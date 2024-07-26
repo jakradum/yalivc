@@ -1,0 +1,169 @@
+/* src/components/Navbar.module.css */
+.navbar {
+    background-color: #333;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .menu li {
+    position: relative;
+    margin-right: 2rem;
+  }
+  
+  .menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .dropdown {
+    cursor: pointer;
+  }
+  
+  .dropdownMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .dropdownMenu li {
+    margin: 0;
+  }
+  
+  .dropdownMenu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+  }
+  
+  .dropdown:hover .dropdownMenu {
+    display: block;
+  }
+  
+  .menuToggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    z-index: 1000;
+  }
+  
+  .sidebarMenu {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebarMenu li {
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+  
+  .sidebarMenu a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .sidebarDropdownMenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebarDropdownMenu li {
+    margin: 0;
+  }
+  
+  .sidebarDropdownMenu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 600px) {
+    .menu {
+      display: none;
+    }
+  
+    .menuToggle {
+      display: block;
+    }
+  
+    .navbar {
+      padding: 0.5rem;
+    }
+  }
+  /* Add these styles to your existing Navbar.module.css */
+
+.dropdown > a {
+  display: inline-block;
+  padding-right: 1.5em;
+  position: relative;
+}
+
+.dropdown > a::after {
+  content: '▼';
+  font-size: 0.7em;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #444;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 150px;
+}
+
+.dropdown:hover .dropdownMenu {
+  display: block;
+}
+
+/* You may need to adjust these styles for the mobile sidebar as well */
