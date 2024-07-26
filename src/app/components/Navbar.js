@@ -37,7 +37,7 @@ const Navbar = () => {
             <li className={styles.dropdown}>
               <Link href="/about-yali">About Yali</Link>
               <ul className={styles.dropdownMenu}>
-                <li><Link href="/about-me/team">Team</Link></li>
+                <li><Link href="/about-yali#team">Team</Link></li>
               </ul>
             </li>
             <li><Link href="/newsroom">Newsroom</Link></li>
@@ -53,9 +53,9 @@ const Navbar = () => {
           <ul className={styles.sidebarMenu}>
             <li><Link href="/">Home</Link></li>
             <li>
-              <Link href="/about-me">About Yali</Link>
+              <Link href="/about-yali">About Yali</Link>
               <ul className={styles.sidebarDropdownMenu}>
-                <li><Link href="/about-me/team">Team</Link></li>
+                <li><Link href="/about-yali#team">Team</Link></li>
               </ul>
             </li>
             <li><Link href="/newsroom">Newsroom</Link></li>
