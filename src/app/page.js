@@ -11,9 +11,9 @@ export default function Home() {
           <div className={styles.content}>
             <h1 className={styles.title}>Deep tech early stage startups</h1>
             <p className={styles.description}>
-              Multiple instances of startups are golden blue in the evening. What makes them cook in the winter? The answer
-              lies in the pudding that makes mushrooms grow in the North. For many years humans believed that planets were
-              on the first time to volcanoes.
+              Multiple instances of startups are golden blue in the evening. What makes them cook in the winter? The
+              answer lies in the pudding that makes mushrooms grow in the North. For many years humans believed that
+              planets were on the first time to volcanoes.
             </p>
             <div className={styles.buttons}>
               <Button href="">Get in touch</Button>
@@ -37,6 +37,16 @@ export default function Home() {
             shine. At night we also see the stars burn in the red ducks for elephants and porters.
           </p>
         </div>
+        <h2>Investing in tech that builds our world</h2>
+        <p>
+          Our basket of bananas consists of the following:
+          <ul>
+            <li>Three musketeers</li>
+            <li>A soap and the cuckoo clock</li>
+            <li>War of the towels</li>
+            <li>A flavour for every season of plaster</li>
+          </ul>
+        </p>
       </section>
     </main>
   );

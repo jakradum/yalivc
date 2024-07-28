@@ -7,16 +7,29 @@ import styles from '../styles/Navbar.module.css'
 const Navbar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 600);
     };
 
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
+    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('resize', checkScreenSize);
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const toggleSidebar = () => {
@@ -25,7 +38,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={styles.navbar}>
+      <nav className={`${styles.navbar} ${isSticky ? styles.sticky : ''}`}>
         {isMobile && (
           <button className={styles.menuToggle} onClick={toggleSidebar}>
             ☰
