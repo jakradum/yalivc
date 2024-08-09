@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import styles from '../styles/Navbar.module.css'
+import { useState, useEffect, useRef } from 'react';
+import styles from '../styles/Navbar.module.css';
 
 const Navbar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -22,18 +23,36 @@ const Navbar = () => {
       }
     };
 
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false);
+      }
+    };
+
+    const handleRouteChange = () => {
+      setSidebarOpen(false);
+    };
+
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     window.addEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('popstate', handleRouteChange);
 
     return () => {
       window.removeEventListener('resize', checkScreenSize);
       window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('popstate', handleRouteChange);
     };
   }, []);
 
+  const handlePageOpen = () => {
+    setSidebarOpen(false);
+  };
+
   const toggleSidebar = () => {
-    setSidebarOpen(prevState => !prevState);
+    setSidebarOpen((prevState) => !prevState);
   };
 
   return (
@@ -46,33 +65,49 @@ const Navbar = () => {
         )}
         {!isMobile && (
           <ul className={styles.menu}>
-            <li><Link href="/">Home</Link></li>
+            <li>
+              <Link href="/">Home</Link>
+            </li>
             <li className={styles.dropdown}>
               <Link href="/about-yali">About Yali</Link>
               <ul className={styles.dropdownMenu}>
-                <li><Link href="/about-yali#team">Team</Link></li>
+                <li>
+                  <Link href="/about-yali#team">Team</Link>
+                </li>
               </ul>
             </li>
-            <li><Link href="/newsroom">Newsroom</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+            <li>
+              <Link href="/newsroom">Newsroom</Link>
+            </li>
+            <li>
+              <Link href="/contact">Contact</Link>
+            </li>
           </ul>
         )}
       </nav>
-      {isMobile && isSidebarOpen && (
-        <aside className={styles.sidebar}>
+      {isMobile && (
+        <aside ref={sidebarRef} className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}>
           <button className={styles.closeButton} onClick={toggleSidebar}>
             &times;
           </button>
           <ul className={styles.sidebarMenu}>
-            <li><Link href="/">Home</Link></li>
             <li>
-              <Link href="/about-yali">About Yali</Link>
+              <Link onClick={handlePageOpen} href="/">Home</Link>
+            </li>
+            <li>
+              <Link onClick={handlePageOpen} href="/about-yali">About Yali</Link>
               <ul className={styles.sidebarDropdownMenu}>
-                <li><Link href="/about-yali#team">Team</Link></li>
+                <li>
+                  <Link onClick={handlePageOpen} href="/about-yali#team">Team</Link>
+                </li>
               </ul>
             </li>
-            <li><Link href="/newsroom">Newsroom</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+            <li>
+              <Link onClick={handlePageOpen} href="/newsroom">Newsroom</Link>
+            </li>
+            <li>
+              <Link onClick={handlePageOpen} href="/contact">Contact</Link>
+            </li>
           </ul>
         </aside>
       )}
