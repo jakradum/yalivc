@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production'
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['plus.unsplash.com'],
+    domains: ['yali.vc'],
   },
   basePath: isProd ? '/yalivc' : '',
   assetPrefix: isProd ? '/yalivc/' : '',
