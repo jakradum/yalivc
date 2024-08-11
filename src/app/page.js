@@ -7,7 +7,6 @@ import CustomHead from './customhead';
 export default function Home() {
   return (
     <>
-      <CustomHead />
       <main className={styles.main}>
         <section className={styles.fold}>
           <div className={styles.grid}>

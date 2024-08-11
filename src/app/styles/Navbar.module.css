@@ -1,5 +1,4 @@
 
-
 .sticky {
   position: fixed;
   top: 0;
@@ -13,7 +12,7 @@
   display: flex;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 1rem;
 }
 
 .menu li {
@@ -69,11 +68,17 @@
 
 .navbar {
   background-color: #333;
-  padding: 1rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  /* z-index: 1000; */
   transition: all 0.3s ease;
 }
 
@@ -86,7 +91,7 @@
   background-color: #33333389;
   color: white;
   padding: 1rem;
-  z-index: 1000;
+  /* z-index: 1000; */
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
 }
