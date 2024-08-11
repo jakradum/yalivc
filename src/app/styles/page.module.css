@@ -17,22 +17,18 @@
   max-width: 800px;
   text-align: center;
 }
-.about {
-  position: relative;
+.subTitle {
+font-size: 1.5rem;
+padding: 0;
 }
 
-.aboutContent {
+.aboutBox{
+  max-width: 50%;
+}
+.aboutSection{
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
   align-items: flex-start;
-  margin-top: 2rem;
-}
-
-.aboutBox {
-  max-width: 40%;
-  background-color: #f5f5f5;
-  padding: 2rem;
-  border-radius: 8px;
 }
 
 .aboutBox p {
@@ -47,7 +43,6 @@
   background-color: #800020;
   color: white;
   text-decoration: none;
-  border-radius: 4px;
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
@@ -84,7 +79,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  text-align: center;
+  text-align: left;
 }
 
 .about p {
@@ -106,7 +101,6 @@
   text-decoration: none;
   background-color: #800020;
   color: white;
-  border-radius: 0.25rem;
   transition: background-color 0.3s ease;
 }
 
@@ -133,46 +127,48 @@
 /* Desktop Layout */
 .desktopLayout {
   display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
 .companyDetails {
-  flex: 1;
   background-color: #800020;
   color: white;
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  height: 400px;
-  overflow-y: auto;
+  min-height: 300px;
 }
 
-.companyImage {
-  position: relative;
+.companyLogoScroll {
   width: 100%;
-  height: 200px;
-  margin-bottom: 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #800020 #f0f0f0;
+  padding-bottom: 1rem;
 }
 
-.companyInfo h3 {
-  margin-top: 0;
+.companyLogoScroll::-webkit-scrollbar {
+  height: 8px;
 }
 
-.companyGrid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.1rem;
-  max-height: 400px;
-  overflow-y: auto;
+.companyLogoScroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.companyLogoScroll::-webkit-scrollbar-thumb {
+  background-color: #800020;
+
 }
 
 .companyLogo {
-  background-color: #e0e0e0;
-  aspect-ratio: 1 / 1;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  margin-right: 1rem;
+  background-color: #e0e0e0;
 
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -194,12 +190,12 @@
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .companyCarousel::-webkit-scrollbar {
-  display: none; /* WebKit */
+  display: none;
 }
 
 .companyCarouselTrack {
@@ -222,11 +218,6 @@
   .desktopLayout {
     flex-direction: column;
   }
-
-  .companyGrid {
-    grid-template-columns: repeat(3, 1fr);
-    max-height: none;
-  }
 }
 
 @media (max-width: 600px) {
@@ -248,7 +239,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
   }
 }
 /* carousel section styles end */
@@ -263,6 +253,8 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
+  text-align: left;
+  
 }
 
 .companyLogo, .teamMember, .newsArticle {
@@ -271,7 +263,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
 }
 
 .teamMember, .newsArticle {
@@ -295,7 +286,6 @@
 }
 
 .image {
-  border-radius: 0.5rem;
   object-fit: cover;
 }
 

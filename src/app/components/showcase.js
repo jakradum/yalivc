@@ -5,16 +5,12 @@ import Image from 'next/image';
 import styles from '../styles/page.module.css';
 
 const companyData = [
-  { name: 'Idea Forge', details: 'Details about Idea Forge', fundedYear: '2020' },
-  { name: 'Company2', details: 'Details about Company2', fundedYear: '2021' },
-  { name: 'Company3', details: 'Details about Company3', fundedYear: '2019' },
-  { name: 'Company4', details: 'Details about Company4', fundedYear: '2022' },
-  { name: 'Company5', details: 'Details about Company5', fundedYear: '2018' },
-  { name: 'Company6', details: 'Details about Company6', fundedYear: '2023' },
-  { name: 'Company7', details: 'Details about Company7', fundedYear: '2020' },
-  { name: 'Company8', details: 'Details about Company8', fundedYear: '2021' },
-  { name: 'Company9', details: 'Details about Company9', fundedYear: '2022' },
-  { name: 'Company10', details: 'Details about Company10', fundedYear: '2023' },
+  { name: 'Logo 1', details: 'Details about Logo 1', fundedYear: '2020' },
+  { name: 'Logo 2', details: 'Details about Logo 2', fundedYear: '2021' },
+  { name: 'Logo 3', details: 'Details about Logo 3', fundedYear: '2022' },
+  { name: 'Logo 4', details: 'Details about Logo 4', fundedYear: '2023' },
+  { name: 'Logo 5', details: 'Details about Logo 5', fundedYear: '2024' },
+  { name: 'Logo 6', details: 'Details about Logo 6', fundedYear: '2025' },
 ];
 
 export default function CompanyShowcase() {
@@ -51,7 +47,7 @@ export default function CompanyShowcase() {
             <p>Select a company to view details</p>
           )}
         </div>
-        <div className={styles.companyGrid}>
+        <div className={styles.companyCarouselTrack}>
           {companyData.map((company, index) => (
             <div
               key={index}
@@ -79,13 +75,6 @@ export default function CompanyShowcase() {
             ))}
           </div>
         </div>
-        {selectedCompany && (
-          <div className={styles.mobileCompanyDetails}>
-            <h3>{selectedCompany.name}</h3>
-            <p>FUNDED {selectedCompany.fundedYear}</p>
-            <p>{selectedCompany.details}</p>
-          </div>
-        )}
       </div>
     </section>
   );
