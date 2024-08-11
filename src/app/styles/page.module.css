@@ -1,81 +1,110 @@
 .main {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 6rem;
   min-height: 100vh;
 }
 
-.fold {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.content {
+.hero {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem;
+}
+
+.heroContent {
+  max-width: 800px;
+  text-align: center;
 }
 
 .title {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: #000000;
+  line-height: 1.2;
+  margin-bottom: 1rem;
 }
 
 .description {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   line-height: 1.5;
   color: #666;
 }
 
-.buttons {
-  display: flex;
-  gap: 1rem;
+.section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.button, .buttonOutline {
-  padding: 0.8rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s ease;
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.about p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .button {
-  background-color: #0070f3;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: #800020;
   color: white;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #600018;
 }
 
-.buttonOutline {
-  border: 1px solid #0070f3;
-  color: #0070f3;
+.companyGrid, .teamGrid, .newsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.buttonOutline:hover {
-  background-color: #0070f3;
-  color: white;
+.companyLogo, .teamMember, .newsArticle {
+  background-color: #e0e0e0;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.teamMember, .newsArticle {
+  flex-direction: column;
+}
+
+.teamMember h3, .newsArticle h3 {
+  margin: 0.5rem 0;
+}
+
+.teamMember p, .newsArticle p {
+  margin: 0;
+  text-align: center;
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 2rem;
 }
 
 .image {
@@ -83,27 +112,25 @@
   object-fit: cover;
 }
 
-.additional {
-  margin-top: 4rem;
-}
-
-.subtitle {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
 @media (max-width: 768px) {
-  .main {
-    padding: 2rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
+  .hero {
+    height: auto;
+    min-height: 100vh;
   }
 
   .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.2rem;
+  }
+
+  .section {
+    padding: 3rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
   }
 }
