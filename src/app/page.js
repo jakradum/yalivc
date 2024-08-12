@@ -38,7 +38,7 @@ export default function Home() {
               innovators and industry leaders. The core team at Yali Capital includes people from a range of backgrounds
               such as Semiconductor, Life Sciences, Machine Learning, and Venture Capital.
             </p>
-            <Image loader={({ src }) => src} unoptimized src={BASE_LOGO_URL} width={160} height={38} alt="Logo" />
+            <Image src='https://yali.vc/wp-content/uploads/2023/10/cosmic-circuits-1.png' width={160} height={38} alt="Logo" />
           </div>
         </div>
       </section>
