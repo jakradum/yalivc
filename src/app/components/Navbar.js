@@ -56,6 +56,7 @@ const Navbar = () => {
           </div>
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
+              <div className={styles.menuItems}>
               <ul className={styles.mobileMenuList}>
                 <li>
                   <Link href="/" onClick={() => setMenuOpen(false)}>
@@ -85,6 +86,7 @@ const Navbar = () => {
                   </Link>
                 </li>
               </ul>
+              </div>
             </div>
           )}
         </>
