@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/Navbar.module.css';
+import { Logo } from './logo';
 
 const Navbar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -64,25 +65,29 @@ const Navbar = () => {
           </button>
         )}
         {!isMobile && (
-          <ul className={styles.menu}>
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li className={styles.dropdown}>
-              <Link href="/about-yali">About Yali</Link>
-              <ul className={styles.dropdownMenu}>
-                <li>
-                  <Link href="/about-yali#team">Team</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link href="/newsroom">Newsroom</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-          </ul>
+          <>
+            <div className={styles.logoContainer}>
+              <Link href="/">
+                <Logo />
+              </Link>
+            </div>
+            <ul className={styles.menu}>
+              <li className={styles.dropdown}>
+                <Link href="/about-yali">About Yali</Link>
+                <ul className={styles.dropdownMenu}>
+                  <li>
+                    <Link href="/about-yali#team">Team</Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Link href="/newsroom">Newsroom</Link>
+              </li>
+              <li>
+                <Link href="/contact">Contact</Link>
+              </li>
+            </ul>
+          </>
         )}
       </nav>
       {isMobile && (
@@ -92,21 +97,31 @@ const Navbar = () => {
           </button>
           <ul className={styles.sidebarMenu}>
             <li>
-              <Link onClick={handlePageOpen} href="/">Home</Link>
+              <Link onClick={handlePageOpen} href="/">
+                Home
+              </Link>
             </li>
             <li>
-              <Link onClick={handlePageOpen} href="/about-yali">About Yali</Link>
+              <Link onClick={handlePageOpen} href="/about-yali">
+                About Yali
+              </Link>
               <ul className={styles.sidebarDropdownMenu}>
                 <li>
-                  <Link onClick={handlePageOpen} href="/about-yali#team">Team</Link>
+                  <Link onClick={handlePageOpen} href="/about-yali#team">
+                    Team
+                  </Link>
                 </li>
               </ul>
             </li>
             <li>
-              <Link onClick={handlePageOpen} href="/newsroom">Newsroom</Link>
+              <Link onClick={handlePageOpen} href="/newsroom">
+                Newsroom
+              </Link>
             </li>
             <li>
-              <Link onClick={handlePageOpen} href="/contact">Contact</Link>
+              <Link onClick={handlePageOpen} href="/contact">
+                Contact
+              </Link>
             </li>
           </ul>
         </aside>

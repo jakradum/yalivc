@@ -1,11 +1,20 @@
-
-.sticky {
+.navbar {
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.15);
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.logoContainer {
+  padding: 35px 0 25px 90px;
 }
 
 .menu {
@@ -63,23 +72,17 @@
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
-  margin-left: auto; 
+  margin-left: auto;
+  display: none;
 }
 
-.navbar {
-  background-color: #333;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.sticky {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
-  padding: 0 20px;
-  box-sizing: border-box;
-  /* z-index: 1000; */
-  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.15);
 }
 
 .sidebar {
@@ -91,7 +94,6 @@
   background-color: #33333389;
   color: white;
   padding: 1rem;
-  /* z-index: 1000; */
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
 }
@@ -127,7 +129,7 @@
 }
 
 .sidebarMenu li {
-padding: 1rem;
+  padding: 1rem;
 }
 
 .sidebarMenu a {
@@ -163,21 +165,6 @@ padding: 1rem;
   right: 1rem;
 }
 
-/* Responsive styles */
-@media (max-width: 600px) {
-  .menu {
-    display: none;
-  }
-
-  .menuToggle {
-    display: block;
-  }
-
-  .navbar {
-    padding: 0.5rem;
-  }
-}
-
 .dropdown > a {
   display: inline-block;
   padding-right: 1.5em;
@@ -191,4 +178,23 @@ padding: 1rem;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .menu {
+    display: none;
+  }
+
+  .menuToggle {
+    display: block;
+  }
+
+  .navbar {
+    padding: 0.5rem;
+  }
+
+  .logoContainer {
+    padding: 10px 0 10px 20px;
+  }
 }
