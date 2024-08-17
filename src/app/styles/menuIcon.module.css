@@ -1,0 +1,33 @@
+/* Initial styles for the lines in the menu icon */
+.line {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+  
+  /* Top line transformation to form the cross */
+  .line1 {
+    transform: translateY(8px);
+  }
+  
+  .line1.open {
+    transform: translateY(8px) rotate(45deg);
+  }
+  
+  /* Middle line fades out when menu is open */
+  .line2 {
+    opacity: 1;
+  }
+  
+  .line2.open {
+    opacity: 0;
+  }
+  
+  /* Bottom line transformation to form the cross */
+  .line3 {
+    transform: translateY(-8px);
+  }
+  
+  .line3.open {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  

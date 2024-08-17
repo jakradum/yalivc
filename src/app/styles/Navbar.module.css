@@ -199,6 +199,7 @@
 /* Close button styles */
 .closeButton {
   background: none;
+  
   border: none;
   color: white;
   font-size: 2rem;
@@ -210,20 +211,73 @@
 
 /* Responsive styles */
 @media (max-width: 600px) {
-  .menu {
-    display: none;
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    background-color: #830D35;
+  }
+
+  .mobileNavContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .mobileLogo {
+    padding: 10px 0 10px 20px;
   }
 
   .menuToggle {
     display: block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding-right: 1.5rem;
   }
 
-  .navbar {
-    padding: 0.5rem;
+  .mobileMenu {
+    display: none;
     background-color: #830D35;
   }
 
-  .logoContainer {
-    padding: 10px 0 10px 20px;
+  .navbar.expanded .mobileMenu {
+    display: block;
+  }
+
+  .mobileMenuList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobileMenuList li {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobileMenuList a {
+    color: white;
+    text-decoration: none;
+    display: block;
+  }
+
+  .mobileSubmenu {
+    list-style: none;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobileSubmenu li {
+    padding: 0.5rem 0;
+    border-top: none;
+  }
+
+  /* Hide desktop menu on mobile */
+  .menu {
+    display: none;
   }
 }
