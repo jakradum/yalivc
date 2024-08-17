@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/Navbar.module.css';
 import { Logo } from './logo';
+import { Lightlogo } from './lightlogo';
 
 const Navbar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -59,12 +60,18 @@ const Navbar = () => {
   return (
     <>
       <nav className={`${styles.navbar} ${isSticky ? styles.sticky : ''}`}>
-        {isMobile && (
-          <button className={styles.menuToggle} onClick={toggleSidebar}>
-            ☰
-          </button>
-        )}
-        {!isMobile && (
+        {isMobile ? (
+          <div className={styles.mobileNavContent}>
+            <div className={styles.mobileLogo}>
+              <Link href="/">
+                <Lightlogo />
+              </Link>
+            </div>
+            <button className={styles.menuToggle} onClick={toggleSidebar}>
+              ☰
+            </button>
+          </div>
+        ) : (
           <>
             <div className={styles.logoContainer}>
               <Link href="/">
@@ -90,6 +97,7 @@ const Navbar = () => {
           </>
         )}
       </nav>
+      
       {isMobile && (
         <aside ref={sidebarRef} className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}>
           <button className={styles.closeButton} onClick={toggleSidebar}>
