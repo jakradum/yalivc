@@ -1,24 +1,37 @@
 html {
-    scroll-padding-top: 60px;
+  scroll-padding-top: 60px;
+}
+
+:root {
+--font-inter: 'Inter', sans-serif;
+--font-jetbrains-mono: 'JetBrains Mono', monospace;
 }
 
 body {
-    margin: 2rem 1rem 1rem 1rem;
-    padding-top: 3.5rem;
-    font-family: var(--font-roboto-mono);
+  margin: 2rem 1rem 1rem 1rem;
+  padding-top: 2rem; /* Default padding for mobile */
+  font-family: var(--font-inter);
+}
+
+@media screen and (min-width: 600px) {
+  body {
+      padding-top: 3.5rem;
+  }
 }
 
 h1, h2, h3, nav, .nav-item {
-    font-family: var(--font-roboto-mono);
+font-family: var(--font-jetbrains-mono);
+
 }
-p{
-    font-family: var(--font-roboto);
+
+p {
+  font-family: var(--font-inter);
 }
 
 code {
-    font-family: var(--font-roboto-mono);
+  font-family: var(--font-inter);
 }
 
 .main-content {
-    padding-top: 60px;
+  padding-top: 60px;
 }

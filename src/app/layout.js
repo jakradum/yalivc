@@ -1,15 +1,17 @@
-import { Nunito, Roboto_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from './components/Navbar';
 import './styles/globals.css';
 
-const inter = Nunito({
+
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-nunito',
+  variable: '--font-inter',
 })
 
-const roboto_mono = Roboto_Mono({
+
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-roboto-mono',
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata = {
@@ -19,7 +21,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className={inter.className}>
         <Navbar />
         {children}
