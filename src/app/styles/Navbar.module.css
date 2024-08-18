@@ -310,46 +310,51 @@
     background-color: #EFEFEF;
   }
 
-  /* Styling for the last child (Contact) in the mobile menu */
-  .mobileMenuList li:last-child {
-    background-color: transparent;
+  .mobileMenuList li:nth-last-child(2) {   /* removes the bottom border for the last but one menu item */
     border-bottom: none;
-    height: auto;
   }
 
+  /* Styling for the last child (Contact) in the mobile menu */
   .mobileMenuList a {
-    color: #000000;
     text-decoration: none;
     display: block;
     font-size: 1.2rem;
   }
+  .mobileMenuList li:not(:last-child) a {
+    color: #000000;
+  }
 
-/* Styling for the last child (Contact) link in the mobile menu */
+  .mobileMenuList a:last-child {
+    color: white;
+  } 
 .mobileMenuList li:last-child {
   background-color: transparent;
+  border-bottom: none;
   border: 0.0625rem solid white;  
   height: auto;
   padding: 1rem;  
-  margin: 1rem;  
+  margin: 1rem auto; 
+  width: 11.5rem;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  text-align: center; 
 }
 
 .mobileSubmenu {
   list-style: none;
   padding-left: 1rem;
   margin-top: 0.5rem;
-  
 }
 
-.mobileSubmenu li a{
+.mobileSubmenu li a {
   padding: 0.5rem 0;
   border-top: none;
-  color: #0d8315;
 }
 
 .mobileSubmenu li {
   padding: 0.5rem 0;
   border-top: none;
-  
 }
 
   /* Hide desktop menu on mobile */
