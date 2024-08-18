@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import styles from '../styles/Navbar.module.css';
-import { Logo } from './logo';
-import { Lightlogo } from './lightlogo';
+import { Logo } from './icons/logo';
+import { Lightlogo } from './icons/lightlogo';
+import { PinkLogo } from './icons/pinklogo';
 
 // JSON object for menu items
 const menuItems = [
@@ -12,13 +13,11 @@ const menuItems = [
   {
     name: 'About Yali',
     path: '/about-yali',
-    subItems: [
-      { name: 'Team', path: '/about-yali#team' }
-    ]
+    subItems: [{ name: 'Team', path: '/about-yali#team' }],
   },
   { name: 'Investments', path: '/investments' },
   { name: 'Newsroom', path: '/newsroom' },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
 ];
 
 const Navbar = () => {
@@ -101,13 +100,15 @@ const Navbar = () => {
   );
 
   return (
-    <nav className={`${styles.navbar} ${isSticky ? styles.sticky : ''} ${isMobile && isMenuOpen ? styles.expanded : ''}`}>
+    <nav
+      className={`${styles.navbar} ${isSticky ? styles.sticky : ''} ${isMobile && isMenuOpen ? styles.expanded : ''}`}
+    >
       {isMobile ? (
         <>
           <div className={isMenuOpen ? styles.mobileNavContentOpen : styles.mobileNavContent}>
             <div className={styles.mobileLogo}>
               <Link href="/" onClick={() => setMenuOpen(false)}>
-                {isMenuOpen ? <Logo/> : <Lightlogo />}
+                {isMenuOpen ? <Logo /> : <Lightlogo />}
               </Link>
             </div>
             <button className={styles.menuToggle} onClick={toggleMenu}>
@@ -116,9 +117,9 @@ const Navbar = () => {
           </div>
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
-              <div className={styles.menuItems}>
-                {renderMobileMenu()}
-              </div>
+              <div className={styles.menuItems}>{renderMobileMenu()}</div>
+              <p className={styles.verticalText}>Yali.VC</p>
+              <PinkLogo className={styles.pinklogo}/>
             </div>
           )}
         </>

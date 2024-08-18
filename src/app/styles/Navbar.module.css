@@ -203,6 +203,7 @@
 
 /* Responsive styles */
 @media (max-width: 800px) {
+
   /* this is the top nav bar on mobile */
   .mobileNavContent {
     display: flex;
@@ -215,7 +216,8 @@
     right: 0;
     z-index: 1001;
     background-color: #830D35;
-    height: 5rem; /* Set a fixed height */
+    height: 5rem;
+    /* Set a fixed height */
     padding: 0 1.5rem;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
@@ -233,7 +235,8 @@
     right: 0;
     z-index: 1001;
     background-color: white;
-    height: 5rem; /* Set a fixed height */
+    height: 5rem;
+    /* Set a fixed height */
     padding: 0 1.5rem;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
@@ -284,9 +287,35 @@
   }
 
   /* this is the bottom empty section in the mobile drawer under the menu list items */
-  .navbar.expanded .mobileMenu  {
+  .navbar.expanded .mobileMenu {
     display: block;
-    background-color: #9d576e;
+    background-color: #830D35;
+  }
+
+  .verticalText {
+    transform: rotate(-180deg);
+    writing-mode: vertical-rl;
+    font-family: 'JetBrains Mono';
+    color: #EFEFEF;
+    position: absolute;
+    bottom: 1rem;
+    margin-left: 1rem;
+    font-size: 2.439rem;
+    letter-spacing: -0.241rem;
+    font-weight: 400;
+  }
+
+  .pinklogo {
+    position: absolute;
+    margin-right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    z-index: 0;
+    width: auto;
+    height: 100%;
+    max-height: 80vh; 
   }
 
   .mobileMenuList {
@@ -310,7 +339,8 @@
     background-color: #EFEFEF;
   }
 
-  .mobileMenuList li:nth-last-child(2) {   /* removes the bottom border for the last but one menu item */
+  .mobileMenuList li:nth-last-child(2) {
+    /* removes the bottom border for the last but one menu item */
     border-bottom: none;
   }
 
@@ -320,42 +350,44 @@
     display: block;
     font-size: 1.2rem;
   }
+
   .mobileMenuList li:not(:last-child) a {
     color: #000000;
   }
 
   .mobileMenuList a:last-child {
     color: white;
-  } 
-.mobileMenuList li:last-child {
-  background-color: transparent;
-  border-bottom: none;
-  border: 0.0625rem solid white;  
-  height: auto;
-  padding: 1rem;  
-  margin: 1rem auto; 
-  width: 11.5rem;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  text-align: center; 
-}
+  }
 
-.mobileSubmenu {
-  list-style: none;
-  padding-left: 1rem;
-  margin-top: 0.5rem;
-}
+  .mobileMenuList li:last-child {
+    background-color: transparent;
+    border-bottom: none;
+    border: 0.0625rem solid white;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 11.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.mobileSubmenu li a {
-  padding: 0.5rem 0;
-  border-top: none;
-}
+  .mobileSubmenu {
+    list-style: none;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+  }
 
-.mobileSubmenu li {
-  padding: 0.5rem 0;
-  border-top: none;
-}
+  .mobileSubmenu li a {
+    padding: 0.5rem 0;
+    border-top: none;
+  }
+
+  .mobileSubmenu li {
+    padding: 0.5rem 0;
+    border-top: none;
+  }
 
   /* Hide desktop menu on mobile */
   .menu {

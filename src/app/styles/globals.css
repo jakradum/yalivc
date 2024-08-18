@@ -18,6 +18,9 @@ body {
       padding-top: 3.5rem;
   }
 }
+nav p[class*="verticalText"] {
+  font-family: var(--font-jetbrains-mono);
+}
 
 h1, h2, h3 {
 font-family: var(--font-jetbrains-mono);
