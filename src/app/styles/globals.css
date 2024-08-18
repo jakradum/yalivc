@@ -13,7 +13,7 @@ body {
   font-family: var(--font-inter);
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 800px) {
   body {
       padding-top: 3.5rem;
   }

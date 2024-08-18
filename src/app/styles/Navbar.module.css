@@ -19,19 +19,7 @@
   padding: 35px 0 25px 90px;
 }
 
-.mobileNavContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1001;
-  background-color: #830D35;
-}
 
 /* Main menu styles */
 .menu {
@@ -216,23 +204,58 @@
 }
 
 /* Responsive styles */
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0;
-    background-color: #830D35;
-  }
-
+@media (max-width: 800px) {
+  /* this is the top nav bar on mobile */
   .mobileNavContent {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    background-color: #830D35;
+    height: 5rem; /* Set a fixed height */
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Same thing when opened (only for BG colour change) */
+  .mobileNavContentOpen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    background-color: #EFEFEF;
+    height: 5rem; /* Set a fixed height */
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
   }
 
   .mobileLogo {
-    padding: 10px 0 10px 20px;
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
   .menuToggle {
@@ -242,23 +265,30 @@
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding-right: 1.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
+  /* this is for the list items when the drawer is opened */
   .mobileMenu {
     display: none;
     position: fixed;
-    top: 0;
+    top: 5rem;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #830D35;
     z-index: 1000;
     overflow-y: auto;
   }
 
+  /* this is the bottom empty section in the mobile drawer under the menu list items */
   .navbar.expanded .mobileMenu {
     display: block;
+    background-color: #9d576e;
   }
 
   .mobileMenuList {
@@ -267,7 +297,6 @@
     margin: 0;
     height: 100%;
     box-sizing: border-box;
-    
   }
 
   .mobileMenuList li {
@@ -278,7 +307,7 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     width: 100%;
-    height:auto;
+    height: auto;
     border-bottom: 1px solid #000000;
     background-color: #EFEFEF;
   }
@@ -300,7 +329,6 @@
     padding: 0.5rem 0;
     border-top: none;
   }
-
 
   /* Hide desktop menu on mobile */
   .menu {

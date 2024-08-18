@@ -6,6 +6,21 @@ import styles from '../styles/Navbar.module.css';
 import { Logo } from './logo';
 import { Lightlogo } from './lightlogo';
 
+// JSON object for menu items
+const menuItems = [
+  { name: 'Home', path: '/' },
+  {
+    name: 'About Yali',
+    path: '/about-yali',
+    subItems: [
+      { name: 'Team', path: '/about-yali#team' }
+    ]
+  },
+  { name: 'Investments', path: '/investments' },
+  { name: 'Newsroom', path: '/newsroom' },
+  { name: 'Contact', path: '/contact' }
+];
+
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -13,7 +28,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 600);
+      setIsMobile(window.innerWidth <= 800);
     };
 
     const handleScroll = () => {
@@ -40,14 +55,59 @@ const Navbar = () => {
     setMenuOpen((prevState) => !prevState);
   };
 
+  const renderMobileMenu = () => (
+    <ul className={styles.mobileMenuList}>
+      {menuItems.map((item, index) => (
+        <li key={index}>
+          <Link href={item.path} onClick={() => setMenuOpen(false)}>
+            {item.name}
+          </Link>
+          {/* Team commented out for mobile */}
+          {/*
+          {item.subItems && (
+            <ul className={styles.mobileSubmenu}>
+              {item.subItems.map((subItem, subIndex) => (
+                <li key={`${index}-${subIndex}`}>
+                  <Link href={subItem.path} onClick={() => setMenuOpen(false)}>
+                    {subItem.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          */}
+        </li>
+      ))}
+    </ul>
+  );
+
+  const renderDesktopMenu = () => (
+    <ul className={styles.menu}>
+      {menuItems.map((item, index) => (
+        <li key={index} className={item.subItems ? styles.dropdown : ''}>
+          <Link href={item.path}>{item.name}</Link>
+          {item.subItems && (
+            <ul className={styles.dropdownMenu}>
+              {item.subItems.map((subItem, subIndex) => (
+                <li key={`${index}-${subIndex}`}>
+                  <Link href={subItem.path}>{subItem.name}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
     <nav className={`${styles.navbar} ${isSticky ? styles.sticky : ''} ${isMobile && isMenuOpen ? styles.expanded : ''}`}>
       {isMobile ? (
         <>
-          <div className={styles.mobileNavContent}>
+          <div className={isMenuOpen ? styles.mobileNavContentOpen : styles.mobileNavContent}>
             <div className={styles.mobileLogo}>
               <Link href="/" onClick={() => setMenuOpen(false)}>
-                <Lightlogo />
+                {isMenuOpen ? <Logo/> : <Lightlogo />}
               </Link>
             </div>
             <button className={styles.menuToggle} onClick={toggleMenu}>
@@ -57,62 +117,20 @@ const Navbar = () => {
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
               <div className={styles.menuItems}>
-              <ul className={styles.mobileMenuList}>
-                <li>
-                  <Link href="/" onClick={() => setMenuOpen(false)}>
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about-yali" onClick={() => setMenuOpen(false)}>
-                    About Yali
-                  </Link>
-                  {/* <ul className={styles.mobileSubmenu}>
-                    <li>
-                      <Link href="/about-yali#team" onClick={() => setMenuOpen(false)}>
-                        Team
-                      </Link>
-                    </li>
-                  </ul> */}
-                </li>
-                <li>
-                  <Link href="/newsroom" onClick={() => setMenuOpen(false)}>
-                    Newsroom
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" onClick={() => setMenuOpen(false)}>
-                    Contact
-                  </Link>
-                </li>
-              </ul>
+                {renderMobileMenu()}
               </div>
             </div>
           )}
         </>
       ) : (
         <>
+          {/* Desktop section below */}
           <div className={styles.logoContainer}>
             <Link href="/">
               <Logo />
             </Link>
           </div>
-          <ul className={styles.menu}>
-            <li className={styles.dropdown}>
-              <Link href="/about-yali">About Yali</Link>
-              <ul className={styles.dropdownMenu}>
-                <li>
-                  <Link href="/about-yali#team">Team</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link href="/newsroom">Newsroom</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-          </ul>
+          {renderDesktopMenu()}
         </>
       )}
     </nav>
