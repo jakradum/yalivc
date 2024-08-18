@@ -46,7 +46,7 @@ const Navbar = () => {
         <>
           <div className={styles.mobileNavContent}>
             <div className={styles.mobileLogo}>
-              <Link href="/">
+              <Link href="/" onClick={() => setMenuOpen(false)}>
                 <Lightlogo />
               </Link>
             </div>
