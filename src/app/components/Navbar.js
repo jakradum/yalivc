@@ -67,13 +67,13 @@ const Navbar = () => {
                   <Link href="/about-yali" onClick={() => setMenuOpen(false)}>
                     About Yali
                   </Link>
-                  <ul className={styles.mobileSubmenu}>
+                  {/* <ul className={styles.mobileSubmenu}>
                     <li>
                       <Link href="/about-yali#team" onClick={() => setMenuOpen(false)}>
                         Team
                       </Link>
                     </li>
-                  </ul>
+                  </ul> */}
                 </li>
                 <li>
                   <Link href="/newsroom" onClick={() => setMenuOpen(false)}>
