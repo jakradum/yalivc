@@ -19,9 +19,13 @@ body {
   }
 }
 
-h1, h2, h3, nav, .nav-item {
+h1, h2, h3 {
 font-family: var(--font-jetbrains-mono);
+}
 
+nav, .nav-item {
+  font-family: var(--font-inter);
+  letter-spacing: 0.01rem;
 }
 
 p {

@@ -60,7 +60,7 @@ const Navbar = () => {
       {menuItems.map((item, index) => (
         <li key={index}>
           <Link href={item.path} onClick={() => setMenuOpen(false)}>
-            {item.name}
+            {item.name.toUpperCase()}
           </Link>
           {/* Team commented out for mobile */}
           {/*
@@ -85,7 +85,7 @@ const Navbar = () => {
     <ul className={styles.menu}>
       {menuItems.map((item, index) => (
         <li key={index} className={item.subItems ? styles.dropdown : ''}>
-          <Link href={item.path}>{item.name}</Link>
+          <Link href={item.path}>{item.name.toUpperCase()}</Link>
           {item.subItems && (
             <ul className={styles.dropdownMenu}>
               {item.subItems.map((subItem, subIndex) => (

@@ -16,10 +16,8 @@
 
 /* Logo container styles */
 .logoContainer {
-  padding: 35px 0 25px 90px;
+  padding: 2.18rem 0 1.55rem 5.625rem;
 }
-
-
 
 /* Main menu styles */
 .menu {
@@ -115,7 +113,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 2px 24px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.1250rem 1.5rem 0 rgba(0, 0, 0, 0.15);
 }
 
 /* Sidebar styles */
@@ -234,7 +232,7 @@
     left: 0;
     right: 0;
     z-index: 1001;
-    background-color: #EFEFEF;
+    background-color: white;
     height: 5rem; /* Set a fixed height */
     padding: 0 1.5rem;
     box-sizing: border-box;
@@ -286,7 +284,7 @@
   }
 
   /* this is the bottom empty section in the mobile drawer under the menu list items */
-  .navbar.expanded .mobileMenu {
+  .navbar.expanded .mobileMenu  {
     display: block;
     background-color: #9d576e;
   }
@@ -304,12 +302,19 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 0.0625rem solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     width: 100%;
-    height: auto;
-    border-bottom: 1px solid #000000;
+    height: 6.025rem;
+    border-bottom: 0.0625rem solid #000000;
     background-color: #EFEFEF;
+  }
+
+  /* Styling for the last child (Contact) in the mobile menu */
+  .mobileMenuList li:last-child {
+    background-color: transparent;
+    border-bottom: none;
+    height: auto;
   }
 
   .mobileMenuList a {
@@ -319,16 +324,33 @@
     font-size: 1.2rem;
   }
 
-  .mobileSubmenu {
-    list-style: none;
-    padding-left: 1rem;
-    margin-top: 0.5rem;
-  }
+/* Styling for the last child (Contact) link in the mobile menu */
+.mobileMenuList li:last-child {
+  background-color: transparent;
+  border: 0.0625rem solid white;  
+  height: auto;
+  padding: 1rem;  
+  margin: 1rem;  
+}
 
-  .mobileSubmenu li {
-    padding: 0.5rem 0;
-    border-top: none;
-  }
+.mobileSubmenu {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  
+}
+
+.mobileSubmenu li a{
+  padding: 0.5rem 0;
+  border-top: none;
+  color: #0d8315;
+}
+
+.mobileSubmenu li {
+  padding: 0.5rem 0;
+  border-top: none;
+  
+}
 
   /* Hide desktop menu on mobile */
   .menu {
