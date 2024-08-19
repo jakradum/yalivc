@@ -25,6 +25,9 @@ nav p[class*="verticalText"] {
 h1, h2, h3 {
 font-family: var(--font-jetbrains-mono);
 }
+.global-pinklogo {
+  pointer-events: none;
+}
 
 nav, .nav-item {
   font-family: var(--font-inter);

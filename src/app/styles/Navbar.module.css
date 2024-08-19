@@ -305,17 +305,13 @@
     font-weight: 400;
   }
 
-  .pinklogo {
+  .pinkLogo {
     position: absolute;
-    margin-right: 0;
-    top: 0;
+    right: 0;
     bottom: 0;
-    display: flex;
-    align-items: center;
-    z-index: 0;
     width: auto;
-    height: 100%;
-    max-height: 80vh; 
+    height: 40%;
+    z-index: -1;
   }
 
   .mobileMenuList {

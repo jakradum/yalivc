@@ -118,8 +118,10 @@ const Navbar = () => {
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
               <div className={styles.menuItems}>{renderMobileMenu()}</div>
-              <p className={styles.verticalText}>Yali.VC</p>
-              <PinkLogo className={styles.pinklogo}/>
+              <div className={styles.mobileMenuBottom}>
+                <p className={styles.verticalText}>Yali.VC</p>
+                <PinkLogo className={`${styles.pinkLogo} global-pinklogo`} />
+              </div>
             </div>
           )}
         </>
