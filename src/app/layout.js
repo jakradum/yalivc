@@ -2,12 +2,10 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from './components/Navbar';
 import './styles/globals.css';
 
-
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 })
-
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -17,6 +15,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: `Yali Capital | Funding India's deep tech`,
   description: 'Powering the future of deep tech with investments in AI, Genomics, Robotics, Semiconductor and more.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {

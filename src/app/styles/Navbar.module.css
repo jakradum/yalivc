@@ -12,6 +12,7 @@
   padding: 0;
   box-sizing: border-box;
   transition: all 0.3s ease;
+  border-bottom: 0.0625rem solid black;
 }
 
 /* Logo container styles */
@@ -235,6 +236,7 @@
     right: 0;
     z-index: 1001;
     background-color: white;
+    border-bottom: 0.0625rem solid black;
     height: 5rem;
     /* Set a fixed height */
     padding: 0 1.5rem;
