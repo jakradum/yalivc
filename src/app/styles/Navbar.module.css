@@ -310,7 +310,7 @@
     right: 0;
     bottom: 0;
     width: auto;
-    height: 40%;
+    height: 30%;
     z-index: -1;
   }
 
@@ -322,7 +322,7 @@
     box-sizing: border-box;
   }
 
-  .mobileMenuList li {
+  .mobileMenuList li:not(:last-child) .mobileMenuLink {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -334,6 +334,11 @@
     border-bottom: 0.0625rem solid #000000;
     background-color: #EFEFEF;
   }
+
+  .mobileMenuList li:not(:last-child) .mobileMenuLink:hover {
+    background-color: white;
+  }
+  
 
   .mobileMenuList li:nth-last-child(2) {
     /* removes the bottom border for the last but one menu item */
@@ -367,22 +372,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-  }
-
-  .mobileSubmenu {
-    list-style: none;
-    padding-left: 1rem;
-    margin-top: 0.5rem;
-  }
-
-  .mobileSubmenu li a {
-    padding: 0.5rem 0;
-    border-top: none;
-  }
-
-  .mobileSubmenu li {
-    padding: 0.5rem 0;
-    border-top: none;
   }
 
   /* Hide desktop menu on mobile */

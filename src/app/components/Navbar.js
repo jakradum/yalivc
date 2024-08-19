@@ -6,6 +6,8 @@ import styles from '../styles/Navbar.module.css';
 import { Logo } from './icons/logo';
 import { Lightlogo } from './icons/lightlogo';
 import { PinkLogo } from './icons/pinklogo';
+import { CloseIcon } from './icons/closeicon';
+import { Openicon } from './icons/Openicon';
 
 // JSON object for menu items
 const menuItems = [
@@ -57,10 +59,10 @@ const Navbar = () => {
   const renderMobileMenu = () => (
     <ul className={styles.mobileMenuList}>
       {menuItems.map((item, index) => (
-        <li key={index}>
-          <Link href={item.path} onClick={() => setMenuOpen(false)}>
-            {item.name.toUpperCase()}
-          </Link>
+      <li key={index}>
+        <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+          <span>{item.name.toUpperCase()}</span>
+        </Link>
           {/* Team commented out for mobile */}
           {/*
           {item.subItems && (
@@ -112,7 +114,7 @@ const Navbar = () => {
               </Link>
             </div>
             <button className={styles.menuToggle} onClick={toggleMenu}>
-              {isMenuOpen ? '×' : '☰'}
+              {isMenuOpen ? <CloseIcon/> : <Openicon/>}
             </button>
           </div>
           {isMenuOpen && (
