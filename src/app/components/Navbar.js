@@ -52,7 +52,7 @@ const Navbar = () => {
           <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
             <span>{item.name.toUpperCase()}</span>
           </Link>
-          {item.subItems && (
+          {/* {item.subItems && (
             <ul className={styles.mobileSubmenu}>
               {item.subItems.map((subItem, subIndex) => (
                 <li key={`${index}-${subIndex}`}>
@@ -62,7 +62,7 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-          )}
+          )} */}  
         </li>
       ))}
     </ul>

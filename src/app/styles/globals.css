@@ -21,11 +21,6 @@ body {
 nav p[class*="verticalText"] {
   font-family: var(--font-jetbrains-mono);
 }
-footer{
-  margin-bottom: 0;
-  margin-left: 0;
-    margin-right: 0;
-}
 
 h1, h2, h3 {
 font-family: var(--font-jetbrains-mono);
@@ -45,6 +40,10 @@ p {
 
 code {
   font-family: var(--font-inter);
+}
+
+footer{
+  width: 100%;
 }
 
 .main-content {
