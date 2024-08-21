@@ -5,6 +5,7 @@ max-height: 34.875rem;
     flex-direction: column;
 }
 
+
 .redSectionFlex {
     display: flex;
     flex-direction: row;
@@ -12,7 +13,7 @@ max-height: 34.875rem;
     justify-content: space-between;
     position: relative;
     height: 50rem;
-    overflow: hidden; /* Prevent content from spilling out */
+    overflow: hidden; 
 }
 
 .linksSection {
@@ -25,15 +26,15 @@ max-height: 34.875rem;
     position: absolute;
     bottom: 0;
     right: 0;
-    height: 100%; /* Fill the entire height of redSectionFlex */
+    height: 100%; 
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
 }
 
 .graphicSection svg {
-    max-height: 100%; /* Ensure the SVG doesn't exceed the container */
-    width: auto; /* Maintain aspect ratio */
+    max-height: 100%; 
+    width: auto; 
 }
 .bottomStrip{
     display: flex;
@@ -43,12 +44,19 @@ max-height: 34.875rem;
     background-color: #EFEFEF;
     align-items: center;
     padding: 0 2rem 0 2rem;
+    border-right: 0.063rem solid black;
+    border-left: 0.063rem solid black;
+    border-bottom: 0.063rem solid black;
+}
+.bottomStrip a {
+    text-decoration: none;
+    color: black;
 }
 
 @media (max-width: 800px) {
     .redSectionFlex {
         flex-direction: column;
-        height: auto; /* Allow it to grow based on content */
+        height: auto; 
         min-height: 30rem;
     }
 
@@ -59,7 +67,7 @@ max-height: 34.875rem;
     .graphicSection {
         position: static;
         height: auto;
-        max-height: 50vh; /* Limit height on mobile */
+        max-height: 50vh; 
         justify-content: center;
         width: 100%;
     }

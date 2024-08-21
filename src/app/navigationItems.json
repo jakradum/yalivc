@@ -1,0 +1,30 @@
+{
+    "menuItems": [
+      {
+        "name": "Home",
+        "path": "/"
+      },
+      {
+        "name": "About Yali",
+        "path": "/about-yali",
+        "subItems": [
+          {
+            "name": "Team",
+            "path": "/about-yali#team"
+          }
+        ]
+      },
+      {
+        "name": "Investments",
+        "path": "/investments"
+      },
+      {
+        "name": "Newsroom",
+        "path": "/newsroom"
+      },
+      {
+        "name": "Contact",
+        "path": "/contact"
+      }
+    ]
+  }

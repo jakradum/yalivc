@@ -8,24 +8,13 @@ import { Lightlogo } from './icons/lightlogo';
 import { PinkLogo } from './icons/pinklogo';
 import { CloseIcon } from './icons/closeicon';
 import { Openicon } from './icons/Openicon';
-
-// JSON object for menu items
-const menuItems = [
-  { name: 'Home', path: '/' },
-  {
-    name: 'About Yali',
-    path: '/about-yali',
-    subItems: [{ name: 'Team', path: '/about-yali#team' }],
-  },
-  { name: 'Investments', path: '/investments' },
-  { name: 'Newsroom', path: '/newsroom' },
-  { name: 'Contact', path: '/contact' },
-];
+import navigationItemsData from '../navigationItems.json';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const navigationItems = navigationItemsData.menuItems;
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -58,13 +47,11 @@ const Navbar = () => {
 
   const renderMobileMenu = () => (
     <ul className={styles.mobileMenuList}>
-      {menuItems.map((item, index) => (
-      <li key={index}>
-        <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
-          <span>{item.name.toUpperCase()}</span>
-        </Link>
-          {/* Team commented out for mobile */}
-          {/*
+      {navigationItems.map((item, index) => (
+        <li key={index}>
+          <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+            <span>{item.name.toUpperCase()}</span>
+          </Link>
           {item.subItems && (
             <ul className={styles.mobileSubmenu}>
               {item.subItems.map((subItem, subIndex) => (
@@ -76,7 +63,6 @@ const Navbar = () => {
               ))}
             </ul>
           )}
-          */}
         </li>
       ))}
     </ul>
@@ -84,7 +70,7 @@ const Navbar = () => {
 
   const renderDesktopMenu = () => (
     <ul className={styles.menu}>
-      {menuItems.map((item, index) => (
+      {navigationItems.map((item, index) => (
         <li key={index} className={item.subItems ? styles.dropdown : ''}>
           <Link href={item.path}>{item.name.toUpperCase()}</Link>
           {item.subItems && (
@@ -119,7 +105,7 @@ const Navbar = () => {
           </div>
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
-              <div className={styles.menuItems}>{renderMobileMenu()}</div>
+              <div className={styles.navigationItems}>{renderMobileMenu()}</div>
               <div className={styles.mobileMenuBottom}>
                 <p className={styles.verticalText}>Yali.VC</p>
                 <PinkLogo className={`${styles.pinkLogo} global-pinklogo`} />
@@ -129,7 +115,6 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          {/* Desktop section below */}
           <div className={styles.logoContainer}>
             <Link href="/">
               <Logo />
