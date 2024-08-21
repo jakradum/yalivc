@@ -1,0 +1,66 @@
+.footer {
+max-height: 34.875rem;
+    --footer-height-mobile: 30rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.redSectionFlex {
+    display: flex;
+    flex-direction: row;
+    background-color: #830D35;
+    justify-content: space-between;
+    position: relative;
+    height: 50rem;
+    overflow: hidden; /* Prevent content from spilling out */
+}
+
+.linksSection {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.graphicSection {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%; /* Fill the entire height of redSectionFlex */
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.graphicSection svg {
+    max-height: 100%; /* Ensure the SVG doesn't exceed the container */
+    width: auto; /* Maintain aspect ratio */
+}
+.bottomStrip{
+    display: flex;
+    flex-direction: row;
+    max-height: 3rem;
+    justify-content: space-between;
+    background-color: #EFEFEF;
+    align-items: center;
+    padding: 0 2rem 0 2rem;
+}
+
+@media (max-width: 800px) {
+    .redSectionFlex {
+        flex-direction: column;
+        height: auto; /* Allow it to grow based on content */
+        min-height: 30rem;
+    }
+
+    .linksSection {
+        margin-bottom: 2rem;
+    }
+
+    .graphicSection {
+        position: static;
+        height: auto;
+        max-height: 50vh; /* Limit height on mobile */
+        justify-content: center;
+        width: 100%;
+    }
+}

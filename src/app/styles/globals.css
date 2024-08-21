@@ -21,6 +21,9 @@ body {
 nav p[class*="verticalText"] {
   font-family: var(--font-jetbrains-mono);
 }
+footer{
+  margin-bottom: 0;
+}
 
 h1, h2, h3 {
 font-family: var(--font-jetbrains-mono);
