@@ -11,34 +11,33 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.redSectionFlex}>
         <div className={styles.contentWrapper}>
+            <div className={styles.rowOne}></div>
           <div className={styles.linksSection}>
             {navigationItems.map((item, index) => (
-              <div className={styles.linkBox}>
-                <Link key={index} href={item.path}>
+              <div key={index} className={styles.linkBox}>
+                <Link href={item.path}>
                   {item.name.toUpperCase()} <ArrowLinkOpen />
                 </Link>
               </div>
             ))}
           </div>
-          <div>
+          <div className={styles.infoSection}>
             <h3>Yali.VC</h3>
             <p>
-              Yali Capital is a deep tech fund headquartered at Bangalore, India. We invest in early stage deep tech
-              startups across a range of verticals from Aerospace to Robotics
+              Yali Capital, headquartered in Bangalore India, is a deep tech fund that invests in early stage companies
+              across a range of sectors.
             </p>
           </div>
-          
-        </div>
-        <div className={styles.bottomStrip}>
-          <Link href="/">LinkedIn</Link>
-          <Link href="/">Media Relations</Link>
-          <Link href="/">Legal</Link>
-          <Link href="/">Careers</Link>
-          <small>©Yali Capital {new Date().getFullYear()}</small>
         </div>
         <div className={styles.graphicSection}>
-            <FooterLogo />
-          </div>
+          <FooterLogo />
+        </div>
+      </div>
+      <div className={styles.bottomStrip}>
+        <Link href="mailto:hello@yali.com">hello@yali.com</Link>
+        <Link href="/">LinkedIn</Link>
+        <Link href="/">We're hiring - Get in touch</Link>
+        <small>Yali@{new Date().getFullYear()}</small>
       </div>
     </footer>
   );
