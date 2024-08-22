@@ -7,6 +7,15 @@ import { ArrowLinkOpen } from './icons/small icons/arrowLinkOpen';
 export default function Footer() {
   const navigationItems = navigationItemsData.menuItems;
 
+  const BottomStripContent = () => (
+    <>
+      <Link href="mailto:press@yali.com">Get in touch for press inquiries</Link>
+      <Link href="/">Follow us on LinkedIn</Link>
+      <Link href="/">Legal</Link>
+      <small>© Yali Capital {new Date().getFullYear()}</small>
+    </>
+  );
+
   return (
     <footer className={styles.footer}>
       <div className={styles.redSectionFlex}>
@@ -34,16 +43,16 @@ export default function Footer() {
               </p>
             </div>
           </div>
+          <div className={` ${styles.mobileBottomStrip}`}>
+            <BottomStripContent />
+          </div>
         </div>
         <div className={styles.graphicSection}>
           <FooterLogo />
         </div>
       </div>
-      <div className={styles.bottomStrip}>
-        <Link href="mailto:hello@yali.com">hello@yali.com</Link>
-        <Link href="/">LinkedIn</Link>
-        <Link href="/">We're hiring - Get in touch</Link>
-        <small>© Yali Capital {new Date().getFullYear()}</small>
+      <div className={`${styles.bottomStrip} ${styles.desktopBottomStrip}`}>
+        <BottomStripContent />
       </div>
     </footer>
   );
