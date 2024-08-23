@@ -1,6 +1,6 @@
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from './components/Navbar';
-import Footer from './components/footer'; // Import the Footer component
+import Footer from './components/footer';
 import './styles/globals.css';
 
 const inter = Inter({
@@ -26,8 +26,10 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className={inter.className}>
         <Navbar />
-        <main>{children}</main>
-        <Footer /> 
+        <div className="page-wrapper">
+          <main>{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

@@ -4,6 +4,62 @@
 
 .desktopBottomStrip {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #efefef;
+    padding: 0;  
+    border-top: 1px solid #000;  
+    border-bottom: 1px solid #000;  
+    position: relative;  
+}
+
+.desktopBottomStrip > * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    position: relative;  
+
+}
+
+.desktopBottomStrip > *:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #000;  
+}
+
+.desktopBottomStrip > a {
+    text-decoration: none;
+    color: black;
+}
+
+.desktopBottomStrip > small {
+    color: #9A9A9A;
+    font-size: 1rem;
+}
+
+.desktopBottomStrip::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.8rem;  
+    height: 1px;
+    background-color: #000;  
+    
+}
+
+.desktopBottomStrip > * {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mobileBottomStrip {
@@ -17,6 +73,9 @@
     min-height: var(--footer-height-desktop);
     overflow: hidden;
     z-index: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    
 }
 
 .contentWrapper {
@@ -104,7 +163,7 @@
 }
 
 .infoSection h3 {
-    font-size: clamp(3rem, 4vw, 1.8rem);
+    font-size: clamp(4rem, 2vw, 1.8rem);
     margin-bottom: 1rem;
     font-weight: 400;
     max-width: 100%;

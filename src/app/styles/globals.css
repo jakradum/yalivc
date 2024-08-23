@@ -14,6 +14,14 @@ body {
   font-family: var(--font-inter);
 }
 
+.page-wrapper {
+  flex: 1;
+  margin: 0 1rem;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  min-height: 100vh;
+}
+
 @media screen and (min-width: 800px) {
   body {
       padding-top: 3.5rem;
@@ -23,7 +31,7 @@ nav p[class*="verticalText"] {
   font-family: var(--font-jetbrains-mono);
 }
 
-h1, h2, h3 {
+h1, h2, h3, small {
 font-family: var(--font-jetbrains-mono);
 }
 .global-pinklogo {
@@ -51,6 +59,8 @@ footer{
   width: 100%;
   padding: 0;
   margin: 0;
+  border-bottom: 1px solid black;
+  padding-bottom: .8rem;
 }
 
 .main-content {
