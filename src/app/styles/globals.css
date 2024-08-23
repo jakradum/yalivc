@@ -9,14 +9,15 @@ html {
 }
 
 body {
-  margin: 2rem 1rem 1rem 1rem;
+  margin-top: 2rem;
   padding-top: 2rem; /* Default padding for mobile */
   font-family: var(--font-inter);
 }
 
 .page-wrapper {
   flex: 1;
-  margin: 0 1rem;
+  margin: 1rem;
+  margin-bottom: 0;
   border-left: 1px solid black;
   border-right: 1px solid black;
   min-height: 100vh;
@@ -59,7 +60,6 @@ footer{
   width: 100%;
   padding: 0;
   margin: 0;
-  border-bottom: 1px solid black;
   padding-bottom: .8rem;
 }
 

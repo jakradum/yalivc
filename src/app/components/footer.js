@@ -51,7 +51,7 @@ export default function Footer() {
           <FooterLogo />
         </div>
       </div>
-      <div className={`${styles.bottomStrip} ${styles.desktopBottomStrip}`}>
+      <div className={`${styles.desktopBottomStrip}`}>
         <BottomStripContent />
       </div>
     </footer>
