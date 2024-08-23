@@ -12,6 +12,7 @@ body {
   margin-top: 2rem;
   padding-top: 2rem; /* Default padding for mobile */
   font-family: var(--font-inter);
+  background-color: #efefef;
 }
 
 .page-wrapper {
