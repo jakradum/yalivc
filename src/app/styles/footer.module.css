@@ -164,7 +164,7 @@
 }
 
 .infoSection h3 {
-    font-size: clamp(4rem, 2vw, 1.8rem);
+    font-size: clamp(4rem, 2vw, 1rem);
     margin-bottom: 1rem;
     font-weight: 400;
     max-width: 100%;

@@ -1,12 +1,12 @@
-/* Landing scroll styles */
+/* Landing scroll desktop styles */
 .heroSection {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   border-bottom: 1px solid black;
   position: relative;
-  overflow: hidden; /* Prevent horizontal scrolling */
-  padding-bottom: 0; /* Remove bottom padding */
+  overflow: hidden;
+  padding-bottom: 0;
 }
 
 .contentWrapper {
@@ -14,54 +14,79 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 5rem; 
+  padding-bottom: 5rem;
   border-right: 1px solid black;
   margin-right: 1rem;
   position: relative;
-  align-self: stretch; 
+  align-self: stretch;
+
 }
 
 .headingBox {
-  max-width: 35.875rem;
   display: flex;
   flex-direction: column;
   position: relative;
+
 }
 
 .headerFlex {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0 1rem;
   padding: 0 1rem;
+  max-width: 80%;
+
+
 }
 
-.headerFlex > h1 {
-  font-size: clamp(1.5rem, 4vw, 3rem);
+.headerFlex>h1 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
   color: #363636;
   margin-left: 2rem;
   top: 0;
+  max-width: 90%;
+  max-height: 70%;
+  top: 345px;
+  left: 60px;
+  gap: 0px;
+  opacity: 0px;
 }
 
-.headingBox > p {
+.headerFlex > h1::after {
+  content: '|';
+  position: absolute;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.headingBox>p {
   font-size: clamp(0.5rem, 3vw, 1rem);
   color: #363636;
   margin: 1rem 2rem;
   position: relative;
-  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+  max-width: 80%;
 }
 
 .contentWrapper::before {
   content: '';
   position: absolute;
   top: 6%;
-  right: 0; 
-  width: 100vw; /* Extend fully to the left */
+  right: 0;
+  width: 100vw;
   height: 1px;
-  background-color: black;  
+  background-color: black;
 }
 
 .graphicWrapper {
@@ -72,6 +97,7 @@
   padding-bottom: 1rem;
   position: relative;
   margin-top: 2rem;
+  margin-right: 0.5rem;
 }
 
 .graphicFg {
@@ -111,11 +137,11 @@
   z-index: 0;
 }
 
-.headerFlex > svg:first-child {
+.headerFlex>svg:first-child {
   align-self: flex-start;
   transform: rotate(-180deg);
 }
 
-.headerFlex > svg:last-child {
+.headerFlex>svg:last-child {
   align-self: flex-end;
 }
