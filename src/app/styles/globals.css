@@ -17,11 +17,12 @@ body {
 
 .page-wrapper {
   flex: 1;
-  margin: 1rem;
-  margin-bottom: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
   border-left: 1px solid black;
   border-right: 1px solid black;
   min-height: 100vh;
+
 }
 
 @media screen and (min-width: 800px) {

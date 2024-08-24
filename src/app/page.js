@@ -1,12 +1,7 @@
-import Image from 'next/image';
-import landingStyles from './styles/landingScroll.module.css';
-import Button from './components/button';
-import CompanyShowcase from './components/showcase';
-import { DottedLogoGraphic } from './components/icons/dotted logo graphic';
+import landingStyles from './landing page styles/landingscroll.module.css'
+import { DottedLogoGraphic } from './components/icons/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
-
-// Base URL for logo images
-const BASE_LOGO_URL = 'https://yali.vc/wp-content/uploads/2023/10/cosmic-circuits-1.png';
+import { Graphicfg } from './components/icons/graphicfg';
 
 export default function Home() {
   return (
@@ -23,14 +18,19 @@ export default function Home() {
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
               <h1>
-                Taking Indian deep tech to new heights. One investment at a time.
+               Taking Indian deep tech to new heights. One investment at a time.
               </h1>
               <ViewfinderIcon />
             </div>
           </div>
         </aside>
         <aside className={landingStyles.graphicWrapper}>
-          <DottedLogoGraphic />
+          <div className={landingStyles.graphicFg}>
+            <Graphicfg/>
+          </div>
+          <div className={landingStyles.dottedLogo}>
+            <DottedLogoGraphic />
+          </div>
         </aside>
       </section>
 

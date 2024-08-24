@@ -13,6 +13,7 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
   border-bottom: 0.0625rem solid black;
+  z-index: 1000;
 }
 
 /* Logo container styles */
