@@ -18,8 +18,7 @@ export default function Home() {
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
               <h1>
-               Taking Indian deep tech to new heights. One investment at a time.
-              </h1>
+               Taking Indian deep tech to new heights. One investment at a time.</h1>
               <ViewfinderIcon />
             </div>
           </div>
