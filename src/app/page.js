@@ -66,6 +66,13 @@ export default function Home() {
       {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>
         <MissionStatementRedBG/>
+        <div className={missionStyles.headerFlex}>
+              <ViewfinderIcon />
+              <h1>
+               Our love for deep tech runs deep.
+               </h1>
+              <ViewfinderIcon />
+            </div>
       </section>
     </main>
   );
