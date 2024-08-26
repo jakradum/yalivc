@@ -1,4 +1,9 @@
 /* Navbar styles */
+@viewport {
+  width: device-width;
+  zoom: 1.0;
+}
+
 .navbar {
   background-color: #EFEFEF;
   display: flex;
@@ -254,6 +259,23 @@
     left: 0;
     right: 0;
     z-index: 1001;
+    width: 100% !important;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+  }
+
+  .mobileNavContent,
+  .mobileNavContentOpen { /* newly added to debug screen width on mobile issue */
+    width: 100% !important;
+    max-width: 100vw;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
   }
 
   .mobileLogo {
@@ -286,7 +308,7 @@
     right: 0;
     bottom: 0;
     z-index: 1000;
-    overflow-y: auto;  
+    overflow-y: auto;
   }
 
   /* this is the bottom empty section in the mobile drawer under the menu list items */
@@ -341,7 +363,7 @@
   .mobileMenuList li:not(:last-child) .mobileMenuLink:hover {
     background-color: white;
   }
-  
+
 
   .mobileMenuList li:nth-last-child(2) {
     /* removes the bottom border for the last but one menu item */

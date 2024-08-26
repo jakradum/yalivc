@@ -14,11 +14,27 @@ const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const navigationItems = navigationItemsData.menuItems;
 
   useEffect(() => {
+    setIsClient(true);
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 800);
+      const mediaQuery = window.matchMedia("(max-width: 800px)");
+      const isMobileByMedia = mediaQuery.matches;
+      const isMobileByWidth = window.innerWidth <= 800;
+      const isMobileNow = isMobileByMedia && isMobileByWidth;
+      
+      setIsMobile(isMobileNow);
+      
+      console.log('Screen Size Check:', {
+        isMobile: isMobileNow,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        mediaQueryMatch: isMobileByMedia,
+        pixelRatio: window.devicePixelRatio,
+        userAgent: navigator.userAgent
+      });
     };
 
     const handleScroll = () => {

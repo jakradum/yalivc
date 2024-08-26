@@ -31,7 +31,6 @@
     top: 345px;
     left: 60px;
     gap: 0px;
-    opacity: 0px;
   }
   .headerFlex>svg:first-child {
     align-self: flex-start;

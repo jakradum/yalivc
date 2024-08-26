@@ -1,8 +1,10 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import Navbar from './components/Navbar';
+import dynamic from 'next/dynamic';
 import Footer from './components/footer';
 import './styles/globals.css';
 import Head from 'next/head';
+
+const Navbar = dynamic(() => import('./components/Navbar'), { ssr: false });
 
 const inter = Inter({
   subsets: ['latin'],
