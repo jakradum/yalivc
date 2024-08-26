@@ -29,7 +29,7 @@
   .separator {
     color: white;
     padding: 0 0.25rem;
-    font-size: clamp(0.4rem, 2vw, 0.8rem); /* Match .technology font-size */
+    font-size: clamp(0.4rem, 2vw, 0.8rem); 
   }
   
   /* Ensure the strip maintains its height on smaller screens */

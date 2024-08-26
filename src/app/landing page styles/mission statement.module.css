@@ -1,4 +1,5 @@
 .sectionBG{
+    margin: 1rem;
     background-color: #830D35;
     display: flex;
     flex-direction: column;
@@ -7,4 +8,5 @@
 .sectionBG > svg{
     height: 100%;
     padding-bottom: 10%;
+    justify-self: center;
 }
