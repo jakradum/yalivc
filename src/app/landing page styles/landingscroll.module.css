@@ -52,7 +52,7 @@
   opacity: 0px;
 }
 
-.headerFlex > h1::after {
+.headerFlex>h1::after {
   content: '|';
   position: absolute;
   animation: blink 0.7s infinite;
@@ -60,9 +60,12 @@
 }
 
 @keyframes blink {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
@@ -151,41 +154,46 @@
     flex-direction: column;
   }
 
- /* New styles to add margin to direct children of heroSection */
- .heroSection > * {
-  margin: 1rem;
-}
+  /* New styles to add margin to direct children of heroSection */
+  .heroSection>* {
+    margin: 1rem;
+  }
 
 
-/* Reset margin for pseudo-elements */
-.heroSection::before,
-.heroSection::after {
-  margin: 0;
-  padding: 0;
-}
+  /* Reset margin for pseudo-elements */
+  .heroSection::before,
+  .heroSection::after {
+    margin: 0;
+    padding: 0;
+  }
 
   .contentWrapper {
     border-right: none;
-    border-bottom: 1px solid black;
     margin-right: 0;
-    padding-bottom: 2rem;
+    padding: 2rem 0;
+    justify-content:left;
   }
 
   .graphicWrapper {
-    margin: 1rem;
-    padding: 1rem 0;
-    width: 100%; 
-    aspect-ratio: 0.78; 
-    margin-left: auto; 
+    margin: 0 1rem;
+    width: 100%;
+    aspect-ratio: 0.78;
+    margin-left: auto;
     margin-right: auto;
   }
 
-  .contentWrapper{
-    border-bottom: none;
+  .contentWrapper::before {
+    display: none;
   }
 
-  .graphicWrapper > * {
-    width: 100%; 
+  .headerFlex>svg path,
+  .headerFlex>svg rect,
+  .headerFlex>svg circle {
+    fill: #830D35;
+  }
+
+  .graphicWrapper>* {
+    width: 100%;
     height: 100%;
   }
 
@@ -194,35 +202,43 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%; /* Adjust this value to control the size of the SVGs */
-    height: 80%; /* Maintain aspect ratio */
+    width: 80%;
+    /* Adjust this value to control the size of the SVGs */
+    height: 80%;
+    /* Maintain aspect ratio */
   }
 
   /* Specific style for the dotted logo if needed */
   .dottedLogo svg {
-    width: 100%; /* Make the dotted logo fill the wrapper */
+    width: 100%;
+    /* Make the dotted logo fill the wrapper */
     height: 100%;
     max-width: none;
     max-height: none;
   }
 
   .graphicFg svg {
-    z-index: 1; /* Ensure the foreground graphic stays on top */
+    z-index: 1;
+    /* Ensure the foreground graphic stays on top */
   }
 
   .headerFlex {
     max-width: 100%;
   }
 
-  .headerFlex > h1 {
+  .headerFlex>h1 {
     margin-left: 0;
     max-width: 100%;
+    color: #830D35;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 
-  .headingBox > p {
+  .headingBox>p {
     padding: 1rem;
     max-width: 100%;
     margin: 0.5rem 0;
+    font-size: 0.8rem;
   }
 
   .contentWrapper::before {

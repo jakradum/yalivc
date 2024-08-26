@@ -1,9 +1,34 @@
-import landingStyles from './landing page styles/landingscroll.module.css'
+import React from 'react';
+import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
 import { Graphicfg } from './components/icons/graphicfg';
-import missionStyles from './landing page styles/mission statement.module.css'
+import missionStyles from './landing page styles/mission statement.module.css';
 import { MissionStatementRedBG } from './components/icons/background svgs/mission statement red bg';
+import categories from './categories.json';
+import separatorStyles from './landing page styles/separator.module.css';
+
+const TechnologiesArticle = () => {
+  const technologies = categories.emergingTechnologies;
+
+  // Function to repeat the array multiple times
+  const repeatTechnologies = (arr, times) => [].concat(...Array(times).fill(arr));
+
+  const repeatedTechnologies = repeatTechnologies(technologies, 10); // Repeat 10 times, adjust as needed
+
+  return (
+    <div className={separatorStyles.containerWrapper}>
+      <div className={separatorStyles.repeatingContainer}>
+        {repeatedTechnologies.map((tech, index) => (
+          <React.Fragment key={`${tech}-${index}`}>
+            {index > 0 && <span className={separatorStyles.separator}>·</span>}
+            <span className={separatorStyles.technology}>{tech}</span>
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
   return (
@@ -34,6 +59,9 @@ export default function Home() {
           </div>
         </aside>
       </section>
+
+      {/* Technologies Article */}
+      <TechnologiesArticle />
 
       {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>

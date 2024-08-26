@@ -1,0 +1,45 @@
+.containerWrapper {
+    width: 100%;
+    overflow: hidden;
+    background-color: #830D35;
+    padding: 1rem 0;
+    border-bottom: 1px solid black;
+  }
+  
+  .repeatingContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .technologyWrapper {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .technology {
+    font-size: clamp(0.4rem, 2vw, 0.8rem);
+    font-weight: 300;
+    color: white;
+    padding: 0 0.5rem;
+    text-transform: uppercase;
+  }
+  
+  .separator {
+    color: white;
+    padding: 0 0.25rem;
+    font-size: clamp(0.4rem, 2vw, 0.8rem); /* Match .technology font-size */
+  }
+  
+  /* Ensure the strip maintains its height on smaller screens */
+  @media (max-width: 800px) {
+    .containerWrapper {
+      padding: 0.5rem 0;
+    }
+    
+    .technology,
+    .separator {
+      font-size: 0.5rem;
+    }
+  }
