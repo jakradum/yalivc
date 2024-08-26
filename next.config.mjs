@@ -8,10 +8,10 @@ const nextConfig = {
     loaderFile: './image-loader.js',
     domains: ['yali.vc'],
   },
-  basePath: '',  // Remove the basePath
-  assetPrefix: isProd ? 'https://jakradum.com' : '',  // Use your actual domain here
+  basePath: isProd ? '/yalivc' : '',
+  assetPrefix: isProd ? 'https://jakradum.github.io/yalivc' : '',
   trailingSlash: true,
-  ...(isProd ? { output: 'export' } : {}),
+  output: 'export',
 };
 
 export default nextConfig;
