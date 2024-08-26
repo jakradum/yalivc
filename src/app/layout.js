@@ -2,6 +2,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import Navbar from './components/Navbar';
 import Footer from './components/footer';
 import './styles/globals.css';
+import Head from 'next/head';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,9 +25,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <head>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" />
-      </head>
+      </Head>
       <body className={inter.className}>
         <Navbar />
         <div className="page-wrapper">
