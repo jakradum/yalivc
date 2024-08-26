@@ -2,6 +2,8 @@ import landingStyles from './landing page styles/landingscroll.module.css'
 import { DottedLogoGraphic } from './components/icons/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
 import { Graphicfg } from './components/icons/graphicfg';
+import missionStyles from './landing page styles/mission statement.module.css'
+import { MissionStatementRedBG } from './components/icons/background svgs/mission statement red bg';
 
 export default function Home() {
   return (
@@ -34,7 +36,9 @@ export default function Home() {
       </section>
 
       {/* Mission statement scroll */}
-      <section></section>
+      <section className={missionStyles.sectionBG}>
+        <MissionStatementRedBG/>
+      </section>
     </main>
   );
 }
