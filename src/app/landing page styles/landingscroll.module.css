@@ -49,7 +49,6 @@
   top: 345px;
   left: 60px;
   gap: 0px;
-  opacity: 0px;
 }
 
 .headerFlex>h1::after {
