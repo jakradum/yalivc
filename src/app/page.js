@@ -1,11 +1,11 @@
 import React from 'react';
 import landingStyles from './landing page styles/landingscroll.module.css';
-import { DottedLogoGraphic } from './components/icons/graphic bg';
+import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
-import { Graphicfg } from './components/icons/graphicfg';
+import { Graphicfg } from './components/icons/background svgs/graphicfg';
 import missionStyles from './landing page styles/mission statement.module.css';
 import { MissionStatementRedBG } from './components/icons/background svgs/mission statement red bg';
-import categories from './categories.json';
+import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
 
 const TechnologiesArticle = () => {

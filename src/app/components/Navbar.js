@@ -7,7 +7,7 @@ import { Logo } from './icons/logo';
 import { Lightlogo } from './icons/lightlogo';
 import { PinkLogo } from './icons/pinklogo';
 import { CloseIcon } from './icons/small icons/closeicon';
-import { Openicon } from './icons/Openicon';
+import { Openicon } from './icons/small icons/Openicon';
 import navigationItemsData from '../navigationItems.json';
 
 const Navbar = () => {
