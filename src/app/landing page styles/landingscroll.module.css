@@ -5,7 +5,7 @@
   justify-content: space-between;
   border-bottom: 1px solid black;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   padding-bottom: 0;
 }
 
