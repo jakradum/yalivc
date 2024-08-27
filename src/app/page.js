@@ -7,6 +7,7 @@ import missionStyles from './landing page styles/mission statement.module.css';
 import { MissionStatementRedBG } from './components/icons/background svgs/mission statement red bg';
 import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
+import HeaderFlex from './components/icons/headerflex';
 
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
@@ -67,11 +68,7 @@ export default function Home() {
         <div className={missionStyles.backgroundSVG}>
           <MissionStatementRedBG />
         </div>
-        <div className={missionStyles.headerFlex}>
-          <ViewfinderIcon />
-          <h1>Our love for deep tech runs deep.</h1>
-          <ViewfinderIcon />
-        </div>
+        <HeaderFlex title="Our love for deep tech runs deep." color="white" />
         <article className={missionStyles.bodyText}>
           <p>
             Yali Capital is helmed by a team of experts from the world of deep tech with a razor-sharp focus on
