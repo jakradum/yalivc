@@ -76,6 +76,7 @@
   margin: 1rem 2rem;
   position: relative;
   padding-bottom: clamp(1rem, 2vw, 0.2rem);
+  padding-top: 2.5rem;
   max-width: 80%;
 }
 

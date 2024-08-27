@@ -1,46 +1,79 @@
-.sectionBG{
-    margin: 1rem;
-    background-color: #830D35;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.sectionBG {
+  margin: 1rem;
+  background-color: #830D35;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  min-height: 80vh;
 }
-.sectionBG > svg{
-    height: 100%;
-    justify-self: center;
+
+.backgroundSVG {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+}
+
+.backgroundSVG > svg {
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 .headerFlex {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 0 1rem;
-    max-width: 50%;
-    padding: 2rem;
-  }
-  .headerFlex>h1 {
-    font-size: clamp(1.5rem, 3vw, 3rem);
-    font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
-    color: white;
-    margin-left: 2rem;
-    top: 0;
-    max-width: 90%;
-    max-height: 70%;
-    top: 345px;
-    left: 60px;
-    gap: 0px;
-  }
-  .headerFlex>svg:first-child {
-    align-self: flex-start;
-    transform: rotate(-180deg);
-  }
-  .headerFlex>svg:last-child {
-    align-self: flex-end;
-  }
-  .headerFlex>svg path,
-  .headerFlex>svg rect,
-  .headerFlex>svg circle {
-    fill: white;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 40%;
+  padding: 0 2rem;
+}
+
+.headerFlex > h1 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
+  color: white;
+  margin: 0 0 0 2rem;
+  top: 0;
+  max-width: 90%;
+  max-height: 70%;
+  top: 345px;
+  left: 60px;
+  gap: 0px;
+}
+
+.headerFlex > svg:first-child {
+  align-self: flex-start;
+  transform: rotate(-180deg);
+}
+
+.headerFlex > svg:last-child {
+  align-self: flex-end;
+  padding: 0 2rem 3rem 0;
+}
+
+.headerFlex > svg path,
+.headerFlex > svg rect,
+.headerFlex > svg circle {
+  fill: white;
+}
+
+.bodyText {
+  color: white;
+  max-width: 40%;
+  position: absolute;
+  bottom: 25%;  /* Adjust this value to move the text up or down */
+  right: 5%;
+  z-index: 2;
+}
+
+.bodyText p {
+  margin-bottom: 1rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  line-height: 1.5;
+}

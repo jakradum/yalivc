@@ -44,15 +44,14 @@ export default function Home() {
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
-              <h1>
-               Taking Indian deep tech to new heights. One investment at a time.</h1>
+              <h1>Taking Indian deep tech to new heights. One investment at a time.</h1>
               <ViewfinderIcon />
             </div>
           </div>
         </aside>
         <aside className={landingStyles.graphicWrapper}>
           <div className={landingStyles.graphicFg}>
-            <Graphicfg/>
+            <Graphicfg />
           </div>
           <div className={landingStyles.dottedLogo}>
             <DottedLogoGraphic />
@@ -65,14 +64,25 @@ export default function Home() {
 
       {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>
-        <MissionStatementRedBG/>
+        <div className={missionStyles.backgroundSVG}>
+          <MissionStatementRedBG />
+        </div>
         <div className={missionStyles.headerFlex}>
-              <ViewfinderIcon />
-              <h1>
-               Our love for deep tech runs deep.
-               </h1>
-              <ViewfinderIcon />
-            </div>
+          <ViewfinderIcon />
+          <h1>Our love for deep tech runs deep.</h1>
+          <ViewfinderIcon />
+        </div>
+        <article className={missionStyles.bodyText}>
+          <p>
+            Yali Capital is helmed by a team of experts from the world of deep tech with a razor-sharp focus on
+            early-stage companies. We help nurture startups through funding, mentorship, and access to a network of
+            innovators and industry leaders.
+          </p>
+          <p>
+            The core team at Yali Capital includes people from a range of backgrounds such as Semiconductor, Life
+            Sciences, Machine Learning, and Venture Capital.
+          </p>
+        </article>
       </section>
     </main>
   );

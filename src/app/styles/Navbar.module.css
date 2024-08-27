@@ -259,7 +259,6 @@
     left: 0;
     right: 0;
     z-index: 1001;
-    width: 100% !important;
     max-width: 100vw;
     overflow-x: hidden;
     box-sizing: border-box;
@@ -269,7 +268,6 @@
 
   .mobileNavContent,
   .mobileNavContentOpen { /* newly added to debug screen width on mobile issue */
-    width: 100% !important;
     max-width: 100vw;
     left: 0;
     right: 0;
