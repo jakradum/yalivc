@@ -8,6 +8,7 @@ import { MissionStatementRedBG } from './components/icons/background svgs/missio
 import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
+import MissionStatement from './components/missionstatement';
 
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
@@ -45,7 +46,7 @@ export default function Home() {
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
-              <h1>Taking Indian deep tech to new heights. One investment at a time.</h1>
+              <h1>Raising the bar for India's deep tech.<br/> One investment at a time.</h1>
               <ViewfinderIcon />
             </div>
           </div>
@@ -65,21 +66,7 @@ export default function Home() {
 
       {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>
-        <div className={missionStyles.backgroundSVG}>
-          <MissionStatementRedBG />
-        </div>
-        <HeaderFlex title="Our love for deep tech runs deep." color="white" />
-        <article className={missionStyles.bodyText}>
-          <p>
-            Yali Capital is helmed by a team of experts from the world of deep tech with a razor-sharp focus on
-            early-stage companies. We help nurture startups through funding, mentorship, and access to a network of
-            innovators and industry leaders.
-          </p>
-          <p>
-            The core team at Yali Capital includes people from a range of backgrounds such as Semiconductor, Life
-            Sciences, Machine Learning, and Venture Capital.
-          </p>
-        </article>
+        <MissionStatement/>
       </section>
     </main>
   );
