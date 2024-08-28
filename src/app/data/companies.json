@@ -1,112 +1,112 @@
 {
-    "companies": [
-      {
-        "name": "Cosmic Circuits",
-        "category": "Analog and Mixed-Signal IP",
-        "oneLiner": "Provider of cutting-edge analog and mixed-signal IP solutions for semiconductor industry.",
-        "detail": "Develops analog and mixed-signal IP cores for connectivity and advanced technologies in 40nm and 28nm nodes, with ongoing development in 20nm and FinFET."
-      },
-      {
-        "name": "Cirel Systems",
-        "category": "Power Management ICs",
-        "oneLiner": "Innovator in power management solutions for smart devices and custom sensor ASICs.",
-        "detail": "Specializes in power management ICs for portable devices, offering integrated solutions for power application processors, regulators, and battery management."
-      },
-      {
-        "name": "NanoSemi",
-        "category": "Digital Compensator IP",
-        "oneLiner": "Developer of high-performance digital compensator IP for wireless and optical communications.",
-        "detail": "Creates digital compensator IP to linearize non-linear dynamic systems in wireless radios, data converters, and optical transceivers, focusing on spectral efficiency and low power consumption."
-      },
-      {
-        "name": "Haystack Analytics",
-        "category": "Genomics Diagnostics",
-        "oneLiner": "Pioneer in genomics-based diagnostic solutions for infectious diseases.",
-        "detail": "HealthTech company developing clinical genomics products for diagnostic labs and hospitals, with a focus on infectious diseases like Tuberculosis. Recognized for innovation by Indian science agencies."
-      },
-      {
-        "name": "Ethereal Machines",
-        "category": "CNC Machining Technology",
-        "oneLiner": "Advancing 5-Axis CNC machining technology for diverse manufacturing applications.",
-        "detail": "Deep-Tech startup innovating in 5-Axis CNC machining technology, addressing manufacturing gaps across various industries including plastics, aerospace, and healthcare."
-      },
-      {
-        "name": "BluArmor",
-        "category": "Two-Wheeler Safety Technology",
-        "oneLiner": "Innovator in comfort and safety solutions for two-wheeler riders.",
-        "detail": "Develops proprietary technologies like RIDEGRID™ and RIDEAURA™ to enhance two-wheeler riding experience, focusing on connectivity, communication, and safety."
-      },
-      {
-        "name": "GalaxEye",
-        "category": "Satellite Imaging",
-        "oneLiner": "Pioneering space-tech startup developing advanced satellite imaging solutions.",
-        "detail": "IIT Madras incubated startup creating innovative sensing solutions for satellite imaging, founded by former members of the Avishkar Hyperloop team."
-      },
-      {
-        "name": "Tonbo Imaging",
-        "category": "Advanced Sensing Solutions",
-        "oneLiner": "Provider of advanced sensing and imaging solutions for defense and security applications.",
-        "detail": "Designs and develops sensing solutions for enhanced situational awareness in security, defense, reconnaissance, and smart city applications."
-      },
-      {
-        "name": "Aurasemi",
-        "category": "Mixed-Signal ICs",
-        "oneLiner": "Multinational fabless semiconductor company specializing in mixed-signal IC solutions.",
-        "detail": "Develops high-performance integrated circuits for timing, power management, RF signal chain, and sensor applications across various markets including communications and automotive."
-      },
-      {
-        "name": "Kyulux",
-        "category": "OLED Materials",
-        "oneLiner": "Developer of next-generation OLED materials using TADF/Hyperfluorescence™ technology.",
-        "detail": "Creates cost-effective, durable, and efficient OLED emitters without rare metals, utilizing AI-driven material development processes."
-      },
-      {
-        "name": "ideaForge",
-        "category": "Unmanned Aircraft Systems",
-        "oneLiner": "Leading manufacturer of indigenous unmanned aircraft systems in India.",
-        "detail": "Pioneering UAV company with the largest operational deployment of indigenous drones in India, ranked 5th globally in dual-use category drone manufacturers."
-      },
-      {
-        "name": "Walden International",
-        "category": "Venture Capital",
-        "oneLiner": "Venture capital firm focusing on Sprout Stage™ investments in digital media and cloud services.",
-        "detail": "Targets investments in early-stage companies with mass-market potential, providing active support in brand building and scaling operations."
-      },
-      {
-        "name": "Cadence",
-        "category": "Electronic Design Automation",
-        "oneLiner": "Leader in electronic systems design software and hardware solutions.",
-        "detail": "Provides computational software expertise for electronic design automation, serving innovative companies across various market applications."
-      },
-      {
-        "name": "Artera",
-        "category": "Critical Infrastructure Solutions",
-        "oneLiner": "Provider of sustainable mission-critical infrastructure solutions for utility industries.",
-        "detail": "Offers services for natural gas, water, electric, and telecommunications industries across 41 states, building on decades of experience in critical infrastructure."
-      },
-      {
-        "name": "SambaNova Systems",
-        "category": "AI Hardware and Software",
-        "oneLiner": "Innovator in AI hardware and software solutions for enterprise applications.",
-        "detail": "Develops advanced AI systems to help organizations implement and scale AI technologies across various industries."
-      },
-      {
-        "name": "Greenstone Biosciences",
-        "category": "AI-Driven Drug Discovery",
-        "oneLiner": "Biotech innovator combining AI and hiPSC for accelerated drug discovery.",
-        "detail": "Utilizes an AI-hiPSC platform to expedite the development of effective therapies, bridging the gap between laboratory research and patient care."
-      },
-      {
-        "name": "Data Patterns",
-        "category": "Defense Electronics",
-        "oneLiner": "Vertically integrated provider of indigenous defense and aerospace electronics solutions.",
-        "detail": "Specializes in developing and manufacturing high-reliability electronic systems and mission-critical precision components for defense and space sectors."
-      },
-      {
-        "name": "MTAR Technologies",
-        "category": "Precision Engineering",
-        "oneLiner": "Leading manufacturer of precision engineered products for critical sectors.",
-        "detail": "Produces mission-critical precision components and assemblies for nuclear, space, and defense sectors, with expertise in specialized fabrication and import substitution."
-      }
-    ]
-  }
+  "companies": [
+    {
+      "name": "Cosmic Circuits",
+      "category": "semiconductors",
+      "oneLiner": "Provider of cutting-edge analog and mixed-signal IP solutions for semiconductor industry.",
+      "detail": "Develops analog and mixed-signal IP cores for connectivity and advanced technologies in 40nm and 28nm nodes, with ongoing development in 20nm and FinFET."
+    },
+    {
+      "name": "Cirel Systems",
+      "category": "semiconductors",
+      "oneLiner": "Innovator in power management solutions for smart devices and custom sensor ASICs.",
+      "detail": "Specializes in power management ICs for portable devices, offering integrated solutions for power application processors, regulators, and battery management."
+    },
+    {
+      "name": "NanoSemi",
+      "category": "semiconductors",
+      "oneLiner": "Developer of high-performance digital compensator IP for wireless and optical communications.",
+      "detail": "Creates digital compensator IP to linearize non-linear dynamic systems in wireless radios, data converters, and optical transceivers, focusing on spectral efficiency and low power consumption."
+    },
+    {
+      "name": "Haystack Analytics",
+      "category": "genomics",
+      "oneLiner": "Pioneer in genomics-based diagnostic solutions for infectious diseases.",
+      "detail": "HealthTech company developing clinical genomics products for diagnostic labs and hospitals, with a focus on infectious diseases like Tuberculosis. Recognized for innovation by Indian science agencies."
+    },
+    {
+      "name": "Ethereal Machines",
+      "category": "advanced manufacturing",
+      "oneLiner": "Advancing 5-Axis CNC machining technology for diverse manufacturing applications.",
+      "detail": "Deep-Tech startup innovating in 5-Axis CNC machining technology, addressing manufacturing gaps across various industries including plastics, aerospace, and healthcare."
+    },
+    {
+      "name": "BluArmor",
+      "category": "advanced manufacturing",
+      "oneLiner": "Innovator in comfort and safety solutions for two-wheeler riders.",
+      "detail": "Develops proprietary technologies like RIDEGRID™ and RIDEAURA™ to enhance two-wheeler riding experience, focusing on connectivity, communication, and safety."
+    },
+    {
+      "name": "GalaxEye",
+      "category": "aerospace",
+      "oneLiner": "Pioneering space-tech startup developing advanced satellite imaging solutions.",
+      "detail": "IIT Madras incubated startup creating innovative sensing solutions for satellite imaging, founded by former members of the Avishkar Hyperloop team."
+    },
+    {
+      "name": "Tonbo Imaging",
+      "category": "defence",
+      "oneLiner": "Provider of advanced sensing and imaging solutions for defense and security applications.",
+      "detail": "Designs and develops sensing solutions for enhanced situational awareness in security, defense, reconnaissance, and smart city applications."
+    },
+    {
+      "name": "Aurasemi",
+      "category": "semiconductors",
+      "oneLiner": "Multinational fabless semiconductor company specializing in mixed-signal IC solutions.",
+      "detail": "Develops high-performance integrated circuits for timing, power management, RF signal chain, and sensor applications across various markets including communications and automotive."
+    },
+    {
+      "name": "Kyulux",
+      "category": "advanced manufacturing",
+      "oneLiner": "Developer of next-generation OLED materials using TADF/Hyperfluorescence™ technology.",
+      "detail": "Creates cost-effective, durable, and efficient OLED emitters without rare metals, utilizing AI-driven material development processes."
+    },
+    {
+      "name": "ideaForge",
+      "category": "aerospace",
+      "oneLiner": "Leading manufacturer of indigenous unmanned aircraft systems in India.",
+      "detail": "Pioneering UAV company with the largest operational deployment of indigenous drones in India, ranked 5th globally in dual-use category drone manufacturers."
+    },
+    {
+      "name": "Walden International",
+      "category": "artificial intelligence",
+      "oneLiner": "Venture capital firm focusing on Sprout Stage™ investments in digital media and cloud services.",
+      "detail": "Targets investments in early-stage companies with mass-market potential, providing active support in brand building and scaling operations."
+    },
+    {
+      "name": "Cadence",
+      "category": "semiconductors",
+      "oneLiner": "Leader in electronic systems design software and hardware solutions.",
+      "detail": "Provides computational software expertise for electronic design automation, serving innovative companies across various market applications."
+    },
+    {
+      "name": "Artera",
+      "category": "advanced manufacturing",
+      "oneLiner": "Provider of sustainable mission-critical infrastructure solutions for utility industries.",
+      "detail": "Offers services for natural gas, water, electric, and telecommunications industries across 41 states, building on decades of experience in critical infrastructure."
+    },
+    {
+      "name": "SambaNova Systems",
+      "category": "artificial intelligence",
+      "oneLiner": "Innovator in AI hardware and software solutions for enterprise applications.",
+      "detail": "Develops advanced AI systems to help organizations implement and scale AI technologies across various industries."
+    },
+    {
+      "name": "Greenstone Biosciences",
+      "category": "life sciences",
+      "oneLiner": "Biotech innovator combining AI and hiPSC for accelerated drug discovery.",
+      "detail": "Utilizes an AI-hiPSC platform to expedite the development of effective therapies, bridging the gap between laboratory research and patient care."
+    },
+    {
+      "name": "Data Patterns",
+      "category": "defence",
+      "oneLiner": "Vertically integrated provider of indigenous defense and aerospace electronics solutions.",
+      "detail": "Specializes in developing and manufacturing high-reliability electronic systems and mission-critical precision components for defense and space sectors."
+    },
+    {
+      "name": "MTAR Technologies",
+      "category": "advanced manufacturing",
+      "oneLiner": "Leading manufacturer of precision engineered products for critical sectors.",
+      "detail": "Produces mission-critical precision components and assemblies for nuclear, space, and defense sectors, with expertise in specialized fabrication and import substitution."
+    }
+  ]
+}

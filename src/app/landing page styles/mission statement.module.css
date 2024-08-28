@@ -98,8 +98,9 @@
   }
   
   .backgroundSVG > svg {
-    width: 400%; /* Increased width to ensure coverage */
+
     min-width: unset;
+    height: 100%;
     min-height:max-content;
     transform: translate(-50%, -50%) scale(1); /* Scale down for mobile */
     align-self: center;
