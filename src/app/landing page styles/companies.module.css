@@ -22,6 +22,7 @@
 }
 
 /* grid styling starts here */
+
 .companyGridContainer {
     display: flex;
     padding: 0 2rem;  /* Removed top and bottom padding */

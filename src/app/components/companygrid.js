@@ -14,12 +14,12 @@ const CompanyGrid = () => {
       </div>
       <div className={styles.companyGrid}>
         {companiesData.companies.slice(0, 10).map((company, index) => (
-          <div key={index} className={styles.companyCard}>
+          <article key={index} className={styles.companyCard}>
             <div className={styles.companyNumber}><h2>{String(index + 1).padStart(2, '0')}</h2></div>
             <h4 className={styles.companyTitle}>{company.name}</h4>
             <p className={styles.companyCategory}>{company.category}</p>
             <small>{company.oneLiner}</small>
-          </div>
+          </article>
         ))}
       </div>
     </div>
