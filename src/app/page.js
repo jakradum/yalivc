@@ -68,6 +68,9 @@ export default function Home() {
       <section className={missionStyles.sectionBG}>
         <MissionStatement/>
       </section>
+      <section>
+        <HeaderFlex title='Our companies make us proud' color='black'/>
+      </section>
     </main>
   );
 }
