@@ -3,8 +3,20 @@
   background-color: #830D35;
   position: relative;
   height: 80vh;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow the border to be visible */
   transition: height 0.3s ease-out;
+  padding-bottom: 1rem; /* Space for the border */
+}
+
+.sectionBG::after {
+  content: '';
+  position: absolute;
+  left: -100vw; /* Extend to the left edge of the screen */
+  right: -100vw; /* Extend to the right edge of the screen */
+  bottom: -1rem; /* Position it 1rem below the container */
+  height: 1px; /* Increased thickness for visibility */
+  background-color: #000; /* Ensure this contrasts with your background */
+  z-index: 10; /* Increased to ensure it's above other elements */
 }
 
 .sectionBG.expanded {

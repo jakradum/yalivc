@@ -8,6 +8,7 @@ import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
+import companyStyles from './landing page styles/companies.module.css'
 
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
@@ -67,7 +68,9 @@ export default function Home() {
       <section className={missionStyles.sectionBG}>
         <MissionStatement/>
       </section>
-      <section>
+      
+      {/* team section */}
+      <section className={companyStyles.section}>
         <HeaderFlex title='Our companies make us proud' color='black'/>
       </section>
     </main>
