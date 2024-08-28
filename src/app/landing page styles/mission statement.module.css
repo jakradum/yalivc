@@ -2,8 +2,13 @@
   margin: 1rem;
   background-color: #830D35;
   position: relative;
-  min-height: 80vh;
+  height: 80vh;
   overflow: hidden;
+  transition: height 0.3s ease-out;
+}
+
+.sectionBG.expanded {
+  height: calc(80vh + 2rem + var(--header-height));
 }
 
 .backgroundSVG {
@@ -11,7 +16,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 80vh;
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -34,22 +39,28 @@
 .content {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   height: 100%;
-  padding: 2rem;
 }
 
-/* Styles for HeaderFlex component */
-.content > div:first-child {
-  margin-bottom: 2rem;
+.headerWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.3s ease-out, top 0.3s ease-out;
+}
+
+.headerWrapper.bottomPosition {
+  top: calc(80vh - var(--header-height));
+  transform: none;
 }
 
 .bodyText {
   color: white;
   max-width: 40%;
-  align-self: flex-end;
+  position: absolute;
+  bottom: calc(var(--header-height) + 2rem);
+  right: 5%;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
@@ -67,10 +78,11 @@
   background-color: #830D35;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .bodyText {
     max-width: 90%;
-    align-self: center;
+    right: 5%;
+    left: 5%;
   }
   
   .backgroundSVG > svg {
