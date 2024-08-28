@@ -227,18 +227,18 @@
   }
 
   .headerFlex>h1 {
-    margin-left: 0;
     max-width: 100%;
     color: #830D35;
     padding-bottom: 0;
     margin-bottom: 0;
+    font-size: 2rem;
   }
 
   .headingBox>p {
     padding: 1rem;
     max-width: 100%;
     margin: 0.5rem 0;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .contentWrapper::before {

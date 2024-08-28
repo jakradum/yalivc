@@ -4,7 +4,6 @@ import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
 import { Graphicfg } from './components/icons/background svgs/graphicfg';
 import missionStyles from './landing page styles/mission statement.module.css';
-import { MissionStatementRedBG } from './components/icons/background svgs/mission statement red bg';
 import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
@@ -42,11 +41,11 @@ export default function Home() {
             <p>
               We believe the next wave of large-scale innovation will have roots in deep tech. With investments across
               sectors like Semiconductors, Robotics, Genomics, Aerospace, and AI, we're helping India's startups build
-              for the future, and we're only getting started.
+              for the future, and we are only getting started.
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
-              <h1>Raising the bar for India's deep tech.<br/> One investment at a time.</h1>
+              <h1>Helping India's deep tech soar.<br/>Because, our growth story is still being written.</h1>
               <ViewfinderIcon />
             </div>
           </div>

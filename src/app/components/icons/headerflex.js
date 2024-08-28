@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/HeaderFlex.module.css';
+import styles from '../../styles/headerflex.module.css'; // don't change the name of this import
 import { ViewfinderIcon } from './small icons/viewfinder icon.js';
 
 const HeaderFlex = ({ 
@@ -20,3 +20,4 @@ const HeaderFlex = ({
 };
 
 export default HeaderFlex;
+

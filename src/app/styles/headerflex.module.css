@@ -11,7 +11,7 @@
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
-  color: inherit; /* This allows the h1 to inherit the color from its parent */
+  color: inherit;
   margin: 0 0 0 2rem;
   max-width: 90%;
   max-height: 70%;
@@ -35,13 +35,51 @@
 
 @media (max-width: 800px) {
   .headerFlex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     max-width: 100%;
+    padding: 2rem;
+    position: relative;
+    height: auto;
+    min-height: 200px;
   }
-
+  
   .headerFlex > h1 {
-    margin-left: 0;
-    max-width: 100%;
-    padding-bottom: 0;
-    margin-bottom: 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
+    color: inherit;
+    max-width: 90%;
+    margin: 2rem 0;
+    z-index: 1;
+    align-self: center; /* Explicitly set for mobile */
+  }
+  
+  /* Move first SVG to the top-left corner */
+  .headerFlex > svg:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-180deg);
+    margin: 1rem;
+    align-self: flex-start; /* Override the inherited align-self */
+  }
+  
+  /* Move second SVG to the bottom-right corner */
+  .headerFlex > svg:last-child {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+    padding: 0;
+    align-self: flex-end; /* Override the inherited align-self */
+  }
+  
+  .headerFlex > svg {
+    width: 24px;
+    height: 24px;
   }
 }

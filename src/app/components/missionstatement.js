@@ -36,7 +36,7 @@ const MissionStatement = () => {
         <MissionStatementRedBG />
       </div>
       <div className={missionStyles.content}>
-        <HeaderFlex title="Our love for deep tech runs deep." color="white" />
+        <HeaderFlex title="We are an early stage, tech focused fund. And our love for deep tech runs deep." color="white" />
         <article className={`${missionStyles.bodyText} ${isVisible ? missionStyles.visible : ''}`}>
           <p>
             Yali Capital is helmed by a team of experts from the world of deep tech with a razor-sharp focus on
