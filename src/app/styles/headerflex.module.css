@@ -42,8 +42,7 @@
     max-width: 100%;
     padding: 2rem;
     position: relative;
-    height: auto;
-    min-height: 200px;
+    min-height: 5rem;
   }
   
   .headerFlex > h1 {
