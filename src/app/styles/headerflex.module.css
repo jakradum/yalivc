@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   max-width: 40%;
-  padding: 0 2rem;
+  padding: 2rem;
 }
 
 .headerFlex > h1 {
