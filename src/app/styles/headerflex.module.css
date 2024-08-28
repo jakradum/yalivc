@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   max-width: 40%;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .headerFlex > h1 {
@@ -24,7 +24,7 @@
 
 .headerFlex > svg:last-child {
   align-self: flex-end;
-  padding: 0 2rem 3rem 0;
+  /* padding: 0 2rem 3rem 0; */
 }
 
 .headerFlex > svg path,

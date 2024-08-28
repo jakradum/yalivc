@@ -9,6 +9,7 @@ import separatorStyles from './landing page styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
 import companyStyles from './landing page styles/companies.module.css'
+import CompanyGrid from './components/companygrid';
 
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
@@ -71,7 +72,10 @@ export default function Home() {
       
       {/* team section */}
       <section className={companyStyles.section}>
+        <div className={companyStyles.titleSec}>
         <HeaderFlex title='Our companies make us proud' color='black'/>
+        </div>
+        <CompanyGrid/>
       </section>
     </main>
   );

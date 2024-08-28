@@ -98,9 +98,10 @@
   }
   
   .backgroundSVG > svg {
-    width: auto;
-    height: 100%;
+    width: 400%; /* Increased width to ensure coverage */
     min-width: unset;
-    max-width: none;
+    min-height:max-content;
+    transform: translate(-50%, -50%) scale(1); /* Scale down for mobile */
+    align-self: center;
   }
 }
