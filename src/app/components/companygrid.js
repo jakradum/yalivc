@@ -61,7 +61,7 @@ const CompanyTable = () => {
       className={styles.mobileCompanyGrid}
       onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.companies.length)}
     >
-      <div className={styles.carouselContainer}>
+      <section className={styles.carouselContainer}>
         {companiesData.companies.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
           const cardStyle = isVisible
@@ -73,12 +73,12 @@ const CompanyTable = () => {
             : { display: 'none' };
 
           return (
-            <div
+            <aside
               key={index}
               className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
               style={cardStyle}
             >
-              <div className={styles.keyDetails}>
+              <article className={styles.keyDetails}>
                 <div className={styles.cardHeader}>
                   <span className={styles.companyNumber}>
                     <h2>{String(index + 1).padStart(2, '0')}</h2>
@@ -89,12 +89,13 @@ const CompanyTable = () => {
                 </div>
                 <h4 className={styles.companyTitle}>{company.name}</h4>
                 <p className={styles.companyCategory}>{company.category}</p>
-              </div>
+              </article>
               <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
-            </div>
+              <small>{company.oneLiner}</small>
+            </aside>
           );
         })}
-      </div>
+      </section>
       <Button href="/investments" color="black">
         {buttonText}
       </Button>

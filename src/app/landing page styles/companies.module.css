@@ -183,7 +183,8 @@
         display: flex;
         flex-direction: column;
         width: 7.06rem;
-
+        align-items:flex-start;
+        padding: 0;
     }
 
     .carouselContainer {
@@ -207,7 +208,6 @@
         cursor: pointer;
         box-sizing: border-box;
     }
-
     .mobileCompanyCard:not(.activeCard):hover {
         transform: translateX(-5px) !important;
     }
