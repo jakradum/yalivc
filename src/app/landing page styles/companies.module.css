@@ -134,7 +134,7 @@
     background-color: white;
 }
 
-@media (max-width: 1000px) { /* 1200px = 75rem */
+@media (max-width: 1028px) { /* 1200px = 75rem */
     .companyTableContainer {
         flex-direction: column;
     }
