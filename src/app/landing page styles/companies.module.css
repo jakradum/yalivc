@@ -26,13 +26,16 @@
 }
 
 .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 25%;
     padding-right: 2rem;
     padding-top: 2rem;
 }
 
 .sidebarText {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.5;
     margin-bottom: 1rem;
 }

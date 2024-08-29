@@ -11,7 +11,7 @@ const CompanyTable = () => {
           Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to
           public markets in India.
         </p>
-        <Button href="/learn-more" color="black">Know More</Button>
+        <Button href="/investments" color="black">Know More</Button>
       </div>
       <table className={styles.companyTable}>
         <tbody>
