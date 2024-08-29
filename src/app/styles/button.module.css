@@ -11,33 +11,46 @@
 
 .text {
   position: relative;
+  display: inline-block; /* Ensures proper wrapping */
 }
 
 .text::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -2px;
+  bottom: -2px; /* Slightly below the text */
   width: 100%;
-  height: 2px;
+  height: 1px;
   background-color: currentColor;
   transition: width 0.3s ease;
+  box-sizing: border-box;
 }
 
 .button:hover .text::after {
   width: 0;
 }
 
-.arrow {
-  margin-left: 8px;
-  transition: transform 0.3s ease;
+.button > svg path,
+.button > svg rect,
+.button > svg circle {
+  fill: currentColor;
 }
 
-.button:hover .arrow {
+.button svg {
+  padding-left: 0.5rem;
+  height: clamp(1rem, 3vw, 0.8rem); 
+  transition: transform 0.3s ease; /* Add transition for transform property */
+}
+
+.button:hover svg {
   transform: translate(5px, -5px);
 }
+
+
 @media (max-width: 900px) {
-  .button{
-font-size: 0.8rem;
-}
+  .button {
+    font-size: 0.8rem;
+    border: 1px solid black;
+    padding: clamp(1rem, 3vw, 0.8rem);
+  }
 }

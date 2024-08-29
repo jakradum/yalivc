@@ -57,7 +57,7 @@ const CompanyTable = () => {
   );
 
   const renderMobileLayout = () => (
-    <div className={styles.mobileCompanyGrid}>
+    <div className={styles.mobileCompanyGrid} onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.companies.length)}>
       <div className={styles.carouselContainer}>
         {companiesData.companies.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
@@ -68,17 +68,12 @@ const CompanyTable = () => {
                 opacity: 1 - (index - currentCard) * 0.2,
               }
             : { display: 'none' };
-
+  
           return (
             <div
               key={index}
               className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
               style={cardStyle}
-              onClick={() => {
-                if (index === currentCard) {
-                  setCurrentCard((prev) => (prev + 1) % companiesData.companies.length);
-                }
-              }}
             >
               <div className={styles.cardHeader}>
                 <span className={styles.companyNumber}>{String(index + 1).padStart(2, '0')}</span>
@@ -95,7 +90,7 @@ const CompanyTable = () => {
         {buttonText}
       </Button>
     </div>
-  );
+  );  
 
   return <div className={styles.companyTableContainer}>{isMobile ? renderMobileLayout() : renderDesktopLayout()}</div>;
 };
