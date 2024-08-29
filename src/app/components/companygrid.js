@@ -9,6 +9,7 @@ const CompanyTable = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const dummyImg = 'https://img.freepik.com/free-vector/business-logo_23-2147503133.jpg';
+  const buttonText = 'view all companies'
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,7 +29,7 @@ const CompanyTable = () => {
           public markets in India.
         </p>
         <Button href="/investments" color="black">
-          View more companies
+          {buttonText}
         </Button>
       </div>
       <table className={styles.companyTable}>
@@ -91,7 +92,7 @@ const CompanyTable = () => {
         })}
       </div>
       <Button href="/investments" color="black">
-        Know more
+        {buttonText}
       </Button>
     </div>
   );
