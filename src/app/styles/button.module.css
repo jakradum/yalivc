@@ -1,5 +1,5 @@
 .button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   text-decoration: none;
   font-family: Arial, sans-serif;
@@ -38,5 +38,6 @@
 }
 @media (max-width: 900px) {
   .button{
-font-size: 0.8rem;}
+font-size: 0.8rem;
+}
 }

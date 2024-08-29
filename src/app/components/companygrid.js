@@ -58,17 +58,30 @@ const CompanyTable = () => {
   const renderMobileLayout = () => (
     <div className={styles.mobileCompanyGrid}>
       <div className={styles.carouselContainer}>
-        {companiesData.companies.slice(0, 10).map((company, index) => {
-          let cardClass = '';
-          if (index === currentCard) cardClass = styles.activeCard;
-          else if (index === (currentCard + 1) % 10) cardClass = styles.nextCard;
-          else if (index === (currentCard - 1 + 10) % 10) cardClass = styles.prevCard;
+        {companiesData.companies.map((company, index) => {
+          const isVisible = index >= currentCard && index < currentCard + 4;
+          const cardStyle = isVisible
+            ? {
+                zIndex: companiesData.companies.length - (index - currentCard),
+                transform: `translateX(${(index - currentCard) * 20}px) scale(${1 - (index - currentCard) * 0.05})`,
+                opacity: 1 - (index - currentCard) * 0.2,
+              }
+            : { display: 'none' };
 
           return (
-            <div key={index} className={`${styles.mobileCompanyCard} ${cardClass}`} style={{ zIndex: 10 - index }}>
+            <div
+              key={index}
+              className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
+              style={cardStyle}
+              onClick={() => {
+                if (index === currentCard) {
+                  setCurrentCard((prev) => (prev + 1) % companiesData.companies.length);
+                }
+              }}
+            >
               <div className={styles.cardHeader}>
                 <span className={styles.companyNumber}>{String(index + 1).padStart(2, '0')}</span>
-                <span className={styles.totalCount}>/10</span>
+                <span className={styles.totalCount}>/{companiesData.companies.length}</span>
               </div>
               <h4 className={styles.companyTitle}>{company.name}</h4>
               <p className={styles.companyCategory}>{company.category}</p>
@@ -77,16 +90,8 @@ const CompanyTable = () => {
           );
         })}
       </div>
-      <div className={styles.navigationButtons}>
-        <button onClick={() => setCurrentCard((prev) => (prev > 0 ? prev - 1 : 9))} className={styles.navButton}>
-          Previous
-        </button>
-        <button onClick={() => setCurrentCard((prev) => (prev < 9 ? prev + 1 : 0))} className={styles.navButton}>
-          Next
-        </button>
-      </div>
       <Button href="/investments" color="black">
-        View more companies
+        Know more
       </Button>
     </div>
   );
