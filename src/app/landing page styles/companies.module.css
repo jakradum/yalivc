@@ -1,8 +1,6 @@
-/* styling for the parent container in page.js */
 .section {
-    margin: 2rem 0;
+    margin: 1rem 0;
     position: relative;
-    padding-bottom: 2rem; /* Add some padding to separate content from border */
 }
 
 .section::after {
@@ -21,18 +19,16 @@
     padding: 0;
 }
 
-/* grid styling starts here */
-
-.companyGridContainer {
+.companyTableContainer {
     display: flex;
-    padding: 0 2rem;  /* Removed top and bottom padding */
+    padding: 0 2rem;
     font-family: Arial, sans-serif;
 }
 
 .sidebar {
     width: 25%;
     padding-right: 2rem;
-    padding-top: 2rem;  /* Added top padding to align with grid */
+    padding-top: 2rem;
 }
 
 .sidebarText {
@@ -55,24 +51,23 @@
     color: #fff;
 }
 
-.companyGrid {
+.companyTable {
     width: 75%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0;
-    border-top: none;
+    border-collapse: collapse;
     border-left: 1px solid black;
-    border-bottom: none;  /* Added bottom border */
+    height: 40rem;
 }
 
-.companyCard {
+.companyCell {
     background-color: #efefef;
     border-right: 1px solid black;
     border-bottom: 1px solid black;
     padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    vertical-align: top;
+}
+
+.companyTable tr:last-child .companyCell {
+    border-bottom: none;
 }
 
 .companyNumber h2 {
@@ -93,28 +88,28 @@
     margin: 0;
 }
 
-.companyCard small {
+.companyCell small {
     font-size: 0.9rem;
     color: #333;
     margin-top: 0.5rem;
+    display: block;
 }
 
 @media (max-width: 1200px) {
-    .companyGridContainer {
+    .companyTableContainer {
         flex-direction: column;
     }
 
-    .sidebar, .companyGrid {
+    .sidebar, .companyTable {
         width: 100%;
     }
 
     .sidebar {
         margin-bottom: 2rem;
-        padding-top: 0;  /* Remove top padding in column layout */
+        padding-top: 0;
     }
 
-    .companyGrid {
-        grid-template-columns: repeat(3, 1fr);
+    .companyTable {
         border-top: 1px solid black;
         border-bottom: 1px solid black;
     }

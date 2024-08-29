@@ -47,7 +47,7 @@ export default function Home() {
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
-              <h1>Helping India's deep tech soar.<br/>Because, our growth story is still being written.</h1>
+              <h1>Helping India's deep tech soar. Because, our growth story is still being written.</h1>
               <ViewfinderIcon />
             </div>
           </div>
