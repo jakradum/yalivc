@@ -14,7 +14,7 @@ const CompanyTable = () => {
           public markets in India.
         </p>
         <Button href="/investments" color="black">
-          View more
+          View more companies
         </Button>
       </div>
       <table className={styles.companyTable}>

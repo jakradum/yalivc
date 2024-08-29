@@ -1,8 +1,8 @@
 .headerFlex {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  max-width: 40%;
+  justify-content: center;
+  max-width:40%;
   padding: 1rem;
 }
 
