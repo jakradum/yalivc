@@ -3,7 +3,7 @@ import companiesData from '../data/companies.json';
 import styles from '../landing page styles/companies.module.css';
 import Button from './button';
 
-const CompanyGrid = () => {
+const CompanyTable = () => {
   return (
     <div className={styles.companyTableContainer}>
       <div className={styles.sidebar}>
@@ -13,25 +13,27 @@ const CompanyGrid = () => {
         </p>
         <Button href="/investments" color="black">Know More</Button>
       </div>
-      <div className={styles.companyTable}>
-        {[0, 1].map(row => (
-          <div key={row} className={styles.companyRow}>
-            {companiesData.companies.slice(row * 5, (row + 1) * 5).map((company, index) => (
-              <div key={index} className={styles.companyCell}>
-                <article className={styles.companyContent}>
-                  <div className={styles.companyNumber}><h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2></div>
-                  <h4 className={styles.companyTitle}>{company.name}</h4>
-                  <p className={styles.companyCategory}>{company.category}</p>
-                  <div className={styles.imagePlaceholder}></div>
-                  <small className={styles.companyOneLiner}>{company.oneLiner}</small>
-                </article>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+      <table className={styles.companyTable}>
+        <tbody>
+          {[0, 1].map(row => (
+            <tr key={row}>
+              {companiesData.companies.slice(row * 5, (row + 1) * 5).map((company, index) => (
+                <td key={index} className={styles.companyCell}>
+                  <article className={styles.companyContent}>
+                    <div className={styles.companyNumber}><h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2></div>
+                    <h4 className={styles.companyTitle}>{company.name}</h4>
+                    <p className={styles.companyCategory}>{company.category}</p>
+                    <div className={styles.imagePlaceholder}></div>
+                    <small className={styles.companyOneLiner}>{company.oneLiner}</small>
+                  </article>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default CompanyGrid;
+export default CompanyTable;
