@@ -179,9 +179,16 @@
         align-items: center;
     }
 
+    .keyDetails { /* this is a div with the number, company name and category */
+        display: flex;
+        flex-direction: column;
+        width: 7.06rem;
+
+    }
+
     .carouselContainer {
         position: relative;
-        height: 420px; /* Adjusted to match the card height */
+        height: 26.25rem; /* Adjusted to match the card height */
         margin-bottom: 2rem;
         width: 100%;
         max-width: 280px; /* Adjusted to match the card width */
@@ -207,20 +214,25 @@
 
     .cardHeader {
         display: flex;
-        justify-content: space-between;
-        align-items: baseline;
+        justify-content: flex-start; /* Align items to the start of the flex container */
+        align-items:baseline; /* Align items to the base of the div */
         margin-bottom: 0.5rem;
+    }
+    .companyNumber > h2 {
+        color: #000;
+        margin-right: 1rem;
+        font-size: 3rem;
+    }
+    .totalCount > h3 {
+        color: #888;
+        margin-right: 1rem;
+        font-size: 1.1rem;
+        font-weight: 200;
     }
 
     .companyNumber {
-        font-size: 2rem;
         font-weight: bold;
         color: #000;
-    }
-
-    .totalCount {
-        font-size: 1rem;
-        color: #888;
     }
 
     .companyTitle {

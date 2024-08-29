@@ -9,7 +9,7 @@ const CompanyTable = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const dummyImg = 'https://img.freepik.com/free-vector/business-logo_23-2147503133.jpg';
-  const buttonText = 'view all companies'
+  const buttonText = 'view all companies';
 
   useEffect(() => {
     const handleResize = () => {
@@ -57,7 +57,10 @@ const CompanyTable = () => {
   );
 
   const renderMobileLayout = () => (
-    <div className={styles.mobileCompanyGrid} onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.companies.length)}>
+    <div
+      className={styles.mobileCompanyGrid}
+      onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.companies.length)}
+    >
       <div className={styles.carouselContainer}>
         {companiesData.companies.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
@@ -68,19 +71,25 @@ const CompanyTable = () => {
                 opacity: 1 - (index - currentCard) * 0.2,
               }
             : { display: 'none' };
-  
+
           return (
             <div
               key={index}
               className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
               style={cardStyle}
             >
-              <div className={styles.cardHeader}>
-                <span className={styles.companyNumber}>{String(index + 1).padStart(2, '0')}</span>
-                <span className={styles.totalCount}>/{companiesData.companies.length}</span>
+              <div className={styles.keyDetails}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.companyNumber}>
+                    <h2>{String(index + 1).padStart(2, '0')}</h2>
+                  </span>
+                  <span className={styles.totalCount}>
+                    <h3>/{companiesData.companies.length}</h3>
+                  </span>
+                </div>
+                <h4 className={styles.companyTitle}>{company.name}</h4>
+                <p className={styles.companyCategory}>{company.category}</p>
               </div>
-              <h4 className={styles.companyTitle}>{company.name}</h4>
-              <p className={styles.companyCategory}>{company.category}</p>
               <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
             </div>
           );
@@ -90,7 +99,7 @@ const CompanyTable = () => {
         {buttonText}
       </Button>
     </div>
-  );  
+  );
 
   return <div className={styles.companyTableContainer}>{isMobile ? renderMobileLayout() : renderDesktopLayout()}</div>;
 };
