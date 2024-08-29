@@ -3,7 +3,7 @@
   align-items: center;
   text-decoration: none;
   font-family: Arial, sans-serif;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 300;
   text-transform: uppercase;
   transition: all 0.3s ease;
@@ -35,4 +35,8 @@
 
 .button:hover .arrow {
   transform: translate(5px, -5px);
+}
+@media (max-width: 900px) {
+  .button{
+font-size: 0.8rem;}
 }

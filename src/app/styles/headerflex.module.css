@@ -33,7 +33,7 @@
   fill: currentColor;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .headerFlex {
     display: flex;
     flex-direction: column;
@@ -42,7 +42,7 @@
     max-width: 100%;
     padding: 2rem;
     position: relative;
-    min-height: 5rem;
+
   }
   
   .headerFlex > h1 {
