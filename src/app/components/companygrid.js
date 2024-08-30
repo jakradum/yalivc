@@ -61,6 +61,10 @@ const CompanyTable = () => {
       className={styles.mobileCompanyGrid}
       onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.companies.length)}
     >
+      <p className={styles.sidebarText}>
+          Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to
+          public markets in India.
+        </p>
       <section className={styles.carouselContainer}>
         {companiesData.companies.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
@@ -78,6 +82,7 @@ const CompanyTable = () => {
               className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
               style={cardStyle}
             >
+              
               <article className={styles.keyDetails}>
                 <div className={styles.cardHeader}>
                   <span className={styles.companyNumber}>
