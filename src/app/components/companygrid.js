@@ -97,6 +97,7 @@ const CompanyTable = () => {
               </article>
               <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
               <small>{company.oneLiner}</small>
+              <p>Tap to view next</p>
             </aside>
           );
         })}
