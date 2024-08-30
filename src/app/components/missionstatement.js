@@ -36,14 +36,16 @@ const MissionStatement = () => {
         <MissionStatementRedBG />
       </div>
       <div className={missionStyles.content}>
-        <HeaderFlex title="We are an early stage, tech focused fund. And our love for deep tech runs deep." color="white" />
+        <div className={missionStyles.headerWrapper}>
+          <HeaderFlex title="We are an early stage, tech focused fund. And our love for deep tech runs deep." color="white" />
+        </div>
         <article className={`${missionStyles.bodyText} ${isVisible ? missionStyles.visible : ''}`}>
-          <p>
+          <p className={isVisible ? missionStyles.visible : ''}>
             Yali Capital is helmed by a team of experts from the world of deep tech with a razor-sharp focus on
             early-stage companies. We help nurture startups through funding, mentorship, and access to a network of
             innovators and industry leaders.
           </p>
-          <p>
+          <p className={isVisible ? missionStyles.visible : ''}>
             The core team at Yali Capital includes people from a range of backgrounds such as Semiconductor, Life
             Sciences, Machine Learning, and Venture Capital.
           </p>

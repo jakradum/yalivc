@@ -42,7 +42,6 @@
     max-width: 100%;
     padding: 2rem;
     position: relative;
-
   }
   
   .headerFlex > h1 {
@@ -54,31 +53,44 @@
     max-width: 90%;
     margin: 2rem 0;
     z-index: 1;
-    align-self: center; /* Explicitly set for mobile */
+    align-self: center;
   }
   
-  /* Move first SVG to the top-left corner */
+  /* Position first SVG */
   .headerFlex > svg:first-child {
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotate(-180deg);
-    margin: 1rem;
-    align-self: flex-start; /* Override the inherited align-self */
+    top: 20%;
+    left: 10%; /* Percentage-based positioning */
+    transform: rotate(-180deg) translate(50%, 50%); /* Center the SVG around its position */
+    max-left: 1rem; /* Constrain maximum distance from left */
+    align-self: flex-start;
   }
   
-  /* Move second SVG to the bottom-right corner */
+  /* Position second SVG */
   .headerFlex > svg:last-child {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 1rem;
-    padding: 0;
-    align-self: flex-end; /* Override the inherited align-self */
+    bottom: 25%;
+    right: 10%; 
+    transform: translate(50%, 50%); /* Center the SVG around its position */
+    max-right: 1rem; /* Constrain maximum distance from right */
+    align-self: flex-end;
   }
   
   .headerFlex > svg {
     width: 24px;
     height: 24px;
+    max-width: 5vw; /* Limit SVG size on very wide screens */
+    max-height: 10vw;
+  }
+
+  /* Media query for wider mobile screens */
+  @media (min-width: 600px) {
+    .headerFlex > svg:first-child {
+      left: max(10%, 2rem); /* At least 2rem from left, but not more than 10% */
+    }
+    
+    .headerFlex > svg:last-child {
+      right: max(10%, 2rem); /* At least 2rem from right, but not more than 10% */
+    }
   }
 }
