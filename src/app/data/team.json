@@ -1,0 +1,28 @@
+{
+    "team_members": [
+      {
+        "name": "Ganapathy 'Gani' Subramaniam",
+        "category": "Founding Managing Partner",
+        "oneLiner": "Seasoned tech executive with 30+ years of industry experience.",
+        "detail": "Gani brings over 30 years of industry knowledge, including nearly a decade of entrepreneurial and investing experience. He served as a Director at Texas Instruments for 15 years, founded and sold Cosmic Circuits, and has since been on the board of five other deep tech companies. At Yali Capital, Gani serves as its Managing Partner, leveraging his extensive experience in the semiconductor and deep tech sectors."
+      },
+      {
+        "name": "Lip-Bu Tan",
+        "category": "Advisor",
+        "oneLiner": "Visionary leader with 40+ years in semiconductor and deep tech industries.",
+        "detail": "Lip-Bu Tan offers over four decades of unparalleled experience in the semiconductor and deep tech industries. As the former CEO and Executive Chairman of Cadence Design Systems, he led the company to become a global leader in electronic design automation. His career includes successfully taking over 130 companies to IPO. On Yali Capital's Advisory Board, Lip-Bu provides invaluable insights, guiding investment strategies with his wealth of knowledge and foresight in the semiconductor and deep tech sectors."
+      },
+      {
+        "name": "Mathew Cyriac",
+        "category": "Founding General Partner",
+        "oneLiner": "Experienced private equity leader and corporate strategist.",
+        "detail": "Mathew Cyriac, Chairman of Florintree Advisors, brings top-tier private equity and corporate leadership experience. As the former Co-head of Blackstone India PE, he managed $3 billion in assets. His recent successes include the IPOs of MTAR, Data Patterns, and ideaForge. Mathew currently serves as the Chairman of Gokaldas Exports and holds board positions in several prominent companies, including Tata Capital and Tata Play, offering a unique blend of operational knowledge and strategic vision to Yali Capital."
+      },
+      {
+        "name": "Karthikeyan 'Karthik' Madathil",
+        "category": "Partner",
+        "oneLiner": "Deep tech expert with 30 years of engineering and leadership experience.",
+        "detail": "Karthik brings 30 years of deep tech experience, including eight years as VP of Engineering at a deep tech startup. He founded and led an ML-powered EdTech company for five years and has a 17-year tenure across various leadership roles in both multinational corporations and startups specializing in IC design. His experience spans from Engineering Head to Business Head, providing Yali Capital with comprehensive insights into the technical and business aspects of deep tech ventures."
+      }
+    ]
+  }
