@@ -71,12 +71,10 @@
 
 .imagePlaceholder {
     position: absolute;
-    bottom: 1rem;
-    /* 1px = 0.0625rem */
+    bottom: 3rem;
     left: 1rem;
     right: 1rem;
     height: 5rem;
-    /* 80px = 5rem */
     background-color: black;
 }
 
