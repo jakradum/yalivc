@@ -11,7 +11,7 @@ export default function Footer() {
     <>
       <Link href="mailto:media-relations@yali.vc">Press inquiries</Link>
       <Link href="https://www.linkedin.com/company/yali-capital/" target='_blank'>Follow us on LinkedIn</Link>
-      <Link href="/">Legal</Link>
+      <Link href="mailto:careers@yali.vc">Careers</Link>
       <small>© Yali Capital {new Date().getFullYear()}</small>
     </>
   );
