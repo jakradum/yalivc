@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import articlesData from '../data/news.json';
-import styles from '../landing page styles/newssec.module.css'
+import styles from '../landing page styles/newssec.module.css';
 import Button from "./button";
 
 const extractPublicationName = (url) => {
@@ -15,7 +15,6 @@ const extractPublicationName = (url) => {
 
 // Button text
 const buttonText = 'Read all';
-
 
 const extractPseudoTitle = (url) => {
   try {
@@ -92,6 +91,7 @@ const getPublicationName = (article) => {
 
 export const NewsSection = () => {
   const [articles, setArticles] = useState([]);
+  const [sortOrder, setSortOrder] = useState('newest'); // default sort order is 'newest'
 
   useEffect(() => {
     const fetchYouTubeTitle = async (url) => {
@@ -128,14 +128,38 @@ export const NewsSection = () => {
           };
         })
       );
-      setArticles(formattedArticles);
+
+      // Sort articles based on the current sortOrder state
+      const sortedArticles = formattedArticles.sort((a, b) => {
+        const dateA = new Date(a.formattedDate);
+        const dateB = new Date(b.formattedDate);
+
+        if (sortOrder === 'newest') {
+          return dateB - dateA; // Newest first
+        } else {
+          return dateA - dateB; // Oldest first
+        }
+      });
+
+      setArticles(sortedArticles);
     };
 
     fetchAndFormatArticles();
-  }, []);
+  }, [sortOrder]);
+
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   return (
     <div className={styles.newsSection}>
+      <div className={styles.sortBy}>
+        <label htmlFor="sortOrder">Sort by: </label>
+        <select id="sortOrder" value={sortOrder} onChange={handleSortChange}>
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
       <div className={styles.newsArticles}>
         {articles.map((article, index) => (
           <article key={index} className={styles.article}>
