@@ -10,6 +10,12 @@ import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
 import companyStyles from './landing page styles/companies.module.css'
 import CompanyGrid from './components/companygrid';
+import { NewsSection } from './components/news section';
+import dynamic from 'next/dynamic'
+
+
+
+// Use DynamicNewsSection in your page component
 
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
@@ -70,13 +76,19 @@ export default function Home() {
         <MissionStatement/>
       </section>
       
-      {/* team section */}
+      {/* companies section */}
       <section className={companyStyles.section}>
         <div className={companyStyles.titleSec}>
         <HeaderFlex title='Our companies make us proud' color='black'/>
         </div>
         <CompanyGrid/>
       </section>
+
+      {/* news section */}
+      <section>
+        <NewsSection/>
+      </section>
+
     </main>
   );
 }
