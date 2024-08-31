@@ -86,6 +86,9 @@ export default function Home() {
 
       {/* news section */}
       <section>
+        <div className={companyStyles.titleSec}>
+          <HeaderFlex title='Yali in the news' color='black'/> 
+        </div>
         <NewsSection/>
       </section>
 

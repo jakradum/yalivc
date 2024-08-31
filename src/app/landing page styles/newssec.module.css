@@ -1,0 +1,16 @@
+/* Container for the entire news section */
+.newsSection {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+}
+
+/* Grid Layout */
+.newsArticles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+.articleTitle{
+    font-size: 1.2rem;
+    font-weight: 300;
+}

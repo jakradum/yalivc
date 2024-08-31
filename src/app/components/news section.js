@@ -1,7 +1,8 @@
 'use client';
-
 import React, { useState, useEffect } from "react";
 import articlesData from '../data/news.json';
+import styles from '../landing page styles/newssec.module.css'
+import Button from "./button";
 
 const extractPublicationName = (url) => {
   try {
@@ -11,6 +12,10 @@ const extractPublicationName = (url) => {
     return '';
   }
 };
+
+// Button text
+const buttonText = 'Read all';
+
 
 const extractPseudoTitle = (url) => {
   try {
@@ -130,21 +135,24 @@ export const NewsSection = () => {
   }, []);
 
   return (
-    <div>
-      {articles.map((article, index) => (
-        <article key={index}>
-          <h2>{truncateText(article.title, 50)}</h2>
-          <p>
-            {article.publicationName}
-            {article.formattedDate && ` | ${article.formattedDate}`}
-          </p>
-          <p>
-            <a href={article.url} target="_blank" rel="noopener noreferrer">
-              {article.isVideo ? "Watch" : "Read more"}
-            </a>
-          </p>
-        </article>
-      ))}
+    <div className={styles.newsSection}>
+      <div className={styles.newsArticles}>
+        {articles.map((article, index) => (
+          <article key={index} className={styles.article}>
+            <h2 className={styles.articleTitle}>{truncateText(article.title, 50)}</h2>
+            <p className={styles.articleMeta}>
+              {article.publicationName}
+              {article.formattedDate && ` | ${article.formattedDate}`}
+            </p>
+            <p className={styles.articleLink}>
+              <a href={article.url} target="_blank" rel="noopener noreferrer">
+                {article.isVideo ? "Watch" : "Read more"}
+              </a>
+            </p>
+          </article>
+        ))}
+      </div>
+      <Button href='/newsroom' color="black">{buttonText}</Button>
     </div>
   );
 };
