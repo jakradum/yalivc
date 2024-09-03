@@ -25,44 +25,12 @@ const isVideoUrl = (url) => {
   return videoPatterns.some((pattern) => pattern.test(url));
 };
 
-const extractPseudoTitle = (url) => {
-  try {
-    const { pathname } = new URL(url);
-    const segments = pathname.split('/').filter((segment) => segment.length > 0);
-
-    const ignoredWords = ['articleshow', 'article', 'story', 'news', 'cms', 'html', 'php'];
-    const relevantSegments = segments.filter(
-      (segment) => !ignoredWords.some((word) => segment.toLowerCase().includes(word)) && !/^\d+$/.test(segment)
-    );
-
-    if (relevantSegments.length === 0) {
-      return 'Article Title';
-    }
-
-    const rawTitle = relevantSegments[relevantSegments.length - 1];
-
-    const words = rawTitle
-      .split(/[-_]/)
-      .map((word) => word.replace(/[^\w\s]/g, '').trim())
-      .filter((word) => word.length > 0);
-
-    return words
-      .map((word) => {
-        if (word.length <= 2) return word.toUpperCase();
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      })
-      .join(' ');
-  } catch (error) {
-    return 'Article Title';
-  }
-};
-
 const formatArticles = (articles) => {
   return articles.map((article) => ({
     ...article,
     formattedDate: formatDate(article.date),
     isVideo: isVideoUrl(article.url),
-    title: article.headlineEdited || extractPseudoTitle(article.url),
+    title: article.headlineEdited
   }));
 };
 
@@ -76,7 +44,6 @@ export const NewsSection = () => {
       try {
         const response = await fetch(newsEndpoint);
         const data = await response.json();
-
         if (data.status === 'success' && data.data.articles) {
           const formattedArticles = formatArticles(data.data.articles);
           setArticles(formattedArticles);
@@ -86,34 +53,55 @@ export const NewsSection = () => {
         // Fallback data will remain in use
       }
     };
-
     fetchArticles();
   }, []);
+
+  const renderLeftGridArticle = (article, index) => (
+    <article
+      key={index}
+      className={styles.article}
+    >
+      <h3>{article.formattedDate && article.formattedDate}</h3>
+      <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
+      <p className={styles.articleMeta}>{article.publicationName || 'Unknown publication'}</p>
+      {isClient && (
+        <p className={styles.articleLink}>
+          <a href={article.url} target="_blank" rel="noopener noreferrer">
+            {article.isVideo ? 'Watch' : 'Read more'}
+          </a>
+        </p>
+      )}
+    </article>
+  );
+
+  const renderButton = () => (
+    <div className={`${styles.article} ${styles.readAllButton}`}>
+      <Button href="/newsroom" color="black">
+        Read all
+      </Button>
+    </div>
+  );
+
+  const renderRightStackArticle = (article, index) => (
+    <a href={article.url} target='_blank'>
+    <article key={index} className={styles.article}>
+      <h3>{article.formattedDate && article.formattedDate}</h3>
+      <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
+    </article>
+    </a>
+  );
 
   return (
     <div className={styles.newsSection}>
       <div className={styles.newsArticles}>
-        {articles.map((article, index) => (
-          <article key={index} className={styles.article}>
-            <h3> {article.formattedDate && article.formattedDate}</h3>
-            <h2 className={styles.articleTitle}>{truncateText(article.title, 50)}</h2>
-            <p className={styles.articleMeta}>
-              {article.publicationName}
-              
-            </p>
-            {isClient && (
-              <p className={styles.articleLink}>
-                <a href={article.url} target="_blank" rel="noopener noreferrer">
-                  {article.isVideo ? 'Watch' : 'Read more'}
-                </a>
-              </p>
-            )}
-          </article>
-        ))}
+        <div className={styles.leftGrid}>
+          {articles.slice(0, 4).map(renderLeftGridArticle)}
+        </div>
+        <div className={styles.rightStack}>
+          {articles.slice(4, 8).map(renderRightStackArticle)}
+          {renderButton()}
+        </div>
       </div>
-      <Button href="/newsroom" color="black">
-        Read all
-      </Button>
     </div>
   );
 };
