@@ -7,7 +7,7 @@ import articlesData from '../data/news.json';
 const newsEndpoint =
   'https://script.googleusercontent.com/macros/echo?user_content_key=wMwqmD3hyEfjuyzrmit9jSDCLn5xdX1dHEGRoaIRU6my1Wo8PMkPxs98lDD7aWYsb4e6JeD_-mz3WDdMRgeUiCS1qgMJ1hhYm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnO7Olp7pqFy3TogCoZyFUbirTpo2gKpFMxR5S6ehinpBH3e6cC_4M7e1OIWPPuzQWGgZZi-ESOrh77Vl3ZGmdGSdJoCw8JvXDg&lib=MmHDKL-d2iWmU93zHCQ7t4_c2JwAnkCxa';
 
-  const buttonText = 'view all coverage';
+const buttonText = 'view all coverage';
 
 const truncateText = (text, maxLength) => {
   if (!text) return '';
@@ -87,7 +87,9 @@ export const NewsSection = () => {
   return (
     <div className={styles.newsSection}>
       <div className={styles.newsArticles}>
-        <div className={styles.leftGrid}>{articles.slice(0, 4).map(renderLeftGridArticle)}</div>
+        <div className={styles.leftGrid}>
+          {articles.slice(0, 4).map(renderLeftGridArticle)}
+        </div>
         <div className={styles.rightStack}>
           {articles.slice(4, 8).map(renderRightStackArticle)}
           {renderButton()}
