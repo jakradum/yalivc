@@ -140,7 +140,6 @@ const CompanyTable = () => {
 
   return (
     <div className={styles.companyTableContainer}>
-      {isLoading && <div>Updating...</div>}
       {isMobile ? renderMobileLayout() : renderDesktopLayout()}
     </div>
   );

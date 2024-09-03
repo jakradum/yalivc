@@ -1,25 +1,37 @@
 {
-    "articles": [
+    "status": "success",
+    "data": {
+      "articles": [
         {
-            "url": "https://startupstorymedia.com/insights-healthtech-startup-4basecare-secures-6-mn-in-series-a-funding-eyes-global-expansion/",
-            "date": "08/12/2024"
+          "url": "https://startupstorymedia.com/insights-healthtech-startup-4basecare-secures-6-mn-in-series-a-funding-eyes-global-expansion/",
+          "date": "2024-08-12T00:00:00.000Z",
+          "publicationName": "startup story",
+          "headlineEdited": ""
         },
         {
-            "url": "https://www.vccircle.com/truva4basecare-two-others-secure-early-stage-funds",
-            "date": "08/12/2024"
+          "url": "https://www.vccircle.com/truva4basecare-two-others-secure-early-stage-funds",
+          "date": "2024-08-12T00:00:00.000Z",
+          "publicationName": "vc circle",
+          "headlineEdited": "Truva, 4baseCare, 2 Others secure early stage funds"
         },
         {
-            "url": "https://yourstory.com/2024/08/4basecare-raises-6m-seriesa-funding-plans-expansion",
-            "date": "08/12/2024"
+          "url": "https://yourstory.com/2024/08/4basecare-raises-6m-seriesa-funding-plans-expansion",
+          "date": "2024-08-12T00:00:00.000Z",
+          "publicationName": "your story",
+          "headlineEdited": "4baseCare raises $6M in Series A funding led by Yali Capital"
         },
         {
-            "url": "https://economictimes.indiatimes.com/tech/funding/yali-capital-launches-rs-810-crore-deep-tech-fund/articleshow/111760323.cms",
-            "date": "08/12/2024"
+          "url": "https://economictimes.indiatimes.com/tech/funding/yali-capital-launches-rs-810-crore-deep-tech-fund/articleshow/111760323.cms",
+          "date": "2024-08-12T00:00:00.000Z",
+          "publicationName": "economic times",
+          "headlineEdited": ""
         },
         {
-            "url": "https://www.youtube.com/watch?v=83OBB_oOcrw",
-            "date": "07/15/2024",
-            "publicationName": "CNBC TV18"
+          "url": "https://www.youtube.com/watch?v=83OBB_oOcrw",
+          "date": "2024-07-15T00:00:00.000Z",
+          "publicationName": "CNBC TV18",
+          "headlineEdited": "Yali Capital Rolls Out ₹810 Cr Fund To Back Deeptech Startups"
         }
-    ]
-}
+      ]
+    }
+  }

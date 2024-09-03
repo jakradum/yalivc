@@ -1,21 +1,33 @@
-/* Container for the entire news section */
 .newsSection {
-    padding: 2rem;
-    font-family: Arial, sans-serif;
-}
-
-/* Grid Layout */
-.newsArticles {
+    /* Ensure the section takes full width */
+    width: 100%;
+  }
+  
+  .newsArticles {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-.articleTitle{
-    font-size: 1.2rem;
-    font-weight: 300;
-}
-.articleMeta{
-    text-transform: uppercase;
-    color: #565656;
-    font-size: 0.8rem;
-}
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  
+  /* Style for the first 4 articles (2x2 grid on the left) */
+  .newsArticles .article:nth-child(-n+4) {
+    /* Span 1 column each in the grid */
+    grid-column: span 1;
+  }
+  
+  /* Style for the next 4 articles (stack on the right) */
+  .newsArticles .article:nth-child(n+5):nth-child(-n+8) {
+    /* Place these in the third column */
+    grid-column: 3;
+  }
+  
+  /* Hide articles beyond the 8th */
+  .newsArticles .article:nth-child(n+9) {
+    display: none;
+  }
+  
+  /* Ensure the "Read all" button is below the articles */
+  .newsSection > .button {
+    margin-top: 20px;
+    display: block;
+  }
