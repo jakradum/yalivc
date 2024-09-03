@@ -26,6 +26,18 @@
     font-weight: 500;
     color: #363636;
     text-transform: capitalize;
+    position: relative;
+    padding-bottom: 1.1rem;
+}
+
+.articleTitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0.3rem;
+    width: 4rem;
+    background-color: #830D35; /* Using background-color instead of color for a visible element */
 }
 
 .newsArticles {
