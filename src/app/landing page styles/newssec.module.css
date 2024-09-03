@@ -7,6 +7,10 @@
     padding: 40px 20px;
 }
 
+.articleLink > a{
+    color: black;
+}
+
 .leftGrid .article {
     border-right: 1px solid black;
 }
@@ -63,6 +67,11 @@ padding: 0;
 
 .rightStack > a {
 text-decoration: none;
+    }
+
+    .rightStack > button {
+        align-items: center;
+        border: 1px solid black;
     }
 
 .articleMeta {
