@@ -1,0 +1,171 @@
+.titleSecFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 0;
+    border-bottom: 1px solid #000;
+  }
+
+  .titleSec::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 1px; /* Adjust this value to change the thickness of the line */
+    background-color: black; /* Adjust this to change the color of the line */
+    transform: translateX(-50%);
+}
+  
+  .titleSecFlex > *:first-child {
+    flex: 0 0 40%;
+    align-items: flex-start;
+  }
+  
+  .titleSecFlex > *:nth-child(2) {
+    flex: 0 0 40%;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .titleSecFlex > *:last-child {
+    align-self: flex-end;
+  }
+  
+  .meetTeamTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0;
+  }
+  
+  .teamsLpContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .teamTable {
+    width: 55%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .tableRow {
+    display: flex;
+    width: 100%;
+  }
+  
+  .teamMember {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #000;
+    transition: background-color 0.4s ease, color 1s ease;
+  }
+  
+  /* Remove right border from left cell and left border from right cell */
+  /* .teamMember:first-child {
+    border-right: none;
+  } */
+  
+  .teamMember:last-child {
+    border-left: none;
+  }
+  
+  /* Add bottom margin to all rows except the last one */
+  .tableRow:not(:last-child) {
+    margin-bottom: -1px;
+  }
+  
+  .teamMember:only-child {
+    border: 1px solid #000;
+    width: 100%;
+  }
+  
+  .teamMember:hover {
+    background-color: #830D35;
+    color: white;
+    border-color: #830D35;
+    z-index: 1; /* Ensure hover state is above other cells */
+  }
+  
+  .teamMember:hover .memberInfo * {
+    color: white;
+  }
+  
+  .name {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .desig {
+    font-size: 0.75rem;
+    font-weight: 300;
+  }
+  
+  .memberInfo h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .memberInfo p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .socialLinks {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .socialButton {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000;
+    background: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .teamMember:hover .socialButton {
+    border-color: white;
+    color: white;
+  }
+  
+  .teamDescription {
+    width: 40%;
+  }
+  
+  .teamImage {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .teamsLpContainer {
+      flex-direction: column;
+    }
+  
+    .teamTable,
+    .teamDescription {
+      width: 100%;
+    }
+  
+    .tableRow {
+      flex-direction: column;
+    }
+  
+    .teamMember,
+    .teamMember:first-child,
+    .teamMember:last-child,
+    .teamMember:only-child {
+      width: 100%;
+      margin: 5px 0;
+      border: 1px solid #000;
+    }
+  
+    .tableRow:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }

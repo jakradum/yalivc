@@ -19,6 +19,15 @@
     border-bottom: 0.0625rem solid black;
     padding: 0;
 }
+.titleSecFlex{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.titleSecFlex>p{
+    max-width: 50%;
+}
 
 .companyTableContainer {
     display: flex;
@@ -145,6 +154,14 @@
     /* 1200px = 75rem */
     .companyTableContainer {
         flex-direction: column;
+    }
+    .titleSecFlex{
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+    }
+    .titleSecFlex > *:not(:last-child) {
+        width: 100%;
     }
 
     .sidebar,
