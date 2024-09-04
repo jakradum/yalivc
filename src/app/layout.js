@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Footer from './components/footer';
 import './styles/globals.css';
 import Head from 'next/head';
+import { DataProvider } from './data/fetch component';
 
 const Navbar = dynamic(() => import('./components/Navbar'), { ssr: false });
 
@@ -24,6 +25,8 @@ export const metadata = {
   },
 };
 
+const USE_LOCAL_DATA_ONLY = false;
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
@@ -31,6 +34,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" />
       </Head>
+      <DataProvider useLocalOnly={USE_LOCAL_DATA_ONLY}>
       <body className={inter.className}>
         <Navbar />
         <div className="page-wrapper">
@@ -38,6 +42,7 @@ export default function RootLayout({ children }) {
           <Footer />
         </div>
       </body>
+      </DataProvider>
     </html>
   );
 }

@@ -4,39 +4,22 @@ import React, { useState, useEffect } from 'react';
 import localCompaniesData from '../data/companies.json';
 import styles from '../landing page styles/companies.module.css';
 import Button from './button';
-
-const API_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=rsI5aJreCH3UVDj6WtAFcGxkjZkcOofgCkOvInVxGyNrkZ1NZ-QNpfC0oin9EqEmmnmm7QzuPM3UnyBZcC2TggzaYndVheE0m5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnDU7zD5nrkmclF5j850JDRYBlfuhWT3Cj-E-49cRxK-qlmd6_1NOqA6n2lAH5jfLZU7JUIUzOJcR4MX7KV-QZyuKNqivHFDEKA&lib=MmHDKL-d2iWmU93zHCQ7t4_c2JwAnkCxa';
+import { useData } from '../data/fetch component';
 
 const CompanyTable = () => {
+  const { data } = useData();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [companiesData, setCompaniesData] = useState(localCompaniesData);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const dummyImg = 'https://img.freepik.com/free-vector/business-logo_23-2147503133.jpg';
   const buttonText = 'view all companies';
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setCompaniesData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError(error);
-        // We're not setting companiesData here, as we're already using localCompaniesData as fallback
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) {
+      setCompaniesData({ data: data.data['companies-csv (1)'] });
+    }
+  }, [data]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,10 +30,6 @@ const CompanyTable = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  if (error) {
-    console.warn('Using local data due to fetch error:', error.message);
-  }
 
   const renderDesktopLayout = () => (
     <>

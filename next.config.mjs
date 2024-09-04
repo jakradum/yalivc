@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
@@ -12,6 +11,10 @@ const nextConfig = {
   assetPrefix: isProd ? 'https://jakradum.github.io/yalivc' : '',
   trailingSlash: true,
   output: 'export',
+  // Add this to allow using 'use client' directive
+  experimental: {
+    appDir: true,
+  },
 };
 
 export default nextConfig;

@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../landing page styles/newssec.module.css';
 import Button from './button';
-import articlesData from '../data/news.json';
-
-const newsEndpoint =
-  'https://script.googleusercontent.com/macros/echo?user_content_key=wMwqmD3hyEfjuyzrmit9jSDCLn5xdX1dHEGRoaIRU6my1Wo8PMkPxs98lDD7aWYsb4e6JeD_-mz3WDdMRgeUiCS1qgMJ1hhYm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnO7Olp7pqFy3TogCoZyFUbirTpo2gKpFMxR5S6ehinpBH3e6cC_4M7e1OIWPPuzQWGgZZi-ESOrh77Vl3ZGmdGSdJoCw8JvXDg&lib=MmHDKL-d2iWmU93zHCQ7t4_c2JwAnkCxa';
+import { useData } from '../data/fetch component';
+import fallbackData from '../data/news.json';
 
 const buttonText = 'view all coverage';
 
@@ -31,30 +29,20 @@ const formatArticles = (articles) => {
 };
 
 export const NewsSection = () => {
-  const [articles, setArticles] = useState(formatArticles(articlesData.data.articles));
+  const { data } = useData();
+  const [articles, setArticles] = useState(formatArticles(fallbackData.data.articles));
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch(newsEndpoint);
-        const data = await response.json();
-        if (data.status === 'success' && data.data.articles) {
-          const formattedArticles = formatArticles(data.data.articles);
-          setArticles(formattedArticles);
-        }
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-        // Fallback data will remain in use
-      }
-    };
-    fetchArticles();
-  }, []);
+    if (data && data.status === 'success' && data.data && data.data.articles) {
+      setArticles(formatArticles(data.data.articles));
+    }
+  }, [data]);
 
   const renderLeftGridArticle = (article, index) => (
     <article key={index} className={styles.article}>
-      <h3>{article.formattedDate && article.formattedDate}</h3>
+      <h3>{article.formattedDate}</h3>
       <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
       <p className={styles.articleMeta}>{article.publicationName || 'Unknown publication'}</p>
       {isClient && (
@@ -76,9 +64,9 @@ export const NewsSection = () => {
   );
 
   const renderRightStackArticle = (article, index) => (
-    <a href={article.url} target="_blank" rel="noopener noreferrer">
-      <article key={index} className={styles.article}>
-        <h3>{article.formattedDate && article.formattedDate}</h3>
+    <a key={index} href={article.url} target="_blank" rel="noopener noreferrer">
+      <article className={styles.article}>
+        <h3>{article.formattedDate}</h3>
         <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
       </article>
     </a>
