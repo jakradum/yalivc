@@ -5,17 +5,6 @@
     padding: 2rem 0;
     border-bottom: 1px solid #000;
   }
-
-  .titleSec::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 100vw;
-    height: 1px; /* Adjust this value to change the thickness of the line */
-    background-color: black; /* Adjust this to change the color of the line */
-    transform: translateX(-50%);
-}
   
   .titleSecFlex > *:first-child {
     flex: 0 0 40%;
