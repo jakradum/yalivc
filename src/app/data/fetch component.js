@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import companiesData from './companies.json';
 import newsData from './news.json';
 import teamData from './team.json';
@@ -13,16 +13,23 @@ export function DataProvider({ children, useLocalOnly = false }) {
   const [data, setData] = useState({ companies: companiesData, news: newsData, team: teamData });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
     async function fetchData() {
       if (useLocalOnly) {
         console.log('Using local data only');
-        return; // Don't fetch if useLocalOnly is true
+        return;
+      }
+
+      if (fetchedRef.current) {
+        console.log('Data already fetched, skipping');
+        return;
       }
 
       setLoading(true);
       try {
+        console.log('Fetching data...');
         const response = await fetch(ENDPOINT_URL);
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -30,19 +37,23 @@ export function DataProvider({ children, useLocalOnly = false }) {
         const result = await response.json();
         console.log('Fetched data:', result);
         setData(result);
+        fetchedRef.current = true;
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(error);
-        // We're already using local data as initial state, so no need to set it again
       } finally {
         setLoading(false);
       }
     }
 
-    // Only fetch data on the client side and if not using local only
     if (typeof window !== 'undefined' && !useLocalOnly) {
       fetchData();
     }
+
+    // Cleanup function
+    return () => {
+      console.log('DataProvider unmounting');
+    };
   }, [useLocalOnly]);
 
   return (

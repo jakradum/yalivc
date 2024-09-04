@@ -25,7 +25,7 @@ export const metadata = {
   },
 };
 
-const USE_LOCAL_DATA_ONLY = false;
+const USE_LOCAL_DATA_ONLY = false; // set this to true to disable fetch and only use local
 
 export default function RootLayout({ children }) {
   return (
