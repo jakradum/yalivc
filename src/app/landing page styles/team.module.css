@@ -5,7 +5,22 @@
     padding: 2rem 0;
     border-bottom: 1px solid #000;
   }
-  
+.teamSec{
+    position: relative;
+}
+
+  .teamSec::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 1px; /* Adjust this value to change the thickness of the line */
+    background-color: black; /* Adjust this to change the color of the line */
+    transform: translateX(-50%);
+}
+
+
   .titleSecFlex > *:first-child {
     flex: 0 0 40%;
     align-items: flex-start;
@@ -36,7 +51,7 @@
   .teamTable {
     width: 55%;
     border-collapse: separate;
-    border-spacing: 0;
+
   }
   
   .tableRow {
@@ -47,6 +62,7 @@
   .teamMember {
     flex: 1;
     padding: 20px;
+    background-color: white;
     border: 1px solid #000;
     transition: background-color 0.4s ease, color 1s ease;
   }
@@ -70,17 +86,6 @@
     width: 100%;
   }
   
-  .teamMember:hover {
-    background-color: #830D35;
-    color: white;
-    border-color: #830D35;
-    z-index: 1; /* Ensure hover state is above other cells */
-  }
-  
-  .teamMember:hover .memberInfo * {
-    color: white;
-  }
-  
   .name {
     font-size: 1.25rem;
     font-weight: 500;
@@ -88,7 +93,8 @@
   
   .desig {
     font-size: 0.75rem;
-    font-weight: 300;
+    font-weight: 200;
+    text-transform: uppercase;
   }
   
   .memberInfo h3 {
@@ -116,11 +122,6 @@
     transition: border-color 0.3s ease, color 0.3s ease;
   }
   
-  .teamMember:hover .socialButton {
-    border-color: white;
-    color: white;
-  }
-  
   .teamDescription {
     width: 40%;
   }
@@ -131,7 +132,7 @@
     margin-top: 20px;
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     .teamsLpContainer {
       flex-direction: column;
     }

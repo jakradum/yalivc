@@ -86,7 +86,7 @@ export default function Home() {
       </section>
 
       {/* Team section */}
-      <section>
+      <section className={teamStyles.teamSec}>
         <header className={teamStyles.titleSec}>
           <div className={teamStyles.titleSecFlex}>
             <HeaderFlex title='Meet the Yali team' color='black' />

@@ -24,7 +24,6 @@ export const TeamsLPComponent = () => {
             <div className={styles.memberInfo}>
               <p className={styles.name}>{teamMembers[i].Name}</p>
               <p className={styles.desig}>{teamMembers[i].Designation}</p>
-              <p>{teamMembers[i]['One-Liner']}</p>
               <div className={styles.socialLinks}>
                 {teamMembers[i].linkedin && (
                   <a href={teamMembers[i].linkedin} target="_blank" rel="noopener noreferrer">
@@ -39,7 +38,6 @@ export const TeamsLPComponent = () => {
               <div className={styles.memberInfo}>
                 <p className={styles.name}>{teamMembers[i + 1].Name}</p>
                 <p className={styles.desig}>{teamMembers[i + 1].Designation}</p>
-                <p>{teamMembers[i + 1]['One-Liner']}</p>
                 <div className={styles.socialLinks}>
                   {teamMembers[i + 1].linkedin && (
                     <a href={teamMembers[i + 1].linkedin} target="_blank" rel="noopener noreferrer">
