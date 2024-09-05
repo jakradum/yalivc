@@ -6,6 +6,8 @@ import localTeamData from '../data/team.json';
 import styles from '../landing page styles/team.module.css';
 import { ExpandIcon } from './icons/small icons/expandIcon';
 import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
+import Button from './button';
+import { genericButtonText } from '../page';
 
 export const TeamsLPComponent = () => {
   const { data } = useData();
@@ -111,16 +113,23 @@ export const TeamsLPComponent = () => {
 
   return (
     <div className={styles.teamsLpContainer}>
-      <table className={styles.teamTable}>
-        <tbody>{renderTableRows()}</tbody>
-      </table>
+      <div className={styles.teamTableWrapper}>
+        <table className={styles.teamTable}>
+          <tbody>{renderTableRows()}</tbody>
+        </table>
+        {teamMembers.length <= 4 && (
+          <div className={styles.viewAllButtonWrapper}>
+            <Button href='/about-yali#team'>{genericButtonText}</Button>
+          </div>
+        )}
+      </div>
       {!isMobile && (
         <div className={styles.teamDescription}>
           {selectedMember ? (
             <>
-              <Image 
-                src={getImagePath(teamMembers.indexOf(selectedMember))} 
-                alt={selectedMember.Name} 
+              <Image
+                src={getImagePath(teamMembers.indexOf(selectedMember))}
+                alt={selectedMember.Name}
                 width={300}
                 height={300}
                 className={styles.memberImage}
@@ -135,6 +144,11 @@ export const TeamsLPComponent = () => {
               <p className={styles.defaultText}>Select a team member to view details</p>
             </div>
           )}
+        </div>
+      )}
+      {teamMembers.length > 4 && (
+        <div className={styles.viewAllButtonWrapperInline}>
+         <Button href='/about-yali#team'>{genericButtonText}</Button>
         </div>
       )}
     </div>

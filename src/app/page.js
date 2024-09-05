@@ -18,6 +18,8 @@ import TeamsLPComponent from './components/teams LP component';
 
 // Use DynamicNewsSection in your page component
 
+export const genericButtonText = 'view more';
+
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
 
@@ -95,7 +97,7 @@ export default function Home() {
                 The team at Yali Capital is armed with an impressive track record of successful investment history, and
                 a combined 60 years in the deep tech domain.
               </p>
-              <Button href="/team">view all</Button>
+              <Button href="/about-yali">{genericButtonText}</Button>
             </aside>
           </div>
         </header>

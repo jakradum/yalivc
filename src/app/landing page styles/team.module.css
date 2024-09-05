@@ -63,11 +63,17 @@
 .teamsLpContainer {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+}
+.teamTableWrapper {
+    flex: 11;
+    width: 55%;
+    display: flex;
+    flex-direction: column;
 }
 
 .teamTable {
-    flex: 11;
-    width: 55%;
+    width: 100%;
     border-collapse: separate;
 }
 
@@ -153,19 +159,51 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 100%;
-    background-color: #830D35;  /* Added background color for the SVG */
+    background-color: #830D35;
 }
 
 .defaultSVG {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
 }
 
 .defaultText {
     font-size: 1.2rem;
     color: white;
     text-align: center;
+    margin-top: 20px;
+}
+.viewAllButtonWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.viewAllButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #830D35;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.viewAllButtonWrapperInline {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.viewAllButtonInline {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    background-color: #830D35;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 @media (max-width: 800px) {
