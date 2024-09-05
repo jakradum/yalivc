@@ -1,18 +1,16 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useData } from '../data/fetch component';
 import fallbackData from '../data/team.json';
 import styles from '../landing page styles/team.module.css';
 
 export const TeamsLPComponent = () => {
-  const { data } = useData();
-  const [teamMembers, setTeamMembers] = useState(fallbackData['Team Members'] || []);
+  const { data, loading } = useData();
 
-  useEffect(() => {
-    if (data && data.status === 'success' && data.data && data.data['Team Members']) {
-      setTeamMembers(data.data['Team Members']);
-    }
-  }, [data]);
+  // Use fallback data if data is not yet loaded or if fetch was not successful
+  const teamMembers = (data && data.status === 'success' && data.data && data.data['Team Members']) 
+    ? data.data['Team Members'] 
+    : fallbackData['Team Members'] || [];
 
   const renderTableRows = () => {
     const rows = [];

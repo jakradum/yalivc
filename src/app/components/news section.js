@@ -30,15 +30,17 @@ const formatArticles = (articles) => {
 
 export const NewsSection = () => {
   const { data } = useData();
-  const [articles, setArticles] = useState(formatArticles(fallbackData.data.articles));
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    if (data && data.status === 'success' && data.data && data.data.articles) {
-      setArticles(formatArticles(data.data.articles));
-    }
-  }, [data]);
+  }, []);
+
+  const articles = formatArticles(
+    (data && data.status === 'success' && data.data && data.data.articles) 
+      ? data.data.articles 
+      : fallbackData.data.articles
+  );
 
   const renderLeftGridArticle = (article, index) => (
     <article key={index} className={styles.article}>

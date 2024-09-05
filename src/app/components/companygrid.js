@@ -10,16 +10,13 @@ const CompanyTable = () => {
   const { data } = useData();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
-  const [companiesData, setCompaniesData] = useState(localCompaniesData);
 
   const dummyImg = 'https://img.freepik.com/free-vector/business-logo_23-2147503133.jpg';
   const buttonText = 'view all companies';
 
-  useEffect(() => {
-    if (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) {
-      setCompaniesData({ data: data.data['companies-csv (1)'] });
-    }
-  }, [data]);
+  const companiesData = (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) 
+    ? { data: data.data['companies-csv (1)'] }
+    : localCompaniesData;
 
   useEffect(() => {
     const handleResize = () => {
