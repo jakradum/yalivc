@@ -5,6 +5,7 @@ import { useData } from '../data/fetch component';
 import localTeamData from '../data/team.json';
 import styles from '../landing page styles/team.module.css';
 import { ExpandIcon } from './icons/small icons/expandIcon';
+import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
 
 export const TeamsLPComponent = () => {
   const { data } = useData();
@@ -129,17 +130,10 @@ export const TeamsLPComponent = () => {
               <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
             </>
           ) : (
-            <>
-              <Image 
-                src={getImagePath(0)} 
-                alt="Team member" 
-                width={500}
-                height={300}
-                className={styles.teamImage}
-              />
-              <h2>With over 96 years of experience in lore ipsum dolor si amet.</h2>
-              <p>"Ut ullamcorper risus ut suspendisse. Arcu et odio velit in morbi egestas."</p>
-            </>
+            <div className={styles.defaultDisplay}>
+              <TeamsDefaultSVG className={styles.defaultSVG} />
+              <p className={styles.defaultText}>Select a team member to view details</p>
+            </div>
           )}
         </div>
       )}
