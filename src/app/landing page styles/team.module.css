@@ -23,11 +23,11 @@
 
 .selectedMember {
     background-color: #830D35 !important;
-  }
+}
 
-  .selectedMember .name,
+.selectedMember .name,
 .selectedMember .desig {
-  color: white;
+    color: white;
 }
 
 .selectedMemberName {
@@ -73,32 +73,35 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    min-height: auto; /* Increase the minimum height of the container */
   }
+
   .teamTableWrapper {
     flex: 11;
     width: 55%;
     display: flex;
     flex-direction: column;
+    min-height: 600px; /* Match the minimum height of the container */
   }
 
-  .teamTable {
+.teamTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0.5rem;
-  }
+}
 
-  .tableRow {
+.tableRow {
     display: flex;
     width: 100%;
-  }
+}
 
-  .teamMember {
+.teamMember {
     flex: 1;
     padding: 20px;
     background-color: white;
     border: 1px solid #000;
     transition: background-color 0.4s ease, color 1s ease;
-  }
+}
 
 .teamMember:last-child {
     border-left: none;
@@ -123,11 +126,12 @@
     font-weight: 200;
     text-transform: uppercase;
 }
+
 .knowMoreCell {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
 
 .memberInfo h3 {
     margin: 0;
@@ -144,10 +148,11 @@
     gap: 10px;
     margin-top: 10px;
 }
+
 .selectedMember .socialButton {
     border-color: white;
     color: white;
-  }
+}
 
 .socialButton {
     width: 30px;
@@ -162,18 +167,54 @@
     flex: 9;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     transition: height 0.3s ease;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
-.teamImage {
+  .teamDescription .memberImageContainer {
     width: 100%;
-    height: auto;
-    margin-top: 20px;
+    height: auto; /* Let the height adapt to the image */
+    margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
-/* New styles for the default SVG display */
+.teamDescription .memberImage {
+    width: 100%;
+    height: auto; 
+    object-fit: contain; 
+    object-position: center top; 
+}
+
+  .teamDescription .selectedMemberName {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+.teamDescription .selectedMemberDesignation {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.teamDescription .selectedMemberOneLiner {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow-y: auto;
+    max-height: calc(40% - 3rem);
+}
+
 .defaultDisplay {
     display: flex;
     flex-direction: column;
@@ -182,27 +223,28 @@
     width: 100%;
     height: 100%;
     background-color: #830D35;
-  }
+}
 
 .defaultSVG {
-    width: 100%;
+    width: 50%;
     height: auto;
-    max-width: 300px;
+    margin-bottom: 1rem;
 }
 
 .defaultText {
     font-size: 1.2rem;
     color: white;
     text-align: center;
-    margin-top: 20px;
 }
+
 .viewAllButtonWrapper {
     width: 100%;
     display: flex;
     justify-content: center;
     padding: 20px 0;
     margin-top: 20px;
-  }
+}
+
 .viewAllButton {
     padding: 10px 20px;
     font-size: 1rem;
@@ -278,11 +320,12 @@
         height: auto;
         margin-bottom: 10px;
     }
+
     .memberImage {
         width: 300px;
         height: 300px;
         object-fit: cover;
-      }
+    }
 
     .memberImage,
     .teamImage {

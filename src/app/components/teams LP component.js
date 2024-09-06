@@ -139,25 +139,28 @@ export const TeamsLPComponent = () => {
         </table>
         {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
           <div className={styles.viewAllButtonWrapper}>
-            <Button href='/about-yali#team'>{genericButtonText}</Button>
+            <Button href="/about-yali#team">{genericButtonText}</Button>
           </div>
         )}
       </div>
       {!isMobile && (
-        <div className={styles.teamDescription} style={{ height: `${tableHeight}px` }}>
+        <div className={styles.teamDescription}>
           {selectedMember ? (
             <>
-              {selectedMember.image ? (
-                <Image
+              <div className={styles.memberImageContainer}>
+                {selectedMember.image ? (
+                  <Image
                   src={getImagePath(teamMembers.indexOf(selectedMember))}
                   alt={selectedMember.Name}
+                  className={styles.memberImage} // Use styles for responsiveness
+                  layout="responsive" // This allows the image to resize automatically
                   width={300}
                   height={300}
-                  className={styles.memberImage}
-                />
-              ) : (
-                <Graphicfg className={styles.memberImage} />
-              )}
+                />                
+                ) : (
+                  <Graphicfg className={styles.memberImage} />
+                )}
+              </div>
               <h3 className={styles.selectedMemberName}>{selectedMember.Name}</h3>
               <p className={styles.selectedMemberDesignation}>{selectedMember.Designation}</p>
               <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
