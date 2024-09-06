@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useData } from '../data/fetch component';
@@ -8,12 +9,15 @@ import { ExpandIcon } from './icons/small icons/expandIcon';
 import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
 import Button from './button';
 import { genericButtonText } from '../page';
+import { Graphicfg } from './icons/background svgs/graphicfg';
 
 export const TeamsLPComponent = () => {
   const { data } = useData();
   const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
+  const [tableHeight, setTableHeight] = useState(0);
 
   // Use local data for first 4 members
   const localMembers = localTeamData['Team Members'].slice(0, 4);
@@ -32,6 +36,13 @@ export const TeamsLPComponent = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const tableWrapper = document.querySelector(`.${styles.teamTableWrapper}`);
+    if (tableWrapper) {
+      setTableHeight(tableWrapper.offsetHeight);
+    }
+  }, [teamMembers]);
+
   const getImagePath = (index) => {
     if (index < 4) {
       return localMembers[index].image;
@@ -45,71 +56,80 @@ export const TeamsLPComponent = () => {
       setExpandedRow(expandedRow === index ? null : index);
     } else {
       setSelectedMember(member);
+      setSelectedIndex(index);
     }
   };
 
   const renderTableRows = () => {
     const rows = [];
-    for (let i = 0; i < teamMembers.length; i += (isMobile ? 1 : 2)) {
-      const isLastOddMember = !isMobile && i === teamMembers.length - 1 && teamMembers.length % 2 !== 0;
+    for (let i = 0; i < teamMembers.length; i += 2) {
+      const isLastRow = i >= teamMembers.length - 2;
       rows.push(
-        <React.Fragment key={i}>
-          <tr className={`${styles.tableRow} ${isMobile ? styles.mobileRow : ''}`}>
-            <td 
-              className={`${styles.teamMember} ${isLastOddMember ? styles.fullWidth : ''}`}
-              onClick={() => handleCellClick(teamMembers[i], i)}
-            >
-              <div className={styles.memberInfo}>
-                <p className={styles.name}>{teamMembers[i].Name}</p>
-                <p className={styles.desig}>{teamMembers[i].Designation}</p>
-                <div className={styles.socialLinks}>
-                  {teamMembers[i].linkedin && (
-                    <a href={teamMembers[i].linkedin} target="_blank" rel="noopener noreferrer">
-                      <button className={styles.socialButton}>in</button>
-                    </a>
-                  )}
-                </div>
-              </div>
-              {isMobile && <ExpandIcon className={styles.expandIcon} />}
-            </td>
-            {!isMobile && !isLastOddMember && teamMembers[i + 1] && (
-              <td 
-                className={styles.teamMember}
-                onClick={() => handleCellClick(teamMembers[i + 1], i + 1)}
-              >
-                <div className={styles.memberInfo}>
-                  <p className={styles.name}>{teamMembers[i + 1].Name}</p>
-                  <p className={styles.desig}>{teamMembers[i + 1].Designation}</p>
-                  <div className={styles.socialLinks}>
-                    {teamMembers[i + 1].linkedin && (
-                      <a href={teamMembers[i + 1].linkedin} target="_blank" rel="noopener noreferrer">
-                        <button className={styles.socialButton}>in</button>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </td>
-            )}
-          </tr>
-          {isMobile && expandedRow === i && (
-            <tr className={styles.expandedContent}>
-              <td colSpan="2">
-                <Image 
-                  src={getImagePath(i)} 
-                  alt={teamMembers[i].Name} 
-                  width={300}
-                  height={300}
-                  className={styles.memberImage}
-                />
-                <p>{teamMembers[i]['One-Liner']}</p>
-              </td>
-            </tr>
-          )}
-        </React.Fragment>
+        <tr key={i} className={`${styles.tableRow} ${isMobile ? styles.mobileRow : ''}`}>
+          {renderCell(teamMembers[i], i)}
+          {i + 1 < teamMembers.length ? 
+            renderCell(teamMembers[i + 1], i + 1) : 
+            (isLastRow && teamMembers.length % 2 !== 0 && teamMembers.length > 4) ? 
+              renderKnowMoreCell() : 
+              null
+          }
+        </tr>
       );
+
+      if (isMobile) {
+        if (expandedRow === i) rows.push(renderExpandedContent(teamMembers[i], i));
+        if (expandedRow === i + 1 && i + 1 < teamMembers.length) rows.push(renderExpandedContent(teamMembers[i + 1], i + 1));
+      }
     }
+
     return rows;
   };
+
+  const renderCell = (member, index) => (
+    <td 
+      key={index}
+      className={`${styles.teamMember} ${selectedIndex === index ? styles.selectedMember : ''}`}
+      onClick={() => handleCellClick(member, index)}
+    >
+      <div className={styles.memberInfo}>
+        <p className={styles.name}>{member.Name}</p>
+        <p className={styles.desig}>{member.Designation}</p>
+        <div className={styles.socialLinks}>
+          {member.linkedin && (
+            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+              <button className={styles.socialButton}>in</button>
+            </a>
+          )}
+        </div>
+      </div>
+      {isMobile && <ExpandIcon className={styles.expandIcon} />}
+    </td>
+  );
+
+  const renderKnowMoreCell = () => (
+    <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
+      <Button href='/about-yali#team'>{genericButtonText}</Button>
+    </td>
+  );
+
+  const renderExpandedContent = (member, index) => (
+    <tr key={`expanded-${index}`} className={styles.expandedContent}>
+      <td colSpan="2">
+        {member.image ? (
+          <Image 
+            src={getImagePath(index)} 
+            alt={member.Name} 
+            width={300}
+            height={300}
+            className={styles.memberImage}
+          />
+        ) : (
+          <Graphicfg className={styles.memberImage} />
+        )}
+        <p>{member['One-Liner']}</p>
+      </td>
+    </tr>
+  );
 
   return (
     <div className={styles.teamsLpContainer}>
@@ -117,23 +137,27 @@ export const TeamsLPComponent = () => {
         <table className={styles.teamTable}>
           <tbody>{renderTableRows()}</tbody>
         </table>
-        {teamMembers.length <= 4 && (
+        {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
           <div className={styles.viewAllButtonWrapper}>
             <Button href='/about-yali#team'>{genericButtonText}</Button>
           </div>
         )}
       </div>
       {!isMobile && (
-        <div className={styles.teamDescription}>
+        <div className={styles.teamDescription} style={{ height: `${tableHeight}px` }}>
           {selectedMember ? (
             <>
-              <Image
-                src={getImagePath(teamMembers.indexOf(selectedMember))}
-                alt={selectedMember.Name}
-                width={300}
-                height={300}
-                className={styles.memberImage}
-              />
+              {selectedMember.image ? (
+                <Image
+                  src={getImagePath(teamMembers.indexOf(selectedMember))}
+                  alt={selectedMember.Name}
+                  width={300}
+                  height={300}
+                  className={styles.memberImage}
+                />
+              ) : (
+                <Graphicfg className={styles.memberImage} />
+              )}
               <h3 className={styles.selectedMemberName}>{selectedMember.Name}</h3>
               <p className={styles.selectedMemberDesignation}>{selectedMember.Designation}</p>
               <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
@@ -144,11 +168,6 @@ export const TeamsLPComponent = () => {
               <p className={styles.defaultText}>Select a team member to view details</p>
             </div>
           )}
-        </div>
-      )}
-      {teamMembers.length > 4 && (
-        <div className={styles.viewAllButtonWrapperInline}>
-         <Button href='/about-yali#team'>{genericButtonText}</Button>
         </div>
       )}
     </div>
