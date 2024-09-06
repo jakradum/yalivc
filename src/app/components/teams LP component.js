@@ -146,7 +146,7 @@ export const TeamsLPComponent = () => {
       {!isMobile && (
         <div className={styles.teamDescription}>
           {selectedMember ? (
-            <>
+            <header>
               <div className={styles.memberImageContainer}>
                 {selectedMember.image ? (
                   <Image
@@ -164,7 +164,7 @@ export const TeamsLPComponent = () => {
               <h3 className={styles.selectedMemberName}>{selectedMember.Name}</h3>
               <p className={styles.selectedMemberDesignation}>{selectedMember.Designation}</p>
               <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
-            </>
+            </header>
           ) : (
             <div className={styles.defaultDisplay}>
               <TeamsDefaultSVG className={styles.defaultSVG} />

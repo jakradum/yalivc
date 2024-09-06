@@ -33,7 +33,6 @@
 .selectedMemberName {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
 .selectedMemberDesignation {
@@ -167,20 +166,21 @@
     flex: 9;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     text-align: left;
     transition: height 0.3s ease;
-    padding: 0.5rem;
+    margin: 0.5rem;
+    padding: 0;
     box-sizing: border-box;
     overflow: hidden;
   }
 
   .teamDescription .memberImageContainer {
-    width: 100%;
+    width: 75%;
     height: auto; /* Let the height adapt to the image */
-    margin-bottom: 1.5rem;
     overflow: hidden;
 }
+
 
 .teamDescription .memberImage {
     width: 100%;
@@ -193,13 +193,11 @@
     font-size: 1.8rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 0.5rem;
   }
 
 .teamDescription .selectedMemberDesignation {
     font-size: 1.2rem;
     color: #666;
-    margin-bottom: 1rem;
     text-transform: uppercase;
 }
 
