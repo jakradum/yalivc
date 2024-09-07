@@ -5,6 +5,26 @@ import localCompaniesData from '../data/companies.json';
 import styles from '../landing page styles/companies.module.css';
 import Button from './button';
 import { useData } from '../data/fetch component';
+import { DefenceVector } from './icons/background svgs/category svgs/defence vector';
+import { GenericVector } from './icons/background svgs/category svgs/generic vector';
+import { LifeSciencesVector } from './icons/background svgs/category svgs/life sciennces vector';
+import { RoboticsVector } from './icons/background svgs/category svgs/robotics vector';
+import { GenomicsVector } from './icons/background svgs/category svgs/genomics vector';
+import { SemiconVector } from './icons/background svgs/category svgs/semicon vector';
+
+export const vectorUsageMap = {
+  'robotics': <RoboticsVector/>,
+  'artificial intelligence': <GenericVector/>,
+  'genomics': <GenomicsVector/>,
+  'semiconductors': <SemiconVector/>,
+  'aerospace': <GenericVector/>,
+  'defence': <DefenceVector/>,
+  'fabless chip design': <SemiconVector/>,
+  'advanced manufacturing': <RoboticsVector/>,
+  'generative AI': <GenericVector/>,
+  'life sciences': <LifeSciencesVector/>,
+};
+
 
 const CompanyTable = () => {
   const { data } = useData();
