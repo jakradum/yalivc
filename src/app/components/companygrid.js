@@ -71,6 +71,11 @@ const CompanyTable = () => {
                     </div>
                     <h4 className={styles.companyTitle}>{company.name}</h4>
                     <p className={styles.companyCategory}>{company.category}</p>
+                    
+                    {/* Vector usage based on category */}
+                    <div className={styles.vector}>
+                    {vectorUsageMap[company.category] }
+                    </div>
                     <img src={dummyImg} className={styles.imagePlaceholder} alt={company.name} />
                     <small className={styles.companyOneLiner}>{company.oneLiner}</small>
                   </article>
@@ -82,6 +87,7 @@ const CompanyTable = () => {
       </table>
     </>
   );
+  
 
   const renderMobileLayout = () => (
     <div
@@ -102,7 +108,7 @@ const CompanyTable = () => {
                 opacity: 1 - (index - currentCard) * 0.2,
               }
             : { display: 'none' };
-
+  
           return (
             <aside
               key={index}
@@ -120,10 +126,19 @@ const CompanyTable = () => {
                 </div>
                 <h4 className={styles.companyTitle}>{company.name}</h4>
                 <p className={styles.companyCategory}>{company.category}</p>
+  
+                {/* Vector usage based on category */}
+                {vectorUsageMap[company.category] && (
+                  <img
+                    src={vectorUsageMap[company.category]}
+                    className={styles.categoryVector}
+                  />
+                )}
+  
+                <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
+                <small>{company.oneLiner}</small>
+                <p>Tap to view next</p>
               </article>
-              <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
-              <small>{company.oneLiner}</small>
-              <p>Tap to view next</p>
             </aside>
           );
         })}
@@ -133,6 +148,7 @@ const CompanyTable = () => {
       </Button>
     </div>
   );
+  
 
   return (
     <div className={styles.companyTableContainer}>

@@ -149,6 +149,44 @@
     background-color: white;
 }
 
+/* Ensure the vector is hidden by default */
+.vector {
+    display: none; /* Hidden initially */
+    justify-content: center; /* Center the vector horizontally */
+    align-items: flex-end; /* Align the vector to the bottom of the container */
+    width: 100%; /* Ensure it fills the parent container's width */
+    height: 10rem; /* Fixed height */
+    margin-bottom: 5px;
+    background-color: #830D35;
+    overflow: hidden; /* Hide any overflow from scaling */
+    z-index: -1;
+}
+
+/* Show the vector on hover */
+.companyCell:hover .vector {
+    display: flex; /* Display the vector on hover */
+    transition: all 1s ease;
+}
+
+/* Hide the image on hover */
+.companyCell:hover .imagePlaceholder {
+    display: none; /* Image disappears on hover */
+    transition: all 1s ease;
+}
+
+/* Styling for the vector SVG */
+.vector > svg {
+    width: 100%; /* Ensure the SVG fills the container width */
+    height: auto; /* Maintain aspect ratio for landscape layout */
+    transform: scale(1.1); /* Slightly zoom the SVG in */
+    object-fit: contain; /* Ensure no distortion */
+    margin-bottom: 0; /* Ensure no additional margin at the bottom */
+}
+
+  
+  
+  
+
 @media (max-width: 1028px) {
 
     /* 1200px = 75rem */
