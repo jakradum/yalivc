@@ -175,7 +175,7 @@ export const TeamsLPComponent = () => {
       {!isMobile && (
         <div className={styles.teamDescription}>
           {selectedMember ? (
-            <header>
+            <header className={styles.headerSec}>
               <div className={styles.memberImageContainer}>
                 {selectedMember.image ? (
                   <Image

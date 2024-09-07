@@ -105,12 +105,12 @@ export default function Home() {
       </section>
 
       {/* news section */}
-      {/* <section>
+      <section>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Yali in the news" color="black" />
         </div>
         <NewsSection />
-      </section> */}
+      </section>
     </main>
   );
 }
