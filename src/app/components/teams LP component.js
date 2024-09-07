@@ -78,24 +78,26 @@ export const TeamsLPComponent = () => {
               )}
             </div>
           </div>
-          <ExpandIcon className={styles.expandIcon} />
+          <ExpandIcon isExpanded={expandedRow === index} />
         </div>
-        {expandedRow === index && (
-          <div className={styles.mobileExpandedContent}>
+        <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
+          <div className={styles.expandedImageContainer}>
             {member.image ? (
               <Image 
                 src={getImagePath(index)} 
                 alt={member.Name} 
+                layout="responsive"
                 width={300}
-                height={300}
+                height={200}
+                objectFit="contain"
                 className={styles.memberImage}
               />
             ) : (
               <Graphicfg className={styles.memberImage} />
             )}
-            <p>{member['One-Liner']}</p>
           </div>
-        )}
+          <p className={styles.expandedOneLiner}>{member['One-Liner']}</p>
+        </div>
       </div>
     ));
   };

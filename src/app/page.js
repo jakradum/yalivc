@@ -80,12 +80,12 @@ export default function Home() {
       </section> */}
 
       {/* companies section */}
-      <section className={companyStyles.section}>
+      {/* <section className={companyStyles.section}>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Our companies make us proud" color="black" />
         </div>
         <CompanyGrid />
-      </section>
+      </section> */}
 
       {/* Team section */}
       <section className={teamStyles.teamSec}>
