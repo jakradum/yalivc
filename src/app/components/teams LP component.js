@@ -60,12 +60,52 @@ export const TeamsLPComponent = () => {
     }
   };
 
+  const renderMobileView = () => {
+    return teamMembers.map((member, index) => (
+      <div key={index} className={styles.mobileTeamMemberWrapper}>
+        <div 
+          className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
+          onClick={() => handleCellClick(member, index)}
+        >
+          <div className={styles.memberInfo}>
+            <p className={styles.name}>{member.Name}</p>
+            <p className={styles.desig}>{member.Designation}</p>
+            <div className={styles.socialLinks}>
+              {member.linkedin && (
+                <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                  <button className={styles.socialButton}>in</button>
+                </a>
+              )}
+            </div>
+          </div>
+          <ExpandIcon className={styles.expandIcon} />
+        </div>
+        {expandedRow === index && (
+          <div className={styles.mobileExpandedContent}>
+            {member.image ? (
+              <Image 
+                src={getImagePath(index)} 
+                alt={member.Name} 
+                width={300}
+                height={300}
+                className={styles.memberImage}
+              />
+            ) : (
+              <Graphicfg className={styles.memberImage} />
+            )}
+            <p>{member['One-Liner']}</p>
+          </div>
+        )}
+      </div>
+    ));
+  };
+
   const renderTableRows = () => {
     const rows = [];
     for (let i = 0; i < teamMembers.length; i += 2) {
       const isLastRow = i >= teamMembers.length - 2;
       rows.push(
-        <tr key={i} className={`${styles.tableRow} ${isMobile ? styles.mobileRow : ''}`}>
+        <tr key={i} className={styles.tableRow}>
           {renderCell(teamMembers[i], i)}
           {i + 1 < teamMembers.length ? 
             renderCell(teamMembers[i + 1], i + 1) : 
@@ -75,13 +115,7 @@ export const TeamsLPComponent = () => {
           }
         </tr>
       );
-
-      if (isMobile) {
-        if (expandedRow === i) rows.push(renderExpandedContent(teamMembers[i], i));
-        if (expandedRow === i + 1 && i + 1 < teamMembers.length) rows.push(renderExpandedContent(teamMembers[i + 1], i + 1));
-      }
     }
-
     return rows;
   };
 
@@ -102,7 +136,6 @@ export const TeamsLPComponent = () => {
           )}
         </div>
       </div>
-      {isMobile && <ExpandIcon className={styles.expandIcon} />}
     </td>
   );
 
@@ -112,35 +145,29 @@ export const TeamsLPComponent = () => {
     </td>
   );
 
-  const renderExpandedContent = (member, index) => (
-    <tr key={`expanded-${index}`} className={styles.expandedContent}>
-      <td colSpan="2">
-        {member.image ? (
-          <Image 
-            src={getImagePath(index)} 
-            alt={member.Name} 
-            width={300}
-            height={300}
-            className={styles.memberImage}
-          />
-        ) : (
-          <Graphicfg className={styles.memberImage} />
-        )}
-        <p>{member['One-Liner']}</p>
-      </td>
-    </tr>
-  );
-
   return (
     <div className={styles.teamsLpContainer}>
       <div className={styles.teamTableWrapper}>
-        <table className={styles.teamTable}>
-          <tbody>{renderTableRows()}</tbody>
-        </table>
-        {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
-          <div className={styles.viewAllButtonWrapper}>
-            <Button href="/about-yali#team">{genericButtonText}</Button>
+        {isMobile ? (
+          <div className={styles.mobileTeamList}>
+            {renderMobileView()}
+            {teamMembers.length > 4 && (
+              <div className={styles.mobileViewAllButtonWrapper}>
+                <Button href="/about-yali#team">{genericButtonText}</Button>
+              </div>
+            )}
           </div>
+        ) : (
+          <>
+            <table className={styles.teamTable}>
+              <tbody>{renderTableRows()}</tbody>
+            </table>
+            {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
+              <div className={styles.viewAllButtonWrapper}>
+                <Button href="/about-yali#team">{genericButtonText}</Button>
+              </div>
+            )}
+          </>
         )}
       </div>
       {!isMobile && (
@@ -150,13 +177,13 @@ export const TeamsLPComponent = () => {
               <div className={styles.memberImageContainer}>
                 {selectedMember.image ? (
                   <Image
-                  src={getImagePath(teamMembers.indexOf(selectedMember))}
-                  alt={selectedMember.Name}
-                  className={styles.memberImage} // Use styles for responsiveness
-                  layout="responsive" // This allows the image to resize automatically
-                  width={300}
-                  height={300}
-                />                
+                    src={getImagePath(teamMembers.indexOf(selectedMember))}
+                    alt={selectedMember.Name}
+                    className={styles.memberImage}
+                    layout="responsive"
+                    width={300}
+                    height={300}
+                  />                
                 ) : (
                   <Graphicfg className={styles.memberImage} />
                 )}

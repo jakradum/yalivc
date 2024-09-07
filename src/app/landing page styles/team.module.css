@@ -32,7 +32,7 @@
 
 .selectedMemberName {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 100;
 }
 
 .selectedMemberDesignation {
@@ -176,7 +176,7 @@
   }
 
   .teamDescription .memberImageContainer {
-    width: 75%;
+    width: 70%;
     height: auto; /* Let the height adapt to the image */
     overflow: hidden;
 }
@@ -269,94 +269,82 @@
 }
 
 @media (max-width: 800px) {
+    .titleSecFlex {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .titleSecFlex > p {
+        display: none;
+    }
+
     .teamsLpContainer {
-        flex-direction: column;
+        padding: 0 15px;
     }
 
-    .teamTable,
-    .teamDescription {
-        width: 100%;
-    }
-
-    .tableRow {
-        flex-direction: column;
-    }
-
-    .teamMember,
-    .teamMember:first-child,
-    .teamMember:last-child,
-    .teamMember:only-child {
-        width: 100%;
-        margin: 5px 0;
-        border: 1px solid #000;
-    }
-
-    .tableRow:not(:last-child) {
-        margin-bottom: 5px;
-    }
-
-    .mobileRow {
-        position: relative;
-        cursor: pointer;
-    }
-
-    .expandIcon {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .expandedContent {
-        background-color: #f0f0f0;
-        padding: 20px;
-    }
-
-    .expandedContent img {
-        width: 100%;
-        max-width: 200px;
-        height: auto;
-        margin-bottom: 10px;
-    }
-
-    .memberImage {
-        width: 300px;
-        height: 300px;
-        object-fit: cover;
-    }
-
-    .memberImage,
-    .teamImage {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        margin-bottom: 20px;
-        object-fit: cover;
-        border-radius: 5px;
+    .teamTableWrapper {
+        margin: 0 -15px;
     }
 
     .teamTable {
+        background-color: #000;
         width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
-    .mobileRow {
+    .tableRow {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px;
-        border-bottom: 1px solid #ccc;
+        flex-direction: column;
+        margin-bottom: 0;
+        position: relative;
     }
 
     .teamMember {
         width: 100%;
-        border: none;
+        margin: 0; /* Remove extra margins */
+        padding: 15px;
+        box-sizing: border-box;
+        background-color: white;
+      }
+
+    /* Remove border from the very last team member */
+    .tableRow:last-of-type .teamMember:last-of-type {
+        border-bottom: none;
     }
 
+    /* Style for expanded content */
     .expandedContent {
-        display: table-row;
+        background-color: white;
+        width: 100%;
+        padding: 15px;
+        margin: 0; /* No margin to avoid pushing it away */
+        border-bottom: 1px solid black;
+        box-sizing: border-box;
+      }
+      
+      /* Adjust the positioning and alignment for mobile */
+      .tableRow.expanded + .expandedContent {
+        margin-top: -1px; /* Ensures it appears right after the clicked row */
+      }
+      
+
+    /* Ensure the expanded content is directly under its row */
+    .tableRow.expanded {
+        margin-bottom: -1px; /* Overlap with the next row's border */
     }
 
-    .expandedContent td {
+    /* Ensure the 'Know More' button has consistent margins */
+    .knowMoreCell {
+        margin: 0 15px;
+        border-bottom: 1px solid black;
+    }
+
+    /* Ensure any potential overflowing content is handled */
+    .teamDescription {
+        width: 100%;
+        box-sizing: border-box;
         padding: 15px;
     }
 }

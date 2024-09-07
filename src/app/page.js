@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <main>
       {/* Landing scroll */}
-      <section className={landingStyles.heroSection}>
+      {/* <section className={landingStyles.heroSection}>
         <aside className={landingStyles.contentWrapper}>
           <div className={landingStyles.headingBox}>
             <p>
@@ -69,23 +69,23 @@ export default function Home() {
             <DottedLogoGraphic />
           </div>
         </aside>
-      </section>
+      </section> */}
 
       {/* Technologies Article */}
-      <TechnologiesArticle />
+      {/* <TechnologiesArticle /> */}
 
       {/* Mission statement scroll */}
-      <section className={missionStyles.sectionBG}>
-        <MissionStatement />
-      </section>
+      {/* <section className={missionStyles.sectionBG}>
+         <MissionStatement />
+      </section> */}
 
       {/* companies section */}
-      <section className={companyStyles.section}>
+      {/* <section className={companyStyles.section}>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Our companies make us proud" color="black" />
         </div>
         <CompanyGrid />
-      </section>
+      </section> */}
 
       {/* Team section */}
       <section className={teamStyles.teamSec}>
@@ -105,12 +105,12 @@ export default function Home() {
       </section>
 
       {/* news section */}
-      <section>
+      {/* <section>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Yali in the news" color="black" />
         </div>
         <NewsSection />
-      </section>
+      </section> */}
     </main>
   );
 }
