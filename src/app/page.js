@@ -97,7 +97,7 @@ export default function Home() {
                 The team at Yali Capital is armed with an impressive track record of successful investment history, and
                 a combined 60 years in the deep tech domain.
               </p>
-              <Button href="/about-yali">{genericButtonText}</Button>
+
             </aside>
           </div>
         </header>

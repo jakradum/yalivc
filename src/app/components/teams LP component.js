@@ -153,7 +153,7 @@ export const TeamsLPComponent = () => {
         {isMobile ? (
           <div className={styles.mobileTeamList}>
             {renderMobileView()}
-            {teamMembers.length > 4 && (
+            {teamMembers.length > 0 && (
               <div className={styles.mobileViewAllButtonWrapper}>
                 <Button href="/about-yali#team">{genericButtonText}</Button>
               </div>
