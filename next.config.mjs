@@ -1,4 +1,5 @@
 const isProd = process.env.NODE_ENV === 'production'
+const repoName = 'yalivc'
 
 const nextConfig = {
   reactStrictMode: true,
@@ -7,11 +8,10 @@ const nextConfig = {
     loaderFile: './image-loader.js',
     domains: ['yali.vc'],
   },
-  basePath: isProd ? '/yalivc' : '',
-  assetPrefix: isProd ? 'https://jakradum.github.io/yalivc' : '',
+  basePath: isProd ? `/${repoName}` : '',
+  assetPrefix: isProd ? `/${repoName}/` : '',
   trailingSlash: true,
   output: 'export',
-  // Add this to allow using 'use client' directive
   experimental: {
     appDir: true,
   },
