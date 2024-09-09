@@ -288,7 +288,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        width: 20rem; /* Fixed width */
+        min-width: 17rem; /* Fixed width */
         height: 28rem; /* Fixed height */
         background-color: white;
         border: 1px solid #000;
