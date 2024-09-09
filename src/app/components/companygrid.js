@@ -5,12 +5,32 @@ import localCompaniesData from '../data/companies.json';
 import styles from '../landing page styles/companies.module.css';
 import Button from './button';
 import { useData } from '../data/fetch component';
+import Image from 'next/image';
 import { DefenceVector } from './icons/background svgs/category svgs/defence vector';
 import { GenericVector } from './icons/background svgs/category svgs/generic vector';
 import { LifeSciencesVector } from './icons/background svgs/category svgs/life sciennces vector';
 import { RoboticsVector } from './icons/background svgs/category svgs/robotics vector';
 import { GenomicsVector } from './icons/background svgs/category svgs/genomics vector';
 import { SemiconVector } from './icons/background svgs/category svgs/semicon vector';
+
+// logo imports
+import artera from '../../../public/logos/artera.png';
+import auraSemi from '../../../public/logos/aura semi.png';
+import bluarmor from '../../../public/logos/bluarmor.png';
+import cadence from '../../../public/logos/cadence-1.png';
+import cirelSystems from '../../../public/logos/cirel-systems-1.png';
+import cosmicCircuits from '../../../public/logos/cosmic circuits.png';
+import dataPatterns from '../../../public/logos/data-pattens-1.png';
+import etherealMachines from '../../../public/logos/ethereal-machines-1.png';
+import galaxeye from '../../../public/logos/galaxeye-1.png';
+import greenstone from '../../../public/logos/greenstone.png';
+import kyulux from '../../../public/logos/kyulux-1.png';
+import mtar from '../../../public/logos/mtar.png';
+import nanosemi from '../../../public/logos/nanosemi-inc-1.png';
+import sambaNova from '../../../public/logos/SambaNova-dark-logo-1.png';
+import tonbo from '../../../public/logos/tonbo.png';
+import haystack from '../../../public/logos/Haystack.png';
+import walden from '../../../public/logos/walden.jpeg';
 
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,
@@ -25,13 +45,32 @@ export const vectorUsageMap = {
   'life sciences': <LifeSciencesVector/>,
 };
 
+const companyLogoMap = {
+  'Aurasemi': '/logos/aura semi.png',
+  'BluArmor': '/logos/bluarmor.png',
+  'Cadence': '/logos/cadence-1.png',
+  'Cirel Systems': '/logos/cirel-systems-1.png',
+  'Cosmic Circuits': '/logos/cosmic circuits.png',
+  'Data Patterns': '/logos/data-pattens-1.png',
+  'Ethereal Machines': '/logos/ethereal-machines-1.png',
+  'GalaxEye': '/logos/galaxeye-1.png',
+  'Greenstone Biosciences': '/logos/greenstone.png',
+  'Kyulux': '/logos/kyulux-1.png',
+  'MTAR Technologies': '/logos/mtar.png',
+  'NanoSemi': '/logos/nanosemi-inc-1.png',
+  'SambaNova Systems': '/logos/SambaNova-dark-logo-1.png',
+  'Tonbo Imaging': '/logos/tonbo.png',
+  'Haystack Analytics': '/logos/Haystack.png',
+  'Walden International': '/logos/walden.jpeg',
+};
+
+
 
 const CompanyTable = () => {
   const { data } = useData();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
 
-  const dummyImg = 'https://img.freepik.com/free-vector/business-logo_23-2147503133.jpg';
   const buttonText = 'view all companies';
 
   const companiesData = (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) 
@@ -71,12 +110,18 @@ const CompanyTable = () => {
                     </div>
                     <h4 className={styles.companyTitle}>{company.name}</h4>
                     <p className={styles.companyCategory}>{company.category}</p>
-                    
-                    {/* Vector usage based on category */}
-                    <div className={styles.vector}>
-                    {vectorUsageMap[company.category] }
-                    </div>
-                    <img src={dummyImg} className={styles.imagePlaceholder} alt={company.name} />
+
+                    <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
+                    {companyLogoMap[company.name] && (
+                      <div className={styles.imagePlaceholder}>
+                        <Image
+                          src={companyLogoMap[company.name]}
+                          alt={company.name}
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </div>
+                    )}
                     <small className={styles.companyOneLiner}>{company.oneLiner}</small>
                   </article>
                 </td>
@@ -87,7 +132,6 @@ const CompanyTable = () => {
       </table>
     </>
   );
-  
 
   const renderMobileLayout = () => (
     <div
@@ -126,16 +170,18 @@ const CompanyTable = () => {
                 </div>
                 <h4 className={styles.companyTitle}>{company.name}</h4>
                 <p className={styles.companyCategory}>{company.category}</p>
-  
-                {/* Vector usage based on category */}
+
                 {vectorUsageMap[company.category] && (
-                  <img
-                    src={vectorUsageMap[company.category]}
-                    className={styles.categoryVector}
-                  />
+                  <img src={vectorUsageMap[company.category]} className={styles.categoryVector} />
                 )}
-  
-                <img src={dummyImg} className={styles.mobileImagePlaceholder} alt={company.name} />
+
+                <Image
+                  src={companyLogoMap[company.name]}
+                  alt={company.name}
+                  className={styles.mobileImagePlaceholder}
+                  width={80}
+                  height={80}
+                />
                 <small>{company.oneLiner}</small>
                 <p>Tap to view next</p>
               </article>
@@ -148,7 +194,6 @@ const CompanyTable = () => {
       </Button>
     </div>
   );
-  
 
   return (
     <div className={styles.companyTableContainer}>

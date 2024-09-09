@@ -8,14 +8,14 @@ const HeaderFlex = ({
   backgroundColor = 'transparent'
 }) => {
   return (
-    <div 
+    <header 
       className={styles.headerFlex} 
       style={{ backgroundColor, color }}
     >
       <ViewfinderIcon />
       <h1>{title}</h1>
       <ViewfinderIcon />
-    </div>
+    </header>
   );
 };
 
