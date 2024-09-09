@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -23,9 +23,10 @@ export const TeamsLPComponent = () => {
   const localMembers = localTeamData['Team Members'].slice(0, 4);
 
   // Use remote data for additional members, starting from order 5
-  const remoteMembers = data && data.status === 'success' && data.data && data.data['Team Members'] 
-    ? data.data['Team Members'].filter(member => member.Order > 4)
-    : [];
+  const remoteMembers =
+    data && data.status === 'success' && data.data && data.data['Team Members']
+      ? data.data['Team Members'].filter((member) => member.Order > 4)
+      : [];
 
   const teamMembers = [...localMembers, ...remoteMembers];
 
@@ -45,8 +46,10 @@ export const TeamsLPComponent = () => {
 
   const getImagePath = (index) => {
     if (index < 4) {
+      // For local members, use the image path directly
       return localMembers[index].image;
     } else {
+      // For remote members, use the provided image path or a placeholder
       return teamMembers[index].image || '/api/placeholder/400/400';
     }
   };
@@ -63,7 +66,7 @@ export const TeamsLPComponent = () => {
   const renderMobileView = () => {
     return teamMembers.map((member, index) => (
       <div key={index} className={styles.mobileTeamMemberWrapper}>
-        <div 
+        <div
           className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
           onClick={() => handleCellClick(member, index)}
         >
@@ -83,13 +86,12 @@ export const TeamsLPComponent = () => {
         <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
           <div className={styles.expandedImageContainer}>
             {member.image ? (
-              <Image 
-                src={getImagePath(index)} 
-                alt={member.Name} 
-                layout="responsive"
+              <Image
+                src={getImagePath(index)}
+                alt={member.Name}
                 width={300}
                 height={200}
-                objectFit="contain"
+                style={{ objectFit: 'contain' }}
                 className={styles.memberImage}
               />
             ) : (
@@ -109,12 +111,11 @@ export const TeamsLPComponent = () => {
       rows.push(
         <tr key={i} className={styles.tableRow}>
           {renderCell(teamMembers[i], i)}
-          {i + 1 < teamMembers.length ? 
-            renderCell(teamMembers[i + 1], i + 1) : 
-            (isLastRow && teamMembers.length % 2 !== 0 && teamMembers.length > 4) ? 
-              renderKnowMoreCell() : 
-              null
-          }
+          {i + 1 < teamMembers.length
+            ? renderCell(teamMembers[i + 1], i + 1)
+            : isLastRow && teamMembers.length % 2 !== 0 && teamMembers.length > 4
+            ? renderKnowMoreCell()
+            : null}
         </tr>
       );
     }
@@ -122,7 +123,7 @@ export const TeamsLPComponent = () => {
   };
 
   const renderCell = (member, index) => (
-    <td 
+    <td
       key={index}
       className={`${styles.teamMember} ${selectedIndex === index ? styles.selectedMember : ''}`}
       onClick={() => handleCellClick(member, index)}
@@ -143,7 +144,7 @@ export const TeamsLPComponent = () => {
 
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
-      <Button href='/about-yali#team'>{genericButtonText}</Button>
+      <Button href="/about-yali#team">{genericButtonText}</Button>
     </td>
   );
 
@@ -182,10 +183,10 @@ export const TeamsLPComponent = () => {
                     src={getImagePath(teamMembers.indexOf(selectedMember))}
                     alt={selectedMember.Name}
                     className={styles.memberImage}
-                    layout="responsive"
                     width={300}
                     height={300}
-                  />                
+                    style={{ objectFit: 'contain' }}
+                  />
                 ) : (
                   <Graphicfg className={styles.memberImage} />
                 )}
