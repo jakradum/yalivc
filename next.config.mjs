@@ -7,6 +7,7 @@ const nextConfig = {
     loader: 'custom',
     loaderFile: './image-loader.js',
     domains: ['yali.vc'],
+    unoptimized: true, // For static exports
   },
   basePath: isProd ? `/${repoName}` : '',
   assetPrefix: isProd ? `/${repoName}/` : '',

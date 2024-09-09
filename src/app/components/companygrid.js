@@ -27,23 +27,23 @@ export const vectorUsageMap = {
 };
 
 const companyLogoMap = {
-  'Aurasemi': '/logos/aura semi.png',
-  'BluArmor': '/logos/bluarmor.png',
-  'Cadence': '/logos/cadence-1.png',
-  'Cirel Systems': '/logos/cirel-systems-1.png',
-  'Cosmic Circuits': '/logos/cosmic circuits.png',
-  'Data Patterns': '/logos/data-pattens-1.png',
-  'Ethereal Machines': '/logos/ethereal-machines-1.png',
-  'GalaxEye': '/logos/galaxeye-1.png',
-  'Greenstone Biosciences': '/logos/greenstone.png',
-  'Kyulux': '/logos/kyulux-1.png',
-  'MTAR Technologies': '/logos/mtar.png',
-  'NanoSemi': '/logos/nanosemi-inc-1.png',
-  'SambaNova Systems': '/logos/SambaNova-dark-logo-1.png',
-  'Tonbo Imaging': '/logos/tonbo.png',
-  'Haystack Analytics': '/logos/Haystack.png',
-  'Walden International': '/logos/walden.jpeg',
-  'ideaForge': '/logos/ideaforge.png'
+  'Aurasemi': 'logos/aura semi.png',
+  'BluArmor': 'logos/bluarmor.png',
+  'Cadence': 'logos/cadence-1.png',
+  'Cirel Systems': 'logos/cirel-systems-1.png',
+  'Cosmic Circuits': 'logos/cosmic circuits.png',
+  'Data Patterns': 'logos/data-pattens-1.png',
+  'Ethereal Machines': 'logos/ethereal-machines-1.png',
+  'GalaxEye': 'logos/galaxeye-1.png',
+  'Greenstone Biosciences': 'logos/greenstone.png',
+  'Kyulux': 'logos/kyulux-1.png',
+  'MTAR Technologies': 'logos/mtar.png',
+  'NanoSemi': 'logos/nanosemi-inc-1.png',
+  'SambaNova Systems': 'logos/SambaNova-dark-logo-1.png',
+  'Tonbo Imaging': 'logos/tonbo.png',
+  'Haystack Analytics': 'logos/Haystack.png',
+  'Walden International': 'logos/walden.jpeg',
+  'ideaForge': 'logos/ideaforge.png'
 };
 
 
@@ -99,8 +99,9 @@ const CompanyTable = () => {
                         <Image
                           src={companyLogoMap[company.name]}
                           alt={company.name}
-                          layout="fill"
-                          objectFit="contain"
+                          width={100} // Adjust these values as needed
+                          height={100} // Adjust these values as needed
+                          style={{ objectFit: 'contain' }}
                         />
                       </div>
                     )}
