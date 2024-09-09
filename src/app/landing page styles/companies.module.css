@@ -228,6 +228,32 @@
         flex-direction: column;
         align-items: center;
     }
+    .mobileVector {
+        width: 100%;
+        height: 200px; /* Adjust as needed */
+        background-color: #830D35; /* Maroon background color */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .mobileVector svg {
+        scale: (1.1);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    /* Style the SVG paths to be light */
+  
 
     .keyDetails {
         display: flex;
@@ -237,6 +263,12 @@
         padding: 1rem 0; /* Remove padding */
         margin: 0;
     }
+    .keyDetails p:last-of-type {
+        align-self: center;
+        font-size: 0.8rem;
+        color:#666;
+    }
+
     .sidebarText{
         font-size: .9rem;
         margin-bottom: 2rem;

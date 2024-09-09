@@ -13,25 +13,6 @@ import { RoboticsVector } from './icons/background svgs/category svgs/robotics v
 import { GenomicsVector } from './icons/background svgs/category svgs/genomics vector';
 import { SemiconVector } from './icons/background svgs/category svgs/semicon vector';
 
-// logo imports
-import artera from '../../../public/logos/artera.png';
-import auraSemi from '../../../public/logos/aura semi.png';
-import bluarmor from '../../../public/logos/bluarmor.png';
-import cadence from '../../../public/logos/cadence-1.png';
-import cirelSystems from '../../../public/logos/cirel-systems-1.png';
-import cosmicCircuits from '../../../public/logos/cosmic circuits.png';
-import dataPatterns from '../../../public/logos/data-pattens-1.png';
-import etherealMachines from '../../../public/logos/ethereal-machines-1.png';
-import galaxeye from '../../../public/logos/galaxeye-1.png';
-import greenstone from '../../../public/logos/greenstone.png';
-import kyulux from '../../../public/logos/kyulux-1.png';
-import mtar from '../../../public/logos/mtar.png';
-import nanosemi from '../../../public/logos/nanosemi-inc-1.png';
-import sambaNova from '../../../public/logos/SambaNova-dark-logo-1.png';
-import tonbo from '../../../public/logos/tonbo.png';
-import haystack from '../../../public/logos/Haystack.png';
-import walden from '../../../public/logos/walden.jpeg';
-
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,
   'artificial intelligence': <GenericVector/>,
@@ -62,6 +43,7 @@ const companyLogoMap = {
   'Tonbo Imaging': '/logos/tonbo.png',
   'Haystack Analytics': '/logos/Haystack.png',
   'Walden International': '/logos/walden.jpeg',
+  'ideaForge': '/logos/ideaforge.png'
 };
 
 
@@ -171,17 +153,10 @@ const CompanyTable = () => {
                 <h4 className={styles.companyTitle}>{company.name}</h4>
                 <p className={styles.companyCategory}>{company.category}</p>
 
-                {vectorUsageMap[company.category] && (
-                  <img src={vectorUsageMap[company.category]} className={styles.categoryVector} />
-                )}
+                <div className={styles.mobileVector}>
+                  {vectorUsageMap[company.category] || <GenericVector />}
+                </div>
 
-                <Image
-                  src={companyLogoMap[company.name]}
-                  alt={company.name}
-                  className={styles.mobileImagePlaceholder}
-                  width={80}
-                  height={80}
-                />
                 <small>{company.oneLiner}</small>
                 <p>Tap to view next</p>
               </article>
