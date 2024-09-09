@@ -52,5 +52,6 @@
     font-size: 0.8rem;
     border: 1px solid black;
     padding: clamp(1rem, 3vw, 0.8rem);
+    margin: 2rem 0 0 0;
   }
 }
