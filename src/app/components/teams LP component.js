@@ -45,12 +45,18 @@ export const TeamsLPComponent = () => {
   }, [teamMembers]);
 
   const getImagePath = (index) => {
+    const isProd = process.env.NODE_ENV === 'production';
+    const repoName = 'yalivc';
+    const basePath = isProd ? `/${repoName}` : '';
+  
     if (index < 4) {
-      // For local members, use the image path directly
-      return localMembers[index].image;
+      // For local members
+      const imagePath = localMembers[index].image;
+      return `${basePath}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
     } else {
-      // For remote members, use the provided image path or a placeholder
-      return teamMembers[index].image || '/api/placeholder/400/400';
+      // For remote members
+      const imagePath = teamMembers[index].image || '/api/placeholder/400/400';
+      return `${basePath}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
     }
   };
 
