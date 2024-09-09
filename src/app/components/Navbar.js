@@ -14,11 +14,40 @@ const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const navigationItems = navigationItemsData.menuItems;
 
   useEffect(() => {
     setIsClient(true);
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateNavbar = () => {
+      const scrollY = window.scrollY;
+      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+
+      if (scrollPercent > 3) {
+        setIsSticky(true);
+        if (!isMobile) {
+          setIsVisible(scrollY < lastScrollY);
+        }
+      } else {
+        setIsSticky(false);
+        setIsVisible(true);
+      }
+
+      lastScrollY = scrollY;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNavbar);
+        ticking = true;
+      }
+    };
+
     const checkScreenSize = () => {
       const mediaQuery = window.matchMedia("(max-width: 800px)");
       const isMobileByMedia = mediaQuery.matches;
@@ -26,19 +55,6 @@ const Navbar = () => {
       const isMobileNow = isMobileByMedia && isMobileByWidth;
       
       setIsMobile(isMobileNow);
-      
-      console.log('Screen Size Check:', {
-        isMobile: isMobileNow,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        mediaQueryMatch: isMobileByMedia,
-        pixelRatio: window.devicePixelRatio,
-        userAgent: navigator.userAgent
-      });
-    };
-
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
     };
 
     const handleRouteChange = () => {
@@ -47,15 +63,15 @@ const Navbar = () => {
 
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll);
     window.addEventListener('popstate', handleRouteChange);
 
     return () => {
       window.removeEventListener('resize', checkScreenSize);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('popstate', handleRouteChange);
     };
-  }, []);
+  }, [isMobile]);
 
   const toggleMenu = () => {
     setMenuOpen((prevState) => !prevState);
@@ -105,7 +121,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`${styles.navbar} ${isSticky ? styles.sticky : ''} ${isMobile && isMenuOpen ? styles.expanded : ''}`}
+      className={`${styles.navbar} 
+                  ${isSticky ? styles.sticky : ''} 
+                  ${isMobile && isMenuOpen ? styles.expanded : ''} 
+                  ${!isMobile && !isVisible ? styles.hidden : ''}`}
     >
       {isMobile ? (
         <>
@@ -121,7 +140,7 @@ const Navbar = () => {
           </div>
           {isMenuOpen && (
             <div className={styles.mobileMenu}>
-              <div className={styles.navigationItems}>{renderMobileMenu()}</div>
+              {renderMobileMenu()}
               <div className={styles.mobileMenuBottom}>
                 <p className={styles.verticalText}>Yali.VC</p>
                 <PinkLogo className={`${styles.pinkLogo} global-pinklogo`} />
