@@ -4,6 +4,7 @@ import Footer from './components/footer';
 import './styles/globals.css';
 import Head from 'next/head';
 import { DataProvider } from './data/fetch component';
+import Breadcrumb from './components/breadcrumb';
 
 const Navbar = dynamic(() => import('./components/Navbar'), { ssr: false });
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Navbar />
         <div className="page-wrapper">
+          {/* <Breadcrumb/> */}
           <main>{children}</main>
           <Footer />
         </div>
