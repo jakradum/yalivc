@@ -1,0 +1,192 @@
+.mainAbout {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    overflow: visible;
+    padding: 3rem 0 0 0;
+}
+
+/* Top line pseudo-element */
+.mainAbout::before {
+    content: '';
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 1px;
+    background-color: #000;
+}
+
+/* Bottom line pseudo-element */
+.mainAbout::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 1px;
+    background-color: #000;
+}
+
+.textContent {
+    flex: 11;
+    padding: 0 3rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.textContent > h1 {
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0 0 2rem 0;
+    line-height: 3rem;
+    letter-spacing: -0.25rem;
+    position: relative;
+    padding: 2rem 0;
+}
+
+/* h1 underline pseudo-element */
+.textContent > h1::after {
+    content: '';
+    position: absolute;
+    left: -3rem;
+    right: -3rem;
+    bottom: -1rem;
+    height: 1px;
+    background-color: #000;
+}
+
+.paraFlex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container for paragraphs to enable vertical centering */
+.textContent > div {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Styles for paragraphs */
+.textContent > div > p {
+    margin: 0.5rem 0;
+}
+
+.mainsecGraphic {
+    flex: 9;
+    border-left: 1px solid black;
+    background-color: #830D35;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow: hidden; /* Hide overflowing parts of the SVG */
+    min-width: 200px; /* Set a minimum width to prevent excessive cropping */
+}
+
+.mainsecGraphic > svg {
+    opacity: 80%;
+    width: 100%; /* Make SVG responsive */
+    height: 100%; /* Make SVG responsive */
+    min-width: 300px; /* Ensure SVG doesn't become too small */
+    object-fit: cover; /* Crop the SVG instead of scaling it down */
+    object-position: center; /* Center the SVG when cropping */
+}
+
+/* Existing styles remain the same */
+
+/* Media query for screens 800px and below */
+/* Existing styles remain the same */
+
+/* Media query for screens 800px and below */
+@media (max-width: 800px) {
+    .mainAbout {
+        flex-direction: column;
+        padding: 0;
+        position: relative;
+        margin: 1rem 0;
+    }
+    .mainAbout::before {
+        top: 0;
+    }
+
+    .mainAbout::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100vw; /* Full viewport width */
+        height: 1px;
+        background-color: #000;
+    }
+
+    .textContent {
+        padding: 2rem 1.5rem;
+    }
+
+    .textContent > h1 {
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+        letter-spacing: -0.2rem;
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    /* Add line after heading */
+    .textContent > h1::after {
+        content: '';
+        position: absolute;
+        left: -1.5rem;
+        right: -1.5rem;
+        bottom: -0.5rem;
+        height: 1px;
+        background-color: #000;
+    }
+
+    /* Container for paragraphs */
+    .textContent > div {
+        justify-content: flex-start;
+        padding-top: 1rem; /* Add space after the line */
+    }
+
+    /* Adjust paragraph styles */
+    .textContent > div > p {
+        margin: 0.75rem 0;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .mainsecGraphic {
+        width: calc(100% - 2rem); /* Full width minus margins */
+        aspect-ratio: 1 / 1; /* Forces a square shape */
+        margin: 1rem; /* Adds margin around the container */
+        padding: 0; /* Removes any existing padding */
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1rem;
+        background-color: #830D35; /* Ensures the background color fills the square */
+    }
+
+    .mainsecGraphic > svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%; /* Slightly smaller than the container to create a border effect */
+        height: 90%;
+        object-fit: contain; /* Ensures the entire SVG is visible */
+    }
+
+    .mainAbout::before {
+        top: 0;
+    }
+}

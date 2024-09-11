@@ -1,0 +1,241 @@
+.titleSecFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 0;
+    border-bottom: 1px solid #000;
+}
+
+.teamSec {
+    position: relative;
+}
+
+.teamSec::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 1px;
+    /* Adjust this value to change the thickness of the line */
+    background-color: black;
+    /* Adjust this to change the color of the line */
+    transform: translateX(-50%);
+}
+
+.selectedMemberName {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.selectedMemberDesignation {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.selectedMemberOneLiner {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.titleSecFlex>*:first-child {
+    flex: 0 0 40%;
+    align-items: flex-start;
+}
+
+.titleSecFlex>*:nth-child(2) {
+    flex: 0 0 40%;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.titleSecFlex>*:last-child {
+    align-self: flex-end;
+}
+
+.meetTeamTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.teamsLpContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.teamTable {
+    flex: 11;
+    width: 55%;
+    border-collapse: separate;
+
+}
+
+.tableRow {
+    display: flex;
+    width: 100%;
+}
+
+.teamMember {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #000;
+    transition: background-color 0.4s ease, color 1s ease;
+}
+
+.teamMember:last-child {
+    border-left: none;
+}
+
+/* Add bottom margin to all rows except the last one */
+.tableRow:not(:last-child) {
+    margin-bottom: -1px;
+}
+
+.teamMember:only-child {
+    border: 1px solid #000;
+    width: 100%;
+}
+
+.name {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.desig {
+    font-size: 0.75rem;
+    font-weight: 200;
+    text-transform: uppercase;
+}
+
+.memberInfo h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.memberInfo p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.socialButton {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000;
+    background: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.teamDescription {
+    flex: 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.teamImage {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+    .teamsLpContainer {
+        flex-direction: column;
+    }
+
+    .teamTable,
+    .teamDescription {
+        width: 100%;
+    }
+
+    .tableRow {
+        flex-direction: column;
+    }
+
+    .teamMember,
+    .teamMember:first-child,
+    .teamMember:last-child,
+    .teamMember:only-child {
+        width: 100%;
+        margin: 5px 0;
+        border: 1px solid #000;
+    }
+
+    .tableRow:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    .mobileRow {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .expandIcon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .expandedContent {
+        background-color: #f0f0f0;
+        padding: 20px;
+    }
+
+    .expandedContent img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .memberImage,
+    .teamImage {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 20px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 800px) {
+        .teamTable {
+            width: 100%;
+        }
+
+        .mobileRow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .teamMember {
+            width: 100%;
+            border: none;
+        }
+
+        .expandedContent {
+            display: table-row;
+        }
+
+        .expandedContent td {
+            padding: 15px;
+        }
+    }
+}
