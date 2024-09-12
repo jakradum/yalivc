@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useData } from '../data/fetch component';
@@ -9,21 +9,22 @@ import Button from '../components/button';
 const TeamMember = ({ member }) => (
   <div className={styles.teamMember}>
     <div className={styles.memberInfo}>
-      <h2 className={styles.name}>{member.Name}</h2>
-      <p className={styles.designation}>{member.Designation}</p>
+      <header className={styles.header}>
+        <p className={styles.name}>{member.Name}</p>
+
+        <p className={styles.designation}>{member.Designation}</p>
+      </header>
       <p className={styles.bio}>{member.Detailed || member['One-Liner']}</p>
+      <div className={styles.viewmoreButton}>
       {member.linkedin && (
-        <Button href={member.linkedin} color='black'>view on linkedin</Button>
+        <Button href={member.linkedin} color="black">
+          view on linkedin
+        </Button>
       )}
+      </div>
     </div>
     <div className={styles.memberImage}>
-      <Image
-        src={member.image || "/placeholder-image.jpg"}
-        alt={member.Name}
-        width={400}
-        height={400}
-        style={{ objectFit: "cover" }}
-      />
+      <Image src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
     </div>
   </div>
 );
@@ -36,12 +37,12 @@ const TeamList = () => {
   useEffect(() => {
     if (data && data.status === 'success' && data.data && Array.isArray(data.data['Team Members'])) {
       const remoteMembers = data.data['Team Members'].filter((member) => member.Order > 4);
-      setTeamMembers(prevMembers => [...prevMembers, ...remoteMembers]);
+      setTeamMembers((prevMembers) => [...prevMembers, ...remoteMembers]);
     }
   }, [data]);
 
   const handleLoadMore = () => {
-    setVisibleCount(prevCount => Math.min(prevCount + 4, teamMembers.length));
+    setVisibleCount((prevCount) => Math.min(prevCount + 4, teamMembers.length));
   };
 
   return (
