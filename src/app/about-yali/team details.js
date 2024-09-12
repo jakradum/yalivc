@@ -1,9 +1,33 @@
+"use client"
 import React from 'react';
+import Image from 'next/image';
 import { DataProvider, useData } from '../data/fetch component';
 import localTeamData from '../data/team.json';
+import styles from './detail styles.module.css';
+import Button from '../components/button';
+
+const TeamMember = ({ member }) => (
+  <div className={styles.teamMember}>
+    <div className={styles.memberInfo}>
+      <h2 className={styles.name}>{member.Name}</h2>
+      <p className={styles.designation}>{member.Designation}</p>
+      <p className={styles.bio}>{member.Detailed}</p>
+     <Button href={member.linkedin} color='black'>view on linkedin</Button>
+    </div>
+    <div className={styles.memberImage}>
+      <Image
+        src={member.image || "/placeholder-image.jpg"}
+        alt={member.Name}
+        width={400}
+        height={400}
+        objectFit="cover"
+      />
+    </div>
+  </div>
+);
 
 const TeamList = () => {
-  const { data, loading, error } = useData();
+  const { data } = useData();
 
   // Use local data for first 4 members
   const localMembers = localTeamData['Team Members'].slice(0, 4);
@@ -16,24 +40,12 @@ const TeamList = () => {
 
   const teamMembers = [...localMembers, ...remoteMembers];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
   return (
-    <div>
-      <h1>Our Team</h1>
+    <div className={styles.teamListContainer}>
       {teamMembers.map((member, index) => (
-        <div key={index}>
-          <h2>{member.Name}</h2>
-          <p>{member.Designation}</p>
-          <p>{member['One-Liner']}</p>
-          {member.linkedin && (
-            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-          )}
-        </div>
+        <TeamMember key={index} member={member} />
       ))}
+      <button className={styles.loadMore}>LOAD MORE</button>
     </div>
   );
 };

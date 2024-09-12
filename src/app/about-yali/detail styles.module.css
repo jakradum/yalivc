@@ -1,0 +1,95 @@
+.teamListContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .teamMember {
+    display: flex;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 40px;
+  }
+  
+  .memberInfo {
+    flex: 1;
+    padding-right: 40px;
+  }
+  
+  .name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+  }
+  
+  .designation {
+    font-size: 16px;
+    color: #666;
+    margin: 0 0 20px 0;
+  }
+  
+  .bio {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .getInTouch {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border: 1px solid #000;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .getInTouch:hover {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  .memberImage {
+    flex: 0 0 400px;
+  }
+  
+  .memberImage img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .loadMore {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .loadMore:hover {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    .teamMember {
+      flex-direction: column-reverse;
+    }
+  
+    .memberInfo {
+      padding-right: 0;
+      padding-top: 20px;
+    }
+  
+    .memberImage {
+      flex: 0 0 auto;
+      margin-bottom: 20px;
+    }
+  }

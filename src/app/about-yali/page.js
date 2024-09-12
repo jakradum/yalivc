@@ -30,11 +30,11 @@ export default function AboutYali() {
           <Nucleus />
         </aside>
         </div>
-        <section>
+        <section id='team'>
           <div className={styles.people}>
           <HeaderFlex title='The Team at Yali Capital' color='black'/>
           </div>
-          {/* <TeamDetails/> */}
+          <TeamDetails/>
         </section>
       </section>
     );
