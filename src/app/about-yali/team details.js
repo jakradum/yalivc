@@ -1,7 +1,7 @@
 "use client"
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { DataProvider, useData } from '../data/fetch component';
+import { useData } from '../data/fetch component';
 import localTeamData from '../data/team.json';
 import styles from './detail styles.module.css';
 import Button from '../components/button';
@@ -11,8 +11,10 @@ const TeamMember = ({ member }) => (
     <div className={styles.memberInfo}>
       <h2 className={styles.name}>{member.Name}</h2>
       <p className={styles.designation}>{member.Designation}</p>
-      <p className={styles.bio}>{member.Detailed}</p>
-     <Button href={member.linkedin} color='black'>view on linkedin</Button>
+      <p className={styles.bio}>{member.Detailed || member['One-Liner']}</p>
+      {member.linkedin && (
+        <Button href={member.linkedin} color='black'>view on linkedin</Button>
+      )}
     </div>
     <div className={styles.memberImage}>
       <Image
@@ -20,7 +22,7 @@ const TeamMember = ({ member }) => (
         alt={member.Name}
         width={400}
         height={400}
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
       />
     </div>
   </div>
@@ -28,34 +30,36 @@ const TeamMember = ({ member }) => (
 
 const TeamList = () => {
   const { data } = useData();
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [teamMembers, setTeamMembers] = useState(localTeamData['Team Members'].slice(0, 4));
 
-  // Use local data for first 4 members
-  const localMembers = localTeamData['Team Members'].slice(0, 4);
+  useEffect(() => {
+    if (data && data.status === 'success' && data.data && Array.isArray(data.data['Team Members'])) {
+      const remoteMembers = data.data['Team Members'].filter((member) => member.Order > 4);
+      setTeamMembers(prevMembers => [...prevMembers, ...remoteMembers]);
+    }
+  }, [data]);
 
-  // Use remote data for additional members, starting from order 5
-  const remoteMembers =
-    data && data.team && data.team['Team Members']
-      ? data.team['Team Members'].filter((member) => member.Order > 4)
-      : [];
-
-  const teamMembers = [...localMembers, ...remoteMembers];
+  const handleLoadMore = () => {
+    setVisibleCount(prevCount => Math.min(prevCount + 4, teamMembers.length));
+  };
 
   return (
     <div className={styles.teamListContainer}>
-      {teamMembers.map((member, index) => (
+      {teamMembers.slice(0, visibleCount).map((member, index) => (
         <TeamMember key={index} member={member} />
       ))}
-      <button className={styles.loadMore}>LOAD MORE</button>
+      {visibleCount < teamMembers.length && (
+        <button className={styles.loadMore} onClick={handleLoadMore}>
+          LOAD MORE
+        </button>
+      )}
     </div>
   );
 };
 
 export const TeamDetails = () => {
-  return (
-    <DataProvider>
-      <TeamList />
-    </DataProvider>
-  );
+  return <TeamList />;
 };
 
 export default TeamDetails;
