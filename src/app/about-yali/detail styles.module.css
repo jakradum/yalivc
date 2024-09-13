@@ -120,7 +120,7 @@
         flex-direction: column;
         border-top: 1px solid black;
         border-bottom: 1px solid black;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
         position: relative;
 
     }
@@ -133,17 +133,7 @@
         order: 1;
     }
 
-    .teamMember::after {
-        content: '';
-        position: absolute;
-        bottom: -0.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100vw;
-        height: 1px;
-
-        background-color: black;
-    }
+  
 
     .header {
         display: flex;
@@ -205,11 +195,24 @@
 
     .memberImage {
         order: 2;
-        width: 100%;
+        width: calc(100% - 2rem); /* Subtract the total horizontal margin */
         height: auto;
+        margin: 1rem;
         aspect-ratio: 1 / 1;
+        position: relative; /* For positioning the pseudo-element */
     }
+    
+    .memberImage::before {
+        content: '';
+        position: absolute;
+        top: -1rem;
+        left: -1rem;
+        right: -1rem;
+        bottom: -1rem;
 
+        pointer-events: none; /* Allows clicking through to the image */
+    }
+    
     .memberImage img {
         width: 100%;
         height: 100%;

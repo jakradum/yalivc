@@ -6,28 +6,52 @@ import localTeamData from '../data/team.json';
 import styles from './detail styles.module.css';
 import Button from '../components/button';
 
-const TeamMember = ({ member }) => (
-  <div className={styles.teamMember}>
-    <div className={styles.memberInfo}>
-      <header className={styles.header}>
-        <p className={styles.name}>{member.Name}</p>
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
 
-        <p className={styles.designation}>{member.Designation}</p>
-      </header>
-      <p className={styles.bio}>{member.Detailed || member['One-Liner']}</p>
-      <div className={styles.viewmoreButton}>
-      {member.linkedin && (
-        <Button href={member.linkedin} color="black">
-          view on linkedin
-        </Button>
-      )}
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 800);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
+};
+
+const TeamMember = ({ member }) => {
+  const isMobile = useIsMobile();
+
+  return (
+    <div className={styles.teamMember}>
+      <div className={styles.memberInfo}>
+        <header className={styles.header}>
+          {isMobile ? (
+            <h2 className={styles.name}>{member.Name}</h2>
+          ) : (
+            <p className={styles.name}>{member.Name}</p>
+          )}
+          <p className={styles.designation}>{member.Designation}</p>
+        </header>
+        <p className={styles.bio}>{member.Detailed || member['One-Liner']}</p>
+        <div className={styles.viewmoreButton}>
+          {member.linkedin && (
+            <Button href={member.linkedin} color="black">
+              view on linkedin
+            </Button>
+          )}
+        </div>
+      </div>
+      <div className={styles.memberImage}>
+        <Image src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
       </div>
     </div>
-    <div className={styles.memberImage}>
-      <Image src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
-    </div>
-  </div>
-);
+  );
+};
 
 const TeamList = () => {
   const { data } = useData();
