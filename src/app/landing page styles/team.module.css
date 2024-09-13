@@ -21,6 +21,9 @@
     transform: translateX(-50%);
 }
 
+.noUnderline {
+  text-decoration: none;
+}
 .selectedMember {
     background-color: #830D35 !important;
 }
@@ -275,7 +278,9 @@
     justify-content: center;
     border-bottom: none;
   }
-
+  .noUnderline {
+    text-decoration: none;
+  }
   .teamSec > header {
     display: flex;
     justify-content: center;

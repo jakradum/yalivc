@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useData } from '../data/fetch component';
 import localTeamData from '../data/team.json';
 import styles from '../landing page styles/team.module.css';
@@ -150,7 +151,9 @@ export const TeamsLPComponent = () => {
 
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
-      <Button href="/about-yali#team">{genericButtonText}</Button>
+      <Link href='/about-yali/#team' className={styles.noUnderline}>
+      <Button>{genericButtonText}</Button>
+    </Link>
     </td>
   );
 
@@ -162,7 +165,9 @@ export const TeamsLPComponent = () => {
             {renderMobileView()}
             {teamMembers.length > 0 && (
               <div className={styles.mobileViewAllButtonWrapper}>
-                <Button href="/about-yali#team">{genericButtonText}</Button>
+                <Link href="/about-yali/#team" className={styles.noUnderline}>
+                  <Button>{genericButtonText}</Button>
+                </Link>
               </div>
             )}
           </div>
@@ -173,7 +178,9 @@ export const TeamsLPComponent = () => {
             </table>
             {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
               <div className={styles.viewAllButtonWrapper}>
-                <Button href="/about-yali#team">{genericButtonText}</Button>
+                <Link href="/about-yali/#team" className={styles.noUnderline}>
+                  <Button>{genericButtonText}</Button>
+                </Link>
               </div>
             )}
           </>
