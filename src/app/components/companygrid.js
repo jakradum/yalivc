@@ -26,7 +26,7 @@ export const vectorUsageMap = {
   'life sciences': <LifeSciencesVector/>,
 };
 
-const companyLogoMap = {
+export const companyLogoMap = {
   'Aurasemi': 'logos/aura semi.png',
   'BluArmor': 'logos/bluarmor.png',
   'Cadence': 'logos/cadence-1.png',
