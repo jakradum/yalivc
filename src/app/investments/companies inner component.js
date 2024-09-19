@@ -7,33 +7,38 @@ import categoriesData from '../data/categories.json';
 import Image from 'next/image';
 import Button from '../components/button';
 import { companyLogoMap } from '../components/companygrid';
-
+import { ExpandIcon } from '../components/icons/small icons/expandIcon';
 
 function useWindowWidth() {
-    const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
-    
-    useEffect(() => {
-      if (typeof window === 'undefined') return;
-      
-      const handleResize = () => setWidth(window.innerWidth);
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, []);
-  
-    return width;
-  }
-  
-  
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return width;
+}
 
 export const CompaniesInnerComponent = () => {
-    const windowWidth = useWindowWidth();
+  const windowWidth = useWindowWidth();
   const { data, loading, error } = useData();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [isUsingLocalData, setIsUsingLocalData] = useState(true);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.emergingTechnologies || [];
+  const toggleCategoryDropdown = () => {
+    setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
+  };
 
+
+
+  
   useEffect(() => {
     console.log('useData hook output:', { data, loading, error });
 
@@ -74,6 +79,8 @@ export const CompaniesInnerComponent = () => {
         return [...prev, lowercaseCategory];
       }
     });
+    // Close the dropdown after selecting a category
+    setIsCategoryDropdownOpen(false);
   };
 
   const filteredCompanies = companies.filter(
@@ -85,8 +92,26 @@ export const CompaniesInnerComponent = () => {
 
   return (
     <div className={styles.container}>
-      {/* <p>Select one or more categories to filter</p> */}
-      <div className={styles.categoriesWrapper}>
+      <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
+        <div className={styles.categoryDropdown}>
+          <button className={styles.dropdownToggle} onClick={toggleCategoryDropdown}>
+            CATEGORIES
+            <ExpandIcon className={`${styles.expandIcon} ${isCategoryDropdownOpen ? styles.expanded : ''}`} />
+          </button>
+          <div className={`${styles.dropdownContent} ${isCategoryDropdownOpen ? styles.show : ''}`}>
+            {categories.map((category, index) => (
+              <button
+                key={index}
+                className={`${styles.categoryItem} ${
+                  selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
+                }`}
+                onClick={() => toggleCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className={styles.categoriesContainer}>
           {categories.map((category, index) => (
             <button
@@ -124,7 +149,7 @@ export const CompaniesInnerComponent = () => {
               </div>
             </div>
             <div className={styles.companyDetail}>
-              <p >{company.detail}</p>
+              <p>{company.detail}</p>
             </div>
           </div>
         ))}

@@ -2,6 +2,9 @@
     margin: 0 auto;
     padding: 20px 0;
   }
+.categoryDropdown{
+  display: none;
+}
   
   .categoriesContainer {
     display: flex;
@@ -86,10 +89,84 @@
   }
 
   @media (max-width: 800px) {
+    .categoriesWrapper {
+      position: relative;
+      z-index: 10;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  
+    .categoryDropdown {
+      display: block;
+      width: 100%;
+    }
+  
+    .dropdownToggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 15px;
+      background-color: #ffffff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  
+    .dropdownContent {
+      display: none;
+      width: 100%;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+  
+    .categoriesWrapper.expanded .dropdownContent {
+      display: block;
+      max-height: 1000px; /* Adjust this value based on your content */
+    }
+  
+    .categoryItem {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      text-align: left;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      border-top: 1px solid #e0e0e0;
+    }
+  
+    .categoryItem:first-child {
+      border-top: none;
+    }
+  
+    .categoryItem.selectedCategory {
+      background-color: #800020; /* Maroon color for selected category */
+      color: #ffffff;
+    }
+  
+    .categoriesContainer {
+      display: none; /* Hide the categories container for mobile */
+    }
+  
+    .expandIcon {
+      transition: transform 0.3s ease;
+    }
+  
+    .expandIcon.expanded {
+      transform: rotate(180deg);
+    }
+  
+    /* Existing styles for company cards and content layout */
     .companyCard {
       flex-direction: column;
       align-items: flex-start;
-
     }
   
     .companyInfo {
@@ -97,6 +174,8 @@
       display: flex;
       flex-direction: row;
       padding: 0;
+      margin-bottom: 1rem;
+      width: 100%;
     }
   
     .logoContainer {
