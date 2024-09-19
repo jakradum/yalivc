@@ -106,7 +106,7 @@ export const CompaniesInnerComponent = () => {
           <div key={index} className={styles.companyCard}>
             <div className={styles.logoContainer}>
               <Image
-                src={`/${companyLogoMap[company.name]}`} 
+                src={`${companyLogoMap[company.name]}`} 
                 alt={company.name}
                 width={150} // Adjust these values as needed
                 height={150} // Adjust these values as needed
