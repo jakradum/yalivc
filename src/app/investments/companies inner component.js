@@ -104,25 +104,27 @@ export const CompaniesInnerComponent = () => {
       <div className={styles.companiesContainer}>
         {filteredCompanies.map((company, index) => (
           <div key={index} className={styles.companyCard}>
-            <div className={styles.logoContainer}>
-              <Image
-                src={`${companyLogoMap[company.name]}`} 
-                alt={company.name}
-                width={150} // Adjust these values as needed
-                height={150} // Adjust these values as needed
-                style={{ objectFit: 'contain' }}
-              />
-            </div>
             <div className={styles.companyInfo}>
-              <p className={styles.companyName}>{company.name}</p>
-              {company.link && (
-                <Button href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
-                  {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
-                </Button>
-              )}
+              <div className={styles.logoContainer}>
+                <Image
+                  src={`/${companyLogoMap[company.name]}`}
+                  alt={company.name}
+                  width={150}
+                  height={150}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <div className={styles.nameAndLink}>
+                <p className={styles.companyName}>{company.name}</p>
+                {company.link && (
+                  <Button href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
+                    {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
+                  </Button>
+                )}
+              </div>
             </div>
-            <div>
-              <p className={styles.companyDetail}>{company.detail}</p>
+            <div className={styles.companyDetail}>
+              <p >{company.detail}</p>
             </div>
           </div>
         ))}
