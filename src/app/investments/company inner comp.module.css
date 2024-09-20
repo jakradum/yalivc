@@ -5,17 +5,22 @@
 .categoryDropdown{
   display: none;
 }
-  
+
+  .viewLink{
+    color: #000;
+
+  }
+ 
   .categoriesContainer {
     display: flex;
-    padding: 0 5rem;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
     margin-bottom: 30px;
     justify-content: center;
-    margin: 0 auto;
+    margin: -0.5rem;
   }
- 
+  
   .categoryItem {
     background-color: #fff;
     border: 1px solid #000;
@@ -23,9 +28,12 @@
     font-size: 1rem;
     text-transform: uppercase;
     white-space: nowrap;
-    flex-grow: 1;
     text-align: center;
     cursor: pointer;
+    flex: 0 1 auto;  /* Changed from flex-grow: 1 */
+    max-width: calc(33.333% - 1rem);  /* Adjust based on your layout preferences */
+    min-width: 200px;  /* Adjust based on your content */
+    margin: 0.5rem;
   }
   .selectedCategory{
     color: white;
@@ -104,29 +112,27 @@
   
     .dropdownToggle {
       display: flex;
+      min-height: 5rem;
       justify-content: space-between;
       align-items: center;
+      background-color: transparent;
       width: 100%;
-      padding: 15px;
-      background-color: #ffffff;
+      padding: 1rem;
       border: none;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 16px;
+      font-weight: 400;
+      font-size: 1.25rem;
     }
   
     .dropdownContent {
-      display: none;
-      width: 100%;
-      background-color: #ffffff;
-      border-top: 1px solid #e0e0e0;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease-out;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
     }
   
-    .categoriesWrapper.expanded .dropdownContent {
-      display: block;
+    .dropdownContent.show {
       max-height: 1000px; /* Adjust this value based on your content */
     }
   
@@ -209,5 +215,7 @@
     .viewLink {
       width: auto;
       max-width: 100%;
+      color: #000;
+
     }
   }

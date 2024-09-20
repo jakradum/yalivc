@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useData } from '../data/fetch component';
 import styles from './company inner comp.module.css';
 import categoriesData from '../data/categories.json';
@@ -36,7 +36,13 @@ export const CompaniesInnerComponent = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
   };
 
-
+  const activeCategories = useMemo(() => {
+    const activeCats = new Set();
+    companies.forEach(company => {
+      activeCats.add(company.category.toLowerCase());
+    });
+    return Array.from(activeCats);
+  }, [companies]);
 
   
   useEffect(() => {
@@ -90,6 +96,7 @@ export const CompaniesInnerComponent = () => {
     return url && url.toLowerCase().includes('linkedin.com');
   };
 
+
   return (
     <div className={styles.container}>
       <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
@@ -99,7 +106,7 @@ export const CompaniesInnerComponent = () => {
             <ExpandIcon className={`${styles.expandIcon} ${isCategoryDropdownOpen ? styles.expanded : ''}`} />
           </button>
           <div className={`${styles.dropdownContent} ${isCategoryDropdownOpen ? styles.show : ''}`}>
-            {categories.map((category, index) => (
+            {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
               <button
                 key={index}
                 className={`${styles.categoryItem} ${
@@ -113,7 +120,7 @@ export const CompaniesInnerComponent = () => {
           </div>
         </div>
         <div className={styles.categoriesContainer}>
-          {categories.map((category, index) => (
+          {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
             <button
               key={index}
               className={`${styles.categoryItem} ${
@@ -142,9 +149,9 @@ export const CompaniesInnerComponent = () => {
               <div className={styles.nameAndLink}>
                 <p className={styles.companyName}>{company.name}</p>
                 {company.link && (
-                  <Button href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
+                  <a href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
                     {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
-                  </Button>
+                  </a>
                 )}
               </div>
             </div>
