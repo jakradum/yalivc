@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../landing page styles/newssec.module.css';
 import Button from './button';
+import Link from 'next/link';
 import { useData } from '../data/fetch component';
 import fallbackData from '../data/news.json';
 
@@ -37,8 +38,8 @@ export const NewsSection = () => {
   }, []);
 
   const articles = formatArticles(
-    (data && data.status === 'success' && data.data && data.data.articles) 
-      ? data.data.articles 
+    data && data.status === 'success' && data.data && data.data.articles
+      ? data.data.articles
       : fallbackData.data.articles
   );
 
@@ -59,9 +60,9 @@ export const NewsSection = () => {
 
   const renderButton = () => (
     <div className={`${styles.article} ${styles.readAllButton}`}>
-      <Button href="/newsroom" color="black">
-        {buttonText}
-      </Button>
+      <Link style={{ textDecoration: 'none' }} href="/newsroom">
+        <Button color="black">{buttonText}</Button>
+      </Link>
     </div>
   );
 
@@ -77,9 +78,7 @@ export const NewsSection = () => {
   return (
     <div className={styles.newsSection}>
       <div className={styles.newsArticles}>
-        <div className={styles.leftGrid}>
-          {articles.slice(0, 4).map(renderLeftGridArticle)}
-        </div>
+        <div className={styles.leftGrid}>{articles.slice(0, 4).map(renderLeftGridArticle)}</div>
         <div className={styles.rightStack}>
           {articles.slice(4, 8).map(renderRightStackArticle)}
           {renderButton()}

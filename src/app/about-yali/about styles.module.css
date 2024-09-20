@@ -6,6 +6,21 @@
     overflow: visible;
     padding: 3rem 0 0 0;
 }
+.sectionLevel {
+    position: relative;
+    margin-bottom: 1rem; /* Adjust as needed to create space for the line */
+}
+
+.sectionLevel::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100vw; /* Full viewport width */
+    height: 1px;
+    background-color: #000; /* Adjust color as needed */
+}
 
 /* Top line pseudo-element */
 .mainAbout::before {

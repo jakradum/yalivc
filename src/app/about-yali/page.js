@@ -5,7 +5,7 @@ import { TeamDetails } from './team details';
 
 export default function AboutYali() {
   return (
-    <section>
+    <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Powering India's growth from deep within</h1>
