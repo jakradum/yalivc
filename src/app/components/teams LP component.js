@@ -11,6 +11,7 @@ import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
 import Button from './button';
 import { genericButtonText } from '../page';
 import { Graphicfg } from './icons/background svgs/graphicfg';
+import imageLoader from '../../../image-loader';
 
 export const TeamsLPComponent = () => {
   const { data } = useData();
@@ -47,17 +48,15 @@ export const TeamsLPComponent = () => {
 
   const getImagePath = (index) => {
     const isProd = process.env.NODE_ENV === 'production';
-    const repoName = 'yalivc';
-    const basePath = isProd ? `/${repoName}` : '';
-  
+    
     if (index < 4) {
       // For local members
       const imagePath = localMembers[index].image;
-      return `${basePath}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
     } else {
       // For remote members
       const imagePath = teamMembers[index].image || '/api/placeholder/400/400';
-      return `${basePath}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
     }
   };
 
