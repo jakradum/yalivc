@@ -7,9 +7,11 @@ module.exports = function imageLoader({ src, width, quality }) {
     return src;
   }
   
-  // For relative URLs, prepend the base path
-  const basePath = isProd ? `/${repoName}` : '';
-  const url = `${basePath}${src.startsWith('/') ? '' : '/'}${src}`;
+  // For relative URLs, only prepend the repo name in production
+  let url = src;
+  if (isProd) {
+    url = `/${repoName}${src.startsWith('/') ? '' : '/'}${src}`;
+  }
   
   // Add width and quality parameters if provided
   const params = new URLSearchParams();

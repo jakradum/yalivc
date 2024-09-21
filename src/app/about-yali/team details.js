@@ -37,10 +37,8 @@ const TeamMember = ({ member }) => {
   }, [member.image]);
 
   const handleImageError = () => {
-    console.error('Image failed to load:', imgSrc);
+    console.error('Image failed to load:', member.image);
     setImgError(true);
-    // Attempt to use a fallback image or placeholder
-    setImgSrc('/placeholder.jpg'); // Ensure you have a placeholder image in your public folder
   };
 
   return (
@@ -63,7 +61,7 @@ const TeamMember = ({ member }) => {
         {!imgError ? (
           <Image
             loader={imageLoader}
-            src={imgSrc}
+            src={member.image}
             alt={member.Name}
             width={400}
             height={400}
