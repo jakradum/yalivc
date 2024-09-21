@@ -24,8 +24,17 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+
+
 const TeamMember = ({ member }) => {
   const isMobile = useIsMobile();
+  const [imgSrc, setImgSrc] = useState(member.image);
+  const handleImageError = () => {
+    console.error('Image failed to load:', imgSrc);
+    setImgError(true);
+    // Attempt to use a fallback image or placeholder
+    setImgSrc('/placeholder.jpg'); // Ensure you have a placeholder image in your public folder
+  };
 
   return (
     <div className={styles.teamMember}>
@@ -44,7 +53,15 @@ const TeamMember = ({ member }) => {
         </div>
       </div>
       <div className={styles.memberImage}>
-        <Image loader={imageLoader} src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
+        <Image
+          loader={imageLoader}
+          src={imgSrc}
+          alt={member.Name}
+          width={400}
+          height={400}
+          style={{ objectFit: 'cover' }}
+          onError={handleImageError}
+        />
       </div>
     </div>
   );
