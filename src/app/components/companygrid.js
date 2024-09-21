@@ -37,13 +37,15 @@ export const companyLogoMap = {
   'GalaxEye': 'logos/galaxeye-1.png',
   'Greenstone Biosciences': 'logos/greenstone.png',
   'Kyulux': 'logos/kyulux-1.png',
+  'Artera':'logos/artera.png',
   'MTAR Technologies': 'logos/mtar.png',
   'NanoSemi': 'logos/nanosemi-inc-1.png',
   'SambaNova Systems': 'logos/SambaNova-dark-logo-1.png',
   'Tonbo Imaging': 'logos/tonbo.png',
   'Haystack Analytics': 'logos/Haystack.png',
   'Walden International': 'logos/walden.jpeg',
-  'ideaForge': 'logos/ideaforge.png'
+  'ideaForge': 'logos/ideaforge.png',
+  '4baseCare': 'logos/4basecare.png'
 };
 
 

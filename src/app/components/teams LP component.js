@@ -93,6 +93,7 @@ export const TeamsLPComponent = () => {
           <div className={styles.expandedImageContainer}>
             {member.image ? (
               <Image
+                loader={imageLoader}
                 src={getImagePath(index)}
                 alt={member.Name}
                 width={300}
@@ -192,6 +193,7 @@ export const TeamsLPComponent = () => {
               <div className={styles.memberImageContainer}>
                 {selectedMember.image ? (
                   <Image
+                    loader={imageLoader}
                     src={getImagePath(teamMembers.indexOf(selectedMember))}
                     alt={selectedMember.Name}
                     className={styles.memberImage}

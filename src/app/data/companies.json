@@ -3,110 +3,135 @@
     {
       "name": "Cosmic Circuits",
       "category": "semiconductors",
-      "oneLiner": "Advanced analog and mixed-signal IP for next-gen semiconductors.",
-      "detail": "Develops analog and mixed-signal IP cores for connectivity and advanced technologies in 40nm and 28nm nodes, with ongoing development in 20nm and FinFET."
+      "oneLiner": "Bengaluru-based advanced analog and mixed-signal IP company for world class semiconductors",
+      "detail": "Cosmic Circuits is a leading provider of differentiated Analog and Mixed-Signal silicon IP for integration on to System-on-Chips. With a single-minded focus on Analog, and a large team of expert analog designers, Cosmic Circuits offers quality analog Hard-IP solutions for integration into nanometer silicon process nodes. \n\nA broad spectrum of high-performance analog IP-cores are available under one roof. Our flexible customization options helps SoC designers get exactly what is needed. Quality is ensured through full silicon qualifications and an evolved design-methodology. And exceptional support results in success on the system-on-chip through production. By partnering with us, our customers are able to focus on their core competencies, reduce product-development risks, and achieve time-to-market goals in a cost-effective manner.",
+      "link": "https://www.linkedin.com/company/cosmic-circuits/"
     },
     {
       "name": "Cirel Systems",
       "category": "semiconductors",
-      "oneLiner": "Smart power ICs for portable devices.",
-      "detail": "Specializes in power management ICs for portable devices, offering integrated solutions for power application processors, regulators, and battery management."
+      "oneLiner": "Smart power ICs for portable devices",
+      "detail": "Cirel Systems is a fabless semiconductor company specializing in custom analog mixed-signal ASIC solutions and standard IC products for power management applications and sensor front ends.\n\nTheir Power Management platform IC solutions optimize power management in portable devices like smartphones and tablets. These highly integrated solutions power application processors with single and multiple cores, while also incorporating regulators for peripherals, battery charging, and monitoring functions. Cirel's flexible PMASIC platform enables customers to develop custom PMUs for their SoCs, which can be integrated as companion die in SoC packages. This approach offers the lowest cost and best performance integrated PM route for SoCs designed in deep submicron process nodes not conducive to DC-DC regulator integration.\n\nThe SensASIC platform facilitates custom ASIC solutions for sensors. Mass-produced examples include ASICs for capacitive sensing and optical pressure sensing. In the sensor IC domain, Cirel offers a family of low noise preamps for MEMS microphone applications. These preamps deliver low noise performance at low power, allowing customers to fine-tune sensitivity to very narrow tolerances. Millions of Cirel preamp units have been shipped, demonstrating their flexibility to work with various sensors.",
+      "link": "https://www.cirelsystems.com/"
     },
     {
       "name": "NanoSemi",
       "category": "semiconductors",
-      "oneLiner": "Digital IP for superior wireless and optical performance.",
-      "detail": "Creates digital compensator IP to linearize non-linear dynamic systems in wireless radios, data converters, and optical transceivers, focusing on spectral efficiency and low power consumption."
+      "oneLiner": "Digital IP for superior wireless and optical performance",
+      "detail": "NanoSemi, a private company founded in 2014 as an MIT spin-off, is based in Boston. The company specializes in developing technology that significantly enhances the performance of 5G and Wi-Fi base stations and smartphones, while simultaneously reducing energy consumption.\n\nAt the core of NanoSemi's innovations are their linearization and signal correction technologies. These advancements improve radio chain power efficiency and signal clarity at bandwidths exceeding 1GHz, leveraging patented machine learning techniques. The compact implementation of these technologies makes them cost-effective for integration into ASICs supporting Wi-Fi and LTE/5G chips for smartphones, as well as FPGAs for wireless infrastructure.\n\nNanoSemi's journey as an independent entity concluded in 2020 when it was acquired by MaxLinear, marking a significant milestone in the company's evolution and the broader wireless technology landscape.",
+      "link": "https://www.maxlinear.com/products/infrastructure/wireless-networking/maxlin"
     },
     {
       "name": "Haystack Analytics",
       "category": "genomics",
-      "oneLiner": "Genomics-driven diagnostics for infectious diseases.",
-      "detail": "HealthTech company developing clinical genomics products for diagnostic labs and hospitals, with a focus on infectious diseases like Tuberculosis. Recognized for innovation by Indian science agencies."
+      "oneLiner": "Genomics-driven diagnostics for infectious diseases",
+      "detail": "HaystackAnalytics, based at IIT Bombay, is a HealthTech company specializing in clinical genomics products. Their solutions empower diagnostic labs and hospitals to offer accurate and personalized diagnostics.\n\nSupported by India's premier science agencies (DST, BIRAC, DBT), the company has developed and launched a portfolio of genomics-based products focused on infectious diseases. Their flagship product, a genomics-based diagnostic solution for Tuberculosis, has gained significant recognition:\n\n1. It was acknowledged as one of the top innovations supported by BIRAC in the past decade.\n2. The Prime Minister of India launched it at the BIRAC Showcase event in Delhi, 2022.\n\nWhile their TB genomics test addresses one of India's major healthcare challenges, HaystackAnalytics' Universal ID solution aligns with the World Health Organization's Sustainable Development Goals (SDGs).",
+      "link": "https://haystackanalytics.in/"
     },
     {
       "name": "Ethereal Machines",
       "category": "advanced manufacturing",
-      "oneLiner": "Revolutionizing 5-axis CNC machining.",
-      "detail": "Deep-Tech startup innovating in 5-Axis CNC machining technology, addressing manufacturing gaps across various industries including plastics, aerospace, and healthcare."
+      "oneLiner": "Revolutionizing 5-axis CNC machining",
+      "detail": "Ethereal Machines is a Deep-Tech start-up at the forefront of 5-Axis CNC machining technology innovation in India. The company addresses manufacturing gaps across a diverse range of industries, including:\n\n- Plastics\n- Aerospace\n- Drone manufacturing\n- Healthcare\n\nTheir CNC Machining Services span from prototyping to mass production, delivering high-accuracy, quality parts to meet varied production requirements. Ethereal Machines' solutions cater to the diverse needs of these industries, positioning them as a key player in advanced manufacturing technology.",
+      "link": "https://etherealmachines.com/"
     },
     {
       "name": "BluArmor",
       "category": "advanced manufacturing",
-      "oneLiner": "Enhancing comfort and safety for two-wheeler riders.",
-      "detail": "Develops proprietary technologies like RIDEGRID™ and RIDEAURA™ to enhance two-wheeler riding experience, focusing on connectivity, communication, and safety."
+      "oneLiner": "Enhancing comfort and safety for two-wheeler riders",
+      "detail": "BluArmor is dedicated to enhancing the experience of two-wheeler rides, making them better, more comfortable, and safer. As a tech company, they focus on solving the everyday challenges faced by two-wheeler riders. Customers are at the core of BluArmor's mission, driving the creation of innovative, rider-focused products with proprietary technology.\n\nThe company has developed several proprietary technologies, including RIDEGRID™, RIDEGRID2.0™, and RIDEAURA™, all designed to improve the riding experience. These technologies address various aspects of riding, from staying connected on the road and facilitating clear communication among riders to enhancing overall ride smoothness and safety. BluArmor's goal is to ensure that every journey their customers take is as enjoyable as possible.",
+      "link": "https://thebluarmor.com/"
     },
     {
       "name": "GalaxEye",
       "category": "aerospace",
-      "oneLiner": "Innovative satellite imaging solutions.",
-      "detail": "IIT Madras incubated startup creating innovative sensing solutions for satellite imaging, founded by former members of the Avishkar Hyperloop team."
+      "oneLiner": "Innovative satellite imaging solutions",
+      "detail": "GalaxEye is pioneering the indigenous development of first-of-its-kind multi-sensor (SAR + MSI) imaging satellites. This innovative technology provides all-time, all-weather information for any point on Earth, offering significant benefits across various industries including defense, agriculture, mining, and more. GalaxEye's satellite technology features high-resolution imagery from multiple sensors, combining optical and radar capabilities for all-weather, day-and-night Earth observation. In the realm of defense and security, it enables detection of military camouflages, tracking of troop movements, and enhanced surveillance in low-light conditions. For agriculture and environmental monitoring, the technology allows precise crop growth tracking, monitoring of urbanization patterns, and detection of changes in Earth's surface. In the business sector, GalaxEye provides comprehensive data for informed decision-making, enabling better resource management and planning. This cutting-edge satellite technology represents a significant advancement in Earth observation capabilities. By offering detailed, continuous, and reliable data, GalaxEye is poised to transform how businesses and governments understand and interact with the world around them, making it a potential game-changer in the field of Earth observation and data-driven decision making.",
+      "link": "https://www.galaxeye.space/"
     },
     {
       "name": "Tonbo Imaging",
       "category": "defence",
-      "oneLiner": "Advanced imaging for defense and security.",
-      "detail": "Designs and develops sensing solutions for enhanced situational awareness in security, defense, reconnaissance, and smart city applications."
+      "oneLiner": "Advanced imaging for defense and security",
+      "detail": "Tonbo Imaging, a spinout of Sarnoff Corporation and Stanford Research International, designs, builds, and deploys advanced imaging and sensor systems to sense, understand, and control complex environments. The company addresses challenging visualization scenarios in modern battlefields, critical infrastructures, unmanned reconnaissance, and dark transport environments, where obscurants like smoke, dust, fog, and camouflage hinder observation and navigation. Tonbo offers solutions for military reconnaissance, critical infrastructure security, and transportation safety, including sophisticated imaging products, custom design applications, and licensable intellectual property cores for OEMs and systems integrators. The company's innovative approach balances front-end analog processing with sophisticated digital image processing, enabling lightweight, low-power imaging platforms across visible, mid-wave IR, and long-wave IR spectrums. This technology leverages micro-optics, lower power electronics, and real-time vision processing to overcome limitations of traditional single-aperture systems. Tonbo's team brings rich experience in battlefield modernization technologies, immersive surveillance, and strategic electronics for military applications, with company principals and management having served as principal investigators for global defense and aerospace programs. This blend of innovative technology and extensive experience positions Tonbo Imaging as a leader in advanced imaging solutions for complex and challenging environments.",
+      "link": "https://tonboimaging.com/"
     },
     {
       "name": "Aurasemi",
       "category": "semiconductors",
-      "oneLiner": "High-performance mixed-signal IC solutions.",
-      "detail": "Develops high-performance integrated circuits for timing, power management, RF signal chain, and sensor applications across various markets including communications and automotive."
+      "oneLiner": "High-performance mixed-signal IC solutions",
+      "detail": "Aurasemi, founded in Bangalore, India in 2011, is a multinational fabless semiconductor company that designs and supplies leading Mixed Signal Integrated Circuits solutions for diverse applications. With principal offices in Bangalore, India; Shenzhen and Shanghai, China; Berkshire, UK; and Milpitas, CA, USA, the privately venture-capital funded company leverages its founding members' extensive semiconductor industry experience to develop advanced mixed signal solutions. Aurasemi's product portfolio includes high-performance Timing, Power Management and Delivery systems, RF Signal Chain components, and MEMS IMUs and flow sensors. These devices cater to various markets, including Communication, Data Center, Internet of Things, and Automotive sectors. The company's unwavering focus on developing challenging, advanced mixed signal solutions that meet customers' needs with the highest industry standards of quality and reliability underscores its vision of delivering excellence in mixed signal ICs. Aurasemi's global presence and commitment to innovation position it as a key player in the semiconductor industry, providing cutting-edge integrated circuit products for a rapidly evolving technological landscape.",
+      "link": "https://www.aurasemi.com/"
     },
     {
       "name": "Kyulux",
       "category": "advanced manufacturing",
-      "oneLiner": "Next-gen OLED materials using AI-driven technology.",
-      "detail": "Creates cost-effective, durable, and efficient OLED emitters without rare metals, utilizing AI-driven material development processes."
+      "oneLiner": "Next-gen OLED materials using AI-driven technology",
+      "detail": "Kyulux Inc., established in 2015, aims to commercialize Hyperfluorescence™ technology from Kyushu University. This technology enables the development of advanced OLED emitter materials offering high efficiency, longevity, color purity, and cost-effectiveness without rare metals. Kyulux employs Kyumatic™, an AI-based prediction system licensed from Harvard University, which has processed over 200,000 quantum chemical calculations and material evaluations.\n\nIn 2023, Kyulux relocated its production management to \"Ito Lab+\", a collaborative research and commercial hub adjacent to its headquarters. This move allows Kyulux to manage production, process development, and quality control in-house, accelerating its readiness for mass production.\n\nKyulux's mission is to shape the future of OLED technology through innovative materials, a skilled team, and advanced software. The company is fostering an organic photonics ecosystem in Kyushu to maximize the potential of OLED display and lighting technologies.",
+      "link": "https://www.kyulux.com/"
     },
     {
       "name": "ideaForge",
       "category": "aerospace",
-      "oneLiner": "Leading indigenous UAV manufacturer in India.",
-      "detail": "Pioneering UAV company with the largest operational deployment of indigenous drones in India, ranked 5th globally in dual-use category drone manufacturers."
+      "oneLiner": "Leading indigenous UAV manufacturer in India",
+      "detail": "ideaForge stands as a pioneer and market leader in India's unmanned aircraft systems (UAS) market. The company boasts the largest operational deployment of indigenous UAVs across India, with an ideaForge drone launching every five minutes on average for surveillance and mapping. Their customers have completed over 500,000 flights using ideaForge UAVs. As of December 2023, the company ranked 5th globally among dual-use (civil and defense) drone manufacturers according to Drone Industry Insights.\n\nideaForge's UAVs feature industry-leading specifications and capabilities, comparable to established global players. The company's indigenous design and technological prowess enable them to invent, design, and deliver customer-centric offerings in-house, maintaining control over performance, reliability, and autonomy.\n\nThe company adopts a 'mission first' approach in architecting their UAV platforms, focusing on meeting customer requirements with reliable, sustainable, and autonomously operable drones. ideaForge holds the distinction of being among the first to enter India's UAV market and the first to indigenously develop and manufacture vertical take-off and landing (VTOL) UAVs in India in 2009. They maintain a leading product portfolio targeting both civil and defense applications.\n\nNotably, ideaForge is publicly listed on the Indian stock exchange under the ticker symbol IDEAFORGE, reflecting its established position in the market and commitment to transparency.",
+      "link": "https://ideaforgetech.com/"
     },
     {
       "name": "Walden International",
       "category": "artificial intelligence",
-      "oneLiner": "VC firm backing early-stage digital and cloud innovations.",
-      "detail": "Targets investments in early-stage companies with mass-market potential, providing active support in brand building and scaling operations."
-    },
-    {
-      "name": "Cadence",
-      "category": "semiconductors",
-      "oneLiner": "Leading EDA software and hardware provider.",
-      "detail": "Provides computational software expertise for electronic design automation, serving innovative companies across various market applications."
+      "oneLiner": "VC firm backing early-stage digital and cloud innovations",
+      "detail": "Targets investments in early-stage companies with mass-market potential, providing active support in brand building and scaling operations.",
+      "link": ""
     },
     {
       "name": "Artera",
-      "category": "advanced manufacturing",
-      "oneLiner": "Sustainable infrastructure solutions for utilities.",
-      "detail": "Offers services for natural gas, water, electric, and telecommunications industries across 41 states, building on decades of experience in critical infrastructure."
+      "category": "artificial intelligence",
+      "oneLiner": "AI-powered cancer tests guide personalized treatment decisions for improved patient outcomes.",
+      "detail": "Artera specializes in AI-enabled predictive and prognostic cancer tests, with a flagship product called The ArteraAI Prostate Test. This innovative test analyzes biopsy images to predict the likelihood of a patient benefiting from specific therapies. It stands out as the first of its kind for localized prostate cancer, empowering physicians to make more informed treatment decisions.\n\nThe company's mission centers on personalizing cancer treatment and fostering shared decision-making between clinicians and patients. Artera envisions a future where AI technology plays a crucial role in helping both medical professionals and patients feel confident and well-informed about their treatment choices.\n\nBy leveraging artificial intelligence in cancer diagnostics and treatment planning, Artera aims to improve patient outcomes and enhance the overall quality of care in oncology. Their approach represents a significant step forward in the application of AI to personalized medicine, particularly in the field of prostate cancer management.",
+      "link": "https://artera.ai/"
     },
     {
       "name": "SambaNova Systems",
       "category": "artificial intelligence",
-      "oneLiner": "AI systems to scale enterprise innovation.",
-      "detail": "Develops advanced AI systems to help organizations implement and scale AI technologies across various industries."
+      "oneLiner": "AI systems to scale enterprise innovation",
+      "detail": "SambaNova Systems has developed an enterprise-grade AI platform designed for complex, high-value AI workloads. Their platform provides a technological foundation for future AI innovation, offering pre-trained foundation models that significantly enhance organizational AI capabilities. The company's flagship product, SambaNova Suite, accelerates AI value realization by a factor of 22.\n\nFounded in 2017 in Palo Alto, California, SambaNova was established by a team of industry experts, business leaders, and innovators with deep AI expertise. The company has since grown to include a talented and driven team committed to making a lasting impact on the AI industry and empowering their customers to excel in the evolving AI landscape.\n\nSambaNova's approach focuses on creating a robust AI infrastructure that can support both current and future AI applications, positioning organizations to leverage advanced AI technologies effectively. By providing a comprehensive platform and pre-trained models, SambaNova aims to streamline the process of implementing and deriving value from AI solutions across various industries.",
+      "link": "https://sambanova.ai/"
     },
     {
       "name": "Greenstone Biosciences",
       "category": "life sciences",
-      "oneLiner": "AI-driven drug discovery with hiPSC tech.",
-      "detail": "Utilizes an AI-hiPSC platform to expedite the development of effective therapies, bridging the gap between laboratory research and patient care."
+      "oneLiner": "AI-driven drug discovery with hiPSC tech",
+      "detail": "Greenstone Biosciences pioneers biotechnology innovation by merging Artificial Intelligence (AI) with human induced Pluripotent Stem Cells (hiPSC) to enhance drug discovery. Their mission focuses on accelerating therapy development through their advanced AI-hiPSC platform. This innovative approach enables a more efficient and precise method for identifying potential therapeutic compounds. By integrating AI capabilities with hiPSC technology, Greenstone Biosciences aims to streamline the process from initial laboratory research to patient treatment, potentially reducing the time and resources typically required in traditional drug discovery methods. The company's platform represents a significant advancement in the field, offering the potential to increase the speed of drug candidate identification, improve the accuracy of predictions for drug efficacy and safety, reduce reliance on animal testing in early-stage drug development, and facilitate personalized medicine approaches. By leveraging the power of AI to analyze complex biological data from hiPSCs, Greenstone Biosciences is positioned to make substantial contributions to the pharmaceutical industry and, ultimately, to patient care.",
+      "link": "https://greenstonebio.com/"
     },
     {
       "name": "Data Patterns",
       "category": "defence",
-      "oneLiner": "Indigenous defense electronics and aerospace systems.",
-      "detail": "Specializes in developing and manufacturing high-reliability electronic systems and mission-critical precision components for defense and space sectors."
+      "oneLiner": "Indigenous defense electronics and aerospace systems",
+      "detail": "Data Patterns is a vertically integrated Defence and Aerospace electronics solutions provider specializing in indigenously developed defence products. With over two decades of experience, the company has established itself as a leader in developing and manufacturing high-reliability products for this sector. Data Patterns' core strength lies in its comprehensive capability to create and produce a wide range of sophisticated electronic systems. The company maintains a captive manufacturing facility, ensuring meticulous attention to detail in product development. Data Patterns is committed to manufacturing products that meet the stringent reliability and lifespan requirements of the defence and aerospace industries. Notably, the company has earned recognition from its customers for its ability to efficiently deliver complex programs within tight timeframes. This combination of technical expertise, manufacturing capabilities, and rapid delivery has positioned Data Patterns as a key player in the Defence and Aerospace electronics market.",
+      "link": "https://www.datapatternsindia.com/"
     },
     {
       "name": "MTAR Technologies",
       "category": "advanced manufacturing",
-      "oneLiner": "Precision engineering for critical sectors.",
-      "detail": "Produces mission-critical precision components and assemblies for nuclear, space, and defense sectors, with expertise in specialized fabrication and import substitution."
+      "oneLiner": "Precision engineering for critical sectors",
+      "detail": "MTAR Technologies is a leading precision engineering company in India, specializing in manufacturing mission-critical components and assemblies for nuclear, space, defense, and clean energy sectors since 1970. The company's expertise lies in precision machining, assembly, testing, quality control, and specialized fabrication, with facilities considered among the best in Asia. MTAR serves esteemed clients like ISRO, NPCIL, DRDO, and international organizations, producing critical assemblies such as liquid propulsion engines, nuclear reactor components, and import substitutes like ball screws. With a focus on complex precision engineering, MTAR has established itself as a top supplier in India, leveraging its technological expertise to create high-quality products within tight timelines. The company's commitment to innovation and addressing sector-specific needs has fostered long-standing customer relationships and positioned MTAR as a key player in the precision engineering industry.",
+      "link": "https://www.mtar.in/"
+    },
+    {
+      "name": "Cadence",
+      "category": "semiconductors",
+      "oneLiner": "Leading EDA software and hardware provider",
+      "detail": "Cadence is a pivotal leader in computational software, delivering software, hardware, and IP that our customers use to turn design concepts into reality for the most dynamic market applications, including hyperscale computing, 5G communications, automotive, mobile, aerospace, consumer, industrial, and life sciences.",
+      "link": ""
+    },
+    {
+      "name": "4baseCare",
+      "category": "genomics",
+      "oneLiner": "Advanced genomics through 4baseCare's innovative precision oncology solutions.",
+      "detail": "4baseCare is a pioneering company in the field of precision oncology, dedicated to developing innovative solutions that combine advanced genomics with next-generation digital health technology. Their primary focus is on personalizing patient care in oncology through the creation of comprehensive genomic panels. These specialized panels empower oncologists to make informed decisions, enabling them to select the most effective targeted therapies for their patients. By bridging the gap between cutting-edge genomic research and practical clinical applications, 4baseCare aims to significantly improve treatment outcomes and quality of life for cancer patients.",
+      "link": "https://4basecare.com/"
     }
   ]
 }
