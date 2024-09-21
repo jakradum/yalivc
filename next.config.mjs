@@ -1,16 +1,15 @@
-const isProd = process.env.NODE_ENV === 'production'
-const repoName = 'yalivc'
+const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   reactStrictMode: true,
   images: {
     loader: 'custom',
     loaderFile: './image-loader.js',
-    domains: ['yali.vc'],
+    domains: ['jakradum.com', 'yali.vc'], // Add both domains
     unoptimized: true, // For static exports
   },
-  basePath: isProd ? `/${repoName}` : '',
-  assetPrefix: isProd ? `/${repoName}/` : '',
+  basePath: '', // No need for a base path on your own domain
+  assetPrefix: isProd ? 'https://jakradum.com' : '', // Use the full domain in production
   trailingSlash: true,
   output: 'export',
   experimental: {

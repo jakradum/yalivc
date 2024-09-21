@@ -1,17 +1,13 @@
 module.exports = function imageLoader({ src, width, quality }) {
   const isProd = process.env.NODE_ENV === 'production';
-  const repoName = 'yalivc'; // Ensure this matches your GitHub repo name
   
   // For absolute URLs or data URLs, return the source as-is
   if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
     return src;
   }
   
-  // For relative URLs, only prepend the repo name in production
-  let url = src;
-  if (isProd) {
-    url = `/${repoName}${src.startsWith('/') ? '' : '/'}${src}`;
-  }
+  // For relative URLs, prepend the domain in production
+  const url = isProd ? `https://jakradum.com${src.startsWith('/') ? '' : '/'}${src}` : src;
   
   // Add width and quality parameters if provided
   const params = new URLSearchParams();
