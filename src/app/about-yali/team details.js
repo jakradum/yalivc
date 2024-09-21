@@ -29,6 +29,13 @@ const useIsMobile = () => {
 const TeamMember = ({ member }) => {
   const isMobile = useIsMobile();
   const [imgSrc, setImgSrc] = useState(member.image);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    console.log('Original image path:', member.image);
+    console.log('Processed image path:', imageLoader({ src: member.image, width: 400 }));
+  }, [member.image]);
+
   const handleImageError = () => {
     console.error('Image failed to load:', imgSrc);
     setImgError(true);
@@ -53,15 +60,19 @@ const TeamMember = ({ member }) => {
         </div>
       </div>
       <div className={styles.memberImage}>
-        <Image
-          loader={imageLoader}
-          src={imgSrc}
-          alt={member.Name}
-          width={400}
-          height={400}
-          style={{ objectFit: 'cover' }}
-          onError={handleImageError}
-        />
+        {!imgError ? (
+          <Image
+            loader={imageLoader}
+            src={imgSrc}
+            alt={member.Name}
+            width={400}
+            height={400}
+            style={{ objectFit: 'cover' }}
+            onError={handleImageError}
+          />
+        ) : (
+          <div>Image failed to load</div>
+        )}
       </div>
     </div>
   );
