@@ -290,7 +290,7 @@
         top: 0;
         right: 0;
         min-width: 17rem; /* Fixed width */
-        min-height: 28rem; /* Fixed height */
+        height: 30rem; /* Fixed height */
         background-color: white;
         border: 1px solid #000;
         padding: 1rem;

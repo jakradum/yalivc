@@ -5,6 +5,11 @@
 .categoryDropdown{
   display: none;
 }
+.container>p{
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
 
   .viewLink{
     color: #000;

@@ -99,6 +99,7 @@ export const CompaniesInnerComponent = () => {
 
   return (
     <div className={styles.container}>
+      <p>Select one or more categories to filter the list below</p>
       <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
         <div className={styles.categoryDropdown}>
           <button className={styles.dropdownToggle} onClick={toggleCategoryDropdown}>
