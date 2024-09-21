@@ -5,6 +5,7 @@ import { useData } from '../data/fetch component';
 import localTeamData from '../data/team.json';
 import styles from './detail styles.module.css';
 import Button from '../components/button';
+import imageLoader from '../../../image-loader';
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -30,11 +31,7 @@ const TeamMember = ({ member }) => {
     <div className={styles.teamMember}>
       <div className={styles.memberInfo}>
         <header className={styles.header}>
-          {isMobile ? (
-            <h2 className={styles.name}>{member.Name}</h2>
-          ) : (
-            <p className={styles.name}>{member.Name}</p>
-          )}
+          {isMobile ? <h2 className={styles.name}>{member.Name}</h2> : <p className={styles.name}>{member.Name}</p>}
           <p className={styles.designation}>{member.Designation}</p>
         </header>
         <p className={styles.bio}>{member.Detailed || member['One-Liner']}</p>
@@ -47,7 +44,7 @@ const TeamMember = ({ member }) => {
         </div>
       </div>
       <div className={styles.memberImage}>
-        <Image src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
+        <Image loader={imageLoader} src={member.image} alt={member.Name} width={400} height={400} style={{ objectFit: 'cover' }} />
       </div>
     </div>
   );
