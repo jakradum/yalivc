@@ -149,6 +149,7 @@ export const CompaniesInnerComponent = () => {
               </div>
               <div className={styles.nameAndLink}>
                 <p className={styles.companyName}>{company.name}</p>
+                <p style={{textTransform:'uppercase',fontSize:'0.9rem'}}>{company.category}</p>
                 {company.link && (
                   <a href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
                     {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
