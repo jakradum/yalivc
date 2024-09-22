@@ -12,17 +12,20 @@ import { LifeSciencesVector } from './icons/background svgs/category svgs/life s
 import { RoboticsVector } from './icons/background svgs/category svgs/robotics vector';
 import { GenomicsVector } from './icons/background svgs/category svgs/genomics vector';
 import { SemiconVector } from './icons/background svgs/category svgs/semicon vector';
+import { ArtificialIntelligenceVector } from './icons/background svgs/category svgs/artificial intelligence vector';
+import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
+import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,
-  'artificial intelligence': <GenericVector/>,
+  'artificial intelligence': <ArtificialIntelligenceVector/>,
   'genomics': <GenomicsVector/>,
   'semiconductors': <SemiconVector/>,
   'aerospace': <GenericVector/>,
   'defence': <DefenceVector/>,
   'fabless chip design': <SemiconVector/>,
-  'advanced manufacturing': <RoboticsVector/>,
-  'generative AI': <GenericVector/>,
+  'advanced manufacturing': <AdvancedManufacturingVector/>,
+  'generative AI': <GenerativeAIVector/>,
   'life sciences': <LifeSciencesVector/>,
 };
 
@@ -42,7 +45,7 @@ export const companyLogoMap = {
   'NanoSemi': 'logos/nanosemi-inc-1.png',
   'SambaNova Systems': 'logos/SambaNova-dark-logo-1.png',
   'Tonbo Imaging': 'logos/tonbo.png',
-  'Haystack Analytics': 'logos/Haystack.png',
+  'Haystack Analytics': 'logos/haystack.png',
   'Walden International': 'logos/walden.jpeg',
   'ideaForge': 'logos/ideaforge.png',
   '4baseCare': 'logos/4basecare.png'
@@ -107,7 +110,7 @@ const CompanyTable = () => {
                         />
                       </div>
                     )}
-                    <small className={styles.companyOneLiner}>{company.oneLiner}</small>
+                    <p className={styles.companyOneLiner}>{company.oneLiner}</p>
                   </article>
                 </td>
               ))}
