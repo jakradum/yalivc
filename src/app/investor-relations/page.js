@@ -1,7 +1,6 @@
 import styles from '../about-yali/about styles.module.css';
 
-
-export default function page(){
+export default function page() {
   return (
     <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
@@ -20,7 +19,45 @@ export default function page(){
           </p>
         </article>
       </div>
+      <section>
+        <article className={styles.textContent}>
+          <h2>Contact Details</h2>
+          <p>At Yali Ventures, investor satisfaction is our foremost agenda. In case of any grievance or complaint:</p>
+          <p>
+            Please contact our compliance officer Mr. Matthew Cyriac at{' '}
+            <a href="mailto:investor.relations@yali.vc">investor.relations@yali.vc</a> and phone no.{' '}
+            <a href="tel:+919845366280">+91 98453 66280</a>. You may also approach Mr. Ganapathy Subramaniam at{' '}
+            <a href="mailto:gani@yali.vc">gani@yali.vc</a> and phone no.
+            <a href="tel:+919845537982">+91 98455 37982</a>.
+          </p>
+          <p>
+            In case you are not satisfied with our response you can lodge your grievance with SEBI at{' '}
+            <a href="https://scores.sebi.gov.in" target="_blank" rel="noopener noreferrer">
+              https://scores.sebi.gov.in
+            </a>{' '}
+            or you may also write to any of the offices of SEBI. For any queries, feedback or assistance, please contact
+            SEBI office on toll free Helpline at <a href="tel:1800227575">1800 22 7575</a> /{' '}
+            <a href="tel:18002667575">1800 266 7575</a>. In case you are still not satisfied with the resolution through
+            SCORES portal, you can initiate the dispute resolution through ODR portal at{' '}
+            <a href="https://smartodr.in/login" target="_blank" rel="noopener noreferrer">
+              https://smartodr.in/login
+            </a>
+            .
+          </p>
+          <p>
+            Note: The dispute resolution through ODR will not be possible, if:
+            <ul>
+              <li>
+                The complaint or grievance is not raised with the compliance officer first and subsequently on the
+                SCORES portal.
+              </li>
+              <li>Dispute raised is pending before any arbitral process or court or tribunal.</li>
+              <li>Dispute is non-arbitrable in terms of Indian Law.</li>
+              <li>Dispute is time-barred in terms of law of limitation.</li>
+            </ul>
+          </p>
+        </article>
+      </section>
     </section>
   );
 }
-

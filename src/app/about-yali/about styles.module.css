@@ -54,6 +54,23 @@
     flex-direction: column;
 }
 
+.textContent a,
+.textContent a:link,
+.textContent a:visited,
+.textContent a:hover,
+.textContent a:active {
+    color: inherit;
+   
+}
+
+/* Safari-specific styles */
+@supports (-webkit-touch-callout: none) {
+    .textContent a {
+        color: inherit !important;
+    }
+}
+
+
 .textContent > h1 {
     font-size: 3rem;
     font-weight: 400;

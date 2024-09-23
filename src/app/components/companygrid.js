@@ -45,7 +45,7 @@ export const companyLogoMap = {
   'NanoSemi': 'logos/nanosemi-inc-1.png',
   'SambaNova Systems': 'logos/SambaNova-dark-logo-1.png',
   'Tonbo Imaging': 'logos/tonbo.png',
-  'Haystack Analytics': 'logos/haystack.png',
+  'Haystack Analytics': 'logos/haystack.svg',
   'Walden International': 'logos/walden.jpeg',
   'ideaForge': 'logos/ideaforge.png',
   '4baseCare': 'logos/4basecare.png'
