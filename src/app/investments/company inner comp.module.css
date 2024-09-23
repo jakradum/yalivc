@@ -144,14 +144,32 @@
   
     .categoryItem {
       display: block;
-      width: 100%;
+      max-width: none;
       padding: 15px;
       text-align: left;
       border: none;
       background: none;
       cursor: pointer;
       font-size: 14px;
-      border-top: 1px solid #e0e0e0;
+      box-sizing: border-box; /* This ensures padding is included in the width */
+      text-decoration: none; /* Remove underline from links */
+      color: inherit; /* Use the parent's text color */
+      -webkit-appearance: none; /* Remove default button styling on iOS */
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    /* Target Safari specifically if needed */
+    @supports (-webkit-touch-callout: none) {
+      .categoryItem {
+        color: -webkit-link; /* Reset to default color */
+        color: inherit; /* Then set to inherit */
+      }
+    }
+    
+    /* Ensure the container of .categoryItem is also full width */
+    .categoryContainer {
+      width: 100%;
     }
   
     .categoryItem:first-child {
