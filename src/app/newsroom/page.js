@@ -5,9 +5,6 @@ import NewsSection from '../components/news section';
 import { NewsComponent } from './news component';
 
 export default function Newsroom() {
-    const inrAmount = 810;
-    const exchangeRate = 84;
-    const usdAmount = (inrAmount / exchangeRate).toFixed(1)
     return (
       <section className={styles.sectionLevel}>
         <div className={styles.mainAbout}>
@@ -15,10 +12,10 @@ export default function Newsroom() {
             <h1>The latest from Yali Capital</h1>
             <div className={styles.paraFlex}>
               <p>
-                We continue to look for deep tech companies across sectors to invest in. We have rolled out an ₹
-                {inrAmount} crore fund (about ${usdAmount} mn) to back companies in India. Our optimism about the
-                success of Indian deep tech companies fuels our commitment to fostering innovation and unlocking the
-                next wave of growth in the region.
+                We continue to look for deep tech companies across sectors to invest in. We have rolled out an ₹810 crore
+                fund (about $100 mn) to back companies in India. Our optimism about the success of Indian deep
+                tech companies fuels our commitment to fostering innovation and unlocking the next wave of growth in the
+                region.
               </p>
             </div>
           </article>
@@ -30,7 +27,7 @@ export default function Newsroom() {
           <div className={styles.people}>
             <HeaderFlex title="About us in the news" color="black" />
           </div>
-          <NewsComponent/>
+          <NewsComponent />
         </section>
       </section>
     );
