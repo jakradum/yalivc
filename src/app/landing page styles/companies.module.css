@@ -69,12 +69,20 @@
     overflow: hidden;
     width: 20%;
     height: 21rem;
+    transition: width 0.5s ease, background-color 0.3s ease;
+}
+.companyCell:hover {
+    width: 50%;
+    background-color: white;
 }
 
 .companyContent {
     padding: 1rem;
     height: 100%;
     position: relative;
+    z-index: 2;
+    background-color: white;
+    transition: background-color 0.3s ease;
 }
 
 .imagePlaceholder {
@@ -96,8 +104,7 @@
 }
 
 .companyCell:hover .companyNumber h2 {
-    color: black;
-    /* Change color to black on hover */
+    color: #efefef;
 }
 
 .companyTitle {
@@ -116,6 +123,13 @@
     text-transform: uppercase;
     margin: 0;
 }
+.companyCell:hover .companyNumber h2,
+.companyCell:hover .companyTitle,
+.companyCell:hover .companyCategory,
+.companyCell:hover .companyOneLiner {
+    color: white !important;
+    transition: color 0.3s ease;
+}
 
 .companyOneLiner {
     font-size: 0.9rem;
@@ -123,12 +137,7 @@
     margin-top: 0.5rem;
     display: block;
     opacity: 0;
-    transition: opacity 1.5s ease;
-    /* Added transition for opacity */
-}
-
-.companyCell:hover .companyOneLiner {
-    opacity: 1;
+    transition: opacity 0.5s ease;
 }
 
 .companyCell {
@@ -143,28 +152,31 @@
     transition: width 0.5s ease, background-color 0.3s ease;
 }
 
-.companyCell:hover {
-    width: 50%;
-    background-color: white;
-}
+
+
 
 /* Ensure the vector is hidden by default */
 .vector {
-    display: none; /* Hidden initially */
-    justify-content: center; /* Center the vector horizontally */
-    align-items: flex-end; /* Align the vector to the bottom of the container */
-    width: 100%; /* Ensure it fills the parent container's width */
-    height: 10rem; /* Fixed height */
-    margin-bottom: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
     background-color: #830D35;
-    overflow: hidden; /* Hide any overflow from scaling */
-    z-index: -1;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    transform: translateY(100%);
 }
 
 /* Show the vector on hover */
 .companyCell:hover .vector {
-    display: flex; /* Display the vector on hover */
-    transition: all 1s ease;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 /* Hide the image on hover */
@@ -175,11 +187,25 @@
 
 /* Styling for the vector SVG */
 .vector > svg {
-    width: 100%; /* Ensure the SVG fills the container width */
-    height: auto; /* Maintain aspect ratio for landscape layout */
-    transform: scale(1.1); /* Slightly zoom the SVG in */
-    object-fit: contain; /* Ensure no distortion */
-    margin-bottom: 0; /* Ensure no additional margin at the bottom */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+}
+.companyCell:hover .vector > svg {
+    transform: scale(1.2);
+}
+.companyNumber,
+.companyTitle,
+.companyCategory,
+.companyOneLiner {
+    position: relative;
+    z-index: 2;
+}
+.companyCell:hover .imagePlaceholder {
+    display: none;
+    transition: all 0.5s ease;
 }
 
   

@@ -51,18 +51,34 @@ export const companyLogoMap = {
   '4baseCare': 'logos/4basecare.png'
 };
 
-
-
 const CompanyTable = () => {
   const { data } = useData();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
 
-  const buttonText = 'view all companies';
+  const buttonText = 'view more details';
 
   const companiesData = (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) 
     ? { data: data.data['companies-csv (1)'] }
     : localCompaniesData;
+
+  const numberOfCompanies = companiesData.data.length;
+  const currentDate = new Date();
+  const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const numberToWords = (num) => {
+    const words = ['one', 'two', 'three', 'four', 'five'];
+    return words[num - 1] || num.toString();
+  };
+
+  const getUpdatedText = () => {
+    if (numberOfCompanies > 5) {
+      return "Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India.";
+    } else {
+      return `Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India. As of ${monthYear}, our investments include ${numberToWords(numberOfCompanies)} ${numberOfCompanies === 1 ? 'company' : 'companies'}.`;
+    }
+  };
+
+  const updatedText = getUpdatedText();
 
   useEffect(() => {
     const handleResize = () => {
@@ -77,10 +93,7 @@ const CompanyTable = () => {
   const renderDesktopLayout = () => (
     <>
       <div className={styles.sidebar}>
-        <p className={styles.sidebarText}>
-          Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to
-          public markets in India.
-        </p>
+        <p className={styles.sidebarText}>{updatedText}</p>
         <Button href="/investments" color="black">
           {buttonText}
         </Button>
@@ -104,8 +117,8 @@ const CompanyTable = () => {
                         <Image
                           src={companyLogoMap[company.name]}
                           alt={company.name}
-                          width={100} // Adjust these values as needed
-                          height={100} // Adjust these values as needed
+                          width={100}
+                          height={100}
                           style={{ objectFit: 'contain' }}
                         />
                       </div>
@@ -126,10 +139,7 @@ const CompanyTable = () => {
       className={styles.mobileCompanyGrid}
       onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.data.length)}
     >
-      <p className={styles.sidebarText}>
-        Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to
-        public markets in India.
-      </p>
+      <p className={styles.sidebarText}>{updatedText}</p>
       <section className={styles.carouselContainer}>
         {companiesData.data.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;

@@ -44,7 +44,6 @@ export const CompaniesInnerComponent = () => {
     return Array.from(activeCats);
   }, [companies]);
 
-  
   useEffect(() => {
     console.log('useData hook output:', { data, loading, error });
 
@@ -92,13 +91,13 @@ export const CompaniesInnerComponent = () => {
   const filteredCompanies = companies.filter(
     (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category.toLowerCase())
   );
+
   const isLinkedInLink = (url) => {
     return url && url.toLowerCase().includes('linkedin.com');
   };
 
-
-  return (
-    <div className={styles.container}>
+  const renderCategoriesSection = activeCategories.length > 3 && (
+    <>
       <p>Select one or more categories to filter the list below</p>
       <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
         <div className={styles.categoryDropdown}>
@@ -134,6 +133,12 @@ export const CompaniesInnerComponent = () => {
           ))}
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <div className={styles.container}>
+      {renderCategoriesSection}
       <div className={styles.companiesContainer}>
         {filteredCompanies.map((company, index) => (
           <div key={index} className={styles.companyCard}>
