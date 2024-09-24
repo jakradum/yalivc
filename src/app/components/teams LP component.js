@@ -60,7 +60,7 @@ export const TeamsLPComponent = () => {
     }
   };
 
-  const handleCellClick = (member, index) => {
+  const handleCellInteraction = (member, index) => {
     if (isMobile) {
       setExpandedRow(expandedRow === index ? null : index);
     } else {
@@ -69,12 +69,19 @@ export const TeamsLPComponent = () => {
     }
   };
 
+  const handleCellHoverLeave = () => {
+    if (!isMobile) {
+      setSelectedMember(null);
+      setSelectedIndex(null);
+    }
+  };
+
   const renderMobileView = () => {
     return teamMembers.map((member, index) => (
       <div key={index} className={styles.mobileTeamMemberWrapper}>
         <div
           className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
-          onClick={() => handleCellClick(member, index)}
+          onClick={() => handleCellInteraction(member, index)}
         >
           <div className={styles.memberInfo}>
             <p className={styles.name}>{member.Name}</p>
@@ -133,7 +140,8 @@ export const TeamsLPComponent = () => {
     <td
       key={index}
       className={`${styles.teamMember} ${selectedIndex === index ? styles.selectedMember : ''}`}
-      onClick={() => handleCellClick(member, index)}
+      onMouseEnter={() => handleCellInteraction(member, index)}
+      onMouseLeave={handleCellHoverLeave}
     >
       <div className={styles.memberInfo}>
         <p className={styles.name}>{member.Name}</p>
@@ -152,8 +160,8 @@ export const TeamsLPComponent = () => {
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
       <Link href='/about-yali/#team' className={styles.noUnderline}>
-      <Button>{genericButtonText}</Button>
-    </Link>
+        <Button>{genericButtonText}</Button>
+      </Link>
     </td>
   );
 
@@ -212,7 +220,7 @@ export const TeamsLPComponent = () => {
           ) : (
             <div className={styles.defaultDisplay}>
               <TeamsDefaultSVG className={styles.defaultSVG} />
-              <p className={styles.defaultText}>Select a team member to view details</p>
+              <p className={styles.defaultText}>Hover over a team member to view details</p>
             </div>
           )}
         </div>
