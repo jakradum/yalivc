@@ -7,7 +7,7 @@ module.exports = function imageLoader({ src, width, quality }) {
   }
   
   // For relative URLs, prepend the domain in production
-  const url = isProd ? `https://jakradum.com${src.startsWith('/') ? '' : '/'}${src}` : src;
+  const url = isProd ? `https://yali.vc${src.startsWith('/') ? '' : '/'}${src}` : src;
   
   // Add width and quality parameters if provided
   const params = new URLSearchParams();
