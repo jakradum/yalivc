@@ -11,16 +11,6 @@
       "image": "/images/gani.webp"
     },
     {
-      "Order": 2,
-      "Name": "Lip-Bu Tan",
-      "Designation": "Advisor",
-      "One-Liner": "Over four decades of experience in semiconductor and deep tech industries with a proven track record in venture investing.",
-      "Detailed": "Lip-Bu Tan brings over four decades of unparalleled experience in the semiconductor and deep tech industries, combining executive leadership with a proven track record in venture investing. As the former CEO and Executive Chairman of Cadence Design Systems, a company with a market capitalization of approximately $60 billion, Lip-Bu led the organisation to become a global leader in electronic design automation. Over the course of his career, he has led the charge, taking over 130 companies to successful IPOs, and cementing his status as a visionary investor in the global tech landscape. His role on our Advisory Board provides invaluable insights, particularly in the semiconductor and deep tech sectors, guiding investment strategies with his wealth of knowledge and foresight.",
-      "linkedin": "https://www.linkedin.com/in/lip-bu-tan-284a7846/",
-      "email": "lip-bu@yali.vc",
-      "image": "/images/lip-bu_tan.webp"
-    },
-    {
       "Order": 3,
       "Name": "Mathew Cyriac",
       "Designation": "Founding General Partner",
@@ -39,6 +29,16 @@
       "linkedin": "https://www.linkedin.com/in/kmadathil/",
       "email": "karthik@yali.vc",
       "image": "/images/karthik.webp"
+    },
+    {
+      "Order": 2,
+      "Name": "Lip-Bu Tan",
+      "Designation": "Advisor",
+      "One-Liner": "Over four decades of experience in semiconductor and deep tech industries with a proven track record in venture investing.",
+      "Detailed": "Lip-Bu Tan brings over four decades of unparalleled experience in the semiconductor and deep tech industries, combining executive leadership with a proven track record in venture investing. As the former CEO and Executive Chairman of Cadence Design Systems, a company with a market capitalization of approximately $60 billion, Lip-Bu led the organisation to become a global leader in electronic design automation. Over the course of his career, he has led the charge, taking over 130 companies to successful IPOs, and cementing his status as a visionary investor in the global tech landscape. His role on our Advisory Board provides invaluable insights, particularly in the semiconductor and deep tech sectors, guiding investment strategies with his wealth of knowledge and foresight.",
+      "linkedin": "https://www.linkedin.com/in/lip-bu-tan-284a7846/",
+      "email": "lip-bu@yali.vc",
+      "image": "/images/lip-bu_tan.webp"
     }
   ]
 }
