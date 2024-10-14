@@ -22,9 +22,16 @@ jobs:
       - name: Build
         run: npm run build && npm run export
 
+      - name: Create CNAME file for main branch
+        if: github.ref == 'refs/heads/main'
+        run: echo "yali.vc" > ./out/CNAME
+
+      - name: Remove CNAME file for staging branch
+        if: github.ref == 'refs/heads/staging'
+        run: rm -f ./out/CNAME
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
-          cname: ${{ github.ref == 'refs/heads/main' && 'yali.vc' || '' }}
