@@ -48,7 +48,8 @@ export const companyLogoMap = {
   'Haystack Analytics': 'logos/haystack.svg',
   'Walden International': 'logos/walden.jpeg',
   'ideaForge': 'logos/ideaforge.png',
-  '4baseCare': 'logos/4basecare.png'
+  '4baseCare': 'logos/4basecare.png',
+  'Perceptyne': 'https://cdn.prod.website-files.com/65f80c8d989211966d577295/6607243203bf77dcc16f7f69_perceptyne%20logo.svg',
 };
 
 const CompanyTable = () => {

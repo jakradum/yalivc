@@ -6,6 +6,13 @@
       "oneLiner": "Advanced genomics through 4baseCare's innovative precision oncology solutions.",
       "detail": "4baseCare is a pioneering company in the field of precision oncology, dedicated to developing innovative solutions that combine advanced genomics with next-generation digital health technology. Their primary focus is on personalizing patient care in oncology through the creation of comprehensive genomic panels. These specialized panels empower oncologists to make informed decisions, enabling them to select the most effective targeted therapies for their patients. By bridging the gap between cutting-edge genomic research and practical clinical applications, 4baseCare aims to significantly improve treatment outcomes and quality of life for cancer patients.",
       "link": "https://4basecare.com/"
+    },
+    {
+      "name": "Perceptyne",
+      "category": "robotics",
+      "oneLiner": "Full-stack robotics platform for automating dextrous tasks.",
+      "detail": "Founded by Raviteja Chivukula, Jagga Raju N and Mrutyunjaya Sastry, Perceptyne is a deeptech robotics platform developing dexterous, affordable and contextually aware robots. Its flagship products include dual-arm and single-arm robots named PR-34D and PR-9D, ushering in a revolution in automated assembly in Electronics and Automobile Industries",
+      "link": "https://www.perceptyne.com/about"
     }
   ]
 }
