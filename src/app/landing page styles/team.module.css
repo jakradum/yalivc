@@ -180,76 +180,122 @@
 }
 
 .teamDescription {
-    flex: 9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: left;
-    transition: height 0.3s ease;
-
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .teamDescription .memberImageContainer {
-    width: 70%;
-    height: auto; /* Let the height adapt to the image */
-    overflow: hidden;
+  flex: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 600px;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
+.teamDescription .memberImageContainer,
+.teamDescription .selectedMemberName,
+.teamDescription .selectedMemberDesignation,
+.teamDescription .selectedMemberOneLiner {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.teamDescription .memberImageContainer:not(:empty),
+.teamDescription .selectedMemberName:not(:empty),
+.teamDescription .selectedMemberDesignation:not(:empty),
+.teamDescription .selectedMemberOneLiner:not(:empty) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.teamDescription .memberImageContainer {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+}
 
 .teamDescription .memberImage {
-    width: 100%;
-    height: auto; 
-    object-fit: contain; 
-    object-position: center top; 
+  width: 100%;
+  height: 100%; 
+  object-fit: cover;
+  object-position: center top;
 }
 
-  .teamDescription .selectedMemberName {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-  }
+.teamDescription .selectedMemberName {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin: 1.5rem 0 0.75rem;
+  text-align: center;
+}
 
 .teamDescription .selectedMemberDesignation {
-    font-size: 1.2rem;
-    color: #666;
-    text-transform: uppercase;
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0 0 1rem;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .teamDescription .selectedMemberOneLiner {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #444;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow-y: auto;
-    max-height: calc(40% - 3rem);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #444;
+  text-align: center;
+  margin: 0 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .defaultDisplay {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background-color: #830D35;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 600px;
+  background-color: #830D35;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.teamDescription:not(:empty) + .defaultDisplay,
+.teamDescription:not(:empty) ~ .defaultDisplay {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
 }
 
 .defaultSVG {
-    width: 50%;
-    height: auto;
-    margin-bottom: 1rem;
+  width: 50%;
+  height: auto;
+  margin-bottom: 1rem;
+  transition: opacity 0.3s ease;
 }
 
 .defaultText {
-    font-size: 1.2rem;
-    color: white;
-    text-align: center;
+  font-size: 1.2rem;
+  color: white;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.teamDescription:not(:empty) + .defaultDisplay .defaultSVG,
+.teamDescription:not(:empty) + .defaultDisplay .defaultText,
+.teamDescription:not(:empty) ~ .defaultDisplay .defaultSVG,
+.teamDescription:not(:empty) ~ .defaultDisplay .defaultText {
+  opacity: 0;
 }
 
 .viewAllButtonWrapper {
