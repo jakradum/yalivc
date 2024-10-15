@@ -88,13 +88,17 @@
 
 .teamTable {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0.5rem;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .tableRow {
     display: flex;
     width: 100%;
+    margin-bottom: 0;
+}
+.tableRow:not(:last-child) .teamMember {
+  border-bottom: none; /* Remove bottom border for all but last row */
 }
 
 .teamMember {
@@ -103,6 +107,7 @@
     background-color: white;
     border: 1px solid #000;
     transition: background-color 0.4s ease, color 1s ease;
+    margin: 0;
 }
 
 .teamMember:last-child {
@@ -116,6 +121,15 @@
 .teamMember:only-child {
     border: 1px solid #000;
     width: 100%;
+}
+.tableRow .teamMember:first-child {
+  border-left: none;
+}
+.tableRow:first-child .teamMember {
+  border-top: none;
+}
+.tableRow .teamMember:nth-child(2n) {
+  border-right: none;
 }
 
 .name {
@@ -172,7 +186,7 @@
     align-items: center;
     text-align: left;
     transition: height 0.3s ease;
-    margin: 0.5rem;
+
     padding: 0;
     box-sizing: border-box;
     overflow: hidden;
