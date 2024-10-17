@@ -2,8 +2,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width:40%;
+  align-items: center;
+  max-width: 100%;
   padding: 1rem;
+  position: relative;
+  min-height: 9rem;
 }
 
 .headerFlex > h1 {
@@ -12,19 +15,27 @@
   line-height: 1.2;
   letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
   color: inherit;
-  margin: 0 0 0 2rem;
+  margin: 0;
   max-width: 90%;
-  max-height: 70%;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%; /* Ensures the text takes up the full width for proper centering */
 }
 
 .headerFlex > svg:first-child {
-  align-self: flex-start;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
   transform: rotate(-180deg);
 }
 
 .headerFlex > svg:last-child {
-  align-self: flex-end;
-  /* padding: 0 2rem 3rem 0; */
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
 
 .headerFlex > svg path,
@@ -39,58 +50,80 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     max-width: 100%;
-    padding: 2rem;
+    padding: 2rem 1rem; /* Reduced horizontal padding */
     position: relative;
+    min-height: 200px;
+    box-sizing: border-box; /* Include padding in width calculation */
   }
   
   .headerFlex > h1 {
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 300;
-    line-height: 1.2;
-    letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
+    line-height: 1.3;
+    letter-spacing: clamp(-0.1rem, 2vw, -0.25rem); /* Reduced max letter-spacing */
     color: inherit;
+    width: 100%;
     max-width: 90%;
-    margin: 2rem 0;
+    margin: 0;
     z-index: 1;
-    align-self: center;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center both vertically and horizontally */
   }
   
   /* Position first SVG */
   .headerFlex > svg:first-child {
     position: absolute;
-    top: 20%;
-    left: 10%; /* Percentage-based positioning */
-    transform: rotate(-180deg) translate(50%, 50%); /* Center the SVG around its position */
-    max-left: 1rem; /* Constrain maximum distance from left */
-    align-self: flex-start;
+    top: 1rem;
+    left: 1rem;
+    transform: rotate(-180deg);
   }
   
   /* Position second SVG */
   .headerFlex > svg:last-child {
     position: absolute;
-    bottom: 25%;
-    right: 10%; 
-    transform: translate(50%, 50%); /* Center the SVG around its position */
-    max-right: 1rem; /* Constrain maximum distance from right */
-    align-self: flex-end;
+    bottom: 1rem;
+    right: 1rem;
   }
   
   .headerFlex > svg {
     width: 24px;
     height: 24px;
-    max-width: 5vw; /* Limit SVG size on very wide screens */
+    max-width: 5vw;
     max-height: 10vw;
   }
+}
 
-  /* Media query for wider mobile screens */
-  @media (min-width: 600px) {
-    .headerFlex > svg:first-child {
-      left: max(10%, 2rem); /* At least 2rem from left, but not more than 10% */
-    }
-    
-    .headerFlex > svg:last-child {
-      right: max(10%, 2rem); /* At least 2rem from right, but not more than 10% */
-    }
+@media (max-width: 400px) {
+  .headerFlex {
+    padding: 1.5rem 0.5rem; /* Further reduced padding for very small screens */
+  }
+
+  .headerFlex > h1 {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    line-height: 1.4;
+    max-width: 95%; /* Increased max-width for very small screens */
+  }
+  
+  .headerFlex > svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .headerFlex > svg:first-child {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .headerFlex > svg:last-child {
+    bottom: 0.5rem;
+    right: 0.5rem;
   }
 }
