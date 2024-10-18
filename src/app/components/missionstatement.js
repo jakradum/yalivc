@@ -37,7 +37,7 @@ const MissionStatement = () => {
       </div>
       <div className={missionStyles.content}>
         <div className={missionStyles.headerWrapper}>
-          <HeaderFlex title="We are an early stage, tech focused fund. And our love for deep tech runs deep." color="white" backgroundColor='#830d3498' mobileMinHeight={'13rem'} />
+          <HeaderFlex title="We are an early stage, tech focused fund. And our love for deep tech runs deep." color="white" backgroundColor='#830d3498' desktopMaxWidth={'70%'} mobileMinHeight={'13rem'} />
         </div>
         <article className={`${missionStyles.bodyText} ${isVisible ? missionStyles.visible : ''}`}>
           <p className={isVisible ? missionStyles.visible : ''}>
