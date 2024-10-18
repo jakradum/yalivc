@@ -1,12 +1,24 @@
+.headerFlexWrapper {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  margin-bottom: 2rem;
+}
+
 .headerFlex {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
-  padding: 1rem;
+  width: 100%;
+  padding: 3rem 1rem;
   position: relative;
-  min-height: 9rem;
+  min-height: var(--custom-height, 8rem); /* Increased default minimum height */
+  height: var(--custom-height, auto);
+  background-color: var(--background-color, transparent);
+  color: var(--color, inherit);
+  box-sizing: border-box;
 }
 
 .headerFlex > h1 {
@@ -22,18 +34,25 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%; /* Ensures the text takes up the full width for proper centering */
+  width: 100%;
+}
+
+.headerFlex > svg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  max-width: 5vw;
+  max-height: 10vw;
+  color: inherit;
 }
 
 .headerFlex > svg:first-child {
-  position: absolute;
   top: 1rem;
   left: 1rem;
   transform: rotate(-180deg);
 }
 
 .headerFlex > svg:last-child {
-  position: absolute;
   bottom: 1rem;
   right: 1rem;
 }
@@ -44,86 +63,45 @@
   fill: currentColor;
 }
 
-@media (max-width: 900px) {
-  .headerFlex {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
-    padding: 2rem 1rem; /* Reduced horizontal padding */
-    position: relative;
-    min-height: 200px;
-    box-sizing: border-box; /* Include padding in width calculation */
-  }
-  
-  .headerFlex > h1 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 300;
-    line-height: 1.3;
-    letter-spacing: clamp(-0.1rem, 2vw, -0.25rem); /* Reduced max letter-spacing */
-    color: inherit;
-    width: 100%;
-    max-width: 90%;
-    margin: 0;
-    z-index: 1;
-    text-align: center;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Center both vertically and horizontally */
-  }
-  
-  /* Position first SVG */
-  .headerFlex > svg:first-child {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    transform: rotate(-180deg);
-  }
-  
-  /* Position second SVG */
-  .headerFlex > svg:last-child {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-  }
-  
-  .headerFlex > svg {
-    width: 24px;
-    height: 24px;
-    max-width: 5vw;
-    max-height: 10vw;
+/* Apply desktop max-width */
+@media (min-width: 901px) {
+  .headerFlexWrapper.desktopMaxWidth {
+    max-width: var(--desktop-max-width, 100%);
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
-@media (max-width: 400px) {
-  .headerFlex {
-    padding: 1.5rem 0.5rem; /* Further reduced padding for very small screens */
+@media (max-width: 900px) {
+  .headerFlexWrapper {
+    max-width: var(--mobile-max-width, 100%);
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .headerFlex > h1 {
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
-    line-height: 1.4;
-    max-width: 95%; /* Increased max-width for very small screens */
+ .headerFlex {
+    padding: 3rem 1rem;
+    min-height: var(--mobile-min-height, var(--custom-height, 8rem));
+    height: var(--custom-height, auto);
   }
   
-  .headerFlex > svg {
-    width: 20px;
-    height: 20px;
+  .headerFlex > h1 {
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: clamp(-0.1rem, 2vw, -0.25rem);
+    z-index: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   .headerFlex > svg:first-child {
-    top: 0.5rem;
-    left: 0.5rem;
+    top: 1rem;
+    left: 1rem;
   }
 
   .headerFlex > svg:last-child {
-    bottom: 0.5rem;
-    right: 0.5rem;
+    bottom: 1rem;
+    right: 1rem;
   }
 }

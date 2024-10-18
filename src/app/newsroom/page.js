@@ -25,7 +25,7 @@ export default function Newsroom() {
         </div>
         <section id="team">
           <div className={styles.people}>
-            <HeaderFlex title="About us in the news" color="black" />
+            <HeaderFlex title="About us in the news" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>
           </div>
           <NewsComponent />
         </section>

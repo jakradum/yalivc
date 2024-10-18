@@ -29,7 +29,7 @@ const Investments = () => {
       </div>
       <section>
         <div className={styles.people}>
-          <HeaderFlex title="Our portfolio of companies" color="black" />
+          <HeaderFlex title="Our portfolio of companies" color="black" desktopMaxWidth={'50%'}  mobileMinHeight={'8rem'}/>
         </div>
       </section>
       <CompaniesInnerComponent />

@@ -35,7 +35,7 @@ export default function AboutYali() {
       </div>
       <section id="team">
         <div className={styles.people}>
-          <HeaderFlex title="All about the team at Yali Capital" color="black" />
+          <HeaderFlex title="All about the team at Yali Capital" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'10rem'} />
         </div>
         <TeamDetails />
       </section>

@@ -76,13 +76,13 @@ export default function Home() {
 
       {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>
-         <MissionStatement />
+        <MissionStatement />
       </section>
 
       {/* companies section */}
       <section className={companyStyles.section}>
         <div className={companyStyles.titleSec}>
-          <HeaderFlex title="Our companies make us proud" color="black" />
+          <HeaderFlex title="Our companies make us proud" color="black" desktopMaxWidth={'45%'} />
         </div>
         <CompanyGrid />
       </section>
@@ -91,23 +91,22 @@ export default function Home() {
       <section className={teamStyles.teamSec}>
         <header className={teamStyles.titleSec}>
           <div className={teamStyles.titleSecFlex}>
-            <HeaderFlex title='Meet the Yali team' color='black' />
+            <HeaderFlex title="Meet the Yali team" color="black" desktopMaxWidth={'50%'} />
             <aside>
               <p>
                 The team at Yali Capital is armed with an impressive track record of successful investment history, and
                 a combined 60 years in the deep tech domain.
               </p>
-
             </aside>
           </div>
         </header>
-        <TeamsLPComponent/>
+        <TeamsLPComponent />
       </section>
 
       {/* news section */}
       <section>
         <div className={companyStyles.titleSec}>
-          <HeaderFlex title="Yali in the news" color="black" />
+          <HeaderFlex title="Yali in the news" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
         </div>
         <NewsSection />
       </section>
