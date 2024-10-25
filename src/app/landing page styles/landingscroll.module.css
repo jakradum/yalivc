@@ -32,8 +32,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0;
   max-width: 80%;
+  margin: 2rem;
 }
 
 .headerFlex>h1 {
@@ -224,6 +225,7 @@
 
   .headerFlex {
     max-width: 100%;
+    margin: 1rem;
   }
 
   .headerFlex>h1 {
