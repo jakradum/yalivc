@@ -67,16 +67,19 @@ const CompanyTable = () => {
   const currentDate = new Date();
   const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
   const numberToWords = (num) => {
-    const words = ['one', 'two', 'three', 'four', 'five'];
-    return words[num - 1] || num.toString();
+    const words = [
+      'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 
+      'eighteen', 'nineteen', 'twenty'
+    ];
+    if (num <= 20) {
+      return words[num - 1];
+    }
+    return num.toString();
   };
 
   const getUpdatedText = () => {
-    if (numberOfCompanies > 5) {
-      return "Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India.";
-    } else {
-      return `Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India. As of ${monthYear}, our investments include ${numberToWords(numberOfCompanies)} ${numberOfCompanies === 1 ? 'company' : 'companies'}.`;
-    }
+    return `Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India. As of ${monthYear}, our investments include ${numberToWords(numberOfCompanies)} ${numberOfCompanies === 1 ? 'company' : 'companies'}.`;
   };
 
   const updatedText = getUpdatedText();
