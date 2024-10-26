@@ -74,7 +74,7 @@
 .headerWrapper {
   position: relative;
   margin-left: 5%;
-  width: 100%;
+  width: 90%;
   align-self: flex-end;
 }
 
@@ -85,7 +85,7 @@
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-  margin-left: auto;
+  margin-left: 2rem;
   margin-right: 5%;
   margin-bottom: 0; /* Remove bottom margin */
   align-self: flex-end; /* Explicitly align to bottom */
