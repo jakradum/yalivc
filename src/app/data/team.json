@@ -21,16 +21,6 @@
       "image": "/images/mathew-cyriac.webp"
     },
     {
-      "Order": 4,
-      "Name": "Karthikeyan 'Karthik' Madathil",
-      "Designation": "Partner",
-      "One-Liner": "30 years of deep tech experience with leadership roles in multinational corporations and startups.",
-      "Detailed": "Karthik brings 30 years of deep tech experience to the table, with eight years as VP of Engineering at a deep tech startup. His wealth of experience includes an ML-powered EdTech company that he founded and led for five years in addition to a 17-year tenure across various leadership roles, from Engineering Head to Business Head, in both multinational corporations and startups specialising in IC design.",
-      "linkedin": "https://www.linkedin.com/in/kmadathil/",
-      "email": "karthik@yali.vc",
-      "image": "/images/karthik.webp"
-    },
-    {
       "Order": 2,
       "Name": "Lip-Bu Tan",
       "Designation": "Advisor",
@@ -39,6 +29,16 @@
       "linkedin": "https://www.linkedin.com/in/lip-bu-tan-284a7846/",
       "email": "lip-bu@yali.vc",
       "image": "/images/lip-bu_tan.webp"
+    },
+    {
+      "Order": 4,
+      "Name": "Karthikeyan 'Karthik' Madathil",
+      "Designation": "Partner",
+      "One-Liner": "30 years of deep tech experience with leadership roles in multinational corporations and startups.",
+      "Detailed": "Karthik brings 30 years of deep tech experience to the table, with eight years as VP of Engineering at a deep tech startup. His wealth of experience includes an ML-powered EdTech company that he founded and led for five years in addition to a 17-year tenure across various leadership roles, from Engineering Head to Business Head, in both multinational corporations and startups specialising in IC design.",
+      "linkedin": "https://www.linkedin.com/in/kmadathil/",
+      "email": "karthik@yali.vc",
+      "image": "/images/karthik.webp"
     }
   ]
 }
