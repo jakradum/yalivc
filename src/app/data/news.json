@@ -3,6 +3,13 @@
     "data": {
       "articles": [
         {
+          "url": "https://www.thehindu.com/news/cities/bangalore/bengaluru-start-up-strives-to-bridge-the-indigenous-data-gap-in-precision-oncology/article68835845.ece",
+          "date": "2024-11-07T00:00:00.000Z",
+          "publicationName": "The Hindu",
+          "headlineEdited": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology",
+          "isVideo": false
+        },
+        {
           "url": "https://inc42.com/buzz/robotics-startup-perceptyne-bags-3-mn-from-endiya-partners-yali-capital-others/",
           "date": "2024-10-14T00:00:00.000Z",
           "publicationName": "Inc42",
