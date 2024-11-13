@@ -50,6 +50,8 @@ export const companyLogoMap = {
   'ideaForge': 'logos/ideaforge.png',
   '4baseCare': 'logos/4basecare.png',
   'Perceptyne': 'logos/perceptyne.png',
+  'C2i': 'logos/c2i.webp',
+
 };
 
 const CompanyTable = () => {
