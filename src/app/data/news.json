@@ -3,10 +3,24 @@
     "data": {
       "articles": [
         {
+          "url": "https://www.businessworld.in/article/yali-capital-semiconductor-veteran-lip-bu-tan-co-invest-in-fabless-chip-startup-c2i-semiconductors-538524",
+          "date": "2024-11-08T00:00:00.000Z",
+          "publicationName": "Businessworld",
+          "headlineEdited": "Yali Capital, Semiconductor Veteran Lip-Bu Tan Co-invest In Fabless Chip Startup C2i Semiconductors",
+          "isVideo": false
+        },
+        {
+          "url": "https://inc42.com/buzz/yali-capital-invests-4-mn-in-chip-design-startup-c2i-semiconductors/",
+          "date": "2024-11-08T00:00:00.000Z",
+          "publicationName": "Inc42",
+          "headlineEdited": "Yali Capital Invests $4 Mn In Chip Design Startup C2i Semiconductors",
+          "isVideo": false
+        },
+        {
           "url": "https://www.thehindu.com/news/cities/bangalore/bengaluru-start-up-strives-to-bridge-the-indigenous-data-gap-in-precision-oncology/article68835845.ece",
           "date": "2024-11-07T00:00:00.000Z",
           "publicationName": "The Hindu",
-          "headlineEdited": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology",
+          "headlineEdited": "Bengaluru start-up strives to bridge the indigenous data gap in precision oncology",
           "isVideo": false
         },
         {
@@ -34,7 +48,7 @@
           "url": "https://startuprise.org/perceptyne-secures-3-mn-seed-funding/",
           "date": "2024-10-14T00:00:00.000Z",
           "publicationName": "Startup Rise",
-          "headlineEdited": "Perceptyne Secures $3 Mn Seed Funding From Endiya Partners, Yali Capital & Others",
+          "headlineEdited": "Perceptyne Secures $3 Mn Seed Funding From Endiya Partners, Yali Capital& Others",
           "isVideo": false
         },
         {
