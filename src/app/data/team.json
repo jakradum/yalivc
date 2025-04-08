@@ -39,6 +39,16 @@
       "linkedin": "https://www.linkedin.com/in/kmadathil/",
       "email": "karthik@yali.vc",
       "image": "/images/karthik.webp"
+    },
+    {
+      "Order": 5,
+      "Name": "Sunil",
+      "Designation": "Partner",
+      "One-Liner": "20 years in Finance and Operations.",
+      "Detailed": "Sunil is a Chartered Accountant with over 20 years of experience in Finance and Operations. He manages the firm's finance, investor relations, fund administration, and compliance functions. Previously, he worked at Cirel Systems and Cosmic Circuits. His expertise includes startup finance operations, due diligence, exits, taxation, and regulatory compliance.",
+      "linkedin": "https://www.linkedin.com/in/kmadathil/",
+      "email": "sunil@yali.vc",
+      "image": "/images/sunil.webp"
     }
   ]
 }

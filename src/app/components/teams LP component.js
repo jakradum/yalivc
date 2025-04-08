@@ -21,15 +21,16 @@ export const TeamsLPComponent = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [tableHeight, setTableHeight] = useState(0);
 
-  // Use local data for first 4 members
-  const localMembers = localTeamData['Team Members'].slice(0, 4);
+  // Get all members from local data
+  const localMembers = localTeamData['Team Members'];
 
-  // Use remote data for additional members, starting from order 5
+  // Get all members from remote data, if available
   const remoteMembers =
     data && data.status === 'success' && data.data && data.data['Team Members']
-      ? data.data['Team Members'].filter((member) => member.Order > 4)
+      ? data.data['Team Members']
       : [];
 
+  // Combine both local and remote members
   const teamMembers = [...localMembers, ...remoteMembers];
 
   useEffect(() => {
@@ -47,17 +48,9 @@ export const TeamsLPComponent = () => {
   }, [teamMembers]);
 
   const getImagePath = (index) => {
-    const isProd = process.env.NODE_ENV === 'production';
-    
-    if (index < 4) {
-      // For local members
-      const imagePath = localMembers[index].image;
-      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    } else {
-      // For remote members
-      const imagePath = teamMembers[index].image || '/api/placeholder/400/400';
-      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    }
+    const member = teamMembers[index];
+    const imagePath = member.image || '/api/placeholder/400/400';
+    return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
   };
 
   const handleCellInteraction = (member, index) => {
