@@ -24,9 +24,9 @@ export default function page() {
           <h2>Contact Details</h2>
           <p>At Yali Ventures, investor satisfaction is our foremost agenda. In case of any grievance or complaint:</p>
           <p>
-            Please contact our compliance officer Mr. Matthew Cyriac at{' '}
+            Please contact our compliance officer Mr. Sunil S Patil at{' '}
             <a href="mailto:investor.relations@yali.vc">investor.relations@yali.vc</a> and phone no.{' '}
-            <a href="tel:+919845366280">+91 98453 66280</a>. You may also approach Mr. Ganapathy Subramaniam at{' '}
+            <a href="tel:+919845366280">+91 9845366280</a>. You may also approach Mr. Ganapathy Subramaniam at{' '}
             <a href="mailto:gani@yali.vc">gani@yali.vc</a> and phone no.
             <a href="tel:+919845537982">+91 98455 37982</a>.
           </p>

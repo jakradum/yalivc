@@ -24,8 +24,6 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-
-
 const TeamMember = ({ member }) => {
   const isMobile = useIsMobile();
   const [imgSrc, setImgSrc] = useState(member.image);
@@ -79,14 +77,64 @@ const TeamMember = ({ member }) => {
 const TeamList = () => {
   const { data } = useData();
   const [visibleCount, setVisibleCount] = useState(4);
-  const [teamMembers, setTeamMembers] = useState(localTeamData['Team Members'].slice(0, 4));
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [showLoadMore, setShowLoadMore] = useState(false);
+
+  useEffect(() => {
+    // Get all members from local data
+    const localMembers = localTeamData['Team Members'];
+    
+    // Start by setting all local team members
+    setTeamMembers(localMembers);
+    
+    // If 10 or fewer members, show all of them
+    if (localMembers.length <= 10) {
+      setVisibleCount(localMembers.length);
+      setShowLoadMore(false);
+    } else {
+      // Otherwise show only 4 initially
+      setVisibleCount(4);
+      setShowLoadMore(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (data && data.status === 'success' && data.data && Array.isArray(data.data['Team Members'])) {
-      const remoteMembers = data.data['Team Members'].filter((member) => member.Order > 4);
-      setTeamMembers((prevMembers) => [...prevMembers, ...remoteMembers]);
+      // Get all remote members without filtering
+      const remoteMembers = data.data['Team Members'];
+      
+      // Merge local and remote members
+      setTeamMembers(prevMembers => {
+        const combinedMembers = [...prevMembers];
+        
+        // Add any remote members that aren't already in the array
+        remoteMembers.forEach(remoteMember => {
+          // Check if this member is already in the array by some unique identifier
+          // Using Name as a possible identifier - adjust if you have a better unique ID
+          const exists = combinedMembers.some(m => m.Name === remoteMember.Name);
+          if (!exists) {
+            combinedMembers.push(remoteMember);
+          }
+        });
+        
+        // Update the load more logic based on total number of members
+        if (combinedMembers.length <= 10) {
+          setVisibleCount(combinedMembers.length);
+          setShowLoadMore(false);
+        } else if (combinedMembers.length > 10 && visibleCount < 4) {
+          // If we now have more than 10 members but were showing all of them,
+          // reset to showing 4 with load more option
+          setVisibleCount(4);
+          setShowLoadMore(true);
+        } else {
+          // Keep current visible count but ensure load more button is shown
+          setShowLoadMore(true);
+        }
+        
+        return combinedMembers;
+      });
     }
-  }, [data]);
+  }, [data, visibleCount]);
 
   const handleLoadMore = () => {
     setVisibleCount((prevCount) => Math.min(prevCount + 4, teamMembers.length));
@@ -97,7 +145,7 @@ const TeamList = () => {
       {teamMembers.slice(0, visibleCount).map((member, index) => (
         <TeamMember key={index} member={member} />
       ))}
-      {visibleCount < teamMembers.length && (
+      {showLoadMore && visibleCount < teamMembers.length && (
         <button className={styles.loadMore} onClick={handleLoadMore}>
           LOAD MORE
         </button>
