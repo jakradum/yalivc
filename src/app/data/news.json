@@ -3,10 +3,24 @@
     "data": {
       "articles": [
         {
+          "url": "https://timesofindia.indiatimes.com/business/india-business/infosys-innovation-fund-invests-in-yali-capital-to-up-deep-tech-game-plan/articleshow/120614882.cms",
+          "date": "2025-04-28T00:00:00.000Z",
+          "publicationName": "economic times",
+          "headlineEdited": "Infosys Innovation Fund invests in Yali Capital to up deep-tech game plan",
+          "isVideo": false
+        },
+        {
+          "url": "https://www.vccircle.com/yalicapital-taps-key-lp-for-maiden-vc-fund-to-back-deep-tech-startups",
+          "date": "2025-04-24T00:00:00.000Z",
+          "publicationName": "vc circle",
+          "headlineEdited": "Yali Capital Taps Key LP for Maiden VC Fund to Back Deep-tech Startups",
+          "isVideo": false
+        },
+        {
           "url": "https://bwhealthcareworld.com/article/aiims-jammu-collaborates-with-4basecare-to-establish-centre-for-advanced-genomics-precision-medicine-545715",
           "date": "2025-01-23T00:00:00.000Z",
           "publicationName": "Businessworld",
-          "headlineEdited": "AIIMS Jammu Collaborates With 4baseCare to Establish Centre For Advanced Genomics & Precision Medicine",
+          "headlineEdited": "AIIMS Jammu Collaborates With 4baseCare To Establish Centre For Advanced Genomics & Precision Medicine",
           "isVideo": false
         },
         {
