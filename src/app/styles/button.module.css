@@ -2,12 +2,14 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-inter) !important; /* Changed from Arial */
   font-size: 1rem;
   font-weight: 300;
   text-transform: uppercase;
   transition: all 0.3s ease;
 }
+
+/* Rest of your existing button styles stay the same... */
 
 .text {
   position: relative;

@@ -14,7 +14,7 @@
   width: 100%;
   padding: 3rem 1rem;
   position: relative;
-  min-height: var(--custom-height, 8rem); /* Increased default minimum height */
+  min-height: var(--custom-height, 8rem);
   height: var(--custom-height, auto);
   background-color: var(--background-color, transparent);
   color: var(--color, inherit);
@@ -22,6 +22,7 @@
 }
 
 .headerFlex > h1 {
+  font-family: var(--font-jetbrains-mono) !important;
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 500;
   line-height: 1.2;
@@ -36,6 +37,8 @@
   transform: translate(-50%, -50%);
   width: 100%;
 }
+
+
 
 .headerFlex > svg {
   position: absolute;

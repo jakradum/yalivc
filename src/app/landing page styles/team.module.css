@@ -63,6 +63,14 @@
   align-self: center;
   margin-left: auto; /* This keeps it at the end horizontally */
 }
+/* Add this to your existing team.module.css */
+.titleSecFlex > aside > p {
+  font-family: var(--font-inter) !important;
+}
+
+.selectedMemberOneLiner {
+  font-family: var(--font-inter) !important;
+}
 
 .meetTeamTitle {
     font-size: 2.5rem;
