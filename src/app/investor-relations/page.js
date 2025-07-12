@@ -25,10 +25,8 @@ export default function page() {
           <p>At Yali Ventures, investor satisfaction is our foremost agenda. In case of any grievance or complaint:</p>
           <p>
             Please contact our compliance officer Mr. Sunil S Patil at{' '}
-            <a href="mailto:investor.relations@yali.vc">investor.relations@yali.vc</a> and phone no.{' '}
-            <a href="tel:+919845366280">+91 9845366280</a>. You may also approach Mr. Ganapathy Subramaniam at{' '}
-            <a href="mailto:gani@yali.vc">gani@yali.vc</a> and phone no.
-            <a href="tel:+919845537982">+91 98455 37982</a>.
+            <a href="mailto:sunil@yali.vc">sunil@yali.vc</a>. You may also approach Mr. Ganapathy Subramaniam at{' '}
+            <a href="mailto:gani@yali.vc">gani@yali.vc</a>.
           </p>
           <p>
             In case you are not satisfied with our response you can lodge your grievance with SEBI at{' '}
