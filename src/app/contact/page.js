@@ -38,7 +38,7 @@ export default function Contact() {
       <section className={styles.headerSection}>
         <h1 className={styles.pageTitle}>Get in Touch</h1>
         <p className={styles.pageDescription}>
-          We're here to help with your deep tech journey. Whether you're looking to pitch your startup, 
+         Whether you're looking to pitch your startup, 
           discuss partnerships, or have media inquiries, reach out to us using the appropriate 
           contact below for the fastest response.
         </p>
