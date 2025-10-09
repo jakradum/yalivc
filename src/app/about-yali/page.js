@@ -1,7 +1,8 @@
 import styles from './about styles.module.css';
 import { Nucleus } from '../components/icons/background svgs/nucleus';
 import HeaderFlex from '../components/icons/headerflex';
-import { TeamDetails } from './team details';
+import TeamDetails from './team details';
+
 
 export default function AboutYali() {
   return (

@@ -26,7 +26,7 @@ export const metadata = {
   },
 };
 
-const USE_LOCAL_DATA_ONLY = false; // set this to true to disable fetch and only use local
+const USE_LOCAL_DATA_ONLY = false;
 
 export default function RootLayout({ children }) {
   return (
@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" />
       </head>
-      <DataProvider useLocalOnly={USE_LOCAL_DATA_ONLY}>
+      <DataProvider>
         <body className={inter.className}>
           <Navbar />
           <div className="page-wrapper">

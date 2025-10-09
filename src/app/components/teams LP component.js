@@ -21,17 +21,9 @@ export const TeamsLPComponent = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [tableHeight, setTableHeight] = useState(0);
 
-  // Get all members from local data
-  const localMembers = localTeamData['Team Members'];
-
-  // Get all members from remote data, if available
-  const remoteMembers =
-    data && data.status === 'success' && data.data && data.data['Team Members']
-      ? data.data['Team Members']
-      : [];
-
-  // Combine both local and remote members
-  const teamMembers = [...localMembers, ...remoteMembers];
+const teamMembers = data && data.data && data.data.team 
+  ? data.data.team 
+  : [];
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 800);
@@ -77,8 +69,8 @@ export const TeamsLPComponent = () => {
           onClick={() => handleCellInteraction(member, index)}
         >
           <div className={styles.memberInfo}>
-            <p className={styles.name}>{member.Name}</p>
-            <p className={styles.desig}>{member.Designation}</p>
+            <p className={styles.name}>{member.name}</p>
+            <p className={styles.desig}>{member.designation}</p>
             <div className={styles.socialLinks}>
               {member.linkedin && (
                 <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
@@ -95,7 +87,7 @@ export const TeamsLPComponent = () => {
               <Image
                 loader={imageLoader}
                 src={getImagePath(index)}
-                alt={member.Name}
+                alt={member.name}
                 width={300}
                 height={200}
                 style={{ objectFit: 'contain' }}
@@ -105,7 +97,7 @@ export const TeamsLPComponent = () => {
               <Graphicfg className={styles.memberImage} />
             )}
           </div>
-          <p className={styles.expandedOneLiner}>{member['One-Liner']}</p>
+          <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
         </div>
       </div>
     ));
@@ -137,8 +129,8 @@ export const TeamsLPComponent = () => {
       onMouseLeave={handleCellHoverLeave}
     >
       <div className={styles.memberInfo}>
-        <p className={styles.name}>{member.Name}</p>
-        <p className={styles.desig}>{member.Designation}</p>
+        <p className={styles.name}>{member.name}</p>
+        <p className={styles.desig}>{member.designation}</p>
         <div className={styles.socialLinks}>
           {member.linkedin && (
             <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
@@ -196,7 +188,7 @@ export const TeamsLPComponent = () => {
                   <Image
                     loader={imageLoader}
                     src={getImagePath(teamMembers.indexOf(selectedMember))}
-                    alt={selectedMember.Name}
+                    alt={selectedMember.name}
                     className={styles.memberImage}
                     width={300}
                     height={300}
@@ -206,7 +198,7 @@ export const TeamsLPComponent = () => {
                   <Graphicfg className={styles.memberImage} />
                 )}
               </div>
-              <h3 className={styles.selectedMemberName}>{selectedMember.Name}</h3>
+              <h3 className={styles.selectedMemberName}>{selectedMember.name}</h3>
               <p className={styles.selectedMemberDesignation}>{selectedMember.Designation}</p>
               <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
             </header>
