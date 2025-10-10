@@ -6,7 +6,7 @@ import { DataProvider } from './data/fetch component';
 import Breadcrumb from './components/breadcrumb';
 import { GoogleAnalytics } from '@next/third-parties/google'
 
-const Navbar = dynamic(() => import('./components/Navbar'), { ssr: false });
+const Navbar = dynamic(() => import('./components/Navbar'));
 
 const inter = Inter({
   subsets: ['latin'],

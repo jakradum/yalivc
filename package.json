@@ -11,13 +11,14 @@
     "deploy": "next build && touch out/.nojekyll && gh-pages -d out -t true"
   },
   "dependencies": {
-    "@next/third-parties": "^14.2.13",
+    "@next/third-parties": "^15.5.4",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
     "dotenv": "^17.2.3",
-    "next": "14.2.5",
-    "react": "^18",
-    "react-dom": "^18",
+    "next": "^15.5.4",
+    "next-sanity": "^11.4.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "sanity": "^4.10.2",
     "styled-components": "^6.1.19"
   },

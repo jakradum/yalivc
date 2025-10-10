@@ -1,21 +1,21 @@
 export const DottedLogoGraphic = () => {
   return (
     <svg width="564" height="762" viewBox="0 0 564 762" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_209_25726)">
+      <g clipPath="url(#clip0_209_25726)">
         <rect width="564" height="762" fill="#EFEFEF" />
-        <line x1="89.9011" x2="89.9011" y2="762" stroke="#C4C4C4" stroke-width="1.36071" stroke-dasharray="2.72 2.72" />
-        <line x1="187.874" x2="187.874" y2="762" stroke="#C4C4C4" stroke-width="1.36071" stroke-dasharray="2.72 2.72" />
-        <line x1="285.844" x2="285.844" y2="762" stroke="#C4C4C4" stroke-width="1.36071" stroke-dasharray="2.72 2.72" />
-        <line x1="383.815" x2="383.815" y2="762" stroke="#C4C4C4" stroke-width="1.36071" stroke-dasharray="2.72 2.72" />
-        <line x1="481.788" x2="481.788" y2="762" stroke="#C4C4C4" stroke-width="1.36071" stroke-dasharray="2.72 2.72" />
+        <line x1="89.9011" x2="89.9011" y2="762" stroke="#C4C4C4" strokeWidth="1.36071" strokeDasharray="2.72 2.72" />
+        <line x1="187.874" x2="187.874" y2="762" stroke="#C4C4C4" strokeWidth="1.36071" strokeDasharray="2.72 2.72" />
+        <line x1="285.844" x2="285.844" y2="762" stroke="#C4C4C4" strokeWidth="1.36071" strokeDasharray="2.72 2.72" />
+        <line x1="383.815" x2="383.815" y2="762" stroke="#C4C4C4" strokeWidth="1.36071" strokeDasharray="2.72 2.72" />
+        <line x1="481.788" x2="481.788" y2="762" stroke="#C4C4C4" strokeWidth="1.36071" strokeDasharray="2.72 2.72" />
         <line
           x1="658"
           y1="87.7663"
           x2="-104"
           y2="87.7663"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -23,8 +23,8 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="185.737"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -32,8 +32,8 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="283.71"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -41,8 +41,8 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="381.68"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -50,8 +50,8 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="479.651"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -59,8 +59,8 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="577.624"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
         <line
           x1="658"
@@ -68,10 +68,10 @@ export const DottedLogoGraphic = () => {
           x2="-104"
           y2="675.594"
           stroke="#C4C4C4"
-          stroke-width="1.36071"
-          stroke-dasharray="2.72 2.72"
+          strokeWidth="1.36071"
+          strokeDasharray="2.72 2.72"
         />
-        <g clip-path="url(#clip1_209_25726)"></g>
+        <g clipPath="url(#clip1_209_25726)"></g>
         <circle cx="20.6691" cy="88.6691" r="3.6691" fill="#C4C4C4" />
         <circle cx="89.6691" cy="186.669" r="3.6691" fill="#C4C4C4" />
         <circle cx="69.9093" cy="560.278" r="3.6691" fill="#C4C4C4" />

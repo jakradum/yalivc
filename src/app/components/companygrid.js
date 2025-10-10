@@ -15,6 +15,7 @@ import { SemiconVector } from './icons/background svgs/category svgs/semicon vec
 import { ArtificialIntelligenceVector } from './icons/background svgs/category svgs/artificial intelligence vector';
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
+import { urlFor } from '../../../sanity/client';
 
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,
@@ -27,31 +28,6 @@ export const vectorUsageMap = {
   'advanced manufacturing': <AdvancedManufacturingVector/>,
   'generative AI': <GenerativeAIVector/>,
   'life sciences': <LifeSciencesVector/>,
-};
-
-export const companyLogoMap = {
-  'Aurasemi': 'logos/aura semi.png',
-  'BluArmor': 'logos/bluarmor.png',
-  'Cadence': 'logos/cadence-1.png',
-  'Cirel Systems': 'logos/cirel-systems-1.png',
-  'Cosmic Circuits': 'logos/cosmic circuits.png',
-  'Data Patterns': 'logos/data-pattens-1.png',
-  'Ethereal Machines': 'logos/ethereal-machines-1.png',
-  'GalaxEye': 'logos/galaxeye-1.png',
-  'Greenstone Biosciences': 'logos/greenstone.png',
-  'Kyulux': 'logos/kyulux-1.png',
-  'Artera':'logos/artera.png',
-  'MTAR Technologies': 'logos/mtar.png',
-  'NanoSemi': 'logos/nanosemi-inc-1.png',
-  'SambaNova Systems': 'logos/SambaNova-dark-logo-1.png',
-  'Tonbo Imaging': 'logos/tonbo.png',
-  'Haystack Analytics': 'logos/haystack.svg',
-  'Walden International': 'logos/walden.jpeg',
-  'ideaForge': 'logos/ideaforge.png',
-  '4baseCare': 'logos/4basecare.png',
-  'Perceptyne': 'logos/perceptyne.png',
-  'C2i': 'logos/C2i.webp',
-
 };
 
 const CompanyTable = () => {
@@ -118,10 +94,10 @@ const CompanyTable = () => {
                     <p className={styles.companyCategory}>{company.category}</p>
 
                     <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
-                    {companyLogoMap[company.name] && (
+                    {company.logo && (
                       <div className={styles.imagePlaceholder}>
                         <Image
-                          src={companyLogoMap[company.name]}
+                          src={urlFor(company.logo).width(100).url()}
                           alt={company.name}
                           width={100}
                           height={100}

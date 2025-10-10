@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';

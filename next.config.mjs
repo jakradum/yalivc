@@ -1,19 +1,18 @@
-const isProd = process.env.NODE_ENV === 'production';
-
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    loader: 'custom',
-    loaderFile: './image-loader.js',
-    domains: ['yali.vc', 'cdn.sanity.io'],
-    unoptimized: true,
+    domains: ['cdn.sanity.io', 'yali.vc'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
   },
-  basePath: '',
-  assetPrefix: isProd ? 'https://yali.vc' : '',
   trailingSlash: true,
-  // Remove output: 'export' - we need dynamic features for forms/API
-  experimental: {
-    appDir: true,
+  // NO output: 'export' here
+  env: {
+    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV,
   },
 };
 
