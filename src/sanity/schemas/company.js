@@ -12,8 +12,8 @@ const company = {
     {
       name: 'category',
       title: 'Category',
-      type: 'string',
-      // REMOVED: to: [{type: 'category'}] - can't use with type: 'string'
+      type: 'reference',
+      to: [{type: 'category'}],
       validation: Rule => Rule.required()
     },
     {

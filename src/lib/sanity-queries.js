@@ -5,7 +5,7 @@ export async function getCompanies() {
   const query = `*[_type == "company"] | order(order asc) {
     _id,
     name,
-    category,
+    "category": category->name,
     oneLiner,
     detail,
     link,
@@ -24,7 +24,7 @@ export async function getNews(limit = 50) {
     headlineEdited,
     isVideo,
     featured,
-    "publicationName": publication
+    "publicationName": publication->name
   }`;
   return await client.fetch(query);
 }
@@ -57,10 +57,10 @@ export async function getCategories() {
 
 // Fetch companies by category
 export async function getCompaniesByCategory(categoryName) {
-  const query = `*[_type == "company" && category == $categoryName] | order(order asc) {
+  const query = `*[_type == "company" && category->name == $categoryName] | order(order asc) {
     _id,
     name,
-    category,
+    "category": category->name,
     oneLiner,
     detail,
     link,
