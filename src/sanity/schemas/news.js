@@ -1,4 +1,4 @@
-export default {
+const news = {
   name: 'news',
   title: 'News Articles',
   type: 'document',
@@ -64,3 +64,5 @@ export default {
     }
   ]
 }
+
+export default news

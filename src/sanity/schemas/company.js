@@ -1,4 +1,4 @@
-export default {
+const company = {
   name: 'company',
   title: 'Portfolio Companies',
   type: 'document',
@@ -61,3 +61,6 @@ export default {
     }
   }
 }
+
+
+export default company
