@@ -1,4 +1,4 @@
-import styles from '../about-yali/about styles.module.css';
+import styles from '../about-yali/about-styles.module.css';
 
 export default function page() {
   return (
