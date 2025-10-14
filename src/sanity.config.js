@@ -1,7 +1,7 @@
 import {defineConfig} from 'sanity'
-import {deskTool} from 'sanity/desk'
+import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import { schemaTypes } from './sanity/schemaTypes'
+import {schemaTypes} from './sanity/schemas'
 
 export default defineConfig({
   name: 'default',
@@ -11,7 +11,7 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    deskTool({
+    structureTool({
       structure: (S) =>
         S.list()
           .title('Content')
@@ -28,6 +28,9 @@ export default defineConfig({
             S.listItem()
               .title('Categories')
               .child(S.documentTypeList('category').title('Categories')),
+            S.listItem()
+              .title('Publications')
+              .child(S.documentTypeList('publication').title('Publications')),
             S.divider(),
             S.listItem()
               .title('Blog Posts')
@@ -44,6 +47,5 @@ export default defineConfig({
     types: schemaTypes,
   },
 
-  // Custom base path for Studio
   basePath: '/console'
 })
