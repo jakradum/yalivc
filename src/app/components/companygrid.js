@@ -30,16 +30,15 @@ export const vectorUsageMap = {
   'life sciences': <LifeSciencesVector/>,
 };
 
-const CompanyTable = () => {
-  const { data } = useData();
+const CompanyTable = ({ companies }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
 
   const buttonText = 'view more details';
 
-  const companiesData = (data && data.status === 'success' && data.data && data.data['companies-csv (1)']) 
-    ? { data: data.data['companies-csv (1)'] }
-    : localCompaniesData;
+   const companiesData = { data: companies || localCompaniesData.data };
+    // ? { data: data.data['companies-csv (1)'] }
+    // : localCompaniesData;
 
   const numberOfCompanies = companiesData.data.length;
   const currentDate = new Date();

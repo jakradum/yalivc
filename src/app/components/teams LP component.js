@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useData } from '../data/fetch component';
-import localTeamData from '../data/team.json';
+// import { useData } from '../data/fetch component';
 import styles from '../landing page styles/team.module.css';
 import { ExpandIcon } from './icons/small icons/expandIcon';
 import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
@@ -13,17 +12,17 @@ import { genericButtonText } from '../page';
 import { Graphicfg } from './icons/background svgs/graphicfg';
 import imageLoader from '../../../image-loader';
 
-export const TeamsLPComponent = () => {
-  const { data } = useData();
+export const TeamsLPComponent = ({ teamMembers = [] }) => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
   const [tableHeight, setTableHeight] = useState(0);
 
-const teamMembers = data && data.data && data.data.team 
-  ? data.data.team 
-  : [];
+  
+
+
+const finalTeam = teamMembers;
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 800);
@@ -37,11 +36,12 @@ const teamMembers = data && data.data && data.data.team
     if (tableWrapper) {
       setTableHeight(tableWrapper.offsetHeight);
     }
-  }, [teamMembers]);
+  }, [finalTeam]);
 
   const getImagePath = (index) => {
-    const member = teamMembers[index];
-    const imagePath = member.image || '/api/placeholder/400/400';
+    const member = finalTeam[index];
+    const imagePath = member.photo || '/api/placeholder/400/400';
+    if (imagePath.startsWith('http')) return imagePath;
     return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
   };
 
@@ -61,19 +61,25 @@ const teamMembers = data && data.data && data.data.team
     }
   };
 
-  const renderMobileView = () => {
-    return teamMembers.map((member, index) => (
+  const renderMobileView = () =>
+    finalTeam.map((member, index) => (
       <div key={index} className={styles.mobileTeamMemberWrapper}>
         <div
-          className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
+          className={`${styles.mobileTeamMember} ${
+            expandedRow === index ? styles.expanded : ''
+          }`}
           onClick={() => handleCellInteraction(member, index)}
         >
           <div className={styles.memberInfo}>
             <p className={styles.name}>{member.name}</p>
-            <p className={styles.desig}>{member.designation}</p>
+            <p className={styles.desig}>{member.role}</p>
             <div className={styles.socialLinks}>
-              {member.linkedin && (
-                <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+              {member.linkedIn && (
+                <a
+                  href={member.linkedIn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <button className={styles.socialButton}>in</button>
                 </a>
               )}
@@ -81,40 +87,45 @@ const teamMembers = data && data.data && data.data.team
           </div>
           <ExpandIcon isExpanded={expandedRow === index} />
         </div>
-        <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
+        <div
+          className={`${styles.mobileExpandedContent} ${
+            expandedRow === index ? styles.expanded : ''
+          }`}
+        >
           <div className={styles.expandedImageContainer}>
-            {member.image ? (
+            {member.photo ? (
               <Image
-                loader={imageLoader}
+                loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
                 src={getImagePath(index)}
                 alt={member.name}
                 width={300}
                 height={200}
-                style={{ objectFit: 'contain' }}
                 className={styles.memberImage}
+                style={{ objectFit: 'contain' }}
               />
             ) : (
               <Graphicfg className={styles.memberImage} />
             )}
           </div>
-          <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
+<p className={styles.expandedOneLiner}>{member.oneLiner}</p>
         </div>
       </div>
     ));
-  };
 
   const renderTableRows = () => {
     const rows = [];
-    for (let i = 0; i < teamMembers.length; i += 2) {
-      const isLastRow = i >= teamMembers.length - 2;
+    for (let i = 0; i < finalTeam.length; i += 2) {
+      const isLastRow = i >= finalTeam.length - 2;
       rows.push(
         <tr key={i} className={styles.tableRow}>
-          {renderCell(teamMembers[i], i)}
-          {i + 1 < teamMembers.length
-            ? renderCell(teamMembers[i + 1], i + 1)
-            : isLastRow && teamMembers.length % 2 !== 0 && teamMembers.length > 4
-            ? renderKnowMoreCell()
-            : null}
+          {renderCell(finalTeam[i], i)}
+          {i + 1 < finalTeam.length
+            ? renderCell(finalTeam[i + 1], i + 1)
+            : isLastRow &&
+              finalTeam.length % 2 !== 0 &&
+              finalTeam.length > 4
+              ? renderKnowMoreCell()
+              : null}
         </tr>
       );
     }
@@ -124,16 +135,22 @@ const teamMembers = data && data.data && data.data.team
   const renderCell = (member, index) => (
     <td
       key={index}
-      className={`${styles.teamMember} ${selectedIndex === index ? styles.selectedMember : ''}`}
+      className={`${styles.teamMember} ${
+        selectedIndex === index ? styles.selectedMember : ''
+      }`}
       onMouseEnter={() => handleCellInteraction(member, index)}
       onMouseLeave={handleCellHoverLeave}
     >
       <div className={styles.memberInfo}>
         <p className={styles.name}>{member.name}</p>
-        <p className={styles.desig}>{member.designation}</p>
+        <p className={styles.desig}>{member.role}</p>
         <div className={styles.socialLinks}>
-          {member.linkedin && (
-            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+          {member.linkedIn && (
+            <a
+              href={member.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <button className={styles.socialButton}>in</button>
             </a>
           )}
@@ -144,7 +161,7 @@ const teamMembers = data && data.data && data.data.team
 
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
-      <Link href='/about-yali/#team' className={styles.noUnderline}>
+      <Link href="/about-yali/#team" className={styles.noUnderline}>
         <Button>{genericButtonText}</Button>
       </Link>
     </td>
@@ -156,7 +173,7 @@ const teamMembers = data && data.data && data.data.team
         {isMobile ? (
           <div className={styles.mobileTeamList}>
             {renderMobileView()}
-            {teamMembers.length > 0 && (
+            {finalTeam.length > 0 && (
               <div className={styles.mobileViewAllButtonWrapper}>
                 <Link href="/about-yali/#team" className={styles.noUnderline}>
                   <Button>{genericButtonText}</Button>
@@ -169,7 +186,7 @@ const teamMembers = data && data.data && data.data.team
             <table className={styles.teamTable}>
               <tbody>{renderTableRows()}</tbody>
             </table>
-            {(teamMembers.length === 4 || (teamMembers.length > 4 && teamMembers.length % 2 === 0)) && (
+            {(finalTeam.length === 4 || (finalTeam.length > 4 && finalTeam.length % 2 === 0)) && (
               <div className={styles.viewAllButtonWrapper}>
                 <Link href="/about-yali/#team" className={styles.noUnderline}>
                   <Button>{genericButtonText}</Button>
@@ -184,10 +201,10 @@ const teamMembers = data && data.data && data.data.team
           {selectedMember ? (
             <header className={styles.headerSec}>
               <div className={styles.memberImageContainer}>
-                {selectedMember.image ? (
+                {selectedMember.photo ? (
                   <Image
                     loader={imageLoader}
-                    src={getImagePath(teamMembers.indexOf(selectedMember))}
+                    src={getImagePath(finalTeam.indexOf(selectedMember))}
                     alt={selectedMember.name}
                     className={styles.memberImage}
                     width={300}
@@ -199,8 +216,8 @@ const teamMembers = data && data.data && data.data.team
                 )}
               </div>
               <h3 className={styles.selectedMemberName}>{selectedMember.name}</h3>
-              <p className={styles.selectedMemberDesignation}>{selectedMember.Designation}</p>
-              <p className={styles.selectedMemberOneLiner}>{selectedMember['One-Liner']}</p>
+              <p className={styles.selectedMemberDesignation}>{selectedMember.role}</p>
+              <p className={styles.selectedMemberOneLiner}>{selectedMember.oneLiner}</p>
             </header>
           ) : (
             <div className={styles.defaultDisplay}>

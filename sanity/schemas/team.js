@@ -8,41 +8,51 @@ export default {
       name: 'name',
       title: 'Full Name',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'role',
       title: 'Role/Title',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'bio',
       title: 'Biography',
       type: 'text',
-      rows: 4
+      rows: 4,
+    },
+    {
+      name: 'oneLiner',
+      title: 'One-Liner',
+      type: 'string',
+      description: 'Brief description (max 100 characters)',
+      validation: (Rule) => Rule.required().max(100),
     },
     {
       name: 'photo',
       title: 'Photo',
       type: 'image',
       options: {
-        hotspot: true
-      }
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'linkedIn',
       title: 'LinkedIn URL',
       type: 'url',
-      validation: Rule => Rule.uri({
-        scheme: ['http', 'https']
-      })
+      validation: (Rule) =>
+        Rule.uri({
+          scheme: ['http', 'https'],
+        }),
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
-      description: 'Lower numbers appear first'
+      description: 'Lower numbers appear first',
     },
     {
       name: 'status',
@@ -50,19 +60,19 @@ export default {
       type: 'string',
       options: {
         list: [
-          {title: 'Active', value: 'active'},
-          {title: 'Alumni', value: 'alumni'}
-        ]
+          { title: 'Active', value: 'active' },
+          { title: 'Alumni', value: 'alumni' },
+        ],
       },
       initialValue: 'active',
-      validation: Rule => Rule.required()
-    }
+      validation: (Rule) => Rule.required(),
+    },
   ],
   preview: {
     select: {
       title: 'name',
       subtitle: 'role',
-      media: 'photo'
-    }
-  }
-}
+      media: 'photo',
+    },
+  },
+};

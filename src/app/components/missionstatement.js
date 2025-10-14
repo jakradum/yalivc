@@ -5,7 +5,7 @@ import { MissionStatementRedBG } from './icons/background svgs/mission statement
 import HeaderFlex from './icons/headerflex';
 import { Gridsvg } from './icons/background svgs/gridsvg';
 
-const MissionStatement = () => {
+export default function MissionStatement() { 
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
@@ -63,5 +63,3 @@ const MissionStatement = () => {
     </section>
   );
 };
-
-export default MissionStatement;

@@ -5,10 +5,9 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
-  useCdn: true, // Use CDN for faster responses
+  useCdn: true,
 });
 
-// Image URL builder
 const builder = imageUrlBuilder(client);
 export const urlFor = (source) => builder.image(source);
 
@@ -22,7 +21,7 @@ export async function getCompanies() {
     link,
     "category": category->name,
     "categorySlug": category->slug.current,
-    logo,
+    "logo": logo.asset->url,
     order
   }`;
   return await client.fetch(query);
@@ -35,21 +34,22 @@ export async function getCompaniesByCategory(categorySlug) {
     oneLiner,
     detail,
     link,
-    logo
+    "logo": logo.asset->url,
+    order
   }`;
   return await client.fetch(query, { categorySlug });
 }
 
 // ============ NEWS ============
 export async function getNews(limit = 50) {
-  const query = `*[_type == "news"] | order(date desc) [0...${limit}] {
+  const query = `*[_type == "news"] | order(date desc)[0...${limit}] {
     _id,
     url,
     date,
-"publicationName": publication->name,
     headlineEdited,
     isVideo,
-    featured
+    featured,
+    "publicationName": publication->name
   }`;
   return await client.fetch(query);
 }
@@ -59,9 +59,23 @@ export async function getFeaturedNews() {
     _id,
     url,
     date,
-"publicationName": publication->name,
     headlineEdited,
-    isVideo
+    isVideo,
+    "publicationName": publication->name
+  }`;
+  return await client.fetch(query);
+}
+
+// ============ TEAM ============
+export async function getTeamMembers() {
+  const query = `*[_type == "teamMember" && status == "active"] | order(order asc) {
+    _id,
+    name,
+    role,
+    bio,
+    "photo": photo.asset->url,
+    linkedIn,
+    order
   }`;
   return await client.fetch(query);
 }
@@ -86,20 +100,6 @@ export async function getCategoryBySlug(slug) {
     description
   }`;
   return await client.fetch(query, { slug });
-}
-
-// ============ TEAM (non-core only) ============
-export async function getTeamMembers() {
-  const query = `*[_type == "teamMember" && status == "active"] | order(order asc) {
-    _id,
-    name,
-    role,
-    bio,
-    photo,
-    linkedIn,
-    order
-  }`;
-  return await client.fetch(query);
 }
 
 // ============ BLOG POSTS ============
@@ -145,7 +145,7 @@ export async function getQuarterlyReports() {
   return await client.fetch(query);
 }
 
-// ============ APPLICATIONS (Console only) ============
+// ============ APPLICATIONS ============
 export async function createApplication(data) {
   const doc = {
     _type: 'application',

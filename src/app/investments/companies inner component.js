@@ -6,7 +6,6 @@ import styles from './company inner comp.module.css';
 import categoriesData from '../data/categories.json';
 import Image from 'next/image';
 import Button from '../components/button';
-import { companyLogoMap } from '../components/companygrid';
 import { ExpandIcon } from '../components/icons/small icons/expandIcon';
 
 function useWindowWidth() {
@@ -23,15 +22,14 @@ function useWindowWidth() {
   return width;
 }
 
-export const CompaniesInnerComponent = () => {
+export const CompaniesInnerComponent = ({companies}) => {
   const windowWidth = useWindowWidth();
-  const { data, loading, error } = useData();
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [isUsingLocalData, setIsUsingLocalData] = useState(true);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.emergingTechnologies || [];
+  
+  // Continue with activeCategories useMemo...
   const toggleCategoryDropdown = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
   };
@@ -44,33 +42,33 @@ export const CompaniesInnerComponent = () => {
     return Array.from(activeCats);
   }, [companies]);
 
-  useEffect(() => {
-    console.log('useData hook output:', { data, loading, error });
+  // useEffect(() => {
+  //   console.log('useData hook output:', { data, loading, error });
 
-    if (loading) {
-      console.log('Currently loading, no action taken');
-      return;
-    }
+  //   if (loading) {
+  //     console.log('Currently loading, no action taken');
+  //     return;
+  //   }
 
-    if (error) {
-      console.log('Error fetching data, using local data:', error);
-      setIsUsingLocalData(true);
-      return;
-    }
+  //   if (error) {
+  //     console.log('Error fetching data, using local data:', error);
+  //     setIsUsingLocalData(true);
+  //     return;
+  //   }
 
-    if (data && data.status === 'success' && data.data && Array.isArray(data.data['companies-csv (1)'])) {
-      console.log('Fetched data successfully, updating companies');
-      setCompanies(data.data['companies-csv (1)']);
-      setIsUsingLocalData(false);
-    } else if (data && data.companies && Array.isArray(data.companies.data)) {
-      console.log('Using local data');
-      setCompanies(data.companies.data);
-      setIsUsingLocalData(true);
-    } else {
-      console.log('Data not in expected format, using local data. Data:', data);
-      setIsUsingLocalData(true);
-    }
-  }, [data, loading, error]);
+  //   if (data && data.status === 'success' && data.data && Array.isArray(data.data['companies-csv (1)'])) {
+  //     console.log('Fetched data successfully, updating companies');
+  //     setCompanies(data.data['companies-csv (1)']);
+  //     setIsUsingLocalData(false);
+  //   } else if (data && data.companies && Array.isArray(data.companies.data)) {
+  //     console.log('Using local data');
+  //     setCompanies(data.companies.data);
+  //     setIsUsingLocalData(true);
+  //   } else {
+  //     console.log('Data not in expected format, using local data. Data:', data);
+  //     setIsUsingLocalData(true);
+  //   }
+  // }, [data, loading, error]);
 
   console.log('Current companies data:', companies);
 
@@ -145,7 +143,7 @@ export const CompaniesInnerComponent = () => {
             <div className={styles.companyInfo}>
               <div className={styles.logoContainer}>
                 <Image
-                  src={`/${companyLogoMap[company.name]}`}
+                  src={company.logo || '/placeholder-logo.png'}
                   alt={company.name}
                   width={150}
                   height={150}

@@ -17,23 +17,40 @@ export function DataProvider({ children }) {
   useEffect(() => {
     async function fetchData() {
       try {
+        console.log('📡 Fetching data from Sanity...');
+
         const [companies, articles, sanityTeam] = await Promise.all([
           getCompanies(),
           getNews(),
-          getTeamMembers()
+          getTeamMembers(),
         ]);
 
-        // Merge hardcoded core team with CMS team
-        const allTeam = [...coreTeam, ...sanityTeam];
+        // ✅ Normalize coreTeam fields to match the Sanity schema
+        const normalizedCoreTeam = coreTeam.map((member) => ({
+          name: member.name,
+          role: member.designation, // normalize designation → role
+          bio: member.detailed,     // normalize detailed → bio
+          photo: member.image,      // normalize image → photo
+          linkedIn: member.linkedin,
+          order: member.order,
+        }));
+
+        // ✅ Merge normalized core team and Sanity team
+        const allTeam = [...normalizedCoreTeam, ...sanityTeam];
 
         setData({
           status: 'success',
           data: { companies, articles, team: allTeam },
         });
+
+        console.log('✅ Data fetched successfully. Team count:', allTeam.length);
       } catch (err) {
-        console.error('Error fetching from Sanity:', err);
+        console.error('❌ Error fetching from Sanity:', err);
         setError(err);
-        setData({ status: 'error', data: { companies: [], articles: [], team: [] } });
+        setData({
+          status: 'error',
+          data: { companies: [], articles: [], team: [] },
+        });
       } finally {
         setLoading(false);
       }
@@ -42,7 +59,11 @@ export function DataProvider({ children }) {
     fetchData();
   }, []);
 
-  return <DataContext.Provider value={{ data, loading, error }}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider value={{ data, loading, error }}>
+      {children}
+    </DataContext.Provider>
+  );
 }
 
 export function useData() {

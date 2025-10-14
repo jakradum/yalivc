@@ -30,15 +30,6 @@ export default defineConfig({
               .child(S.documentTypeList('category').title('Categories')),
             S.divider(),
             S.listItem()
-              .title('Applications')
-              .child(
-                S.documentTypeList('application')
-                  .title('Funding Applications')
-                  .filter('_type == "application"')
-                  .defaultOrdering([{field: 'submittedAt', direction: 'desc'}])
-              ),
-            S.divider(),
-            S.listItem()
               .title('Blog Posts')
               .child(S.documentTypeList('blogPost').title('Blog Posts')),
             S.listItem()

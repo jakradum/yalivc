@@ -1,4 +1,4 @@
-module.exports = function imageLoader({ src, width, quality }) {
+export default function imageLoader({ src, width, quality }) {
   const isProd = process.env.NODE_ENV === 'production';
   
   // For absolute URLs or data URLs, return the source as-is

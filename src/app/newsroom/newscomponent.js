@@ -2,9 +2,9 @@
 import React, { useState, useMemo } from 'react';
 import styles from './newscomponent.module.css';
 import Button from '../components/button';
-import { useData } from '../data/fetch component';
 import fallbackData from '../data/news.json';
 
+// Utility functions
 const buttonText = 'view all coverage';
 
 const formatDate = (dateString) => {
@@ -20,30 +20,28 @@ const formatDate = (dateString) => {
 };
 
 const formatArticles = (articles) => {
+  if (!articles || !Array.isArray(articles)) return [];
   return articles.map((article) => ({
     ...article,
     formattedDate: formatDate(article.date),
-    title: article.headlineEdited,
+    title: article.headlineEdited || article.title || 'Untitled',
     year: new Date(article.date).getFullYear(),
     month: new Date(article.date).getMonth(),
-    monthName: new Date(article.date).toLocaleString('default', { month: 'long' })
+    monthName: new Date(article.date).toLocaleString('default', { month: 'long' }),
   }));
 };
 
-export const NewsComponent = () => {
-  const { data } = useData();
+export default function NewsComponent({ news = [] }) {
+  console.log('News prop received:', news);
+  console.log('News length:', news.length);
+  const articles = useMemo(() => formatArticles(news.length > 0 ? news : fallbackData.data.articles), [news]);
+
   const [selectedYear, setSelectedYear] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('all');
 
-  const articles = formatArticles(
-    (data && data.status === 'success' && data.data && data.data.articles) 
-      ? data.data.articles 
-      : fallbackData.data.articles
-  );
-
-  // Get unique years and months for filter options
+  // Unique filter options
   const filterOptions = useMemo(() => {
-    const years = [...new Set(articles.map(article => article.year))].sort((a, b) => b - a);
+    const years = [...new Set(articles.map((a) => a.year))].sort((a, b) => b - a);
     const months = [
       { value: 0, name: 'January' },
       { value: 1, name: 'February' },
@@ -56,33 +54,26 @@ export const NewsComponent = () => {
       { value: 8, name: 'September' },
       { value: 9, name: 'October' },
       { value: 10, name: 'November' },
-      { value: 11, name: 'December' }
+      { value: 11, name: 'December' },
     ];
-    
     return { years, months };
   }, [articles]);
 
-  // Filter articles based on selected year and month
+  // Apply filters
   const filteredArticles = useMemo(() => {
     let filtered = articles;
-    
     if (selectedYear !== 'all') {
-      filtered = filtered.filter(article => article.year === parseInt(selectedYear));
+      filtered = filtered.filter((a) => a.year === parseInt(selectedYear));
     }
-    
     if (selectedMonth !== 'all') {
-      filtered = filtered.filter(article => article.month === parseInt(selectedMonth));
+      filtered = filtered.filter((a) => a.month === parseInt(selectedMonth));
     }
-    
     return filtered;
   }, [articles, selectedYear, selectedMonth]);
 
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
-    // Reset month when year changes to 'all'
-    if (e.target.value === 'all') {
-      setSelectedMonth('all');
-    }
+    if (e.target.value === 'all') setSelectedMonth('all');
   };
 
   const handleMonthChange = (e) => {
@@ -100,7 +91,7 @@ export const NewsComponent = () => {
       <a href={article.url} target="_blank" rel="noopener noreferrer">
         <p className={styles.articleTitle}>{article.title}</p>
       </a>
-      <p className={styles.articleMeta}>{article.publicationName}</p>
+      <p className={styles.articleMeta}>{article.publicationName || 'Unknown publication'}</p>
     </article>
   );
 
@@ -108,46 +99,44 @@ export const NewsComponent = () => {
     <div className={styles.newsSection}>
       {/* Filter Controls */}
       <div className={styles.filterControls}>
+        {/* Year Filter */}
         <div className={styles.filterGroup}>
           <label htmlFor="year-filter" className={styles.filterLabel}>
             Filter by Year:
           </label>
-          <select 
-            id="year-filter"
-            value={selectedYear} 
-            onChange={handleYearChange}
-            className={styles.filterSelect}
-          >
+          <select id="year-filter" value={selectedYear} onChange={handleYearChange} className={styles.filterSelect}>
             <option value="all">All Years</option>
-            {filterOptions.years.map(year => (
-              <option key={year} value={year}>{year}</option>
+            {filterOptions.years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
             ))}
           </select>
         </div>
 
+        {/* Month Filter */}
         <div className={styles.filterGroup}>
           <label htmlFor="month-filter" className={styles.filterLabel}>
             Filter by Month:
           </label>
-          <select 
+          <select
             id="month-filter"
-            value={selectedMonth} 
+            value={selectedMonth}
             onChange={handleMonthChange}
             className={styles.filterSelect}
             disabled={selectedYear === 'all'}
           >
             <option value="all">All Months</option>
-            {filterOptions.months.map(month => (
-              <option key={month.value} value={month.value}>{month.name}</option>
+            {filterOptions.months.map((month) => (
+              <option key={month.value} value={month.value}>
+                {month.name}
+              </option>
             ))}
           </select>
         </div>
 
         {(selectedYear !== 'all' || selectedMonth !== 'all') && (
-          <button 
-            onClick={clearFilters}
-            className={styles.clearFilters}
-          >
+          <button onClick={clearFilters} className={styles.clearFilters}>
             Clear Filters
           </button>
         )}
@@ -158,15 +147,14 @@ export const NewsComponent = () => {
         <p className={styles.resultsCount}>
           Showing {filteredArticles.length} of {articles.length} articles
           {selectedYear !== 'all' && ` for ${selectedYear}`}
-          {selectedMonth !== 'all' && ` in ${filterOptions.months.find(m => m.value === parseInt(selectedMonth))?.name}`}
+          {selectedMonth !== 'all' &&
+            ` in ${filterOptions.months.find((m) => m.value === parseInt(selectedMonth))?.name}`}
         </p>
       </div>
 
       {/* Articles Grid */}
       {filteredArticles.length > 0 ? (
-        <div className={styles.newsArticles}>
-          {filteredArticles.map(renderArticle)}
-        </div>
+        <div className={styles.newsArticles}>{filteredArticles.map(renderArticle)}</div>
       ) : (
         <div className={styles.noResults}>
           <p>No articles found for the selected filters.</p>
@@ -175,6 +163,13 @@ export const NewsComponent = () => {
           </button>
         </div>
       )}
+
+      {/* View All Button */}
+      <div className={styles.viewAllButton}>
+        <Button href="/newsroom" color="black">
+          {buttonText}
+        </Button>
+      </div>
     </div>
   );
-};
+}

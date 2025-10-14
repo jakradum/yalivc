@@ -1,18 +1,22 @@
 'use client';
+
 import { useState } from 'react';
 import styles from './contact.module.css';
+import ApplicationForm from '../components/ApplicationForm';
+import { isFeatureEnabled } from '@/config/features';
 
 export default function Contact() {
   const [copiedEmails, setCopiedEmails] = useState({});
+  const showApplicationForm = isFeatureEnabled('applicationForm');
 
   const copyToClipboard = async (email, index) => {
     try {
       await navigator.clipboard.writeText(email);
-      setCopiedEmails(prev => ({ ...prev, [index]: true }));
-      
+      setCopiedEmails((prev) => ({ ...prev, [index]: true }));
+
       // Reset after 10 seconds
       setTimeout(() => {
-        setCopiedEmails(prev => ({ ...prev, [index]: false }));
+        setCopiedEmails((prev) => ({ ...prev, [index]: false }));
       }, 10000);
     } catch (err) {
       console.error('Failed to copy email:', err);
@@ -21,15 +25,17 @@ export default function Contact() {
 
   const contactCategories = [
     {
-      title: "Investment Opportunities",
-      description: "Submit your startup pitch, discuss investment opportunities, and funding inquiries.",
-      email: "pitch@yali.vc"
+      title: 'Investment Opportunities',
+      description:
+        'Submit your startup pitch, discuss investment opportunities, and funding inquiries.',
+      email: 'pitch@yali.vc',
     },
     {
-      title: "Press, Media & General Inquiries", 
-      description: "Media inquiries, press releases, interview requests, investor relations, and all other correspondence.",
-      email: "investor.relations@yali.vc"
-    }
+      title: 'Press, Media & General Inquiries',
+      description:
+        'Media inquiries, press releases, interview requests, investor relations, and all other correspondence.',
+      email: 'investor.relations@yali.vc',
+    },
   ];
 
   return (
@@ -38,65 +44,89 @@ export default function Contact() {
       <section className={styles.headerSection}>
         <h1 className={styles.pageTitle}>Get in Touch</h1>
         <p className={styles.pageDescription}>
-         Whether you're looking to pitch your startup, 
-          discuss partnerships, or have media inquiries, reach out to us using the appropriate 
-          contact below for the fastest response.
+          Whether you're looking to pitch your startup, discuss partnerships, or have media
+          inquiries, reach out to us using the appropriate contact below for the fastest response.
         </p>
       </section>
 
-      {/* Contact Categories Section */}
-      <section className={styles.contactSection}>
-        <p className={styles.sectionSubtitle}>
-          Write to us by choosing from one of these specialized contact addresses based on your inquiry type.
-        </p>
-        
-        <div className={styles.contactGrid}>
-          {contactCategories.map((category, index) => (
-            <div key={index} className={styles.contactCard}>
-              <h3 className={styles.cardTitle}>{category.title}</h3>
-              <p className={styles.cardDescription}>{category.description}</p>
-              <div className={styles.buttonGroup}>
-                <a 
-                  href={`mailto:${category.email}`}
-                  className={styles.emailButton}
-                >
-                  Email {category.email}
-                </a>
-                <button
-                  onClick={() => copyToClipboard(category.email, index)}
-                  className={`${styles.copyButton} ${copiedEmails[index] ? styles.copied : ''}`}
-                  title="Copy email address"
-                >
-                  {copiedEmails[index] ? (
-                    <>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="20,6 9,17 4,12"></polyline>
-                      </svg>
-                      <span className={styles.buttonText}>Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                      </svg>
-                      <span className={styles.buttonText}>Copy</span>
-                    </>
-                  )}
-                </button>
+      {/* ✅ Show ApplicationForm if feature flag is ON */}
+      {showApplicationForm && (
+        <section className={styles.formSection}>
+          <ApplicationForm />
+        </section>
+      )}
+
+      {/* ✅ Otherwise show email contact cards */}
+      {!showApplicationForm && (
+        <section className={styles.contactSection}>
+          <p className={styles.sectionSubtitle}>
+            Write to us by choosing from one of these specialized contact addresses based on your
+            inquiry type.
+          </p>
+
+          <div className={styles.contactGrid}>
+            {contactCategories.map((category, index) => (
+              <div key={index} className={styles.contactCard}>
+                <h3 className={styles.cardTitle}>{category.title}</h3>
+                <p className={styles.cardDescription}>{category.description}</p>
+                <div className={styles.buttonGroup}>
+                  <a href={`mailto:${category.email}`} className={styles.emailButton}>
+                    Email {category.email}
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard(category.email, index)}
+                    className={`${styles.copyButton} ${
+                      copiedEmails[index] ? styles.copied : ''
+                    }`}
+                    title="Copy email address"
+                  >
+                    {copiedEmails[index] ? (
+                      <>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <polyline points="20,6 9,17 4,12"></polyline>
+                        </svg>
+                        <span className={styles.buttonText}>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span className={styles.buttonText}>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Address Section */}
+      {/* Address Section — always visible */}
       <section className={styles.addressSection}>
         <div className={styles.addressInfo}>
           <h3 className={styles.addressTitle}>Registered Address</h3>
           <address className={styles.addressText}>
-            No. 505, B Block, 3rd Cross, AECS Layout,<br />
-            Kundalahalli, Bengaluru - 560037,<br />
+            No. 505, B Block, 3rd Cross, AECS Layout,
+            <br />
+            Kundalahalli, Bengaluru - 560037,
+            <br />
             Karnataka, India
           </address>
         </div>

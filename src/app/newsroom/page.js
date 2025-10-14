@@ -1,10 +1,15 @@
-import styles from '../about-yali/about styles.module.css';
+import styles from '../about-yali/about-styles.module.css';
 import HeaderFlex from '../components/icons/headerflex';
 import { NewsSVG } from '../components/icons/background svgs/newsSVG';
-import NewsSection from '../components/news section';
-import { NewsComponent } from './news component';
+import NewsSection from '../components/newssection';
+import NewsComponent  from './newscomponent.js';
 
-export default function Newsroom() {
+import { getNews } from '@/lib/sanity-queries';
+
+export default async function Newsroom() {
+const news = await getNews();
+console.log('📰 page.js fetched news[0]:', news[0]);
+
     return (
       <section className={styles.sectionLevel}>
         <div className={styles.mainAbout}>
@@ -27,7 +32,7 @@ export default function Newsroom() {
           <div className={styles.people}>
             <HeaderFlex title="About us in the news" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>
           </div>
-          <NewsComponent />
+          <NewsComponent news={news} />
         </section>
       </section>
     );

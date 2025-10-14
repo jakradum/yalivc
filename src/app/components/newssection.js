@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '../landing page styles/newssec.module.css';
 import Button from './button';
 import Link from 'next/link';
-import { useData } from '../data/fetch component';
 import fallbackData from '../data/news.json';
+
 
 const buttonText = 'view all coverage';
 
@@ -14,40 +14,52 @@ const truncateText = (text, maxLength) => {
   return text.substring(0, maxLength) + '...';
 };
 
+// Consistent date formatting across server + client
 const formatDate = (dateString) => {
   if (!dateString) return '';
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
-  return isNaN(date.getTime()) ? '' : date.toLocaleDateString(undefined, options);
+  if (isNaN(date.getTime())) return '';
+
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  return formatter.format(date);
 };
 
-const formatArticles = (articles) => {
-  return articles.map((article) => ({
-    ...article,
-    formattedDate: formatDate(article.date),
-    title: article.headlineEdited,
-  }));
+const formatArticles = (articles = []) => {
+  return articles.map((article) => {
+    const publicationFromQuery = article.publicationName ?? article.pubRefName;
+    const publicationFromField =
+      typeof article.publication === 'string' ? article.publication : undefined;
+    const displayPublication = publicationFromQuery ?? publicationFromField ?? 'Unknown publication';
+
+    return {
+      ...article,
+      formattedDate: formatDate(article.date),
+      title: article.headlineEdited || article.title || 'Untitled',
+      displayPublication,
+    };
+  });
 };
 
-export const NewsSection = () => {
-  const { data } = useData();
+export default function NewsSection({ news = [] }) {
+
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const articles = formatArticles(
-    data && data.status === 'success' && data.data && data.data.articles
-      ? data.data.articles
-      : fallbackData.data.articles
-  );
+const articles = formatArticles(news.length > 0 ? news : fallbackData.data.articles);
 
   const renderLeftGridArticle = (article, index) => (
     <article key={index} className={styles.article}>
       <h3>{article.formattedDate}</h3>
       <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
-      <p className={styles.articleMeta}>{article.publicationName || 'Unknown publication'}</p>
+      <p className={styles.articleMeta}>{article.displayPublication}</p>
       {isClient && (
         <p className={styles.articleLink}>
           <a href={article.url} target="_blank" rel="noopener noreferrer">
@@ -86,4 +98,4 @@ export const NewsSection = () => {
       </div>
     </div>
   );
-};
+}

@@ -1,5 +1,8 @@
-'use client'
+
+
 import React from 'react';
+import { getCompanies, getNews, getTeamMembers } from '@/lib/sanity-queries';
+import teamData from './data/team.json';
 import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
@@ -12,22 +15,18 @@ import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
 import companyStyles from './landing page styles/companies.module.css';
 import CompanyGrid from './components/companygrid';
-import { NewsSection } from './components/news section';
-import dynamic from 'next/dynamic';
-import Button from './components/button';
+import NewsSection from './components/newssection.js';
 import TeamsLPComponent from './components/teams LP component';
-
-// Use DynamicNewsSection in your page component
+import Button from './components/button';
 
 export const genericButtonText = 'view more';
 
+
 const TechnologiesArticle = () => {
   const technologies = categories.emergingTechnologies;
-
-  // Function to repeat the array multiple times
   const repeatTechnologies = (arr, times) => [].concat(...Array(times).fill(arr));
-
-  const repeatedTechnologies = repeatTechnologies(technologies, 10); // Repeat 10 times, adjust as needed
+  const repeatedTechnologies = repeatTechnologies(technologies, 10);
+  
 
   return (
     <div className={separatorStyles.containerWrapper}>
@@ -43,10 +42,27 @@ const TechnologiesArticle = () => {
   );
 };
 
-export default function Home() {
+export default async function HomePage() {
+  const companies = await getCompanies();
+  const news = await getNews();
+  const sanityTeam = await getTeamMembers();
+  
+ const coreTeam = teamData['Team Members']
+   .map((member) => ({
+     name: member.Name,
+     role: member.Designation,
+     oneLiner: member['One-Liner'],
+     bio: member.Detailed,
+     photo: member.image,
+     linkedIn: member.linkedin,
+     order: member.Order,
+   }))
+   .sort((a, b) => a.order - b.order);
+  
+  const team = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
+
   return (
     <main>
-      {/* Landing scroll */}
       <section className={landingStyles.heroSection}>
         <aside className={landingStyles.contentWrapper}>
           <div className={landingStyles.headingBox}>
@@ -72,23 +88,19 @@ export default function Home() {
         </aside>
       </section>
 
-      {/* Categories strip */}
       <TechnologiesArticle />
 
-      {/* Mission statement scroll */}
       <section className={missionStyles.sectionBG}>
         <MissionStatement />
       </section>
 
-      {/* companies section */}
       <section className={companyStyles.section}>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Our companies make us proud" color="black" desktopMaxWidth={'45%'} />
         </div>
-        <CompanyGrid />
+        <CompanyGrid companies={companies} />
       </section>
 
-      {/* Team section */}
       <section className={teamStyles.teamSec}>
         <header className={teamStyles.titleSec}>
           <div className={teamStyles.titleSecFlex}>
@@ -101,16 +113,23 @@ export default function Home() {
             </aside>
           </div>
         </header>
-        <TeamsLPComponent />
+        <TeamsLPComponent teamMembers={team} />
       </section>
 
-      {/* news section */}
       <section>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Yali in the news" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
         </div>
-        <NewsSection />
+        <NewsSection news={news} />
       </section>
     </main>
   );
 }
+
+// export default function HomePage() {
+//   return (
+//     <DataProvider>
+//       <HomeContent />
+//     </DataProvider>
+//   );
+// }
