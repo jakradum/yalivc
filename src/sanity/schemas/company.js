@@ -13,7 +13,7 @@ const company = {
       name: 'category',
       title: 'Category',
       type: 'string',
-      to: [{type: 'category'}],
+      // REMOVED: to: [{type: 'category'}] - can't use with type: 'string'
       validation: Rule => Rule.required()
     },
     {
@@ -61,6 +61,5 @@ const company = {
     }
   }
 }
-
 
 export default company

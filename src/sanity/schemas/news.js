@@ -21,7 +21,7 @@ const news = {
       name: 'publication',
       title: 'Publication',
       type: 'string',
-      to: [{type: 'publication'}],
+      // REMOVED: to: [{type: 'publication'}] - can't use with type: 'string'
       validation: Rule => Rule.required()
     },
     {
@@ -46,7 +46,7 @@ const news = {
   preview: {
     select: {
       title: 'headlineEdited',
-      publication: 'publication.name',
+      publication: 'publication',
       date: 'date'
     },
     prepare({title, publication, date}) {
