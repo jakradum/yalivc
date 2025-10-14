@@ -15,7 +15,7 @@ import { SemiconVector } from './icons/background svgs/category svgs/semicon vec
 import { ArtificialIntelligenceVector } from './icons/background svgs/category svgs/artificial intelligence vector';
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
-import { urlFor } from '../../../sanity/client';
+import { urlFor } from '@/sanity/client';
 
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,

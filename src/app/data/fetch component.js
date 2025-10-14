@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCompanies, getNews, getTeamMembers } from '../../../sanity/client';
+import { getCompanies, getNews, getTeamMembers } from '@/sanity/client';
 import { coreTeam } from './coreTeam';
 
 const DataContext = createContext(null);
