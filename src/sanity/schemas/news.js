@@ -20,7 +20,7 @@ const news = {
     {
       name: 'publication',
       title: 'Publication',
-      type: 'reference',
+      type: 'string',
       to: [{type: 'publication'}],
       validation: Rule => Rule.required()
     },

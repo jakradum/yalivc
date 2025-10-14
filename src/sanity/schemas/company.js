@@ -12,7 +12,7 @@ const company = {
     {
       name: 'category',
       title: 'Category',
-      type: 'reference',
+      type: 'string',
       to: [{type: 'category'}],
       validation: Rule => Rule.required()
     },
