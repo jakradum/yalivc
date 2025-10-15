@@ -14,6 +14,14 @@ export default {
       name: 'role',
       title: 'Role/Title',
       type: 'string',
+      options: {
+        list: [
+          { title: 'Investments', value: 'Investments' },
+          { title: 'Platform & Ops', value: 'Platform & Ops' },
+          { title: 'Advisor', value: 'Advisor' },
+        ],
+        layout: 'dropdown',
+      },
       validation: (Rule) => Rule.required(),
     },
     {
@@ -43,29 +51,15 @@ export default {
       title: 'LinkedIn URL',
       type: 'url',
       validation: (Rule) =>
-        Rule.uri({
-          scheme: ['http', 'https'],
+        Rule.required().uri({
+          scheme: ['https'],
         }),
-      validation: (Rule) => Rule.required(),
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
       description: 'Lower numbers appear first',
-    },
-    {
-      name: 'status',
-      title: 'Status',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Active', value: 'active' },
-          { title: 'Alumni', value: 'alumni' },
-        ],
-      },
-      initialValue: 'active',
-      validation: (Rule) => Rule.required(),
     },
   ],
   preview: {
