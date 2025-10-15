@@ -18,6 +18,7 @@ import CompanyGrid from './components/companygrid';
 import NewsSection from './components/newssection.js';
 import TeamsLPComponent from './components/teams LP component';
 import Button from './components/button';
+export const revalidate = 60;
 
 export const genericButtonText = 'view more';
 

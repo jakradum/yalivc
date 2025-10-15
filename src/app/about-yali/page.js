@@ -4,6 +4,7 @@ import HeaderFlex from '../components/icons/headerflex';
 import TeamDetails from './team-details';
 import { getTeamMembers } from '@/lib/sanity-queries';
 import teamData from '../data/team.json';
+export const revalidate = 60;
 
 export default async function AboutYali() {
   const teamMembers = await getTeamMembers();

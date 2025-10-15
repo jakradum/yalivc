@@ -5,6 +5,7 @@ import NewsSection from '../components/newssection';
 import NewsComponent  from './newscomponent.js';
 
 import { getNews } from '@/lib/sanity-queries';
+export const revalidate = 60;
 
 export default async function Newsroom() {
 const news = await getNews();

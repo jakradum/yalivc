@@ -3,6 +3,7 @@ import { InvestmentsGraphic } from '../components/icons/background svgs/investme
 import HeaderFlex from '../components/icons/headerflex';
 import { CompaniesInnerComponent } from './companies inner component';
 import { getCompanies } from '@/lib/sanity-queries';
+export const revalidate = 60;
 
 export default async function Investments() {
   let companies = [];
