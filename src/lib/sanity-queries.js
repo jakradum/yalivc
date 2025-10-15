@@ -31,7 +31,7 @@ export async function getNews(limit = 50) {
 
 export async function getTeamMembers() {
   return client.fetch(`
-    *[_type == "teamMember" && status == "active"] | order(order asc) {
+    *[_type == "teamMember"] | order(order asc) {
       name,
       role,
       oneLiner,
