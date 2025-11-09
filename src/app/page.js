@@ -89,7 +89,7 @@ export default async function HomePage() {
         </aside>
       </section>
 
-      <TechnologiesArticle />
+       <TechnologiesArticle /> {/* test comment for feature branch */}
 
       <section className={missionStyles.sectionBG}>
         <MissionStatement />
