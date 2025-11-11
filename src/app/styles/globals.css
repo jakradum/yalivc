@@ -1,0 +1,85 @@
+html {
+  scroll-padding-top: 60px;
+  scroll-behavior: smooth;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+:root {
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 0 0;
+  font-family: var(--font-inter);
+  background-color: #efefef;
+}
+
+.page-wrapper {
+  flex: 1;
+  min-height: 100vh;
+  max-width: calc(100vw - 2rem);
+  margin: 2rem auto 0 auto; 
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 950px) {
+  body {
+    padding-top: 3.5rem;
+  }
+}
+
+/* PRESERVE ORIGINAL TYPOGRAPHY HIERARCHY */
+nav p[class*="verticalText"] {
+  font-family: var(--font-jetbrains-mono);
+}
+
+h1, h2, h3, small, label {
+  font-family: var(--font-jetbrains-mono);
+}
+
+.global-pinklogo {
+  pointer-events: none;
+}
+
+nav, .nav-item {
+  font-family: var(--font-inter);
+  letter-spacing: 0.01rem;
+}
+
+/* Force Inter specifically on body text elements that might inherit Arial */
+p, span, div:not([class*="header"]):not([class*="title"]) {
+  font-family: var(--font-inter) !important;
+}
+
+/* Buttons and form elements */
+button, input, textarea{
+  font-family: var(--font-inter) !important;
+}
+
+/* Links */
+a {
+  font-family: var(--font-inter) !important;
+}
+
+code {
+  font-family: var(--font-inter);
+}
+
+footer {
+  width: 100%;
+  padding: 0 0 .8rem;
+  margin: 0;
+}
+
+.main-content {
+  padding-top: 60px;
+}

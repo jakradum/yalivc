@@ -1,0 +1,68 @@
+{
+  "menuItems": [
+    {
+      "name": "Home",
+      "path": "/"
+    },
+    {
+      "name": "About Us",
+      "path": "/about-yali",
+      "subItems": [
+        {
+          "name": "Team",
+          "path": "/about-yali/team"
+        },
+        {
+          "name": "FAQ",
+          "path": "/about-yali/faq"
+        }
+      ]
+    },
+    {
+      "name": "Investments",
+      "path": "/investments",
+      "subItems": [
+        {
+          "name": "All Sectors",
+          "path": "/investments/sectors"
+        },
+        {
+          "name": "Artificial Intelligence",
+          "path": "/investments/sectors/artificial-intelligence"
+        },
+        {
+          "name": "Genomics",
+          "path": "/investments/sectors/genomics"
+        },
+        {
+          "name": "Semiconductors",
+          "path": "/investments/sectors/semiconductors"
+        },
+        {
+          "name": "Robotics",
+          "path": "/investments/sectors/robotics"
+        },
+        {
+          "name": "Aerospace & Defence",
+          "path": "/investments/sectors/aerospace-defence"
+        },
+        {
+          "name": "Advanced Manufacturing",
+          "path": "/investments/sectors/advanced-manufacturing"
+        },
+        {
+          "name": "Life Sciences",
+          "path": "/investments/sectors/life-sciences"
+        }
+      ]
+    },
+    {
+      "name": "Newsroom",
+      "path": "/newsroom"
+    },
+    {
+      "name": "Contact",
+      "path": "/contact"
+    }
+  ]
+}

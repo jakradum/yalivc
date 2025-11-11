@@ -1,0 +1,442 @@
+.footer {
+    --footer-height-desktop: 30rem;
+}
+
+.desktopBottomStrip {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #efefef;
+    padding: 0;  
+    border-top: 1px solid #000;  
+    border-bottom: 1px solid #000;  
+    position: relative;  
+}
+
+.desktopBottomStrip > * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.2rem; /* top strip in the double band */
+    text-align: center;
+    position: relative;  
+
+}
+
+.desktopBottomStrip > *:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #000;  
+}
+
+.desktopBottomStrip > a {
+    text-decoration: none;
+    color: black;
+
+}
+
+.desktopBottomStrip > small {
+    color: #9A9A9A;
+    font-size: 1rem;
+}
+
+.desktopBottomStrip::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.8rem;  
+    height: 1px;
+    background-color: #000;  
+    
+}
+
+.desktopBottomStrip > * {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mobileBottomStrip {
+    display: none;
+}
+
+.redSectionFlex {
+    display: flex;
+    flex-direction: row;
+    background-color: #830D35;
+    min-height: var(--footer-height-desktop);
+    overflow: hidden;
+    z-index: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    
+}
+
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    position: relative;
+    z-index: 2;
+
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto repeat(3, 1fr) auto;
+    height: 100%;
+    padding-bottom: 0;
+}
+
+.emptyGrid {
+    grid-column: span 1; 
+    min-height: 5.5rem; 
+    border-right: 1px solid white;
+}
+
+.linksSection {
+    grid-column: 1 / 2;
+    grid-row: 2 / span 3;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    padding-left: 2.5rem;
+    border-top: 1px solid white; /* delette this in mobile */
+    border-right: 1px solid white;
+    border-bottom: 1px solid white; /* delette this in mobile */
+}
+
+.emptyGridSide {
+    grid-column: 2 / 3;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white; /* delette this in mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emptyGridSide:nth-child(4) { 
+    grid-row: 2 / 3; 
+    border-top: 1px solid white;  
+}
+.emptyGridSide:nth-child(5) { grid-row: 3 / 4; }
+.emptyGridSide:nth-child(6) { grid-row: 4 / 5; }
+
+.linkBox {
+    margin-bottom: 1.5rem;
+}
+
+.linkBox > a {
+    text-decoration: none;
+    color: white;
+    font-size: clamp(0.8rem, 2vw, 1.5rem);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02rem;
+}
+
+.linkBox > a svg {
+    margin-left: 0.5rem;
+}
+
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    grid-row: 5 / 6;
+    width: 100%;
+    padding: 1.5rem;
+    padding-left: 2.5rem;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    border-right: 1px solid white;
+}
+
+.infoSection h3 {
+    font-size: clamp(4rem, 2vw, 1rem);
+    margin-bottom: 1rem;
+    font-weight: 400;
+    max-width: 100%;
+}
+
+.infoSection p {
+    font-size: clamp(0.5rem, 1.5vw, 1rem);
+    font-weight: 400;
+    max-width: 100%;
+    line-height: 1.5;
+}
+
+.graphicSection {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1;
+    padding-left: 1rem;
+    height: auto;
+    bottom: 3rem;
+}
+
+.graphicSection svg {
+    overflow-y: hidden;
+}
+
+
+/* mobile styles */
+
+
+@media (max-width: 950px) {
+    .footer {
+        --footer-height-mobile: auto;
+    }
+    .desktopBottomStrip {
+        display: none;
+    }
+    
+
+    .mobileBottomStrip {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        padding: 0;
+        gap: 0;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .mobileBottomStrip > * {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 5.5rem;
+        padding: 0 calc(10% + 1px);
+        box-sizing: border-box;
+        position: relative;
+    }
+    
+    .mobileBottomStrip > *::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -10vw;
+        right: -10vw;
+        height: 1px;
+        background-color: white;
+    }
+    
+    .mobileBottomStrip > *:first-child::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -10vw;
+        right: -10vw;
+        height: 1px;
+        background-color: white;
+    }
+
+    .mobileBottomStrip > * {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mobileBottomStrip > a {
+        text-decoration: none;
+        color: white;
+    }
+
+    
+    .redSectionFlex {
+        flex-direction: column;
+        height: auto;
+        min-height: unset;
+        position: relative;
+        overflow: hidden;
+    }
+    
+
+    .contentWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        position: relative;
+        z-index: 2;
+        padding: 0;  
+        box-sizing: border-box;  
+        margin: 0 auto;
+    }
+
+    .contentWrapper::before,
+    .contentWrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: white;
+    }
+
+    .contentWrapper::before {
+        left: 0;
+    }
+
+    .contentWrapper::after {
+        right: 0;
+    }
+
+    .gridContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;  
+        max-width: none;  
+        padding: 1rem 0;  
+        border-left: none;
+        border-right: none;
+    }
+
+
+    .emptyGrid {
+        display: none;
+    }
+
+    .emptyGrid:first-child {
+        display: flex;
+        width: 100%;
+        border: none;
+        position: relative;
+        border-top: none;
+        border-bottom: none;  
+    }
+
+    .emptyGrid:first-child::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        right: 50%;
+        height: 1px;
+        background-color: white;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        
+    }
+
+     .linksSection {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        order: 1;
+        padding: 1rem;
+        padding-top: 2rem;
+        margin-bottom: 2rem;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .linkBox {
+        margin-bottom: 1rem;
+    }
+
+    .linkBox > a {
+        font-size: 1.2rem;
+        font-weight: 300;
+        letter-spacing: .32px;
+        justify-content: space-between;
+    }
+
+    .emptyGridSide {
+        display: none;
+        border-top: none;
+        border-bottom: none;
+        border-right: none;
+    }
+
+    .emptyGridSide:nth-child(-n+5) {  
+        display: flex;
+        width: 100%;
+        position: relative;
+        height: 5.5rem;  
+        order: 2;
+    }
+
+    .emptyGridSide:nth-child(-n+5)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        right: 50%;
+        height: 1px;
+        background-color: white;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+
+    .emptyGridSide:nth-child(4)::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        right: 50%;
+        height: 1px;
+        background-color: white;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .infoSection {
+
+        order: 2;
+        padding: 1rem;
+        align-items: center;
+        border: none;
+        text-align: left;
+    }
+
+    .infoSection h3 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .infoSection p {
+        font-size: 0.7rem;
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    .graphicSection {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        overflow-y: hidden;
+    }
+
+    .graphicSection svg {
+        width: 150%;  
+        height: 150%;  
+        object-fit: cover;
+        position: absolute;
+        left: 0;
+
+    }
+
+   
+}

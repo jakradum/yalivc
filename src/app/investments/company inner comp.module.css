@@ -1,0 +1,247 @@
+.container {
+    margin: 0 auto;
+    padding: 20px 0;
+  }
+.categoryDropdown{
+  display: none;
+}
+.container>p{
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+  .viewLink{
+    color: #000;
+
+  }
+ 
+  .categoriesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 30px;
+    justify-content: center;
+    margin: -0.5rem;
+  }
+  
+  .categoryItem {
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 1.375rem 1.5rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    flex: 0 1 auto;  /* Changed from flex-grow: 1 */
+    max-width: calc(33.333% - 1rem);  /* Adjust based on your layout preferences */
+    min-width: 200px;  /* Adjust based on your content */
+    margin: 0.5rem;
+  }
+  .selectedCategory{
+    color: white;
+    background-color: #830D35;
+    border: none;
+  }
+  .companyCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: center; 
+    border-top: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    padding: 2rem; 
+    background-color: #f9f9f9;
+  }
+  .companiesContainer {
+    margin: 1rem 0;
+  }
+  
+  .logoContainer {
+    flex: 0 0 200px; /* Increased width */
+    margin-right: 3rem; /* Increased margin */
+    border: 1px solid #e0e0e0;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .companyInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 30rem;
+    padding: 2rem;
+  }
+  
+  .companyName {
+    font-size: 1.5rem; 
+    font-weight: 500;
+  }
+  
+  .companyDetail {
+    font-size: 1rem; 
+    line-height: 1.3;
+    margin-left: 5rem;
+    max-width: 55%;
+  }
+  
+  .founderInfo {
+    font-weight: bold;
+    margin-top: auto;
+  }
+  
+  .visitSite {
+    text-decoration: underline;
+    color: #666;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 800px) {
+    .categoriesWrapper {
+      position: relative;
+      z-index: 10;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  
+    .categoryDropdown {
+      display: block;
+      width: 100%;
+    }
+  
+    .dropdownToggle {
+      display: flex;
+      min-height: 5rem;
+      justify-content: space-between;
+      align-items: center;
+      background-color: transparent;
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 1.25rem;
+    }
+  
+    .dropdownContent {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+    }
+  
+    .dropdownContent.show {
+      max-height: 1000px; /* Adjust this value based on your content */
+    }
+  
+    .categoryItem {
+      display: block;
+      max-width: none;
+      padding: 15px;
+      text-align: left;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      box-sizing: border-box; /* This ensures padding is included in the width */
+      text-decoration: none; /* Remove underline from links */
+      color: inherit; /* Use the parent's text color */
+      -webkit-appearance: none; /* Remove default button styling on iOS */
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    /* Target Safari specifically if needed */
+    @supports (-webkit-touch-callout: none) {
+      .categoryItem {
+        color: -webkit-link; /* Reset to default color */
+        color: inherit; /* Then set to inherit */
+      }
+    }
+    
+    /* Ensure the container of .categoryItem is also full width */
+    .categoryContainer {
+      width: 100%;
+    }
+  
+    .categoryItem:first-child {
+      border-top: none;
+    }
+  
+    .categoryItem.selectedCategory {
+      background-color: #800020; /* Maroon color for selected category */
+      color: #ffffff;
+    }
+  
+    .categoriesContainer {
+      display: none; /* Hide the categories container for mobile */
+    }
+  
+    .expandIcon {
+      transition: transform 0.3s ease;
+    }
+  
+    .expandIcon.expanded {
+      transform: rotate(180deg);
+    }
+  
+    /* Existing styles for company cards and content layout */
+    .companyCard {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .companyInfo {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      padding: 0;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+  
+    .logoContainer {
+      flex: 0 1 auto;
+      max-width: 100%;
+      margin-right: 1rem;
+    }
+  
+    .logoContainer img {
+      width: 100%;
+      height: auto;
+      max-width: 7rem;
+      object-fit: contain;
+    }
+  
+    .nameAndLink {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  
+    .companyName {
+      word-break: break-word;
+      font-size: 1.5rem;
+    }
+  
+    .companyDetail {
+      margin-left: 0;
+      width: 100%;
+      max-width: none;
+    }
+    
+  
+    .viewLink {
+      width: auto;
+      max-width: 100%;
+      color: #000;
+
+    }
+  }

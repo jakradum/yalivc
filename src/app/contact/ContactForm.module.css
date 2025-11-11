@@ -1,0 +1,550 @@
+/* ========================================
+   COLOR PALETTE
+   ======================================== */
+/* 
+  YALI Brand Colors:
+  - #830D35 - YALI Red (primary brand color, buttons, labels, focus states)
+  - #363636 - Dark Gray (text, replaces black)
+  - #989ea6 - Light Gray (disabled states, borders, inactive elements)
+  - #ebde84 - Yellow Accent (reserved for future use, not currently applied)
+*/
+
+/* Two-column container */
+.formContainer {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 3rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left Panel Styles */
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Changed from center */
+  padding-top: 2rem; /* Add consistent top padding */
+}
+
+
+.formTitle {
+  font-size: 3rem;
+  font-weight: 500;
+  margin: 0;
+  color: #363636;
+  line-height: 1.2;
+}
+
+.formSubtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.infoText {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 0;
+}
+
+.infoText p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+.faqLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: underline;
+  color: #363636;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  width: fit-content;
+  font-family: var(--font-jetbrains-mono);
+}
+
+.faqLink:hover {
+  color: #830D35;
+}
+
+.arrow {
+  font-size: 1.25rem;
+}
+
+/* Right Panel - Form Styles */
+.rightPanel {
+  border: 1px solid #363636;
+  padding: 1.5rem 2rem;
+  background: #fff;
+  box-sizing: border-box;
+  min-height: 800px;  /* ← THIS IS THE CULPRIT */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; /* ← AND THIS */
+}
+/* Airtable embed specific styling */
+.rightPanelAirtable {
+  border: 1px solid #363636;
+  padding: 0;
+  background: #fff;
+  box-sizing: border-box;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightPanel form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-radius: 0;
+}
+
+/* Form Row (for side-by-side fields) */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border-radius: 0;
+}
+
+/* Form Field */
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 0;
+}
+
+.formField label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #830D35;
+  font-family: var(--font-jetbrains-mono);
+}
+
+.required {
+  color: #830D35;
+}
+
+.formField input,
+.formField textarea,
+.formField select {
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #989ea6;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: transparent;
+}
+
+.formField input::placeholder,
+.formField textarea::placeholder {
+  color: #999;
+}
+
+.formField input:focus,
+.formField textarea:focus,
+.formField select:focus {
+  outline: none;
+  border-bottom: 2px solid #830D35;
+}
+
+/* Select dropdown placeholder styling */
+.formField select.placeholder {
+  color: #999;
+}
+
+.formField select option {
+  color: #363636;
+}
+
+/* File Upload Styling */
+.fileUpload {
+  position: relative;
+}
+
+.fileInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.fileLabel {
+  display: block;
+  padding: 0.75rem;
+  border: 1px dashed #989ea6;
+  cursor: pointer;
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.fileLabel:hover {
+  border-color: #830D35;
+  background-color: #f9f9f9;
+}
+
+/* Textarea */
+.formField textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Character Counter */
+.charCounter {
+  font-size: 0.85rem;
+  color: #830D35;
+  text-align: right;
+  margin-top: -0.25rem;
+}
+
+/* Submit Button - Figma Specs: 183px × 59px */
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  background-color: #989ea6;
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-weight: 200;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 11rem;
+  height: 3.5rem;
+}
+
+.buttonText {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-weight: 500 !important;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: white;
+}
+
+/* Arrow Box - Figma Specs: 40px × 40px */
+.arrowBox {
+  background-color: #ebde84;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.arrowBox svg {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+/* Disabled state - show stroke */
+.submitButton .arrowBox svg rect {
+  stroke: #363636;
+  stroke-width: 1;
+}
+
+.submitButton .arrowBox svg path {
+  fill: #363636;
+}
+
+/* When form is valid and button is enabled */
+.submitButton:not(:disabled) {
+  background-color: #830D35;
+  cursor: pointer;
+}
+
+.submitButton:not(:disabled) .arrowBox {
+  background-color: #ebde84;
+}
+
+/* Enabled state - remove stroke */
+.submitButton:not(:disabled) .arrowBox svg rect {
+  stroke: none;
+}
+
+.submitButton:not(:disabled):hover {
+  background-color: #6a0a2a;
+}
+
+.submitButton:hover:not(:disabled) .arrowBox svg {
+  transform: translateX(4px);
+}
+
+/* Error Text */
+.errorText {
+  color: #830D35;
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+}
+
+/* Thank You Message Styles */
+.thankYouContainer {
+  grid-column: 1 / -1; /* Span full width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 600px; /* Match approximate form height to prevent jump */
+  padding: 3rem 2rem;
+}
+
+.thankYouContent {
+  max-width: 600px;
+  text-align: center;
+  border: 1px solid #363636;
+  padding: 3rem 2rem;
+  background: #fff;
+}
+
+.thankYouTitle {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: #830D35;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.thankYouMessage {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #363636;
+  margin: 0 0 1rem 0;
+}
+
+.thankYouMessage strong {
+  color: #830D35;
+  font-weight: 600;
+}
+
+.thankYouMessage:last-child {
+  margin-bottom: 0;
+}
+/* Success Message - Desktop */
+.successMessage {
+  color: #363636;
+  padding: 1.5rem 2rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.successMessage strong {
+  color: #1b5e20;
+  font-weight: 600;
+}
+
+/* Disabled form fields */
+.formField input:disabled,
+.formField textarea:disabled,
+.formField select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Slide-in animation for custom category field */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to custom category field when it appears */
+.formField:has(#customCategory) {
+  animation: slideDown 0.3s ease-out forwards;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+  .formContainer {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem; /* Reduced from 1.5rem */
+    max-width: 100%;
+    overflow-x: hidden;
+    min-height: 750px;
+  }
+
+  .leftPanel {
+    padding-right: 0;
+  }
+
+  .formTitle {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 0 0.5rem; /* Reduced padding for mobile */
+    gap: 1.5rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .formTitle {
+    font-size: 2rem;
+  }
+
+  .leftPanel {
+    padding-right: 0;
+    width: calc(100% - 1rem); /* Account for container padding */
+    max-width: 500px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .rightPanel {
+    padding: 1rem;
+    border: 1px solid #363636;
+    box-sizing: border-box;
+    width: calc(100% - 1rem); /* Account for container padding */
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .rightPanel form {
+    gap: 1rem;
+  }
+
+  /* Ensure all form fields fit properly */
+  .formField {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .formField input,
+  .formField textarea,
+  .formField select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Thank You Message - Mobile */
+  .thankYouContainer {
+    padding: 2rem 1rem;
+    min-height: 500px; /* Match approximate mobile form height */
+  }
+
+  .thankYouContent {
+    padding: 2rem 1.5rem;
+    width: calc(100% - 1rem);
+    max-width: 500px;
+  }
+
+  .thankYouTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .thankYouMessage {
+    font-size: 1rem;
+  }
+  @media (max-width: 600px) {
+  .successMessage {
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+}
+
+  /* iPhone-style swipe button */
+  .submitButton {
+    width: 100%;
+    height: 3.5rem;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    box-sizing: border-box;
+  }
+
+  .submitButton:active {
+    cursor: grabbing;
+  }
+
+  .buttonText {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Arrow box now draggable */
+  .arrowBox {
+    width: 3rem;
+    height: 3rem;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+    cursor: grab;
+    margin-left: 0.25rem;
+  }
+
+  .arrowBox:active {
+    cursor: grabbing;
+  }
+
+  .arrowBox svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  /* Swipe hint text */
+  .swipeHint {
+    font-size: 0.85rem;
+    color: white;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0.8;
+    font-family: var(--font-jetbrains-mono);
+  }
+}

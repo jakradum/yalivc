@@ -1,0 +1,177 @@
+.sectionBG {
+  margin: 1rem;
+  background-color: #830D35;
+  position: relative;
+  height: 80vh;
+  overflow: visible;
+  transition: height 0.3s ease-out;
+  padding-bottom: 1rem;
+}
+
+.sectionBG::after {
+  content: '';
+  position: absolute;
+  left: -100vw; /* Extend to the left edge of the screen */
+  right: -100vw; /* Extend to the right edge of the screen */
+  bottom: -1rem; /* Position it 1rem below the container */
+  height: 1px; /* Increased thickness for visibility */
+  background-color: #000; /* Ensure this contrasts with your background */
+  z-index: 10; /* Increased to ensure it's above other elements */
+}
+
+.sectionBG.expanded {
+  height: calc(80vh + 2rem + var(--header-height));
+}
+
+.backgroundSVG {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80vh;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.backgroundSVG > svg {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  position: absolute;
+  opacity: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.backgroundSVG > svg:first-child { /* MissionStatementRedBG */
+  height: 95%; /* Scale down from original size */
+  width: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end; /* This aligns items to bottom */
+  padding-bottom: 2rem;
+  width: 100%;
+  justify-content: space-between; /* This helps maintain spacing */
+  bottom: 0; /* Ensure it's at the bottom */
+}
+
+.headerWrapper {
+  position: relative;
+  margin-left: 5%;
+  width: 90%;
+  align-self: flex-end;
+}
+
+.bodyText {
+  color: white;
+  width: 45%;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  margin-left: 2rem;
+  margin-right: 5%;
+  margin-bottom: 0; /* Remove bottom margin */
+  align-self: flex-end; /* Explicitly align to bottom */
+}
+
+.bodyText.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bodyText p {
+  margin-bottom: 1rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  line-height: 1.5;
+  background-color: #830D35;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.bodyText.visible p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bodyText p:nth-child(2) {
+  transition-delay: 0.2s; /* Delay the second paragraph's animation */
+}
+@media (max-width: 800px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem;
+    position: relative;
+  }
+  .bodyText>p {
+    font-size: clamp(0.8rem, 2.5vw, 1rem); /* Adjust min, preferred, and max values as needed */
+ }
+  
+  .bodyText {
+    width: 85%;
+    max-width: 85%;
+    padding: 0;
+    position: relative;
+    transform: none;
+    order: 1;
+    margin-top: 15vh; /* Reduced from 25vh to move text up */
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .headerWrapper {
+    width: 90%;
+    padding: 0;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-57.5%); /* Reset to just handle X-axis */
+    margin: 0;
+}
+  .headerWrapper h1,
+  .headerWrapper p {
+    text-align: left;
+    margin-left: 2rem; /* Add some left padding to the text */
+  }
+
+  .sectionBG {
+    margin: 0.5rem;
+    height: 70vh;
+    overflow: hidden;
+  }
+  .backgroundSVG {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+  }
+  .backgroundSVG > svg:first-child {
+    z-index: 2;
+    height: 10%; /* Increase size */
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: -90%; /* Pull to the left to crop that side */
+    transform: translateY(-50%);
+    object-fit: cover;
+  }
+}

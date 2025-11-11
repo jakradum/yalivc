@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^16.0.1",
+    "@portabletext/react": "^5.0.0",
+    "@sanity/client": "^7.12.1",
+    "@sanity/image-url": "^1.2.0",
+    "next": "14.2.5",
+    "next-sanity": "^11.6.5",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "react-dom": "^18"
   }
 }

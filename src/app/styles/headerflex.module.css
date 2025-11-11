@@ -1,0 +1,114 @@
+.headerFlexWrapper {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  margin-bottom: 2rem;
+}
+
+.headerFlex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 3rem 1rem;
+  position: relative;
+  min-height: var(--custom-height, 8rem);
+  height: var(--custom-height, auto);
+  background-color: var(--background-color, transparent);
+  color: var(--color, inherit);
+  box-sizing: border-box;
+}
+
+
+
+.headerFlex > h1 {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
+  color: inherit;
+  margin: 0;
+  max-width: 90%;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+
+
+.headerFlex > svg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  max-width: 5vw;
+  max-height: 10vw;
+  color: inherit;
+}
+
+.headerFlex > svg:first-child {
+  top: 1rem;
+  left: 1rem;
+  transform: rotate(-180deg);
+}
+
+.headerFlex > svg:last-child {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.headerFlex > svg path,
+.headerFlex > svg rect,
+.headerFlex > svg circle {
+  fill: currentColor;
+}
+
+
+
+/* Apply desktop max-width */
+@media (min-width: 901px) {
+  .headerFlexWrapper.desktopMaxWidth {
+    max-width: var(--desktop-max-width, 100%);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .headerFlexWrapper {
+    max-width: var(--mobile-max-width, 100%);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+ .headerFlex {
+    padding: 3rem 1rem;
+    min-height: var(--mobile-min-height, var(--custom-height, 8rem));
+    height: var(--custom-height, auto);
+  }
+  
+  .headerFlex > h1 {
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: clamp(-0.1rem, 2vw, -0.25rem);
+    z-index: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .headerFlex > svg:first-child {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .headerFlex > svg:last-child {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

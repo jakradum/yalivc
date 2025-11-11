@@ -1,0 +1,249 @@
+/* desktop styles */
+.heroSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.contentWrapper {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 5rem;
+  border-right: 1px solid black;
+  margin-right: 1rem;
+  position: relative;
+  align-self: stretch;
+}
+
+.headingBox {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+}
+
+.headerFlex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  max-width: 80%;
+  margin: 2rem;
+}
+
+.headerFlex>h1 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: clamp(-0.1rem, 4vw, -0.25rem);
+  color: #363636;
+  margin-left: 2rem;
+  top: 0;
+  max-width: 90%;
+  max-height: 70%;
+  top: 345px;
+  left: 60px;
+  gap: 0px;
+}
+
+.headerFlex>h1::after {
+  content: '|';
+  position: absolute;
+  animation: blink 0.7s infinite;
+  color: #830D35;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.headingBox>p {
+  font-size: clamp(1rem, 2vw, 0.02rem);
+  color: #363636;
+  margin: 1rem 2rem;
+  position: relative;
+  padding-bottom: clamp(1rem, 2vw, 0.2rem);
+  padding-top: 2.5rem;
+  max-width: 80%;
+}
+
+.contentWrapper::before {
+  content: '';
+  position: absolute;
+  top: 6%;
+  right: 0;
+  width: 100vw;
+  height: 1px;
+  background-color: black;
+}
+
+.graphicWrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1rem;
+  position: relative;
+  margin-top: 2rem;
+  margin-right: 0.5rem;
+
+}
+
+.graphicFg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.graphicFg svg {
+  fill: transparent;
+  transition: fill 0.8s ease;
+}
+
+.graphicFg svg path {
+  stroke: black;
+  transition: stroke 0.3s ease;
+}
+
+.dottedLogo {
+  position: relative;
+  z-index: 0;
+}
+
+/* Hover effects */
+.graphicWrapper:hover .graphicFg svg {
+  fill: #830D35;
+}
+
+.graphicWrapper:hover .graphicFg svg path {
+  stroke: none;
+}
+
+.dottedLogo {
+  position: relative;
+  z-index: 0;
+}
+
+.headerFlex>svg:first-child {
+  align-self: flex-start;
+  transform: rotate(-180deg);
+}
+
+.headerFlex>svg:last-child {
+  align-self: flex-end;
+}
+
+/* Mobile styles */
+@media (max-width: 800px) {
+  .heroSection {
+    flex-direction: column;
+  }
+
+  /* New styles to add margin to direct children of heroSection */
+  .heroSection>* {
+    margin: 1rem;
+  }
+
+
+  /* Reset margin for pseudo-elements */
+  .heroSection::before,
+  .heroSection::after {
+    margin: 0;
+    padding: 0;
+  }
+
+  .contentWrapper {
+    border-right: none;
+    margin-right: 0;
+    padding: 2rem 0;
+    justify-content:left;
+  }
+
+  .graphicWrapper {
+    margin: 0 1rem;
+    width: 100%;
+    aspect-ratio: 0.78;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contentWrapper::before {
+    display: none;
+  }
+
+  .headerFlex>svg path,
+  .headerFlex>svg rect,
+  .headerFlex>svg circle {
+    fill: #830D35;
+  }
+
+  .graphicWrapper>* {
+    width: 100%;
+    height: 100%;
+  }
+
+  .graphicWrapper svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Adjust this value to control the size of the SVGs */
+    height: 80%;
+    /* Maintain aspect ratio */
+  }
+
+  /* Specific style for the dotted logo if needed */
+  .dottedLogo svg {
+    width: 100%;
+    /* Make the dotted logo fill the wrapper */
+    height: 100%;
+    max-width: none;
+    max-height: none;
+  }
+
+  .graphicFg svg {
+    z-index: 1;
+    /* Ensure the foreground graphic stays on top */
+  }
+
+  .headerFlex {
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .headerFlex>h1 {
+    max-width: 100%;
+    color: #830D35;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-size: 2rem;
+  }
+
+  .headingBox>p {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .contentWrapper::before {
+    width: 100%;
+  }
+}

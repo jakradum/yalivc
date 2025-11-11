@@ -1,0 +1,377 @@
+/* Navbar styles */
+.navbar {
+  background-color: #EFEFEF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease, transform 0.3s ease;
+  border-bottom: 0.0625rem solid black;
+  z-index: 1000;
+}
+
+.navbar.visible {
+  transform: translateY(0);
+}
+
+.navbar.hidden {
+  transform: translateY(-100%);
+}
+
+/* Logo container styles */
+.logoContainer {
+  padding: 2.18rem 0 1.55rem 1rem; /* Updated padding */
+}
+
+/* Main menu styles */
+.menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+}
+
+.menu li {
+  position: relative;
+  margin-right: 2rem;
+}
+
+.menu a {
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  position: relative;
+}
+
+.menu li:not(.dropdown) a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #666;
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.menu li:not(.dropdown) a:hover::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.menu li:not(.dropdown) a.active::after {
+  width: 100%;
+  opacity: 1;
+  background-color: #830D35;
+}
+
+/* Dropdown styles */
+.dropdown {
+  cursor: pointer;
+}
+
+.dropdown > a {
+  display: inline-block;
+  padding-right: 1.5em;
+  position: relative;
+}
+
+.dropdown > a::after {
+  font-size: 0.7em;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dropdownMenu {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width:8rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  border: 1px solid #830D35;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownMenu li {
+  margin: 0;
+}
+
+.dropdownMenu li:not(:first-child) a {
+  padding-left: 2rem;
+}
+
+.dropdownMenu a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-bottom: none;
+}
+
+.dropdown:hover .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdownMenu a:hover {
+  background-color: #830D35;
+  color: white;
+}
+
+/* Sticky navbar styles */
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 0.1250rem 1.5rem 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive styles */
+@media (max-width: 950px) {
+
+  /* this is the top nav bar on mobile */
+  .mobileNavContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    background-color: #830D35;
+    height: 5rem;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Same thing when opened (only for BG colour change) */
+  .mobileNavContentOpen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    background-color: white;
+    border-bottom: 0.0625rem solid black;
+    height: 5rem;
+    /* Set a fixed height */
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    transition: transform 0.3s ease;
+  }
+  .navbar.visible {
+    transform: translateY(0);
+  }
+
+  .navbar.hidden {
+    transform: translateY(-100%);
+  }
+
+  .mobileNavContent,
+  .mobileNavContentOpen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 5rem;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    max-width: 100vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+  }
+
+
+  .mobileLogo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+
+  .menuToggle {
+    display: block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* this is for the list items when the drawer is opened */
+  .mobileMenu {
+    display: none;
+    position: fixed;
+    top: 5rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .navbar.expanded .mobileMenu {
+    display: block;
+    background-color: #830D35;
+  }
+
+  .verticalText {
+    transform: rotate(-180deg);
+    writing-mode: vertical-rl;
+    font-family: 'JetBrains Mono';
+    color: #EFEFEF;
+    position: absolute;
+    bottom: 1rem;
+    margin-left: 1rem;
+    font-size: 2.439rem;
+    letter-spacing: -0.241rem;
+    font-weight: 400;
+  }
+
+  .pinkLogo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 30%;
+    z-index: -1;
+  }
+
+  .mobileMenuList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobileMenuList li:not(:last-child) .mobileMenuLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    border-top: 0.0625rem solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    width: 100%;
+    height: 6.025rem;
+    border-bottom: 0.0625rem solid #000000;
+    background-color: #EFEFEF;
+  }
+
+  .mobileMenuList li:not(:last-child) .mobileMenuLink:hover {
+    background-color: white;
+  }
+
+
+  .mobileMenuList li:nth-last-child(2) {
+    /* removes the bottom border for the last but one menu item */
+    border-bottom: none;
+  }
+
+  /* Styling for the last child (Contact) in the mobile menu */
+  .mobileMenuList a {
+    text-decoration: none;
+    display: block;
+    font-size: 1.2rem;
+  }
+
+  .mobileMenuList li:not(:last-child) a {
+    color: #000000;
+  }
+
+  .mobileMenuList a:last-child {
+    color: white;
+  }
+
+  .mobileMenuList li:last-child {
+    background-color: transparent;
+    border-bottom: none;
+    border: 0.0625rem solid white;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 11.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .visible {
+    transform: translateY(0);
+  }
+
+  .hidden {
+    transform: translateY(-100%);
+  }
+
+  /* Hide desktop menu on mobile */
+  .menu {
+    display: none;
+  }
+}
+
+.mobileMenuBottom {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 15%;
+  background-color: transparent;
+  z-index: 999;
+}

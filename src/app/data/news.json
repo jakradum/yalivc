@@ -1,0 +1,154 @@
+{
+    "status": "success",
+    "data": {
+      "articles": [
+      {
+        "url": "https://www.livemint.com/companies/start-ups/yali-capital-raises-104-million-in-debut-deep-tech-fund-11753346908886.html",
+        "date": "2025-07-25T00:00:00.000Z",
+        "publicationName": "Mint",
+        "headlineEdited": "Yali Capital raises $104 million in debut deep-tech fund",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.prnewswire.com/in/news-releases/yali-capital-raises-893-crores-to-back-indias-deep-tech-revolution-302513254.html",
+        "date": "2025-07-25T00:00:00.000Z",
+        "publicationName": "PR Newswire",
+        "headlineEdited": "Yali Capital Raises ₹893 Crores to Back India's Deep Tech Revolution",
+        "isVideo": false
+      },
+      {
+        "url": "https://timesofindia.indiatimes.com/business/india-business/infosys-innovation-fund-invests-in-yali-capital-to-up-deep-tech-game-plan/articleshow/120614882.cms",
+        "date": "2025-04-28T00:00:00.000Z",
+        "publicationName": "economic times",
+        "headlineEdited": "Infosys Innovation Fund invests in Yali Capital to up deep-tech game plan",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.vccircle.com/yalicapital-taps-key-lp-for-maiden-vc-fund-to-back-deep-tech-startups",
+        "date": "2025-04-24T00:00:00.000Z",
+        "publicationName": "vc circle",
+        "headlineEdited": "Yali Capital Taps Key LP for Maiden VC Fund to Back Deep-tech Startups",
+        "isVideo": false
+      },
+      {
+        "url": "https://bwhealthcareworld.com/article/aiims-jammu-collaborates-with-4basecare-to-establish-centre-for-advanced-genomics-precision-medicine-545715",
+        "date": "2025-01-23T00:00:00.000Z",
+        "publicationName": "Businessworld",
+        "headlineEdited": "AIIMS Jammu Collaborates With 4baseCare To Establish Centre For Advanced Genomics & Precision Medicine",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.businessworld.in/article/yali-capital-semiconductor-veteran-lip-bu-tan-co-invest-in-fabless-chip-startup-c2i-semiconductors-538524",
+        "date": "2024-11-08T00:00:00.000Z",
+        "publicationName": "Businessworld",
+        "headlineEdited": "Yali Capital, Semiconductor Veteran Lip-Bu Tan Co-invest In Fabless Chip Startup C2i Semiconductors",
+        "isVideo": false
+      },
+      {
+        "url": "https://inc42.com/buzz/yali-capital-invests-4-mn-in-chip-design-startup-c2i-semiconductors/",
+        "date": "2024-11-08T00:00:00.000Z",
+        "publicationName": "Inc42",
+        "headlineEdited": "Yali Capital Invests $4 Mn In Chip Design Startup C2i Semiconductors",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.thehindu.com/news/cities/bangalore/bengaluru-start-up-strives-to-bridge-the-indigenous-data-gap-in-precision-oncology/article68835845.ece",
+        "date": "2024-11-07T00:00:00.000Z",
+        "publicationName": "The Hindu",
+        "headlineEdited": "Bengaluru start-up strives to bridge the indigenous data gap in precision oncology",
+        "isVideo": false
+      },
+      {
+        "url": "https://inc42.com/buzz/robotics-startup-perceptyne-bags-3-mn-from-endiya-partners-yali-capital-others/",
+        "date": "2024-10-14T00:00:00.000Z",
+        "publicationName": "Inc42",
+        "headlineEdited": "Robotics Startup Perceptyne Bags $3 Mn From Endiya Partners, Yali Capital & Others",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.business-standard.com/companies/start-ups/ai-focused-robotic-startup-perceptyne-secures-3-million-in-seed-funding-124101400488_1.html",
+        "date": "2024-10-14T00:00:00.000Z",
+        "publicationName": "Business Standard",
+        "headlineEdited": "AI focused robotic startup Perceptyne secures $3 million in seed funding",
+        "isVideo": false
+      },
+      {
+        "url": "https://yourstory.com/2024/10/startup-news-updates-daily-roundup-october-14-funding-robotics",
+        "date": "2024-10-14T00:00:00.000Z",
+        "publicationName": "your story",
+        "headlineEdited": "Robotics startup Perceptyne raises $3M in seed funding",
+        "isVideo": false
+      },
+      {
+        "url": "https://startuprise.org/perceptyne-secures-3-mn-seed-funding/",
+        "date": "2024-10-14T00:00:00.000Z",
+        "publicationName": "Startup Rise",
+        "headlineEdited": "Perceptyne Secures $3 Mn Seed Funding From Endiya Partners, Yali Capital& Others",
+        "isVideo": false
+      },
+      {
+        "url": "https://startupstorymedia.com/insights-healthtech-startup-4basecare-secures-6-mn-in-series-a-funding-eyes-global-expansion/",
+        "date": "2024-08-12T00:00:00.000Z",
+        "publicationName": "startup story",
+        "headlineEdited": "Healthtech Startup 4baseCare Secures $6 Mn in Series A Funding, Eyes Global Expansion",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.vccircle.com/truva4basecare-two-others-secure-early-stage-funds",
+        "date": "2024-08-12T00:00:00.000Z",
+        "publicationName": "vc circle",
+        "headlineEdited": "Truva, 4baseCare, 2 Others secure early stage funds",
+        "isVideo": false
+      },
+      {
+        "url": "https://yourstory.com/2024/08/4basecare-raises-6m-seriesa-funding-plans-expansion",
+        "date": "2024-08-12T00:00:00.000Z",
+        "publicationName": "your story",
+        "headlineEdited": "4baseCare raises $6M in Series A funding led by Yali Capital",
+        "isVideo": false
+      },
+      {
+        "url": "https://economictimes.indiatimes.com/tech/funding/yali-capital-launches-rs-810-crore-deep-tech-fund/articleshow/111760323.cms",
+        "date": "2024-08-12T00:00:00.000Z",
+        "publicationName": "economic times",
+        "headlineEdited": "Yali Capital launches ₹810 crore deep-tech fund",
+        "isVideo": false
+      },
+      {
+        "url": "https://economictimes.indiatimes.com/prime/technology-and-startups/dont-just-look-overseas-indian-deep-tech-startups-have-huge-opportunities-in-the-domestic-market-lip-bu-tan/primearticleshow/111833512.cms?from=mdr",
+        "date": "2024-07-18T00:00:00.000Z",
+        "publicationName": "economic times",
+        "headlineEdited": "Don’t just look overseas; Indian deep-tech should mine the domestic market: Lip-Bu Tan",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=5H2qRuEMbCM",
+        "date": "2024-07-16T00:00:00.000Z",
+        "publicationName": "CNBC TV18",
+        "headlineEdited": "Generative AI Will Be Bigger Than The Internet: Walden International | CNBC TV18",
+        "isVideo": true
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=83OBB_oOcrw",
+        "date": "2024-07-15T00:00:00.000Z",
+        "publicationName": "CNBC TV18",
+        "headlineEdited": "Yali Capital Rolls Out ₹810 Cr Fund To Back Deeptech Startups",
+        "isVideo": true
+      },
+      {
+        "url": "https://www.moneycontrol.com/technology/vc-industry-veterans-launch-rs-810-cr-deeptech-focused-fund-yali-capital-article-12769665.html",
+        "date": "2024-07-15T00:00:00.000Z",
+        "publicationName": "moneycontrol",
+        "headlineEdited": "VC industry veterans launch Rs 810-cr deeptech-focused fund 'Yali Capital'",
+        "isVideo": false
+      },
+      {
+        "url": "https://www.linkedin.com/posts/yali-capital_deeptech-patents-startupinvestment-activity-7226481319805956096-Scvg/?utm_source=combined_share_message&utm_medium=member_desktop",
+        "date": "2024-05-12T00:00:00.000Z",
+        "publicationName": "LinkedIn",
+        "headlineEdited": "Gani: The patent portfolio measures the strength of a deep tech company",
+        "isVideo": true
+      }
+    ]
+    }
+  }

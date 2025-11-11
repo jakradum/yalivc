@@ -1,0 +1,54 @@
+{
+  "Team Members": [
+    {
+      "Order": 1,
+      "Name": "Ganapathy 'Gani' Subramaniam",
+      "Designation": "Investments",
+      "One-Liner": "Over 30 years of industry knowledge, including a decade of entrepreneurial and investing experience.",
+      "Detailed": "Gani comes with over 30 years of industry knowledge of which nearly a decade consists of entrepreneurial and investing experience. Gani served as a Director at semiconductor giant Texas Instruments where he spent a total of 15 years. Leaning into his experience with Cosmic Circuits, a company he later founded, grew and sold, Gani has since been on the board of five other companies in the deep tech space. At Yali Capital, Gani serves as its Managing Partner.",
+      "linkedin": "https://www.linkedin.com/in/ganapathy-subramaniam-25859827/",
+      "email": "gani@yali.vc",
+      "image": "/images/gani.webp"
+    },
+    {
+      "Order": 2,
+      "Name": "Mathew Cyriac",
+      "Designation": "Investments",
+      "One-Liner": "Chairman of Florintree Advisors with extensive private equity and corporate leadership experience.",
+      "Detailed": "Mathew Cyriac, Chairman of Florintree Advisors, brings a wealth of top-tier private equity and corporate leadership experience. As the former Co-head of Blackstone India PE, Mathew managed an impressive $3 billion in assets and more recently the success of IPOs of MTAR, Data Patterns, and ideaForge stand testimony to his incredibly rich and diverse leadership experience. Currently serving as the Chairman of Gokaldas Exports and holding board positions in several prominent companies, including Tata Capital and Tata Play, Mathew offers a unique blend of operational knowledge and strategic vision.",
+      "linkedin": "https://www.linkedin.com/in/mathew-cyriac-9663181b5/",
+      "email": "mathew@yali.vc",
+      "image": "/images/mathew-cyriac.webp"
+    },
+    {
+      "Order": 3,
+      "Name": "Lip-Bu Tan",
+      "Designation": "Advisor",
+      "One-Liner": "Currently serving as the CEO of Intel, Lip-bu Tan brings over four decades of experience in semiconductor and deep tech industries with a proven track record in venture investing.",
+      "Detailed": "Lip-Bu Tan currently serving as the CEO of Intel, brings over four decades of unparalleled experience in the semiconductor and deep tech industries, combining executive leadership with a proven track record in venture investing. As the former CEO and Executive Chairman of Cadence Design Systems, a company with a market capitalization of approximately $60 billion, Lip-Bu led the organisation to become a global leader in electronic design automation. Over the course of his career, he has led the charge, taking over 130 companies to successful IPOs, and cementing his status as a visionary investor in the global tech landscape. His role on our Advisory Board provides invaluable insights, particularly in the semiconductor and deep tech sectors, guiding investment strategies with his wealth of knowledge and foresight.",
+      "linkedin": "https://www.linkedin.com/in/lip-bu-tan-284a7846/",
+      "email": "lip-bu@yali.vc",
+      "image": "/images/lip-bu_tan.webp"
+    },
+    {
+      "Order": 4,
+      "Name": "Karthikeyan 'Karthik' Madathil",
+      "Designation": "Investments",
+      "One-Liner": "30 years of deep tech experience with leadership roles in multinational corporations and startups.",
+      "Detailed": "Karthik brings 30 years of deep tech experience to the table, with eight years as VP of Engineering at a deep tech startup. His wealth of experience includes an ML-powered EdTech company that he founded and led for five years in addition to a 17-year tenure across various leadership roles, from Engineering Head to Business Head, in both multinational corporations and startups specialising in IC design.",
+      "linkedin": "https://www.linkedin.com/in/kmadathil/",
+      "email": "karthik@yali.vc",
+      "image": "/images/karthik.webp"
+    },
+    {
+      "Order": 5,
+      "Name": "Sunil S Patil",
+      "Designation": "Investments",
+      "One-Liner": "Over 20 years of experience in finance and operations, with expertise across a wide range of disciplines from startup finance operations to regulatory compliance",
+      "Detailed": "Sunil is a Chartered Accountant with over 20 years of experience in Finance and Operations. He manages the firm's finance, investor relations, fund administration, and compliance functions. Previously, he worked at Cirel Systems and Cosmic Circuits. His expertise includes startup finance operations, due diligence, exits, taxation, and regulatory compliance.",
+      "linkedin": "https://www.linkedin.com/in/sunil-s-patil/",
+      "email": "sunil@yali.vc",
+      "image": "/images/sunil.webp"
+    }
+  ]
+}

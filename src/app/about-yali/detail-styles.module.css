@@ -1,0 +1,225 @@
+.teamListContainer {
+    width: 100%;
+    margin: 0 auto 1rem auto;
+    background-color: white;
+}
+
+.teamMember {
+    display: flex;
+    border-bottom: 1px solid black;
+    padding: 0;
+    position: relative;
+}
+
+.memberInfo {
+    flex: 1;
+    padding: 2rem 2rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.name {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.designation {
+    font-size: 1rem;
+    font-weight: 300;
+    color: black;
+    text-transform: uppercase;
+    margin: 10px 0 0 0;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -2rem;
+    width: calc(100% + 4rem);
+    height: 1px;
+    background-color: black;
+}
+
+.viewmoreButton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    /* border: 1px solid black; */
+    padding: 1.5rem;
+
+}
+
+.bio {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.getInTouch {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border: 1px solid #000;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+    align-self: flex-start;
+}
+
+.getInTouch:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.memberImage {
+    flex: 0 0 300px;
+    height: auto;
+}
+
+.memberImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.loadMore {
+    display: block;
+    width: 100%;
+    padding: 2rem;
+    color: #000;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}
+
+.loadMore:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .teamMember {
+        flex-direction: column;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        margin-bottom: 1rem;
+        position: relative;
+
+    }
+    .teamMember:first-child{
+        border-top: none;
+    }
+
+    .memberInfo {
+        padding: 1.5rem;
+        order: 1;
+    }
+
+  
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .name {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .name::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -1.5rem;
+        right: -1.5rem;
+        height: 1px;
+        background-color: black;
+    }
+
+    .designation {
+        font-size: 0.875rem;
+        margin: 0.5rem 0 1rem;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+    .designation::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -1.5rem;
+        right: -1.5rem;
+        height: 1px;
+        background-color: black;
+    }
+
+    .bio {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .getInTouch {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+        border: 1px solid black;
+        background: none;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+    }
+
+    .memberImage {
+        order: 2;
+        width: calc(100% - 2rem); /* Subtract the total horizontal margin */
+        height: auto;
+        margin: 1rem;
+        aspect-ratio: 1 / 1;
+        position: relative; /* For positioning the pseudo-element */
+    }
+    
+    .memberImage::before {
+        content: '';
+        position: absolute;
+        top: -1rem;
+        left: -1rem;
+        right: -1rem;
+        bottom: -1rem;
+
+        pointer-events: none; /* Allows clicking through to the image */
+    }
+    
+    .memberImage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .header::after {
+        display: none;
+    }
+}
