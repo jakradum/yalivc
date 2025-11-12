@@ -5,6 +5,7 @@ export async function getCompanies() {
   const query = `*[_type == "company"] | order(order asc) {
     _id,
     name,
+    slug,
     "category": category->name,
     oneLiner,
     detail,

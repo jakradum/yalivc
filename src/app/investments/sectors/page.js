@@ -1,8 +1,9 @@
 import styles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
-import { getSectors } from '@/lib/sanity-queries';
+import { getSectors, getCompanies } from '@/lib/sanity-queries';
 import Link from 'next/link';
 import Breadcrumb from '../../components/breadcrumb';
+import { CompaniesInnerComponent } from '../companies inner component';
 
 export const revalidate = 60;
 
@@ -13,12 +14,15 @@ export const metadata = {
 
 export default async function SectorsPage() {
   let sectors = [];
-  
+  let companies = [];
+
   try {
     sectors = await getSectors();
+    companies = await getCompanies();
     console.log('Sectors fetched:', sectors.length);
+    console.log('Companies fetched:', companies.length);
   } catch (error) {
-    console.error('Failed to fetch sectors:', error);
+    console.error('Failed to fetch data:', error);
   }
   
   return (
@@ -54,8 +58,8 @@ export default async function SectorsPage() {
         {sectors.length > 0 ? (
           <div className={styles.sectorsGrid}>
             {sectors.map((sector) => (
-              <Link 
-                key={sector._id} 
+              <Link
+                key={sector._id}
                 href={`/investments/sectors/${sector.slug.current}`}
                 className={styles.sectorCard}
               >
@@ -70,6 +74,22 @@ export default async function SectorsPage() {
           </div>
         )}
       </section>
+
+      {/* Portfolio Companies Section */}
+      {companies.length > 0 && (
+        <section>
+          <div className={styles.people}>
+            <HeaderFlex
+              title="Portfolio companies"
+              color="black"
+              desktopMaxWidth={'50%'}
+              mobileMinHeight={'8rem'}
+            />
+          </div>
+          <CompaniesInnerComponent companies={companies} />
+        </section>
+      )}
+
       <Breadcrumb />
     </section>
   );

@@ -34,8 +34,18 @@ export default async function SectorPage({ params }) {
       notFound();
     }
     
-    companies = await getCompanies();
-    console.log('Sector page loaded:', sector.name);
+  companies = await getCompanies();
+console.log('DEBUG - Sector name:', sector.name);
+console.log('DEBUG - All companies:', companies.map(c => ({ name: c.name, category: c.category?.name })));
+
+// Filter companies by sector
+console.log('DEBUG - All companies:', companies.map(c => ({ name: c.name, category: c.category })));
+
+companies = companies.filter(company => 
+  company.category?.toLowerCase() === sector.name.toLowerCase()
+);
+
+console.log('DEBUG - Filtered companies:', companies.length);
   } catch (error) {
     console.error('Failed to fetch sector data:', error);
     notFound();
@@ -96,7 +106,7 @@ export default async function SectorPage({ params }) {
         <section>
           <div className={styles.people}>
             <HeaderFlex 
-              title="Portfolio companies" 
+              title="Portfolio companies in this sector" 
               color="black" 
               desktopMaxWidth={'50%'} 
               mobileMinHeight={'8rem'}
