@@ -41,6 +41,20 @@ const news = {
       title: 'Featured on Homepage?',
       type: 'boolean',
       initialValue: false
+    },
+    {
+      name: 'relatedSectors',
+      title: 'Related Sectors',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'sector'}]}],
+      description: 'Link this article to relevant sectors'
+    },
+    {
+      name: 'relatedCompanies',
+      title: 'Related Companies',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'company'}]}],
+      description: 'Link this article to relevant companies'
     }
   ],
   preview: {
@@ -64,5 +78,4 @@ const news = {
     }
   ]
 }
-
 export default news
