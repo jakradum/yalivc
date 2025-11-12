@@ -1,25 +1,36 @@
-import styles from '../about-styles.module.css';
+import { getFAQs } from '@/lib/sanity-queries';
 import Breadcrumb from '../../components/breadcrumb';
-import HeaderFlex from '@/app/components/icons/headerflex';
+import FAQ from '../../components/FAQ';
+import styles from '@/app/contact/contact.module.css';
+
+export const revalidate = 60;
 
 export const metadata = {
   title: 'FAQ | YALI Capital',
-  description: 'Frequently asked questions about YALI Capital',
+  description: 'Frequently asked questions about YALI Capital.',
 };
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const companyFAQs = await getFAQs('company');
+  
   return (
-    <section>
+    <>
       <Breadcrumb />
-      
-      <div className={styles.mainAbout}>
-        <article className={styles.textContent}>
-          <HeaderFlex title="Frequently asked questions" color="black" desktopMaxWidth="45%" />
-          <div className={styles.paraFlex}>
-            <p>Find answers to common questions about YALI Capital.</p>
-          </div>
-        </article>
+      <div className={styles.pageContainer}>
+        <section className={styles.faqSection}>
+          <FAQ 
+            title="About YALI Capital" 
+            description="Learn more about who we are and what drives our investment philosophy."
+            faqs={companyFAQs}
+          />
+        </section>
+        
+        <section className={styles.dividerSection}>
+          <p>
+            Have more questions? <a href="/contact">Contact us</a> for additional information.
+          </p>
+        </section>
       </div>
-    </section>
+    </>
   );
 }

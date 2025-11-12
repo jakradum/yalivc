@@ -7,6 +7,7 @@ import categoriesData from '../data/categories.json';
 import Image from 'next/image';
 import Button from '../components/button';
 import { ExpandIcon } from '../components/icons/small icons/expandIcon';
+import Link from 'next/link';
 
 function useWindowWidth() {
   const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
@@ -134,38 +135,49 @@ export const CompaniesInnerComponent = ({companies}) => {
     </>
   );
 
-  return (
-    <div className={styles.container}>
-      {renderCategoriesSection}
-      <div className={styles.companiesContainer}>
-        {filteredCompanies.map((company, index) => (
-          <div key={index} className={styles.companyCard}>
-            <div className={styles.companyInfo}>
-              <div className={styles.logoContainer}>
-                <Image
-                  src={company.logo || '/placeholder-logo.png'}
-                  alt={company.name}
-                  width={150}
-                  height={150}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-              <div className={styles.nameAndLink}>
-                <p className={styles.companyName}>{company.name}</p>
-                <p style={{textTransform:'uppercase',fontSize:'0.9rem'}}>{company.category}</p>
-                {company.link && (
-                  <a href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
-                    {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
-                  </a>
-                )}
-              </div>
-            </div>
-            <div className={styles.companyDetail}>
-              <p>{company.detail}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+ return (
+   <div className={styles.container}>
+     {renderCategoriesSection}
+     <div className={styles.companiesContainer}>
+       {filteredCompanies.map((company, index) => (
+         <Link
+           key={index}
+           href={`/investments/companies/${company.slug?.current || company.slug}`}
+           className={styles.companyCard}
+           style={{ textDecoration: 'none', color: 'inherit' }}
+         >
+           <div className={styles.companyInfo}>
+             <div className={styles.logoContainer}>
+               <Image
+                 src={company.logo || '/placeholder-logo.png'}
+                 alt={company.name}
+                 width={150}
+                 height={150}
+                 style={{ objectFit: 'contain' }}
+               />
+             </div>
+             <div className={styles.nameAndLink}>
+               <p className={styles.companyName}>{company.name}</p>
+               <p style={{ textTransform: 'uppercase', fontSize: '0.9rem' }}>{company.category}</p>
+               {company.link && (
+                 <a
+                   href={company.link}
+                   className={styles.viewLink}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onClick={(e) => e.stopPropagation()}
+                 >
+                   {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
+                 </a>
+               )}
+             </div>
+           </div>
+           <div className={styles.companyDetail}>
+             <p>{company.detail}</p>
+           </div>
+         </Link>
+       ))}
+     </div>
+   </div>
+ );
 };

@@ -5,6 +5,8 @@ import TeamDetails from './team-details';
 import { getTeamMembers } from '@/lib/sanity-queries';
 import teamData from '../data/team.json';
 export const revalidate = 60;
+import Button from '../components/button';
+import detailStyles from './detail-styles.module.css';
 
 export default async function AboutYali() {
   const teamMembers = await getTeamMembers();
@@ -62,6 +64,12 @@ console.log('Team order:', allTeam.map(m => ({ name: m.name, order: m.order })))
         </div>
         <TeamDetails teamMembers={allTeam} />
       </section>
+      <div className={detailStyles.viewmoreButton}>
+        <p>If you're still curious, our FAQs are a good place to start.</p>
+        <Button href="/about-yali/faq" color="black">
+          View all FAQs
+        </Button>
+      </div>
     </section>
   );
 }

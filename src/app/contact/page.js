@@ -1,10 +1,12 @@
-'use client';
+
 
 import styles from './contact.module.css';
 import AirtableForm from './AirtableForm';
 import FAQ from '../components/FAQ';
+import { getFAQs } from '@/lib/sanity-queries';
 
-export default function Contact() {
+export default async function Contact() {
+  const pitchFAQs = await getFAQs('pitch');
   return (
     <div className={styles.pageContainer}>
       {/* Header Section */}
@@ -29,7 +31,11 @@ export default function Contact() {
 
       {/* FAQ */}
       <section id="faq" className={styles.faqSection}>
-        <FAQ />
+        <FAQ 
+      title="Frequently Asked Questions" 
+      description="Got more questions? Feel free to contact us for more information by clicking the link provided below."
+      faqs={pitchFAQs}
+    />
       </section>
 
       {/* Email Disclaimer */}

@@ -10,7 +10,7 @@
       "subItems": [
         {
           "name": "Team",
-          "path": "/about-yali/team"
+          "path": "/about-yali#team"
         },
         {
           "name": "FAQ",
@@ -19,43 +19,19 @@
       ]
     },
     {
-      "name": "Investments",
-      "path": "/investments",
-      "subItems": [
-        {
-          "name": "All Sectors",
-          "path": "/investments/sectors"
-        },
-        {
-          "name": "Artificial Intelligence",
-          "path": "/investments/sectors/artificial-intelligence"
-        },
-        {
-          "name": "Genomics",
-          "path": "/investments/sectors/genomics"
-        },
-        {
-          "name": "Semiconductors",
-          "path": "/investments/sectors/semiconductors"
-        },
-        {
-          "name": "Robotics",
-          "path": "/investments/sectors/robotics"
-        },
-        {
-          "name": "Aerospace & Defence",
-          "path": "/investments/sectors/aerospace-defence"
-        },
-        {
-          "name": "Advanced Manufacturing",
-          "path": "/investments/sectors/advanced-manufacturing"
-        },
-        {
-          "name": "Life Sciences",
-          "path": "/investments/sectors/life-sciences"
-        }
-      ]
+  "name": "Investments",
+  "path": "/investments",
+  "subItems": [
+    {
+      "name": "Investment Focus",
+      "path": "/investments/sectors"
     },
+    {
+      "name": "Companies",
+      "path": "/investments/companies"
+    }
+  ]
+},
     {
       "name": "Newsroom",
       "path": "/newsroom"

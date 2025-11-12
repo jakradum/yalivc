@@ -16,6 +16,37 @@ export async function getCompanies() {
   return await client.fetch(query);
 }
 
+// Get company by slug
+export async function getCompanyBySlug(slug) {
+  return client.fetch(
+    `*[_type == "company" && slug.current == $slug][0]{
+      _id,
+      name,
+      slug,
+      "category": category->name,
+      oneLiner,
+      detail,
+      link,
+      "logo": logo.asset->url,
+      order
+    }`,
+    { slug }
+  );
+}
+
+// Get FAQs by type
+export async function getFAQs(type) {
+  return client.fetch(
+    `*[_type == "faq" && type == $type] | order(order asc, _createdAt asc){
+      _id,
+      question,
+      answer,
+      order
+    }`,
+    { type }
+  );
+}
+
 // Fetch all news articles
 export async function getNews(limit = 50) {
   const query = `*[_type == "news"] | order(date desc)[0...${limit}] {
