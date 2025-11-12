@@ -7,21 +7,27 @@ export default {
       name: 'name',
       title: 'Sector Name',
       type: 'string',
-      readOnly: true,
-      description: 'Pre-set sector name',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      description: 'Link this sector to its parent category',
+      validation: Rule => Rule.required()
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      readOnly: true,
-      description: 'Pre-set URL slug',
+      options: { source: 'name' },
+      validation: Rule => Rule.required()
     },
     {
       name: 'iconName',
       title: 'Icon',
       type: 'string',
-      readOnly: true,
       description: 'Auto-assigned icon from /src/app/components/icons/category svgs/',
     },
     {
@@ -30,9 +36,8 @@ export default {
       type: 'text',
       rows: 3,
       description: '4-5 lines for sector grid card',
-      validation: (Rule) => Rule.max(250).required(),
+      validation: Rule => Rule.max(250).required(),
     },
-    // /src/sanity/schemas/sector.js
     {
       name: 'published',
       title: 'Published',
@@ -41,11 +46,16 @@ export default {
       initialValue: true,
     },
     {
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+      description: 'Lower numbers appear first'
+    },
+    {
       name: 'overview',
       title: 'Sector Overview',
       type: 'array',
-      description:
-        'Structure: 1) Market landscape 2) Key trends 3) Technology drivers 4) India opportunity. Max 400 words.',
+      description: 'Structure: 1) Market landscape 2) Key trends 3) Technology drivers 4) India opportunity. Max 400 words.',
       of: [
         {
           type: 'block',
@@ -68,28 +78,21 @@ export default {
                 name: 'link',
                 type: 'object',
                 title: 'URL',
-                fields: [
-                  {
-                    title: 'URL',
-                    name: 'href',
-                    type: 'url',
-                  },
-                ],
+                fields: [{ title: 'URL', name: 'href', type: 'url' }],
               },
             ],
           },
         },
       ],
-      validation: (Rule) =>
-        Rule.required().custom((blocks) => {
-          if (!blocks) return true;
-          const text = blocks
-            .filter((block) => block._type === 'block')
-            .map((block) => block.children?.map((child) => child.text).join(''))
-            .join(' ');
-          const wordCount = text.trim().split(/\s+/).length;
-          return wordCount <= 400 ? true : `Overview is ${wordCount} words. Please keep it under 400 words.`;
-        }),
+      validation: Rule => Rule.required().custom(blocks => {
+        if (!blocks) return true;
+        const text = blocks
+          .filter(block => block._type === 'block')
+          .map(block => block.children?.map(child => child.text).join(''))
+          .join(' ');
+        const wordCount = text.trim().split(/\s+/).length;
+        return wordCount <= 400 || `Overview is ${wordCount} words. Keep under 400.`;
+      }),
     },
     {
       name: 'whyYALICares',
@@ -112,16 +115,15 @@ export default {
           },
         },
       ],
-      validation: (Rule) =>
-        Rule.required().custom((blocks) => {
-          if (!blocks) return true;
-          const text = blocks
-            .filter((block) => block._type === 'block')
-            .map((block) => block.children?.map((child) => child.text).join(''))
-            .join(' ');
-          const wordCount = text.trim().split(/\s+/).length;
-          return wordCount <= 1000 ? true : `Investment thesis is ${wordCount} words. Please keep it under 1000 words.`;
-        }),
+      validation: Rule => Rule.required().custom(blocks => {
+        if (!blocks) return true;
+        const text = blocks
+          .filter(block => block._type === 'block')
+          .map(block => block.children?.map(child => child.text).join(''))
+          .join(' ');
+        const wordCount = text.trim().split(/\s+/).length;
+        return wordCount <= 1000 || `Thesis is ${wordCount} words. Keep under 1000.`;
+      }),
     },
   ],
   preview: {

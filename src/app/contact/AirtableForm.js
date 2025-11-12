@@ -50,6 +50,7 @@ export default function AirtableForm() {
   frameBorder="0"
   width="100%"
   height="1200"
+
   style={{
     background: 'transparent',
     border: 'none',
