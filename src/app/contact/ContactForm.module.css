@@ -26,6 +26,67 @@
   justify-content: flex-start; /* Changed from center */
   padding-top: 2rem; /* Add consistent top padding */
 }
+.shimmer {
+  width: 100%;
+  height: 900px;
+  padding: 3rem 2rem;
+  background: #ffffff;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.shimmerHeader {
+  height: 40px;
+  width: 60%;
+  margin-bottom: 3rem;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+.shimmerInput {
+  height: 45px;
+  width: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.shimmerInputLarge {
+  height: 120px;
+  width: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.shimmerField {
+  margin-bottom: 2rem;
+}
+.shimmerLabel {
+  height: 20px;
+  width: 30%;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.shimmerLine {
+  height: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
 
 .formTitle {
@@ -98,6 +159,7 @@
   min-height: auto;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .rightPanel form {
@@ -407,17 +469,10 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 950px) {
   .formContainer {
-    padding: 0 0.5rem; /* Reduced padding for mobile */
+    padding: 0;
     gap: 1.5rem;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
   }
 
   .formRow {
@@ -429,12 +484,10 @@
     font-size: 2rem;
   }
 
-  .leftPanel {
-    padding-right: 0;
-    width: calc(100% - 1rem); /* Account for container padding */
-    max-width: 500px;
-    margin: 0 auto;
-    box-sizing: border-box;
+ .leftPanel {
+    width: 100%;
+    max-width: none;
+    padding: 0 1rem;
   }
 
   .rightPanel {
@@ -446,8 +499,11 @@
     margin: 0 auto;
   }
 
-  .rightPanel form {
-    gap: 1rem;
+  .rightPanel,
+  .rightPanelAirtable {
+    width: 100%;
+    max-width: none;
+    padding: 1rem;
   }
 
   /* Ensure all form fields fit properly */
