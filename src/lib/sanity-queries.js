@@ -32,6 +32,33 @@ export async function getCompanyBySlug(slug) {
   );
 }
 
+export async function getNews() {
+  return client.fetch(
+    `*[_type == "news"] | order(date desc) {
+      _id,
+      url,
+      date,
+      headlineEdited,
+      isVideo,
+      "publicationName": publication->name
+    }`
+  );
+}
+
+export async function getTeamMembers() {
+  return client.fetch(
+    `*[_type == "team"] | order(order asc) {
+      _id,
+      name,
+      role,
+      bio,
+      "photo": photo.asset->url,
+      linkedIn,
+      order
+    }`
+  );
+}
+
 export async function getSectors() {
   return client.fetch(
     `*[_type == "sector"] | order(order asc) {
