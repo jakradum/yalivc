@@ -28,6 +28,16 @@
     max-width: 50%;
     margin: 1rem;
 }
+.companyLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.companyCell {
+  cursor: pointer;
+}
 
 .companyTableContainer {
     display: flex;

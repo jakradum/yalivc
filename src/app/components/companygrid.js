@@ -16,6 +16,7 @@ import { ArtificialIntelligenceVector } from './icons/background svgs/category s
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 import { urlFor } from '@/sanity/client';
+import Link from 'next/link';
 
 export const vectorUsageMap = {
   'robotics': <RoboticsVector/>,
@@ -85,27 +86,29 @@ const CompanyTable = ({ companies }) => {
             <tr key={row}>
               {companiesData.data.slice(row * 5, (row + 1) * 5).map((company, index) => (
                 <td key={index} className={styles.companyCell}>
-                  <article className={styles.companyContent}>
-                    <div className={styles.companyNumber}>
-                      <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
-                    </div>
-                    <h4 className={styles.companyTitle}>{company.name}</h4>
-                    <p className={styles.companyCategory}>{company.category}</p>
-
-                    <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
-                    {company.logo && (
-                      <div className={styles.imagePlaceholder}>
-                        <Image
-                          src={urlFor(company.logo).width(100).url()}
-                          alt={company.name}
-                          width={100}
-                          height={100}
-                          style={{ objectFit: 'contain' }}
-                        />
+                  <Link href={`/investments/companies/${company.slug.current}`} className={styles.companyLink}>
+                    <article className={styles.companyContent}>
+                      <div className={styles.companyNumber}>
+                        <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
                       </div>
-                    )}
-                    <p className={styles.companyOneLiner}>{company.oneLiner}</p>
-                  </article>
+                      <h4 className={styles.companyTitle}>{company.name}</h4>
+                      <p className={styles.companyCategory}>{company.category}</p>
+
+                      <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
+                      {company.logo && (
+                        <div className={styles.imagePlaceholder}>
+                          <Image
+                            src={urlFor(company.logo).width(100).url()}
+                            alt={company.name}
+                            width={100}
+                            height={100}
+                            style={{ objectFit: 'contain' }}
+                          />
+                        </div>
+                      )}
+                      <p className={styles.companyOneLiner}>{company.oneLiner}</p>
+                    </article>
+                  </Link>
                 </td>
               ))}
             </tr>

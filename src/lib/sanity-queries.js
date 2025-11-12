@@ -45,9 +45,20 @@ export async function getNews() {
   );
 }
 
+
+
+export async function getInvestmentPhilosophy() {
+  return client.fetch(
+    `*[_type == "investmentPhilosophy"][0]{
+      philosophyText,
+      lastUpdated
+    }`
+  );
+}
+
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "team"] | order(order asc) {
+    `*[_type == "teamMember"] | order(order asc) {
       _id,
       name,
       role,
@@ -61,7 +72,7 @@ export async function getTeamMembers() {
 
 export async function getSectors() {
   return client.fetch(
-    `*[_type == "sector"] | order(order asc) {
+    `*[_type == "sector" && published == true] | order(order asc) {
       _id,
       name,
       slug,

@@ -1,8 +1,9 @@
 import styles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
-import { getSectors } from '@/lib/sanity-queries';
+import { getSectors, getInvestmentPhilosophy } from '@/lib/sanity-queries';
 import Link from 'next/link';
 import Breadcrumb from '../../components/breadcrumb';
+import { PortableText } from '@portabletext/react';
 
 export const revalidate = 60;
 
@@ -13,10 +14,13 @@ export const metadata = {
 
 export default async function SectorsPage() {
   let sectors = [];
+  let philosophy = null;
 
   try {
-    sectors = await getSectors();
-    console.log('Sectors fetched:', sectors.length);
+    [sectors, philosophy] = await Promise.all([
+      getSectors(),
+      getInvestmentPhilosophy()
+    ]);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
@@ -24,51 +28,43 @@ export default async function SectorsPage() {
   return (
     <section>
       <Breadcrumb />
-      
+
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Investment Focus</h1>
           <div className={styles.paraFlex}>
-            <p>
-              We invest in deep tech companies across multiple sectors where cutting-edge technology creates 
-              sustainable competitive advantages. Our focus areas represent the future of innovation in India.
-            </p>
-            <p>
-              Each sector represents a domain where we bring deep expertise, networks, and strategic value 
-              beyond capital. Explore our investment focus areas below.
-            </p>
+            {philosophy?.philosophyText ? (
+              <PortableText value={philosophy.philosophyText} />
+            ) : (
+              <>
+                <p>We invest in deep tech companies...</p>
+                <p>Each sector represents...</p>
+              </>
+            )}
           </div>
         </article>
       </div>
 
       <section className={styles.sectorsSection}>
-        <div className={styles.people}>
-          <HeaderFlex 
-            title="Our sectors" 
-            color="black" 
-            desktopMaxWidth={'40%'} 
-            mobileMinHeight={'6rem'}
-          />
-        </div>
-        
-        {sectors.length > 0 ? (
+        <div className={styles.sectorsContainer}>
+          <div className={styles.sectorsHeader}>
+            <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
+          </div>
+          <p>
+              Each of the {sectors.length} sectors below represents a domain where India has the potential to lead globally. Our investments span
+              across these focus areas, where we bring deep technical expertise and industry networks to help founders
+              scale cutting-edge technology companies.
+            </p>
           <div className={styles.sectorsGrid}>
             {sectors.map((sector) => (
-              <Link
-                key={sector._id}
-                href={`/investments/sectors/${sector.slug.current}`}
-                className={styles.sectorCard}
-              >
+              <Link key={sector._id} href={`/investments/sectors/${sector.slug.current}`} className={styles.sectorCard}>
                 <h3>{sector.name}</h3>
                 <p>{sector.shortDescription}</p>
               </Link>
             ))}
+           
           </div>
-        ) : (
-          <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
-            <p>No sectors available at the moment.</p>
-          </div>
-        )}
+        </div>
       </section>
 
       <Breadcrumb />

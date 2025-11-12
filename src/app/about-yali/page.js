@@ -9,21 +9,27 @@ import Button from '../components/button';
 import detailStyles from './detail-styles.module.css';
 
 export default async function AboutYali() {
-  const teamMembers = await getTeamMembers();
-  const sanityTeam = await getTeamMembers();
-const coreTeam = teamData['Team Members']
-  .map(member => ({
-    name: member.Name,
-    role: member.Designation,
-    bio: member.Detailed,
-    photo: member.image,
-    linkedIn: member.linkedin,
-    order: member.Order
-  }))
-  .sort((a, b) => a.order - b.order);
+const sanityTeam = await getTeamMembers();
+console.log('Sanity raw:', JSON.stringify(sanityTeam, null, 2));
+console.log('Sanity count:', sanityTeam.length);
+  
+  const coreTeam = teamData['Team Members']
+    .map(member => ({
+      name: member.Name,
+      role: member.Designation,
+      bio: member.Detailed,
+      photo: member.image,
+      linkedIn: member.linkedin,
+      order: member.Order
+    }))
+    .sort((a, b) => a.order - b.order);
 
-const allTeam = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
-console.log('Team order:', allTeam.map(m => ({ name: m.name, order: m.order })));
+  console.log('Sanity team:', sanityTeam);
+  console.log('Core team count:', coreTeam.length);
+  console.log('Sanity team count:', sanityTeam.length);
+
+  const allTeam = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
+  console.log('All team:', allTeam);
   return (
     <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
@@ -65,10 +71,11 @@ console.log('Team order:', allTeam.map(m => ({ name: m.name, order: m.order })))
         <TeamDetails teamMembers={allTeam} />
       </section>
       <div className={detailStyles.viewmoreButton}>
-        <p>If you're still curious, our FAQs are a good place to start.</p>
+        {/* <p>If you're still curious, our FAQs are a good place to start.</p>
         <Button href="/about-yali/faq" color="black">
           View all FAQs
-        </Button>
+        </Button> */} 
+        {/* uncomment the above later once the FAQs are written */}
       </div>
     </section>
   );

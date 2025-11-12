@@ -15,7 +15,6 @@ export default async function Investments() {
   try {
     companies = await getCompanies();
     sectors = await getSectors();
-    console.log('Data fetched:', { companies: companies.length, sectors: sectors.length });
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
@@ -54,7 +53,6 @@ export default async function Investments() {
             {sectors.slice(0, 4).map((sector) => (
               <Link key={sector._id} href={`/investments/sectors/${sector.slug.current}`} className={styles.sectorCard}>
                 <h3>{sector.name}</h3>
-                <p>{sector.shortDescription}</p>
               </Link>
             ))}
           </div>
