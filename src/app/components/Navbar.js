@@ -87,20 +87,23 @@ const Navbar = () => {
     return pathname.startsWith(path);
   };
 
-  const filterSectorItems = (items) => {
-    return items.map(item => {
-      if (item.path === '/investments' && item.subItems) {
-        return {
-          ...item,
-          subItems: item.subItems.filter(subItem => 
-            subItem.path === '/investments/sectors' ||
-            availableSectors.some(slug => subItem.path.includes(slug))
-          )
-        };
-      }
-      return item;
-    });
-  };
+ const filterSectorItems = (items) => {
+  return items.map(item => {
+    if (item.path === '/investments' && availableSectors.length > 0) {
+      return {
+        ...item,
+        subItems: [
+          { name: 'Sectors', path: '/investments/sectors' },
+          ...availableSectors.map(slug => ({
+            name: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' '),
+            path: `/investments/sectors/${slug}`
+          }))
+        ]
+      };
+    }
+    return item;
+  });
+};
 
   const renderMobileMenu = () => (
     <ul className={styles.mobileMenuList}>

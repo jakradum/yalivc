@@ -27,6 +27,7 @@ export default function TeamPage() {
         </div>
         {/* Add team members here */}
       </section>
+      <Breadcrumb />
     </section>
   );
 }

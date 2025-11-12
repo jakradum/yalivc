@@ -6,19 +6,37 @@ import { CompaniesInnerComponent } from '../../companies inner component';
 import { notFound } from 'next/navigation';
 import Breadcrumb from '../../../components/breadcrumb';
 import newsStyles from '../../../newsroom/newscomponent.module.css';
+import { RoboticsVector } from '@/app/components/icons/background svgs/category svgs/robotics vector';
+import { GenomicsVector } from '@/app/components/icons/background svgs/category svgs/genomics vector';
+import { SemiconVector } from '@/app/components/icons/background svgs/category svgs/semicon vector';
+import { GenericVector } from '@/app/components/icons/background svgs/category svgs/generic vector';
+import { ArtificialIntelligenceVector } from '@/app/components/icons/background svgs/category svgs/artificial intelligence vector';
+import { DefenceVector } from '@/app/components/icons/background svgs/category svgs/defence vector';
+import { FablessChipVector } from '@/app/components/icons/background svgs/category svgs/fabless chip vector';
+import { AdvancedManufacturingVector } from '@/app/components/icons/background svgs/category svgs/advanced manufacturing vector';
+import { GenerativeAIVector } from '@/app/components/icons/background svgs/category svgs/generative AI vector';
+import { LifeSciencesVector } from '@/app/components/icons/background svgs/category svgs/life sciennces vector'
+
+
+const sectorVectors = {
+  robotics: RoboticsVector,
+  genomics: GenomicsVector,
+  semiconductors: SemiconVector,
+  aerospace: GenericVector,
+};
 
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const sector = await getSectorBySlug(slug);
-  
+
   if (!sector) {
     return {
       title: 'Sector Not Found | YALI Capital',
     };
   }
-  
+
   return {
     title: `${sector.name} | YALI Capital`,
     description: sector.shortDescription || `Learn about YALI Capital's investments in ${sector.name}`,
@@ -30,77 +48,105 @@ export default async function SectorPage({ params }) {
   let sector = null;
   let companies = [];
   let news = [];
-  
+
   try {
     sector = await getSectorBySlug(slug);
-    
+
     if (!sector) {
       notFound();
     }
-    
+
     companies = await getCompanies();
-    const sectorCompanies = companies.filter(company => {
+    const sectorCompanies = companies.filter((company) => {
       const companyCategory = company.category?.name || company.category;
       return companyCategory?.toLowerCase() === sector.name.toLowerCase();
     });
-    
+
     news = await getNewsBySector(slug);
-    console.log('Sector ID:', sector._id);
-    console.log('News fetched:', news);
-    
+
     return (
-      <section>
+      <section className={styles.sectionLevel}>
         <Breadcrumb />
 
         <div className={styles.mainAbout}>
           <article className={styles.textContent}>
             <h1>{sector.name}</h1>
-
-            {sector.shortDescription && (
+            {sector.overview && (
               <div className={styles.paraFlex}>
-                <p style={{ fontSize: '1.125rem', fontWeight: '500' }}>{sector.shortDescription}</p>
+                <PortableText value={sector.overview} />
               </div>
             )}
           </article>
+          <aside className={styles.mainsecGraphic}>
+            <div
+              style={{
+                width: '500px',
+                height: '500px',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {sector.name.toLowerCase() === 'robotics' && (
+                <RoboticsVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'genomics' && (
+                <GenomicsVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'semiconductors' && (
+                <SemiconVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'aerospace' && (
+                <GenericVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'artificial intelligence' && (
+                <ArtificialIntelligenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'defence' && (
+                <DefenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'fabless chip design' && (
+                <FablessChipVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'advanced manufacturing' && (
+                <AdvancedManufacturingVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'generative ai' && (
+                <GenerativeAIVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+              {sector.name.toLowerCase() === 'life sciences' && (
+                <LifeSciencesVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              )}
+            </div>
+          </aside>
         </div>
 
-        {sector.overview && (
-          <section className={styles.sectorsSection}>
-            <div className={styles.people}>
-              <HeaderFlex title="Overview" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
-            </div>
-            <div style={{ padding: '2rem 0', lineHeight: '1.8', fontSize: '1rem' }}>
-              <PortableText value={sector.overview} />
-            </div>
-          </section>
-        )}
-
         {sector.whyYALICares && (
-          <section className={styles.sectorsSection}>
-            <div className={styles.people}>
-              <HeaderFlex title="Why we invest here" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
-            </div>
-            <div style={{ padding: '2rem 0', lineHeight: '1.8', fontSize: '1rem' }}>
+          <section >
+            {/* <h2 style={{padding:'0 2rem'}}>Why we invest here</h2> */}
+            <HeaderFlex title="Why we invest" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'0rem'} />
+            <div style={{ padding: ' 0 2rem ', lineHeight: '1.8', fontSize: '1rem' }}>
               <PortableText value={sector.whyYALICares} />
+            </div>
+            <div className={styles.people}>
+
             </div>
           </section>
         )}
 
         {sectorCompanies.length > 0 && (
           <section>
-            <div className={styles.people}>
-              <HeaderFlex title="Portfolio companies" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'8rem'} />
-            </div>
+            <HeaderFlex title="Portfolio companies" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'0rem'} />
             <CompaniesInnerComponent companies={sectorCompanies} />
           </section>
         )}
 
         {news.length > 0 && (
-          <section className={styles.sectorsSection} style={{ paddingBottom: 0, marginBottom: "1rem" }}>
+          <section id="news">
             <div className={styles.people}>
-              <HeaderFlex title="Related News" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
+              <HeaderFlex title="Related articles" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
             </div>
-
             <div
               className={newsStyles.newsArticles}
               style={{
@@ -127,6 +173,7 @@ export default async function SectorPage({ params }) {
             </div>
           </section>
         )}
+        <Breadcrumb />
       </section>
     );
   } catch (error) {

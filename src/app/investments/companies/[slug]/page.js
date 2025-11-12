@@ -22,7 +22,7 @@ export default async function CompanyPage({ params }) {
 
   return (
     <section>
-      <Breadcrumb customLabel={company.name} />
+      <Breadcrumb />
 
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
@@ -98,6 +98,7 @@ export default async function CompanyPage({ params }) {
           </div>
         </section>
       )}
+      <Breadcrumb />
     </section>
   );
 }
