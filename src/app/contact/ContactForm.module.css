@@ -156,10 +156,10 @@
   padding: 0;
   background: #fff;
   box-sizing: border-box;
-  min-height: auto;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  height: 1000px;
 }
 
 .rightPanel form {

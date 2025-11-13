@@ -50,7 +50,7 @@ export default async function Investments() {
           <p className={styles.helperText}>Select a category to view more</p>
 
           <div className={styles.sectorsGrid}>
-            {sectors.slice(0, 4).map((sector) => (
+            {sectors.map((sector) => (
               <Link key={sector._id} href={`/investments/sectors/${sector.slug.current}`} className={styles.sectorCard}>
                 <h3>{sector.name}</h3>
               </Link>
