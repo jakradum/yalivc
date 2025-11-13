@@ -1,32 +1,17 @@
-import { getCompanies } from '@/lib/sanity-queries';
 import { client } from '@/sanity/client';
 
 export async function GET() {
   try {
     const sectors = await client.fetch(`
-      *[_type == "sector" && published == true] {
-        _id,
+      *[_type == "sector" && published == true] | order(order asc) {
         name,
-        "slug": slug.current,
-        "categoryName": category->name
+        "slug": slug.current
       }
     `);
 
-    const companies = await getCompanies();
-    
-    const categoriesWithCompanies = new Set(
-      companies.map(c => c.category).filter(Boolean)
-    );
-
-    const sectorsWithCompanies = sectors.filter(sector =>
-      categoriesWithCompanies.has(sector.categoryName)
-    );
-
-    return Response.json({
-      slugs: sectorsWithCompanies.map(s => s.slug)
-    });
+    return Response.json({ sectors });
   } catch (error) {
     console.error('Failed to fetch sectors:', error);
-    return Response.json({ slugs: [] });
+    return Response.json({ sectors: [] });
   }
 }

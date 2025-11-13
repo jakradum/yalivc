@@ -19,7 +19,7 @@ export default async function CompanyPage({ params }) {
   }
 
   const news = await getNewsByCompany(slug);
-
+const sortedNews = [...news].sort((a, b) => new Date(b.date) - new Date(a.date));
   return (
     <section>
       <Breadcrumb />
@@ -32,7 +32,7 @@ export default async function CompanyPage({ params }) {
               flexDirection: 'row',
               alignItems: 'center',
               gap: '2rem',
-              marginBottom: '2rem',
+              margin: '2rem',
               flexWrap: 'nowrap',
             }}
           >
@@ -75,11 +75,10 @@ export default async function CompanyPage({ params }) {
           <div
             className={newsStyles.newsArticles}
             style={{
-              gridTemplateColumns: `repeat(${news.length}, 1fr)`,
               marginBottom: 0,
             }}
           >
-            {news.map((article) => {
+            {sortedNews.map((article) => {
               const date = new Date(article.date);
               const day = date.getDate().toString().padStart(2, '0');
               const month = date.toLocaleString('default', { month: 'short' });

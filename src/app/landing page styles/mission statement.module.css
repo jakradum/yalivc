@@ -89,6 +89,7 @@
   margin-right: 5%;
   margin-bottom: 0; /* Remove bottom margin */
   align-self: flex-end; /* Explicitly align to bottom */
+
 }
 
 .bodyText.visible {
@@ -124,6 +125,8 @@
   }
   .bodyText>p {
     font-size: clamp(0.8rem, 2.5vw, 1rem); /* Adjust min, preferred, and max values as needed */
+    margin: 0 1rem;
+    padding: 0.5rem 0;
  }
   
   .bodyText {

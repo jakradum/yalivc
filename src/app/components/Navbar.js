@@ -35,9 +35,9 @@ const Navbar = () => {
 
   useEffect(() => {
     fetch('/api/sectors-with-companies')
-      .then(res => res.json())
-      .then(data => setAvailableSectors(data.slugs))
-      .catch(err => console.error('Failed to load sectors:', err));
+      .then((res) => res.json())
+      .then((data) => setAvailableSectors(data.sectors || []))
+      .catch((err) => console.error('Failed to load sectors:', err));
   }, []);
 
   useEffect(() => {
@@ -94,11 +94,11 @@ const Navbar = () => {
         ...item,
         subItems: [
           { name: 'Sectors', path: '/investments/sectors' },
-          ...availableSectors.map(slug => ({
-            name: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' '),
-            path: `/investments/sectors/${slug}`
-          }))
-        ]
+          ...availableSectors.map((sector) => ({
+            name: sector.name,
+            path: `/investments/sectors/${sector.slug}`,
+          })),
+        ],
       };
     }
     return item;

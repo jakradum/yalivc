@@ -33,7 +33,7 @@ const Breadcrumb = ({ customLabel }) => {
           
           return (
             <li key={href}>
-              <span className={styles.separator}> · </span>
+              <span className={styles.separator}> &gt; </span>
               {isLast ? (
                 <span aria-current="page">{title}</span>
               ) : (

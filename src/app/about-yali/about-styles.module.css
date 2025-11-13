@@ -172,7 +172,15 @@
     background-color: #000;
 }
 
-
+/* Helper text for Investment Focus section */
+.helperText {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
 
 .sectorsGrid {
     display: grid;
@@ -324,5 +332,11 @@ font-size: 1.125rem;
 
     .sectorsGrid {
         grid-template-columns: 1fr;
+    }
+
+    .helperText {
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        margin-bottom: 1.5rem;
     }
 }

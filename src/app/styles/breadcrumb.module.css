@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 0;
+  flex-wrap: wrap;
 }
 
 .breadcrumb li {
@@ -39,10 +40,48 @@
 }
 
 @media (max-width: 950px) {
-
   .breadcrumb {
     margin-top: 1rem;
     padding-top: 1rem;
   }
+}
 
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .breadcrumb ol {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .breadcrumb .separator {
+    margin: 0 0.3rem;
+  }
+  
+  .breadcrumb [aria-current="page"] {
+    font-size: 0.75rem;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb ol {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
+  
+  .breadcrumb .separator {
+    margin: 0 0.25rem;
+  }
+  
+  .breadcrumb [aria-current="page"] {
+    font-size: 0.7rem;
+    max-width: 100px;
+  }
+  
+  .breadcrumb a {
+    font-size: 0.75rem;
+  }
 }

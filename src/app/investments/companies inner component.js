@@ -43,34 +43,6 @@ export const CompaniesInnerComponent = ({companies}) => {
     return Array.from(activeCats);
   }, [companies]);
 
-  // useEffect(() => {
-  //   console.log('useData hook output:', { data, loading, error });
-
-  //   if (loading) {
-  //     console.log('Currently loading, no action taken');
-  //     return;
-  //   }
-
-  //   if (error) {
-  //     console.log('Error fetching data, using local data:', error);
-  //     setIsUsingLocalData(true);
-  //     return;
-  //   }
-
-  //   if (data && data.status === 'success' && data.data && Array.isArray(data.data['companies-csv (1)'])) {
-  //     console.log('Fetched data successfully, updating companies');
-  //     setCompanies(data.data['companies-csv (1)']);
-  //     setIsUsingLocalData(false);
-  //   } else if (data && data.companies && Array.isArray(data.companies.data)) {
-  //     console.log('Using local data');
-  //     setCompanies(data.companies.data);
-  //     setIsUsingLocalData(true);
-  //   } else {
-  //     console.log('Data not in expected format, using local data. Data:', data);
-  //     setIsUsingLocalData(true);
-  //   }
-  // }, [data, loading, error]);
-
   console.log('Current companies data:', companies);
 
   const toggleCategory = (category) => {
@@ -87,57 +59,60 @@ export const CompaniesInnerComponent = ({companies}) => {
     setIsCategoryDropdownOpen(false);
   };
 
-  const filteredCompanies = companies.filter(
-    (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category.toLowerCase())
-  );
+  // FILTERING DISABLED - Show all companies
+  // const filteredCompanies = companies.filter(
+  //   (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category.toLowerCase())
+  // );
+  const filteredCompanies = companies;
 
   const isLinkedInLink = (url) => {
     return url && url.toLowerCase().includes('linkedin.com');
   };
 
-  const renderCategoriesSection = activeCategories.length > 3 && (
-    <>
-      <p>Select one or more categories to filter the list below</p>
-      <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
-        <div className={styles.categoryDropdown}>
-          <button className={styles.dropdownToggle} onClick={toggleCategoryDropdown}>
-            CATEGORIES
-            <ExpandIcon className={`${styles.expandIcon} ${isCategoryDropdownOpen ? styles.expanded : ''}`} />
-          </button>
-          <div className={`${styles.dropdownContent} ${isCategoryDropdownOpen ? styles.show : ''}`}>
-            {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
-              <button
-                key={index}
-                className={`${styles.categoryItem} ${
-                  selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
-                }`}
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className={styles.categoriesContainer}>
-          {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
-            <button
-              key={index}
-              className={`${styles.categoryItem} ${
-                selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
-              }`}
-              onClick={() => toggleCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+  // CATEGORY FILTER UI DISABLED
+  // const renderCategoriesSection = activeCategories.length > 3 && (
+  //   <>
+  //     <p>Select one or more categories to filter the list below</p>
+  //     <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
+  //       <div className={styles.categoryDropdown}>
+  //         <button className={styles.dropdownToggle} onClick={toggleCategoryDropdown}>
+  //           CATEGORIES
+  //           <ExpandIcon className={`${styles.expandIcon} ${isCategoryDropdownOpen ? styles.expanded : ''}`} />
+  //         </button>
+  //         <div className={`${styles.dropdownContent} ${isCategoryDropdownOpen ? styles.show : ''}`}>
+  //           {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
+  //             <button
+  //               key={index}
+  //               className={`${styles.categoryItem} ${
+  //                 selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
+  //               }`}
+  //               onClick={() => toggleCategory(category)}
+  //             >
+  //               {category}
+  //             </button>
+  //           ))}
+  //         </div>
+  //       </div>
+  //       <div className={styles.categoriesContainer}>
+  //         {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
+  //           <button
+  //             key={index}
+  //             className={`${styles.categoryItem} ${
+  //               selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
+  //             }`}
+  //             onClick={() => toggleCategory(category)}
+  //           >
+  //             {category}
+  //           </button>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   </>
+  // );
 
  return (
-   <div className={styles.container}>
-     {renderCategoriesSection}
+   <div  className={styles.container}>
+     {/* {renderCategoriesSection} */}
      <div className={styles.companiesContainer}>
        {filteredCompanies.map((company, index) => (
          <Link
@@ -180,4 +155,5 @@ export const CompaniesInnerComponent = ({companies}) => {
      </div>
    </div>
  );
+ 
 };

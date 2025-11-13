@@ -49,6 +49,7 @@
   padding-bottom: 0.5rem;
   display: inline-block;
   position: relative;
+  text-transform: uppercase;
 }
 
 .menu li:not(.dropdown) a::after {
@@ -124,7 +125,7 @@
   text-decoration: none;
   display: block;
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   border-bottom: none;
 }
 

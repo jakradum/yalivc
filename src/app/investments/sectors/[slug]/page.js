@@ -22,7 +22,7 @@ const sectorVectors = {
   robotics: RoboticsVector,
   genomics: GenomicsVector,
   semiconductors: SemiconVector,
-  aerospace: GenericVector,
+  aerospace: DefenceVector,
 };
 
 export const revalidate = 60;
@@ -63,6 +63,7 @@ export default async function SectorPage({ params }) {
     });
 
     news = await getNewsBySector(slug);
+    const sortedNews = [...news].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return (
       <section className={styles.sectionLevel}>
@@ -97,8 +98,8 @@ export default async function SectorPage({ params }) {
               {sector.name.toLowerCase() === 'semiconductors' && (
                 <SemiconVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               )}
-              {sector.name.toLowerCase() === 'aerospace' && (
-                <GenericVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              {sector.name.toLowerCase() === 'aerospace & defence' && (
+                <DefenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               )}
               {sector.name.toLowerCase() === 'artificial intelligence' && (
                 <ArtificialIntelligenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -123,15 +124,13 @@ export default async function SectorPage({ params }) {
         </div>
 
         {sector.whyYALICares && (
-          <section >
+          <section>
             {/* <h2 style={{padding:'0 2rem'}}>Why we invest here</h2> */}
             <HeaderFlex title="Why we invest" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'0rem'} />
             <div style={{ padding: ' 0 2rem ', lineHeight: '1.8', fontSize: '1rem' }}>
               <PortableText value={sector.whyYALICares} />
             </div>
-            <div className={styles.people}>
-
-            </div>
+            <div className={styles.people}></div>
           </section>
         )}
 
@@ -150,11 +149,10 @@ export default async function SectorPage({ params }) {
             <div
               className={newsStyles.newsArticles}
               style={{
-                gridTemplateColumns: `repeat(${news.length}, 1fr)`,
                 marginBottom: 0,
               }}
             >
-              {news.map((article) => {
+              {sortedNews.map((article) => {
                 const date = new Date(article.date);
                 const day = date.getDate().toString().padStart(2, '0');
                 const month = date.toLocaleString('default', { month: 'short' });

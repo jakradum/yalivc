@@ -11,7 +11,6 @@
   padding: 1.5rem;
   background-color: #ffffff;
   border: 1px solid #e5e5e5;
-
   flex-wrap: wrap;
 }
 
@@ -32,7 +31,6 @@
 .filterSelect {
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
-
   font-size: 1rem;
   background-color: white;
   cursor: pointer;
@@ -60,7 +58,6 @@
   background-color: #830D35;
   color: white;
   border: none;
-
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -94,7 +91,6 @@
   text-align: center;
   padding: 4rem 2rem;
   background-color: #f5f5f5;
-
   margin: 2rem 0;
 }
 
@@ -122,6 +118,8 @@
   border-right: 0.5px solid black;
   border-bottom: 0.5px solid black;
   min-height: 200px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .article a {
@@ -140,21 +138,9 @@
   text-decoration: none;
 }
 
-/* Ensure proper grid borders for any number of articles */
-.article:nth-child(4n) {
-  border-right: none;
-}
-
-/* This only removes bottom border if last article completes a row of 4 */
-.newsArticles .article:last-child:nth-child(4n) {
-  border-bottom: none;
-}
-
-/* If the last row is incomplete, extend the last article to full width */
-.newsArticles:has(.article:last-child:nth-child(4n-3)) .article:last-child,
-.newsArticles:has(.article:last-child:nth-child(4n-2)) .article:last-child,
-.newsArticles:has(.article:last-child:nth-child(4n-1)) .article:last-child {
-  border-right: none;
+/* Remove right border from last item in each row */
+.article:last-child {
+  border-right: 1px solid black;
 }
 
 .articleDate {
@@ -169,6 +155,7 @@
   margin-bottom: 2.5rem;
   flex-grow: 1;
   position: relative;
+  word-break: break-word;
 }
 
 .articleTitle::after {
@@ -213,11 +200,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
   
-  /* Reset for 2-column layout */
-  .article:nth-child(4n) {
-    border-right: 0.5px solid black;
-  }
-  
   .article:nth-child(2n) {
     border-right: none;
   }
@@ -240,16 +222,11 @@
   }
 
   .newsArticles {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
-  
-  /* Reset for single column layout */
-  .article:nth-child(2n) {
-    border-right: 0.5px solid black;
-  }
-  
+
   .article {
-    border-right: none;
+    border-right: 0.5px solid black !important;
   }
 
   .noResults {

@@ -63,6 +63,7 @@ export async function getTeamMembers() {
       name,
       role,
       bio,
+      oneLiner,
       "photo": photo.asset->url,
       linkedIn,
       order
