@@ -292,10 +292,11 @@
 }
 
 .defaultText {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   color: white;
   text-align: center;
   transition: opacity 0.3s ease;
+  font-weight: 200;
 }
 
 .teamDescription:not(:empty) + .defaultDisplay .defaultSVG,
