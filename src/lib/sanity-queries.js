@@ -31,13 +31,14 @@ export async function getNews(limit = 50) {
 
 export async function getTeamMembers() {
   return client.fetch(`
-    *[_type == "teamMember"] | order(order asc) {
+    *[_type == "teamMember" && showOnHomepage == true] | order(order asc) {
       name,
       role,
       oneLiner,
       bio,
       "photo": photo.asset->url,
-      linkedIn
+      linkedIn,
+      order
     }
   `);
 }
