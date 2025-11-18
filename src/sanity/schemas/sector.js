@@ -1,3 +1,5 @@
+import {portableTextConfig} from './portableTextConfig';
+
 export default {
   name: 'sector',
   title: 'Sectors',
@@ -54,36 +56,8 @@ export default {
     {
       name: 'overview',
       title: 'Sector Overview',
-      type: 'array',
       description: 'Structure: 1) Market landscape 2) Key trends 3) Technology drivers 4) India opportunity. Max 400 words.',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H2', value: 'h2' },
-            { title: 'H3', value: 'h3' },
-          ],
-          lists: [
-            { title: 'Bullet', value: 'bullet' },
-            { title: 'Numbered', value: 'number' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' },
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'URL',
-                fields: [{ title: 'URL', name: 'href', type: 'url' }],
-              },
-            ],
-          },
-        },
-      ],
+      ...portableTextConfig,
       validation: Rule => Rule.required().custom(blocks => {
         if (!blocks) return true;
         const text = blocks
@@ -97,24 +71,8 @@ export default {
     {
       name: 'whyYALICares',
       title: 'Why YALI Cares (Investment Thesis)',
-      type: 'array',
       description: "YALI's specific investment thesis for this sector. Max 1000 words.",
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H3', value: 'h3' },
-          ],
-          lists: [{ title: 'Bullet', value: 'bullet' }],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' },
-            ],
-          },
-        },
-      ],
+      ...portableTextConfig,
       validation: Rule => Rule.required().custom(blocks => {
         if (!blocks) return true;
         const text = blocks

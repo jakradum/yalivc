@@ -1,0 +1,150 @@
+/* Pull Quote - Short, impactful */
+.pullQuote {
+  margin: 3rem auto;
+  padding: 0;
+  max-width: 600px;
+  text-align: center;
+  border: none;
+}
+
+.pullQuoteText {
+  font-size: 1.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #830D35;
+  margin: 0;
+  font-style: italic;
+}
+
+.pullQuoteAttribution {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #666;
+  font-style: normal;
+}
+
+/* Block Quote - Longer quote */
+.blockQuote {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  border-left: 4px solid #830D35;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.blockQuoteText {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #363636;
+  margin: 0;
+  font-style: italic;
+}
+
+.blockQuoteAttribution {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: normal;
+}
+
+.blockQuoteAttribution a {
+  color: #830D35;
+  text-decoration: none;
+}
+
+.blockQuoteAttribution a:hover {
+  text-decoration: underline;
+}
+
+/* Standard blockquote (from styles dropdown) */
+.standardQuote {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid #989ea6;
+  background: #fafafa;
+  font-style: italic;
+  color: #555;
+}
+
+/* Text elements */
+.paragraph {
+  margin: 1rem 0;
+  line-height: 1.7;
+  color: #363636;
+}
+
+.h2 {
+  margin: 2rem 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #363636;
+}
+
+.h3 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #363636;
+}
+
+/* Lists */
+.bulletList, .numberList {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  line-height: 1.7;
+}
+
+.listItem {
+  margin: 0.5rem 0;
+}
+
+/* Code */
+.inlineCode {
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  color: #830D35;
+}
+
+/* Images */
+.imageBlock {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .pullQuoteText {
+    font-size: 1.4rem;
+  }
+  
+  .blockQuote {
+    padding: 1rem 1.5rem;
+  }
+  
+  .h2 {
+    font-size: 1.5rem;
+  }
+  
+  .h3 {
+    font-size: 1.25rem;
+  }
+}

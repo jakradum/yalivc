@@ -1,3 +1,5 @@
+import {portableTextConfig} from './portableTextConfig';
+
 const teamMember = {
   name: 'teamMember',
   title: 'Team Members',
@@ -44,24 +46,8 @@ const teamMember = {
     {
       name: 'personalPhilosophy',
       title: 'Personal Philosophy',
-      type: 'array',
       description: 'Long-form personal philosophy written by the team member',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            {title: 'Normal', value: 'normal'},
-            {title: 'H3', value: 'h3'}
-          ],
-          lists: [],
-          marks: {
-            decorators: [
-              {title: 'Strong', value: 'strong'},
-              {title: 'Emphasis', value: 'em'}
-            ]
-          }
-        }
-      ]
+      ...portableTextConfig
     },
     {
       name: 'outsideWork',
