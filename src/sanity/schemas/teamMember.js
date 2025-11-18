@@ -44,6 +44,13 @@ const teamMember = {
       readOnly: ({document}) => document?.isCore === true
     },
     {
+      name: 'showOnHomepage',
+      title: 'Show on Homepage',
+      type: 'boolean',
+      description: 'Display this team member on the homepage',
+      initialValue: false
+    },
+    {
       name: 'personalPhilosophy',
       title: 'Personal Philosophy',
       description: 'Long-form personal philosophy written by the team member',
