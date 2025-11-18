@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { getCompanies, getNews, getTeamMembers } from '@/lib/sanity-queries';
-import teamData from './data/team.json';
 import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
@@ -48,19 +47,7 @@ export default async function HomePage() {
   const news = await getNews();
   const sanityTeam = await getTeamMembers();
   
- const coreTeam = teamData['Team Members']
-   .map((member) => ({
-     name: member.Name,
-     role: member.Designation,
-     oneLiner: member['One-Liner'],
-     bio: member.Detailed,
-     photo: member.image,
-     linkedIn: member.linkedin,
-     order: member.Order,
-   }))
-   .sort((a, b) => a.order - b.order);
-  
-  const team = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
+const team = sanityTeam;
 
   return (
     <main>
