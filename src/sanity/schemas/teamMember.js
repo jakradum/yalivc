@@ -41,12 +41,14 @@ const teamMember = {
       title: 'Biography',
       type: 'text',
       rows: 4,
+       validation: Rule => Rule.required(),
       readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'showOnHomepage',
       title: 'Show on Homepage',
       type: 'boolean',
+       validation: Rule => Rule.required(),
       description: 'Display this team member on the homepage',
       initialValue: false
     },
