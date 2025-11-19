@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './shareButtons.module.css';
+import styles from './sharebuttons.module.css';
 
 export default function ShareButtons({ url, title, description }) {
   const [copied, setCopied] = useState(false);
