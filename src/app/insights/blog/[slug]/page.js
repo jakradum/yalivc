@@ -101,7 +101,7 @@ export default async function BlogPostPage({ params }) {
                   )}
                   <div>
                     <p className={blogStyles.authorName}>{post.author.name}</p>
-                    <p className={blogStyles.authorRole}>{post.author.role}</p>
+                    <p className={blogStyles.authorRole}>{post.author.role} @ Yali</p>
                   </div>
                 </div>
               )}
