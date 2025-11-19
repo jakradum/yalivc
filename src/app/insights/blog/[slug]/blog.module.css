@@ -73,6 +73,22 @@ background-color: white;
   margin-bottom: 3rem;
   overflow: hidden;
 }
+.postMeta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* tags at the top */
+.metaTag {
+  font-size: 0.85rem;
+  color: #363636;
+}
+.metaTag:not(:last-child)::after {
+  content: " | ";
+  margin-left: 1rem;
+  color: #363636;
+}
 
 .featuredImg {
   width: 100%;
@@ -82,9 +98,10 @@ background-color: white;
 
 /* Article Body */
 .articleBody {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #363636;
+  font-family: 'Inter', sans-serif;
 }
 .articleBody::after {
   content: "";
@@ -165,13 +182,19 @@ display: grid;
   overflow: hidden;
   text-decoration: none;
   display: block;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid black;
 }
 
 .relatedCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  background-color: #830D35;
+  transition: 0.5s ease;
+}
+
+.relatedCard:hover .relatedTitle,
+.relatedCard:hover .relatedBlurb,
+.relatedCard:hover .relatedDate,
+.relatedCard:hover .relatedAuthor {
+  color: white;
 }
 
 .relatedImage {

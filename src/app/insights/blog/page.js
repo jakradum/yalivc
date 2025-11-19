@@ -8,6 +8,7 @@ import BlogFilters from './BlogFilters';
 import Pagination from './Pagination';
 import aboutStyles from '../../about-yali/about-styles.module.css';
 import { Gridsvg } from '@/app/components/icons/background svgs/gridsvg';
+import { GenericVector } from '@/app/components/icons/background svgs/category svgs/generic vector';
 
 export const revalidate = 60;
 
@@ -42,23 +43,21 @@ export default async function BlogListingPage({ searchParams }) {
         <section>
           <div className={aboutStyles.mainAbout}>
             <article className={aboutStyles.textContent}>
-              <h1>Our Investments</h1>
+              <h1>The Yali Blog</h1>
               <div className={aboutStyles.paraFlex}>
                 <p>
-                  We focus our investing on Indian deep tech companies across sectors. We believe a deep tech company is
-                  one whose moat is its cutting-edge technology that differentiates it from its competitors. And our
-                  investments in the past have been in close alignment with this belief, with some of them even going
-                  public, listing in Indian stock exchanges.
-                </p>
-                <p>
-                  Our involvement with companies doesn't end with funding; we offer support and mentoring that helps
-                  them go to market. Sectors that excite us most include semiconductor, robotics, smart manufacturing,
-                  and genomics to name a few.
+                  The way we see it, Yali isn't just a deep tech fund; there's a bit more to it. We live our thesis
+                  every day. We work in close quarters with countless startups, industry leaders, government bodies, and
+                  other experts to deeply understand the state of our country's deep tech scene. This blog is a
+                  reflection of our thoughts, investment philosophy and worldview. Most or all articles are written by
+                  our Investments team, who possess a strong technical depth and have had significant first-hand
+                  experience fashioning tech companies themselves. We hope you find these pieces useful; and feel free
+                  to share those that you enjoyed reading.
                 </p>
               </div>
             </article>
             <aside className={aboutStyles.mainsecGraphic}>
-              <Gridsvg />
+<GenericVector/>
             </aside>
           </div>
         </section>

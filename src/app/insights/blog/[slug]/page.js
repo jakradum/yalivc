@@ -69,7 +69,14 @@ export default async function BlogPostPage({ params }) {
         <Breadcrumb />
 
         {/* Article Header */}
+
         <article className={blogStyles.blogArticle}>
+          <div className={blogStyles.postMeta}>
+            {post.sectors?.length > 0 && <span className={blogStyles.metaTag}>{post.sectors[0].name}</span>}
+            <span className={blogStyles.metaTag}>
+              {post.contentType === 'newsletter' ? 'Newsletter' : post.contentType === 'resource' ? 'Resource' : 'Blog'}
+            </span>
+          </div>
           <header className={blogStyles.articleHeader}>
             <h1 className={blogStyles.articleTitle}>{post.title}</h1>
 
@@ -149,7 +156,6 @@ export default async function BlogPostPage({ params }) {
 
                 {post.companies?.length > 0 && (
                   <div className={blogStyles.tagGroup}>
-                    
                     <span className={blogStyles.tagLabel}>Companies:</span>
                     <div className={blogStyles.tags}>
                       {post.companies.map((company) => (
@@ -167,22 +173,22 @@ export default async function BlogPostPage({ params }) {
               </div>
               {/* Author Bio */}
               {post.author && (
-                <section  >
+                <section>
                   <p>Written by</p>
                   <div className={blogStyles.authorBio}>
-                  {post.author.photo && (
-                    <Image
-                      src={post.author.photo}
-                      alt={post.author.name}
-                      width={80}
-                      height={80}
-                      className={blogStyles.authorBioPhoto}
-                    />
-                  )}
-                  <div className={blogStyles.authorBioContent}>
-                    <h3 className={blogStyles.authorBioName}>{post.author.name}</h3>
-                    {post.author.oneLiner && <p className={blogStyles.authorBioOneLiner}>{post.author.oneLiner}</p>}
-                  </div>
+                    {post.author.photo && (
+                      <Image
+                        src={post.author.photo}
+                        alt={post.author.name}
+                        width={80}
+                        height={80}
+                        className={blogStyles.authorBioPhoto}
+                      />
+                    )}
+                    <div className={blogStyles.authorBioContent}>
+                      <h3 className={blogStyles.authorBioName}>{post.author.name}</h3>
+                      {post.author.oneLiner && <p className={blogStyles.authorBioOneLiner}>{post.author.oneLiner}</p>}
+                    </div>
                   </div>
                 </section>
               )}
