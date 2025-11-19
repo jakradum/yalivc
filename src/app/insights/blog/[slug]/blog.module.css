@@ -82,7 +82,7 @@ background-color: white;
 
 /* Article Body */
 .articleBody {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1.8;
   color: #363636;
 }
@@ -94,10 +94,11 @@ background-color: white;
 
 /* Footer / Tags */
 .articleFooter {
-    
   margin-top: 4rem;
-  padding-top: 2rem;
   border-top: 2px solid #e0e0e0;
+}
+.articleFooter >p{
+  font-size: large;
 }
 
 .tagsSection {

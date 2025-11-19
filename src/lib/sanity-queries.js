@@ -187,22 +187,49 @@ export async function getBlogPostBySlug(slug) {
   );
 }
 
-export async function getAllBlogPosts() {
+export async function getAllBlogPosts(options = {}) {
+  const {
+    limit = 12,
+    offset = 0,
+    authorId = null,
+    sectorId = null,
+    companyId = null
+  } = options;
+
+  let filters = `_type == "blogPost" && status == "published"`;
+  
+  if (authorId) filters += ` && author._ref == "${authorId}"`;
+  if (sectorId) filters += ` && "${sectorId}" in sectors[]._ref`;
+  if (companyId) filters += ` && "${companyId}" in companies[]._ref`;
+
   return client.fetch(
-    `*[_type == "blogPost" && status == "published"] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      blurb,
-      contentType,
-      publishedAt,
-      featuredImage {
-        asset->{url},
-        alt
+    `{
+      "posts": *[${filters}] | order(featured desc, publishedAt desc) [${offset}...${offset + limit}] {
+        _id,
+        title,
+        slug,
+        blurb,
+        contentType,
+        publishedAt,
+        featured,
+        featuredImage {
+          asset->{url},
+          alt
+        },
+        author->{
+          _id,
+          name
+        },
+        sectors[]->{
+          _id,
+          name
+        },
+        companies[]->{
+          _id,
+          name
+        }
       },
-      author->{
-        name
-      }
+      "total": count(*[${filters}])
     }`
   );
 }
@@ -236,5 +263,34 @@ export async function getRelatedBlogPosts(currentPostId, sectors, companies, lim
       companyIds: companies?.map((c) => c._id) || [],
       limit,
     }
+  );
+}
+
+export async function getBlogAuthors() {
+  return client.fetch(
+    `*[_type == "teamMember" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
+      _id,
+      name
+    }`
+  );
+}
+
+// ADD: Get all sectors with published posts
+export async function getBlogSectors() {
+  return client.fetch(
+    `*[_type == "sector" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
+      _id,
+      name
+    }`
+  );
+}
+
+// ADD: Get all companies with published posts
+export async function getBlogCompanies() {
+  return client.fetch(
+    `*[_type == "company" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
+      _id,
+      name
+    }`
   );
 }

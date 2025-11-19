@@ -128,6 +128,7 @@ export default async function BlogPostPage({ params }) {
           {/* Tags Section */}
           {(post.sectors?.length > 0 || post.companies?.length > 0) && (
             <footer className={blogStyles.articleFooter}>
+              <p>Explore more</p>
               <div className={blogStyles.tagsSection}>
                 {post.sectors?.length > 0 && (
                   <div className={blogStyles.tagGroup}>
@@ -148,6 +149,7 @@ export default async function BlogPostPage({ params }) {
 
                 {post.companies?.length > 0 && (
                   <div className={blogStyles.tagGroup}>
+                    
                     <span className={blogStyles.tagLabel}>Companies:</span>
                     <div className={blogStyles.tags}>
                       {post.companies.map((company) => (
@@ -165,7 +167,9 @@ export default async function BlogPostPage({ params }) {
               </div>
               {/* Author Bio */}
               {post.author && (
-                <section className={blogStyles.authorBio}>
+                <section  >
+                  <p>Written by</p>
+                  <div className={blogStyles.authorBio}>
                   {post.author.photo && (
                     <Image
                       src={post.author.photo}
@@ -178,6 +182,7 @@ export default async function BlogPostPage({ params }) {
                   <div className={blogStyles.authorBioContent}>
                     <h3 className={blogStyles.authorBioName}>{post.author.name}</h3>
                     {post.author.oneLiner && <p className={blogStyles.authorBioOneLiner}>{post.author.oneLiner}</p>}
+                  </div>
                   </div>
                 </section>
               )}
