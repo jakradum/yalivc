@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: 3rem;
   border: 1px solid black;
-background-color: white;
+  background-color: white;
 }
 
 /* Article Header */
@@ -73,6 +73,7 @@ background-color: white;
   margin-bottom: 3rem;
   overflow: hidden;
 }
+
 .postMeta {
   display: flex;
   gap: 1rem;
@@ -84,6 +85,7 @@ background-color: white;
   font-size: 0.85rem;
   color: #363636;
 }
+
 .metaTag:not(:last-child)::after {
   content: " | ";
   margin-left: 1rem;
@@ -103,6 +105,7 @@ background-color: white;
   color: #363636;
   font-family: 'Inter', sans-serif;
 }
+
 .articleBody::after {
   content: "";
   display: table;
@@ -114,18 +117,19 @@ background-color: white;
   margin-top: 4rem;
   border-top: 2px solid #e0e0e0;
 }
-.articleFooter >p{
+
+.articleFooter>p {
   font-size: large;
 }
 
 .tagsSection {
-display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    grid-auto-rows: minmax(5rem, auto);
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    height: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-auto-rows: minmax(5rem, auto);
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: auto;
 
 }
 
@@ -185,6 +189,23 @@ display: grid;
   border: 1px solid black;
 }
 
+/* reading time calculation */
+.readingTime {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+.dateAndTime {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.separator {
+  margin: 0 0.5rem;
+}
+
 .relatedCard:hover {
   background-color: #830D35;
   transition: 0.5s ease;
@@ -242,16 +263,15 @@ display: grid;
   font-weight: 500;
 }
 
-/* ADD THESE STYLES TO blog.module.css */
+
 
 /* Author Bio Section */
 .authorBio {
-    max-width: 750px;
-  margin: 1rem auto 2rem auto;
+  max-width: 600px;
   padding: 1rem;
   display: flex;
   gap: 1.5rem;
-border: 1px solid black;
+  border: 1px solid black;
   align-items: center;
 
 }
@@ -291,9 +311,13 @@ border: 1px solid black;
 }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .blogArticle {
     padding: 1rem;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-left: none;
+    border-right: none;
   }
 
   .articleTitle {
@@ -303,22 +327,25 @@ border: 1px solid black;
   .articleBlurb {
     font-size: 1.1rem;
   }
-.authorBio{
+
+  .authorBio {
     display: flex;
     flex-direction: row;
     text-align: left;
-}
+  }
+
   .articleMeta {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
+
   .authorBioOneLiner {
-  font-size: .8rem;
-  line-height: 1;
-  color: #666;
-  margin: 0;
-}
+    font-size: .8rem;
+    line-height: 1;
+    color: #666;
+    margin: 0;
+  }
 
   .articleBody {
     font-size: 1rem;
@@ -333,12 +360,13 @@ border: 1px solid black;
     min-width: auto;
     padding-top: 0;
   }
+
   .authorBioName {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #363636;
-  margin: 0 0 0.5rem 0;
-}
+    font-size: 1rem;
+    font-weight: 500;
+    color: #363636;
+    margin: 0 0 0.5rem 0;
+  }
 
   .relatedGrid {
     grid-template-columns: 1fr;

@@ -9,6 +9,7 @@ import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
 import ShareButtons from './sharebuttons';
+import { calculateReadingTime } from '../../../../lib/readingtime'
 
 export const revalidate = 60;
 
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }) {
       title: 'Blog Post Not Found | YALI Capital',
     };
   }
+
 
   return {
     title: post.metaTitle || `${post.title} | YALI Capital Blog`,
@@ -41,12 +43,14 @@ export async function generateMetadata({ params }) {
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   
+  
   try {
     const post = await getBlogPostBySlug(slug);
 
     if (!post) {
       notFound();
     }
+    const readingTime = calculateReadingTime(post.body);
 
     // Get related posts
     const relatedPosts = await getRelatedBlogPosts(
@@ -101,9 +105,11 @@ export default async function BlogPostPage({ params }) {
                   </div>
                 </div>
               )}
-              <time className={blogStyles.publishDate} dateTime={post.publishedAt}>
-                {formattedDate}
-              </time>
+              <div className={blogStyles.dateAndTime}>
+                <time dateTime={post.publishedAt}>{formattedDate}</time>
+                <span className={blogStyles.separator}> | </span>
+                <span>{readingTime} min read</span>
+              </div>
             </div>
 
             {/* Featured Image */}
@@ -174,20 +180,22 @@ export default async function BlogPostPage({ params }) {
               {/* Author Bio */}
               {post.author && (
                 <section>
-                  <p>Written by</p>
-                  <div className={blogStyles.authorBio}>
-                    {post.author.photo && (
-                      <Image
-                        src={post.author.photo}
-                        alt={post.author.name}
-                        width={80}
-                        height={80}
-                        className={blogStyles.authorBioPhoto}
-                      />
-                    )}
-                    <div className={blogStyles.authorBioContent}>
-                      <h3 className={blogStyles.authorBioName}>{post.author.name}</h3>
-                      {post.author.oneLiner && <p className={blogStyles.authorBioOneLiner}>{post.author.oneLiner}</p>}
+                  <div className={blogStyles.writtenBy}>
+                    <p>Written by</p>
+                    <div className={blogStyles.authorBio}>
+                      {post.author.photo && (
+                        <Image
+                          src={post.author.photo}
+                          alt={post.author.name}
+                          width={80}
+                          height={80}
+                          className={blogStyles.authorBioPhoto}
+                        />
+                      )}
+                      <div className={blogStyles.authorBioContent}>
+                        <h3 className={blogStyles.authorBioName}>{post.author.name}</h3>
+                        {post.author.oneLiner && <p className={blogStyles.authorBioOneLiner}>{post.author.oneLiner}</p>}
+                      </div>
                     </div>
                   </div>
                 </section>
