@@ -9,7 +9,7 @@ import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
 import ShareButtons from './sharebuttons';
-import { calculateReadingTime } from '../../../../lib/readingtime'
+import { calculateReadingTime } from '@/lib/readingTime';
 
 export const revalidate = 60;
 
