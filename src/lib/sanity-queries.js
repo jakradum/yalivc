@@ -45,8 +45,6 @@ export async function getNews() {
   );
 }
 
-
-
 export async function getInvestmentPhilosophy() {
   return client.fetch(
     `*[_type == "investmentPhilosophy"][0]{
@@ -134,5 +132,109 @@ export async function getNewsByCompany(companySlug) {
       "publicationName": publication->name
     }[0...5]`,
     { companySlug }
+  );
+}
+
+// Add these functions to your existing sanity-queries.js file
+
+// UPDATE this function in /src/lib/sanity-queries.js
+
+export async function getBlogPostBySlug(slug) {
+  return client.fetch(
+    `*[_type == "blogPost" && slug.current == $slug && status == "published"][0]{
+      _id,
+      title,
+      slug,
+      blurb,
+      body[]{
+        ...,
+        _type == "image" => {
+          ...,
+          asset->
+        }
+      },
+      contentType,
+      publishedAt,
+      featuredImage {
+        asset->{url},
+        alt
+      },
+      author->{
+        _id,
+        name,
+        role,
+        oneLiner,
+        "photo": photo.asset->url,
+        linkedIn
+      },
+      sectors[]->{
+        _id,
+        name,
+        slug
+      },
+      companies[]->{
+        _id,
+        name,
+        slug
+      },
+      metaTitle,
+      metaDescription,
+      ogImage {
+        asset->{url}
+      }
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllBlogPosts() {
+  return client.fetch(
+    `*[_type == "blogPost" && status == "published"] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      blurb,
+      contentType,
+      publishedAt,
+      featuredImage {
+        asset->{url},
+        alt
+      },
+      author->{
+        name
+      }
+    }`
+  );
+}
+
+export async function getRelatedBlogPosts(currentPostId, sectors, companies, limit = 3) {
+  return client.fetch(
+    `*[_type == "blogPost" 
+      && status == "published" 
+      && _id != $currentPostId
+      && (
+        count((sectors[]._ref)[@ in $sectorIds]) > 0 ||
+        count((companies[]._ref)[@ in $companyIds]) > 0
+      )
+    ] | order(publishedAt desc) [0...$limit] {
+      _id,
+      title,
+      slug,
+      blurb,
+      publishedAt,
+      featuredImage {
+        asset->{url},
+        alt
+      },
+      author->{
+        name
+      }
+    }`,
+    {
+      currentPostId,
+      sectorIds: sectors?.map((s) => s._id) || [],
+      companyIds: companies?.map((c) => c._id) || [],
+      limit,
+    }
   );
 }
