@@ -95,6 +95,112 @@ export async function getSectorBySlug(slug) {
   );
 }
 
+export async function getFAQs(type) {
+  return client.fetch(
+    `*[_type == "faq" && type == $type] | order(order asc){
+      _id,
+      question,
+      answer,
+      order
+    }`,
+    { type }
+  );
+}
+
+// UNIFIED CONTENT QUERIES (News + Blogs)
+export async function getContentByCompany(companySlug) {
+  const news = await client.fetch(
+    `*[_type == "news" && $companySlug in relatedCompanies[]->slug.current] | order(date desc) {
+      _id,
+      date,
+      headlineEdited,
+      url,
+      "publicationName": publication->name,
+      isVideo
+    }`,
+    { companySlug }
+  );
+
+  const blogs = await client.fetch(
+    `*[_type == "blogPost" && status == "published" && references(*[_type=="company" && slug.current == $slug]._id)] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      publishedAt,
+      contentType
+    }`,
+    { slug: companySlug }
+  );
+
+  return [
+    ...news.map(n => ({
+      _id: n._id,
+      type: 'press',
+      date: n.date,
+      title: n.headlineEdited,
+      url: n.url,
+      source: n.publicationName,
+      isExternal: true
+    })),
+    ...blogs.map(b => ({
+      _id: b._id,
+      type: b.contentType || 'blog',
+      date: b.publishedAt,
+      title: b.title,
+      url: `/insights/blog/${b.slug.current}`,
+      source: 'YALI Capital',
+      isExternal: false
+    }))
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+export async function getContentBySector(sectorSlug) {
+  const news = await client.fetch(
+    `*[_type == "news" && $sectorSlug in relatedSectors[]->slug.current] | order(date desc) {
+      _id,
+      date,
+      headlineEdited,
+      url,
+      "publicationName": publication->name,
+      isVideo
+    }`,
+    { sectorSlug }
+  );
+
+  const blogs = await client.fetch(
+    `*[_type == "blogPost" && status == "published" && references(*[_type=="sector" && slug.current == $slug]._id)] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      publishedAt,
+      contentType
+    }`,
+    { slug: sectorSlug }
+  );
+
+  return [
+    ...news.map(n => ({
+      _id: n._id,
+      type: 'press',
+      date: n.date,
+      title: n.headlineEdited,
+      url: n.url,
+      source: n.publicationName,
+      isExternal: true
+    })),
+    ...blogs.map(b => ({
+      _id: b._id,
+      type: b.contentType || 'blog',
+      date: b.publishedAt,
+      title: b.title,
+      url: `/insights/blog/${b.slug.current}`,
+      source: 'YALI Capital',
+      isExternal: false
+    }))
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+// LEGACY - kept for backward compatibility
 export async function getNewsBySector(sectorSlug) {
   return client.fetch(
     `*[_type == "news" && $sectorSlug in relatedSectors[]->slug.current] | order(date desc) {
@@ -106,18 +212,6 @@ export async function getNewsBySector(sectorSlug) {
       "publicationName": publication->name
     }[0...5]`,
     { sectorSlug }
-  );
-}
-
-export async function getFAQs(type) {
-  return client.fetch(
-    `*[_type == "faq" && type == $type] | order(order asc){
-      _id,
-      question,
-      answer,
-      order
-    }`,
-    { type }
   );
 }
 
@@ -135,10 +229,7 @@ export async function getNewsByCompany(companySlug) {
   );
 }
 
-// Add these functions to your existing sanity-queries.js file
-
-// UPDATE this function in /src/lib/sanity-queries.js
-
+// BLOG QUERIES
 export async function getBlogPostBySlug(slug) {
   return client.fetch(
     `*[_type == "blogPost" && slug.current == $slug && status == "published"][0]{
@@ -275,7 +366,6 @@ export async function getBlogAuthors() {
   );
 }
 
-// ADD: Get all sectors with published posts
 export async function getBlogSectors() {
   return client.fetch(
     `*[_type == "sector" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
@@ -285,7 +375,6 @@ export async function getBlogSectors() {
   );
 }
 
-// ADD: Get all companies with published posts
 export async function getBlogCompanies() {
   return client.fetch(
     `*[_type == "company" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
