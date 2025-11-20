@@ -7,6 +7,8 @@ import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
+import additionalStyles from './additionalStyles.module.css';
+
 
 export const revalidate = 60;
 
@@ -24,20 +26,11 @@ const sortedNews = [...news].sort((a, b) => new Date(b.date) - new Date(a.date))
     <section>
       <Breadcrumb />
 
-      <div className={styles.mainAbout}>
+      <div className={additionalStyles.mainAbout}>
         <article className={styles.textContent}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '2rem',
-              margin: '2rem',
-              flexWrap: 'nowrap',
-            }}
-          >
+          <div className={styles.companyHeader}>
             {company.logo && (
-              <div style={{ flexShrink: 0 }}>
+              <div className={styles.logoContainer}>
                 <Image
                   src={urlFor(company.logo).width(120).url()}
                   alt={`${company.name} logo`}
@@ -47,7 +40,7 @@ const sortedNews = [...news].sort((a, b) => new Date(b.date) - new Date(a.date))
                 />
               </div>
             )}
-            <h1 style={{ margin: 0, flex: 1 }}>{company.name}</h1>
+            <h1 className={additionalStyles.companyName}>{company.name}</h1>
           </div>
 
           {/* <p style={{ fontSize: '1.25rem', fontWeight: '500', marginBottom: '1rem' }}>{company.oneLiner}</p> */}

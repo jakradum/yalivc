@@ -1,0 +1,29 @@
+.companyHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem;
+}
+
+.logoContainer {
+  flex-shrink: 0;
+}
+
+.companyName {
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .companyHeader {
+    gap: 1rem;
+    margin: 1rem;
+  }
+  
+  .logoContainer img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}
