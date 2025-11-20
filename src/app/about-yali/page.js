@@ -3,25 +3,12 @@ import { Nucleus } from '../components/icons/background svgs/nucleus';
 import HeaderFlex from '../components/icons/headerflex';
 import TeamDetails from './team-details';
 import { getTeamMembers } from '@/lib/sanity-queries';
-import teamData from '../data/team.json';
+
 export const revalidate = 60;
 
 export default async function AboutYali() {
   const teamMembers = await getTeamMembers();
-  const sanityTeam = await getTeamMembers();
-const coreTeam = teamData['Team Members']
-  .map(member => ({
-    name: member.Name,
-    role: member.Designation,
-    bio: member.Detailed,
-    photo: member.image,
-    linkedIn: member.linkedin,
-    order: member.Order
-  }))
-  .sort((a, b) => a.order - b.order);
 
-const allTeam = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
-console.log('Team order:', allTeam.map(m => ({ name: m.name, order: m.order })));
   return (
     <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
@@ -60,7 +47,7 @@ console.log('Team order:', allTeam.map(m => ({ name: m.name, order: m.order })))
             mobileMinHeight={'10rem'}
           />
         </div>
-        <TeamDetails teamMembers={allTeam} />
+        <TeamDetails teamMembers={teamMembers} />
       </section>
     </section>
   );
