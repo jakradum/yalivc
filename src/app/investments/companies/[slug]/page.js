@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
 import detailStyles from '../../../about-yali/detail-styles.module.css'
+import blogStyles from '../../../insights/blog/[slug]/blog.module.css'
 
 export const revalidate = 60;
 
@@ -130,7 +131,7 @@ export default async function CompanyPage({ params }) {
       {/* METRICS + COMPANY INFO */}
       {(company.metrics?.length > 0 || company.companyInfo || company.investmentDetails) && (
         <section className={companyStyles.infoSection}>
-          <HeaderFlex title="Key Information" color="black" desktopMaxWidth={'35%'} mobileMinHeight={'6rem'} />
+          <h2>Key information</h2>
           <div className={companyStyles.infoGrid}>
             {/* Metrics */}
             {company.metrics?.map((metric, idx) => (
@@ -189,21 +190,23 @@ export default async function CompanyPage({ params }) {
             <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
             <h2>{company.story.title}</h2>
             {company.story.author && (
-              <div className={companyStyles.storyAuthor}>
-                <Image
-                  src={company.story.author.photo}
-                  alt={company.story.author.name}
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: '50%' }}
-                />
-                <div>
-                  <p className={companyStyles.authorName}>{company.story.author.name}</p>
-                  <p className={companyStyles.authorRole}>{company.story.author.role} @ Yali</p>
+              <div className={blogStyles.articleMeta} style={{ borderBottom: 'none' }}>
+                <div className={blogStyles.authorInfo}>
+                  <Image
+                    src={company.story.author.photo}
+                    alt={company.story.author.name}
+                    width={48}
+                    height={48}
+                    className={blogStyles.authorPhoto}
+                  />
+                  <div>
+                    <p className={blogStyles.authorName}>{company.story.author.name}</p>
+                    <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
+                  </div>
                 </div>
               </div>
             )}
-            <div className={companyStyles.storyContent}>
+            <div className={blogStyles.articleBody}>
               <PortableText value={company.story.content} components={storyComponents} />
             </div>
           </div>

@@ -10,9 +10,6 @@
   border: 0.5px solid black;
 }
 
-.teamMember:last-child{
-    border-right: none;
-}
 
 .memberInfo {
     flex: 1;
