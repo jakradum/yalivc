@@ -9,6 +9,10 @@
 
 .logoContainer {
   flex-shrink: 0;
+
+}
+.logoContainer>img{
+  max-height: 80px;
 }
 
 .companyName {

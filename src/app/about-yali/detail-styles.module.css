@@ -1,14 +1,17 @@
 .teamListContainer {
-    width: 100%;
-    margin: 0 auto 1rem auto;
-    background-color: white;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+
 }
 
 .teamMember {
-    display: flex;
-    border-bottom: 1px solid black;
-    padding: 0;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid black;
+}
+
+.teamMember:last-child{
+    border-right: none;
 }
 
 .memberInfo {
@@ -17,6 +20,8 @@
     display: flex;
     flex-direction: column;
 }
+
+
 
 .header {
     display: flex;
@@ -85,11 +90,13 @@
 .getInTouch:hover {
     background-color: #000;
     color: #fff;
+    max-height: 350px;
 }
 
 .memberImage {
     flex: 0 0 300px;
-    height: auto;
+height: 400px;
+
 }
 
 .memberImage img {

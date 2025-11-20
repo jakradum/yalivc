@@ -3,33 +3,12 @@ import { Nucleus } from '../components/icons/background svgs/nucleus';
 import HeaderFlex from '../components/icons/headerflex';
 import TeamDetails from './team-details';
 import { getTeamMembers } from '@/lib/sanity-queries';
-import teamData from '../data/team.json';
+
 export const revalidate = 60;
-import Button from '../components/button';
-import detailStyles from './detail-styles.module.css';
 
 export default async function AboutYali() {
-const sanityTeam = await getTeamMembers();
-console.log('Sanity raw:', JSON.stringify(sanityTeam, null, 2));
-console.log('Sanity count:', sanityTeam.length);
-  
-  const coreTeam = teamData['Team Members']
-    .map(member => ({
-      name: member.Name,
-      role: member.Designation,
-      bio: member.Detailed,
-      photo: member.image,
-      linkedIn: member.linkedin,
-      order: member.Order
-    }))
-    .sort((a, b) => a.order - b.order);
+  const teamMembers = await getTeamMembers();
 
-  console.log('Sanity team:', sanityTeam);
-  console.log('Core team count:', coreTeam.length);
-  console.log('Sanity team count:', sanityTeam.length);
-
-  const allTeam = [...coreTeam, ...sanityTeam].sort((a, b) => (a.order || 999) - (b.order || 999));
-  console.log('All team:', allTeam);
   return (
     <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
@@ -68,15 +47,8 @@ console.log('Sanity count:', sanityTeam.length);
             mobileMinHeight={'10rem'}
           />
         </div>
-        <TeamDetails teamMembers={allTeam} />
+        <TeamDetails teamMembers={teamMembers} />
       </section>
-      <div className={detailStyles.viewmoreButton}>
-        {/* <p>If you're still curious, our FAQs are a good place to start.</p>
-        <Button href="/about-yali/faq" color="black">
-          View all FAQs
-        </Button> */} 
-        {/* uncomment the above later once the FAQs are written */}
-      </div>
     </section>
   );
 }

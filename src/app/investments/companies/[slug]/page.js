@@ -85,12 +85,14 @@ export default async function CompanyPage({ params }) {
       {/* FOUNDERS SECTION */}
       {company.founders && company.founders.length > 0 && (
         <section>
-          <HeaderFlex
-            title={company.founders.length > 1 ? 'Meet the Founders' : 'Meet the Founder'}
-            color="black"
-            desktopMaxWidth={'40%'}
-            mobileMinHeight={'6rem'}
-          />
+          <div className={styles.people}>
+            <HeaderFlex
+              title={company.founders.length > 1 ? 'Meet the Founders' : 'Meet the Founder'}
+              color="black"
+              desktopMaxWidth={'40%'}
+              mobileMinHeight={'6rem'}
+            />
+          </div>
           <div className={detailStyles.teamListContainer}>
             {company.founders.map((founder, idx) => (
               <article key={idx} className={detailStyles.teamMember}>
@@ -99,14 +101,9 @@ export default async function CompanyPage({ params }) {
                     <h3 className={detailStyles.name}>{founder.name}</h3>
                     <p className={detailStyles.designation}>{founder.role}</p>
                   </div>
-                  <blockquote className={detailStyles.bio}>"{founder.quote}"</blockquote>
-                  <div className={detailStyles.viewmoreButton}>
-                    {founder.linkedIn && (
-                      <Button href={founder.linkedIn} color="#000000">
-                        view on linkedin
-                      </Button>
-                    )}
-                  </div>
+                  <blockquote className={companyStyles.pullQuote}>
+                    <p>{founder.quote}</p>
+                  </blockquote>
                 </div>
                 <div className={detailStyles.memberImage}>
                   <Image
@@ -116,6 +113,13 @@ export default async function CompanyPage({ params }) {
                     height={300}
                     style={{ objectFit: 'cover' }}
                   />
+                </div>
+                <div className={detailStyles.viewmoreButton}>
+                  {founder.linkedIn && (
+                    <Button href={founder.linkedIn} color="#000000">
+                      view on linkedin
+                    </Button>
+                  )}
                 </div>
               </article>
             ))}
