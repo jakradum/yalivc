@@ -26,7 +26,17 @@ export async function getCompanyBySlug(slug) {
       oneLiner,
       detail,
       link,
-      logo
+      logo,
+      founders,
+      story{
+        title,
+        author->{name, role, "photo": photo.asset->url},
+        content
+      },
+      metrics[] | order(order asc),
+      investmentDetails,
+      companyInfo,
+      achievements[] | order(date desc)
     }`,
     { slug }
   );
