@@ -1,6 +1,6 @@
 import styles from './blog-listing.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
-import { getAllBlogPosts, getBlogAuthors, getBlogSectors, getBlogCompanies } from '@/lib/sanity-queries';
+import { getAllBlogPosts, getBlogAuthors, getBlogCategories, getBlogCompanies } from '@/lib/sanity-queries';
 import Breadcrumb from '../../components/breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ export default async function BlogListingPage({ searchParams }) {
   const params = await searchParams;
   const page = parseInt(params?.page || '1');
   const authorId = params?.author || null;
-  const sectorId = params?.sector || null;
+  const categoryId = params?.category || null;
   const companyId = params?.company || null;
 
   const limit = 12;
@@ -26,11 +26,11 @@ export default async function BlogListingPage({ searchParams }) {
     limit,
     offset,
     authorId,
-    sectorId,
+    categoryId,
     companyId,
   });
 
-  const [authors, sectors, companies] = await Promise.all([getBlogAuthors(), getBlogSectors(), getBlogCompanies()]);
+  const [authors, categories, companies] = await Promise.all([getBlogAuthors(), getBlogCategories(), getBlogCompanies()]);
 
   const totalPages = Math.ceil(total / limit);
   const featuredPost = posts.find((p) => p.featured);
@@ -65,10 +65,10 @@ export default async function BlogListingPage({ searchParams }) {
           <HeaderFlex title="In depth | The Yali Blog" color="black" desktopMaxWidth={'50%'} />
           <BlogFilters
             authors={authors}
-            sectors={sectors}
+            categories={categories}
             companies={companies}
             currentAuthor={authorId}
-            currentSector={sectorId}
+            currentCategory={categoryId}
             currentCompany={companyId}
           />
 

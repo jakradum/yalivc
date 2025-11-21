@@ -1,60 +1,70 @@
 import styles from '../../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../../components/icons/headerflex';
-import { getSectorBySlug, getCompanies, getContentBySector } from '@/lib/sanity-queries';
+import { getCategoryBySlug, getCompanies, getContentByCategory } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
 import { CompaniesInnerComponent } from '../../companies inner component';
 import { notFound } from 'next/navigation';
 import Breadcrumb from '../../../components/breadcrumb';
 import newsStyles from '../../../newsroom/newscomponent.module.css';
 import { RoboticsVector } from '@/app/components/icons/background svgs/category svgs/robotics vector';
-import { GenomicsVector } from '@/app/components/icons/background svgs/category svgs/genomics vector';
 import { SemiconVector } from '@/app/components/icons/background svgs/category svgs/semicon vector';
 import { GenericVector } from '@/app/components/icons/background svgs/category svgs/generic vector';
 import { ArtificialIntelligenceVector } from '@/app/components/icons/background svgs/category svgs/artificial intelligence vector';
 import { DefenceVector } from '@/app/components/icons/background svgs/category svgs/defence vector';
-import { FablessChipVector } from '@/app/components/icons/background svgs/category svgs/fabless chip vector';
 import { AdvancedManufacturingVector } from '@/app/components/icons/background svgs/category svgs/advanced manufacturing vector';
-import { GenerativeAIVector } from '@/app/components/icons/background svgs/category svgs/generative AI vector';
 import { LifeSciencesVector } from '@/app/components/icons/background svgs/category svgs/life sciennces vector';
 
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const sector = await getSectorBySlug(slug);
+  const category = await getCategoryBySlug(slug);
 
-  if (!sector) {
+  if (!category) {
     return {
       title: 'Sector Not Found | YALI Capital',
     };
   }
 
   return {
-    title: `${sector.name} | YALI Capital`,
-    description: sector.shortDescription || `Learn about YALI Capital's investments in ${sector.name}`,
+    title: `${category.name} | YALI Capital`,
+    description: category.description || `Learn about YALI Capital's investments in ${category.name}`,
   };
 }
 
 export default async function SectorPage({ params }) {
   const { slug } = await params;
-  let sector = null;
+  let category = null;
   let companies = [];
   let allContent = [];
 
   try {
-    sector = await getSectorBySlug(slug);
+    category = await getCategoryBySlug(slug);
 
-    if (!sector) {
+    if (!category) {
       notFound();
     }
 
     companies = await getCompanies();
-    const sectorCompanies = companies.filter((company) => {
-      const companyCategory = company.category?.name || company.category;
-      return companyCategory?.toLowerCase() === sector.name.toLowerCase();
+    const categoryCompanies = companies.filter((company) => {
+      const companyCategory = company.category?.toLowerCase();
+      return companyCategory === category.name.toLowerCase();
     });
 
-    allContent = await getContentBySector(slug);
+    allContent = await getContentByCategory(slug);
+
+    // Map category names to SVG components
+    const categoryVectorMap = {
+      'artificial intelligence': ArtificialIntelligenceVector,
+      'life sciences': LifeSciencesVector,
+      semiconductors: SemiconVector,
+      'smart manufacturing': AdvancedManufacturingVector,
+      robotics: RoboticsVector,
+      defence: DefenceVector,
+      'strategic tech': GenericVector,
+    };
+
+    const VectorComponent = categoryVectorMap[category.name.toLowerCase()] || GenericVector;
 
     return (
       <section className={styles.sectionLevel}>
@@ -62,10 +72,10 @@ export default async function SectorPage({ params }) {
 
         <div className={styles.mainAbout}>
           <article className={styles.textContent}>
-            <h1>{sector.name}</h1>
-            {sector.overview && (
+            <h1>{category.name}</h1>
+            {category.description && (
               <div className={styles.paraFlex}>
-                <PortableText value={sector.overview} />
+                <p>{category.description}</p>
               </div>
             )}
           </article>
@@ -80,54 +90,15 @@ export default async function SectorPage({ params }) {
                 justifyContent: 'center',
               }}
             >
-              {sector.name.toLowerCase() === 'robotics' && (
-                <RoboticsVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'genomics' && (
-                <GenomicsVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'semiconductors' && (
-                <SemiconVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'aerospace & defence' && (
-                <DefenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'artificial intelligence' && (
-                <ArtificialIntelligenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'defence' && (
-                <DefenceVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'fabless chip design' && (
-                <FablessChipVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'advanced manufacturing' && (
-                <AdvancedManufacturingVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'generative ai' && (
-                <GenerativeAIVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
-              {sector.name.toLowerCase() === 'life sciences' && (
-                <LifeSciencesVector style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              )}
+              <VectorComponent style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
           </aside>
         </div>
 
-        {sector.whyYALICares && (
-          <section>
-            <HeaderFlex title="Why we invest" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'0rem'} />
-            <div style={{ padding: ' 0 2rem ', lineHeight: '1.8', fontSize: '1rem' }}>
-              <PortableText value={sector.whyYALICares} />
-            </div>
-            <div className={styles.people}></div>
-          </section>
-        )}
-
-        {sectorCompanies.length > 0 && (
+        {categoryCompanies.length > 0 && (
           <section>
             <HeaderFlex title="Portfolio companies" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'0rem'} />
-            <CompaniesInnerComponent companies={sectorCompanies} />
+            <CompaniesInnerComponent companies={categoryCompanies} />
           </section>
         )}
 
@@ -184,7 +155,7 @@ export default async function SectorPage({ params }) {
       </section>
     );
   } catch (error) {
-    console.error('Error loading sector page:', error);
+    console.error('Error loading category page:', error);
     notFound();
   }
 }

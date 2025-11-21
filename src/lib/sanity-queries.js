@@ -79,9 +79,9 @@ export async function getTeamMembers() {
   );
 }
 
-export async function getSectors() {
+export async function getCategories() {
   return client.fetch(
-    `*[_type == "sector" && published == true] | order(order asc) {
+    `*[_type == "category" && published == true] | order(order asc) {
       _id,
       name,
       slug,
@@ -91,15 +91,13 @@ export async function getSectors() {
   );
 }
 
-export async function getSectorBySlug(slug) {
+export async function getCategoryBySlug(slug) {
   return client.fetch(
-    `*[_type == "sector" && slug.current == $slug][0]{
+    `*[_type == "category" && slug.current == $slug][0]{
       _id,
       name,
       slug,
-      shortDescription,
-      overview,
-      whyYALICares
+      description
     }`,
     { slug }
   );
@@ -164,9 +162,9 @@ export async function getContentByCompany(companySlug) {
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
-export async function getContentBySector(sectorSlug) {
+export async function getContentByCategory(categorySlug) {
   const news = await client.fetch(
-    `*[_type == "news" && $sectorSlug in relatedSectors[]->slug.current] | order(date desc) {
+    `*[_type == "news" && $categorySlug in relatedCategories[]->slug.current] | order(date desc) {
       _id,
       date,
       headlineEdited,
@@ -174,18 +172,18 @@ export async function getContentBySector(sectorSlug) {
       "publicationName": publication->name,
       isVideo
     }`,
-    { sectorSlug }
+    { categorySlug }
   );
 
   const blogs = await client.fetch(
-    `*[_type == "blogPost" && status == "published" && references(*[_type=="sector" && slug.current == $slug]._id)] | order(publishedAt desc) {
+    `*[_type == "blogPost" && status == "published" && references(*[_type=="category" && slug.current == $slug]._id)] | order(publishedAt desc) {
       _id,
       title,
       slug,
       publishedAt,
       contentType
     }`,
-    { slug: sectorSlug }
+    { slug: categorySlug }
   );
 
   return [
@@ -211,9 +209,9 @@ export async function getContentBySector(sectorSlug) {
 }
 
 // LEGACY - kept for backward compatibility
-export async function getNewsBySector(sectorSlug) {
+export async function getNewsByCategory(categorySlug) {
   return client.fetch(
-    `*[_type == "news" && $sectorSlug in relatedSectors[]->slug.current] | order(date desc) {
+    `*[_type == "news" && $categorySlug in relatedCategories[]->slug.current] | order(date desc) {
       _id,
       url,
       date,
@@ -221,7 +219,7 @@ export async function getNewsBySector(sectorSlug) {
       isVideo,
       "publicationName": publication->name
     }[0...5]`,
-    { sectorSlug }
+    { categorySlug }
   );
 }
 
@@ -268,7 +266,7 @@ export async function getBlogPostBySlug(slug) {
         "photo": photo.asset->url,
         linkedIn
       },
-      sectors[]->{
+      categories[]->{
         _id,
         name,
         slug
@@ -293,14 +291,14 @@ export async function getAllBlogPosts(options = {}) {
     limit = 12,
     offset = 0,
     authorId = null,
-    sectorId = null,
+    categoryId = null,
     companyId = null
   } = options;
 
   let filters = `_type == "blogPost" && status == "published"`;
   
   if (authorId) filters += ` && author._ref == "${authorId}"`;
-  if (sectorId) filters += ` && "${sectorId}" in sectors[]._ref`;
+  if (categoryId) filters += ` && "${categoryId}" in categories[]._ref`;
   if (companyId) filters += ` && "${companyId}" in companies[]._ref`;
 
   return client.fetch(
@@ -321,7 +319,7 @@ export async function getAllBlogPosts(options = {}) {
           _id,
           name
         },
-        sectors[]->{
+        categories[]->{
           _id,
           name
         },
@@ -335,13 +333,13 @@ export async function getAllBlogPosts(options = {}) {
   );
 }
 
-export async function getRelatedBlogPosts(currentPostId, sectors, companies, limit = 3) {
+export async function getRelatedBlogPosts(currentPostId, categories, companies, limit = 3) {
   return client.fetch(
     `*[_type == "blogPost" 
       && status == "published" 
       && _id != $currentPostId
       && (
-        count((sectors[]._ref)[@ in $sectorIds]) > 0 ||
+        count((categories[]._ref)[@ in $categoryIds]) > 0 ||
         count((companies[]._ref)[@ in $companyIds]) > 0
       )
     ] | order(publishedAt desc) [0...$limit] {
@@ -360,7 +358,7 @@ export async function getRelatedBlogPosts(currentPostId, sectors, companies, lim
     }`,
     {
       currentPostId,
-      sectorIds: sectors?.map((s) => s._id) || [],
+      categoryIds: categories?.map((c) => c._id) || [],
       companyIds: companies?.map((c) => c._id) || [],
       limit,
     }
@@ -376,9 +374,9 @@ export async function getBlogAuthors() {
   );
 }
 
-export async function getBlogSectors() {
+export async function getBlogCategories() {
   return client.fetch(
-    `*[_type == "sector" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
+    `*[_type == "category" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
       _id,
       name
     }`

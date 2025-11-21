@@ -31,9 +31,9 @@ export default {
     },
     {
       name: 'category',
-      title: 'Sector',
+      title: 'Category',
       type: 'reference',
-      to: [{ type: 'sector' }],
+      to: [{ type: 'category' }],
     },
     {
       name: 'logo',

@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './BlogFilters.module.css';
 
-export default function BlogFilters({ authors, sectors, companies, currentAuthor, currentSector, currentCompany }) {
+export default function BlogFilters({ authors, categories, companies, currentAuthor, currentCategory, currentCompany }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -16,7 +16,7 @@ export default function BlogFilters({ authors, sectors, companies, currentAuthor
       params.delete(type);
     }
     
-    params.delete('page'); // Reset to page 1 on filter change
+    params.delete('page');
     
     router.push(`/insights/blog?${params.toString()}`);
   };
@@ -25,7 +25,7 @@ export default function BlogFilters({ authors, sectors, companies, currentAuthor
     router.push('/insights/blog');
   };
 
-  const hasActiveFilters = currentAuthor || currentSector || currentCompany;
+  const hasActiveFilters = currentAuthor || currentCategory || currentCompany;
 
   return (
     <div className={styles.filters}>
@@ -45,16 +45,16 @@ export default function BlogFilters({ authors, sectors, companies, currentAuthor
       </div>
 
       <div className={styles.filterGroup}>
-        <label htmlFor="sector">Sector:</label>
+        <label htmlFor="category">Category:</label>
         <select 
-          id="sector"
-          value={currentSector || ''} 
-          onChange={(e) => handleFilterChange('sector', e.target.value)}
+          id="category"
+          value={currentCategory || ''} 
+          onChange={(e) => handleFilterChange('category', e.target.value)}
           className={styles.select}
         >
-          <option value="">All Sectors</option>
-          {sectors.map(sector => (
-            <option key={sector._id} value={sector._id}>{sector.name}</option>
+          <option value="">All Categories</option>
+          {categories.map(category => (
+            <option key={category._id} value={category._id}>{category.name}</option>
           ))}
         </select>
       </div>

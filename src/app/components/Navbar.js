@@ -16,7 +16,7 @@ const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [availableSectors, setAvailableSectors] = useState([]);
+  const [availableCategories, setAvailableCategories] = useState([]);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -36,8 +36,8 @@ const Navbar = () => {
   useEffect(() => {
     fetch('/api/sectors-with-companies')
       .then((res) => res.json())
-      .then((data) => setAvailableSectors(data.sectors || []))
-      .catch((err) => console.error('Failed to load sectors:', err));
+      .then((data) => setAvailableCategories(data.categories || []))
+      .catch((err) => console.error('Failed to load categories:', err));
   }, []);
 
   useEffect(() => {
@@ -87,16 +87,16 @@ const Navbar = () => {
     return pathname.startsWith(path);
   };
 
- const filterSectorItems = (items) => {
+ const filterCategoryItems = (items) => {
   return items.map(item => {
-    if (item.path === '/investments' && availableSectors.length > 0) {
+    if (item.path === '/investments' && availableCategories.length > 0) {
       return {
         ...item,
         subItems: [
           { name: 'Sectors', path: '/investments/sectors' },
-          ...availableSectors.map((sector) => ({
-            name: sector.name,
-            path: `/investments/sectors/${sector.slug}`,
+          ...availableCategories.map((category) => ({
+            name: category.name,
+            path: `/investments/sectors/${category.slug}`,
           })),
         ],
       };
@@ -107,7 +107,7 @@ const Navbar = () => {
 
   const renderMobileMenu = () => (
     <ul className={styles.mobileMenuList}>
-      {filterSectorItems(navigationItems.menuItems).map((item, index) => (
+      {filterCategoryItems(navigationItems.menuItems).map((item, index) => (
         <li key={index}>
           <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
             <span>{item.name.toUpperCase()}</span>
@@ -119,7 +119,7 @@ const Navbar = () => {
 
   const renderDesktopMenu = () => (
     <ul className={styles.menu}>
-      {filterSectorItems(navigationItems.menuItems).map((item, index) => (
+      {filterCategoryItems(navigationItems.menuItems).map((item, index) => (
         <li key={index} className={item.subItems ? styles.dropdown : ''}>
           <Link 
             href={item.path}

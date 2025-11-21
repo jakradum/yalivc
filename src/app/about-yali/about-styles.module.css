@@ -7,6 +7,13 @@
     padding: 3rem 0 0 0;
 }
 
+.textContent > h1,
+.textContent > h2,
+.textContent > h3,
+.textContent > h4 {
+    text-transform:capitalize;
+}
+
 .sectionLevel {
     position: relative;
     margin-bottom: 1rem;

@@ -1,6 +1,6 @@
 import styles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
-import { getSectors, getInvestmentPhilosophy } from '@/lib/sanity-queries';
+import { getCategories, getInvestmentPhilosophy } from '@/lib/sanity-queries';
 import Link from 'next/link';
 import Breadcrumb from '../../components/breadcrumb';
 import { PortableText } from '@portabletext/react';
@@ -13,12 +13,12 @@ export const metadata = {
 };
 
 export default async function SectorsPage() {
-  let sectors = [];
+  let categories = [];
   let philosophy = null;
 
   try {
-    [sectors, philosophy] = await Promise.all([
-      getSectors(),
+    [categories, philosophy] = await Promise.all([
+      getCategories(),
       getInvestmentPhilosophy()
     ]);
   } catch (error) {
@@ -51,15 +51,15 @@ export default async function SectorsPage() {
             <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
           </div>
           <p>
-              Each of the {sectors.length} sectors below represents a domain where India has the potential to lead globally. Our investments span
+              Each of the {categories.length} sectors below represents a domain where India has the potential to lead globally. Our investments span
               across these focus areas, where we bring deep technical expertise and industry networks to help founders
               scale cutting-edge technology companies.
             </p>
           <div className={styles.sectorsGrid}>
-            {sectors.map((sector) => (
-              <Link key={sector._id} href={`/investments/sectors/${sector.slug.current}`} className={styles.sectorCard}>
-                <h3>{sector.name}</h3>
-                <p>{sector.shortDescription}</p>
+            {categories.map((category) => (
+              <Link key={category._id} href={`/investments/sectors/${category.slug.current}`} className={styles.sectorCard}>
+                <h3>{category.name}</h3>
+                <p>{category.description}</p>
               </Link>
             ))}
            

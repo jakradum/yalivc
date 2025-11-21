@@ -9,4 +9,4 @@ import publication from './schemas/publication'
 import blogPost from './schemas/blogPost'
 import quarterlyReport from './schemas/quarterlyReport'
 
-export const schemaTypes = [company, news, teamMember, category, sector, investmentPhilosophy, faq, publication, blogPost, quarterlyReport]
+export const schemaTypes = [company, news, teamMember, category, investmentPhilosophy, faq, publication, blogPost, quarterlyReport]

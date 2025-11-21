@@ -26,7 +26,6 @@ export default defineConfig({
                     S.listItem()
                       .title('Investment Philosophy')
                       .child(S.document().schemaType('investmentPhilosophy').documentId('investmentPhilosophy')),
-                    S.listItem().title('Sectors').child(S.documentTypeList('sector').title('Sectors')),
                     S.listItem().title('Portfolio Companies').child(S.documentTypeList('company').title('Companies')),
                     S.listItem().title('Categories').child(S.documentTypeList('category').title('Categories')),
                     S.listItem().title('Team Members').child(S.documentTypeList('teamMember').title('Team')),
@@ -53,6 +52,12 @@ export default defineConfig({
     }),
     visionTool(),
   ],
+
+    studio: {
+    components: {
+      navbar: () => null
+    }
+  },
 
   schema: {
     types: schemaTypes,

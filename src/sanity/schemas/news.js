@@ -7,75 +7,76 @@ const news = {
       name: 'url',
       title: 'Article URL',
       type: 'url',
-      validation: Rule => Rule.required().uri({
-        scheme: ['http', 'https']
-      })
+      validation: (Rule) =>
+        Rule.required().uri({
+          scheme: ['http', 'https'],
+        }),
     },
     {
       name: 'date',
       title: 'Publication Date',
       type: 'date',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'publication',
       title: 'Publication',
       type: 'reference',
-      to: [{type: 'publication'}],
-      validation: Rule => Rule.required()
+      to: [{ type: 'publication' }],
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'headlineEdited',
       title: 'Headline',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'isVideo',
       title: 'Is Video?',
       type: 'boolean',
-      initialValue: false
+      initialValue: false,
     },
     {
       name: 'featured',
       title: 'Featured on Homepage?',
       type: 'boolean',
-      initialValue: false
+      initialValue: false,
     },
     {
-      name: 'relatedSectors',
-      title: 'Related Sectors',
+      name: 'relatedCategories',
+      title: 'Related Categories',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'sector'}]}],
-      description: 'Link this article to relevant sectors'
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Link this article to relevant categories',
     },
     {
       name: 'relatedCompanies',
       title: 'Related Companies',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'company'}]}],
-      description: 'Link this article to relevant companies'
-    }
+      of: [{ type: 'reference', to: [{ type: 'company' }] }],
+      description: 'Link this article to relevant companies',
+    },
   ],
   preview: {
     select: {
       title: 'headlineEdited',
       publication: 'publication.name',
-      date: 'date'
+      date: 'date',
     },
-    prepare({title, publication, date}) {
+    prepare({ title, publication, date }) {
       return {
         title,
-        subtitle: `${publication} - ${new Date(date).toLocaleDateString()}`
-      }
-    }
+        subtitle: `${publication} - ${new Date(date).toLocaleDateString()}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Date, Newest',
       name: 'dateDesc',
-      by: [{field: 'date', direction: 'desc'}]
-    }
-  ]
-}
+      by: [{ field: 'date', direction: 'desc' }],
+    },
+  ],
+};
 export default news

@@ -2,16 +2,16 @@ import { client } from '@/sanity/client';
 
 export async function GET() {
   try {
-    const sectors = await client.fetch(`
-      *[_type == "sector" && published == true] | order(order asc) {
+    const categories = await client.fetch(`
+      *[_type == "category"] | order(order asc) {
         name,
         "slug": slug.current
       }
     `);
 
-    return Response.json({ sectors });
+    return Response.json({ categories });
   } catch (error) {
-    console.error('Failed to fetch sectors:', error);
-    return Response.json({ sectors: [] });
+    console.error('Failed to fetch categories:', error);
+    return Response.json({ categories: [] });
   }
 }

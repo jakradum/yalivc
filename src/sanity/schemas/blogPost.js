@@ -57,11 +57,11 @@ export default {
       validation: Rule => Rule.required()
     },
     {
-      name: 'sectors',
-      title: 'Related Sectors',
+      name: 'categories',
+      title: 'Related Categories',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'sector'}]}],
-      description: 'Tag relevant investment sectors'
+      of: [{type: 'reference', to: [{type: 'category'}]}],
+      description: 'Tag relevant investment categories'
     },
     {
       name: 'companies',
