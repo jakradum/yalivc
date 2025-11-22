@@ -27,40 +27,33 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${category.name} | YALI Capital`,
+    title: `${category.name.charAt(0).toUpperCase() + category.name.slice(1)} | Yali Capital`,
     description: category.description || `Learn about YALI Capital's investments in ${category.name}`,
   };
 }
 
 export default async function SectorPage({ params }) {
   const { slug } = await params;
-  let category = null;
-  let companies = [];
-  let allContent = [];
-
+  
   try {
-    category = await getCategoryBySlug(slug);
+    const category = await getCategoryBySlug(slug);
+    if (!category) notFound();
 
-    if (!category) {
-      notFound();
-    }
-
-    companies = await getCompanies();
+    const companies = await getCompanies();
     const categoryCompanies = companies.filter((company) => {
       const companyCategory = company.category?.toLowerCase();
       return companyCategory === category.name.toLowerCase();
     });
 
-    allContent = await getContentByCategory(slug);
+    const allContent = await getContentByCategory(slug);
 
-    // Map category names to SVG components
     const categoryVectorMap = {
       'artificial intelligence': ArtificialIntelligenceVector,
       'life sciences': LifeSciencesVector,
-      semiconductors: SemiconVector,
+      'semiconductors': SemiconVector,
       'smart manufacturing': AdvancedManufacturingVector,
-      robotics: RoboticsVector,
-      defence: DefenceVector,
+      'robotics': RoboticsVector,
+      'defence': DefenceVector,
       'strategic tech': GenericVector,
     };
 
@@ -73,9 +66,9 @@ export default async function SectorPage({ params }) {
         <div className={styles.mainAbout}>
           <article className={styles.textContent}>
             <h1>{category.name}</h1>
-            {category.description && (
+            {category.overview && (
               <div className={styles.paraFlex}>
-                <p>{category.description}</p>
+                <PortableText value={category.overview} />
               </div>
             )}
           </article>
@@ -94,6 +87,15 @@ export default async function SectorPage({ params }) {
             </div>
           </aside>
         </div>
+
+        {category.whyYALICares && (
+          <section>
+            <HeaderFlex title="Why we invest" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'0rem'} />
+            <div className={styles.twoColumnText}>
+              <PortableText value={category.whyYALICares} />
+            </div>
+          </section>
+        )}
 
         {categoryCompanies.length > 0 && (
           <section>
@@ -151,6 +153,7 @@ export default async function SectorPage({ params }) {
             </div>
           </section>
         )}
+        
         <Breadcrumb />
       </section>
     );

@@ -97,7 +97,9 @@ export async function getCategoryBySlug(slug) {
       _id,
       name,
       slug,
-      description
+      description,
+      overview,
+      whyYALICares
     }`,
     { slug }
   );

@@ -9,8 +9,9 @@ import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
-import detailStyles from '../../../about-yali/detail-styles.module.css'
-import blogStyles from '../../../insights/blog/[slug]/blog.module.css'
+import detailStyles from '../../../about-yali/detail-styles.module.css';
+import blogStyles from '../../../insights/blog/[slug]/blog.module.css';
+import teamLPstyles from '../../../landing page styles/team.module.css';
 
 export const revalidate = 60;
 
@@ -83,102 +84,104 @@ export default async function CompanyPage({ params }) {
           )}
         </article>
       </div>
-      {/* FOUNDERS SECTION */}
-      {company.founders && company.founders.length > 0 && (
+
+      {/* FOUNDERS + INFO SECTION */}
+      {(company.founders?.length > 0 ||
+        company.metrics?.length > 0 ||
+        company.companyInfo ||
+        company.investmentDetails) && (
         <section>
           <div className={styles.people}>
             <HeaderFlex
-              title={company.founders.length > 1 ? 'Meet the Founders' : 'Meet the Founder'}
+              title={
+                company.founders?.length > 1
+                  ? 'Meet the Founders'
+                  : company.founders?.length === 1
+                    ? 'Meet the Founder'
+                    : 'Key Information'
+              }
               color="black"
               desktopMaxWidth={'40%'}
               mobileMinHeight={'6rem'}
             />
           </div>
-          <div className={detailStyles.teamListContainer}>
-            {company.founders.map((founder, idx) => (
-              <article key={idx} className={detailStyles.teamMember}>
-                <div className={detailStyles.memberInfo}>
-                  <div className={detailStyles.header}>
-                    <h3 className={detailStyles.name}>{founder.name}</h3>
-                    <p className={detailStyles.designation}>{founder.role}</p>
+          <div className={companyStyles.founderInfoGrid}>
+            {/* Founders Column */}
+            <div>
+              {company.founders?.map((founder, idx) => (
+                <article key={idx} className={companyStyles.founderCard}>
+                  <div className={companyStyles.founderImage}>
+                    <Image
+                      src={urlFor(founder.photo).width(300).url()}
+                      alt={founder.name}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
                   </div>
-                  <blockquote className={companyStyles.pullQuote}>
-                    <p>{founder.quote}</p>
-                  </blockquote>
-                </div>
-                <div className={detailStyles.memberImage}>
-                  <Image
-                    src={urlFor(founder.photo).width(300).url()}
-                    alt={founder.name}
-                    width={300}
-                    height={300}
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-                <div className={detailStyles.viewmoreButton}>
-                  {founder.linkedIn && (
-                    <Button href={founder.linkedIn} color="#000000">
-                      view on linkedin
-                    </Button>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+                  <div className={companyStyles.founderContent}>
+                    <div className={companyStyles.founderHeader}>
+                      <h2 className={companyStyles.founderName}>{founder.name}</h2>
+                      <p className={companyStyles.founderRole}>{founder.role}</p>
+                    </div>
+                    {founder.linkedIn && (
+                      <div className={companyStyles.founderLinkedIn}>
+                        <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer">
+                          <button className={teamLPstyles.socialButton}>in</button>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
 
-      {/* METRICS + COMPANY INFO */}
-      {(company.metrics?.length > 0 || company.companyInfo || company.investmentDetails) && (
-        <section className={companyStyles.infoSection}>
-          <h2>Key information</h2>
-          <div className={companyStyles.infoGrid}>
-            {/* Metrics */}
-            {company.metrics?.map((metric, idx) => (
-              <div key={idx} className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>{metric.label}</p>
-                <p className={companyStyles.metricValue}>{metric.value}</p>
+            {/* Info Column */}
+            <div className={companyStyles.infoSection}>
+              <h2>Key information</h2>
+              <div className={companyStyles.infoGrid}>
+                {company.metrics?.map((metric, idx) => (
+                  <div key={idx} className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>{metric.label}</p>
+                    <p className={companyStyles.metricValue}>{metric.value}</p>
+                  </div>
+                ))}
+                {company.companyInfo?.founded && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Founded</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.founded}</p>
+                  </div>
+                )}
+                {company.companyInfo?.headquarters && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Headquarters</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.headquarters}</p>
+                  </div>
+                )}
+                {company.companyInfo?.teamSize && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Team Size</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.teamSize}</p>
+                  </div>
+                )}
+                {company.investmentDetails?.stage && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Investment Stage</p>
+                    <p className={companyStyles.metricValue}>{company.investmentDetails.stage}</p>
+                  </div>
+                )}
+                {company.investmentDetails?.date && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Investment Date</p>
+                    <p className={companyStyles.metricValue}>
+                      {new Date(company.investmentDetails.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                      })}
+                    </p>
+                  </div>
+                )}
               </div>
-            ))}
-
-            {/* Company Info */}
-            {company.companyInfo?.founded && (
-              <div className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>Founded</p>
-                <p className={companyStyles.metricValue}>{company.companyInfo.founded}</p>
-              </div>
-            )}
-            {company.companyInfo?.headquarters && (
-              <div className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>Headquarters</p>
-                <p className={companyStyles.metricValue}>{company.companyInfo.headquarters}</p>
-              </div>
-            )}
-            {company.companyInfo?.teamSize && (
-              <div className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>Team Size</p>
-                <p className={companyStyles.metricValue}>{company.companyInfo.teamSize}</p>
-              </div>
-            )}
-
-            {/* Investment Details */}
-            {company.investmentDetails?.stage && (
-              <div className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>Investment Stage</p>
-                <p className={companyStyles.metricValue}>{company.investmentDetails.stage}</p>
-              </div>
-            )}
-            {company.investmentDetails?.date && (
-              <div className={companyStyles.metricCard}>
-                <p className={companyStyles.metricLabel}>Investment Date</p>
-                <p className={companyStyles.metricValue}>
-                  {new Date(company.investmentDetails.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                  })}
-                </p>
-              </div>
-            )}
+            </div>
           </div>
         </section>
       )}

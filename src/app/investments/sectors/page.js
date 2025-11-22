@@ -51,7 +51,7 @@ export default async function SectorsPage() {
             <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
           </div>
           <p>
-              Each of the {categories.length} sectors below represents a domain where India has the potential to lead globally. Our investments span
+              Each of the {categories.length > 0 ? categories.length : ""} sectors {categories.length>0?"below":""} represents a domain where India has the potential to lead globally. Our investments span
               across these focus areas, where we bring deep technical expertise and industry networks to help founders
               scale cutting-edge technology companies.
             </p>

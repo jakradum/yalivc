@@ -2,16 +2,16 @@
 .header {
   display: flex;
   flex-direction: row;
-  align-items:flex-start;
+  align-items: flex-start;
   gap: 1rem;
   margin: 2rem 0;
 }
 
 .logoContainer {
   flex-shrink: 0;
-
 }
-.logoContainer>img{
+
+.logoContainer > img {
   max-height: 80px;
 }
 
@@ -21,89 +21,97 @@
   word-break: break-word;
 }
 
-/* Founder Section */
-.founderSection {
-  padding: 4rem 2rem;
+/* Founder + Info Grid */
+.founderInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 1rem;
+padding: 1rem;
 }
 
+/* Founder Cards */
 .founderCard {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 3rem;
-  margin-top: 2rem;
+  grid-template-columns: 20rem 1fr;
+  border: 1px solid #000;
+  margin: 1rem;
+  min-height: 10rem;
+  background-color: white;
+}
+
+.founderImage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.founderImage img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+
+}
+
+.founderContent {
   padding: 2rem;
-  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
 }
 
-.founderPhoto img {
-  border-radius: 4px;
+.founderHeader {
+  text-align: right;
 }
 
-.founderInfo h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.5rem;
+.founderName {
+  font-size: 1.8rem;
+  color: #830D35;
+  font-weight: 300;
 }
 
 .founderRole {
-  color: #830D35;
-  text-transform: uppercase;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 1.12rem;
+  color: #363636;
 }
 
-.founderQuote {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  font-style: italic;
-  margin: 2rem 0;
-  padding-left: 1.5rem;
-  border-left: 3px solid #830D35;
+.founderLinkedIn {
+  align-self: flex-end;
 }
-
-.linkedInLink {
-  display: inline-block;
-  color: #830D35;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.linkedInLink:hover {
-  text-decoration: underline;
-}
-
 
 /* Info Section */
 .infoSection {
-  padding: 2rem 2rem;
-  background-color: #fff;
+  position: sticky;
+  top: 2rem;
+}
+
+.infoSection h2 {
+  margin-bottom: 1.5rem;
 }
 
 .infoGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin-top: 1.5rem;
 }
 
 .metricCard {
   padding: 1rem;
-  border: 1px solid #e0e0e0;
-  background-color: #f9f9f9;
+  border: 1px solid #000;
+  background-color: #830D35;
 }
 
 .metricLabel {
   font-size: 0.75rem;
-  color: #666;
+  color: white;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
-  letter-spacing: 0.05em;
 }
 
 .metricValue {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #830D35;
+  color: #ebde84;
   margin: 0;
 }
 
@@ -114,44 +122,9 @@
   margin: 0 auto;
 }
 
-.storyAuthor {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 2rem 0;
-  padding: 1rem;
-  background-color: #f5f5f5;
-}
-
-.authorName {
-  font-weight: 600;
-  margin: 0;
-}
-
-.authorRole {
-  font-size: 0.875rem;
-  color: #666;
-  margin: 0;
-}
-
 .storyContent {
   line-height: 1.8;
   font-size: 1.0625rem;
-}
-
-.storyContent p {
-  margin-bottom: 1.5rem;
-}
-
-.storyImage {
-  margin: 3rem 0;
-}
-
-.storyImage figcaption {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #666;
-  text-align: center;
 }
 
 .pullQuote {
@@ -161,14 +134,6 @@
   border-left: 4px solid #830D35;
   font-size: 1.25rem;
   font-style: italic;
-}
-
-.pullQuote cite {
-  display: block;
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  font-style: normal;
-  color: #666;
 }
 
 /* Achievements */
@@ -201,51 +166,36 @@
   border-radius: 50%;
 }
 
-.timelineDate {
-  font-size: 0.875rem;
-  color: #666;
-  font-weight: 600;
-}
-
-.timelineContent h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.125rem;
-}
-
-.timelineContent p {
-  margin: 0;
-  color: #666;
-  line-height: 1.6;
-}
-
 /* Mobile */
-@media (max-width: 768px) {
-  .header {
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 1rem;
+@media (max-width: 900px) {
+  .founderInfoGrid {
+    grid-template-columns: 1fr;
+    padding: 0;
   }
-
-  .logoContainer img {
-    width: 80px !important;
-    height: 80px !important;
-  }
-
+  
+ 
+  
   .founderCard {
     grid-template-columns: 1fr;
-    padding: 1.5rem;
   }
-
-  .founderPhoto {
-    text-align: center;
+  
+  .founderImage {
+    height: 300px;
   }
-
-  .infoGrid {
-    grid-template-columns: 1fr;
+  
+  .founderHeader {
+    text-align: left;
   }
-
-  .timelineItem {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  
+  .founderLinkedIn {
+    align-self: flex-start;
+  }
+  
+  .infoSection {
+    position: static;
+  }
+ 
+  .metricCard {
+margin: 1rem;
   }
 }

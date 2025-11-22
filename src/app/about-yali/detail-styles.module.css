@@ -1,8 +1,11 @@
 .teamListContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 background-color: white;
 }
+
+
+
 
 .teamMember {
   display: flex;
@@ -13,7 +16,7 @@ background-color: white;
 
 .memberInfo {
     flex: 1;
-    padding: 2rem 2rem 0 2rem;
+    padding: 1rem ;
     display: flex;
     flex-direction: column;
 }
@@ -122,7 +125,42 @@ padding: 1rem;
     text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+/* The graphic that fills up the remaining space after all grid elements are displayed */
+
+   /* this is for sizing the width using :last-child */
+.teamListContainer > *:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 20rem;
+  position: relative;
+  grid-column: auto / -1;
+}
+
+.teamListContainer > *:last-child svg {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  opacity: 0.2;
+  transform: translateY(-50%);
+  width: 200%;
+  height: 200%;
+  object-fit: contain;
+}
+
+/* Hide when grid is 3 columns or fewer */
+@media (max-width: 1320px) {
+  .teamListContainer > *:last-child {
+    display: none;
+  }
+}
+
+/* end of graphic css */
+
+
+
+/* @media (max-width: 768px) {
     .teamMember {
         flex-direction: column;
         border-top: 1px solid black;
@@ -202,11 +240,11 @@ padding: 1rem;
 
     .memberImage {
         order: 2;
-        width: calc(100% - 2rem); /* Subtract the total horizontal margin */
+        width: calc(100% - 2rem); 
         height: auto;
         margin: 1rem;
         aspect-ratio: 1 / 1;
-        position: relative; /* For positioning the pseudo-element */
+        position: relative; 
     }
     
     .memberImage::before {
@@ -217,7 +255,7 @@ padding: 1rem;
         right: -1rem;
         bottom: -1rem;
 
-        pointer-events: none; /* Allows clicking through to the image */
+        pointer-events: none; 
     }
     
     .memberImage img {
@@ -229,4 +267,4 @@ padding: 1rem;
     .header::after {
         display: none;
     }
-}
+} */
