@@ -12,23 +12,12 @@
           "name": "Team",
           "path": "/about-yali#team"
         }
-       
       ]
     },
     {
-  "name": "Investments",
-  "path": "/investments",
-  "subItems": [
-    {
-      "name": "Investment Focus",
-      "path": "/investments/sectors"
+      "name": "Investments",
+      "path": "/investments"
     },
-    {
-      "name": "Companies",
-      "path": "/investments/companies"
-    }
-  ]
-},
     {
       "name": "Newsroom",
       "path": "/newsroom"

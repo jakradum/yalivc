@@ -2,25 +2,38 @@ import styles from '../about-yali/about-styles.module.css';
 import { InvestmentsGraphic } from '../components/icons/background svgs/investmentsGraphic';
 import HeaderFlex from '../components/icons/headerflex';
 import { CompaniesInnerComponent } from './companies inner component';
-import { getCompanies, getSectors } from '@/lib/sanity-queries';
-import Link from 'next/link';
-import Button from '../components/button';
+import { getCompanies, getCategories, getInvestmentPhilosophy } from '@/lib/sanity-queries';
+import CategoryTable from './CategoryTable'; // Updated path
+import Breadcrumb from '../components/breadcrumb';
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: 'Our Investments | YALI Capital',
+  description: 'Deep tech investments across AI, robotics, semiconductors, and more.',
+};
+
 export default async function Investments() {
   let companies = [];
-  let sectors = [];
+  let categories = [];
+  let philosophy = null;
 
   try {
-    companies = await getCompanies();
-    sectors = await getSectors();
+    [companies, categories, philosophy] = await Promise.all([
+      getCompanies(),
+      getCategories(),
+      getInvestmentPhilosophy()
+    ]);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
 
+  const philosophyText = `Each of these ${categories.length} sectors represents a domain where India has the potential to lead globally. Our investments span across these focus areas, where we bring deep technical expertise and industry networks to help founders scale cutting-edge technology companies.`;
+
   return (
     <section>
+      <Breadcrumb />
+      
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Our Investments</h1>
@@ -43,30 +56,17 @@ export default async function Investments() {
         </aside>
       </div>
 
-      {/* Sectors Section */}
-      {sectors.length > 0 && (
-        <section className={styles.sectorsSection}>
-          <HeaderFlex title="Investment focus areas" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'8rem'} />
-          <p className={styles.helperText}>Select a category to view more</p>
-
-          <div className={styles.sectorsGrid}>
-            {sectors.map((sector) => (
-              <Link key={sector._id} href={`/investments/sectors/${sector.slug.current}`} className={styles.sectorCard}>
-                <h3>{sector.name}</h3>
-              </Link>
-            ))}
-          </div>
-          <div className={`${styles.article} ${styles.readAllButton}`}>
-            <Button href="/investments/sectors" color="black">
-              View all sectors
-            </Button>
-          </div>
-        </section>
-      )}
+      {/* Sectors Grid - Replaces old grid */}
+      <section className={styles.sectorsSection}>
+        <div className={styles.sectorsHeader}>
+          <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
+        </div>
+        <CategoryTable categories={categories} philosophyText={philosophyText} />
+      </section>
 
       {/* Portfolio Companies */}
-      <section >
-        <div >
+      <section>
+        <div className={styles.people}>
           <HeaderFlex
             title="Our portfolio of companies"
             color="black"
@@ -76,6 +76,8 @@ export default async function Investments() {
         </div>
       </section>
       <CompaniesInnerComponent companies={companies} />
+      
+      <Breadcrumb />
     </section>
   );
 }

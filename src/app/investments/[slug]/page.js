@@ -1,11 +1,11 @@
-import styles from '../../../about-yali/about-styles.module.css';
-import HeaderFlex from '../../../components/icons/headerflex';
+import styles from '../../about-yali/about-styles.module.css';
+import HeaderFlex from '../../components/icons/headerflex';
 import { getCategoryBySlug, getCompanies, getContentByCategory } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
-import { CompaniesInnerComponent } from '../../companies inner component';
+import { CompaniesInnerComponent } from '../companies inner component';
 import { notFound } from 'next/navigation';
-import Breadcrumb from '../../../components/breadcrumb';
-import newsStyles from '../../../newsroom/newscomponent.module.css';
+import Breadcrumb from '../../components/breadcrumb';
+import newsStyles from '../../newsroom/newscomponent.module.css';
 import { RoboticsVector } from '@/app/components/icons/background svgs/category svgs/robotics vector';
 import { SemiconVector } from '@/app/components/icons/background svgs/category svgs/semicon vector';
 import { GenericVector } from '@/app/components/icons/background svgs/category svgs/generic vector';

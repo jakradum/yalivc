@@ -87,16 +87,16 @@ const Navbar = () => {
     return pathname.startsWith(path);
   };
 
- const filterCategoryItems = (items) => {
+const filterCategoryItems = (items) => {
   return items.map(item => {
     if (item.path === '/investments' && availableCategories.length > 0) {
       return {
         ...item,
         subItems: [
-          { name: 'Sectors', path: '/investments/sectors' },
+          ...(item.subItems || []), // Safe check - use empty array if undefined
           ...availableCategories.map((category) => ({
             name: category.name,
-            path: `/investments/sectors/${category.slug}`,
+            path: `/investments/${category.slug}`,
           })),
         ],
       };

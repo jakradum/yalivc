@@ -116,9 +116,9 @@
   margin: 0;
 }
 
-.dropdownMenu li:not(:first-child) a {
+/* .dropdownMenu li:not(:first-child) a {
   padding-left: 2rem;
-}
+} */
 
 .dropdownMenu a {
   color: #333;

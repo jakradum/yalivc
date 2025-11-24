@@ -96,7 +96,7 @@ const CompanyTable = ({ companies }) => {
                       <h4 className={styles.companyTitle}>{company.name}</h4>
                       <p className={styles.companyCategory}>{company.category}</p>
 
-                      <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
+                      <div className={styles.vector}>{vectorUsageMap[company.category?.toLowerCase()]}</div>
                       {company.logo && (
                         <div className={styles.imagePlaceholder}>
                           <Image
@@ -156,7 +156,7 @@ const CompanyTable = ({ companies }) => {
                 <p className={styles.companyCategory}>{company.category}</p>
 
                 <div className={styles.mobileVector}>
-                  {vectorUsageMap[company.category] || <GenericVector />}
+                  {vectorUsageMap[company.category?.toLowerCase()] || <GenericVector />}
                 </div>
 
                 <small>{company.oneLiner}</small>

@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import styles from './sectors.module.css';
-import Button from '../../components/button';
+import styles from './investments.module.css'; 
+import Button from '../components/button';
 import Link from 'next/link';
-import { vectorUsageMap } from '../../components/companygrid';
+import { vectorUsageMap } from '../components/companygrid';
 
 const CategoryTable = ({ categories, philosophyText }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -34,7 +34,7 @@ const CategoryTable = ({ categories, philosophyText }) => {
           <tr>
             {categories.slice(0, 4).map((category, index) => (
               <td key={index} className={styles.categoryCell}>
-                <Link href={`/investments/sectors/${category.slug.current}`} className={styles.categoryLink}>
+                <Link href={`/investments/${category.slug.current}`} className={styles.categoryLink}>
                   <div className={styles.vector}>
                     {vectorUsageMap[category.name.toLowerCase()] || vectorUsageMap['artificial intelligence']}
                   </div>
@@ -52,7 +52,7 @@ const CategoryTable = ({ categories, philosophyText }) => {
           <tr>
             {categories.slice(4, 7).map((category, index) => (
               <td key={index} className={styles.categoryCell}>
-                <Link href={`/investments/sectors/${category.slug.current}`} className={styles.categoryLink}>
+                <Link href={`/investments/${category.slug.current}`} className={styles.categoryLink}>
                   <div className={styles.vector}>
                     {vectorUsageMap[category.name.toLowerCase()] || vectorUsageMap['artificial intelligence']}
                   </div>
