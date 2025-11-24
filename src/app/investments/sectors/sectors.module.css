@@ -1,0 +1,292 @@
+.categoryTableContainer {
+    display: flex;
+    padding: 0 2rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 25%;
+    padding-right: 2rem;
+    padding-top: 2rem;
+}
+
+.sidebarText {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.categoryTable {
+    width: 75%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-left: 0.0625rem solid black;
+    border-top: 1px solid black;
+    table-layout: fixed; /* Add this */
+}
+
+.categoryTable tbody tr {
+    height: 21rem;
+}
+.categoryTable tbody tr:first-child .categoryCell {
+    width: 25%;
+}
+.categoryTable tbody tr:last-child .categoryCell {
+    width: 33.33%;
+}
+
+.categoryLink {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Change back from absolute */
+    height: 21rem; /* Explicit height to match row */
+    width: 100%;
+    position: relative;
+}
+
+.categoryCell {
+    background-color: white;
+    border-right: 0.0625rem solid black;
+    border-bottom: 0.0625rem solid black;
+    padding: 0;
+    vertical-align: top;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    height: 21rem; /* Explicit height */
+}
+
+/* First row with 4 items - equal width */
+.categoryTable tbody tr:first-child .categoryCell {
+    width: 25%;
+}
+
+/* Second row with 3 items - equal width */
+.categoryTable tbody tr:last-child .categoryCell {
+    width: 33.33%;
+}
+
+/* On hover, expand to 50% and maintain aspect */
+.categoryTable tbody tr:first-child .categoryCell:hover {
+    width: 50% !important;
+}
+
+.categoryTable tbody tr:last-child .categoryCell:hover {
+    width: 50% !important;
+}
+
+.categoryContent {
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.categoryNumber h2 {
+    font-size: 2rem;
+    color: #888;
+    font-weight: 400;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.categoryTitle {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    color: black;
+    transition: color 0.3s ease;
+    text-transform: capitalize;
+}
+
+/* Vector background */
+.vector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #830D35;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translateY(100%);
+}
+
+.vector > svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.categoryCell:hover .vector {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+
+
+.categoryCell:hover .vector > svg {
+    transform: scale(1.2);
+}
+
+/* Text color changes on hover */
+.categoryCell:hover .categoryNumber h2 {
+    color: #efefef;
+}
+
+.categoryCell:hover .categoryTitle {
+    color: white;
+}
+
+/* Z-index for layering */
+.categoryNumber,
+.categoryTitle {
+    position: relative;
+    z-index: 2;
+}
+
+/* Mobile styles */
+@media (max-width: 1028px) {
+    .categoryTableContainer {
+        flex-direction: column;
+    }
+
+    .sidebar,
+    .categoryTable {
+        width: 100%;
+    }
+
+    .sidebar {
+        margin-bottom: 2rem;
+        padding-top: 0;
+    }
+
+    .categoryTable {
+        border-top: 0.0625rem solid black;
+        border-bottom: 0.0625rem solid black;
+    }
+}
+
+@media (max-width: 900px) {
+    .mobileCategoryGrid {
+        padding-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebarText {
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        max-width: 70%;
+    }
+
+    .carouselContainer {
+        position: relative;
+        height: 26.25rem;
+        margin-bottom: 2rem;
+        width: 100%;
+        max-width: 280px;
+        padding-bottom: 2rem;
+    }
+
+    .mobileCategoryCard {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 17rem;
+        height: 30rem;
+        background-color: white;
+        border: 1px solid #000;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .mobileCategoryCard:not(.activeCard):hover {
+        transform: translateX(-5px) !important;
+    }
+
+    .cardHeader {
+        display: flex;
+        justify-content: flex-start;
+        align-items: baseline;
+        margin-bottom: 0;
+    }
+
+    .categoryNumber > h2 {
+        color: #000;
+        margin-right: 1rem;
+        font-size: 3rem;
+        margin-bottom: 0;
+        line-height: 1;
+    }
+
+    .totalCount > h3 {
+        color: #888;
+        margin-right: 1rem;
+        font-size: 1.1rem;
+        font-weight: 200;
+        margin-bottom: 0;
+    }
+
+    .categoryTitle {
+        font-size: 1.2rem;
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #830D35;
+        margin: 0;
+        padding-top: 0.2rem;
+    }
+
+    .mobileVector {
+        width: 100%;
+        height: 200px;
+        background-color: #830D35;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .mobileVector svg {
+        scale: 1.1;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .keyDetails {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        padding: 1rem 0;
+        margin: 0;
+    }
+
+    .keyDetails p:last-of-type {
+        align-self: center;
+        font-size: 0.8rem;
+        color: #666;
+    }
+}

@@ -81,12 +81,11 @@ export async function getTeamMembers() {
 
 export async function getCategories() {
   return client.fetch(
-    `*[_type == "category" && published == true] | order(order asc) {
+    `*[_type == "category"] | order(name asc) {
       _id,
       name,
-      slug,
-      shortDescription,
-      order
+      description,
+      slug
     }`
   );
 }

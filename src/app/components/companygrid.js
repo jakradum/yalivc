@@ -29,6 +29,8 @@ export const vectorUsageMap = {
   'advanced manufacturing': <AdvancedManufacturingVector/>,
   'generative AI': <GenerativeAIVector/>,
   'life sciences': <LifeSciencesVector/>,
+  'strategic tech': <GenericVector/>,
+  'smart manufacturing': <AdvancedManufacturingVector/>,
 };
 
 const CompanyTable = ({ companies }) => {

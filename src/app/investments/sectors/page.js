@@ -1,9 +1,9 @@
 import styles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
 import { getCategories, getInvestmentPhilosophy } from '@/lib/sanity-queries';
-import Link from 'next/link';
 import Breadcrumb from '../../components/breadcrumb';
 import { PortableText } from '@portabletext/react';
+import CategoryTable from './CategoryTable';
 
 export const revalidate = 60;
 
@@ -21,9 +21,16 @@ export default async function SectorsPage() {
       getCategories(),
       getInvestmentPhilosophy()
     ]);
+    console.log('Categories fetched:', categories.length, categories);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
+    // Add fallback if no categories
+  if (!categories || categories.length === 0) {
+    return <div>No categories found</div>;
+  }
+
+  const philosophyText = `Each of these ${categories.length} sectors represents a domain where India has the potential to lead globally. Our investments span across these focus areas, where we bring deep technical expertise and industry networks to help founders scale cutting-edge technology companies.`;
   
   return (
     <section>
@@ -37,8 +44,8 @@ export default async function SectorsPage() {
               <PortableText value={philosophy.philosophyText} />
             ) : (
               <>
-                <p>We invest in deep tech companies...</p>
-                <p>Each sector represents...</p>
+                <p>We invest in deep tech companies building transformative technologies across critical sectors.</p>
+                <p>Each sector represents a domain where India has the potential to lead globally.</p>
               </>
             )}
           </div>
@@ -46,26 +53,12 @@ export default async function SectorsPage() {
       </div>
 
       <section className={styles.sectorsSection}>
-        <div className={styles.sectorsContainer}>
-          <div className={styles.sectorsHeader}>
-            <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
-          </div>
-          <p>
-              Each of the {categories.length > 0 ? categories.length : ""} sectors {categories.length>0?"below":""} represents a domain where India has the potential to lead globally. Our investments span
-              across these focus areas, where we bring deep technical expertise and industry networks to help founders
-              scale cutting-edge technology companies.
-            </p>
-          <div className={styles.sectorsGrid}>
-            {categories.map((category) => (
-              <Link key={category._id} href={`/investments/sectors/${category.slug.current}`} className={styles.sectorCard}>
-                <h3>{category.name}</h3>
-                <p>{category.description}</p>
-              </Link>
-            ))}
-           
-          </div>
+        <div className={styles.sectorsHeader}>
+          <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
         </div>
-      </section>
+        
+         <CategoryTable categories={categories} philosophyText={philosophyText} />
+    </section>
 
       <Breadcrumb />
     </section>

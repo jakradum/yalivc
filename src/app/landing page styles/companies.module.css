@@ -66,6 +66,7 @@
     /* 1px = 0.0625rem */
     border-left: 0.0625rem solid black;
     height: 25rem;
+    border-top: 1px solid black;
     /* 40rem (rem to rem) */
 }
 

@@ -216,22 +216,23 @@ export default async function CompanyPage({ params }) {
         </section>
       )}
 
-      {/* ACHIEVEMENTS */}
       {company.achievements?.length > 0 && (
         <section className={companyStyles.achievementsSection}>
-          <HeaderFlex title="Key Milestones" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
+          <HeaderFlex title="Milestones" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'6rem'} />
           <div className={companyStyles.timeline}>
-            {company.achievements.map((achievement, idx) => (
-              <div key={idx} className={companyStyles.timelineItem}>
-                <div className={companyStyles.timelineDate}>
-                  {new Date(achievement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+            {[...company.achievements]
+              .sort((a, b) => new Date(a.date) - new Date(b.date)) // Changed b,a to a,b
+              .map((achievement, idx) => (
+                <div key={idx} className={companyStyles.timelineItem}>
+                  <div className={companyStyles.timelineDate}>
+                    {new Date(achievement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                  </div>
+                  <div className={companyStyles.timelineContent}>
+                    <h4>{achievement.milestone}</h4>
+                    {achievement.description && <p>{achievement.description}</p>}
+                  </div>
                 </div>
-                <div className={companyStyles.timelineContent}>
-                  <h4>{achievement.milestone}</h4>
-                  {achievement.description && <p>{achievement.description}</p>}
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </section>
       )}
