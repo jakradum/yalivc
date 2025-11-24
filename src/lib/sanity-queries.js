@@ -6,7 +6,10 @@ export async function getCompanies() {
       _id,
       name,
       slug,
-      "category": category->name,
+     category->{
+  name,
+  slug
+},
       oneLiner,
       detail,
       link,
@@ -22,7 +25,10 @@ export async function getCompanyBySlug(slug) {
       _id,
       name,
       slug,
-      category->{name},
+      category->{
+  name,
+  slug
+},
       oneLiner,
       detail,
       link,
@@ -142,24 +148,24 @@ export async function getContentByCompany(companySlug) {
   );
 
   return [
-    ...news.map(n => ({
+    ...news.map((n) => ({
       _id: n._id,
       type: 'press',
       date: n.date,
       title: n.headlineEdited,
       url: n.url,
       source: n.publicationName,
-      isExternal: true
+      isExternal: true,
     })),
-    ...blogs.map(b => ({
+    ...blogs.map((b) => ({
       _id: b._id,
       type: b.contentType || 'blog',
       date: b.publishedAt,
       title: b.title,
       url: `/insights/blog/${b.slug.current}`,
       source: 'YALI Capital',
-      isExternal: false
-    }))
+      isExternal: false,
+    })),
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
@@ -188,24 +194,24 @@ export async function getContentByCategory(categorySlug) {
   );
 
   return [
-    ...news.map(n => ({
+    ...news.map((n) => ({
       _id: n._id,
       type: 'press',
       date: n.date,
       title: n.headlineEdited,
       url: n.url,
       source: n.publicationName,
-      isExternal: true
+      isExternal: true,
     })),
-    ...blogs.map(b => ({
+    ...blogs.map((b) => ({
       _id: b._id,
       type: b.contentType || 'blog',
       date: b.publishedAt,
       title: b.title,
       url: `/insights/blog/${b.slug.current}`,
       source: 'YALI Capital',
-      isExternal: false
-    }))
+      isExternal: false,
+    })),
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
@@ -288,16 +294,10 @@ export async function getBlogPostBySlug(slug) {
 }
 
 export async function getAllBlogPosts(options = {}) {
-  const {
-    limit = 12,
-    offset = 0,
-    authorId = null,
-    categoryId = null,
-    companyId = null
-  } = options;
+  const { limit = 12, offset = 0, authorId = null, categoryId = null, companyId = null } = options;
 
   let filters = `_type == "blogPost" && status == "published"`;
-  
+
   if (authorId) filters += ` && author._ref == "${authorId}"`;
   if (categoryId) filters += ` && "${categoryId}" in categories[]._ref`;
   if (companyId) filters += ` && "${companyId}" in companies[]._ref`;

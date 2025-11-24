@@ -40,14 +40,15 @@ const storyComponents = {
 };
 
 export default async function CompanyPage({ params }) {
-  const { slug } = await params;
-  const company = await getCompanyBySlug(slug);
+  const { slug, companySlug } = await params;
+  const company = await getCompanyBySlug(companySlug);
+  console.log('Company data:', JSON.stringify(company, null, 2));
 
   if (!company) {
     notFound();
   }
 
-  const allContent = await getContentByCompany(slug);
+  const allContent = await getContentByCompany(companySlug);
 
   return (
     <section>

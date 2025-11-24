@@ -34,14 +34,14 @@ export async function generateMetadata({ params }) {
 
 export default async function SectorPage({ params }) {
   const { slug } = await params;
-  
+
   try {
     const category = await getCategoryBySlug(slug);
     if (!category) notFound();
 
     const companies = await getCompanies();
     const categoryCompanies = companies.filter((company) => {
-      const companyCategory = company.category?.toLowerCase();
+      const companyCategory = company.category?.name?.toLowerCase();
       return companyCategory === category.name.toLowerCase();
     });
 
@@ -50,10 +50,10 @@ export default async function SectorPage({ params }) {
     const categoryVectorMap = {
       'artificial intelligence': ArtificialIntelligenceVector,
       'life sciences': LifeSciencesVector,
-      'semiconductors': SemiconVector,
+      semiconductors: SemiconVector,
       'smart manufacturing': AdvancedManufacturingVector,
-      'robotics': RoboticsVector,
-      'defence': DefenceVector,
+      robotics: RoboticsVector,
+      defence: DefenceVector,
       'strategic tech': GenericVector,
     };
 
@@ -153,7 +153,7 @@ export default async function SectorPage({ params }) {
             </div>
           </section>
         )}
-        
+
         <Breadcrumb />
       </section>
     );

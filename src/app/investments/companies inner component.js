@@ -23,13 +23,13 @@ function useWindowWidth() {
   return width;
 }
 
-export const CompaniesInnerComponent = ({companies}) => {
+export const CompaniesInnerComponent = ({ companies }) => {
   const windowWidth = useWindowWidth();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.emergingTechnologies || [];
-  
+
   // Continue with activeCategories useMemo...
   const toggleCategoryDropdown = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
@@ -37,8 +37,8 @@ export const CompaniesInnerComponent = ({companies}) => {
 
   const activeCategories = useMemo(() => {
     const activeCats = new Set();
-    companies.forEach(company => {
-      activeCats.add(company.category.toLowerCase());
+    companies.forEach((company) => {
+      activeCats.add(company.category?.name?.toLowerCase());
     });
     return Array.from(activeCats);
   }, [companies]);
@@ -110,50 +110,49 @@ export const CompaniesInnerComponent = ({companies}) => {
   //   </>
   // );
 
- return (
-   <div  className={styles.container}>
-     {/* {renderCategoriesSection} */}
-     <div className={styles.companiesContainer}>
-       {filteredCompanies.map((company, index) => (
-         <Link
-           key={index}
-           href={`/investments/companies/${company.slug?.current || company.slug}`}
-           className={styles.companyCard}
-           style={{ textDecoration: 'none', color: 'inherit' }}
-         >
-           <div className={styles.companyInfo}>
-             <div className={styles.logoContainer}>
-               <Image
-                 src={company.logo || '/placeholder-logo.png'}
-                 alt={company.name}
-                 width={150}
-                 height={150}
-                 style={{ objectFit: 'contain' }}
-               />
-             </div>
-             <div className={styles.nameAndLink}>
-               <p className={styles.companyName}>{company.name}</p>
-               <p style={{ textTransform: 'uppercase', fontSize: '0.9rem' }}>{company.category}</p>
-               {company.link && (
-                 <a
-                   href={company.link}
-                   className={styles.viewLink}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   onClick={(e) => e.stopPropagation()}
-                 >
-                   {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
-                 </a>
-               )}
-             </div>
-           </div>
-           <div className={styles.companyDetail}>
-             <p>{company.detail}</p>
-           </div>
-         </Link>
-       ))}
-     </div>
-   </div>
- );
- 
+  return (
+    <div className={styles.container}>
+      {/* {renderCategoriesSection} */}
+      <div className={styles.companiesContainer}>
+        {filteredCompanies.map((company, index) => (
+          <Link
+            key={index}
+            href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug?.current || company.slug}`}
+            className={styles.companyCard}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className={styles.companyInfo}>
+              <div className={styles.logoContainer}>
+                <Image
+                  src={company.logo || '/placeholder-logo.png'}
+                  alt={company.name}
+                  width={150}
+                  height={150}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <div className={styles.nameAndLink}>
+                <p className={styles.companyName}>{company.name}</p>
+                <p style={{ textTransform: 'uppercase', fontSize: '0.9rem' }}>{company.category?.name}</p>
+                {company.link && (
+                  <a
+                    href={company.link}
+                    className={styles.viewLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className={styles.companyDetail}>
+              <p>{company.detail}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 };

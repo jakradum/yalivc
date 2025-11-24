@@ -167,7 +167,7 @@ export default async function BlogPostPage({ params }) {
                       {post.companies.map((company) => (
                         <Link
                           key={company._id}
-                          href={`/investments/companies/${company.slug.current}`}
+                      href={`/investments/${company.category.slug.current}/${company.slug.current}`}
                           className={blogStyles.tag}
                         >
                           {company.name}
