@@ -91,7 +91,7 @@ export default async function SectorPage({ params }) {
         {category.whyYALICares && (
           <section className={styles.people}>
             <HeaderFlex title="Why we invest" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'0rem'} />
-            <div className={styles.twoColumnText}>
+            <div className={styles.textContent}>
               <PortableText value={category.whyYALICares} />
             </div>
           </section>
