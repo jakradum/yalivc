@@ -58,7 +58,7 @@ export default async function Investments() {
 
       {/* Sectors Grid - Replaces old grid */}
       <section className={styles.sectorsSection}>
-        <div className={styles.sectorsHeader}>
+        <div className={styles.people}>
           <HeaderFlex title="Sectors we invest in" color="black" desktopMaxWidth={'45%'} mobileMinHeight={'4rem'} />
         </div>
         <CategoryTable categories={categories} philosophyText={philosophyText} />
