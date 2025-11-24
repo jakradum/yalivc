@@ -148,7 +148,7 @@ padding: 1rem;
   margin-top: 0.5rem;
   border-left: 2px solid #830D35;
   padding-left: 2rem;
-  padding-top: 0.5rem; /* Add this - aligns border start with first dot */
+  padding-top: 0.5rem;
 }
 
 .timelineItem {
@@ -157,6 +157,24 @@ padding: 1rem;
   gap: 2rem;
   margin-bottom: 2rem;
   position: relative;
+  align-items: start;
+}
+
+.timelineDate {
+  padding-top: 0.25rem;
+}
+
+.timelineContent {
+  padding-top: 0;
+}
+
+.timelineContent h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.timelineContent p {
+  margin-top: 0.5rem;
 }
 
 .timelineItem::before {
