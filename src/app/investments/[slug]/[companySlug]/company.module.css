@@ -28,6 +28,8 @@
   grid-template-columns: 1fr 400px;
   gap: 1rem;
 padding: 1rem;
+ border-bottom: 1px solid #000;
+    padding-bottom: 3rem;
 }
 
 /* Founder Cards */
