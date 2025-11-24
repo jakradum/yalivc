@@ -167,6 +167,12 @@ padding-right: 1rem;
     z-index: 2;
 }
 
+.mobileCategoryCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 /* Mobile styles */
 @media (max-width: 1028px) {
     .categoryTableContainer {

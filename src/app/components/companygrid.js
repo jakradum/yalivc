@@ -36,8 +36,34 @@ export const vectorUsageMap = {
 const CompanyTable = ({ companies }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const buttonText = 'view more details';
+ const minSwipeDistance = 50;
+   const onTouchStart = (e) => {
+    setTouchEnd(0);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setCurrentCard((prev) => (prev + 1) % companiesData.data.length);
+    }
+    if (isRightSwipe) {
+      setCurrentCard((prev) => (prev - 1 + companiesData.data.length) % companiesData.data.length);
+    }
+  };
 
    const companiesData = { data: companies || localCompaniesData.data };
     // ? { data: data.data['companies-csv (1)'] }
@@ -123,13 +149,15 @@ const CompanyTable = ({ companies }) => {
     </>
   );
 
-  const renderMobileLayout = () => (
-    <div
-      className={styles.mobileCompanyGrid}
-      onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.data.length)}
-    >
+   const renderMobileLayout = () => (
+    <div className={styles.mobileCompanyGrid}>
       <p className={styles.sidebarText}>{updatedText}</p>
-      <section className={styles.carouselContainer}>
+      <section 
+        className={styles.carouselContainer}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {companiesData.data.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
           const cardStyle = isVisible
@@ -141,31 +169,36 @@ const CompanyTable = ({ companies }) => {
             : { display: 'none' };
   
           return (
-            <aside
+            <Link
               key={index}
-              className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
-              style={cardStyle}
+              href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug.current}`}
+              className={styles.mobileCompanyCardLink}
             >
-              <article className={styles.keyDetails}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.companyNumber}>
-                    <h2>{String(index + 1).padStart(2, '0')}</h2>
-                  </span>
-                  <span className={styles.totalCount}>
-                    <h3>/{companiesData.data.length}</h3>
-                  </span>
-                </div>
-                <h4 className={styles.companyTitle}>{company.name}</h4>
-                <p className={styles.companyCategory}>{company.category.name}</p>
+              <aside
+                className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
+                style={cardStyle}
+              >
+                <article className={styles.keyDetails}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.companyNumber}>
+                      <h2>{String(index + 1).padStart(2, '0')}</h2>
+                    </span>
+                    <span className={styles.totalCount}>
+                      <h3>/{companiesData.data.length}</h3>
+                    </span>
+                  </div>
+                  <h4 className={styles.companyTitle}>{company.name}</h4>
+                  <p className={styles.companyCategory}>{company.category.name}</p>
 
-                <div className={styles.mobileVector}>
-                  {vectorUsageMap[company.category?.toLowerCase()] || <GenericVector />}
-                </div>
+                  <div className={styles.mobileVector}>
+                    {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
+                  </div>
 
-                <small>{company.oneLiner}</small>
-                <p>Tap to view next</p>
-              </article>
-            </aside>
+                  <small>{company.oneLiner}</small>
+                  <p>Swipe to view next</p>
+                </article>
+              </aside>
+            </Link>
           );
         })}
       </section>
