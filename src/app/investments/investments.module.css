@@ -24,24 +24,17 @@
     border-spacing: 0;
     border-left: 0.0625rem solid black;
     border-top: 1px solid black;
-    table-layout: fixed; /* Add this */
-}
 
+}
 .categoryTable tbody tr {
     height: 21rem;
-}
-.categoryTable tbody tr:first-child .categoryCell {
-    width: 25%;
-}
-.categoryTable tbody tr:last-child .categoryCell {
-    width: 33.33%;
 }
 
 .categoryLink {
     text-decoration: none;
     color: inherit;
-    display: block; /* Change back from absolute */
-    height: 21rem; /* Explicit height to match row */
+    display: block;
+    height: 21rem;
     width: 100%;
     position: relative;
 }
@@ -54,29 +47,30 @@
     vertical-align: top;
     position: relative;
     overflow: hidden;
-    transition: all 0.5s ease;
-    height: 21rem; /* Explicit height */
+    transition: width 0.5s ease;
+    height: 21rem;
 }
 
-/* First row with 4 items - equal width */
+/* Default widths */
 .categoryTable tbody tr:first-child .categoryCell {
     width: 25%;
 }
-
-/* Second row with 3 items - equal width */
-.categoryTable tbody tr:last-child .categoryCell {
-    width: 33.33%;
-}
-
-/* On hover, expand to 50% and maintain aspect */
-.categoryTable tbody tr:first-child .categoryCell:hover {
+/* Hover: any cell expands to 50% */
+.categoryCell:hover {
     width: 50% !important;
 }
 
-.categoryTable tbody tr:last-child .categoryCell:hover {
-    width: 50% !important;
+.categoryTable tbody tr:last-child:hover .categoryCell:hover {
+    width: 50%;
+}
+/* Force siblings to shrink when one cell expands */
+.categoryTable tbody tr:first-child:hover .categoryCell:not(:hover) {
+    width: 16.67% !important;
 }
 
+.categoryTable tbody tr:last-child:hover .categoryCell:not(:hover) {
+    width: 25% !important;
+}
 .categoryContent {
     padding: 1rem;
     height: 100%;
