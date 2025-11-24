@@ -6,9 +6,18 @@ import Button from '../components/button';
 import Link from 'next/link';
 import { vectorUsageMap } from '../components/companygrid';
 
+const truncateWords = (text, wordLimit = 20) => {
+  if (!text) return '';
+  const words = text.split(' ');
+  if (words.length <= wordLimit) return text;
+  return words.slice(0, wordLimit).join(' ') + '...';
+};
+
 const CategoryTable = ({ categories, philosophyText }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,14 +28,38 @@ const CategoryTable = ({ categories, philosophyText }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  const minSwipeDistance = 50;
+
+  // swipe handlers
+
+  const onTouchStart = (e) => {
+    setTouchEnd(0);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setCurrentCard((prev) => (prev + 1) % categories.length);
+    }
+    if (isRightSwipe) {
+      setCurrentCard((prev) => (prev - 1 + categories.length) % categories.length);
+    }
+  };
 
   const renderDesktopLayout = () => (
     <>
       <div className={styles.sidebar}>
         <p className={styles.sidebarText}>{philosophyText}</p>
-        {/* <Button href="/investments/companies" color="black">
-          View Portfolio
-        </Button> */}
       </div>
       <table className={styles.categoryTable}>
         <tbody>
@@ -43,6 +76,9 @@ const CategoryTable = ({ categories, philosophyText }) => {
                       <h2>{String(index + 1).padStart(2, '0')}</h2>
                     </div>
                     <h4 className={styles.categoryTitle}>{category.name}</h4>
+                    <p className={styles.categoryDescription}>
+                      {truncateWords(category.description, 20)}
+                    </p>
                   </article>
                 </Link>
               </td>
@@ -61,6 +97,9 @@ const CategoryTable = ({ categories, philosophyText }) => {
                       <h2>{String(index + 5).padStart(2, '0')}</h2>
                     </div>
                     <h4 className={styles.categoryTitle}>{category.name}</h4>
+                    <p className={styles.categoryDescription}>
+                      {truncateWords(category.description, 20)}
+                    </p>
                   </article>
                 </Link>
               </td>
@@ -71,13 +110,15 @@ const CategoryTable = ({ categories, philosophyText }) => {
     </>
   );
 
-  const renderMobileLayout = () => (
-    <div
-      className={styles.mobileCategoryGrid}
-      onClick={() => setCurrentCard((prev) => (prev + 1) % categories.length)}
-    >
+   const renderMobileLayout = () => (
+    <div className={styles.mobileCategoryGrid}>
       <p className={styles.sidebarText}>{philosophyText}</p>
-      <section className={styles.carouselContainer}>
+      <section 
+        className={styles.carouselContainer}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {categories.map((category, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
           const cardStyle = isVisible
@@ -89,34 +130,36 @@ const CategoryTable = ({ categories, philosophyText }) => {
             : { display: 'none' };
 
           return (
-            <aside
+            <Link 
               key={index}
-              className={`${styles.mobileCategoryCard} ${index === currentCard ? styles.activeCard : ''}`}
-              style={cardStyle}
+              href={`/investments/${category.slug.current}`}
+              className={styles.mobileCategoryCardLink}
             >
-              <article className={styles.keyDetails}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.categoryNumber}>
-                    <h2>{String(index + 1).padStart(2, '0')}</h2>
-                  </span>
-                  <span className={styles.totalCount}>
-                    <h3>/{categories.length}</h3>
-                  </span>
-                </div>
-                <h4 className={styles.categoryTitle}>{category.name}</h4>
+              <aside
+                className={`${styles.mobileCategoryCard} ${index === currentCard ? styles.activeCard : ''}`}
+                style={cardStyle}
+              >
+                <article className={styles.keyDetails}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.categoryNumber}>
+                      <h2>{String(index + 1).padStart(2, '0')}</h2>
+                    </span>
+                    <span className={styles.totalCount}>
+                      <h3>/{categories.length}</h3>
+                    </span>
+                  </div>
+                  <h4 className={styles.categoryTitle}>{category.name}</h4>
 
-                <div className={styles.mobileVector}>
-                  {vectorUsageMap[category.name.toLowerCase()] || vectorUsageMap['artificial intelligence']}
-                </div>
-                <p>Tap to view next</p>
-              </article>
-            </aside>
+                  <div className={styles.mobileVector}>
+                    {vectorUsageMap[category.name.toLowerCase()] || vectorUsageMap['artificial intelligence']}
+                  </div>
+                  <p>Swipe to view next</p>
+                </article>
+              </aside>
+            </Link>
           );
         })}
       </section>
-      {/* <Button href="/investments/companies" color="black">
-        View Portfolio
-      </Button> */}
     </div>
   );
 
