@@ -106,35 +106,38 @@ export default async function CompanyPage({ params }) {
               mobileMinHeight={'6rem'}
             />
           </div>
-          <div className={companyStyles.founderInfoGrid}>
-            {/* Founders Column */}
-            <div>
-              {company.founders?.map((founder, idx) => (
-                <article key={idx} className={companyStyles.founderCard}>
-                  <div className={companyStyles.founderImage}>
-                    <Image
-                      src={urlFor(founder.photo).width(300).url()}
-                      alt={founder.name}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                  <div className={companyStyles.founderContent}>
-                    <div className={companyStyles.founderHeader}>
-                      <h2 className={companyStyles.founderName}>{founder.name}</h2>
-                      <p className={companyStyles.founderRole}>{founder.role}</p>
+
+
+            <div className={companyStyles.founderInfoGrid}>
+              {/* Founders Column */}
+              <div>
+                {company.founders?.map((founder, idx) => (
+                  <article key={idx} className={companyStyles.founderCard}>
+                    <div className={companyStyles.founderImage}>
+                      <Image
+                        src={urlFor(founder.photo).width(300).url()}
+                        alt={founder.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                      />
                     </div>
-                    {founder.linkedIn && (
-                      <div className={companyStyles.founderLinkedIn}>
-                        <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer">
-                          <button className={teamLPstyles.socialButton}>in</button>
-                        </a>
+                    <div className={companyStyles.founderContent}>
+                      <div className={companyStyles.founderHeader}>
+                        <h2 className={companyStyles.founderName}>{founder.name}</h2>
+                        <p className={companyStyles.founderRole}>{founder.role}</p>
                       </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
+                      {founder.linkedIn && (
+                        <div className={companyStyles.founderLinkedIn}>
+                          <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer">
+                            <button className={teamLPstyles.socialButton}>in</button>
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+
 
             {/* Info Column */}
             <div className={companyStyles.infoSection}>
@@ -191,7 +194,9 @@ export default async function CompanyPage({ params }) {
       {company.story?.content && (
         <section className={styles.sectorsSection}>
           <div className={companyStyles.storySection}>
-            <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
+
+              <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
+
             <h2>{company.story.title}</h2>
             {company.story.author && (
               <div className={blogStyles.articleMeta} style={{ borderBottom: 'none' }}>
@@ -219,7 +224,9 @@ export default async function CompanyPage({ params }) {
 
       {company.achievements?.length > 0 && (
         <section className={companyStyles.achievementsSection}>
+
           <HeaderFlex title="Milestones" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'6rem'} />
+
           <div className={companyStyles.timeline}>
             {[...company.achievements]
               .sort((a, b) => new Date(a.date) - new Date(b.date)) // Changed b,a to a,b
