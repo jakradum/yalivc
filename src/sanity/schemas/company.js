@@ -88,7 +88,6 @@ export default {
               title: 'Quote',
               type: 'text',
               rows: 3,
-              validation: (Rule) => Rule.required(),
             },
             {
               name: 'linkedIn',
