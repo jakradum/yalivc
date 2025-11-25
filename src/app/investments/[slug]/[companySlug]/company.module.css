@@ -13,7 +13,6 @@
 
 .logoContainer > img {
   max-height: 80px;
-  
 }
 
 .companyName {
@@ -23,46 +22,53 @@
 }
 
 /* Founder + Info Grid */
+/* Founder + Info Grid */
 .founderInfoGrid {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: minmax(auto, 900px) 500px; /* Changed from 1fr to minmax */
   gap: 1rem;
-padding: 1rem;
- border-bottom: 1px solid #000;
-    padding-bottom: 3rem;
+  padding: 1rem;
+  border-bottom: 1px solid #000;
+  padding-bottom: 3rem;
 }
 
-/* Founder Cards */
+/* Founders Container Grid */
+.founderInfoGrid > div:first-child {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-content: start;
+}
+
+/* Founder Cards - Scaled down to 0.75 */
 .founderCard {
   display: grid;
-  grid-template-columns: 20rem 1fr;
+  grid-template-columns: 12rem 1fr;
   border: 1px solid #000;
-  margin: 1rem;
-  min-height: 8rem;
+  margin: 0;
+  min-height: 6rem;
   background-color: white;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .founderImage {
   position: relative;
   width: 100%;
   height: 100%;
-
+  background-color: #66bdd4;
 }
 
 .founderImage img {
   object-fit: cover;
   width: 100%;
   height: 100%;
-
 }
 
 .founderContent {
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
 }
 
 .founderHeader {
@@ -70,13 +76,13 @@ padding: 1rem;
 }
 
 .founderName {
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   color: #830D35;
   font-weight: 300;
 }
 
 .founderRole {
-  font-size: 1.12rem;
+  font-size: 0.84rem;
   color: #363636;
 }
 
@@ -84,20 +90,21 @@ padding: 1rem;
   align-self: flex-end;
 }
 
-/* Info Section */
+/* Info Section - 2x3 Grid */
 .infoSection {
   position: sticky;
   top: 2rem;
 }
 
 .infoSection h2 {
-  margin: 0 1rem;
+  margin: 0 0.5rem 1rem 0.5rem;
+  font-size: 1.5rem;
 }
 
 .infoGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
 
 .metricCard {
@@ -126,9 +133,24 @@ padding: 1rem;
   margin: 0 auto;
 }
 
+.storySection h2 {
+  margin-top: 2rem;
+}
+
 .storyContent {
   line-height: 1.8;
   font-size: 1.0625rem;
+}
+
+.storyImage {
+  margin: 2rem 0;
+}
+
+.storyImage figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+  font-style: italic;
 }
 
 .pullQuote {
@@ -140,10 +162,17 @@ padding: 1rem;
   font-style: italic;
 }
 
+.pullQuote cite {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-style: normal;
+  color: #666;
+}
+
 /* Achievements */
 .achievementsSection {
   padding: 0 2rem;
-
 }
 
 .timeline {
@@ -190,9 +219,7 @@ padding: 1rem;
   height: 12px;
   background-color: #f5f5f5;
   border: 1.5px solid #830D35;
-
 }
-
 
 /* Mobile */
 @media (max-width: 900px) {
@@ -201,14 +228,17 @@ padding: 1rem;
     padding: 0;
   }
   
- 
-  
-  .founderCard {
+  .founderInfoGrid > div:first-child {
     grid-template-columns: 1fr;
   }
   
+  .founderCard {
+    grid-template-columns: 1fr;
+    margin: 0.75rem;
+  }
+  
   .founderImage {
-    height: 300px;
+    height: 250px;
   }
   
   .founderHeader {
@@ -222,9 +252,13 @@ padding: 1rem;
   .infoSection {
     position: static;
   }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
  
   .metricCard {
-margin: 1rem;
-margin-bottom: 0;
+    margin: 1rem;
+    margin-bottom: 0;
   }
 }
