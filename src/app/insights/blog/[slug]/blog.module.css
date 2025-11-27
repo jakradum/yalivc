@@ -3,6 +3,7 @@
 .blogArticle {
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: 1rem;
   padding: 3rem;
   padding-bottom: 4rem;
   border: 1px solid black;
@@ -316,10 +317,7 @@
 @media (max-width: 900px) {
   .blogArticle {
     padding: 1rem;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    border-left: none;
-    border-right: none;
+    border: 1px solid black;
   }
 
   .articleTitle {
