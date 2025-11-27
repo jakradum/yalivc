@@ -29,10 +29,9 @@
 }
 
 /* Founder + Info Grid */
-/* Founder + Info Grid */
 .founderInfoGrid {
-  display: grid;
-  grid-template-columns: minmax(auto, 900px) 500px; /* Changed from 1fr to minmax */
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 1rem;
   border-bottom: 1px solid #000;
@@ -41,6 +40,7 @@
 
 /* Founders Container Grid */
 .founderInfoGrid > div:first-child {
+  flex: 1 1 600px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
@@ -99,8 +99,10 @@
 
 /* Info Section - 2x3 Grid */
 .infoSection {
+  flex: 0 1 500px;
   position: sticky;
   top: 2rem;
+  padding-bottom: 1rem;
 }
 
 .infoSection h2 {
@@ -260,12 +262,11 @@
   }
 
   .founderInfoGrid {
-    grid-template-columns: 1fr;
     padding: 0;
   }
 
   .founderInfoGrid > div:first-child {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .founderCard {
@@ -296,5 +297,13 @@
   .metricCard {
     margin: 1rem;
     margin-bottom: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .founderInfoGrid > div:first-child {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+    margin: 0 auto;
   }
 }
