@@ -19,18 +19,22 @@ import { urlFor } from '@/sanity/client';
 import Link from 'next/link';
 
 export const vectorUsageMap = {
-  'robotics': <RoboticsVector/>,
+  // New 6 categories
   'artificial intelligence': <ArtificialIntelligenceVector/>,
-  'genomics': <GenomicsVector/>,
+  'aerospace and surveillance': <DefenceVector/>,
+  'life sciences': <LifeSciencesVector/>,
+  'robotics': <RoboticsVector/>,
+  'fabless semiconductor': <SemiconVector/>,
+  'smart manufacturing': <AdvancedManufacturingVector/>,
+  // Legacy mappings (for backward compatibility during migration)
+  'genomics': <LifeSciencesVector/>,
   'semiconductors': <SemiconVector/>,
-  'aerospace': <GenericVector/>,
+  'aerospace': <DefenceVector/>,
   'defence': <DefenceVector/>,
   'fabless chip design': <SemiconVector/>,
   'advanced manufacturing': <AdvancedManufacturingVector/>,
-  'generative AI': <GenerativeAIVector/>,
-  'life sciences': <LifeSciencesVector/>,
-  'strategic tech': <GenericVector/>,
-  'smart manufacturing': <AdvancedManufacturingVector/>,
+  'generative ai': <ArtificialIntelligenceVector/>,
+  'strategic tech': <DefenceVector/>,
 };
 
 const CompanyTable = ({ companies }) => {

@@ -34,8 +34,19 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding: 1rem;
-  border-bottom: 1px solid #000;
   padding-bottom: 3rem;
+  position: relative;
+}
+
+.founderInfoGrid::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background-color: #000;
 }
 
 /* Founders Container Grid */
@@ -56,6 +67,12 @@
   min-height: 6rem;
   background-color: white;
   padding: 0.75rem;
+}
+
+/* Single founder - position to right on desktop */
+.singleFounder {
+  margin-left: 50%;
+  width: 100%;
 }
 
 .founderImage {
@@ -233,8 +250,38 @@
 /* Horizontal Line */
 .horizontalLine {
   border: none;
-  border-top: 1px solid #000;
+  height: 1px;
+  background-color: #000;
   margin: 2rem 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+}
+
+/* Tablet breakpoint - stack founder and info vertically */
+@media (max-width: 1182px) {
+  .founderInfoGrid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .founderInfoGrid > div:first-child {
+    flex: none;
+    width: 100%;
+    max-width: 700px;
+    justify-content: center;
+  }
+
+  .infoSection {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .singleFounder {
+    margin-left: 0;
+    margin: 0 auto;
+  }
 }
 
 /* Mobile */
@@ -263,10 +310,14 @@
 
   .founderInfoGrid {
     padding: 0;
+    flex-direction: column;
+    align-items: center;
   }
 
   .founderInfoGrid > div:first-child {
     grid-template-columns: 1fr 1fr;
+    width: 100%;
+    max-width: 500px;
   }
 
   .founderCard {
@@ -288,6 +339,8 @@
 
   .infoSection {
     position: static;
+    width: 100%;
+    max-width: 500px;
   }
 
   .infoGrid {
@@ -301,9 +354,42 @@
 }
 
 @media (max-width: 500px) {
+  .founderInfoGrid {
+    padding: 0;
+    margin: 0 1rem;
+  }
+
   .founderInfoGrid > div:first-child {
     grid-template-columns: 1fr;
-    max-width: 320px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
+    width: 100%;
+  }
+
+  .founderCard {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .singleFounder {
+    margin-left: 0;
+    width: calc(100% - 2rem);
+    margin: 1rem 1rem 1rem 0.5rem;
+  }
+
+  .infoSection {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .metricCard {
+    margin: 0;
   }
 }

@@ -48,13 +48,22 @@ export default async function SectorPage({ params }) {
     const allContent = await getContentByCategory(slug);
 
     const categoryVectorMap = {
+      // New 6 categories
       'artificial intelligence': ArtificialIntelligenceVector,
+      'aerospace and surveillance': DefenceVector,
       'life sciences': LifeSciencesVector,
-      semiconductors: SemiconVector,
+      'robotics': RoboticsVector,
+      'fabless semiconductor': SemiconVector,
       'smart manufacturing': AdvancedManufacturingVector,
-      robotics: RoboticsVector,
-      defence: DefenceVector,
-      'strategic tech': GenericVector,
+      // Legacy mappings (for backward compatibility during migration)
+      'genomics': LifeSciencesVector,
+      'semiconductors': SemiconVector,
+      'aerospace': DefenceVector,
+      'defence': DefenceVector,
+      'fabless chip design': SemiconVector,
+      'advanced manufacturing': AdvancedManufacturingVector,
+      'generative ai': ArtificialIntelligenceVector,
+      'strategic tech': DefenceVector,
     };
 
     const VectorComponent = categoryVectorMap[category.name.toLowerCase()] || GenericVector;

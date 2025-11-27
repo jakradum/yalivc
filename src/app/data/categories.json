@@ -1,13 +1,10 @@
 {
-    "emergingTechnologies": [
-      "robotics",
-      "artificial intelligence",
-      "genomics",
-      "semiconductors",
-      "aerospace",
-      "fabless chip design",
-      "advanced manufacturing",
-      "generative AI",
-      "life sciences"
-    ]
-  }
+  "emergingTechnologies": [
+    "artificial intelligence",
+    "aerospace and surveillance",
+    "life sciences",
+    "robotics",
+    "fabless semiconductor",
+    "smart manufacturing"
+  ]
+}

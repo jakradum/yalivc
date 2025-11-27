@@ -108,7 +108,7 @@ export default async function CompanyPage({ params }) {
               {/* Founders Column */}
               <div>
                 {company.founders?.map((founder, idx) => (
-                  <article key={idx} className={companyStyles.founderCard} style={company.founders?.length === 1 ? { marginLeft: '50%', width: '100%' } : {}}>
+                  <article key={idx} className={`${companyStyles.founderCard} ${company.founders?.length === 1 ? companyStyles.singleFounder : ''}`}>
                     <div className={companyStyles.founderImage}>
                       <Image
                         src={urlFor(founder.photo).width(300).url()}

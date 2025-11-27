@@ -63,9 +63,9 @@ const CategoryTable = ({ categories, philosophyText }) => {
       </div>
       <table className={styles.categoryTable}>
         <tbody>
-          {/* First row: 4 items */}
+          {/* First row: 3 items */}
           <tr>
-            {categories.slice(0, 4).map((category, index) => (
+            {categories.slice(0, 3).map((category, index) => (
               <td key={index} className={styles.categoryCell}>
                 <Link href={`/investments/${category.slug.current}`} className={styles.categoryLink}>
                   <div className={styles.vector}>
@@ -86,7 +86,7 @@ const CategoryTable = ({ categories, philosophyText }) => {
           </tr>
           {/* Second row: 3 items */}
           <tr>
-            {categories.slice(4, 7).map((category, index) => (
+            {categories.slice(3, 6).map((category, index) => (
               <td key={index} className={styles.categoryCell}>
                 <Link href={`/investments/${category.slug.current}`} className={styles.categoryLink}>
                   <div className={styles.vector}>
@@ -94,7 +94,7 @@ const CategoryTable = ({ categories, philosophyText }) => {
                   </div>
                   <article className={styles.categoryContent}>
                     <div className={styles.categoryNumber}>
-                      <h2>{String(index + 5).padStart(2, '0')}</h2>
+                      <h2>{String(index + 4).padStart(2, '0')}</h2>
                     </div>
                     <h4 className={styles.categoryTitle}>{category.name}</h4>
                     <p className={styles.categoryDescription}>
