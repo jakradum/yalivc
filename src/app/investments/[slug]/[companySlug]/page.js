@@ -57,21 +57,7 @@ export default async function CompanyPage({ params }) {
       {/* HEADER */}
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
-          <div className={companyStyles.header}>
-            {company.logo && (
-              <div className={companyStyles.logoContainer}>
-                <Image
-                  src={urlFor(company.logo).width(120).url()}
-                  alt={`${company.name} logo`}
-                  width={120}
-                  height={120}
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            )}
-            <h1 className={companyStyles.companyName}>{company.name}</h1>
-          </div>
-
+          <h1 className={companyStyles.companyName}>{company.name}</h1>
           <div className={styles.paraFlex}>
             <p>{company.detail}</p>
           </div>
@@ -84,6 +70,16 @@ export default async function CompanyPage({ params }) {
             </div>
           )}
         </article>
+        <aside className={`${styles.mainsecGraphic} ${companyStyles.logoAside}`}>
+          {company.logo && (
+            <Image
+              src={urlFor(company.logo).width(600).url()}
+              alt={`${company.name} logo`}
+              fill
+              style={{ objectFit: 'contain', transform: 'scale(0.8)' }}
+            />
+          )}
+        </aside>
       </div>
 
       {/* FOUNDERS + INFO SECTION */}
@@ -112,7 +108,7 @@ export default async function CompanyPage({ params }) {
               {/* Founders Column */}
               <div>
                 {company.founders?.map((founder, idx) => (
-                  <article key={idx} className={companyStyles.founderCard}>
+                  <article key={idx} className={companyStyles.founderCard} style={company.founders?.length === 1 ? { marginLeft: '50%', width: '100%' } : {}}>
                     <div className={companyStyles.founderImage}>
                       <Image
                         src={urlFor(founder.photo).width(300).url()}
@@ -193,32 +189,35 @@ export default async function CompanyPage({ params }) {
       {/* INVESTMENT STORY */}
       {company.story?.content && (
         <section className={styles.sectorsSection}>
-          <div className={companyStyles.storySection}>
+          <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
 
-              <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
+          <article className={blogStyles.blogArticle}>
+            <header className={blogStyles.articleHeader}>
+              <h1 className={blogStyles.articleTitle}>{company.story.title}</h1>
 
-            <h2>{company.story.title}</h2>
-            {company.story.author && (
-              <div className={blogStyles.articleMeta} style={{ borderBottom: 'none' }}>
-                <div className={blogStyles.authorInfo}>
-                  <Image
-                    src={company.story.author.photo}
-                    alt={company.story.author.name}
-                    width={48}
-                    height={48}
-                    className={blogStyles.authorPhoto}
-                  />
-                  <div>
-                    <p className={blogStyles.authorName}>{company.story.author.name}</p>
-                    <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
+              {company.story.author && (
+                <div className={blogStyles.articleMeta}>
+                  <div className={blogStyles.authorInfo}>
+                    <Image
+                      src={company.story.author.photo}
+                      alt={company.story.author.name}
+                      width={48}
+                      height={48}
+                      className={blogStyles.authorPhoto}
+                    />
+                    <div>
+                      <p className={blogStyles.authorName}>{company.story.author.name}</p>
+                      <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </header>
+
             <div className={blogStyles.articleBody}>
               <PortableText value={company.story.content} components={storyComponents} />
             </div>
-          </div>
+          </article>
         </section>
       )}
 
@@ -246,6 +245,7 @@ export default async function CompanyPage({ params }) {
       )}
 
       {/* RELATED CONTENT */}
+      {allContent.length > 0 && <hr className={companyStyles.horizontalLine} />}
       {allContent.length > 0 && (
         <section className={styles.sectorsSection} style={{ paddingBottom: 0, marginBottom: '1rem' }}>
           <div className={styles.people}>

@@ -15,6 +15,13 @@
   max-height: 80px;
 }
 
+.logoAside {
+  background-color: white !important;
+  position: relative;
+  padding: 1rem;
+  border-top: 1px solid black;
+}
+
 .companyName {
   margin: 0;
   flex: 1;
@@ -221,34 +228,63 @@
   border: 1.5px solid #830D35;
 }
 
+/* Horizontal Line */
+.horizontalLine {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 2rem 0;
+}
+
 /* Mobile */
-@media (max-width: 900px) {
+@media (max-width: 800px) {
+  .logoAside {
+    background-color: white !important;
+    aspect-ratio: auto !important;
+    height: 200px !important;
+    min-height: 200px !important;
+    width: calc(100% - 4rem) !important;
+    margin: 0 auto !important;
+    border: none !important;
+    border-top: 1px solid black !important;
+    position: relative !important;
+    padding: 2rem !important;
+  }
+
+  .logoAside::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -2rem;
+    right: -2rem;
+    border-top: 1px solid black;
+  }
+
   .founderInfoGrid {
     grid-template-columns: 1fr;
     padding: 0;
   }
-  
+
   .founderInfoGrid > div:first-child {
     grid-template-columns: 1fr;
   }
-  
+
   .founderCard {
     grid-template-columns: 1fr;
     margin: 0.75rem;
   }
-  
+
   .founderImage {
     height: 250px;
   }
-  
+
   .founderHeader {
     text-align: left;
   }
-  
+
   .founderLinkedIn {
     align-self: flex-start;
   }
-  
+
   .infoSection {
     position: static;
   }
@@ -256,7 +292,7 @@
   .infoGrid {
     grid-template-columns: 1fr;
   }
- 
+
   .metricCard {
     margin: 1rem;
     margin-bottom: 0;
