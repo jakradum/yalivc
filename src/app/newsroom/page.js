@@ -3,6 +3,7 @@ import HeaderFlex from '../components/icons/headerflex';
 import { NewsSVG } from '../components/icons/background svgs/newsSVG';
 import NewsSection from '../components/newssection';
 import NewsComponent  from './newscomponent.js';
+import PressMailingList from '../components/PressMailingList';
 
 import { getNews } from '@/lib/sanity-queries';
 export const revalidate = 60;
@@ -33,6 +34,7 @@ console.log('📰 page.js fetched news[0]:', news[0]);
           <div className={styles.people}>
             <HeaderFlex title="About us in the news" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>
           </div>
+          <PressMailingList />
           <NewsComponent news={news} />
         </section>
       </section>
