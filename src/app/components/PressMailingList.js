@@ -8,28 +8,43 @@ export default function PressMailingList() {
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
   const [message, setMessage] = useState('');
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) {
+    if (!email || !isValidEmail(email)) {
       setStatus('error');
-      setMessage('Please enter your email address');
+      setMessage('Enter a valid email');
       return;
     }
 
     setStatus('loading');
 
     try {
-      // TODO: Replace with your actual mailing list API endpoint
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/subscribe-press', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to subscribe');
+      }
 
       setStatus('success');
       setMessage('Thank you for subscribing to our press mailing list!');
       setEmail('');
     } catch (error) {
       setStatus('error');
-      setMessage('Something went wrong. Please try again.');
+      setMessage(error.message || 'Something went wrong. Please try again.');
     }
   };
 

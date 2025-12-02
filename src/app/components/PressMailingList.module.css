@@ -1,31 +1,27 @@
 .container {
-  background-color: #830D35;
-  padding: 3rem 2rem;
-  margin: 2rem 0;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  background-color: transparent;
+  padding: 1.5rem 2rem;
+  margin: 0;
 }
 
 .content {
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
   text-align: center;
 }
 
 .title {
-  color: white;
-  font-size: 1.75rem;
+  color: #830D35;
+  font-size: 1.25rem;
   font-weight: 500;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .description {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.5;
+  color: #666;
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
 }
 
 .form {
@@ -41,16 +37,16 @@
 
 .input {
   flex: 1;
-  padding: 0.875rem 1rem;
-  font-size: 1rem;
-  border: 2px solid transparent;
-  border-radius: 4px;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 0;
   outline: none;
   transition: border-color 0.2s ease;
 }
 
 .input:focus {
-  border-color: #ebde84;
+  border-color: #830D35;
 }
 
 .input::placeholder {
@@ -63,20 +59,20 @@
 }
 
 .button {
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #830D35;
-  background-color: #ebde84;
+  color: white;
+  background-color: #830D35;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
 }
 
 .button:hover {
-  background-color: #d4c86e;
+  background-color: #660a29;
 }
 
 .button:active {
@@ -91,33 +87,34 @@
 }
 
 .successMessage {
-  color: #ebde84;
-  font-size: 1.125rem;
+  color: #830D35;
+  font-size: 1rem;
   font-weight: 500;
   margin: 0;
 }
 
 .errorMessage {
   color: #ff6b6b;
-  font-size: 0.875rem;
-  margin: 0.75rem 0 0 0;
+  font-size: 0.75rem;
+  margin: 0.5rem 0 0 0;
 }
 
 @media (max-width: 600px) {
   .container {
-    padding: 2rem 1.5rem;
+    padding: 1rem;
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
   }
 
   .description {
-    font-size: 0.9375rem;
+    font-size: 0.8125rem;
   }
 
   .inputWrapper {
     flex-direction: column;
+    gap: 0.5rem;
   }
 
   .input,

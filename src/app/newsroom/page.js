@@ -34,10 +34,9 @@ console.log('📰 page.js fetched news[0]:', news[0]);
           <div className={styles.people}>
             <HeaderFlex title="About us in the news" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>
           </div>
+          <PressMailingList />
           <NewsComponent news={news} />
         </section>
-
-        <PressMailingList />
       </section>
     );
   }

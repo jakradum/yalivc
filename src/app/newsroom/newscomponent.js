@@ -1,11 +1,7 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import styles from './newscomponent.module.css';
-import Button from '../components/button';
 import fallbackData from '../data/news.json';
-
-// Utility functions
-const buttonText = 'view all coverage';
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -164,12 +160,7 @@ export default function NewsComponent({ news = [] }) {
         </div>
       )}
 
-      {/* View All Button */}
-      <div className={styles.viewAllButton}>
-        <Button href="/newsroom" color="black">
-          {buttonText}
-        </Button>
-      </div>
+
     </div>
   );
 }
