@@ -1,0 +1,127 @@
+.container {
+  background-color: #830D35;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+}
+
+.content {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin: 0 0 0.75rem 0;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.form {
+  width: 100%;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.input {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: #ebde84;
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.button {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #830D35;
+  background-color: #ebde84;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background-color: #d4c86e;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.successMessage {
+  color: #ebde84;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  font-size: 0.875rem;
+  margin: 0.75rem 0 0 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.9375rem;
+  }
+
+  .inputWrapper {
+    flex-direction: column;
+  }
+
+  .input,
+  .button {
+    width: 100%;
+  }
+}

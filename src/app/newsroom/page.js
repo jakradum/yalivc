@@ -3,6 +3,7 @@ import HeaderFlex from '../components/icons/headerflex';
 import { NewsSVG } from '../components/icons/background svgs/newsSVG';
 import NewsSection from '../components/newssection';
 import NewsComponent  from './newscomponent.js';
+import PressMailingList from '../components/PressMailingList';
 
 import { getNews } from '@/lib/sanity-queries';
 export const revalidate = 60;
@@ -35,6 +36,8 @@ console.log('📰 page.js fetched news[0]:', news[0]);
           </div>
           <NewsComponent news={news} />
         </section>
+
+        <PressMailingList />
       </section>
     );
   }
