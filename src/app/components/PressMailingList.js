@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import styles from './PressMailingList.module.css';
+import Button from './button';
 
 export default function PressMailingList() {
   const [email, setEmail] = useState('');
@@ -85,7 +85,8 @@ export default function PressMailingList() {
         )}
 
         <div className={styles.mediaKitLink}>
-          <p>Covering us in your story? <Link href="/newsroom/press-downloads">Use our media kit.</Link></p>
+          <p>Covering us in your story?</p>
+          <Button href="/newsroom/press-downloads" color="black">Use our media kit</Button>
         </div>
       </div>
     </div>
