@@ -65,9 +65,7 @@ const finalTeam = teamMembers;
     finalTeam.map((member, index) => (
       <div key={index} className={styles.mobileTeamMemberWrapper}>
         <div
-          className={`${styles.mobileTeamMember} ${
-            expandedRow === index ? styles.expanded : ''
-          }`}
+          className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
           onClick={() => handleCellInteraction(member, index)}
         >
           <div className={styles.memberInfo}>
@@ -75,11 +73,7 @@ const finalTeam = teamMembers;
             <p className={styles.desig}>{member.role}</p>
             <div className={styles.socialLinks}>
               {member.linkedIn && (
-                <a
-                  href={member.linkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={member.linkedIn} target="_blank" rel="noopener noreferrer">
                   <button className={styles.socialButton}>in</button>
                 </a>
               )}
@@ -87,27 +81,24 @@ const finalTeam = teamMembers;
           </div>
           <ExpandIcon isExpanded={expandedRow === index} />
         </div>
-        <div
-          className={`${styles.mobileExpandedContent} ${
-            expandedRow === index ? styles.expanded : ''
-          }`}
-        >
+        <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
           <div className={styles.expandedImageContainer}>
+            <TeamsDefaultSVG />
             {member.photo ? (
               <Image
                 loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
                 src={getImagePath(index)}
                 alt={member.name}
-                width={300}
-                height={200}
+                width={220}
+                height={220}
                 className={styles.memberImage}
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'cover' }}
               />
             ) : (
               <Graphicfg className={styles.memberImage} />
             )}
           </div>
-<p className={styles.expandedOneLiner}>{member.oneLiner}</p>
+          <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
         </div>
       </div>
     ));
@@ -201,6 +192,7 @@ const finalTeam = teamMembers;
           {selectedMember ? (
             <header className={styles.headerSec}>
               <div className={styles.memberImageContainer}>
+                <TeamsDefaultSVG />
                 {selectedMember.photo ? (
                   <Image
                     loader={imageLoader}
@@ -209,7 +201,7 @@ const finalTeam = teamMembers;
                     className={styles.memberImage}
                     width={300}
                     height={300}
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'cover' }}
                   />
                 ) : (
                   <Graphicfg className={styles.memberImage} />
