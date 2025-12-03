@@ -173,8 +173,29 @@
 
 /* Contact Section */
 .contactSection {
-  padding-top: 1rem;
+  padding: 2rem 0;
   text-align: center;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.contactSection::before,
+.contactSection::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background-color: #000;
+}
+
+.contactSection::before {
+  top: 0;
+}
+
+.contactSection::after {
+  bottom: 0;
 }
 
 .contactSection h3 {

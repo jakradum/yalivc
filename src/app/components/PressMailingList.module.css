@@ -103,6 +103,11 @@
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .mediaKitLink p {
@@ -113,12 +118,8 @@
 
 .mediaKitLink a {
   color: #830D35;
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-.mediaKitLink a:hover {
-  color: #660a29;
+  font-weight: 300;
+  margin: 0;
 }
 
 @media (max-width: 600px) {

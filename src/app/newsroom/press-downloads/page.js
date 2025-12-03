@@ -1,4 +1,5 @@
 import styles from './press-downloads.module.css';
+import aboutStyles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
 import Breadcrumb from '../../components/breadcrumb';
 import { getCategories, getTeamMembers } from '@/lib/sanity-queries';
@@ -21,17 +22,17 @@ export default async function PressDownloads() {
     <section className={styles.container}>
       <Breadcrumb />
 
-      <div className={styles.header}>
+      <div className={aboutStyles.people}>
         <HeaderFlex
           title="Media Download Centre"
           color="black"
           desktopMaxWidth={'60%'}
           mobileMaxWidth={'90%'}
         />
-        <p className={styles.subtitle}>
-          Resources for journalists and media covering Yali Capital.
-        </p>
       </div>
+      <p className={styles.subtitle}>
+        Resources for journalists and media covering Yali Capital.
+      </p>
 
       <PressDownloadsClient categories={categories} teamMembers={teamMembers} />
     </section>
