@@ -159,7 +159,7 @@ The team at Yali Capital brings over 60 years of combined experience in deep tec
       {/* Contact Section */}
       <div className={styles.contactSection}>
         <h3>Media Inquiries</h3>
-        <p>For high-resolution images, interview requests, or additional information, please email <a href="mailto:pranav@yali.vc">pranav@yali.vc</a>.</p>
+        <p>For high-resolution images, interview requests, or additional information, please email <a href="mailto:press@yali.vc">press@yali.vc</a>.</p>
       </div>
     </>
   );

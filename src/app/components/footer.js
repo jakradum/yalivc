@@ -12,7 +12,7 @@ export default function Footer() {
       <Link href="mailto:press@yali.vc">Press inquiries</Link>
       <Link href="https://www.linkedin.com/company/yali-capital/" target='_blank'>Follow us on LinkedIn</Link>
       <Link href="/investor-relations">Investor Relations</Link>
-      <small>© Yali Capital {new Date().getFullYear()}</small>
+      <Link href="/newsroom/press-downloads">Media kit</Link>
     </>
   );
 
@@ -41,6 +41,7 @@ export default function Footer() {
               Yali Capital, headquartered in Bangalore, India, invests in early stage deep tech startups across a wide
               range of verticals from Aerospace to Robotics.
               </p>
+              <small className={styles.copyright}>© Yali Capital {new Date().getFullYear()}</small>
             </div>
           </div>
           <div className={` ${styles.mobileBottomStrip}`}>
