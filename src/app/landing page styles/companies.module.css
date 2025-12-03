@@ -28,6 +28,16 @@
     max-width: 50%;
     margin: 1rem;
 }
+.companyLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.companyCell {
+  cursor: pointer;
+}
 
 .companyTableContainer {
     display: flex;
@@ -56,6 +66,7 @@
     /* 1px = 0.0625rem */
     border-left: 0.0625rem solid black;
     height: 25rem;
+    border-top: 1px solid black;
     /* 40rem (rem to rem) */
 }
 
@@ -92,6 +103,17 @@
     right: 1rem;
     height: 5rem;
     background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagePlaceholder img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain;
 }
 
 .companyNumber h2 {
@@ -208,6 +230,11 @@
     transition: all 0.5s ease;
 }
 
+.mobileCompanyCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
   
   
   
