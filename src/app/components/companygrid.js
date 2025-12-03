@@ -16,25 +16,58 @@ import { ArtificialIntelligenceVector } from './icons/background svgs/category s
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 import { urlFor } from '@/sanity/client';
+import Link from 'next/link';
 
 export const vectorUsageMap = {
-  'robotics': <RoboticsVector/>,
+  // New 6 categories
   'artificial intelligence': <ArtificialIntelligenceVector/>,
-  'genomics': <GenomicsVector/>,
+  'aerospace and surveillance': <DefenceVector/>,
+  'life sciences': <LifeSciencesVector/>,
+  'robotics': <RoboticsVector/>,
+  'fabless semiconductor': <SemiconVector/>,
+  'smart manufacturing': <AdvancedManufacturingVector/>,
+  // Legacy mappings (for backward compatibility during migration)
+  'genomics': <LifeSciencesVector/>,
   'semiconductors': <SemiconVector/>,
-  'aerospace': <GenericVector/>,
+  'aerospace': <DefenceVector/>,
   'defence': <DefenceVector/>,
   'fabless chip design': <SemiconVector/>,
   'advanced manufacturing': <AdvancedManufacturingVector/>,
-  'generative AI': <GenerativeAIVector/>,
-  'life sciences': <LifeSciencesVector/>,
+  'generative ai': <ArtificialIntelligenceVector/>,
+  'strategic tech': <DefenceVector/>,
 };
 
 const CompanyTable = ({ companies }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const buttonText = 'view more details';
+ const minSwipeDistance = 50;
+   const onTouchStart = (e) => {
+    setTouchEnd(0);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setCurrentCard((prev) => (prev + 1) % companiesData.data.length);
+    }
+    if (isRightSwipe) {
+      setCurrentCard((prev) => (prev - 1 + companiesData.data.length) % companiesData.data.length);
+    }
+  };
 
    const companiesData = { data: companies || localCompaniesData.data };
     // ? { data: data.data['companies-csv (1)'] }
@@ -85,27 +118,32 @@ const CompanyTable = ({ companies }) => {
             <tr key={row}>
               {companiesData.data.slice(row * 5, (row + 1) * 5).map((company, index) => (
                 <td key={index} className={styles.companyCell}>
-                  <article className={styles.companyContent}>
-                    <div className={styles.companyNumber}>
-                      <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
-                    </div>
-                    <h4 className={styles.companyTitle}>{company.name}</h4>
-                    <p className={styles.companyCategory}>{company.category}</p>
-
-                    <div className={styles.vector}>{vectorUsageMap[company.category]}</div>
-                    {company.logo && (
-                      <div className={styles.imagePlaceholder}>
-                        <Image
-                          src={urlFor(company.logo).width(100).url()}
-                          alt={company.name}
-                          width={100}
-                          height={100}
-                          style={{ objectFit: 'contain' }}
-                        />
+                  <Link
+                    href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug.current}`}
+                    className={styles.companyLink}
+                  >
+                    <article className={styles.companyContent}>
+                      <div className={styles.companyNumber}>
+                        <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
                       </div>
-                    )}
-                    <p className={styles.companyOneLiner}>{company.oneLiner}</p>
-                  </article>
+                      <h4 className={styles.companyTitle}>{company.name}</h4>
+                      <p className={styles.companyCategory}>{company.category.name}</p>
+
+                      <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
+                      {company.logo && (
+                        <div className={styles.imagePlaceholder}>
+                          <Image
+                            src={urlFor(company.logo).width(100).url()}
+                            alt={company.name}
+                            width={100}
+                            height={100}
+                            style={{ objectFit: 'contain' }}
+                          />
+                        </div>
+                      )}
+                      <p className={styles.companyOneLiner}>{company.oneLiner}</p>
+                    </article>
+                  </Link>
                 </td>
               ))}
             </tr>
@@ -115,13 +153,15 @@ const CompanyTable = ({ companies }) => {
     </>
   );
 
-  const renderMobileLayout = () => (
-    <div
-      className={styles.mobileCompanyGrid}
-      onClick={() => setCurrentCard((prev) => (prev + 1) % companiesData.data.length)}
-    >
+   const renderMobileLayout = () => (
+    <div className={styles.mobileCompanyGrid}>
       <p className={styles.sidebarText}>{updatedText}</p>
-      <section className={styles.carouselContainer}>
+      <section 
+        className={styles.carouselContainer}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {companiesData.data.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
           const cardStyle = isVisible
@@ -133,31 +173,36 @@ const CompanyTable = ({ companies }) => {
             : { display: 'none' };
   
           return (
-            <aside
+            <Link
               key={index}
-              className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
-              style={cardStyle}
+              href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug.current}`}
+              className={styles.mobileCompanyCardLink}
             >
-              <article className={styles.keyDetails}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.companyNumber}>
-                    <h2>{String(index + 1).padStart(2, '0')}</h2>
-                  </span>
-                  <span className={styles.totalCount}>
-                    <h3>/{companiesData.data.length}</h3>
-                  </span>
-                </div>
-                <h4 className={styles.companyTitle}>{company.name}</h4>
-                <p className={styles.companyCategory}>{company.category}</p>
+              <aside
+                className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
+                style={cardStyle}
+              >
+                <article className={styles.keyDetails}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.companyNumber}>
+                      <h2>{String(index + 1).padStart(2, '0')}</h2>
+                    </span>
+                    <span className={styles.totalCount}>
+                      <h3>/{companiesData.data.length}</h3>
+                    </span>
+                  </div>
+                  <h4 className={styles.companyTitle}>{company.name}</h4>
+                  <p className={styles.companyCategory}>{company.category.name}</p>
 
-                <div className={styles.mobileVector}>
-                  {vectorUsageMap[company.category] || <GenericVector />}
-                </div>
+                  <div className={styles.mobileVector}>
+                    {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
+                  </div>
 
-                <small>{company.oneLiner}</small>
-                <p>Tap to view next</p>
-              </article>
-            </aside>
+                  <small>{company.oneLiner}</small>
+                  <p>Swipe to view next</p>
+                </article>
+              </aside>
+            </Link>
           );
         })}
       </section>

@@ -195,7 +195,7 @@
 /* mobile styles */
 
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
     .footer {
         --footer-height-mobile: auto;
     }

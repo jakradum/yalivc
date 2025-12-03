@@ -21,6 +21,8 @@
   box-sizing: border-box;
 }
 
+
+
 .headerFlex > h1 {
   font-family: var(--font-jetbrains-mono) !important;
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -65,6 +67,8 @@
 .headerFlex > svg circle {
   fill: currentColor;
 }
+
+
 
 /* Apply desktop max-width */
 @media (min-width: 901px) {

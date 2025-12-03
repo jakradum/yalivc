@@ -1,5 +1,6 @@
 html {
   scroll-padding-top: 60px;
+  scroll-behavior: smooth;
 }
 
 html, body {
@@ -30,7 +31,7 @@ body {
   box-sizing: border-box;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 950px) {
   body {
     padding-top: 3.5rem;
   }
@@ -41,7 +42,7 @@ nav p[class*="verticalText"] {
   font-family: var(--font-jetbrains-mono);
 }
 
-h1, h2, h3, small {
+h1, h2, h3, small, label {
   font-family: var(--font-jetbrains-mono);
 }
 
@@ -60,7 +61,7 @@ p, span, div:not([class*="header"]):not([class*="title"]) {
 }
 
 /* Buttons and form elements */
-button, input, textarea, label {
+button, input, textarea{
   font-family: var(--font-inter) !important;
 }
 
