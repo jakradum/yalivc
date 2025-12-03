@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './PressMailingList.module.css';
+import Button from './button';
 
 export default function PressMailingList() {
   const [email, setEmail] = useState('');
@@ -82,6 +83,11 @@ export default function PressMailingList() {
             )}
           </form>
         )}
+
+        <div className={styles.mediaKitLink}>
+          <p>Covering us in your story?</p>
+          <Button href="/newsroom/press-downloads" color="black">Use our media kit</Button>
+        </div>
       </div>
     </div>
   );

@@ -99,9 +99,37 @@
   margin: 0.5rem 0 0 0;
 }
 
+.mediaKitLink {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.mediaKitLink p {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+}
+
+.mediaKitLink a {
+  color: #830D35;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.mediaKitLink a:hover {
+  color: #660a29;
+}
+
 @media (max-width: 600px) {
   .container {
     padding: 1rem;
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
   .title {
@@ -115,10 +143,12 @@
   .inputWrapper {
     flex-direction: column;
     gap: 0.5rem;
+    max-width: 100%;
   }
 
   .input,
   .button {
     width: 100%;
+    box-sizing: border-box;
   }
 }
