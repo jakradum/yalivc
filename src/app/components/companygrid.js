@@ -16,7 +16,6 @@ import { ArtificialIntelligenceVector } from './icons/background svgs/category s
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 import { urlFor } from '@/sanity/client';
-import Link from 'next/link';
 
 export const vectorUsageMap = {
   // New 6 categories
@@ -118,18 +117,14 @@ const CompanyTable = ({ companies }) => {
             <tr key={row}>
               {companiesData.data.slice(row * 5, (row + 1) * 5).map((company, index) => (
                 <td key={index} className={styles.companyCell}>
-                  <Link
-                    href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug.current}`}
-                    className={styles.companyLink}
-                  >
                     <article className={styles.companyContent}>
                       <div className={styles.companyNumber}>
                         <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
                       </div>
                       <h4 className={styles.companyTitle}>{company.name}</h4>
-                      <p className={styles.companyCategory}>{company.category.name}</p>
+                      <p className={styles.companyCategory}>{company.category}</p>
 
-                      <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
+                      <div className={styles.vector}>{vectorUsageMap[company.category?.toLowerCase()]}</div>
                       {company.logo && (
                         <div className={styles.imagePlaceholder}>
                           <Image
@@ -143,7 +138,6 @@ const CompanyTable = ({ companies }) => {
                       )}
                       <p className={styles.companyOneLiner}>{company.oneLiner}</p>
                     </article>
-                  </Link>
                 </td>
               ))}
             </tr>
@@ -173,12 +167,8 @@ const CompanyTable = ({ companies }) => {
             : { display: 'none' };
   
           return (
-            <Link
-              key={index}
-              href={`/investments/${company.category?.slug?.current || 'uncategorized'}/${company.slug.current}`}
-              className={styles.mobileCompanyCardLink}
-            >
               <aside
+                key={index}
                 className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
                 style={cardStyle}
               >
@@ -192,17 +182,16 @@ const CompanyTable = ({ companies }) => {
                     </span>
                   </div>
                   <h4 className={styles.companyTitle}>{company.name}</h4>
-                  <p className={styles.companyCategory}>{company.category.name}</p>
+                  <p className={styles.companyCategory}>{company.category}</p>
 
                   <div className={styles.mobileVector}>
-                    {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
+                    {vectorUsageMap[company.category?.toLowerCase()] || <GenericVector />}
                   </div>
 
                   <small>{company.oneLiner}</small>
                   <p>Swipe to view next</p>
                 </article>
               </aside>
-            </Link>
           );
         })}
       </section>
