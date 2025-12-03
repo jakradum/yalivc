@@ -7,6 +7,7 @@ import { useData } from '../data/fetch component';
 import imageLoader from '../../../image-loader';
 import { Graphicfg } from '../components/icons/background svgs/graphicfg';
 import Button from '../components/button';
+import { DefenceVector } from '../components/icons/background svgs/category svgs/defence vector';
 
 export default function TeamDetails({teamMembers}) {
 
@@ -24,13 +25,6 @@ export default function TeamDetails({teamMembers}) {
               <p className={styles.designation}>{member.role}</p>
             </div>
             <p className={styles.bio}>{member.bio}</p>
-            <div className={styles.viewmoreButton}>
-              {member.linkedIn && (
-                <Button href={member.linkedIn} color="#000000">
-                  view on linkedin
-                </Button>
-              )}
-            </div>
           </div>
 
           <div className={styles.memberImage}>
@@ -47,8 +41,18 @@ export default function TeamDetails({teamMembers}) {
               <Graphicfg />
             )}
           </div>
+          <div className={styles.viewmoreButton}>
+            {member.linkedIn && (
+              <Button href={member.linkedIn} color="#000000">
+                view on linkedin
+              </Button>
+            )}
+          </div>
         </article>
       ))}
+      <div className={styles.decorativeGraphic}>
+<Graphicfg/>
+      </div>
     </div>
   );
 }

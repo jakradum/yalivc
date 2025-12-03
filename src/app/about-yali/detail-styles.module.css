@@ -1,22 +1,27 @@
 .teamListContainer {
-    width: 100%;
-    margin: 0 auto 1rem auto;
-    background-color: white;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+background-color: white;
 }
 
+
+
+
 .teamMember {
-    display: flex;
-    border-bottom: 1px solid black;
-    padding: 0;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid black;
 }
+
 
 .memberInfo {
     flex: 1;
-    padding: 2rem 2rem 0 2rem;
+    padding: 1rem ;
     display: flex;
     flex-direction: column;
 }
+
+
 
 .header {
     display: flex;
@@ -31,6 +36,7 @@
     font-weight: 500;
     margin: 0;
     padding-bottom: 5px;
+    color: #830d35;
 }
 
 .designation {
@@ -41,7 +47,8 @@
     margin: 10px 0 0 0;
 }
 
-.header::after {
+/* if you want to add a line after the name, uncomment this  */
+/* .header::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -49,7 +56,7 @@
     width: calc(100% + 4rem);
     height: 1px;
     background-color: black;
-}
+} */
 
 .viewmoreButton{
     display: flex;
@@ -85,18 +92,23 @@
 .getInTouch:hover {
     background-color: #000;
     color: #fff;
+    max-height: 350px;
 }
-
 .memberImage {
-    flex: 0 0 300px;
-    height: auto;
+    width: 320px;
+    height: 320px;
+    background-color: #830D35;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .memberImage img {
-    width: 100%;
-    height: 100%;
+    width: 280px !important;
+    height: 280px !important;
     object-fit: cover;
-    display: block;
+    filter: drop-shadow(0 -10px 20px rgba(0, 0, 0, 0.3));
 }
 
 .loadMore {
@@ -115,7 +127,42 @@
     text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+/* The graphic that fills up the remaining space after all grid elements are displayed */
+
+   /* this is for sizing the width using :last-child */
+.teamListContainer > *:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 20rem;
+  position: relative;
+  grid-column: auto / -1;
+}
+
+.teamListContainer > *:last-child svg {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  opacity: 0.2;
+  transform: translateY(-50%);
+  width: 200%;
+  height: 200%;
+  object-fit: contain;
+}
+
+/* Hide when grid is 3 columns or fewer */
+@media (max-width: 1320px) {
+  .teamListContainer > *:last-child {
+    display: none;
+  }
+}
+
+/* end of graphic css */
+
+
+
+/* @media (max-width: 768px) {
     .teamMember {
         flex-direction: column;
         border-top: 1px solid black;
@@ -195,11 +242,11 @@
 
     .memberImage {
         order: 2;
-        width: calc(100% - 2rem); /* Subtract the total horizontal margin */
+        width: calc(100% - 2rem); 
         height: auto;
         margin: 1rem;
         aspect-ratio: 1 / 1;
-        position: relative; /* For positioning the pseudo-element */
+        position: relative; 
     }
     
     .memberImage::before {
@@ -210,7 +257,7 @@
         right: -1rem;
         bottom: -1rem;
 
-        pointer-events: none; /* Allows clicking through to the image */
+        pointer-events: none; 
     }
     
     .memberImage img {
@@ -222,4 +269,4 @@
     .header::after {
         display: none;
     }
-}
+} */

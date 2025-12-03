@@ -1,14 +1,50 @@
 .mainAbout {
-    margin-top: 2rem;
+
     display: flex;
     flex-direction: row;
     position: relative;
     overflow: visible;
     padding: 3rem 0 0 0;
 }
+
+.twoColumnText {
+    padding: 0 2rem;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+
+
+.textContent>h1,
+.textContent>h2,
+.textContent>h3,
+.textContent>h4 {
+    text-transform: capitalize;
+}
+
 .sectionLevel {
     position: relative;
-    margin-bottom: 1rem; /* Adjust as needed to create space for the line */
+    margin-bottom: 1rem;
+}
+
+.sectorsSection {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 5%;
+    position: relative;
+
+    /* Extra space below button for the line */
+}
+
+.sectorsSection::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 1px;
+    background-color: #000;
 }
 
 .sectionLevel::after {
@@ -17,9 +53,9 @@
     left: 50%;
     bottom: 0;
     transform: translateX(-50%);
-    width: 100vw; /* Full viewport width */
+    width: 100vw;
     height: 1px;
-    background-color: #000; /* Adjust color as needed */
+    background-color: #000;
 }
 
 /* Top line pseudo-element */
@@ -52,6 +88,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    padding-bottom: 1rem;
 }
 
 .textContent a,
@@ -60,7 +97,6 @@
 .textContent a:hover,
 .textContent a:active {
     color: inherit;
-   
 }
 
 /* Safari-specific styles */
@@ -70,8 +106,7 @@
     }
 }
 
-
-.textContent > h1 {
+.textContent>h1 {
     font-size: 3rem;
     font-weight: 400;
     margin: 0 0 2rem 0;
@@ -82,7 +117,7 @@
 }
 
 /* h1 underline pseudo-element */
-.textContent > h1::after {
+.textContent>h1::after {
     content: '';
     position: absolute;
     left: -3rem;
@@ -90,19 +125,23 @@
     bottom: -1rem;
     height: 1px;
     background-color: #000;
+
 }
 
 .paraFlex {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    padding: 1rem 0;
+
 }
-.paraFlex>p{
+
+.paraFlex>p {
     line-height: 1.25rem;
 }
 
 /* Container for paragraphs to enable vertical centering */
-.textContent > div {
+.textContent>div {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -110,7 +149,7 @@
 }
 
 /* Styles for paragraphs */
-.textContent > div > p {
+.textContent>div>p {
     margin: 0.5rem 0;
 }
 
@@ -122,27 +161,111 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    overflow: hidden; /* Hide overflowing parts of the SVG */
-    min-width: 200px; /* Set a minimum width to prevent excessive cropping */
+    overflow: hidden;
+    min-width: 200px;
 }
 
-.mainsecGraphic > svg {
+.mainsecGraphic>svg {
     opacity: 80%;
-    width: 100%; /* Make SVG responsive */
-    height: 100%; /* Make SVG responsive */
-    min-width: 300px; /* Ensure SVG doesn't become too small */
-    object-fit: cover; /* Crop the SVG instead of scaling it down */
-    object-position: center; /* Center the SVG when cropping */
+    width: 100%;
+    height: 100%;
+    min-width: 300px;
+    object-fit: cover;
+    object-position: center;
 }
 
-.people{
-    border-bottom: 1px solid black;
+.people {
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+/* Make the line extend full width */
+.people::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 1px;
+    background-color: #000;
+}
+
+/* Helper text for Investment Focus section */
+.helperText {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.sectorsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.sectorCard {
+    padding: 1.25rem;
+    border: 1px solid #363636;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
 }
-/* Existing styles remain the same */
 
-/* Media query for screens 800px and below */
-/* Existing styles remain the same */
+.sectorCard:hover {
+    background-color: #830D35;
+    color: white;
+    border: none;
+    /* REMOVED: box-shadow */
+}
+
+.sectorCard h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.sectorCard p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.viewAllLink {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.viewAllLink a {
+    color: #830D35;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: var(--font-jetbrains-mono);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.viewAllLink a:hover {
+    text-decoration: underline;
+}
+
+.readAllButton {
+    text-align: center;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
 
 /* Media query for screens 800px and below */
 @media (max-width: 800px) {
@@ -152,6 +275,7 @@
         position: relative;
         margin: 1rem 0;
     }
+
     .mainAbout::before {
         top: 0;
     }
@@ -162,7 +286,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 100vw; /* Full viewport width */
+        width: 100vw;
         height: 1px;
         background-color: #000;
     }
@@ -171,7 +295,7 @@
         padding: 2rem 1.5rem;
     }
 
-    .textContent > h1 {
+    .textContent>h1 {
         font-size: 2.5rem;
         line-height: 2.5rem;
         letter-spacing: -0.2rem;
@@ -181,7 +305,7 @@
     }
 
     /* Add line after heading */
-    .textContent > h1::after {
+    .textContent>h1::after {
         content: '';
         position: absolute;
         left: -1.5rem;
@@ -192,40 +316,51 @@
     }
 
     /* Container for paragraphs */
-    .textContent > div {
+    .textContent>div {
         justify-content: flex-start;
-        padding-top: 1rem; /* Add space after the line */
+        padding-top: 1rem;
     }
 
     /* Adjust paragraph styles */
-    .textContent > div > p {
+    .textContent>div>p {
         margin: 0.75rem 0;
         font-size: 0.9rem;
         line-height: 1.4;
     }
 
     .mainsecGraphic {
-        width: calc(100% - 2rem); /* Full width minus margins */
-        aspect-ratio: 1 / 1; /* Forces a square shape */
-        margin: 1rem; /* Adds margin around the container */
-        padding: 0; /* Removes any existing padding */
+        width: calc(100% - 2rem);
+        aspect-ratio: 1 / 1;
+        margin: 1rem;
+        padding: 0;
         position: relative;
         overflow: hidden;
         margin-bottom: 1rem;
-        background-color: #830D35; /* Ensures the background color fills the square */
+        background-color: #830D35;
     }
 
-    .mainsecGraphic > svg {
+    .mainsecGraphic>svg {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 90%; /* Slightly smaller than the container to create a border effect */
+        width: 90%;
         height: 90%;
-        object-fit: contain; /* Ensures the entire SVG is visible */
+        object-fit: contain;
     }
 
-    .mainAbout::before {
-        top: 0;
+    .sectorsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .helperText {
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .twoColumnText {
+        column-count: 2;
+        column-gap: 3rem;
     }
 }
