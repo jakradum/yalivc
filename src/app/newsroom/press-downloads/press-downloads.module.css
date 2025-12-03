@@ -1,0 +1,84 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 5%;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 1rem;
+  max-width: 600px;
+}
+
+.downloadsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.downloadCard {
+  border: 1px solid #e0e0e0;
+  padding: 2rem;
+  transition: border-color 0.2s ease;
+}
+
+.downloadCard:hover {
+  border-color: #830D35;
+}
+
+.downloadCard h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: #333;
+}
+
+.downloadCard p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+}
+
+.contactSection {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.contactSection h3 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.contactSection p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.contactSection a {
+  color: #830D35;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .downloadsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .downloadCard {
+    padding: 1.5rem;
+  }
+}

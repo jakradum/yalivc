@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import styles from './PressMailingList.module.css';
 
 export default function PressMailingList() {
@@ -82,6 +83,10 @@ export default function PressMailingList() {
             )}
           </form>
         )}
+
+        <div className={styles.mediaKitLink}>
+          <p>Covering us in your story? <Link href="/newsroom/press-downloads">Use our media kit.</Link></p>
+        </div>
       </div>
     </div>
   );
