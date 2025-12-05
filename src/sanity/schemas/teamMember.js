@@ -22,6 +22,17 @@ const teamMember = {
       readOnly: ({document}) => document?.isCore === true
     },
     {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'URL-friendly identifier (e.g., pranav-karnad)',
+      options: {
+        source: 'name',
+        maxLength: 96
+      },
+      validation: Rule => Rule.required()
+    },
+    {
       name: 'role',
       title: 'Role/Title',
       type: 'string',
@@ -59,6 +70,19 @@ const teamMember = {
       ...portableTextConfig
     },
     {
+      name: 'pullQuote',
+      title: 'Pull Quote',
+      type: 'text',
+      rows: 3,
+      description: 'A memorable quote about or from this person (displayed on profile page)'
+    },
+    {
+      name: 'pullQuoteAttribution',
+      title: 'Pull Quote Attribution',
+      type: 'string',
+      description: 'Who said or wrote this quote (e.g., "John Doe, Founder of XYZ")'
+    },
+    {
       name: 'outsideWork',
       title: 'Who am I outside of work?',
       type: 'array',
@@ -67,6 +91,75 @@ const teamMember = {
       options: {
         layout: 'tags'
       }
+    },
+    {
+      name: 'recommendation',
+      title: 'Recommendation',
+      type: 'object',
+      description: 'A LinkedIn-style recommendation from a friend or colleague',
+      fields: [
+        {
+          name: 'text',
+          title: 'Recommendation Text',
+          type: 'text',
+          rows: 4,
+          description: 'The recommendation message'
+        },
+        {
+          name: 'authorName',
+          title: 'Author Name',
+          type: 'string',
+          description: 'Name of the person giving the recommendation'
+        },
+        {
+          name: 'authorTitle',
+          title: 'Author Title/Relationship',
+          type: 'string',
+          description: 'e.g., "Co-founder at XYZ" or "College friend" or "Former colleague"'
+        }
+      ]
+    },
+    {
+      name: 'articles',
+      title: 'Articles Authored',
+      type: 'array',
+      description: 'Articles or posts written by this team member',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Article Title',
+              type: 'string',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'url',
+              title: 'Article URL',
+              type: 'url',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'publication',
+              title: 'Publication/Platform',
+              type: 'string',
+              description: 'e.g., "Medium", "LinkedIn", "Forbes"'
+            },
+            {
+              name: 'date',
+              title: 'Publication Date',
+              type: 'date'
+            }
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              subtitle: 'publication'
+            }
+          }
+        }
+      ]
     },
     {
       name: 'photo',

@@ -25,6 +25,7 @@
   text-decoration: none;
   color: #830D35;
   transition: color 0.2s ease;
+  text-transform: capitalize;
 }
 
 .breadcrumb a:hover {

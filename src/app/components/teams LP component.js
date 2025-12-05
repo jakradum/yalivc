@@ -61,6 +61,10 @@ const finalTeam = teamMembers;
     }
   };
 
+  const getMemberProfileUrl = (member) => {
+    return member.slug?.current ? `/about-yali/${member.slug.current}` : '#';
+  };
+
   const renderMobileView = () =>
     finalTeam.map((member, index) => (
       <div key={index} className={styles.mobileTeamMemberWrapper}>
@@ -73,7 +77,7 @@ const finalTeam = teamMembers;
             <p className={styles.desig}>{member.role}</p>
             <div className={styles.socialLinks}>
               {member.linkedIn && (
-                <a href={member.linkedIn} target="_blank" rel="noopener noreferrer">
+                <a href={member.linkedIn} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                   <button className={styles.socialButton}>in</button>
                 </a>
               )}
@@ -82,23 +86,28 @@ const finalTeam = teamMembers;
           <ExpandIcon isExpanded={expandedRow === index} />
         </div>
         <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
-          <div className={styles.expandedImageContainer}>
-            <TeamsDefaultSVG />
-            {member.photo ? (
-              <Image
-                loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
-                src={getImagePath(index)}
-                alt={member.name}
-                width={220}
-                height={220}
-                className={styles.memberImage}
-                style={{ objectFit: 'cover' }}
-              />
-            ) : (
-              <Graphicfg className={styles.memberImage} />
-            )}
-          </div>
+          <Link href={getMemberProfileUrl(member)} className={styles.expandedImageLink}>
+            <div className={styles.expandedImageContainer}>
+              <TeamsDefaultSVG />
+              {member.photo ? (
+                <Image
+                  loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
+                  src={getImagePath(index)}
+                  alt={member.name}
+                  width={220}
+                  height={220}
+                  className={styles.memberImage}
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : (
+                <Graphicfg className={styles.memberImage} />
+              )}
+            </div>
+          </Link>
           <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
+          <Link href={getMemberProfileUrl(member)} className={styles.viewProfileLink}>
+            View Profile
+          </Link>
         </div>
       </div>
     ));
@@ -132,21 +141,24 @@ const finalTeam = teamMembers;
       onMouseEnter={() => handleCellInteraction(member, index)}
       onMouseLeave={handleCellHoverLeave}
     >
-      <div className={styles.memberInfo}>
-        <p className={styles.name}>{member.name}</p>
-        <p className={styles.desig}>{member.role}</p>
-        <div className={styles.socialLinks}>
-          {member.linkedIn && (
-            <a
-              href={member.linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className={styles.socialButton}>in</button>
-            </a>
-          )}
+      <Link href={getMemberProfileUrl(member)} className={styles.memberCellLink}>
+        <div className={styles.memberInfo}>
+          <p className={styles.name}>{member.name}</p>
+          <p className={styles.desig}>{member.role}</p>
+          <div className={styles.socialLinks}>
+            {member.linkedIn && (
+              <a
+                href={member.linkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className={styles.socialButton}>in</button>
+              </a>
+            )}
+          </div>
         </div>
-      </div>
+      </Link>
     </td>
   );
 

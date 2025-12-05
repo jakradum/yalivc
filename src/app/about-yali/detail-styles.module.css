@@ -1,16 +1,23 @@
 .teamListContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-background-color: white;
+  background-color: white;
 }
 
-
-
+.teamMemberLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
 
 .teamMember {
   display: flex;
   flex-direction: column;
   border: 0.5px solid black;
+  height: 100%;
 }
 
 
@@ -29,6 +36,7 @@ background-color: white;
     position: relative;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    min-height: 5rem;
 }
 
 .name {
@@ -45,6 +53,7 @@ background-color: white;
     color: black;
     text-transform: uppercase;
     margin: 10px 0 0 0;
+    white-space: nowrap;
 }
 
 /* if you want to add a line after the name, uncomment this  */

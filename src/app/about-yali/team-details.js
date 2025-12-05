@@ -3,55 +3,53 @@
 import React from 'react';
 import styles from './detail-styles.module.css';
 import Image from 'next/image';
-import { useData } from '../data/fetch component';
+import Link from 'next/link';
 import imageLoader from '../../../image-loader';
 import { Graphicfg } from '../components/icons/background svgs/graphicfg';
 import Button from '../components/button';
-import { DefenceVector } from '../components/icons/background svgs/category svgs/defence vector';
 
 export default function TeamDetails({teamMembers}) {
-
-
-
-
-
   return (
     <div className={styles.teamListContainer}>
       {teamMembers.map((member, index) => (
-        <article key={index} className={styles.teamMember}>
-          <div className={styles.memberInfo}>
-            <div className={styles.header}>
-              <h3 className={styles.name}>{member.name}</h3>
-              <p className={styles.designation}>{member.role}</p>
+        <Link
+          key={index}
+          href={member.slug?.current ? `/about-yali/${member.slug.current}` : '#'}
+          className={styles.teamMemberLink}
+        >
+          <article className={styles.teamMember}>
+            <div className={styles.memberInfo}>
+              <div className={styles.header}>
+                <h3 className={styles.name}>{member.name}</h3>
+                <p className={styles.designation}>{member.role}</p>
+              </div>
+              <p className={styles.bio}>{member.bio}</p>
             </div>
-            <p className={styles.bio}>{member.bio}</p>
-          </div>
 
-          <div className={styles.memberImage}>
-            {member.photo ? (
-              <Image
-                loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
-                src={member.photo}
-                alt={member.name}
-                width={300}
-                height={300}
-                style={{ objectFit: 'cover' }}
-              />
-            ) : (
-              <Graphicfg />
-            )}
-          </div>
-          <div className={styles.viewmoreButton}>
-            {member.linkedIn && (
-              <Button href={member.linkedIn} color="#000000">
-                view on linkedin
+            <div className={styles.memberImage}>
+              {member.photo ? (
+                <Image
+                  loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
+                  src={member.photo}
+                  alt={member.name}
+                  width={300}
+                  height={300}
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : (
+                <Graphicfg />
+              )}
+            </div>
+            <div className={styles.viewmoreButton}>
+              <Button href="#" color="#000000">
+                View Profile
               </Button>
-            )}
-          </div>
-        </article>
+            </div>
+          </article>
+        </Link>
       ))}
       <div className={styles.decorativeGraphic}>
-<Graphicfg/>
+        <Graphicfg/>
       </div>
     </div>
   );

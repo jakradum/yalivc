@@ -75,6 +75,7 @@ export async function getTeamMembers() {
     `*[_type == "teamMember" && showOnHomepage == true] | order(order asc) {
       _id,
       name,
+      slug,
       role,
       bio,
       oneLiner,
@@ -82,6 +83,58 @@ export async function getTeamMembers() {
       linkedIn,
       order
     }`
+  );
+}
+
+export async function getTeamMemberBySlug(slug) {
+  return client.fetch(
+    `*[_type == "teamMember" && slug.current == $slug][0]{
+      _id,
+      name,
+      slug,
+      role,
+      bio,
+      oneLiner,
+      personalPhilosophy,
+      pullQuote,
+      pullQuoteAttribution,
+      outsideWork,
+      recommendation {
+        text,
+        authorName,
+        authorTitle
+      },
+      articles[] {
+        title,
+        url,
+        publication,
+        date
+      },
+      "photo": photo.asset->url,
+      linkedIn,
+      status
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllTeamMemberSlugs() {
+  return client.fetch(
+    `*[_type == "teamMember" && showOnHomepage == true] {
+      "slug": slug.current
+    }`
+  );
+}
+
+export async function getOtherTeamMembers(currentSlug, limit = 4) {
+  return client.fetch(
+    `*[_type == "teamMember" && showOnHomepage == true && slug.current != $currentSlug] | order(order asc) [0...$limit] {
+      _id,
+      name,
+      slug,
+      role
+    }`,
+    { currentSlug, limit }
   );
 }
 
