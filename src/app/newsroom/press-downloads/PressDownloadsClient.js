@@ -81,7 +81,7 @@ export default function PressDownloadsClient({ categories, teamMembers }) {
 
   const boilerplateText = `Yali Capital is an early-stage deep tech venture capital fund based in Bangalore, India. The fund focuses on backing innovative startups across ${categoryNames}.
 
-With a corpus of ₹810 crore (approximately $100 million), Yali Capital invests in companies that are building deep, technologically superior products with strong intellectual property and the potential to create global impact from India.
+With a corpus of ₹893 crore, Yali Capital invests in companies that are building deep, technologically superior products with strong intellectual property and the potential to create global impact from India.
 
 The team at Yali Capital brings over 60 years of combined experience in deep tech investing, having previously backed several successful companies that have gone public in Indian markets.`;
 

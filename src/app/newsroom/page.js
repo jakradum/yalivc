@@ -19,8 +19,8 @@ console.log('📰 page.js fetched news[0]:', news[0]);
             <h1>The latest from Yali Capital</h1>
             <div className={styles.paraFlex}>
               <p>
-                We continue to look for deep tech companies across sectors to invest in. We have rolled out an ₹810 crore
-                fund (about $100 mn) to back companies in India. Our optimism about the success of Indian deep
+                We continue to look for deep tech companies across sectors to invest in. We have rolled out an ₹893 crore
+                fund to back companies in India. Our optimism about the success of Indian deep
                 tech companies fuels our commitment to fostering innovation and unlocking the next wave of growth in the
                 region.
               </p>
