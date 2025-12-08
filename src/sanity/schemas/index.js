@@ -1,17 +1,42 @@
+import blogPost from './blogPost'
+import category from './category'
 import company from './company'
 import news from './news'
-import teamMember from './team'
-import category from './category'
 import publication from './publication'
-import blogPost from './blogPost'
 import quarterlyReport from './quarterlyReport'
+import teamMember from './teamMember'
+import sector from './sector'
+import investmentPhilosophy from './investmentPhilosophy'
+import newsletter from './newsletter'
+import {
+  openingNoteSection,
+  essaySection,
+  portfolioSpotlightSection,
+  guestColumnSection,
+  radarSection,
+  readingSection,
+  freeformSection
+} from './newsletterSections'
 
 export const schemaTypes = [
-  company,
-  category,
-  publication,
-  news,
-  teamMember,
+  // Existing schemas
   blogPost,
-  quarterlyReport
+  category,
+  company,
+  news,
+  publication,
+  quarterlyReport,
+  teamMember,
+  sector,
+  investmentPhilosophy,
+  // Newsletter
+  newsletter,
+  // Newsletter section types (objects)
+  openingNoteSection,
+  essaySection,
+  portfolioSpotlightSection,
+  guestColumnSection,
+  radarSection,
+  readingSection,
+  freeformSection
 ]

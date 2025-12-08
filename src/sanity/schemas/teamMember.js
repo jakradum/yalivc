@@ -1,33 +1,165 @@
+import {portableTextConfig} from './portableTextConfig';
+
 const teamMember = {
   name: 'teamMember',
   title: 'Team Members',
   type: 'document',
-  description: 'Non-core team members (core 5 are hardcoded)',
+  description: 'Team members including core team',
   fields: [
+    {
+      name: 'isCore',
+      title: 'Core Team Member',
+      type: 'boolean',
+      description: 'Core team members are read-only',
+      initialValue: false,
+      hidden: true
+    },
     {
       name: 'name',
       title: 'Full Name',
       type: 'string',
+      validation: Rule => Rule.required(),
+      readOnly: ({document}) => document?.isCore === true
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'URL-friendly identifier (e.g., pranav-karnad)',
+      options: {
+        source: 'name',
+        maxLength: 96
+      },
       validation: Rule => Rule.required()
     },
     {
       name: 'role',
       title: 'Role/Title',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'oneLiner',
       title: 'One-Liner',
       type: 'string',
       description: 'Brief description (max 100 characters)',
-      validation: Rule => Rule.required().max(100)
+      validation: Rule => Rule.required().max(100),
+      readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'bio',
       title: 'Biography',
       type: 'text',
-      rows: 4
+      rows: 4,
+       validation: Rule => Rule.required(),
+      readOnly: ({document}) => document?.isCore === true
+    },
+    {
+      name: 'showOnHomepage',
+      title: 'Show on Homepage',
+      type: 'boolean',
+       validation: Rule => Rule.required(),
+      description: 'Display this team member on the homepage',
+      initialValue: false
+    },
+    {
+      name: 'personalPhilosophy',
+      title: 'Personal Philosophy',
+      description: 'Long-form personal philosophy written by the team member',
+      ...portableTextConfig
+    },
+    {
+      name: 'pullQuote',
+      title: 'Pull Quote',
+      type: 'text',
+      rows: 3,
+      description: 'A memorable quote about or from this person (displayed on profile page)'
+    },
+    {
+      name: 'pullQuoteAttribution',
+      title: 'Pull Quote Attribution',
+      type: 'string',
+      description: 'Who said or wrote this quote (e.g., "John Doe, Founder of XYZ")'
+    },
+    {
+      name: 'outsideWork',
+      title: 'Who am I outside of work?',
+      type: 'array',
+      description: 'Add bullet points - click "+ Add item" for each point',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags'
+      }
+    },
+    {
+      name: 'recommendation',
+      title: 'Recommendation',
+      type: 'object',
+      description: 'A LinkedIn-style recommendation from a friend or colleague',
+      fields: [
+        {
+          name: 'text',
+          title: 'Recommendation Text',
+          type: 'text',
+          rows: 4,
+          description: 'The recommendation message'
+        },
+        {
+          name: 'authorName',
+          title: 'Author Name',
+          type: 'string',
+          description: 'Name of the person giving the recommendation'
+        },
+        {
+          name: 'authorTitle',
+          title: 'Author Title/Relationship',
+          type: 'string',
+          description: 'e.g., "Co-founder at XYZ" or "College friend" or "Former colleague"'
+        }
+      ]
+    },
+    {
+      name: 'articles',
+      title: 'Articles Authored',
+      type: 'array',
+      description: 'Articles or posts written by this team member',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Article Title',
+              type: 'string',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'url',
+              title: 'Article URL',
+              type: 'url',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'publication',
+              title: 'Publication/Platform',
+              type: 'string',
+              description: 'e.g., "Medium", "LinkedIn", "Forbes"'
+            },
+            {
+              name: 'date',
+              title: 'Publication Date',
+              type: 'date'
+            }
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              subtitle: 'publication'
+            }
+          }
+        }
+      ]
     },
     {
       name: 'photo',
@@ -36,7 +168,8 @@ const teamMember = {
       options: {
         hotspot: true
       },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'linkedIn',
@@ -44,13 +177,15 @@ const teamMember = {
       type: 'url',
       validation: Rule => Rule.uri({
         scheme: ['http', 'https']
-      }).required()
+      }).required(),
+      readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
-      description: 'Lower numbers appear first'
+      description: 'Lower numbers appear first',
+      readOnly: ({document}) => document?.isCore === true
     },
     {
       name: 'status',
@@ -63,14 +198,23 @@ const teamMember = {
         ]
       },
       initialValue: 'active',
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      readOnly: ({document}) => document?.isCore === true
     }
   ],
   preview: {
     select: {
       title: 'name',
       subtitle: 'role',
-      media: 'photo'
+      media: 'photo',
+      isCore: 'isCore'
+    },
+    prepare({title, subtitle, media, isCore}) {
+      return {
+        title: isCore ? `⭐ ${title}` : title,
+        subtitle,
+        media
+      }
     }
   }
 }
