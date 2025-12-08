@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FooterLogo } from './icons/footerLogo';
 import navigationItemsData from '../navigationItems.json';
 import { ArrowLinkOpen } from './icons/small icons/arrowLinkOpen';
+import FooterSubscribe from './FooterSubscribe';
 
 export default function Footer() {
   const navigationItems = navigationItemsData.menuItems;
@@ -41,6 +42,7 @@ export default function Footer() {
               Yali Capital, headquartered in Bangalore, India, invests in early stage deep tech startups across a wide
               range of verticals from Aerospace to Robotics.
               </p>
+              <FooterSubscribe />
               <small className={styles.copyright}>© Yali Capital {new Date().getFullYear()}</small>
             </div>
           </div>

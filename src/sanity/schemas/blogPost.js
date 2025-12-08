@@ -36,7 +36,6 @@ export default {
       options: {
         list: [
           {title: 'Blog Post', value: 'blog'},
-          {title: 'Newsletter', value: 'newsletter'},
           {title: 'Resource', value: 'resource'}
         ],
         layout: 'radio'
@@ -143,7 +142,7 @@ export default {
       status: 'status'
     },
     prepare({title, author, media, contentType, status}) {
-      const typeLabel = contentType === 'newsletter' ? '📧' : contentType === 'resource' ? '📚' : '📝';
+      const typeLabel = contentType === 'resource' ? '📚' : '📝';
       const statusLabel = status === 'published' ? '✓' : status === 'archived' ? '🗃️' : '✏️';
       return {
         title: `${typeLabel} ${title}`,

@@ -1,0 +1,294 @@
+/* Newsletter Archive Page */
+.main {
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+/* Extend border to full page width */
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background-color: #363636;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 300;
+  color: #830D35;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  font-size: 1.25rem;
+  color: #666;
+  margin: 0 0 1.5rem 0;
+  font-style: italic;
+}
+
+.description {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #363636;
+}
+
+/* Newsletter Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  background: white;
+  border: 1px solid #363636;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background-color: #830D35;
+  border-color: #830D35;
+}
+
+.card:hover .cardTitle,
+.card:hover .cardDescription,
+.card:hover .cardMeta,
+.card:hover .date,
+.card:hover .editionNumber,
+.card:hover .separator {
+  color: white;
+}
+
+.card:hover .readMore {
+  color: #ebde84;
+}
+
+/* Card Image */
+.cardImage {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.cardImg {
+  object-fit: cover;
+}
+
+.cardImagePlaceholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.editionBadge {
+  font-size: 3rem;
+  font-weight: 200;
+  color: #ebde84;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+/* Card Content */
+.cardContent {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.editionNumber {
+  color: #830D35;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.separator {
+  color: #999;
+}
+
+.date {
+  color: #666;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.cardDescription {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  flex: 1;
+}
+
+.readMore {
+  font-size: 0.95rem;
+  color: #830D35;
+  font-weight: 500;
+  margin-top: auto;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f9f9f9;
+  border: 1px dashed #ccc;
+}
+
+.emptyState p {
+  font-size: 1.125rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Subscribe CTA */
+.subscribeCta {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f9f9f9;
+  position: relative;
+}
+
+/* Extend border to full page width */
+.subscribeCta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background-color: #363636;
+}
+
+/* Footer line - extend to full page width */
+.subscribeCta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background-color: #363636;
+}
+
+.subscribeCta h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.75rem 0;
+}
+
+.subscribeCta p {
+  font-size: 1.0625rem;
+  color: #666;
+  margin: 0 0 1.5rem 0;
+}
+
+.subscribeButton {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background: #830D35;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.subscribeButton:hover {
+  background: #5a0924;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .cardImage,
+  .cardImagePlaceholder {
+    height: 160px;
+  }
+
+  .editionBadge {
+    font-size: 2rem;
+  }
+
+  .subscribeCta {
+    padding: 3rem 1.5rem;
+  }
+
+  .subscribeCta h2 {
+    font-size: 1.5rem;
+  }
+}

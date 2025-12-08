@@ -1,6 +1,7 @@
 import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
 import teamStyles from './team-profile.module.css';
+import patternStyles from '../../components/patterns/patterns.module.css';
 import Breadcrumb from '../../components/breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -54,7 +55,7 @@ export default async function TeamMemberPage({ params }) {
       <div className={teamStyles.profileGrid}>
         {/* Top Left - Photo with pattern background */}
         <div className={teamStyles.photoCell}>
-          <div className={`${teamStyles.photoInner} ${teamStyles[`pattern${patternIndex}`]}`}>
+          <div className={`${teamStyles.photoInner} ${patternStyles[`pattern${patternIndex}`]}`}>
             {member.photo && (
               <Image
                 src={member.photo}

@@ -26,5 +26,21 @@
       "name": "Contact",
       "path": "/contact"
     }
-  ]
+  ],
+  "_commented_out": {
+    "Insights": {
+      "name": "Insights",
+      "path": "/insights/blog",
+      "subItems": [
+        {
+          "name": "Blog",
+          "path": "/insights/blog"
+        },
+        {
+          "name": "Newsletter",
+          "path": "/newsletter"
+        }
+      ]
+    }
+  }
 }

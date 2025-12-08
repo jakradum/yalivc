@@ -10,7 +10,6 @@ import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
 import detailStyles from '../../../about-yali/detail-styles.module.css';
-import blogStyles from '../../../insights/blog/[slug]/blog.module.css';
 import teamLPstyles from '../../../landing page styles/team.module.css';
 
 export const revalidate = 60;
@@ -191,32 +190,30 @@ export default async function CompanyPage({ params }) {
         <section className={styles.sectorsSection}>
           <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
 
-          <article className={blogStyles.blogArticle}>
-            <header className={blogStyles.articleHeader}>
-              <h1 className={blogStyles.articleTitle}>{company.story.title}</h1>
-
-              {company.story.author && (
-                <div className={blogStyles.articleMeta}>
-                  <div className={blogStyles.authorInfo}>
-                    <Image
-                      src={company.story.author.photo}
-                      alt={company.story.author.name}
-                      width={48}
-                      height={48}
-                      className={blogStyles.authorPhoto}
-                    />
-                    <div>
-                      <p className={blogStyles.authorName}>{company.story.author.name}</p>
-                      <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+          <article className={companyStyles.blogArticle}>
+            <header className={companyStyles.articleHeader}>
+              <h1 className={companyStyles.articleTitle}>{company.story.title}</h1>
             </header>
 
-            <div className={blogStyles.articleBody}>
+            <div className={companyStyles.articleBody}>
               <PortableText value={company.story.content} components={storyComponents} />
             </div>
+
+            {company.story.author && (
+              <div className={companyStyles.authorCard}>
+                <Image
+                  src={company.story.author.photo}
+                  alt={company.story.author.name}
+                  width={48}
+                  height={48}
+                  className={companyStyles.authorPhoto}
+                />
+                <div>
+                  <p className={companyStyles.authorName}>{company.story.author.name}</p>
+                  <p className={companyStyles.authorRole}>{company.story.author.role} @ Yali</p>
+                </div>
+              </div>
+            )}
           </article>
         </section>
       )}

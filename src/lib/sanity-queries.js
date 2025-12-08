@@ -445,3 +445,170 @@ export async function getBlogCompanies() {
     }`
   );
 }
+
+// NEWSLETTER QUERIES
+export async function getAllNewsletters() {
+  return client.fetch(
+    `*[_type == "newsletter" && status == "published"] | order(publishedDate desc) {
+      _id,
+      title,
+      slug,
+      edition,
+      publishedDate,
+      shortDescription,
+      coverImage {
+        asset->{url},
+        alt
+      }
+    }`
+  );
+}
+
+export async function getNewsletterBySlug(slug) {
+  return client.fetch(
+    `*[_type == "newsletter" && slug.current == $slug && status == "published"][0]{
+      _id,
+      title,
+      slug,
+      edition,
+      publishedDate,
+      shortDescription,
+      coverImage {
+        asset->{url},
+        alt
+      },
+      sections[]{
+        _type,
+        _key,
+        // Opening Note
+        _type == "openingNote" => {
+          sectionTitle,
+          author->{
+            _id,
+            name,
+            role,
+            "slug": slug.current,
+            "photo": photo.asset->url
+          },
+          body[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset->
+            }
+          }
+        },
+        // Essay
+        _type == "essay" => {
+          title,
+          body[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset->
+            }
+          },
+          author->{
+            _id,
+            name,
+            role,
+            "slug": slug.current,
+            "photo": photo.asset->url
+          }
+        },
+        // Portfolio Spotlight
+        _type == "portfolioSpotlight" => {
+          sectionTitle,
+          company->{
+            _id,
+            name,
+            slug,
+            oneLiner,
+            "logo": logo.asset->url,
+            link
+          },
+          body[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset->
+            }
+          }
+        },
+        // Guest Column
+        _type == "guestColumn" => {
+          sectionTitle,
+          guestName,
+          guestTitle,
+          guestCompany,
+          guestPhoto {
+            asset->{url}
+          },
+          body[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset->
+            }
+          }
+        },
+        // Radar
+        _type == "radar" => {
+          sectionTitle,
+          items[]{
+            technology,
+            oneLiner,
+            contributor->{
+              _id,
+              name,
+              "slug": slug.current,
+              "photo": photo.asset->url
+            }
+          }
+        },
+        // Reading
+        _type == "reading" => {
+          sectionTitle,
+          items[]{
+            title,
+            url,
+            blurb
+          }
+        },
+        // Freeform
+        _type == "freeform" => {
+          title,
+          body[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset->
+            }
+          }
+        }
+      }
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllNewsletterSlugs() {
+  return client.fetch(
+    `*[_type == "newsletter" && status == "published"] {
+      "slug": slug.current
+    }`
+  );
+}
+
+export async function getLatestNewsletter() {
+  return client.fetch(
+    `*[_type == "newsletter" && status == "published"] | order(publishedDate desc)[0] {
+      _id,
+      title,
+      slug,
+      edition,
+      publishedDate,
+      shortDescription
+    }`
+  );
+}

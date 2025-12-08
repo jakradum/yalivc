@@ -8,5 +8,33 @@ import faq from './schemas/faq'
 import publication from './schemas/publication'
 import blogPost from './schemas/blogPost'
 import quarterlyReport from './schemas/quarterlyReport'
+import newsletter from './schemas/newsletter'
+import {
+  openingNoteSection,
+  essaySection,
+  portfolioSpotlightSection,
+  guestColumnSection,
+  radarSection,
+  readingSection,
+  freeformSection
+} from './schemas/newsletterSections'
 
-export const schemaTypes = [company, news, teamMember, category, investmentPhilosophy, faq, publication, blogPost, quarterlyReport]
+export const schemaTypes = [
+  company,
+  news,
+  teamMember,
+  category,
+  investmentPhilosophy,
+  faq,
+  publication,
+  blogPost,
+  quarterlyReport,
+  newsletter,
+  openingNoteSection,
+  essaySection,
+  portfolioSpotlightSection,
+  guestColumnSection,
+  radarSection,
+  readingSection,
+  freeformSection
+]
