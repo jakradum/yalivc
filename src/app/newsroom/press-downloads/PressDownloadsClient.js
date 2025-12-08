@@ -120,7 +120,7 @@ The team at Yali Capital brings over 60 years of combined experience in deep tec
               The fund focuses on backing innovative startups across {categoryNames}.
             </p>
             <p>
-              With a corpus of ₹810 crore (approximately $100 million), Yali Capital invests
+              With a corpus of ₹893 crore, Yali Capital invests
               in companies that are building deep, technologically superior products with strong intellectual
               property and the potential to create global impact from India.
             </p>
