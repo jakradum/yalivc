@@ -1,0 +1,179 @@
+'use client';
+
+import { useState } from 'react';
+import styles from './partners.module.css';
+
+export default function CompanyGrid({ portfolioData }) {
+  const [selectedCompany, setSelectedCompany] = useState(null);
+
+  const getInitial = (name) => name ? name.charAt(0).toUpperCase() : '?';
+
+  const formatCurrency = (value, decimals = 0) => {
+    if (!value && value !== 0) return '-';
+    return `₹${Number(value).toFixed(decimals)} Cr`;
+  };
+
+  const formatPercent = (value, decimals = 1) => {
+    if (!value && value !== 0) return '-';
+    return `${Number(value).toFixed(decimals)}%`;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  return (
+    <>
+      <div className={styles.companyGrid}>
+        {portfolioData.map((item, index) => (
+          <div
+            key={item.company?._id || index}
+            className={styles.companyCard}
+            onClick={() => setSelectedCompany(item)}
+            style={{ cursor: 'pointer' }}
+          >
+            {item.company?.logo ? (
+              <img
+                src={item.company.logo}
+                alt={item.company.name}
+                className={styles.companyLogo}
+              />
+            ) : (
+              <div className={styles.companyLogoPlaceholder}>
+                {getInitial(item.company?.name)}
+              </div>
+            )}
+            <div className={styles.companyInfo}>
+              <h3 className={styles.companyName}>{item.company?.name || 'Company'}</h3>
+              <p className={styles.companyOneLiner}>{item.company?.oneLiner || item.company?.sector}</p>
+              <div className={styles.companyMeta}>
+                <span className={styles.companyMetaItem}>
+                  Invested: <span className={styles.companyMetaValue}>{formatCurrency(item.investment?.yaliInvestmentAmount, 1)}</span>
+                </span>
+                <span className={styles.companyMetaItem}>
+                  FMV: <span className={styles.companyMetaValue}>{formatCurrency(item.currentFMV, 1)}</span>
+                </span>
+                <span className={styles.companyMetaItem}>
+                  Multiple: <span className={styles.companyMetaValue}>{item.multipleOfInvestment?.toFixed(2)}x</span>
+                </span>
+              </div>
+              {item.updates?.length > 0 && (
+                <ul className={styles.companyUpdates}>
+                  {item.updates.slice(0, 2).map((update, i) => (
+                    <li key={i}>{update}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {selectedCompany && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedCompany(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <button
+              className={styles.modalClose}
+              onClick={() => setSelectedCompany(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+
+            <div className={styles.modalHeader}>
+              {selectedCompany.company?.logo ? (
+                <img
+                  src={selectedCompany.company.logo}
+                  alt={selectedCompany.company.name}
+                  className={styles.modalLogo}
+                />
+              ) : (
+                <div className={styles.modalLogoPlaceholder}>
+                  {getInitial(selectedCompany.company?.name)}
+                </div>
+              )}
+              <div className={styles.modalHeaderInfo}>
+                <h2 className={styles.modalTitle}>{selectedCompany.company?.name}</h2>
+                {selectedCompany.company?.sector && (
+                  <span className={styles.modalSector}>{selectedCompany.company.sector}</span>
+                )}
+              </div>
+            </div>
+
+            <p className={styles.modalOneLiner}>{selectedCompany.company?.oneLiner}</p>
+
+            {selectedCompany.company?.detail && (
+              <p className={styles.modalDescription}>{selectedCompany.company.detail}</p>
+            )}
+
+            <div className={styles.modalMetricsGrid}>
+              <div className={styles.modalMetric}>
+                <span className={styles.modalMetricLabel}>Amount Invested</span>
+                <span className={styles.modalMetricValue}>{formatCurrency(selectedCompany.investment?.yaliInvestmentAmount, 1)}</span>
+              </div>
+              <div className={styles.modalMetric}>
+                <span className={styles.modalMetricLabel}>Current FMV</span>
+                <span className={styles.modalMetricValue}>{formatCurrency(selectedCompany.currentFMV, 1)}</span>
+              </div>
+              <div className={styles.modalMetric}>
+                <span className={styles.modalMetricLabel}>Multiple</span>
+                <span className={styles.modalMetricValue}>{selectedCompany.multipleOfInvestment?.toFixed(2)}x</span>
+              </div>
+              <div className={styles.modalMetric}>
+                <span className={styles.modalMetricLabel}>Ownership</span>
+                <span className={styles.modalMetricValue}>{formatPercent(selectedCompany.currentOwnershipPercent)}</span>
+              </div>
+            </div>
+
+            <div className={styles.modalDetails}>
+              <div className={styles.modalDetailRow}>
+                <span className={styles.modalDetailLabel}>Investment Date</span>
+                <span className={styles.modalDetailValue}>{formatDate(selectedCompany.investment?.investmentDate)}</span>
+              </div>
+              <div className={styles.modalDetailRow}>
+                <span className={styles.modalDetailLabel}>Funding Round</span>
+                <span className={styles.modalDetailValue}>
+                  {selectedCompany.investment?.fundingRound?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || '-'}
+                </span>
+              </div>
+              {selectedCompany.investment?.coInvestors?.length > 0 && (
+                <div className={styles.modalDetailRow}>
+                  <span className={styles.modalDetailLabel}>Co-Investors</span>
+                  <span className={styles.modalDetailValue}>{selectedCompany.investment.coInvestors.join(', ')}</span>
+                </div>
+              )}
+            </div>
+
+            {selectedCompany.updates?.length > 0 && (
+              <div className={styles.modalUpdates}>
+                <h4 className={styles.modalUpdatesTitle}>Quarterly Updates</h4>
+                <ul className={styles.modalUpdatesList}>
+                  {selectedCompany.updates.map((update, i) => (
+                    <li key={i}>{update}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {selectedCompany.company?.link && (
+              <a
+                href={selectedCompany.company.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.modalLink}
+              >
+                Visit Website &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

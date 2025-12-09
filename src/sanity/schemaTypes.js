@@ -7,7 +7,6 @@ import investmentPhilosophy from './schemas/investmentPhilosophy'
 import faq from './schemas/faq'
 import publication from './schemas/publication'
 import blogPost from './schemas/blogPost'
-import quarterlyReport from './schemas/quarterlyReport'
 import newsletter from './schemas/newsletter'
 import {
   openingNoteSection,
@@ -19,6 +18,13 @@ import {
   freeformSection
 } from './schemas/newsletterSections'
 
+// LP Portal Schemas
+import lpFundSettings from './schemas/lpFundSettings'
+import lpInvestment from './schemas/lpInvestment'
+import lpCompanyQuarterUpdate from './schemas/lpCompanyQuarterUpdate'
+import lpPipelineDeal from './schemas/lpPipelineDeal'
+import lpQuarterlyReport from './schemas/lpQuarterlyReport'
+
 export const schemaTypes = [
   company,
   news,
@@ -28,7 +34,6 @@ export const schemaTypes = [
   faq,
   publication,
   blogPost,
-  quarterlyReport,
   newsletter,
   openingNoteSection,
   essaySection,
@@ -36,5 +41,11 @@ export const schemaTypes = [
   guestColumnSection,
   radarSection,
   readingSection,
-  freeformSection
+  freeformSection,
+  // LP Portal
+  lpFundSettings,
+  lpInvestment,
+  lpCompanyQuarterUpdate,
+  lpPipelineDeal,
+  lpQuarterlyReport
 ]

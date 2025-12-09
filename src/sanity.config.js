@@ -42,11 +42,40 @@ export default defineConfig({
                     S.listItem().title('Blog Posts').child(S.documentTypeList('blogPost').title('Blog Posts')),
                     S.listItem().title('Newsletter (Tattva)').child(S.documentTypeList('newsletter').title('Newsletters')),
                     S.listItem().title('News Articles').child(S.documentTypeList('news').title('News')),
-                    S.listItem()
-                      .title('Quarterly Reports')
-                      .child(S.documentTypeList('quarterlyReport').title('Reports')),
                     S.listItem().title('Publications').child(S.documentTypeList('publication').title('Publications')),
                     S.listItem().title('FAQ').child(S.documentTypeList('faq').title('FAQ')),
+                  ])
+              ),
+            S.divider(),
+            // LP Portal
+            S.listItem()
+              .title('LP Portal')
+              .child(
+                S.list()
+                  .title('LP Portal')
+                  .items([
+                    // Fund Settings (singleton)
+                    S.listItem()
+                      .title('Fund Settings')
+                      .child(
+                        S.document()
+                          .schemaType('lpFundSettings')
+                          .documentId('lpFundSettings')
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('Portfolio Investments')
+                      .child(S.documentTypeList('lpInvestment').title('Investments')),
+                    S.listItem()
+                      .title('Company Quarter Updates')
+                      .child(S.documentTypeList('lpCompanyQuarterUpdate').title('Quarter Updates')),
+                    S.listItem()
+                      .title('Pipeline Deals')
+                      .child(S.documentTypeList('lpPipelineDeal').title('Pipeline')),
+                    S.divider(),
+                    S.listItem()
+                      .title('LP Quarterly Reports')
+                      .child(S.documentTypeList('lpQuarterlyReport').title('LP Reports')),
                   ])
               ),
           ]),
@@ -54,7 +83,7 @@ export default defineConfig({
     visionTool(),
   ],
 
-  studio: {
+    studio: {
     components: {
       navbar: () => null
     }
