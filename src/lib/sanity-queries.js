@@ -642,7 +642,50 @@ export async function getLPReportBySlug(slug) {
       summary,
       highlights,
       "pdfUrl": pdfFile.asset->url,
-      "pdfFileName": pdfFile.asset->originalFilename
+      "pdfFileName": pdfFile.asset->originalFilename,
+      coverNote {
+        greeting,
+        paragraphs,
+        signatoryName,
+        signatoryTitle
+      },
+      fundSummary {
+        targetCorpus,
+        capitalRaised,
+        capitalDeployed,
+        navPerUnit,
+        irr,
+        moic
+      },
+      portfolioData[] {
+        company->{
+          _id,
+          name,
+          slug,
+          oneLiner,
+          detail,
+          "logo": logo.asset->url,
+          link,
+          category->{name, slug}
+        },
+        dateOfFirstInvestment,
+        fundingRound,
+        totalAmountInvested,
+        ownershipFullyDiluted,
+        fmv,
+        amountReturnedToInvestors,
+        multipleOfInvestment,
+        keyCoInvestors
+      },
+      mediaCoverage[] {
+        date,
+        title,
+        url
+      },
+      contactInfo {
+        newsroomUrl,
+        irEmail
+      }
     }`,
     { slug }
   );
@@ -652,6 +695,25 @@ export async function getAllLPReportSlugs() {
   return client.fetch(
     `*[_type == "quarterlyReport" && isPublished == true] {
       "slug": slug.current
+    }`
+  );
+}
+
+// Get all companies for LP reports (with full data)
+export async function getCompaniesForLPReport() {
+  return client.fetch(
+    `*[_type == "company"] | order(order asc) {
+      _id,
+      name,
+      slug,
+      oneLiner,
+      detail,
+      "logo": logo.asset->url,
+      link,
+      category->{name, slug},
+      founders,
+      companyInfo,
+      investmentDetails
     }`
   );
 }

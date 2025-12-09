@@ -60,8 +60,7 @@ export default {
       type: 'file',
       options: {
         accept: 'application/pdf'
-      },
-      validation: Rule => Rule.required()
+      }
     },
     {
       name: 'highlights',
@@ -70,6 +69,203 @@ export default {
       of: [{type: 'string'}],
       description: 'Key bullet points for this report'
     },
+
+    // Cover Note Section
+    {
+      name: 'coverNote',
+      title: 'Cover Note',
+      type: 'object',
+      fields: [
+        {
+          name: 'greeting',
+          title: 'Greeting',
+          type: 'string',
+          initialValue: 'Dear Partners,'
+        },
+        {
+          name: 'paragraphs',
+          title: 'Content Paragraphs',
+          type: 'array',
+          of: [{type: 'text'}]
+        },
+        {
+          name: 'signatoryName',
+          title: 'Signatory Name',
+          type: 'string',
+          initialValue: 'Raghunandan G'
+        },
+        {
+          name: 'signatoryTitle',
+          title: 'Signatory Title',
+          type: 'string',
+          initialValue: 'Managing Partner'
+        }
+      ]
+    },
+
+    // Fund Summary Section
+    {
+      name: 'fundSummary',
+      title: 'Fund Summary',
+      type: 'object',
+      fields: [
+        {
+          name: 'targetCorpus',
+          title: 'Target Corpus',
+          type: 'string',
+          placeholder: '₹300 Cr'
+        },
+        {
+          name: 'capitalRaised',
+          title: 'Capital Raised',
+          type: 'string',
+          placeholder: '₹225 Cr'
+        },
+        {
+          name: 'capitalDeployed',
+          title: 'Capital Deployed',
+          type: 'string',
+          placeholder: '₹85 Cr'
+        },
+        {
+          name: 'navPerUnit',
+          title: 'NAV per Unit',
+          type: 'string',
+          placeholder: '₹1.12'
+        },
+        {
+          name: 'irr',
+          title: 'Gross IRR',
+          type: 'string',
+          placeholder: '18.5%'
+        },
+        {
+          name: 'moic',
+          title: 'MOIC',
+          type: 'string',
+          placeholder: '1.15x'
+        }
+      ]
+    },
+
+    // Portfolio Company Data (LP-specific)
+    {
+      name: 'portfolioData',
+      title: 'Portfolio Company Data',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          {
+            name: 'company',
+            title: 'Company',
+            type: 'reference',
+            to: [{type: 'company'}],
+            validation: Rule => Rule.required()
+          },
+          {
+            name: 'dateOfFirstInvestment',
+            title: 'Date of First Investment',
+            type: 'date'
+          },
+          {
+            name: 'fundingRound',
+            title: 'Funding Round',
+            type: 'string',
+            options: {
+              list: ['Pre-Seed', 'Seed', 'Pre-Series A', 'Series A', 'Series B', 'Series C+']
+            }
+          },
+          {
+            name: 'totalAmountInvested',
+            title: 'Total Amount Invested (Cr)',
+            type: 'number'
+          },
+          {
+            name: 'ownershipFullyDiluted',
+            title: 'Ownership Fully Diluted (%)',
+            type: 'number'
+          },
+          {
+            name: 'fmv',
+            title: 'FMV (Cr)',
+            type: 'number'
+          },
+          {
+            name: 'amountReturnedToInvestors',
+            title: 'Amount Returned to Investors',
+            type: 'string',
+            description: 'Enter "-" if none'
+          },
+          {
+            name: 'multipleOfInvestment',
+            title: 'Multiple of Investment',
+            type: 'number'
+          },
+          {
+            name: 'keyCoInvestors',
+            title: 'Key Co-investors',
+            type: 'array',
+            of: [{type: 'string'}]
+          }
+        ],
+        preview: {
+          select: {
+            title: 'company.name',
+            subtitle: 'fundingRound'
+          }
+        }
+      }]
+    },
+
+    // Media Coverage
+    {
+      name: 'mediaCoverage',
+      title: 'Media Coverage',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          {
+            name: 'date',
+            title: 'Date',
+            type: 'date'
+          },
+          {
+            name: 'title',
+            title: 'Headline',
+            type: 'string'
+          },
+          {
+            name: 'url',
+            title: 'URL',
+            type: 'url'
+          }
+        ]
+      }]
+    },
+
+    // Contact Info
+    {
+      name: 'contactInfo',
+      title: 'Contact Information',
+      type: 'object',
+      fields: [
+        {
+          name: 'newsroomUrl',
+          title: 'Newsroom URL',
+          type: 'url',
+          initialValue: 'https://yali.vc/newsroom'
+        },
+        {
+          name: 'irEmail',
+          title: 'Investor Relations Email',
+          type: 'string',
+          initialValue: 'investor.relations@yali.vc'
+        }
+      ]
+    },
+
     {
       name: 'isPublished',
       title: 'Published',

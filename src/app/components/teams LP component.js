@@ -8,7 +8,7 @@ import styles from '../landing page styles/team.module.css';
 import { ExpandIcon } from './icons/small icons/expandIcon';
 import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
 import Button from './button';
-import { genericButtonText } from '../page';
+import { genericButtonText } from '../constants';
 import { Graphicfg } from './icons/background svgs/graphicfg';
 import imageLoader from '../../../image-loader';
 

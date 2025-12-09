@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import styles from './FAQ.module.css';
-import titleStyles from '../contact/ContactForm.module.css';
-import HeaderFlex from '../components/icons/headerflex';
-import { ExpandIcon } from '../components/icons/small icons/expandIcon';
+import titleStyles from '../(main)/contact/ContactForm.module.css';
+import HeaderFlex from './icons/headerflex';
+import { ExpandIcon } from './icons/small icons/expandIcon';
 
 export default function FAQ({ title, description, faqs }) {
   const [openIndex, setOpenIndex] = useState(null);

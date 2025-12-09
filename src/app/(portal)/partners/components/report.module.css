@@ -1,0 +1,846 @@
+/* Report Styles - Full Width Web Layout */
+
+/* Report Viewer Container */
+.reportViewer {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Disable printing */
+@media print {
+  .reportViewer {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+.reportContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4rem 4rem;
+}
+
+/* Typography Hierarchy */
+.h1 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #830D35;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.h2 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #830D35;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.h3 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.75rem 0;
+}
+
+.body {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  line-height: 1.7;
+  margin: 0 0 1rem 0;
+}
+
+.caption {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Cover Section - Full Width Header */
+.coverSection {
+  background-color: #830D35;
+  padding: 4rem;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.coverContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coverLeft {
+  flex: 1;
+}
+
+.coverLogoSvg {
+  width: 120px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.coverLogoSvg path {
+  fill: white;
+}
+
+.coverLogo {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.15em;
+  margin: 0 0 2rem 0;
+}
+
+.coverTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.1;
+}
+
+.coverSubtitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 2rem 0;
+}
+
+.coverFundName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.25rem 0;
+}
+
+.coverDate {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Decorative Graphic */
+.decorativeGraphic {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dotRow {
+  display: flex;
+  gap: 12px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dotHighlight {
+  background-color: #ebde84;
+}
+
+/* Navigation */
+.reportNav {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 4rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.navLink {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #666;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  color: #830D35;
+  border-bottom-color: #830D35;
+}
+
+/* Section Styles */
+.section {
+  background-color: white;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.sectionHeader {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #830D35;
+}
+
+/* Table Styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.tableHeader {
+  background-color: #830D35;
+}
+
+.tableHeader th {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: white;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tableRow {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tableRow:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.tableCell {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  padding: 1rem 1.25rem;
+  vertical-align: top;
+}
+
+.tableCellRight {
+  composes: tableCell;
+  text-align: right;
+}
+
+.tableCellBold {
+  composes: tableCell;
+  font-weight: 600;
+}
+
+/* Bullet List */
+.bulletList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.bulletList li {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.bulletList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.9rem;
+  width: 6px;
+  height: 6px;
+  background-color: #830D35;
+  border-radius: 50%;
+}
+
+/* Cover Note Styles */
+.greeting {
+  font-family: var(--font-inter);
+  font-size: 1.125rem;
+  color: #363636;
+  margin-bottom: 2rem;
+}
+
+.signature {
+  margin-top: 3rem;
+}
+
+.signatureName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0;
+}
+
+.signatureTitle {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #666;
+  margin: 0.25rem 0 0 0;
+}
+
+/* Fund Summary Card */
+.summaryCard {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.summaryValue {
+  font-family: var(--font-inter);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #363636;
+}
+
+.summaryValueSmall {
+  font-family: var(--font-inter);
+  font-size: 1.125rem;
+  color: #363636;
+}
+
+/* Company Card - PDF Style with Two Column Layout */
+.companyCard {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.companyCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background-color: #830D35;
+}
+
+.companyLogo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background-color: white;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.companyLogoPlaceholder {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.companyHeaderInfo {
+  flex: 1;
+}
+
+.companyName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.companyTagline {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.25rem 0 0 0;
+}
+
+.companyCardBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Company Data Table (Left Column) */
+.companyDataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.companyDataTable tr {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.companyDataTable tr:last-child {
+  border-bottom: none;
+}
+
+.companyDataLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #666;
+  padding: 0.75rem 1rem 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  width: 55%;
+  vertical-align: top;
+}
+
+.companyDataValue {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  padding: 0.75rem 0;
+  font-weight: 500;
+  vertical-align: top;
+}
+
+/* Company About Section (Right Column) */
+.companyAbout {
+  padding-left: 2rem;
+  border-left: 1px solid #e0e0e0;
+}
+
+.companyAboutTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 1rem 0;
+}
+
+.companyAboutText {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Legacy company styles */
+.companyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.companyStage {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  background-color: #830D35;
+  padding: 0.25rem 0.75rem;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.companyMeta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.companyMetaItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.companyMetaLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.companyMetaValue {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  font-weight: 500;
+}
+
+.companySection {
+  margin-top: 1rem;
+}
+
+.companySectionTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Metric Highlight */
+.metricHighlight {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  background-color: rgba(131, 13, 53, 0.08);
+  padding: 0.375rem 0.75rem;
+  margin-right: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 2px;
+}
+
+.metricValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #830D35;
+}
+
+.metricLabel {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+/* Pipeline Table */
+.pipelineStatus {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.statusActive {
+  background-color: rgba(46, 125, 50, 0.1);
+  color: #2e7d32;
+}
+
+.statusReview {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+.statusPassed {
+  background-color: rgba(158, 158, 158, 0.1);
+  color: #757575;
+}
+
+/* Media Coverage */
+.mediaItem {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mediaItem:last-child {
+  border-bottom: none;
+}
+
+.mediaDate {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #999;
+  min-width: 100px;
+}
+
+.mediaContent {
+  flex: 1;
+}
+
+.mediaTitle {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.25rem 0;
+}
+
+.mediaSource {
+  font-family: var(--font-inter);
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Contact Section - Burgundy Background */
+.contactSection {
+  background-color: #830D35 !important;
+  text-align: center;
+  padding: 4rem;
+  border-radius: 4px;
+}
+
+.contactLogoSvg {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 2rem;
+}
+
+.contactLogoSvg path {
+  fill: white;
+}
+
+.contactLogo {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+}
+
+.contactInfo {
+  margin-bottom: 2rem;
+}
+
+.contactItem {
+  font-family: var(--font-inter);
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0.75rem 0;
+}
+
+.contactLink {
+  color: #ebde84;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.contactLink:hover {
+  opacity: 0.8;
+}
+
+.disclaimer {
+  max-width: 800px;
+  margin: 3rem auto 0;
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Confidential Badge in Header */
+.confidentialBadge {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #830D35;
+  background-color: rgba(131, 13, 53, 0.1);
+  padding: 0.375rem 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-left: auto;
+  border-radius: 2px;
+}
+
+/* Two Column Grid for sections */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .reportContainer {
+    padding: 0 2rem 3rem;
+  }
+
+  .coverSection {
+    padding: 3rem 2rem;
+  }
+
+  .reportNav {
+    padding: 1rem 2rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .companyCardBody {
+    grid-template-columns: 1fr;
+  }
+
+  .companyAbout {
+    padding-left: 0;
+    padding-top: 2rem;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .coverSection {
+    padding: 2rem 1.5rem;
+  }
+
+  .coverContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .coverTitle {
+    font-size: 2rem;
+  }
+
+  .coverSubtitle {
+    font-size: 1.25rem;
+  }
+
+  .decorativeGraphic {
+    margin-top: 2rem;
+  }
+
+  .reportNav {
+    padding: 1rem 1.5rem;
+  }
+
+  .navContent {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .navLink {
+    font-size: 0.6875rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .companyCardHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .companyCardBody {
+    padding: 1.5rem;
+  }
+
+  .companyMeta {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .table {
+    font-size: 0.875rem;
+  }
+
+  .tableCell,
+  .tableCellRight,
+  .tableCellBold {
+    padding: 0.75rem;
+  }
+
+  .mediaItem {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .reportContainer {
+    padding: 0 1rem 2rem;
+  }
+
+  .contactSection {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .contactLogo {
+    font-size: 2rem;
+  }
+}
+
+/* Scroll Anchor Offset */
+.section[id] {
+  scroll-margin-top: 80px;
+}

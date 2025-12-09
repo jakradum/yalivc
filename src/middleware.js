@@ -14,6 +14,9 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
+  // Allow direct access to /partners in local development
+  const isLocalDev = hostname.includes('localhost') || hostname.includes('127.0.0.1');
+
   // Check if request is coming from partners subdomain
   const isPartnersSubdomain =
     hostname.startsWith('partners.') ||
@@ -30,8 +33,8 @@ export function middleware(request) {
     return NextResponse.rewrite(url);
   }
 
-  // For main site, block access to /partners routes
-  if (url.pathname.startsWith('/partners')) {
+  // For main site, block access to /partners routes (but allow in local dev)
+  if (url.pathname.startsWith('/partners') && !isLocalDev) {
     // Redirect to home if trying to access partners on main domain
     url.pathname = '/';
     return NextResponse.redirect(url);
