@@ -1,0 +1,505 @@
+/* Partners Portal Styles */
+
+/* Layout Wrapper */
+.portalWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+/* Header */
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoLink {
+  text-decoration: none;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.portalLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.confidentialBadge {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #830D35;
+  background-color: rgba(131, 13, 53, 0.1);
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Welcome Section */
+.welcomeSection {
+  background-color: white;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.welcomeTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #830D35;
+  margin: 0 0 1rem 0;
+}
+
+.welcomeText {
+  font-size: 1.0625rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Section Styles */
+.reportsSection,
+.contactSection {
+  background-color: white;
+  padding: 2rem 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.sectionTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #830D35;
+}
+
+/* Reports Grid */
+.reportsGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Report Card */
+.reportCard {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.reportCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.reportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.reportQuarter {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+}
+
+.reportDate {
+  font-size: 0.8125rem;
+  color: #999;
+}
+
+.reportTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.75rem 0;
+}
+
+.reportSummary {
+  font-size: 0.9375rem;
+  color: #666;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.reportHighlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+}
+
+.reportHighlights li {
+  font-size: 0.875rem;
+  color: #555;
+  padding: 0.375rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.reportHighlights li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #830D35;
+  font-weight: bold;
+}
+
+.reportActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.viewButton,
+.downloadButton {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+}
+
+.viewButton {
+  background-color: #830D35;
+  color: white;
+  border: 1px solid #830D35;
+}
+
+.viewButton:hover {
+  background-color: #5a0924;
+  border-color: #5a0924;
+}
+
+.downloadButton {
+  background-color: white;
+  color: #830D35;
+  border: 1px solid #830D35;
+}
+
+.downloadButton:hover {
+  background-color: rgba(131, 13, 53, 0.05);
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+/* Contact Section */
+.contactSection p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.emailLink {
+  color: #830D35;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.emailLink:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.footerNote {
+  margin-top: 0.5rem !important;
+  font-size: 0.75rem !important;
+  color: #999 !important;
+}
+
+/* Report Page Styles */
+.backLink {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: #830D35;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: opacity 0.2s ease;
+}
+
+.backLink:hover {
+  opacity: 0.7;
+}
+
+.reportPageHeader {
+  background-color: white;
+  padding: 2.5rem 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.reportMeta {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.reportQuarterLarge {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(131, 13, 53, 0.1);
+  padding: 0.375rem 0.75rem;
+}
+
+.reportDateLarge {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.reportPageTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 0.75rem 0;
+}
+
+.reportPageSummary {
+  font-size: 1.0625rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Highlights Section */
+.highlightsSection {
+  background-color: white;
+  padding: 2rem 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.highlightsTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1.25rem 0;
+}
+
+.highlightsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.highlightItem {
+  font-size: 1rem;
+  color: #363636;
+  padding: 0.625rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.highlightItem:last-child {
+  border-bottom: none;
+}
+
+.highlightItem::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #830D35;
+  font-weight: bold;
+}
+
+/* PDF Section */
+.pdfSection {
+  background-color: white;
+  padding: 2rem 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.pdfTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1.5rem 0;
+}
+
+.pdfActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.downloadButtonLarge {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.875rem 2rem;
+  background-color: #830D35;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  width: fit-content;
+}
+
+.downloadButtonLarge:hover {
+  background-color: #5a0924;
+}
+
+.pdfEmbed {
+  border: 1px solid #e0e0e0;
+  background-color: #f5f5f5;
+}
+
+.pdfViewer {
+  width: 100%;
+  height: 800px;
+  border: none;
+}
+
+/* Disclaimer */
+.disclaimer {
+  background-color: #fff8e1;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #ffe082;
+  border-left: 4px solid #ffc107;
+}
+
+.disclaimer p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #5d4037;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .headerRight {
+    gap: 1rem;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .welcomeSection,
+  .reportsSection,
+  .contactSection,
+  .reportPageHeader,
+  .highlightsSection,
+  .pdfSection {
+    padding: 1.5rem;
+  }
+
+  .welcomeTitle {
+    font-size: 1.375rem;
+  }
+
+  .reportMeta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .reportPageTitle {
+    font-size: 1.375rem;
+  }
+
+  .pdfViewer {
+    height: 500px;
+  }
+
+  .reportActions {
+    flex-direction: column;
+  }
+
+  .viewButton,
+  .downloadButton {
+    text-align: center;
+  }
+}

@@ -612,3 +612,46 @@ export async function getLatestNewsletter() {
     }`
   );
 }
+
+// LP REPORT QUERIES
+export async function getLPReports() {
+  return client.fetch(
+    `*[_type == "quarterlyReport" && isPublished == true] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      quarter,
+      fiscalYear,
+      publishedAt,
+      summary,
+      highlights,
+      "pdfUrl": pdfFile.asset->url
+    }`
+  );
+}
+
+export async function getLPReportBySlug(slug) {
+  return client.fetch(
+    `*[_type == "quarterlyReport" && slug.current == $slug && isPublished == true][0]{
+      _id,
+      title,
+      slug,
+      quarter,
+      fiscalYear,
+      publishedAt,
+      summary,
+      highlights,
+      "pdfUrl": pdfFile.asset->url,
+      "pdfFileName": pdfFile.asset->originalFilename
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllLPReportSlugs() {
+  return client.fetch(
+    `*[_type == "quarterlyReport" && isPublished == true] {
+      "slug": slug.current
+    }`
+  );
+}

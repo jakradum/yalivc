@@ -7,7 +7,17 @@ export default {
       name: 'title',
       title: 'Report Title',
       type: 'string',
-      placeholder: 'e.g., Q1 2025 Report',
+      placeholder: 'e.g., Q2 FY26',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96
+      },
       validation: Rule => Rule.required()
     },
     {
@@ -25,10 +35,24 @@ export default {
       validation: Rule => Rule.required()
     },
     {
-      name: 'year',
-      title: 'Year',
-      type: 'number',
-      validation: Rule => Rule.required().min(2020).max(2100)
+      name: 'fiscalYear',
+      title: 'Fiscal Year',
+      type: 'string',
+      placeholder: 'e.g., FY26',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'publishedAt',
+      title: 'Published Date',
+      type: 'datetime',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+      rows: 3,
+      description: 'Brief description for the listing page'
     },
     {
       name: 'pdfFile',
@@ -40,51 +64,55 @@ export default {
       validation: Rule => Rule.required()
     },
     {
-      name: 'publishStatus',
-      title: 'Publish Status',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Hidden', value: 'hidden'},
-          {title: 'Published', value: 'published'}
-        ]
-      },
-      initialValue: 'hidden',
-      validation: Rule => Rule.required()
+      name: 'highlights',
+      title: 'Key Highlights',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Key bullet points for this report'
     },
     {
-      name: 'publishedAt',
-      title: 'Published Date',
-      type: 'date'
+      name: 'isPublished',
+      title: 'Published',
+      type: 'boolean',
+      description: 'Control visibility to LPs',
+      initialValue: false
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
-      description: 'Lower numbers appear first'
+      description: 'Lower numbers appear first (optional, defaults to date sorting)'
     }
   ],
   preview: {
     select: {
       title: 'title',
-      status: 'publishStatus',
-      year: 'year',
-      quarter: 'quarter'
+      quarter: 'quarter',
+      fiscalYear: 'fiscalYear',
+      isPublished: 'isPublished'
     },
-    prepare({title, status, year, quarter}) {
+    prepare({title, quarter, fiscalYear, isPublished}) {
+      const status = isPublished ? '✓ Published' : '○ Draft';
       return {
-        title,
-        subtitle: `${quarter} ${year} - ${status}`
+        title: title || `${quarter} ${fiscalYear}`,
+        subtitle: `${quarter} ${fiscalYear} - ${status}`
       }
     }
   },
   orderings: [
     {
       title: 'Newest First',
-      name: 'yearDesc',
+      name: 'newestFirst',
       by: [
-        {field: 'year', direction: 'desc'},
-        {field: 'quarter', direction: 'desc'}
+        {field: 'publishedAt', direction: 'desc'}
+      ]
+    },
+    {
+      title: 'Custom Order',
+      name: 'customOrder',
+      by: [
+        {field: 'order', direction: 'asc'},
+        {field: 'publishedAt', direction: 'desc'}
       ]
     }
   ]
