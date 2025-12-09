@@ -22,10 +22,10 @@ export async function POST(request) {
     }
 
     const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-    const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_TATTVA_TABLE_NAME || 'tblXjGA1lP040k4Kg';
+    const AIRTABLE_BASE_ID = process.env.AIRTABLE_TATTVA_BASE_ID || 'appdVkGBFQCQkTIAm';
+    const AIRTABLE_TABLE_NAME = 'tblXjGA1lP040k4Kg';
 
-    if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+    if (!AIRTABLE_API_KEY) {
       console.error('Airtable credentials not configured');
       return NextResponse.json(
         { error: 'Server configuration error' },
