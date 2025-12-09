@@ -1,3 +1,5 @@
+import {portableTextConfig} from './portableTextConfig';
+
 export default {
   name: 'blogPost',
   title: 'Blog Posts',
@@ -23,78 +25,75 @@ export default {
       name: 'blurb',
       title: 'Short Description',
       type: 'text',
-      rows: 2,
+      rows: 3,
+      description: '150-200 characters',
       validation: Rule => Rule.max(200)
+    },
+    {
+      name: 'contentType',
+      title: 'Content Type',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Blog Post', value: 'blog'},
+          {title: 'Resource', value: 'resource'}
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'blog',
+      validation: Rule => Rule.required()
     },
     {
       name: 'body',
       title: 'Body',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            {title: 'Normal', value: 'normal'},
-            {title: 'H2', value: 'h2'},
-            {title: 'H3', value: 'h3'},
-            {title: 'Quote', value: 'blockquote'}
-          ],
-          lists: [
-            {title: 'Bullet', value: 'bullet'},
-            {title: 'Numbered', value: 'number'}
-          ],
-          marks: {
-            decorators: [
-              {title: 'Strong', value: 'strong'},
-              {title: 'Emphasis', value: 'em'}
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'URL',
-                fields: [
-                  {
-                    title: 'URL',
-                    name: 'href',
-                    type: 'url'
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          type: 'image',
-          options: {hotspot: true}
-        }
-      ]
+      ...portableTextConfig
     },
     {
       name: 'author',
       title: 'Author',
       type: 'reference',
-      to: [{type: 'teamMember'}]
+      to: [{type: 'teamMember'}],
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'categories',
+      title: 'Related Categories',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'category'}]}],
+      description: 'Tag relevant investment categories'
+    },
+    {
+      name: 'companies',
+      title: 'Related Companies',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'company'}]}],
+      description: 'Tag portfolio companies mentioned'
     },
     {
       name: 'featuredImage',
       title: 'Featured Image',
       type: 'image',
-      options: {
-        hotspot: true
-      }
+      options: {hotspot: true},
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alt text'
+        }
+      ]
     },
     {
       name: 'publishedAt',
       title: 'Published Date',
-      type: 'date',
+      type: 'datetime',
       validation: Rule => Rule.required()
     },
     {
-      name: 'readTime',
-      title: 'Read Time (minutes)',
-      type: 'number',
-      description: 'Auto-calculated from word count'
+      name: 'featured',
+      title: 'Featured Post',
+      type: 'boolean',
+      description: 'Show on homepage or top of blog listing',
+      initialValue: false
     },
     {
       name: 'status',
@@ -103,23 +102,51 @@ export default {
       options: {
         list: [
           {title: 'Draft', value: 'draft'},
-          {title: 'Published', value: 'published'}
-        ]
+          {title: 'Published', value: 'published'},
+          {title: 'Archived', value: 'archived'}
+        ],
+        layout: 'radio'
       },
       initialValue: 'draft',
       validation: Rule => Rule.required()
+    },
+    {
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title (leave blank to use post title)',
+      validation: Rule => Rule.max(60)
+    },
+    {
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'text',
+      rows: 2,
+      description: 'SEO description (leave blank to use blurb)',
+      validation: Rule => Rule.max(160)
+    },
+    {
+      name: 'ogImage',
+      title: 'Social Share Image',
+      type: 'image',
+      description: 'Image for social media shares (leave blank to use featured image)',
+      options: {hotspot: true}
     }
   ],
   preview: {
     select: {
       title: 'title',
       author: 'author.name',
-      media: 'featuredImage'
+      media: 'featuredImage',
+      contentType: 'contentType',
+      status: 'status'
     },
-    prepare({title, author, media}) {
+    prepare({title, author, media, contentType, status}) {
+      const typeLabel = contentType === 'resource' ? '📚' : '📝';
+      const statusLabel = status === 'published' ? '✓' : status === 'archived' ? '🗃️' : '✏️';
       return {
-        title,
-        subtitle: author ? `by ${author}` : 'No author',
+        title: `${typeLabel} ${title}`,
+        subtitle: `${statusLabel} ${author ? `by ${author}` : 'No author'}`,
         media
       }
     }
@@ -129,6 +156,11 @@ export default {
       title: 'Published Date, Newest',
       name: 'publishedDesc',
       by: [{field: 'publishedAt', direction: 'desc'}]
+    },
+    {
+      title: 'Published Date, Oldest',
+      name: 'publishedAsc',
+      by: [{field: 'publishedAt', direction: 'asc'}]
     }
   ]
 }
