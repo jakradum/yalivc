@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { getAllNewsletters } from '@/lib/sanity-queries';
 import styles from './newsletter.module.css';
 import patternStyles from '../components/patterns/patterns.module.css';
+import FooterSubscribe from '../components/FooterSubscribe';
 
 export const revalidate = 60;
 
@@ -91,9 +92,7 @@ export default async function NewsletterPage() {
         <section className={styles.subscribeCta}>
           <h2>Stay in the loop</h2>
           <p>Get Tattva delivered to your inbox every month.</p>
-          <Link href="/contact" className={styles.subscribeButton}>
-            Subscribe to Tattva
-          </Link>
+          <FooterSubscribe variant="light" showLabel={false} />
         </section>
       </div>
     </main>

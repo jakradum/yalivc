@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import styles from './FooterSubscribe.module.css';
 
-export default function FooterSubscribe() {
+export default function FooterSubscribe({ variant = 'dark', showLabel = true }) {
+  // variant: 'dark' (footer - burgundy bg) or 'light' (content pages - light bg)
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
   const [message, setMessage] = useState('');
@@ -49,11 +50,21 @@ export default function FooterSubscribe() {
     }
   };
 
+  const containerClass = variant === 'light'
+    ? `${styles.container} ${styles.containerLight}`
+    : styles.container;
+
   return (
-    <div className={styles.container}>
-      <p className={styles.label}>Get deep tech insights in your inbox</p>
+    <div className={containerClass}>
+      {showLabel && (
+        <p className={variant === 'light' ? styles.labelLight : styles.label}>
+          Get deep tech insights in your inbox
+        </p>
+      )}
       {status === 'success' ? (
-        <p className={styles.successMessage}>{message}</p>
+        <p className={variant === 'light' ? styles.successMessageLight : styles.successMessage}>
+          {message}
+        </p>
       ) : (
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputWrapper}>
@@ -61,20 +72,22 @@ export default function FooterSubscribe() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Subscribe to our newsletter"
-              className={styles.input}
+              placeholder="Enter your email"
+              className={variant === 'light' ? styles.inputLight : styles.input}
               disabled={status === 'loading'}
             />
             <button
               type="submit"
-              className={styles.button}
+              className={variant === 'light' ? styles.buttonLight : styles.button}
               disabled={status === 'loading'}
             >
               {status === 'loading' ? '...' : '→'}
             </button>
           </div>
           {status === 'error' && (
-            <p className={styles.errorMessage}>{message}</p>
+            <p className={variant === 'light' ? styles.errorMessageLight : styles.errorMessage}>
+              {message}
+            </p>
           )}
         </form>
       )}

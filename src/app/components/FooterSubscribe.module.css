@@ -82,6 +82,83 @@
   margin: 0.25rem 0 0 0;
 }
 
+/* Light variant styles (for content pages with light background) */
+.containerLight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.labelLight {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inputLight {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #830D35;
+  border-right: none;
+  border-radius: 0;
+  background: white;
+  color: #363636;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 0;
+}
+
+.inputLight:focus {
+  border-color: #5a0924;
+}
+
+.inputLight::placeholder {
+  color: #999;
+}
+
+.inputLight:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonLight {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: #830D35;
+  border: 1px solid #830D35;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.buttonLight:hover {
+  background-color: #5a0924;
+  border-color: #5a0924;
+}
+
+.buttonLight:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successMessageLight {
+  color: #830D35;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.errorMessageLight {
+  color: #d32f2f;
+  font-size: 0.75rem;
+  margin: 0.25rem 0 0 0;
+}
+
 @media (max-width: 950px) {
   .container {
     display: flex;
@@ -99,6 +176,10 @@
   }
 
   .input {
+    max-width: 200px;
+  }
+
+  .inputLight {
     max-width: 200px;
   }
 }

@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getNewsletterBySlug, getAllNewsletterSlugs } from '@/lib/sanity-queries';
 import { NewsletterSection } from '../NewsletterSections';
 import ShareButtons from './ShareButtons';
 import Breadcrumb from '../../components/breadcrumb';
+import FooterSubscribe from '../../components/FooterSubscribe';
 import styles from './newsletter-detail.module.css';
 
 export const revalidate = 60;
@@ -106,9 +106,7 @@ export default async function NewsletterDetailPage({ params }) {
           <div className={styles.subscribeCta}>
             <h3>Enjoyed this edition?</h3>
             <p>Get Tattva delivered to your inbox every month.</p>
-            <Link href="/contact" className={styles.subscribeButton}>
-              Subscribe to Tattva
-            </Link>
+            <FooterSubscribe variant="light" showLabel={false} />
           </div>
 
         </footer>
