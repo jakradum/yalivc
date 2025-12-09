@@ -37,7 +37,7 @@ export const CompaniesInnerComponent = ({companies}) => {
   const activeCategories = useMemo(() => {
     const activeCats = new Set();
     companies.forEach(company => {
-      activeCats.add(company.category.toLowerCase());
+      activeCats.add(company.category?.name?.toLowerCase());
     });
     return Array.from(activeCats);
   }, [companies]);
@@ -87,7 +87,7 @@ export const CompaniesInnerComponent = ({companies}) => {
   };
 
   const filteredCompanies = companies.filter(
-    (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category.toLowerCase())
+    (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category?.name?.toLowerCase())
   );
 
   const isLinkedInLink = (url) => {
@@ -152,7 +152,7 @@ export const CompaniesInnerComponent = ({companies}) => {
               </div>
               <div className={styles.nameAndLink}>
                 <p className={styles.companyName}>{company.name}</p>
-                <p style={{textTransform:'uppercase',fontSize:'0.9rem'}}>{company.category}</p>
+                <p style={{textTransform:'uppercase',fontSize:'0.9rem'}}>{company.category?.name}</p>
                 {company.link && (
                   <a href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
                     {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}

@@ -122,9 +122,9 @@ const CompanyTable = ({ companies }) => {
                         <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
                       </div>
                       <h4 className={styles.companyTitle}>{company.name}</h4>
-                      <p className={styles.companyCategory}>{company.category}</p>
+                      <p className={styles.companyCategory}>{company.category?.name}</p>
 
-                      <div className={styles.vector}>{vectorUsageMap[company.category?.toLowerCase()]}</div>
+                      <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
                       {company.logo && (
                         <div className={styles.imagePlaceholder}>
                           <Image
@@ -182,10 +182,10 @@ const CompanyTable = ({ companies }) => {
                     </span>
                   </div>
                   <h4 className={styles.companyTitle}>{company.name}</h4>
-                  <p className={styles.companyCategory}>{company.category}</p>
+                  <p className={styles.companyCategory}>{company.category?.name}</p>
 
                   <div className={styles.mobileVector}>
-                    {vectorUsageMap[company.category?.toLowerCase()] || <GenericVector />}
+                    {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
                   </div>
 
                   <small>{company.oneLiner}</small>
