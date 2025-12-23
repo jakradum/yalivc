@@ -313,6 +313,11 @@ export default async function PartnersPortal() {
                   </a>
                 ))}
               </div>
+              <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                <a href="https://yali.vc/newsroom" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', color: 'inherit', opacity: 0.7, textDecoration: 'underline' }}>
+                  View All →
+                </a>
+              </div>
             </section>
 
             {/* Contact */}
