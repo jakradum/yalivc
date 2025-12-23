@@ -1,5 +1,10 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './styles/globals.css';
+import { headers } from 'next/headers';
+import Navbar from './components/Navbar';
+import Footer from './components/footer';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import ProviderWrapper from './data/provider-wrapper';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,6 +29,10 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const headersList = headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isPortalRoute = pathname.startsWith('/partners');
+
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
@@ -31,7 +40,20 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body className={inter.className}>
-        {children}
+        {isPortalRoute ? (
+          children
+        ) : (
+          <>
+            <Navbar />
+            <div className="page-wrapper">
+              <ProviderWrapper>
+                <main>{children}</main>
+              </ProviderWrapper>
+              <Footer />
+            </div>
+            <GoogleAnalytics gaId="G-7F0015CFY2" />
+          </>
+        )}
       </body>
     </html>
   );

@@ -25,12 +25,17 @@ export function middleware(request) {
   if (isPartnersSubdomain) {
     // If already on /partners path, continue
     if (url.pathname.startsWith('/partners')) {
-      return NextResponse.next();
+      const response = NextResponse.next();
+      response.headers.set('x-pathname', url.pathname);
+      return response;
     }
 
     // Rewrite to /partners routes
-    url.pathname = `/partners${url.pathname === '/' ? '' : url.pathname}`;
-    return NextResponse.rewrite(url);
+    const rewritePath = `/partners${url.pathname === '/' ? '' : url.pathname}`;
+    url.pathname = rewritePath;
+    const response = NextResponse.rewrite(url);
+    response.headers.set('x-pathname', rewritePath);
+    return response;
   }
 
   // For main site, block access to /partners routes (but allow in local dev)
@@ -40,7 +45,9 @@ export function middleware(request) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set('x-pathname', url.pathname);
+  return response;
 }
 
 export const config = {
