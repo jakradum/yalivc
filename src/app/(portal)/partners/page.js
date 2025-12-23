@@ -11,6 +11,7 @@ import styles from './partners.module.css';
 import Link from 'next/link';
 import { Lightlogo } from '../../components/icons/lightlogo';
 import CompanyGrid from './CompanyGrid';
+import { PortableText } from '@portabletext/react';
 
 export const revalidate = 0; // Disable cache for LP portal to show latest updates immediately
 
@@ -181,10 +182,16 @@ export default async function PartnersPortal() {
                   <span className={styles.messageFrom}>From the Managing Partner</span>
                 </div>
                 <div className={styles.messageContent}>
-                  <p>{report?.coverNoteGreeting || 'Dear Partners,'}</p>
-                  <p>We are pleased to present the quarterly report for {fundSettings?.fundName || 'Yali Capital Deep Tech Fund'} for the period ending {reportingDate}.</p>
-                  <p>This quarter marked significant progress across our portfolio companies, with several key milestones achieved in product development, customer acquisition, and funding rounds.</p>
-                  <p>{fundSettings?.investmentStrategy || 'The Indian deep tech ecosystem continues to show remarkable resilience and growth, with increasing enterprise adoption of AI and advanced technologies across sectors.'}</p>
+                  {report?.coverNoteIntro && report.coverNoteIntro.length > 0 ? (
+                    <PortableText value={report.coverNoteIntro} />
+                  ) : (
+                    <>
+                      <p>{report?.coverNoteGreeting || 'Dear Partners,'}</p>
+                      <p>We are pleased to present the quarterly report for {fundSettings?.fundName || 'Yali Capital Deep Tech Fund'} for the period ending {reportingDate}.</p>
+                      <p>This quarter marked significant progress across our portfolio companies, with several key milestones achieved in product development, customer acquisition, and funding rounds.</p>
+                      <p>{fundSettings?.investmentStrategy || 'The Indian deep tech ecosystem continues to show remarkable resilience and growth, with increasing enterprise adoption of AI and advanced technologies across sectors.'}</p>
+                    </>
+                  )}
                 </div>
                 <div className={styles.messageSignature}>
                   <p className={styles.signatureName}>{signatory.name}</p>
