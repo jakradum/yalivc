@@ -108,8 +108,11 @@ export default function CompanyGrid({ portfolioData }) {
 
             <p className={styles.modalOneLiner}>{selectedCompany.company?.oneLiner}</p>
 
-            {selectedCompany.company?.detail && (
-              <p className={styles.modalDescription}>{selectedCompany.company.detail}</p>
+            {(selectedCompany.company?.detail || selectedCompany.investment?.reportDescription) && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.75rem', opacity: 0.7 }}>About the Company</h4>
+                <p className={styles.modalDescription}>{selectedCompany.investment?.reportDescription || selectedCompany.company?.detail}</p>
+              </div>
             )}
 
             <div className={styles.modalMetricsGrid}>
@@ -149,6 +152,69 @@ export default function CompanyGrid({ portfolioData }) {
                 </div>
               )}
             </div>
+
+            {(selectedCompany.investment?.preMoneyValuation || selectedCompany.investment?.totalRoundSize || selectedCompany.investment?.postMoneyValuation) && (
+              <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.75rem', opacity: 0.7 }}>Investment Round Details</h4>
+                <div className={styles.modalDetails}>
+                  {selectedCompany.investment?.preMoneyValuation && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>Pre-Money Valuation</span>
+                      <span className={styles.modalDetailValue}>{formatCurrency(selectedCompany.investment.preMoneyValuation, 2)}</span>
+                    </div>
+                  )}
+                  {selectedCompany.investment?.totalRoundSize && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>Total Round Size</span>
+                      <span className={styles.modalDetailValue}>{formatCurrency(selectedCompany.investment.totalRoundSize, 2)}</span>
+                    </div>
+                  )}
+                  {selectedCompany.investment?.postMoneyValuation && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>Post-Money Valuation</span>
+                      <span className={styles.modalDetailValue}>{formatCurrency(selectedCompany.investment.postMoneyValuation, 2)}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {(selectedCompany.revenueINR || selectedCompany.patINR || selectedCompany.teamSize || selectedCompany.keyMetrics?.length > 0) && (
+              <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.75rem', opacity: 0.7 }}>Quarterly Financials & Metrics</h4>
+                <div className={styles.modalDetails}>
+                  {selectedCompany.revenueINR && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>Revenue (Quarterly)</span>
+                      <span className={styles.modalDetailValue}>{formatCurrency(selectedCompany.revenueINR, 2)}</span>
+                    </div>
+                  )}
+                  {selectedCompany.patINR && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>PAT (Quarterly)</span>
+                      <span className={styles.modalDetailValue}>{formatCurrency(selectedCompany.patINR, 2)}</span>
+                    </div>
+                  )}
+                  {selectedCompany.teamSize && (
+                    <div className={styles.modalDetailRow}>
+                      <span className={styles.modalDetailLabel}>Team Size</span>
+                      <span className={styles.modalDetailValue}>{selectedCompany.teamSize} people</span>
+                    </div>
+                  )}
+                  {selectedCompany.keyMetrics?.length > 0 && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <div style={{ fontSize: '0.85rem', opacity: 0.7, marginBottom: '0.5rem' }}>Key Metrics:</div>
+                      {selectedCompany.keyMetrics.map((metric, i) => (
+                        <div key={i} className={styles.modalDetailRow}>
+                          <span className={styles.modalDetailLabel}>{metric.label}</span>
+                          <span className={styles.modalDetailValue}>{metric.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {selectedCompany.updates?.length > 0 && (
               <div className={styles.modalUpdates}>

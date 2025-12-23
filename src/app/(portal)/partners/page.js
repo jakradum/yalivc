@@ -89,6 +89,10 @@ export default async function PartnersPortal() {
         currentOwnershipPercent: update.currentOwnershipPercent,
         multipleOfInvestment: update.multipleOfInvestment,
         updates: update.updates || [],
+        revenueINR: update.revenueINR,
+        patINR: update.patINR,
+        teamSize: update.teamSize,
+        keyMetrics: update.keyMetrics || [],
       }))
     : investments.map(inv => ({
         company: inv.company || {},
@@ -97,6 +101,10 @@ export default async function PartnersPortal() {
         currentOwnershipPercent: inv.yaliOwnershipPercent,
         multipleOfInvestment: 1.2,
         updates: [],
+        revenueINR: null,
+        patINR: null,
+        teamSize: null,
+        keyMetrics: [],
       }));
 
   // Get report period display
@@ -136,6 +144,11 @@ export default async function PartnersPortal() {
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>Quarterly Report</h1>
             <p className={styles.heroSubtitle}>{fundSettings?.fundName || 'Yali Capital Deep Tech Fund'}</p>
+            {fundSettings?.tagline && (
+              <p style={{ fontSize: '0.95rem', opacity: 0.8, marginTop: '0.5rem', fontStyle: 'italic' }}>
+                &ldquo;{fundSettings.tagline}&rdquo;
+              </p>
+            )}
             <p className={styles.heroDate}>As of {reportingDate}</p>
           </div>
         </section>
@@ -161,6 +174,14 @@ export default async function PartnersPortal() {
           <div className={styles.statCard}>
             <div className={styles.statLabel}>MOIC</div>
             <div className={styles.statValue}>{fundMetrics.moic?.toFixed(2)}x</div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statLabel}>TVPI</div>
+            <div className={styles.statValue}>{fundMetrics.tvpi?.toFixed(2)}x</div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statLabel}>DPI</div>
+            <div className={styles.statValue}>{fundMetrics.dpi?.toFixed(4)}</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statLabel}>IRR</div>
@@ -190,6 +211,34 @@ export default async function PartnersPortal() {
                       <p>We are pleased to present the quarterly report for {fundSettings?.fundName || 'Yali Capital Deep Tech Fund'} for the period ending {reportingDate}.</p>
                       <p>This quarter marked significant progress across our portfolio companies, with several key milestones achieved in product development, customer acquisition, and funding rounds.</p>
                       <p>{fundSettings?.investmentStrategy || 'The Indian deep tech ecosystem continues to show remarkable resilience and growth, with increasing enterprise adoption of AI and advanced technologies across sectors.'}</p>
+                    </>
+                  )}
+
+                  {report?.investmentActivityNotes && report.investmentActivityNotes.length > 0 && (
+                    <>
+                      <h4 style={{ marginTop: '2rem', marginBottom: '1rem', fontWeight: 600 }}>Investment Activity</h4>
+                      <PortableText value={report.investmentActivityNotes} />
+                    </>
+                  )}
+
+                  {report?.portfolioHighlightsNotes && report.portfolioHighlightsNotes.length > 0 && (
+                    <>
+                      <h4 style={{ marginTop: '2rem', marginBottom: '1rem', fontWeight: 600 }}>Portfolio Highlights</h4>
+                      <PortableText value={report.portfolioHighlightsNotes} />
+                    </>
+                  )}
+
+                  {report?.ecosystemNotes && report.ecosystemNotes.length > 0 && (
+                    <>
+                      <h4 style={{ marginTop: '2rem', marginBottom: '1rem', fontWeight: 600 }}>Ecosystem & Tailwinds</h4>
+                      <PortableText value={report.ecosystemNotes} />
+                    </>
+                  )}
+
+                  {report?.closingNotes && report.closingNotes.length > 0 && (
+                    <>
+                      <h4 style={{ marginTop: '2rem', marginBottom: '1rem', fontWeight: 600 }}>Closing Note</h4>
+                      <PortableText value={report.closingNotes} />
                     </>
                   )}
                 </div>
