@@ -144,10 +144,26 @@ export default {
       type: 'array',
       of: [{
         type: 'reference',
-        to: [{ type: 'lpCompanyQuarterUpdate' }]
+        to: [{ type: 'lpCompanyQuarterUpdate' }],
+        options: {
+          filter: ({ document, parentPath }) => {
+            // Get already selected company update IDs
+            const selectedUpdateIds = document.portfolioCompanyUpdates?.map(ref => ref._ref).filter(Boolean) || [];
+
+            // Filter to exclude already selected updates
+            if (selectedUpdateIds.length > 0) {
+              return {
+                filter: '!(_id in $selectedIds)',
+                params: { selectedIds: selectedUpdateIds }
+              };
+            }
+
+            return {};
+          }
+        }
       }],
       group: 'portfolio',
-      description: 'Select company updates for this quarter'
+      description: 'Select company updates for this quarter. Already added companies will not appear in dropdown.'
     },
     {
       name: 'companyDisplayOrder',

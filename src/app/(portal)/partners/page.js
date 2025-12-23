@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Lightlogo } from '../../components/icons/lightlogo';
 import CompanyGrid from './CompanyGrid';
 
-export const revalidate = 60;
+export const revalidate = 0; // Disable cache for LP portal to show latest updates immediately
 
 export default async function PartnersPortal() {
   // Fetch LP data from Sanity
