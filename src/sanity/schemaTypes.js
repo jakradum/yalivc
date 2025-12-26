@@ -21,7 +21,6 @@ import {
 // LP Portal Schemas
 import lpFundSettings from './schemas/lpFundSettings'
 import lpInvestment from './schemas/lpInvestment'
-import lpCompanyQuarterUpdate from './schemas/lpCompanyQuarterUpdate'
 import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 
@@ -45,7 +44,6 @@ export const schemaTypes = [
   // LP Portal
   lpFundSettings,
   lpInvestment,
-  lpCompanyQuarterUpdate,
   lpPipelineDeal,
   lpQuarterlyReport
 ]
