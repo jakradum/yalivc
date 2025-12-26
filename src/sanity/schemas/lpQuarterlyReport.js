@@ -139,31 +139,33 @@ export default {
 
     // ===== PORTFOLIO (References) =====
     {
-      name: 'portfolioCompanyUpdates',
-      title: 'Portfolio Company Updates',
+      name: 'portfolioCompanies',
+      title: 'Portfolio Companies in Report',
       type: 'array',
       of: [{
         type: 'reference',
-        to: [{ type: 'lpCompanyQuarterUpdate' }],
+        to: [{ type: 'lpInvestment' }],
         options: {
-          filter: ({ document, parentPath }) => {
-            // Get already selected company update IDs
-            const selectedUpdateIds = document.portfolioCompanyUpdates?.map(ref => ref._ref).filter(Boolean) || [];
+          filter: ({ document }) => {
+            // Get already selected investment IDs
+            const selectedIds = document.portfolioCompanies?.map(ref => ref._ref).filter(Boolean) || [];
 
-            // Filter to exclude already selected updates
-            if (selectedUpdateIds.length > 0) {
+            // Filter to exclude already selected investments and only show active
+            if (selectedIds.length > 0) {
               return {
-                filter: '!(_id in $selectedIds)',
-                params: { selectedIds: selectedUpdateIds }
+                filter: '!(_id in $selectedIds) && status == "active"',
+                params: { selectedIds }
               };
             }
 
-            return {};
+            return {
+              filter: 'status == "active"'
+            };
           }
         }
       }],
       group: 'portfolio',
-      description: 'Select company updates for this quarter. Already added companies will not appear in dropdown.'
+      description: 'Select which portfolio companies to include in this quarterly report. Their quarterly data for this quarter will be pulled automatically from their investment records.'
     },
     {
       name: 'companyDisplayOrder',

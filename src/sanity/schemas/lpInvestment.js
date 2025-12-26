@@ -8,6 +8,7 @@ export default {
     { name: 'terms', title: 'Investment Terms' },
     { name: 'economics', title: 'Round Economics' },
     { name: 'coinvestors', title: 'Co-Investors' },
+    { name: 'quarterly', title: 'Quarterly Performance' },
     { name: 'status', title: 'Status' },
   ],
 
@@ -103,6 +104,121 @@ export default {
       of: [{ type: 'string' }],
       description: 'List co-investor names',
       group: 'coinvestors'
+    },
+
+    // QUARTERLY PERFORMANCE DATA
+    {
+      name: 'quarterlyUpdates',
+      title: 'Quarterly Performance Updates',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'quarterUpdate',
+        title: 'Quarter Update',
+        fields: [
+          {
+            name: 'quarter',
+            title: 'Quarter',
+            type: 'string',
+            options: {
+              list: ['Q1', 'Q2', 'Q3', 'Q4']
+            },
+            validation: Rule => Rule.required()
+          },
+          {
+            name: 'fiscalYear',
+            title: 'Fiscal Year',
+            type: 'string',
+            description: 'e.g., "FY26" or "2025-26"',
+            validation: Rule => Rule.required()
+          },
+          {
+            name: 'currentFMV',
+            title: 'Fair Market Value (₹ Crores)',
+            type: 'number',
+            description: 'FMV as of quarter end'
+          },
+          {
+            name: 'currentOwnershipPercent',
+            title: 'Current Ownership (%)',
+            type: 'number',
+            description: 'May change due to dilution'
+          },
+          {
+            name: 'amountReturned',
+            title: 'Amount Returned (₹ Crores)',
+            type: 'number',
+            initialValue: 0
+          },
+          {
+            name: 'multipleOfInvestment',
+            title: 'Multiple of Investment (MOIC)',
+            type: 'number'
+          },
+          {
+            name: 'revenueINR',
+            title: 'Revenue (₹ Crores)',
+            type: 'number',
+            description: 'Quarterly revenue'
+          },
+          {
+            name: 'patINR',
+            title: 'Profit After Tax (₹ Crores)',
+            type: 'number',
+            description: 'Use negative for losses'
+          },
+          {
+            name: 'teamSize',
+            title: 'Team Size',
+            type: 'number'
+          },
+          {
+            name: 'keyMetrics',
+            title: 'Key Metrics',
+            type: 'array',
+            of: [{
+              type: 'object',
+              fields: [
+                { name: 'label', type: 'string', title: 'Metric Name' },
+                { name: 'value', type: 'string', title: 'Value' }
+              ],
+              preview: {
+                select: {
+                  title: 'label',
+                  subtitle: 'value'
+                }
+              }
+            }],
+            description: 'Custom metrics like "Order Book", "Customer Pipeline", etc.'
+          },
+          {
+            name: 'updates',
+            title: 'Quarter Updates',
+            type: 'array',
+            of: [{ type: 'text' }],
+            description: 'Key updates/achievements this quarter (one per item)'
+          }
+        ],
+        preview: {
+          select: {
+            quarter: 'quarter',
+            year: 'fiscalYear',
+            fmv: 'currentFMV',
+            revenue: 'revenueINR'
+          },
+          prepare({ quarter, year, fmv, revenue }) {
+            const metrics = [];
+            if (fmv) metrics.push(`FMV: ₹${fmv} Cr`);
+            if (revenue) metrics.push(`Rev: ₹${revenue} Cr`);
+            return {
+              title: `${quarter} ${year}`,
+              subtitle: metrics.join(' • ') || 'No financial data'
+            }
+          }
+        }
+      }],
+      description: 'Add quarterly performance data for each quarter since investment',
+      group: 'quarterly'
     },
 
     // STATUS
