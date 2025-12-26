@@ -941,37 +941,28 @@ export async function getLPQuarterlyReportBySlug(slug) {
         "photo": photo.asset->url
       },
       "pdfUrl": generatedPdf.asset->url,
-      "portfolioCompanyUpdates": portfolioCompanyUpdates[]->{
+      "portfolioCompanies": portfolioCompanies[]->{
         _id,
-        quarter,
-        fiscalYear,
-        currentFMV,
-        currentOwnershipPercent,
-        amountReturned,
-        multipleOfInvestment,
-        updates,
-        revenueINR,
-        patINR,
-        keyMetrics,
-        "investment": investment->{
+        investmentDate,
+        fundingRound,
+        preMoneyValuation,
+        totalRoundSize,
+        postMoneyValuation,
+        yaliInvestmentAmount,
+        yaliOwnershipPercent,
+        coInvestors,
+        reportDescription,
+        isRevenuePositive,
+        quarterlyUpdates,
+        "company": company->{
           _id,
-          investmentDate,
-          fundingRound,
-          yaliInvestmentAmount,
-          yaliOwnershipPercent,
-          coInvestors,
-          reportDescription,
-          isRevenuePositive,
-          "company": company->{
-            _id,
-            name,
-            "slug": slug.current,
-            oneLiner,
-            detail,
-            "logo": logo.asset->url,
-            link,
-            "sector": category->name
-          }
+          name,
+          "slug": slug.current,
+          oneLiner,
+          detail,
+          "logo": logo.asset->url,
+          link,
+          "sector": category->name
         }
       },
       "companyDisplayOrder": companyDisplayOrder[]->{

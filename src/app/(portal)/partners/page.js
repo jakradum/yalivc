@@ -80,20 +80,27 @@ export default async function PartnersPortal() {
     });
   };
 
-  // Build portfolio data from investments and quarter updates
-  const portfolioData = report?.portfolioCompanyUpdates?.length > 0
-    ? report.portfolioCompanyUpdates.map(update => ({
-        company: update.investment?.company || {},
-        investment: update.investment || {},
-        currentFMV: update.currentFMV,
-        currentOwnershipPercent: update.currentOwnershipPercent,
-        multipleOfInvestment: update.multipleOfInvestment,
-        updates: update.updates || [],
-        revenueINR: update.revenueINR,
-        patINR: update.patINR,
-        teamSize: update.teamSize,
-        keyMetrics: update.keyMetrics || [],
-      }))
+  // Build portfolio data from investments with quarterly data
+  const portfolioData = report?.portfolioCompanies?.length > 0
+    ? report.portfolioCompanies.map(investment => {
+        // Find the quarterly data for this report's quarter
+        const quarterData = investment.quarterlyUpdates?.find(
+          q => q.quarter === report.quarter && q.fiscalYear === report.fiscalYear
+        );
+
+        return {
+          company: investment.company || {},
+          investment: investment,
+          currentFMV: quarterData?.currentFMV || investment.yaliInvestmentAmount,
+          currentOwnershipPercent: quarterData?.currentOwnershipPercent || investment.yaliOwnershipPercent,
+          multipleOfInvestment: quarterData?.multipleOfInvestment || 1.0,
+          updates: quarterData?.updates || [],
+          revenueINR: quarterData?.revenueINR,
+          patINR: quarterData?.patINR,
+          teamSize: quarterData?.teamSize,
+          keyMetrics: quarterData?.keyMetrics || [],
+        };
+      })
     : investments.map(inv => ({
         company: inv.company || {},
         investment: inv,
