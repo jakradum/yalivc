@@ -67,9 +67,6 @@ export default defineConfig({
                       .title('Portfolio Investments')
                       .child(S.documentTypeList('lpInvestment').title('Investments')),
                     S.listItem()
-                      .title('Company Quarter Updates')
-                      .child(S.documentTypeList('lpCompanyQuarterUpdate').title('Quarter Updates')),
-                    S.listItem()
                       .title('Pipeline Deals')
                       .child(S.documentTypeList('lpPipelineDeal').title('Pipeline')),
                     S.divider(),

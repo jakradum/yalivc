@@ -190,16 +190,18 @@ const teamMember = {
     {
       name: 'status',
       title: 'Status',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Active', value: 'active'},
-          {title: 'Alumni', value: 'alumni'}
-        ]
-      },
-      initialValue: 'active',
+      type: 'boolean',
+      description: 'Toggle ON for Active, OFF for Alumni',
+      initialValue: true,
       validation: Rule => Rule.required(),
       readOnly: ({document}) => document?.isCore === true
+    },
+    {
+      name: 'enableTeamPage',
+      title: 'Enable Team Member Page',
+      type: 'boolean',
+      description: 'Enable to make this team member\'s detail page accessible from the website',
+      initialValue: false
     }
   ],
   preview: {

@@ -81,7 +81,8 @@ export async function getTeamMembers() {
       oneLiner,
       "photo": photo.asset->url,
       linkedIn,
-      order
+      order,
+      enableTeamPage
     }`
   );
 }
@@ -112,7 +113,8 @@ export async function getTeamMemberBySlug(slug) {
       },
       "photo": photo.asset->url,
       linkedIn,
-      status
+      status,
+      enableTeamPage
     }`,
     { slug }
   );
@@ -128,7 +130,7 @@ export async function getAllTeamMemberSlugs() {
 
 export async function getOtherTeamMembers(currentSlug, limit = 4) {
   return client.fetch(
-    `*[_type == "teamMember" && showOnHomepage == true && slug.current != $currentSlug] | order(order asc) [0...$limit] {
+    `*[_type == "teamMember" && showOnHomepage == true && enableTeamPage == true && slug.current != $currentSlug] | order(order asc) [0...$limit] {
       _id,
       name,
       slug,

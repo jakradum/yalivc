@@ -62,46 +62,58 @@ const finalTeam = teamMembers;
   };
 
   const renderMobileView = () =>
-    finalTeam.map((member, index) => (
-      <div key={index} className={styles.mobileTeamMemberWrapper}>
-        <div
-          className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
-          onClick={() => handleCellInteraction(member, index)}
-        >
-          <div className={styles.memberInfo}>
-            <p className={styles.name}>{member.name}</p>
-            <p className={styles.desig}>{member.role}</p>
-            <div className={styles.socialLinks}>
-              {member.linkedIn && (
-                <a href={member.linkedIn} target="_blank" rel="noopener noreferrer">
-                  <button className={styles.socialButton}>in</button>
-                </a>
-              )}
+    finalTeam.map((member, index) => {
+      const MemberWrapper = member.enableTeamPage ? Link : 'div';
+      const wrapperProps = member.enableTeamPage
+        ? { href: `/about-yali/${member.slug?.current || member.slug}`, className: styles.noUnderline }
+        : {};
+
+      return (
+        <MemberWrapper key={index} {...wrapperProps}>
+          <div className={styles.mobileTeamMemberWrapper}>
+            <div
+              className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''} ${member.enableTeamPage ? styles.clickable : ''}`}
+              onClick={() => !member.enableTeamPage && handleCellInteraction(member, index)}
+              style={{ cursor: member.enableTeamPage ? 'pointer' : 'default' }}
+            >
+              <div className={styles.memberInfo}>
+                <p className={styles.name}>{member.name}</p>
+                <p className={styles.desig}>{member.role}</p>
+                <div className={styles.socialLinks}>
+                  {member.linkedIn && (
+                    <a href={member.linkedIn} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                      <button className={styles.socialButton}>in</button>
+                    </a>
+                  )}
+                </div>
+              </div>
+              {!member.enableTeamPage && <ExpandIcon isExpanded={expandedRow === index} />}
             </div>
-          </div>
-          <ExpandIcon isExpanded={expandedRow === index} />
-        </div>
-        <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
-          <div className={styles.expandedImageContainer}>
-            <TeamsDefaultSVG />
-            {member.photo ? (
-              <Image
-                loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
-                src={getImagePath(index)}
-                alt={member.name}
-                width={220}
-                height={220}
-                className={styles.memberImage}
-                style={{ objectFit: 'cover' }}
-              />
-            ) : (
-              <Graphicfg className={styles.memberImage} />
+            {!member.enableTeamPage && (
+              <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
+                <div className={styles.expandedImageContainer}>
+                  <TeamsDefaultSVG />
+                  {member.photo ? (
+                    <Image
+                      loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
+                      src={getImagePath(index)}
+                      alt={member.name}
+                      width={220}
+                      height={220}
+                      className={styles.memberImage}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <Graphicfg className={styles.memberImage} />
+                  )}
+                </div>
+                <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
+              </div>
             )}
           </div>
-          <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
-        </div>
-      </div>
-    ));
+        </MemberWrapper>
+      );
+    });
 
   const renderTableRows = () => {
     const rows = [];
@@ -123,15 +135,8 @@ const finalTeam = teamMembers;
     return rows;
   };
 
-  const renderCell = (member, index) => (
-    <td
-      key={index}
-      className={`${styles.teamMember} ${
-        selectedIndex === index ? styles.selectedMember : ''
-      }`}
-      onMouseEnter={() => handleCellInteraction(member, index)}
-      onMouseLeave={handleCellHoverLeave}
-    >
+  const renderCell = (member, index) => {
+    const cellContent = (
       <div className={styles.memberInfo}>
         <p className={styles.name}>{member.name}</p>
         <p className={styles.desig}>{member.role}</p>
@@ -141,14 +146,42 @@ const finalTeam = teamMembers;
               href={member.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
             >
               <button className={styles.socialButton}>in</button>
             </a>
           )}
         </div>
       </div>
-    </td>
-  );
+    );
+
+    if (member.enableTeamPage) {
+      return (
+        <td key={index} className={styles.teamMember}>
+          <Link
+            href={`/about-yali/${member.slug?.current || member.slug}`}
+            style={{ cursor: 'pointer', display: 'block', textDecoration: 'none', color: 'inherit', width: '100%', height: '100%' }}
+          >
+            {cellContent}
+          </Link>
+        </td>
+      );
+    }
+
+    return (
+      <td
+        key={index}
+        className={`${styles.teamMember} ${
+          selectedIndex === index ? styles.selectedMember : ''
+        }`}
+        onMouseEnter={() => handleCellInteraction(member, index)}
+        onMouseLeave={handleCellHoverLeave}
+        style={{ cursor: 'default' }}
+      >
+        {cellContent}
+      </td>
+    );
+  };
 
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
