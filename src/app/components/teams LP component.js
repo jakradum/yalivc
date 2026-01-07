@@ -63,13 +63,15 @@ const finalTeam = teamMembers;
 
   const renderMobileView = () =>
     finalTeam.map((member, index) => {
-      const handleMobileClick = () => {
-        if (member.enableTeamPage && expandedRow === index) {
-          // If expanded and has team page enabled, navigate to the page
+      const handleHeaderClick = () => {
+        // Toggle expand/collapse when clicking the header
+        handleCellInteraction(member, index);
+      };
+
+      const handleExpandedClick = () => {
+        // Navigate to team member page when clicking expanded content (if enabled)
+        if (member.enableTeamPage) {
           window.location.href = `/about-yali/${member.slug?.current || member.slug}`;
-        } else {
-          // Otherwise, toggle expand/collapse
-          handleCellInteraction(member, index);
         }
       };
 
@@ -77,7 +79,7 @@ const finalTeam = teamMembers;
         <div key={index} className={styles.mobileTeamMemberWrapper}>
           <div
             className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
-            onClick={handleMobileClick}
+            onClick={handleHeaderClick}
             style={{ cursor: 'pointer' }}
           >
             <div className={styles.memberInfo}>
@@ -93,7 +95,11 @@ const finalTeam = teamMembers;
             </div>
             <ExpandIcon isExpanded={expandedRow === index} />
           </div>
-          <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
+          <div
+            className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}
+            onClick={handleExpandedClick}
+            style={{ cursor: member.enableTeamPage && expandedRow === index ? 'pointer' : 'default' }}
+          >
             <div className={styles.expandedImageContainer}>
               <TeamsDefaultSVG />
               {member.photo ? (
