@@ -63,55 +63,61 @@ const finalTeam = teamMembers;
 
   const renderMobileView = () =>
     finalTeam.map((member, index) => {
-      const MemberWrapper = member.enableTeamPage ? Link : 'div';
-      const wrapperProps = member.enableTeamPage
-        ? { href: `/about-yali/${member.slug?.current || member.slug}`, className: styles.noUnderline }
-        : {};
+      const handleMobileClick = () => {
+        if (member.enableTeamPage && expandedRow === index) {
+          // If expanded and has team page enabled, navigate to the page
+          window.location.href = `/about-yali/${member.slug?.current || member.slug}`;
+        } else {
+          // Otherwise, toggle expand/collapse
+          handleCellInteraction(member, index);
+        }
+      };
 
       return (
-        <MemberWrapper key={index} {...wrapperProps}>
-          <div className={styles.mobileTeamMemberWrapper}>
-            <div
-              className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''} ${member.enableTeamPage ? styles.clickable : ''}`}
-              onClick={() => !member.enableTeamPage && handleCellInteraction(member, index)}
-              style={{ cursor: member.enableTeamPage ? 'pointer' : 'default' }}
-            >
-              <div className={styles.memberInfo}>
-                <p className={styles.name}>{member.name}</p>
-                <p className={styles.desig}>{member.role}</p>
-                <div className={styles.socialLinks}>
-                  {member.linkedIn && (
-                    <a href={member.linkedIn} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                      <button className={styles.socialButton}>in</button>
-                    </a>
-                  )}
-                </div>
+        <div key={index} className={styles.mobileTeamMemberWrapper}>
+          <div
+            className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
+            onClick={handleMobileClick}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className={styles.memberInfo}>
+              <p className={styles.name}>{member.name}</p>
+              <p className={styles.desig}>{member.role}</p>
+              <div className={styles.socialLinks}>
+                {member.linkedIn && (
+                  <a href={member.linkedIn} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                    <button className={styles.socialButton}>in</button>
+                  </a>
+                )}
               </div>
-              {!member.enableTeamPage && <ExpandIcon isExpanded={expandedRow === index} />}
             </div>
-            {!member.enableTeamPage && (
-              <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
-                <div className={styles.expandedImageContainer}>
-                  <TeamsDefaultSVG />
-                  {member.photo ? (
-                    <Image
-                      loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
-                      src={getImagePath(index)}
-                      alt={member.name}
-                      width={220}
-                      height={220}
-                      className={styles.memberImage}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <Graphicfg className={styles.memberImage} />
-                  )}
-                </div>
-                <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
-              </div>
+            <ExpandIcon isExpanded={expandedRow === index} />
+          </div>
+          <div className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}>
+            <div className={styles.expandedImageContainer}>
+              <TeamsDefaultSVG />
+              {member.photo ? (
+                <Image
+                  loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
+                  src={getImagePath(index)}
+                  alt={member.name}
+                  width={220}
+                  height={220}
+                  className={styles.memberImage}
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : (
+                <Graphicfg className={styles.memberImage} />
+              )}
+            </div>
+            <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
+            {member.enableTeamPage && (
+              <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#830D35', fontWeight: '500' }}>
+                Click to view full profile →
+              </p>
             )}
           </div>
-        </MemberWrapper>
+        </div>
       );
     });
 
