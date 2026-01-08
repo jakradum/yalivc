@@ -169,7 +169,14 @@ const finalTeam = teamMembers;
 
     if (member.enableTeamPage) {
       return (
-        <td key={index} className={styles.teamMember}>
+        <td
+          key={index}
+          className={`${styles.teamMember} ${
+            selectedIndex === index ? styles.selectedMember : ''
+          }`}
+          onMouseEnter={() => handleCellInteraction(member, index)}
+          onMouseLeave={handleCellHoverLeave}
+        >
           <Link
             href={`/about-yali/${member.slug?.current || member.slug}`}
             style={{ cursor: 'pointer', display: 'block', textDecoration: 'none', color: 'inherit', width: '100%', height: '100%' }}
