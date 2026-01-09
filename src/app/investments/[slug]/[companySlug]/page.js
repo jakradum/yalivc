@@ -9,7 +9,6 @@ import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
-import blogStyles from '../../../insights/blog/[slug]/blog.module.css';
 import teamLPstyles from '../../../landing page styles/team.module.css';
 
 export const revalidate = 60;
@@ -189,30 +188,30 @@ export default async function CompanyPage({ params }) {
         <section className={styles.sectorsSection}>
           <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
 
-          <article className={blogStyles.blogArticle}>
-            <header className={blogStyles.articleHeader}>
-              <h1 className={blogStyles.articleTitle}>{company.story.title}</h1>
+          <article className={companyStyles.blogArticle}>
+            <header className={companyStyles.articleHeader}>
+              <h1 className={companyStyles.articleTitle}>{company.story.title}</h1>
 
               {company.story.author && (
-                <div className={blogStyles.articleMeta}>
-                  <div className={blogStyles.authorInfo}>
+                <div className={companyStyles.articleMeta}>
+                  <div className={companyStyles.authorInfo}>
                     <Image
                       src={company.story.author.photo}
                       alt={company.story.author.name}
                       width={48}
                       height={48}
-                      className={blogStyles.authorPhoto}
+                      className={companyStyles.authorPhoto}
                     />
                     <div>
-                      <p className={blogStyles.authorName}>{company.story.author.name}</p>
-                      <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
+                      <p className={companyStyles.authorName}>{company.story.author.name}</p>
+                      <p className={companyStyles.authorRole}>{company.story.author.role} @ Yali</p>
                     </div>
                   </div>
                 </div>
               )}
             </header>
 
-            <div className={blogStyles.articleBody}>
+            <div className={companyStyles.articleBody}>
               <PortableText value={company.story.content} components={storyComponents} />
             </div>
           </article>
