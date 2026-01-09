@@ -5,7 +5,6 @@ import styles from './company.module.css';
 import { PortableText } from '@portabletext/react';
 import { urlFor } from '@/lib/sanity';
 import Link from 'next/link';
-import { LinkedInIcon } from '@/app/components/icons/small icons/linkedIn icon';
 import Button from '@/app/components/button';
 
 // Custom serializers for PortableText
@@ -123,14 +122,11 @@ export default async function CompanyPage({ params }) {
                   <div className={styles.founderRole}>{founder.role}</div>
                 </div>
                 {founder.linkedin && (
-                  <a
-                    href={founder.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.founderLinkedIn}
-                  >
-                    <LinkedInIcon width={24} height={24} />
-                  </a>
+                  <div className={styles.founderLinkedIn}>
+                    <Button href={founder.linkedin} color="black" target="_blank">
+                      LinkedIn
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
