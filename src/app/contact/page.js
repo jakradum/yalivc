@@ -3,11 +3,9 @@
 import { useState } from 'react';
 import styles from './contact.module.css';
 import ApplicationForm from '../components/ApplicationForm';
-import { isFeatureEnabled } from '@/config/features';
 
 export default function Contact() {
   const [copiedEmails, setCopiedEmails] = useState({});
-  const showApplicationForm = isFeatureEnabled('applicationForm');
 
   const copyToClipboard = async (email, index) => {
     try {
@@ -45,26 +43,23 @@ export default function Contact() {
         <h1 className={styles.pageTitle}>Get in Touch</h1>
         <p className={styles.pageDescription}>
           Whether you're looking to pitch your startup, discuss partnerships, or have media
-          inquiries, reach out to us using the appropriate contact below for the fastest response.
+          inquiries, reach out to us using the form below or email addresses provided.
         </p>
       </section>
 
-      {/* ✅ Show ApplicationForm if feature flag is ON */}
-      {showApplicationForm && (
-        <section className={styles.formSection}>
-          <ApplicationForm />
-        </section>
-      )}
+      {/* Application Form - Always visible */}
+      <section className={styles.formSection}>
+        <ApplicationForm />
+      </section>
 
-      {/* ✅ Otherwise show email contact cards */}
-      {!showApplicationForm && (
-        <section className={styles.contactSection}>
-          <p className={styles.sectionSubtitle}>
-            Write to us by choosing from one of these specialized contact addresses based on your
-            inquiry type.
-          </p>
+      {/* Email Contact Section */}
+      <section className={styles.contactSection}>
+        <p className={styles.sectionSubtitle}>
+          Or write to us directly using one of these specialized contact addresses based on your
+          inquiry type.
+        </p>
 
-          <div className={styles.contactGrid}>
+        <div className={styles.contactGrid}>
             {contactCategories.map((category, index) => (
               <div key={index} className={styles.contactCard}>
                 <h3 className={styles.cardTitle}>{category.title}</h3>
@@ -115,8 +110,7 @@ export default function Contact() {
               </div>
             ))}
           </div>
-        </section>
-      )}
+      </section>
 
       {/* Address Section — always visible */}
       <section className={styles.addressSection}>
