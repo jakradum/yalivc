@@ -85,18 +85,18 @@ export default async function CompanyPage({ params }) {
       </nav>
 
       {/* Company Header */}
+      <aside className={styles.logoAside}>
+        {company.logo && (
+          <Image
+            src={company.logo}
+            alt={company.name}
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        )}
+      </aside>
+
       <div className={styles.header}>
-        <div className={styles.logoContainer}>
-          {company.logo && (
-            <Image
-              src={company.logo}
-              alt={company.name}
-              width={150}
-              height={150}
-              style={{ objectFit: 'contain' }}
-            />
-          )}
-        </div>
         <h1 className={styles.companyName}>{company.name}</h1>
       </div>
 
@@ -292,22 +292,70 @@ export default async function CompanyPage({ params }) {
       {relatedContent && relatedContent.length > 0 && (
         <>
           <hr className={styles.horizontalLine} />
-          <section style={{ padding: '2rem' }}>
-            <h2>Related News & Insights</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
+          <section style={{ padding: '2rem 0' }}>
+            <h2 style={{ padding: '0 2rem', marginBottom: '2rem' }}>Related News & Insights</h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              backgroundColor: '#f5f5f5',
+              border: '0.5px solid black',
+              borderBottom: 'none',
+              borderRight: 'none'
+            }}>
               {relatedContent.map((item, index) => (
-                <article key={index} style={{ border: '1px solid #ccc', padding: '1rem' }}>
-                  <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+                <article key={index} style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '1.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRight: '0.5px solid black',
+                  borderBottom: '0.5px solid black',
+                  minHeight: '200px',
+                  minWidth: 0,
+                  overflow: 'hidden'
+                }}>
+                  <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '1rem' }}>
                     {item.source} • {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </div>
-                  <h3 style={{ marginBottom: '1rem' }}>{item.title}</h3>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 500,
+                    marginBottom: '2.5rem',
+                    flexGrow: 1,
+                    position: 'relative',
+                    wordBreak: 'break-word'
+                  }}>
+                    {item.title}
+                    <span style={{
+                      content: '',
+                      position: 'absolute',
+                      bottom: '-1rem',
+                      left: 0,
+                      height: '0.3rem',
+                      width: '4rem',
+                      backgroundColor: '#830D35',
+                      display: 'block'
+                    }}></span>
+                  </h3>
                   {item.isExternal ? (
-                    <a href={item.url} target="_blank" rel="noopener noreferrer">
-                      <Button text="Read Article" />
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{
+                      textDecoration: 'none',
+                      color: '#333',
+                      fontSize: '1rem',
+                      textTransform: 'uppercase',
+                      marginTop: 'auto'
+                    }}>
+                      READ ARTICLE →
                     </a>
                   ) : (
-                    <Link href={item.url}>
-                      <Button text="Read More" />
+                    <Link href={item.url} style={{
+                      textDecoration: 'none',
+                      color: '#333',
+                      fontSize: '1rem',
+                      textTransform: 'uppercase',
+                      marginTop: 'auto'
+                    }}>
+                      READ MORE →
                     </Link>
                   )}
                 </article>
