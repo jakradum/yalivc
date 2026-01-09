@@ -14,14 +14,6 @@ export default {
       name: 'role',
       title: 'Role/Title',
       type: 'string',
-      options: {
-        list: [
-          { title: 'Investments', value: 'Investments' },
-          { title: 'Platform & Ops', value: 'Platform & Ops' },
-          { title: 'Advisor', value: 'Advisor' },
-        ],
-        layout: 'dropdown',
-      },
       validation: (Rule) => Rule.required(),
     },
     {
