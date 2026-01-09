@@ -11,6 +11,12 @@ background-color: white;
   display: flex;
   flex-direction: column;
   border: 0.5px solid black;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.teamMember[style*="cursor: pointer"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -102,6 +108,7 @@ background-color: white;
     align-items: flex-end;
     justify-content: center;
     margin: 0 auto;
+    position: relative;
 }
 
 .memberImage img {
@@ -109,6 +116,20 @@ background-color: white;
     height: 280px !important;
     object-fit: cover;
     filter: drop-shadow(0 -10px 20px rgba(0, 0, 0, 0.3));
+}
+
+.viewProfileBadge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    color: #efefef;
+    margin: 0;
+    font-weight: 300;
+    opacity: 0.8;
+    text-align: center;
+    z-index: 10;
 }
 
 .loadMore {

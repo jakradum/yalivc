@@ -50,10 +50,13 @@ export default function TeamDetails({teamMembers}) {
               ) : (
                 <Graphicfg />
               )}
+              {member.enableTeamPage && (
+                <p className={styles.viewProfileBadge}>View profile</p>
+              )}
             </div>
-            <div className={styles.viewmoreButton}>
+            <div className={styles.viewmoreButton} onClick={(e) => e.stopPropagation()}>
               {member.linkedIn && (
-                <Button href={member.linkedIn} color="#000000" onClick={(e) => member.enableTeamPage && e.stopPropagation()}>
+                <Button href={member.linkedIn} color="#000000" target="_blank">
                   view on linkedin
                 </Button>
               )}

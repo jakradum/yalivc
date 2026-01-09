@@ -115,13 +115,11 @@ const finalTeam = teamMembers;
               ) : (
                 <Graphicfg className={styles.memberImage} />
               )}
+              {member.enableTeamPage && (
+                <p className={styles.viewProfileBadge}>View profile</p>
+              )}
             </div>
             <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
-            {member.enableTeamPage && (
-              <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#830D35', fontWeight: '500' }}>
-                Click to view full profile →
-              </p>
-            )}
           </div>
         </div>
       );

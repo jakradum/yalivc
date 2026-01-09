@@ -114,8 +114,13 @@
     padding: 20px;
     background-color: white;
     border: 1px solid #000;
-    transition: background-color 0.4s ease, color 1s ease;
+    transition: background-color 0.4s ease, color 1s ease, transform 0.3s ease, box-shadow 0.3s ease;
     margin: 0;
+}
+
+.teamMember:has(a):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .teamMember:last-child {
@@ -143,6 +148,19 @@
 .name {
     font-size: 1.25rem;
     font-weight: 500;
+}
+
+.viewProfileBadge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    color: #efefef;
+    margin: 0;
+    font-weight: 300;
+    opacity: 0.8;
+    text-align: center;
 }
 
 .desig {
