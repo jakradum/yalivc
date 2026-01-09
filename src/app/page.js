@@ -55,9 +55,9 @@ const team = sanityTeam;
         <aside className={landingStyles.contentWrapper}>
           <div className={landingStyles.headingBox}>
             <p>
-              We believe the next wave of large-scale innovation will have roots in deep tech. With investments across
-              sectors like Semiconductors, Robotics, Genomics, Aerospace, and AI, we're helping India's startups build
-              for the future, and we are only getting started.
+              We believe the next wave of large-scale innovation will have roots in deep tech. As a venture capital firm with investments across
+              sectors like Semiconductors, Robotics, Genomics, Aerospace, and AI, we're helping India's tech startups build
+              for the future through strategic tech investing, and we are only getting started.
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />

@@ -20,9 +20,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "Yali Capital | Funding India's deep tech",
+  title: "Yali Capital | Deep Tech Venture Capital in Bangalore, India",
   description:
-    'Powering the future of deep tech with investments in AI, Genomics, Robotics, Semiconductor and more.',
+    'Deep tech venture capital firm in Bangalore investing in AI, robotics, semiconductors, genomics, and aerospace. Tech investing in India\'s most promising startups with cutting-edge innovation.',
+  keywords: 'deep tech venture capital, tech investing in india, bangalore venture capital, tech venture capital, AI investing, robotics investing, semiconductor investing',
   icons: {
     icon: '/favicon.svg',
   },
