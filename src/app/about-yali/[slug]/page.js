@@ -114,11 +114,11 @@ export default async function TeamMemberPage({ params }) {
           {member.outsideWork && member.outsideWork.length > 0 && (
             <>
               <h2 className={teamStyles.outsideWorkTitle}>Outside of Work:</h2>
-              <ul className={teamStyles.outsideWorkList}>
+              <div className={teamStyles.outsideWorkTags}>
                 {member.outsideWork.map((item, idx) => (
-                  <li key={idx}>{item}</li>
+                  <span key={idx} className={teamStyles.outsideWorkTag}>{item}</span>
                 ))}
-              </ul>
+              </div>
             </>
           )}
         </div>
