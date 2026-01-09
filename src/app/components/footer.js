@@ -39,8 +39,7 @@ export default function Footer() {
             <div className={styles.infoSection}>
               <h3>Yali.VC</h3>
               <p>
-              Yali Capital, headquartered in Bangalore, India, invests in early stage deep tech startups across a wide
-              range of verticals from Aerospace to Robotics.
+              Yali Capital, headquartered in Bangalore, India, invests in early stage deep tech startups across a wide range of verticals from Aerospace to Robotics. Yali is backed by marquee investors including LipBu Tan, the current CEO of Intel as an advisor.
               </p>
               <FooterSubscribe />
               <small className={styles.copyright}>© Yali Capital {new Date().getFullYear()}</small>
