@@ -297,20 +297,19 @@ export default async function CompanyPage({ params }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
               {relatedContent.map((item, index) => (
                 <article key={index} style={{ border: '1px solid #ccc', padding: '1rem' }}>
-                  {item.coverImage && (
-                    <Image
-                      src={item.coverImage}
-                      alt={item.title}
-                      width={300}
-                      height={200}
-                      style={{ width: '100%', height: 'auto', marginBottom: '1rem' }}
-                    />
+                  <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+                    {item.source} • {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </div>
+                  <h3 style={{ marginBottom: '1rem' }}>{item.title}</h3>
+                  {item.isExternal ? (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                      <Button text="Read Article" />
+                    </a>
+                  ) : (
+                    <Link href={item.url}>
+                      <Button text="Read More" />
+                    </Link>
                   )}
-                  <h3>{item.title}</h3>
-                  <p>{item.excerpt}</p>
-                  <Link href={`/newsroom/${item.slug.current}`}>
-                    <Button text="Read More" />
-                  </Link>
                 </article>
               ))}
             </div>
