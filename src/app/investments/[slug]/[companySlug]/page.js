@@ -1,369 +1,300 @@
 import { getCompanyBySlug, getContentByCompany } from '@/lib/sanity-queries';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import styles from './company.module.css';
-import { PortableText } from '@portabletext/react';
 import { urlFor } from '@/sanity/client';
-import Link from 'next/link';
-import Button from '@/app/components/button';
+import { PortableText } from '@portabletext/react';
+import styles from '../../../about-yali/about-styles.module.css';
+import newsStyles from '../../../newsroom/newscomponent.module.css';
+import companyStyles from './company.module.css';
+import HeaderFlex from '../../../components/icons/headerflex';
+import Breadcrumb from '../../../components/breadcrumb';
+import Image from 'next/image';
+import Button from '../../../components/button';
+import { notFound } from 'next/navigation';
+import blogStyles from '../../../insights/blog/[slug]/blog.module.css';
+import teamLPstyles from '../../../landing page styles/team.module.css';
 
-// Custom serializers for PortableText
-const portableTextComponents = {
-  block: {
-    h1: ({children}) => <h1 className={styles.storyHeading}>{children}</h1>,
-    h2: ({children}) => <h2>{children}</h2>,
-    h3: ({children}) => <h3>{children}</h3>,
-    normal: ({children}) => <p>{children}</p>,
-  },
-  marks: {
-    link: ({value, children}) => {
-      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
-      return (
-        <a href={value?.href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
-          {children}
-        </a>
-      );
-    },
-  },
+export const revalidate = 60;
+
+// Portable Text components for story content
+const storyComponents = {
   types: {
-    image: ({value}) => {
-      if (!value?.asset) return null;
-      return (
-        <figure className={styles.storyImage}>
-          <Image
-            src={urlFor(value).url()}
-            alt={value.alt || ''}
-            width={800}
-            height={500}
-            style={{ width: '100%', height: 'auto' }}
-          />
-          {value.caption && <figcaption>{value.caption}</figcaption>}
-        </figure>
-      );
-    },
+    image: ({ value }) => (
+      <figure className={companyStyles.storyImage}>
+        <Image
+          src={urlFor(value).width(800).url()}
+          alt={value.alt || ''}
+          width={800}
+          height={600}
+          style={{ width: '100%', height: 'auto' }}
+        />
+        {value.caption && <figcaption>{value.caption}</figcaption>}
+      </figure>
+    ),
+    pullQuote: ({ value }) => (
+      <blockquote className={companyStyles.pullQuote}>
+        <p>{value.text}</p>
+        {value.attribution && <cite>— {value.attribution}</cite>}
+      </blockquote>
+    ),
   },
 };
 
-export async function generateMetadata({ params }) {
-  const { companySlug } = await params;
-  const company = await getCompanyBySlug(companySlug);
-
-  if (!company) {
-    return {
-      title: 'Company Not Found',
-    };
-  }
-
-  return {
-    title: `${company.name} | Yali Capital Portfolio`,
-    description: company.detail || `${company.name} - Portfolio company of Yali Capital`,
-  };
-}
-
 export default async function CompanyPage({ params }) {
-  const { companySlug, slug } = await params;
+  const { slug, companySlug } = await params;
   const company = await getCompanyBySlug(companySlug);
 
   if (!company) {
     notFound();
   }
 
-  // Get related content (news/blog posts about this company)
-  const relatedContent = await getContentByCompany(companySlug);
+  const allContent = await getContentByCompany(companySlug);
 
   return (
-    <main>
-      {/* Breadcrumb */}
-      <nav style={{ padding: '1rem 2rem', fontSize: '0.875rem' }}>
-        <Link href="/investments" style={{ color: '#830D35' }}>Investments</Link>
-        {' > '}
-        <Link href={`/investments/${slug}`} style={{ color: '#830D35' }}>
-          {company.category?.name || 'Category'}
-        </Link>
-        {' > '}
-        <span>{company.name}</span>
-      </nav>
+    <section>
+      <Breadcrumb />
 
-      {/* Company Header */}
-      <aside className={styles.logoAside}>
-        {company.logo && (
-          <Image
-            src={company.logo}
-            alt={company.name}
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        )}
-      </aside>
+      {/* HEADER */}
+      <div className={styles.mainAbout}>
+        <article className={styles.textContent}>
+          <h1 className={companyStyles.companyName}>{company.name}</h1>
+          <div className={styles.paraFlex}>
+            <p>{company.detail}</p>
+          </div>
 
-      <div className={styles.header}>
-        <h1 className={styles.companyName}>{company.name}</h1>
+          {company.link && (
+            <div style={{ marginTop: '2rem' }}>
+              <Button href={company.link} color="black" target="_blank">
+                Visit Website
+              </Button>
+            </div>
+          )}
+        </article>
+        <aside className={`${styles.mainsecGraphic} ${companyStyles.logoAside}`}>
+          {company.logo && (
+            <Image
+              src={company.logo}
+              alt={`${company.name} logo`}
+              fill
+              style={{ objectFit: 'contain', transform: 'scale(0.8)' }}
+            />
+          )}
+        </aside>
       </div>
 
-      {/* Founder + Info Grid */}
-      <div className={styles.founderInfoGrid}>
-        {/* Founders Container */}
-        <div className={company.founders?.length === 1 ? styles.singleFounder : ''}>
-          {company.founders?.map((founder, index) => (
-            <div key={index} className={styles.founderCard}>
-              <div className={styles.founderImage}>
-                {founder.photo && (
-                  <Image
-                    src={founder.photo}
-                    alt={founder.name}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
+      {/* FOUNDERS + INFO SECTION */}
+      {(company.founders?.length > 0 ||
+        company.metrics?.length > 0 ||
+        company.companyInfo ||
+        company.investmentDetails) && (
+        <section>
+          <div className={styles.people}>
+            <HeaderFlex
+              title={
+                company.founders?.length > 1
+                  ? 'Meet the Founders'
+                  : company.founders?.length === 1
+                    ? 'Meet the Founder'
+                    : 'Key Information'
+              }
+              color="black"
+              desktopMaxWidth={'40%'}
+              mobileMinHeight={'6rem'}
+            />
+          </div>
+
+          <div className={companyStyles.founderInfoGrid}>
+            {/* Founders Column */}
+            <div>
+              {company.founders?.map((founder, idx) => (
+                <article key={idx} className={`${companyStyles.founderCard} ${company.founders?.length === 1 ? companyStyles.singleFounder : ''}`}>
+                  <div className={companyStyles.founderImage}>
+                    {founder.photo && (
+                      <Image
+                        src={founder.photo}
+                        alt={founder.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
+                  <div className={companyStyles.founderContent}>
+                    <div className={companyStyles.founderHeader}>
+                      <h2 className={companyStyles.founderName}>{founder.name}</h2>
+                      <p className={companyStyles.founderRole}>{founder.role}</p>
+                    </div>
+                    {founder.linkedin && (
+                      <div className={companyStyles.founderLinkedIn}>
+                        <a href={founder.linkedin} target="_blank" rel="noopener noreferrer">
+                          <button className={teamLPstyles.socialButton}>in</button>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* Info Column */}
+            <div className={companyStyles.infoSection}>
+              <h2>Key information</h2>
+              <div className={companyStyles.infoGrid}>
+                {company.metrics?.map((metric, idx) => (
+                  <div key={idx} className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>{metric.label}</p>
+                    <p className={companyStyles.metricValue}>{metric.value}</p>
+                  </div>
+                ))}
+                {company.companyInfo?.founded && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Founded</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.founded}</p>
+                  </div>
                 )}
-              </div>
-              <div className={styles.founderContent}>
-                <div className={styles.founderHeader}>
-                  <div className={styles.founderName}>{founder.name}</div>
-                  <div className={styles.founderRole}>{founder.role}</div>
-                </div>
-                {founder.linkedin && (
-                  <div className={styles.founderLinkedIn}>
-                    <Button href={founder.linkedin} color="black" target="_blank">
-                      LinkedIn
-                    </Button>
+                {company.companyInfo?.headquarters && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Headquarters</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.headquarters}</p>
+                  </div>
+                )}
+                {company.companyInfo?.teamSize && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Team Size</p>
+                    <p className={companyStyles.metricValue}>{company.companyInfo.teamSize}</p>
+                  </div>
+                )}
+                {company.investmentDetails?.stage && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Investment Stage</p>
+                    <p className={companyStyles.metricValue}>{company.investmentDetails.stage}</p>
+                  </div>
+                )}
+                {company.investmentDetails?.date && (
+                  <div className={companyStyles.metricCard}>
+                    <p className={companyStyles.metricLabel}>Investment Date</p>
+                    <p className={companyStyles.metricValue}>
+                      {new Date(company.investmentDetails.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                      })}
+                    </p>
                   </div>
                 )}
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Info Section - Key Information */}
-        <aside className={styles.infoSection}>
-          <h2>Key Information</h2>
-          <div className={styles.infoGrid}>
-            {company.yearFounded && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Year Founded</div>
-                <div className={styles.metricValue}>{company.yearFounded}</div>
-              </div>
-            )}
-            {company.headquarters && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Headquarters</div>
-                <div className={styles.metricValue}>{company.headquarters}</div>
-              </div>
-            )}
-            {company.industry && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Industry</div>
-                <div className={styles.metricValue}>{company.industry}</div>
-              </div>
-            )}
-            {company.stage && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Stage</div>
-                <div className={styles.metricValue}>{company.stage}</div>
-              </div>
-            )}
-            {company.category?.name && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Sector</div>
-                <div className={styles.metricValue}>{company.category.name}</div>
-              </div>
-            )}
-            {company.website && (
-              <div className={styles.metricCard}>
-                <div className={styles.metricLabel}>Website</div>
-                <div className={styles.metricValue}>
-                  <a
-                    href={company.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#ebde84', textDecoration: 'none' }}
-                  >
-                    Visit Site
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </aside>
-      </div>
-
-      <hr className={styles.horizontalLine} />
-
-      {/* Investment Story */}
-      {company.story && (
-        <section className={styles.storySection}>
-          <h2>The Story</h2>
-          <div className={styles.storyContent}>
-            <PortableText
-              value={company.story}
-              components={portableTextComponents}
-            />
           </div>
         </section>
       )}
 
-      {/* Milestones/Achievements Timeline */}
-      {company.milestones && company.milestones.length > 0 && (
-        <>
-          <hr className={styles.horizontalLine} />
-          <section className={styles.achievementsSection}>
-            <h2>Key Milestones</h2>
-            <div className={styles.timeline}>
-              {company.milestones.map((milestone, index) => (
-                <div key={index} className={styles.timelineItem}>
-                  <div className={styles.timelineDate}>
-                    <strong>{milestone.date}</strong>
-                  </div>
-                  <div className={styles.timelineContent}>
-                    <h4>{milestone.title}</h4>
-                    <p>{milestone.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        </>
-      )}
+      {/* INVESTMENT STORY */}
+      {company.story?.content && (
+        <section className={styles.sectorsSection}>
+          <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
 
-      {/* Behind the Deal Article (if available) */}
-      {company.behindTheDeal && (
-        <>
-          <hr className={styles.horizontalLine} />
-          <section style={{ padding: '2rem' }}>
-            <article className={styles.blogArticle}>
-              <header className={styles.articleHeader}>
-                <h2 className={styles.articleTitle}>Behind the Deal</h2>
-                {company.behindTheDeal.author && (
-                  <div className={styles.articleMeta}>
-                    <div className={styles.authorInfo}>
-                      {company.behindTheDeal.author.photo && (
-                        <Image
-                          src={company.behindTheDeal.author.photo}
-                          alt={company.behindTheDeal.author.name}
-                          width={48}
-                          height={48}
-                          className={styles.authorPhoto}
-                        />
-                      )}
-                      <div>
-                        <p className={styles.authorName}>
-                          {company.behindTheDeal.author.name}
-                        </p>
-                        <p className={styles.authorRole}>
-                          {company.behindTheDeal.author.role}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </header>
-              <div className={styles.articleBody}>
-                <PortableText
-                  value={company.behindTheDeal.content}
-                  components={portableTextComponents}
-                />
-              </div>
-              {company.behindTheDeal.author && (
-                <div className={styles.authorCard}>
-                  {company.behindTheDeal.author.photo && (
+          <article className={blogStyles.blogArticle}>
+            <header className={blogStyles.articleHeader}>
+              <h1 className={blogStyles.articleTitle}>{company.story.title}</h1>
+
+              {company.story.author && (
+                <div className={blogStyles.articleMeta}>
+                  <div className={blogStyles.authorInfo}>
                     <Image
-                      src={company.behindTheDeal.author.photo}
-                      alt={company.behindTheDeal.author.name}
-                      width={64}
-                      height={64}
-                      className={styles.authorPhoto}
+                      src={company.story.author.photo}
+                      alt={company.story.author.name}
+                      width={48}
+                      height={48}
+                      className={blogStyles.authorPhoto}
                     />
-                  )}
-                  <div>
-                    <p className={styles.authorName}>
-                      {company.behindTheDeal.author.name}
-                    </p>
-                    <p className={styles.authorRole}>
-                      {company.behindTheDeal.author.role}
-                    </p>
+                    <div>
+                      <p className={blogStyles.authorName}>{company.story.author.name}</p>
+                      <p className={blogStyles.authorRole}>{company.story.author.role} @ Yali</p>
+                    </div>
                   </div>
                 </div>
               )}
-            </article>
-          </section>
-        </>
+            </header>
+
+            <div className={blogStyles.articleBody}>
+              <PortableText value={company.story.content} components={storyComponents} />
+            </div>
+          </article>
+        </section>
       )}
 
-      {/* Related Content */}
-      {relatedContent && relatedContent.length > 0 && (
-        <>
-          <hr className={styles.horizontalLine} />
-          <section style={{ padding: '2rem 0' }}>
-            <h2 style={{ padding: '0 2rem', marginBottom: '2rem' }}>Related News & Insights</h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              backgroundColor: '#f5f5f5',
-              border: '0.5px solid black',
-              borderBottom: 'none',
-              borderRight: 'none'
-            }}>
-              {relatedContent.map((item, index) => (
-                <article key={index} style={{
-                  backgroundColor: '#f5f5f5',
-                  padding: '1.5rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRight: '0.5px solid black',
-                  borderBottom: '0.5px solid black',
-                  minHeight: '200px',
-                  minWidth: 0,
-                  overflow: 'hidden'
-                }}>
-                  <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '1rem' }}>
-                    {item.source} • {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+      {/* MILESTONES */}
+      {company.achievements?.length > 0 && (
+        <section className={companyStyles.achievementsSection}>
+          <HeaderFlex title="Milestones" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'6rem'} />
+
+          <div className={companyStyles.timeline}>
+            {[...company.achievements]
+              .sort((a, b) => new Date(a.date) - new Date(b.date))
+              .map((achievement, idx) => (
+                <div key={idx} className={companyStyles.timelineItem}>
+                  <div className={companyStyles.timelineDate}>
+                    {new Date(achievement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
                   </div>
-                  <h3 style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 500,
-                    marginBottom: '2.5rem',
-                    flexGrow: 1,
-                    position: 'relative',
-                    wordBreak: 'break-word'
-                  }}>
-                    {item.title}
-                    <span style={{
-                      content: '',
-                      position: 'absolute',
-                      bottom: '-1rem',
-                      left: 0,
-                      height: '0.3rem',
-                      width: '4rem',
-                      backgroundColor: '#830D35',
-                      display: 'block'
-                    }}></span>
-                  </h3>
-                  {item.isExternal ? (
-                    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{
-                      textDecoration: 'none',
-                      color: '#333',
-                      fontSize: '1rem',
-                      textTransform: 'uppercase',
-                      marginTop: 'auto'
-                    }}>
-                      READ ARTICLE →
-                    </a>
-                  ) : (
-                    <Link href={item.url} style={{
-                      textDecoration: 'none',
-                      color: '#333',
-                      fontSize: '1rem',
-                      textTransform: 'uppercase',
-                      marginTop: 'auto'
-                    }}>
-                      READ MORE →
-                    </Link>
-                  )}
-                </article>
+                  <div className={companyStyles.timelineContent}>
+                    <h4>{achievement.milestone}</h4>
+                    {achievement.description && <p>{achievement.description}</p>}
+                  </div>
+                </div>
               ))}
-            </div>
-          </section>
-        </>
+          </div>
+        </section>
       )}
-    </main>
+
+      {/* RELATED CONTENT */}
+      {allContent.length > 0 && <hr className={companyStyles.horizontalLine} />}
+      {allContent.length > 0 && (
+        <section className={styles.sectorsSection} style={{ paddingBottom: 0, marginBottom: '1rem' }}>
+          <div className={styles.people}>
+            <HeaderFlex title="Related Content" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
+          </div>
+
+          <div className={newsStyles.newsArticles}>
+            {allContent.map((item) => {
+              const date = new Date(item.date);
+              const day = date.getDate().toString().padStart(2, '0');
+              const month = date.toLocaleString('default', { month: 'short' });
+              const year = date.getFullYear();
+
+              return (
+                <article key={item._id} className={newsStyles.article}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
+                    <p className={newsStyles.articleDate}>{`${day} ${month} ${year}`}</p>
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        fontWeight: '600',
+                        color: '#830D35',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      {item.type}
+                    </span>
+                  </div>
+                  <a
+                    href={item.url}
+                    target={item.isExternal ? '_blank' : undefined}
+                    rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                  >
+                    <p className={newsStyles.articleTitle}>{item.title}</p>
+                  </a>
+                  <p className={newsStyles.articleMeta}>{item.source}</p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+      <Breadcrumb />
+    </section>
   );
 }
