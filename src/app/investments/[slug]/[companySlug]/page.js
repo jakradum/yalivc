@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import styles from './company.module.css';
 import { PortableText } from '@portabletext/react';
-import { urlFor } from '@/lib/sanity';
+import { urlFor } from '@/sanity/client';
 import Link from 'next/link';
 import Button from '@/app/components/button';
 
