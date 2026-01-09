@@ -6,6 +6,12 @@ import { getTeamMembers } from '@/lib/sanity-queries';
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: 'About Yali Capital | Bangalore Venture Capital for Deep Tech',
+  description: 'Bangalore-based venture capital firm funding India\'s deep tech companies. 60+ years of combined experience in tech investing across semiconductors, AI, robotics, genomics, and aerospace sectors.',
+  keywords: 'bangalore venture capital, deep tech venture capital, tech investing in India, venture capital india, deep tech VC',
+};
+
 export default async function AboutYali() {
   const teamMembers = await getTeamMembers();
 
@@ -23,8 +29,8 @@ export default async function AboutYali() {
               their growth.
             </p>
             <p>
-              Yali Capital, headquartered in Bangalore, India, was founded in 2023, with the vision to identify and
-              nurture ideas that are poised to lead the next wave of global innovation, and more so in the Indian
+              Yali Capital, a venture capital firm headquartered in Bangalore, India, was founded in 2023, with the vision to identify and
+              nurture ideas that are poised to lead the next wave of global innovation in tech investing, particularly in the Indian
               context.
             </p>
             <p>
