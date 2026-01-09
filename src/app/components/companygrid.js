@@ -188,7 +188,7 @@ const CompanyTable = ({ companies }) => {
                     {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
                   </div>
 
-                  <small>{company.oneLiner}</small>
+                  <small>{company.oneLiner?.length > 100 ? `${company.oneLiner.substring(0, 100)}...` : company.oneLiner}</small>
                   <p>Swipe to view next</p>
                 </article>
               </aside>
