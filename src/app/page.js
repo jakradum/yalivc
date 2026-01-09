@@ -1,14 +1,13 @@
 
 
 import React from 'react';
-import { getCompanies, getNews, getTeamMembers } from '@/lib/sanity-queries';
+import { getCompanies, getNews, getTeamMembers, getCategories } from '@/lib/sanity-queries';
 import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
 import { Graphicfg } from './components/icons/background svgs/graphicfg';
 import missionStyles from './landing page styles/mission statement.module.css';
 import teamStyles from './landing page styles/team.module.css';
-import categories from './data/categories.json';
 import separatorStyles from './landing page styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
@@ -22,11 +21,11 @@ export const revalidate = 60;
 export const genericButtonText = 'view more';
 
 
-const TechnologiesArticle = () => {
-  const technologies = categories.emergingTechnologies;
+const TechnologiesArticle = ({ categories }) => {
+  const technologies = categories.map(cat => cat.name);
   const repeatTechnologies = (arr, times) => [].concat(...Array(times).fill(arr));
   const repeatedTechnologies = repeatTechnologies(technologies, 10);
-  
+
 
   return (
     <div className={separatorStyles.containerWrapper}>
@@ -46,7 +45,8 @@ export default async function HomePage() {
   const companies = await getCompanies();
   const news = await getNews();
   const sanityTeam = await getTeamMembers();
-  
+  const categories = await getCategories();
+
 const team = sanityTeam;
 
   return (
@@ -76,7 +76,7 @@ const team = sanityTeam;
         </aside>
       </section>
 
-       <TechnologiesArticle /> {/* test comment for feature branch */}
+       <TechnologiesArticle categories={categories} /> {/* test comment for feature branch */}
 
       <section className={missionStyles.sectionBG}>
         <MissionStatement />
