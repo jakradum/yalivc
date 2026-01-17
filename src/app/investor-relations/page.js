@@ -1,6 +1,12 @@
 import styles from '../about-yali/about-styles.module.css';
 
-export default function page() {
+export const metadata = {
+  title: 'Investor Relations | Yali Capital - SEBI Registered AIF',
+  description: 'Yali Deeptech Fund I investor relations. SEBI registered Category II Alternative Investment Fund. Contact our compliance team for investor inquiries and grievances.',
+  keywords: 'Yali Capital investor relations, SEBI registered AIF, alternative investment fund India, deep tech fund investor, Yali Ventures',
+};
+
+export default function InvestorRelations() {
   return (
     <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>

@@ -32,8 +32,13 @@ export async function getCompanyBySlug(slug) {
       oneLiner,
       detail,
       link,
-      logo,
-      founders,
+      "logo": logo.asset->url,
+      founders[]{
+        name,
+        role,
+        linkedin,
+        "photo": photo.asset->url
+      },
       story{
         title,
         author->{name, role, "photo": photo.asset->url},

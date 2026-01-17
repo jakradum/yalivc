@@ -45,6 +45,18 @@ export function middleware(request) {
     return NextResponse.redirect(url);
   }
 
+  // Block individual company and category pages on production (only allow on staging/dev)
+  const isProduction = hostname.includes('yali.vc') && !hostname.includes('staging') && !isLocalDev;
+  const isCompanyOrCategoryPage =
+    url.pathname.match(/^\/investments\/[^\/]+$/) && // Matches /investments/something but not /investments
+    url.pathname !== '/investments';
+
+  if (isCompanyOrCategoryPage && isProduction) {
+    // Redirect to investments page on production
+    url.pathname = '/investments';
+    return NextResponse.redirect(url);
+  }
+
   const response = NextResponse.next();
   response.headers.set('x-pathname', url.pathname);
   return response;
