@@ -1,0 +1,12 @@
+# Robots.txt for Yali Capital
+# https://yali.vc
+
+User-agent: *
+Allow: /
+
+# Disallow portal/partner routes
+Disallow: /partners/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://yali.vc/sitemap.xml
