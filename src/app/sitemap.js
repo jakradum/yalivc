@@ -1,4 +1,4 @@
-import { getCompanies, getCategories, getTeamMembers, getBlogPosts } from '@/lib/sanity-queries';
+import { getTeamMembers, getAllBlogPosts } from '@/lib/sanity-queries';
 
 export default async function sitemap() {
   const baseUrl = 'https://yali.vc';
@@ -62,7 +62,7 @@ export default async function sitemap() {
   // Dynamic blog posts
   let blogPages = [];
   try {
-    const posts = await getBlogPosts();
+    const posts = await getAllBlogPosts();
     blogPages = posts
       .filter(post => post.slug)
       .map((post) => ({
