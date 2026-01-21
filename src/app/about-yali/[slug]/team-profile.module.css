@@ -2,36 +2,38 @@
   background-color: #efefef;
 }
 
-/* 2x2 Grid Layout */
-.profileGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+/* Top Row - Photo and About with text wrapping */
+.topRow {
   border-top: 1px solid #363636;
   border-bottom: 1px solid #363636;
-  align-items: stretch;
+  padding: 2rem;
+  overflow: hidden; /* Clear floats */
+  background-color: white;
 }
 
-/* Top Left - Photo Cell */
-.photoCell {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-right: 1px solid #363636;
+/* Bottom Row - Quote and Outside Work */
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid #363636;
-  padding: 2rem;
+}
+
+/* Left Column - Photo Cell (floated) */
+.photoCell {
+  float: left;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
   background-color: white;
-  min-height: 400px;
+  max-width: 50%;
 }
 
 .photoInner {
   position: relative;
   width: 100%;
-  height: 100%;
+  max-width: 500px;
+  height: calc(100vh - 150px);
+  max-height: 650px;
   background-color: #830D35;
-  aspect-ratio: 1;
 }
 
 .memberPhoto {
@@ -78,13 +80,9 @@
   background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='47.35' height='47.8' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='m23.67 15 8.66-15 15.02 8.66-8.67 15.01Zm0-30 8.66 15 15.02-8.66-8.67-15.01zM0-8.33v17m47.35-17v17M15.01 0h17.32m-8.66 32.8 8.66 15 15.02-8.66-8.67-15.01zM0 39.47v17m47.35-17v17M15.01 47.8h17.32m-56-32.8L-15 0 0 8.65l-8.66 15.01Zm47.35 0L15 0 0 8.65l8.67 15.01Zm0-30L15 0 0-8.66l8.67-15.01Zm47.33 30L62.35 0 47.33 8.65 56 23.67ZM23.67 62.8l8.66-15 15.02 8.66-8.67 15.01zm47.34-30-8.66 15-15.02-8.66L56 24.13Zm-47.33 30L15 47.8 0 56.45l8.67 15.01Zm-47.35-30 8.67 15 15-8.65-8.66-15.01zm47.35 0L15 47.8 0 39.15l8.67-15.01Z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
 }
 
-/* Top Right - About Cell */
+/* Right Column - About Cell (flows around photo) */
 .aboutCell {
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-bottom: 1px solid #363636;
+  overflow: hidden; /* Creates new block formatting context */
 }
 
 .aboutTitle {
@@ -331,21 +329,29 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .profileGrid {
+  .topRow {
+    padding: 1.5rem;
+  }
+
+  .bottomRow {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
   }
 
   .photoCell {
-    border-right: none;
-    min-height: 300px;
+    float: none;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
   }
 
   .photoInner {
+    height: auto;
+    max-height: none;
+    max-width: 350px;
     aspect-ratio: 1;
+    margin: 0 auto;
   }
 
-  .aboutCell,
   .quoteCell,
   .outsideWorkCell {
     padding: 1.5rem;
