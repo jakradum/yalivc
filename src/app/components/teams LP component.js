@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 // import { useData } from '../data/fetch component';
@@ -18,6 +18,8 @@ export const TeamsLPComponent = ({ teamMembers = [] }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
   const [tableHeight, setTableHeight] = useState(0);
+  const [cursorTooltip, setCursorTooltip] = useState({ visible: false, x: 0, y: 0 });
+  const containerRef = useRef(null);
 
   
 
@@ -58,6 +60,17 @@ const finalTeam = teamMembers;
     if (!isMobile) {
       setSelectedMember(null);
       setSelectedIndex(null);
+      setCursorTooltip({ visible: false, x: 0, y: 0 });
+    }
+  };
+
+  const handleMouseMove = (e, hasProfilePage) => {
+    if (!isMobile && hasProfilePage) {
+      setCursorTooltip({
+        visible: true,
+        x: e.clientX + 15,
+        y: e.clientY + 15
+      });
     }
   };
 
@@ -116,7 +129,9 @@ const finalTeam = teamMembers;
                 <Graphicfg className={styles.memberImage} />
               )}
               {member.enableTeamPage && (
-                <p className={styles.viewProfileBadge}>View profile</p>
+                <p className={styles.viewProfileBadge}>
+                  <span className={styles.viewProfileIcon}>+</span> View profile
+                </p>
               )}
             </div>
             <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
@@ -174,6 +189,7 @@ const finalTeam = teamMembers;
           }`}
           onMouseEnter={() => handleCellInteraction(member, index)}
           onMouseLeave={handleCellHoverLeave}
+          onMouseMove={(e) => handleMouseMove(e, true)}
         >
           <Link
             href={`/about-yali/${member.slug?.current || member.slug}`}
@@ -209,7 +225,22 @@ const finalTeam = teamMembers;
   );
 
   return (
-    <div className={styles.teamsLpContainer}>
+    <div className={styles.teamsLpContainer} ref={containerRef}>
+      {/* Cursor tooltip */}
+      {cursorTooltip.visible && (
+        <div
+          className={styles.cursorTooltip}
+          style={{
+            position: 'fixed',
+            left: cursorTooltip.x,
+            top: cursorTooltip.y,
+            pointerEvents: 'none',
+            zIndex: 9999
+          }}
+        >
+          Click to see profile
+        </div>
+      )}
       <div className={styles.teamTableWrapper}>
         {isMobile ? (
           <div className={styles.mobileTeamList}>

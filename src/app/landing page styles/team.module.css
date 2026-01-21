@@ -1,3 +1,26 @@
+/* Cursor tooltip for profile links */
+.cursorTooltip {
+  background-color: #ebde84;
+  color: #363636;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .titleSecFlex {
     display: flex;
     flex-direction: row;
@@ -161,6 +184,25 @@
     font-weight: 300;
     opacity: 0.8;
     text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    z-index: 10;
+}
+
+.viewProfileIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #ebde84;
+    opacity: 1;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #830D35;
+    line-height: 1;
 }
 
 .desig {

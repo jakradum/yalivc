@@ -50,9 +50,9 @@ export default async function TeamMemberPage({ params }) {
     <section className={teamStyles.container}>
       <Breadcrumb />
 
-      {/* 2x2 Grid Layout */}
-      <div className={teamStyles.profileGrid}>
-        {/* Top Left - Photo with pattern background */}
+      {/* Top Row - Photo floats left, About text wraps around */}
+      <div className={teamStyles.topRow}>
+        {/* Photo floats left */}
         <div className={teamStyles.photoCell}>
           <div className={`${teamStyles.photoInner} ${teamStyles[`pattern${patternIndex}`]}`}>
             {member.photo && (
@@ -68,29 +68,30 @@ export default async function TeamMemberPage({ params }) {
           </div>
         </div>
 
-        {/* Top Right - About section */}
-        <div className={teamStyles.aboutCell}>
-          <h1 className={teamStyles.aboutTitle}>About {member.name}</h1>
-          <div className={teamStyles.bioText}>
-            <p>{member.bio}</p>
-          </div>
-          {member.personalPhilosophy && (
-            <div className={teamStyles.inWordsSection}>
-              <h2 className={teamStyles.inWordsTitle}>In {member.name.split(' ')[0]}&apos;s words</h2>
-              <div className={teamStyles.inWordsContent}>
-                <PortableText value={member.personalPhilosophy} />
-              </div>
-            </div>
-          )}
-          {member.linkedIn && (
-            <div className={teamStyles.linkedInButton}>
-              <Button href={member.linkedIn} color="black" target="_blank">
-                View on LinkedIn
-              </Button>
-            </div>
-          )}
+        {/* About section - text wraps around photo */}
+        <h1 className={teamStyles.aboutTitle}>About {member.name}</h1>
+        <div className={teamStyles.bioText}>
+          <p>{member.bio}</p>
         </div>
+        {member.personalPhilosophy && (
+          <div className={teamStyles.inWordsSection}>
+            <h2 className={teamStyles.inWordsTitle}>In {member.name.split(' ')[0]}&apos;s words</h2>
+            <div className={teamStyles.inWordsContent}>
+              <PortableText value={member.personalPhilosophy} />
+            </div>
+          </div>
+        )}
+        {member.linkedIn && (
+          <div className={teamStyles.linkedInButton}>
+            <Button href={member.linkedIn} color="black" target="_blank">
+              View on LinkedIn
+            </Button>
+          </div>
+        )}
+      </div>
 
+      {/* Bottom Row - Quote and Outside Work */}
+      <div className={teamStyles.bottomRow}>
         {/* Bottom Left - Pull Quote */}
         <div className={teamStyles.quoteCell}>
           {member.pullQuote ? (
