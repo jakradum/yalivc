@@ -6,8 +6,9 @@ import { getCategories, getTeamMembers } from '@/lib/sanity-queries';
 import PressDownloadsClient from './PressDownloadsClient';
 
 export const metadata = {
-  title: 'Press Downloads | YALI Capital',
-  description: 'Download media assets, logos, and press materials from YALI Capital.',
+  title: 'Press Downloads | Yali Capital - Media Resources',
+  description: 'Download official Yali Capital media assets including logos, team photos, and press materials. Resources for journalists and media covering our deep tech venture capital investments.',
+  keywords: 'Yali Capital press kit, media downloads, VC logo download, press materials, media resources',
 };
 
 export const revalidate = 60;
