@@ -4,17 +4,29 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './detail-styles.module.css';
 import Image from 'next/image';
-import { useData } from '../data/fetch component';
 import imageLoader from '../../../image-loader';
 import { Graphicfg } from '../components/icons/background svgs/graphicfg';
 import Button from '../components/button';
-import { DefenceVector } from '../components/icons/background svgs/category svgs/defence vector';
+
+const BIO_CHAR_LIMIT = 900;
+
+const TruncatedBio = ({ bio, enableTeamPage, slug }) => {
+  if (!bio) return null;
+
+  const needsTruncation = bio.length > BIO_CHAR_LIMIT;
+  const displayBio = needsTruncation ? bio.substring(0, BIO_CHAR_LIMIT).trim() + '...' : bio;
+
+  return (
+    <>
+      <p className={styles.bio}>{displayBio}</p>
+      {needsTruncation && enableTeamPage && (
+        <span className={styles.viewMoreText}>view more</span>
+      )}
+    </>
+  );
+};
 
 export default function TeamDetails({teamMembers}) {
-
-
-
-
 
   return (
     <div className={styles.teamListContainer}>
@@ -34,7 +46,7 @@ export default function TeamDetails({teamMembers}) {
                 <h3 className={styles.name}>{member.name}</h3>
                 <p className={styles.designation}>{member.role}</p>
               </div>
-              <p className={styles.bio}>{member.bio}</p>
+              <TruncatedBio bio={member.bio} enableTeamPage={member.enableTeamPage} slug={member.slug} />
             </div>
 
             <div className={styles.memberImage}>
