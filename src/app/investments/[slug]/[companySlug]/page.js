@@ -13,6 +13,24 @@ import teamLPstyles from '../../../landing page styles/team.module.css';
 
 export const revalidate = 60;
 
+export async function generateMetadata({ params }) {
+  const { companySlug } = await params;
+  const company = await getCompanyBySlug(companySlug);
+
+  if (!company) {
+    return {
+      title: 'Company Not Found | Yali Capital',
+    };
+  }
+
+  return {
+    title: `${company.name} | Yali Capital Portfolio`,
+    description: company.detail
+      ? `${company.detail.substring(0, 155)}...`
+      : `${company.name} is a portfolio company of Yali Capital, a deep tech venture capital firm based in Bangalore, India.`,
+  };
+}
+
 // Portable Text components for story content
 const storyComponents = {
   types: {

@@ -25,8 +25,20 @@ export const metadata = {
     'Deep tech venture capital firm in Bangalore investing in AI, robotics, semiconductors, genomics, and aerospace. Tech investing in India\'s most promising startups with cutting-edge innovation.',
   keywords: 'deep tech venture capital, tech investing in india, bangalore venture capital, tech venture capital, AI investing, robotics investing, semiconductor investing',
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
+  manifest: '/site.webmanifest',
   verification: {
     google: 'AR3PWsXD41dfGKHMpdT6B-010eU3Q82FsTIW0uqdfGk',
   },
@@ -41,7 +53,6 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.svg" />
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="6eCPyIGmj8Lj1meaCoGOIg" async></script>
       </head>
       <body className={inter.className}>
