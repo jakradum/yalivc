@@ -20,7 +20,6 @@ import {
 
 // LP Portal Schemas
 import lpFundSettings from './schemas/lpFundSettings'
-import lpInvestment from './schemas/lpInvestment'
 import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 
@@ -43,7 +42,6 @@ export const schemaTypes = [
   freeformSection,
   // LP Portal
   lpFundSettings,
-  lpInvestment,
   lpPipelineDeal,
   lpQuarterlyReport
 ]

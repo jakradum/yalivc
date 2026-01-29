@@ -17,6 +17,10 @@ import {
   readingSection,
   freeformSection
 } from './newsletterSections'
+// LP Portal schemas
+import lpQuarterlyReport from './lpQuarterlyReport'
+import lpFundSettings from './lpFundSettings'
+import lpPipelineDeal from './lpPipelineDeal'
 
 export const schemaTypes = [
   // Existing schemas
@@ -38,5 +42,9 @@ export const schemaTypes = [
   guestColumnSection,
   radarSection,
   readingSection,
-  freeformSection
+  freeformSection,
+  // LP Portal
+  lpQuarterlyReport,
+  lpFundSettings,
+  lpPipelineDeal
 ]

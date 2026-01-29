@@ -5,7 +5,6 @@ export default {
 
   groups: [
     { name: 'meta', title: 'Report Info' },
-    { name: 'fundMetrics', title: 'Fund Metrics' },
     { name: 'coverNote', title: 'Cover Note' },
     { name: 'portfolio', title: 'Portfolio' },
     { name: 'pipeline', title: 'Pipeline' },
@@ -43,7 +42,9 @@ export default {
       name: 'fiscalYear',
       title: 'Fiscal Year',
       type: 'string',
-      description: 'e.g., "FY26"',
+      options: {
+        list: ['FY24', 'FY25', 'FY26', 'FY27', 'FY28', 'FY29', 'FY30']
+      },
       group: 'meta',
       validation: Rule => Rule.required()
     },
@@ -61,27 +62,7 @@ export default {
       group: 'meta'
     },
 
-    // ===== FUND METRICS (Snapshot) =====
-    {
-      name: 'fundMetrics',
-      title: 'Fund Metrics',
-      type: 'object',
-      group: 'fundMetrics',
-      fields: [
-        { name: 'fundSizeAtClose', title: 'Fund Size at Final Close (₹ Cr)', type: 'number' },
-        { name: 'amountDrawnDown', title: 'Amount Drawn Down (₹ Cr)', type: 'number' },
-        { name: 'totalInvestedInPortfolio', title: 'Total Invested in Portfolio (₹ Cr)', type: 'number' },
-        { name: 'fmvOfPortfolio', title: 'FMV of Portfolio (₹ Cr)', type: 'number' },
-        { name: 'numberOfPortfolioCompanies', title: 'Number of Portfolio Companies', type: 'number' },
-        { name: 'amountReturned', title: 'Amount Returned (₹ Cr)', type: 'number' },
-        { name: 'moic', title: 'MOIC', type: 'number' },
-        { name: 'tvpi', title: 'TVPI', type: 'number' },
-        { name: 'dpi', title: 'DPI', type: 'number' },
-        { name: 'irr', title: 'IRR (%)', type: 'number' }
-      ]
-    },
-
-    // ===== COVER NOTE =====
+    // ===== COVER NOTE (Text/Narrative only) =====
     {
       name: 'coverNoteGreeting',
       title: 'Greeting',
@@ -134,52 +115,23 @@ export default {
       type: 'reference',
       to: [{ type: 'teamMember' }],
       group: 'coverNote',
-      description: 'Team member who signs the cover note (their role will be used as title)'
+      description: 'Team member who signs the cover note'
     },
 
-    // ===== PORTFOLIO (References) =====
+    // ===== PORTFOLIO (References only) =====
     {
       name: 'portfolioCompanies',
       title: 'Portfolio Companies in Report',
       type: 'array',
       of: [{
         type: 'reference',
-        to: [{ type: 'lpInvestment' }],
-        options: {
-          filter: ({ document }) => {
-            // Get already selected investment IDs
-            const selectedIds = document.portfolioCompanies?.map(ref => ref._ref).filter(Boolean) || [];
-
-            // Filter to exclude already selected investments and only show active
-            if (selectedIds.length > 0) {
-              return {
-                filter: '!(_id in $selectedIds) && status == "active"',
-                params: { selectedIds }
-              };
-            }
-
-            return {
-              filter: 'status == "active"'
-            };
-          }
-        }
+        to: [{ type: 'company' }]
       }],
       group: 'portfolio',
-      description: 'Select which portfolio companies to include in this quarterly report. Their quarterly data for this quarter will be pulled automatically from their investment records.'
-    },
-    {
-      name: 'companyDisplayOrder',
-      title: 'Company Display Order',
-      type: 'array',
-      of: [{
-        type: 'reference',
-        to: [{ type: 'lpInvestment' }]
-      }],
-      group: 'portfolio',
-      description: 'Order companies should appear in report (if different from default)'
+      description: 'Select portfolio companies. Investment data and quarterly updates are pulled from Core Content → Portfolio Companies.'
     },
 
-    // ===== PIPELINE =====
+    // ===== PIPELINE (References + Commentary) =====
     {
       name: 'pipelineDeals',
       title: 'Pipeline Deals to Include',
@@ -188,7 +140,8 @@ export default {
         type: 'reference',
         to: [{ type: 'lpPipelineDeal' }]
       }],
-      group: 'pipeline'
+      group: 'pipeline',
+      description: 'Select pipeline deals to include in this report'
     },
     {
       name: 'pipelineNotes',
@@ -196,41 +149,28 @@ export default {
       type: 'array',
       of: [{ type: 'block' }],
       group: 'pipeline',
-      description: 'Additional commentary about the pipeline'
+      description: 'Narrative commentary about the pipeline'
     },
 
-    // ===== MEDIA =====
-    {
-      name: 'mediaHighlights',
-      title: 'Media Highlights (Manual Entry)',
-      type: 'array',
-      of: [{
-        type: 'object',
-        fields: [
-          { name: 'date', title: 'Date', type: 'date' },
-          { name: 'headline', title: 'Headline', type: 'string' },
-          { name: 'url', title: 'URL', type: 'url' },
-          { name: 'publication', title: 'Publication', type: 'string' },
-          { name: 'image', title: 'Image', type: 'image' },
-          { name: 'caption', title: 'Caption', type: 'text', rows: 2 }
-        ],
-        preview: {
-          select: { title: 'headline', subtitle: 'date', media: 'image' }
-        }
-      }],
-      group: 'media',
-      description: 'Manually entered media highlights'
-    },
+    // ===== MEDIA (References only) =====
     {
       name: 'mediaFromNews',
-      title: 'Include from Newsroom',
+      title: 'Media Coverage',
       type: 'array',
       of: [{
         type: 'reference',
         to: [{ type: 'news' }]
       }],
       group: 'media',
-      description: 'Reference existing news articles'
+      description: 'Select news articles from Site Content → News to include in this report'
+    },
+    {
+      name: 'mediaNotes',
+      title: 'Media Commentary',
+      type: 'array',
+      of: [{ type: 'block' }],
+      group: 'media',
+      description: 'Optional narrative about media coverage'
     },
 
     // ===== OUTPUT =====

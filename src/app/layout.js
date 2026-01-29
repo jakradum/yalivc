@@ -44,8 +44,8 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
-  const headersList = headers();
+export default async function RootLayout({ children }) {
+  const headersList = await headers();
   const pathname = headersList.get('x-pathname') || '';
   const isPortalRoute = pathname.startsWith('/partners');
 
