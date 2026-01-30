@@ -2538,6 +2538,22 @@
   margin-bottom: 1.5rem;
 }
 
+.noQuarterUpdate {
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.noQuarterUpdateText {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
 .quarterUpdateHeader {
   display: flex;
   justify-content: space-between;
