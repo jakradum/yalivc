@@ -828,6 +828,16 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       yaliOwnershipPercent,
       coInvestors,
       investmentStatus,
+      "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        roundName,
+        investmentDate,
+        preMoneyValuation,
+        totalRoundSize,
+        postMoneyValuation,
+        yaliInvestment,
+        yaliOwnership,
+        coInvestors
+      },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
         quarter,
         fiscalYear,

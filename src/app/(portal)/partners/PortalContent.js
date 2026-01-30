@@ -481,8 +481,11 @@ function PortalContentInner({
                         const investedCapital = totalInvested;
 
                         const total = fundSize;
+                        // Pie chart colors - use secondary/tertiary colors only (no burgundy)
+                        // Secondary: #d75d86 (pink), #66bdd4 (teal), #ebde84 (gold)
+                        // Tertiary: #c28d55 (copper/bronze)
                         const segments = [
-                          { label: 'Undrawn Capital', value: undrawnCapital, color: '#830D35', percent: (undrawnCapital / total) * 100 },
+                          { label: 'Undrawn Capital', value: undrawnCapital, color: '#c28d55', percent: (undrawnCapital / total) * 100 },
                           { label: 'Uninvested (Drawn)', value: uninvestedDrawn, color: '#66bdd4', percent: (uninvestedDrawn / total) * 100 },
                           { label: 'Invested in Portfolio', value: investedCapital, color: '#ebde84', percent: (investedCapital / total) * 100 },
                         ];
@@ -723,7 +726,11 @@ function PortalContentInner({
                     if (chartData.length === 0) return null;
 
                     const total = chartData.reduce((sum, d) => sum + d.value, 0);
-                    const colors = ['#d75d86', '#830D35', '#66bdd4', '#ebde84', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2'];
+                    // Pie chart colors - secondary/tertiary palette (no burgundy primary)
+                    // Secondary: #d75d86 (pink), #66bdd4 (teal), #ebde84 (gold)
+                    // Tertiary: #c28d55 (copper/bronze)
+                    // Additional: #9f7ae4 (purple), #0d835b (green), #f5a623 (amber), #50e3c2 (mint)
+                    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2'];
 
                     // SVG Pie Chart calculations
                     const size = 220;
