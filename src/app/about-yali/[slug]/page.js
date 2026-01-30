@@ -92,9 +92,9 @@ export default async function TeamMemberPage({ params }) {
 
       {/* Bottom Row - Quote and Outside Work */}
       <div className={teamStyles.bottomRow}>
-        {/* Bottom Left - Pull Quote */}
-        <div className={teamStyles.quoteCell}>
-          {member.pullQuote ? (
+        {/* Bottom Left - Pull Quote (only show if pullQuote exists) */}
+        {member.pullQuote && (
+          <div className={teamStyles.quoteCell}>
             <blockquote className={teamStyles.pullQuote}>
               <p>{member.pullQuote}</p>
               {member.pullQuoteAttribution && (
@@ -103,12 +103,8 @@ export default async function TeamMemberPage({ params }) {
                 </footer>
               )}
             </blockquote>
-          ) : member.personalPhilosophy ? (
-            <div className={teamStyles.philosophyContent}>
-              <PortableText value={member.personalPhilosophy} />
-            </div>
-          ) : null}
-        </div>
+          </div>
+        )}
 
         {/* Bottom Right - Outside of Work */}
         <div className={teamStyles.outsideWorkCell}>
