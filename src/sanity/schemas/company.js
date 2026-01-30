@@ -1,13 +1,25 @@
 export default {
   name: 'company',
-  title: 'Company',
+  title: 'Portfolio Company',
   type: 'document',
+
+  groups: [
+    { name: 'basic', title: 'Basic Info', default: true },
+    { name: 'investment', title: 'Investment Details' },
+    { name: 'round', title: 'Round Economics' },
+    { name: 'quarterly', title: 'Quarterly Performance' },
+    { name: 'team', title: 'Team & Founders' },
+    { name: 'story', title: 'Investment Story' },
+  ],
+
   fields: [
+    // ===== BASIC INFO =====
     {
       name: 'name',
       title: 'Company Name',
       type: 'string',
       validation: (Rule) => Rule.required(),
+      group: 'basic',
     },
     {
       name: 'slug',
@@ -15,12 +27,14 @@ export default {
       type: 'slug',
       options: { source: 'name' },
       validation: (Rule) => Rule.required(),
+      group: 'basic',
     },
     {
       name: 'oneLiner',
       title: 'One-liner',
       type: 'string',
       validation: (Rule) => Rule.required(),
+      group: 'basic',
     },
     {
       name: 'detail',
@@ -28,38 +42,261 @@ export default {
       type: 'text',
       rows: 5,
       validation: (Rule) => Rule.required(),
+      group: 'basic',
     },
     {
       name: 'category',
-      title: 'Category',
+      title: 'Category / Sector',
       type: 'reference',
       to: [{ type: 'category' }],
+      group: 'basic',
     },
     {
       name: 'logo',
       title: 'Logo',
       type: 'image',
       options: { hotspot: true },
+      group: 'basic',
     },
     {
       name: 'link',
       title: 'Website URL',
       type: 'url',
+      group: 'basic',
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
+      group: 'basic',
     },
 
-    // FOUNDER SECTION (MANDATORY)
-    // Update in /src/sanity/schemas/company.js
+    // ===== INVESTMENT DETAILS =====
+    {
+      name: 'investmentDate',
+      title: 'Date of First Investment',
+      type: 'date',
+      group: 'investment',
+    },
+    {
+      name: 'fundingRound',
+      title: 'Funding Round',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Pre-Seed', value: 'pre-seed' },
+          { title: 'Seed', value: 'seed' },
+          { title: 'Pre-Series A', value: 'pre-series-a' },
+          { title: 'Series A', value: 'series-a' },
+          { title: 'Series B', value: 'series-b' },
+          { title: 'Series C', value: 'series-c' },
+          { title: 'Series D', value: 'series-d' },
+          { title: 'Growth', value: 'growth' },
+        ],
+      },
+      group: 'investment',
+    },
+    {
+      name: 'yaliInvestmentAmount',
+      title: "Yali's Investment Amount (₹ Crores)",
+      type: 'number',
+      group: 'investment',
+    },
+    {
+      name: 'yaliOwnershipPercent',
+      title: "Yali's Ownership (%)",
+      type: 'number',
+      description: 'Fully diluted ownership percentage at time of investment',
+      group: 'investment',
+    },
+    {
+      name: 'leadInvestor',
+      title: 'Yali is Lead Investor?',
+      type: 'boolean',
+      initialValue: false,
+      group: 'investment',
+    },
+    {
+      name: 'investmentStatus',
+      title: 'Investment Status',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Active', value: 'active' },
+          { title: 'Exited', value: 'exited' },
+          { title: 'Written Off', value: 'written-off' },
+        ],
+      },
+      initialValue: 'active',
+      group: 'investment',
+    },
 
+    // ===== ROUND ECONOMICS =====
+    {
+      name: 'preMoneyValuation',
+      title: 'Pre-Money Valuation (₹ Crores)',
+      type: 'number',
+      group: 'round',
+    },
+    {
+      name: 'totalRoundSize',
+      title: 'Total Round Size (₹ Crores)',
+      type: 'number',
+      group: 'round',
+    },
+    {
+      name: 'postMoneyValuation',
+      title: 'Post-Money Valuation (₹ Crores)',
+      type: 'number',
+      group: 'round',
+    },
+    {
+      name: 'coInvestors',
+      title: 'Co-Investors',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'List of co-investor names',
+      group: 'round',
+    },
+
+    // ===== QUARTERLY PERFORMANCE =====
+    {
+      name: 'quarterlyUpdates',
+      title: 'Quarterly Performance Updates',
+      type: 'array',
+      group: 'quarterly',
+      description: 'Add quarterly performance data for LP reports',
+      of: [
+        {
+          type: 'object',
+          name: 'quarterUpdate',
+          title: 'Quarter Update',
+          fields: [
+            {
+              name: 'quarter',
+              title: 'Quarter',
+              type: 'string',
+              options: {
+                list: ['Q1', 'Q2', 'Q3', 'Q4'],
+              },
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'fiscalYear',
+              title: 'Fiscal Year',
+              type: 'string',
+              options: {
+                list: ['FY24', 'FY25', 'FY26', 'FY27', 'FY28', 'FY29', 'FY30']
+              },
+              validation: (Rule) => Rule.required(),
+            },
+            // Valuation & Ownership
+            {
+              name: 'currentFMV',
+              title: 'Fair Market Value (₹ Crores)',
+              type: 'number',
+              description: 'FMV as of quarter end',
+            },
+            {
+              name: 'currentOwnershipPercent',
+              title: 'Current Ownership (%)',
+              type: 'number',
+              description: 'May change due to dilution',
+            },
+            {
+              name: 'amountReturned',
+              title: 'Amount Returned (₹ Crores)',
+              type: 'number',
+              initialValue: 0,
+            },
+            {
+              name: 'multipleOfInvestment',
+              title: 'Multiple of Investment (MOIC)',
+              type: 'number',
+            },
+            // Financials
+            {
+              name: 'revenueINR',
+              title: 'Revenue (₹ Crores)',
+              type: 'number',
+              description: 'Quarterly revenue',
+            },
+            {
+              name: 'patINR',
+              title: 'Profit After Tax (₹ Crores)',
+              type: 'number',
+              description: 'Use negative for losses',
+            },
+            {
+              name: 'teamSize',
+              title: 'Team Size',
+              type: 'number',
+            },
+            // Key Metrics
+            {
+              name: 'keyMetrics',
+              title: 'Key Metrics',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    { name: 'label', type: 'string', title: 'Metric Name' },
+                    { name: 'value', type: 'string', title: 'Value' },
+                  ],
+                  preview: {
+                    select: {
+                      title: 'label',
+                      subtitle: 'value',
+                    },
+                  },
+                },
+              ],
+              description: 'Custom metrics like "Order Book", "Customer Pipeline", etc.',
+            },
+            // Narrative Updates
+            {
+              name: 'updateNotes',
+              title: 'Quarter Update Notes',
+              type: 'text',
+              rows: 10,
+              description: 'Detailed narrative update for this quarter (long form)',
+            },
+            {
+              name: 'highlights',
+              title: 'Key Highlights',
+              type: 'array',
+              of: [{ type: 'string' }],
+              description: 'Bullet point highlights for this quarter',
+            },
+          ],
+          preview: {
+            select: {
+              quarter: 'quarter',
+              year: 'fiscalYear',
+              fmv: 'currentFMV',
+              revenue: 'revenueINR',
+            },
+            prepare({ quarter, year, fmv, revenue }) {
+              const metrics = [];
+              if (fmv) metrics.push(`FMV: ₹${fmv} Cr`);
+              if (revenue) metrics.push(`Rev: ₹${revenue} Cr`);
+              return {
+                title: `${quarter} ${year}`,
+                subtitle: metrics.join(' • ') || 'No financial data',
+              };
+            },
+          },
+        },
+      ],
+    },
+
+    // ===== TEAM & FOUNDERS =====
     {
       name: 'founders',
       title: 'Founders',
       type: 'array',
-      validation: (Rule) => Rule.required().min(1),
+      group: 'team',
       of: [
         {
           type: 'object',
@@ -75,13 +312,11 @@ export default {
               title: 'Photo',
               type: 'image',
               options: { hotspot: true },
-              validation: (Rule) => Rule.required(),
             },
             {
               name: 'role',
               title: 'Role',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             },
             {
               name: 'quote',
@@ -105,12 +340,31 @@ export default {
         },
       ],
     },
+    {
+      name: 'companyInfo',
+      title: 'Company Info',
+      type: 'object',
+      group: 'team',
+      fields: [
+        {
+          name: 'founded',
+          title: 'Founded Year',
+          type: 'number',
+        },
+        {
+          name: 'headquarters',
+          title: 'Headquarters',
+          type: 'string',
+        },
+      ],
+    },
 
-    // VISION/INVESTMENT STORY (OPTIONAL)
+    // ===== INVESTMENT STORY =====
     {
       name: 'story',
       title: 'Investment Story',
       type: 'object',
+      group: 'story',
       description: 'Deep dive: why we invested or founder vision',
       fields: [
         {
@@ -148,127 +402,15 @@ export default {
                 },
               ],
             },
-            {
-              name: 'pullQuote',
-              title: 'Pull Quote',
-              type: 'object',
-              fields: [
-                {
-                  name: 'text',
-                  title: 'Quote Text',
-                  type: 'text',
-                  rows: 3,
-                },
-                {
-                  name: 'attribution',
-                  title: 'Attribution',
-                  type: 'string',
-                },
-              ],
-            },
           ],
         },
       ],
     },
-
-    // KEY METRICS (OPTIONAL)
-    {
-      name: 'metrics',
-      title: 'Key Metrics',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-              placeholder: 'Funding Raised',
-            },
-            {
-              name: 'value',
-              title: 'Value',
-              type: 'string',
-              placeholder: '$6M',
-            },
-            {
-              name: 'order',
-              title: 'Display Order',
-              type: 'number',
-            },
-          ],
-        },
-      ],
-    },
-
-    // INVESTMENT DETAILS (OPTIONAL)
-    {
-      name: 'investmentDetails',
-      title: 'Investment Details',
-      type: 'object',
-      fields: [
-        {
-          name: 'date',
-          title: 'Investment Date',
-          type: 'date',
-        },
-        {
-          name: 'stage',
-          title: 'Stage',
-          type: 'string',
-          options: {
-            list: ['Seed', 'Pre-Series A', 'Series A', 'Series B', 'Series C+'],
-          },
-        },
-        {
-          name: 'leadInvestor',
-          title: 'YALI Lead Investor',
-          type: 'boolean',
-          initialValue: false,
-        },
-      ],
-    },
-
-    // COMPANY INFO (OPTIONAL)
-    {
-      name: 'companyInfo',
-      title: 'Company Info',
-      type: 'object',
-      fields: [
-        {
-          name: 'founded',
-          title: 'Founded Year',
-          type: 'number',
-        },
-        {
-          name: 'headquarters',
-          title: 'Headquarters',
-          type: 'string',
-        },
-        {
-          name: 'teamSize',
-          title: 'Team Size',
-          type: 'string',
-          placeholder: '25+',
-        },
-        {
-          name: 'status',
-          title: 'Status',
-          type: 'string',
-          options: {
-            list: ['Active', 'Exited', 'Acquired'],
-          },
-          initialValue: 'Active',
-        },
-      ],
-    },
-
-    // ACHIEVEMENTS (OPTIONAL)
     {
       name: 'achievements',
       title: 'Key Achievements',
       type: 'array',
+      group: 'story',
       of: [
         {
           type: 'object',

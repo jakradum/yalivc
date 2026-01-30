@@ -5,6 +5,7 @@ export default {
 
   groups: [
     { name: 'identity', title: 'Fund Identity' },
+    { name: 'fundSize', title: 'Fund Size & Capital' },
     { name: 'dates', title: 'Key Dates' },
     { name: 'strategy', title: 'Strategy' },
     { name: 'contacts', title: 'Contacts' },
@@ -57,18 +58,25 @@ export default {
       group: 'dates'
     },
 
-    // FUND SIZE
+    // FUND SIZE & CAPITAL (Static values set at close)
+    {
+      name: 'fundSizeAtClose',
+      title: 'Fund Size at Final Close (₹ Crores)',
+      type: 'number',
+      description: 'Total committed capital at final close',
+      group: 'fundSize'
+    },
     {
       name: 'targetFundSizeINR',
       title: 'Target Fund Size (₹ Crores)',
       type: 'number',
-      group: 'identity'
+      group: 'fundSize'
     },
     {
       name: 'targetFundSizeUSD',
       title: 'Target Fund Size ($ Million)',
       type: 'number',
-      group: 'identity'
+      group: 'fundSize'
     },
 
     // STRATEGY
@@ -91,16 +99,30 @@ export default {
     {
       name: 'investorRelationsEmail',
       title: 'Investor Relations Email',
-      type: 'string',
-      description: 'e.g., "investor.relations@yali.vc"',
+      type: 'email',
+      description: 'Primary IR contact (will be clickable mailto link)',
       group: 'contacts'
     },
     {
       name: 'additionalContacts',
-      title: 'Additional Contact Emails',
+      title: 'Additional Contacts',
       type: 'array',
-      of: [{ type: 'string' }],
-      group: 'contacts'
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'name', title: 'Name', type: 'string' },
+          { name: 'email', title: 'Email', type: 'email' },
+          { name: 'role', title: 'Role', type: 'string' }
+        ],
+        preview: {
+          select: {
+            title: 'name',
+            subtitle: 'email'
+          }
+        }
+      }],
+      group: 'contacts',
+      description: 'Additional team contacts for LP inquiries'
     },
     {
       name: 'website',

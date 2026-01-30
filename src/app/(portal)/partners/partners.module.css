@@ -2,6 +2,126 @@
 /* Background: #efefef, Boxes: white with 1px solid #363636, No rounded corners */
 /* Fonts: JetBrains Mono for figures/labels, Inter for body text */
 
+/* ===== LANDING PAGE ===== */
+.landingContainer {
+  min-height: 100vh;
+  background-color: #830D35;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.landingLogo {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.landingLogo svg {
+  height: 40px;
+  width: auto;
+}
+
+.landingContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 5;
+}
+
+.landingGraphic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  cursor: pointer;
+}
+
+.landingGraphic svg {
+  width: 60vw;
+  max-width: 600px;
+  height: auto;
+  fill: transparent;
+  transition: fill 0.6s ease;
+}
+
+.landingGraphic svg path {
+  stroke: rgba(255, 255, 255, 0.4);
+  transition: stroke 0.3s ease;
+}
+
+/* Hover effect - fill the logo */
+.landingGraphic:hover svg {
+  fill: rgba(255, 255, 255, 0.15);
+}
+
+.landingGraphic:hover svg path {
+  stroke: rgba(255, 255, 255, 0.6);
+}
+
+.landingTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 500;
+  color: white;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 5;
+}
+
+.landingSubtitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 2rem 0;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 5;
+}
+
+.landingDisclaimer {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 520px;
+  line-height: 1.6;
+  margin: 0 0 2.5rem 0;
+  position: relative;
+  z-index: 5;
+}
+
+.landingButton {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: white;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0.875rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 5;
+}
+
+.landingButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+/* ===== MAIN PORTAL ===== */
 .portalContainer {
   min-height: 100vh;
   background-color: #efefef;
@@ -17,6 +137,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 64px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+
+.portalHeaderHidden {
+  transform: translateY(-100%);
 }
 
 .headerLeft {
@@ -481,6 +611,12 @@
   transition: color 0.2s ease;
 }
 
+/* Footer wrapper - higher z-index than sidebar to cover it */
+.footerWrapper {
+  position: relative;
+  z-index: 45; /* Higher than sidebar (40) to cover it when scrolling */
+}
+
 /* Footer */
 .portalFooter {
   background-color: #1a1a1a;
@@ -518,6 +654,1015 @@
   color: white;
 }
 
+/* ===== SIDEBAR LAYOUT ===== */
+.portalLayout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+/* Fixed sidebar - extends to top, goes under navbar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  background-color: white;
+  border-right: 1px solid #363636;
+  z-index: 40; /* Below navbar (z-index: 50) */
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  padding-top: 64px; /* Account for navbar height */
+}
+
+/* Spacer no longer needed - mainArea has fixed padding */
+.sidebarSpacer {
+  display: none;
+}
+
+.sidebarNav {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 0 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.sidebarTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuList li {
+  margin: 0;
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.menuItem:hover {
+  color: #830D35;
+}
+
+.menuItemActive {
+  color: #830D35;
+  font-weight: 600;
+}
+
+/* Menu List Item - clean stack */
+.menuListItem {
+  border: none;
+  margin: 0;
+}
+
+/* Parent menu item (non-clickable) */
+.menuParent {
+  display: block;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+/* Sub-menu list */
+.menuSubList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuSubList li {
+  border: none;
+}
+
+.menuSubItem {
+  padding-left: 2.5rem !important;
+}
+
+/* Sidebar toggle button */
+.sidebarToggle {
+  background: none;
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.sidebarToggle:hover {
+  opacity: 0.8;
+}
+
+.sidebarToggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.sidebarToggle svg line {
+  stroke: white;
+}
+
+.toggleIcon {
+  font-size: 0.75rem;
+}
+
+/* Hamburger Icon (mobile) */
+.hamburgerIcon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+
+.hamburgerIcon span {
+  display: block;
+  height: 2px;
+  background-color: white;
+  width: 100%;
+}
+
+/* FY Dropdown */
+.fyDropdown {
+  position: relative;
+}
+
+.fyDropdownBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fyDropdownBtn:hover {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fyDropdownArrow {
+  font-size: 0.5rem;
+  opacity: 0.7;
+}
+
+.fyDropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #363636;
+  min-width: 140px;
+  z-index: 100;
+}
+
+.fyDropdownItem {
+  display: block;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #363636;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.fyDropdownItem:hover {
+  background-color: #f5f5f5;
+}
+
+.fyDropdownItemActive {
+  background-color: #830D35;
+  color: white;
+}
+
+/* Collapse Popup */
+.collapsePopup {
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 1px solid #363636;
+  padding: 1rem 2rem 1rem 1rem;
+  max-width: 200px;
+  z-index: 200;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.collapsePopup p {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #363636;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.collapsePopupClose {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.collapsePopupClose:hover {
+  color: #363636;
+}
+
+/* Section Navigation (Prev/Next) */
+.sectionNavigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.sectionNavBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid #363636;
+  padding: 0.625rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sectionNavBtn:hover {
+  background-color: #830D35;
+  border-color: #830D35;
+}
+
+.sectionNavBtn:hover .sectionNavLabel,
+.sectionNavBtn:hover .sectionNavArrow {
+  color: white;
+}
+
+.sectionNavBtnNext {
+  flex-direction: row-reverse;
+}
+
+.sectionNavArrow {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  color: #830D35;
+}
+
+.sectionNavLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #363636;
+}
+
+.sectionNavTitle {
+  display: none;
+}
+
+/* Collapsed sidebar state */
+.sidebarCollapsed .sidebar {
+  transform: translateX(-100%) !important; /* Override JS transform when collapsed */
+}
+
+/* sidebarSpacer is hidden, no collapsed state needed */
+
+.sidebarHidden {
+  transform: translateX(-100%) !important; /* Override JS transform when hidden */
+}
+
+/* Main Content Area - fixed position regardless of sidebar state */
+.mainArea {
+  flex: 1;
+  background-color: #efefef;
+  padding: 2rem 3rem;
+  padding-left: calc(240px + 3rem); /* Sidebar width + standard padding - fixed position */
+  min-height: calc(100vh - 64px);
+}
+
+/* Cover Note Section */
+.coverNoteSection {
+  background-color: white;
+  border: 1px solid #363636;
+  padding: 3rem;
+  max-width: 900px;
+}
+
+/* Letterhead */
+.letterhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #830D35;
+}
+
+.letterheadLogo {
+  flex-shrink: 0;
+}
+
+.letterheadLogo svg {
+  height: 40px;
+  width: auto;
+}
+
+.letterheadLogo svg path {
+  fill: #830D35;
+}
+
+.letterheadInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.letterheadName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #830D35;
+}
+
+.letterheadDescriptor {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+/* Letter Date */
+.letterDate {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: #363636;
+  margin-bottom: 2rem;
+  text-align: right;
+}
+
+/* Letter Greeting */
+.letterGreeting {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  margin-bottom: 1.5rem;
+}
+
+.coverNoteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #363636;
+}
+
+.coverNoteTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.coverNoteDate {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #830D35;
+}
+
+.coverNoteContent {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  line-height: 1.75;
+}
+
+.coverNoteContent p {
+  margin: 0 0 1.25rem 0;
+}
+
+.coverNoteContent p:last-child {
+  margin-bottom: 0;
+}
+
+.coverNoteContent h3 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 2.5rem 0 1rem 0;
+}
+
+.coverNoteContent h3:first-of-type {
+  margin-top: 2rem;
+}
+
+/* Author Attribution */
+.coverNoteAuthor {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #363636;
+}
+
+.authorPhoto {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  border: 1px solid #363636;
+  flex-shrink: 0;
+}
+
+.authorPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.authorName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.authorRole {
+  font-family: var(--font-inter);
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ===== CONTENT SECTIONS ===== */
+.contentSection {
+  background-color: white;
+  border: 1px solid #363636;
+  padding: 3rem;
+  max-width: 900px;
+}
+
+.sectionPageTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.placeholderContent {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  line-height: 1.75;
+}
+
+.placeholderContent p {
+  margin: 0 0 1.25rem 0;
+}
+
+/* ===== FUND SUMMARY ===== */
+.fundSummaryContent {
+  font-family: var(--font-inter);
+  color: #363636;
+}
+
+.fundSummaryTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  color: #830D35;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.fundSummarySubtitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  color: #363636;
+  margin: 0 0 2rem 0;
+}
+
+/* View Toggle */
+.viewToggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+}
+
+.viewToggleBtn {
+  background: none;
+  border: 1px solid #363636;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewToggleBtn:first-child {
+  border-right: none;
+}
+
+.viewToggleBtnActive {
+  background-color: #830D35;
+  border-color: #830D35;
+  color: white;
+}
+
+.viewToggleBtn:hover:not(.viewToggleBtnActive) {
+  background-color: #f5f5f5;
+}
+
+/* Chart View */
+.chartContainer {
+  margin-bottom: 2.5rem;
+}
+
+.chartDatesRow {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chartDateItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chartDateLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.chartDateValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Pie Chart */
+.pieChartContainer {
+  margin-bottom: 2.5rem;
+}
+
+.pieChartWrapper {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.pieChart {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+}
+
+.pieSegment {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pieSegment:hover {
+  opacity: 0.85;
+}
+
+.pieTooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #363636;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.pieTooltipLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.pieTooltipValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.pieTooltipPercent {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #830D35;
+}
+
+.pieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pieLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.pieLegendItem:hover,
+.pieLegendItemActive {
+  background-color: #f5f5f5;
+}
+
+.pieLegendColor {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.pieLegendLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #363636;
+  min-width: 140px;
+}
+
+.pieLegendValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Horizontal Bar Chart (kept for reference) */
+.barChart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.barChartItem {
+  display: grid;
+  grid-template-columns: 200px 1fr 100px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.barChartLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #363636;
+}
+
+.barChartBarContainer {
+  height: 28px;
+  background-color: #f0f0f0;
+  position: relative;
+}
+
+.barChartBar {
+  height: 100%;
+  background-color: #830D35;
+  transition: width 0.3s ease;
+}
+
+.barChartValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: right;
+}
+
+/* KPI Cards Row */
+.kpiRow {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kpiLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpiValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #830D35;
+}
+
+/* Table View */
+.fundTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fundTableHeader {
+  background-color: #f5f5f5;
+}
+
+.fundTableHeader th {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #830D35;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid #830D35;
+}
+
+.fundTableHeader th:last-child {
+  text-align: right;
+}
+
+.fundTable tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.fundTable tbody tr:last-child {
+  border-bottom: none;
+}
+
+.fundTable td {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: #363636;
+  padding: 1rem 1.25rem;
+}
+
+.fundTable td:last-child {
+  text-align: right;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Fund Overview - kept for compatibility */
+.fundOverview {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.fundName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.fundManager {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 0.75rem 0;
+}
+
+.fundTagline {
+  font-style: italic;
+  color: #830D35;
+  margin: 0;
+}
+
+/* Metrics Grid - kept for compatibility */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.metricCard {
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metricLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metricValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Fund Details */
+.fundDetails {
+  margin-bottom: 2.5rem;
+}
+
+.fundDetails h3 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailLabel {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.detailValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Investment Strategy */
+.investmentStrategy h3 {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.investmentStrategy p {
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 0 0 1rem 0;
+}
+
+.investmentStrategy p:last-child {
+  margin-bottom: 0;
+}
+
+/* Portfolio Table */
+.portfolioTableWrapper {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.portfolioTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.portfolioTable th {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: white;
+  background-color: #830D35;
+  text-align: left;
+  padding: 0.875rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.portfolioTable th:first-child {
+  width: 60px;
+}
+
+.portfolioTable tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.portfolioTable tbody tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.portfolioTable tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Clickable table rows */
+.clickableRow {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clickableRow:hover {
+  background-color: #830D35 !important;
+}
+
+.clickableRow:hover td {
+  color: white !important;
+}
+
+.portfolioTable td {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #363636;
+  padding: 0.875rem 1rem;
+}
+
+.portfolioTable td:first-child {
+  font-weight: 500;
+  color: #666;
+}
+
+.companyNameCell {
+  font-weight: 600;
+  color: #1a1a1a !important;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .statsGrid {
@@ -526,6 +1671,14 @@
 }
 
 @media (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .mainArea {
+    padding-left: calc(200px + 2rem); /* Match tablet sidebar width */
+  }
+
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -537,9 +1690,105 @@
   .companyGrid {
     grid-template-columns: 1fr;
   }
+
+  .mainArea {
+    padding: 1.5rem 2rem;
+  }
+
+  .coverNoteSection {
+    padding: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
+  .portalLayout {
+    display: block;
+  }
+
+  .sidebar {
+    width: 240px;
+  }
+
+  .mainArea {
+    padding: 1rem;
+    padding-left: 1rem; /* No sidebar offset on mobile */
+  }
+
+  .coverNoteSection,
+  .contentSection {
+    padding: 1.5rem;
+  }
+
+  .coverNoteTitle,
+  .sectionPageTitle {
+    font-size: 1.25rem;
+  }
+
+  .coverNoteContent {
+    font-size: 0.9375rem;
+  }
+
+  .coverNoteAuthor {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .barChartItem {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .barChartBarContainer {
+    height: 24px;
+  }
+
+  .barChartValue {
+    text-align: left;
+  }
+
+  /* Pie chart on mobile */
+  .pieChartWrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .pieChart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .pieLegend {
+    width: 100%;
+  }
+
+  .pieLegendLabel {
+    min-width: auto;
+    flex: 1;
+  }
+
+  .chartDatesRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .kpiRow {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .kpiCard {
+    min-width: 100px;
+  }
+
   .mainContent {
     padding: 1rem;
   }
@@ -559,9 +1808,9 @@
   }
 
   .portalHeader {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.75rem;
-    align-items: flex-start;
+    align-items: center;
     padding: 1rem;
   }
 
@@ -569,6 +1818,33 @@
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+
+  /* Section navigation on mobile */
+  .sectionNavigation {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sectionNavBtn {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .sectionNavBtnNext {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Hide collapse popup on mobile */
+  .collapsePopup {
+    display: none;
+  }
+
+  /* FY dropdown adjustments */
+  .fyDropdownBtn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -813,9 +2089,689 @@
   }
 }
 
+/* ===== PORTFOLIO HUB ===== */
+.portfolioHubSection {
+  max-width: 1000px;
+}
+
+/* Investment Distribution Pie Chart */
+.investmentPieSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.investmentPieTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+}
+
+.investmentPieWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.investmentPieChart {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+}
+
+.investmentPieSegment {
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.investmentPieSegment:hover {
+  opacity: 0.85;
+}
+
+.investmentPieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 280px;
+}
+
+.investmentPieLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  transition: background-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.investmentPieLegendItem:hover,
+.investmentPieLegendItemActive {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+.investmentPieLegendColor {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.investmentPieLegendName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #363636;
+  flex: 1;
+}
+
+.investmentPieLegendValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.investmentPieTooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #363636;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+  pointer-events: none;
+  min-width: 180px;
+}
+
+.investmentPieTooltipName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.investmentPieTooltipSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.6875rem;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.investmentPieTooltipValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #d75d86;
+  margin-top: 0.25rem;
+}
+
+/* Company Tiles Grid */
+.companyTilesSection {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.companyTilesTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+}
+
+.companyTilesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.companyTile {
+  background-color: #f8f8f8;
+  border: 1px solid #363636;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.companyTile:hover {
+  background-color: #830D35;
+  border-color: #830D35;
+}
+
+.companyTile:hover .companyTileName,
+.companyTile:hover .companyTileOneLiner,
+.companyTile:hover .companyTileMetricLabel,
+.companyTile:hover .companyTileMetricValue {
+  color: white;
+}
+
+.companyTile:hover .companyTileSector {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.companyTileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.companyTileLogo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.companyTileLogoPlaceholder {
+  width: 48px;
+  height: 48px;
+  background-color: #830D35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.companyTileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.companyTileName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.125rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.companyTileSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #830D35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.companyTileOneLiner {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #666;
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+
+.companyTileMetrics {
+  display: flex;
+  gap: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.companyTile:hover .companyTileMetrics {
+  border-top-color: rgba(255, 255, 255, 0.3);
+}
+
+.companyTileMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.companyTileMetricLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: color 0.2s ease;
+}
+
+.companyTileMetricValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #d75d86;
+  transition: color 0.2s ease;
+}
+
+/* ===== COMPANY DETAIL PAGE ===== */
+/* Company page main area - consistent left spacing to match portal with sidebar */
+.companyMainArea {
+  flex: 1;
+  background-color: #efefef;
+  padding: 2rem 3rem;
+  padding-left: calc(240px + 3rem); /* Sidebar width + standard padding */
+  min-height: calc(100vh - 64px);
+}
+
+@media (max-width: 1024px) {
+  .companyMainArea {
+    padding-left: calc(200px + 2rem); /* Match tablet sidebar width */
+  }
+}
+
+@media (max-width: 768px) {
+  .companyMainArea {
+    padding: 1rem;
+    padding-left: 1rem; /* No sidebar offset on mobile */
+  }
+}
+
+.companyDetailSection {
+  max-width: 900px;
+}
+
+.companyDetailHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #830D35;
+}
+
+.companyDetailLogo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  background-color: white;
+  border: 1px solid #363636;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.companyDetailLogoPlaceholder {
+  width: 80px;
+  height: 80px;
+  background-color: #830D35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.companyDetailHeaderInfo {
+  flex: 1;
+}
+
+.companyDetailName {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  color: #830D35;
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.companyDetailSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Investment Details Table */
+.investmentDetailsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.investmentDetailsTable tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.investmentDetailsTable tr:last-child {
+  border-bottom: none;
+}
+
+.investmentDetailsTable td {
+  padding: 1rem 0;
+  vertical-align: top;
+}
+
+.investmentDetailsTable td:first-child {
+  font-family: var(--font-inter);
+  font-size: 0.875rem;
+  color: #666;
+  width: 45%;
+}
+
+.investmentDetailsTable td:last-child {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.coInvestorsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.coInvestorsList li {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
+
+/* About Section */
+.companyAboutSection {
+  margin-bottom: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.companyAboutTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.companyAboutText {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #363636;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* Quarterly Updates Section */
+.quarterlyUpdatesSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.quarterlyUpdatesTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #830D35;
+  margin: 0 0 1.5rem 0;
+}
+
+.currentQuarterUpdate {
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.quarterUpdateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.quarterUpdatePeriod {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.quarterUpdateMetrics {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.quarterUpdateMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.quarterUpdateMetricLabel {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.quarterUpdateMetricValue {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #d75d86;
+}
+
+.quarterUpdateNotes {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  white-space: pre-wrap;
+}
+
+.quarterUpdateHighlights {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.quarterUpdateHighlights li {
+  font-family: var(--font-inter);
+  font-size: 0.875rem;
+  color: #363636;
+  line-height: 1.5;
+  margin-bottom: 0.375rem;
+}
+
+.quarterUpdateHighlights li:last-child {
+  margin-bottom: 0;
+}
+
+/* Previous Quarters (Collapsed) */
+.previousQuartersSection {
+  margin-top: 1.5rem;
+}
+
+.previousQuartersToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #830D35;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.previousQuartersToggle:hover {
+  color: #5a0925;
+}
+
+.previousQuartersArrow {
+  font-size: 0.625rem;
+  transition: transform 0.2s ease;
+}
+
+.previousQuartersArrowOpen {
+  transform: rotate(180deg);
+}
+
+.previousQuartersList {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.previousQuarterItem {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  padding: 1rem 1.25rem;
+}
+
+.previousQuarterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.previousQuarterPeriod {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #363636;
+}
+
+.previousQuarterFMV {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  color: #d75d86;
+}
+
+.previousQuarterNotes {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Back Link */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #830D35;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #5a0925;
+}
+
+.backLinkArrow {
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .investmentPieWrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .investmentPieLegend {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .companyTilesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .companyDetailHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .quarterUpdateMetrics {
+    flex-wrap: wrap;
+  }
+
+  .investmentDetailsTable td:first-child {
+    width: 50%;
+  }
+}
+
 /* Print prevention */
 @media print {
   .portalContainer {
     display: none !important;
   }
+}
+
+/* Loading & placeholder states */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #efefef;
+}
+
+.loadingContainer p {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1rem;
+  color: #666;
+}
+
+.noContentMessage {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #999;
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.noDataCell {
+  text-align: center !important;
+  font-style: italic;
+  color: #666 !important;
+  padding: 2rem !important;
 }

@@ -739,6 +739,7 @@ export async function getLPFundSettings() {
       tagline,
       firstCloseDate,
       finalCloseDate,
+      fundSizeAtClose,
       targetFundSizeINR,
       targetFundSizeUSD,
       investmentStrategy,
@@ -756,11 +757,19 @@ export async function getLPFundSettings() {
   );
 }
 
-// Get all LP investments with company data
+// Get all portfolio companies with investment data (for LP reports)
 export async function getLPInvestments() {
   return client.fetch(
-    `*[_type == "lpInvestment" && status == "active"] | order(displayOrder asc, investmentDate asc) {
+    `*[_type == "company" && investmentStatus == "active"] | order(order asc, investmentDate asc) {
       _id,
+      name,
+      "slug": slug.current,
+      oneLiner,
+      detail,
+      "logo": logo.asset->url,
+      link,
+      "sector": category->name,
+      "sectorSlug": category->slug.current,
       investmentDate,
       fundingRound,
       preMoneyValuation,
@@ -769,30 +778,38 @@ export async function getLPInvestments() {
       yaliInvestmentAmount,
       yaliOwnershipPercent,
       coInvestors,
-      reportDescription,
-      isRevenuePositive,
-      status,
-      displayOrder,
-      "company": company->{
-        _id,
-        name,
-        "slug": slug.current,
-        oneLiner,
-        detail,
-        "logo": logo.asset->url,
-        link,
-        "sector": category->name,
-        "sectorSlug": category->slug.current
+      investmentStatus,
+      order,
+      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+        quarter,
+        fiscalYear,
+        currentFMV,
+        currentOwnershipPercent,
+        amountReturned,
+        multipleOfInvestment,
+        updateNotes,
+        highlights,
+        revenueINR,
+        patINR,
+        teamSize,
+        keyMetrics
       }
     }`
   );
 }
 
-// Get LP investment by company slug
+// Get company investment data by slug (includes all quarterly updates)
 export async function getLPInvestmentByCompanySlug(companySlug) {
   return client.fetch(
-    `*[_type == "lpInvestment" && company->slug.current == $companySlug][0]{
+    `*[_type == "company" && slug.current == $companySlug][0]{
       _id,
+      name,
+      "slug": slug.current,
+      oneLiner,
+      detail,
+      "logo": logo.asset->url,
+      link,
+      "sector": category->name,
       investmentDate,
       fundingRound,
       preMoneyValuation,
@@ -801,18 +818,34 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       yaliInvestmentAmount,
       yaliOwnershipPercent,
       coInvestors,
-      reportDescription,
-      isRevenuePositive,
-      status,
-      "company": company->{
-        _id,
-        name,
-        "slug": slug.current,
-        oneLiner,
-        detail,
-        "logo": logo.asset->url,
-        link,
-        "sector": category->name
+      investmentStatus,
+      "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
+        quarter,
+        fiscalYear,
+        currentFMV,
+        currentOwnershipPercent,
+        amountReturned,
+        multipleOfInvestment,
+        updateNotes,
+        highlights,
+        revenueINR,
+        patINR,
+        teamSize,
+        keyMetrics
+      },
+      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+        quarter,
+        fiscalYear,
+        currentFMV,
+        currentOwnershipPercent,
+        amountReturned,
+        multipleOfInvestment,
+        updateNotes,
+        highlights,
+        revenueINR,
+        patINR,
+        teamSize,
+        keyMetrics
       }
     }`,
     { companySlug }
@@ -822,53 +855,54 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
 // Get company quarter updates for a specific quarter
 export async function getLPQuarterUpdates(quarter, fiscalYear) {
   return client.fetch(
-    `*[_type == "lpCompanyQuarterUpdate" && quarter == $quarter && fiscalYear == $fiscalYear] {
+    `*[_type == "company" && investmentStatus == "active" && count(quarterlyUpdates[quarter == $quarter && fiscalYear == $fiscalYear]) > 0] | order(order asc) {
       _id,
-      quarter,
-      fiscalYear,
-      currentFMV,
-      currentOwnershipPercent,
-      amountReturned,
-      multipleOfInvestment,
-      updates,
-      revenueINR,
-      patINR,
-      teamSize,
-      keyMetrics,
-      "investment": investment->{
-        _id,
-        investmentDate,
-        fundingRound,
-        yaliInvestmentAmount,
-        yaliOwnershipPercent,
-        coInvestors,
-        reportDescription,
-        "company": company->{
-          _id,
-          name,
-          "slug": slug.current,
-          "logo": logo.asset->url,
-          "sector": category->name
-        }
+      name,
+      "slug": slug.current,
+      "logo": logo.asset->url,
+      "sector": category->name,
+      investmentDate,
+      fundingRound,
+      yaliInvestmentAmount,
+      yaliOwnershipPercent,
+      coInvestors,
+      "quarterUpdate": quarterlyUpdates[quarter == $quarter && fiscalYear == $fiscalYear][0] {
+        quarter,
+        fiscalYear,
+        currentFMV,
+        currentOwnershipPercent,
+        amountReturned,
+        multipleOfInvestment,
+        updateNotes,
+        highlights,
+        revenueINR,
+        patINR,
+        teamSize,
+        keyMetrics
       }
     }`,
     { quarter, fiscalYear }
   );
 }
 
-// Get historical updates for a specific company
+// Get historical quarterly updates for a specific company
 export async function getLPCompanyHistory(companySlug) {
   return client.fetch(
-    `*[_type == "lpCompanyQuarterUpdate" && investment->company->slug.current == $companySlug] | order(fiscalYear desc, quarter desc) {
-      _id,
-      quarter,
-      fiscalYear,
-      currentFMV,
-      multipleOfInvestment,
-      updates,
-      revenueINR,
-      patINR
-    }`,
+    `*[_type == "company" && slug.current == $companySlug][0] {
+      "quarterlyHistory": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
+        quarter,
+        fiscalYear,
+        currentFMV,
+        currentOwnershipPercent,
+        multipleOfInvestment,
+        updateNotes,
+        highlights,
+        revenueINR,
+        patINR,
+        teamSize,
+        keyMetrics
+      }
+    }.quarterlyHistory`,
     { companySlug }
   );
 }
@@ -934,7 +968,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
       fiscalYear,
       reportingDate,
       publishDate,
-      fundMetrics,
+      // Cover Note (text/narrative only)
       coverNoteGreeting,
       coverNoteIntro,
       investmentActivityNotes,
@@ -948,8 +982,16 @@ export async function getLPQuarterlyReportBySlug(slug) {
         "photo": photo.asset->url
       },
       "pdfUrl": generatedPdf.asset->url,
+      // Portfolio (references to Core Content)
       "portfolioCompanies": portfolioCompanies[]->{
         _id,
+        name,
+        "slug": slug.current,
+        oneLiner,
+        detail,
+        "logo": logo.asset->url,
+        link,
+        "sector": category->name,
         investmentDate,
         fundingRound,
         preMoneyValuation,
@@ -958,28 +1000,10 @@ export async function getLPQuarterlyReportBySlug(slug) {
         yaliInvestmentAmount,
         yaliOwnershipPercent,
         coInvestors,
-        reportDescription,
-        isRevenuePositive,
-        quarterlyUpdates,
-        "company": company->{
-          _id,
-          name,
-          "slug": slug.current,
-          oneLiner,
-          detail,
-          "logo": logo.asset->url,
-          link,
-          "sector": category->name
-        }
+        investmentStatus,
+        quarterlyUpdates
       },
-      "companyDisplayOrder": companyDisplayOrder[]->{
-        _id,
-        "company": company->{
-          _id,
-          name,
-          "slug": slug.current
-        }
-      },
+      // Pipeline (references)
       "pipelineDeals": pipelineDeals[]->{
         _id,
         companyName,
@@ -989,14 +1013,15 @@ export async function getLPQuarterlyReportBySlug(slug) {
         description
       },
       pipelineNotes,
-      mediaHighlights,
+      // Media (references only)
       "mediaFromNews": mediaFromNews[]->{
         _id,
         headlineEdited,
         date,
         url,
         "publicationName": publication->name
-      }
+      },
+      mediaNotes
     }`,
     { slug }
   );
@@ -1023,6 +1048,27 @@ export async function getLatestLPQuarterlyReport() {
       reportingDate,
       publishDate,
       "pdfUrl": generatedPdf.asset->url
+    }`
+  );
+}
+
+// Get all portfolio company slugs (for static generation)
+export async function getAllLPInvestmentSlugs() {
+  return client.fetch(
+    `*[_type == "company" && investmentStatus == "active"] {
+      "slug": slug.current
+    }`
+  );
+}
+
+// Get all available quarters from published LP reports (for dropdown)
+export async function getAvailableLPQuarters() {
+  return client.fetch(
+    `*[_type == "lpQuarterlyReport" && isPublished == true] | order(fiscalYear desc, quarter desc) {
+      _id,
+      "slug": slug.current,
+      quarter,
+      fiscalYear
     }`
   );
 }
