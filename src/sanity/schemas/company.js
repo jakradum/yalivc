@@ -6,7 +6,7 @@ export default {
   groups: [
     { name: 'basic', title: 'Basic Info', default: true },
     { name: 'investment', title: 'Investment Details' },
-    { name: 'round', title: 'Round Economics' },
+    { name: 'round', title: 'Follow-on Rounds' },
     { name: 'quarterly', title: 'Quarterly Performance' },
     { name: 'team', title: 'Team & Founders' },
     { name: 'story', title: 'Investment Story' },
@@ -131,32 +131,122 @@ export default {
       group: 'investment',
     },
 
-    // ===== ROUND ECONOMICS =====
+    // ===== INVESTMENT ROUNDS =====
+    {
+      name: 'investmentRounds',
+      title: 'Follow-on Investment Rounds',
+      type: 'array',
+      group: 'round',
+      description: 'Add FOLLOW-ON rounds here. The initial/first round data comes from the "Investment Details" tab and will automatically appear as the first column in the Investment Round Details table on the portal.',
+      of: [
+        {
+          type: 'object',
+          name: 'investmentRound',
+          title: 'Investment Round',
+          fields: [
+            {
+              name: 'roundName',
+              title: 'Round Name',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Pre-Seed', value: 'pre-seed' },
+                  { title: 'Seed', value: 'seed' },
+                  { title: 'Series A', value: 'series-a' },
+                  { title: 'Series B', value: 'series-b' },
+                  { title: 'Series C', value: 'series-c' },
+                  { title: 'Series D', value: 'series-d' },
+                  { title: 'Bridge', value: 'bridge' },
+                  { title: 'Follow-on', value: 'follow-on' },
+                ],
+              },
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'investmentDate',
+              title: 'Investment Date',
+              type: 'date',
+            },
+            {
+              name: 'preMoneyValuation',
+              title: 'Pre-Money Valuation (₹ Crores)',
+              type: 'number',
+            },
+            {
+              name: 'totalRoundSize',
+              title: 'Total Round Size (₹ Crores)',
+              type: 'number',
+            },
+            {
+              name: 'postMoneyValuation',
+              title: 'Post-Money Valuation (₹ Crores)',
+              type: 'number',
+            },
+            {
+              name: 'yaliInvestment',
+              title: "Yali's Investment (₹ Crores)",
+              type: 'number',
+            },
+            {
+              name: 'yaliOwnership',
+              title: "Yali's Ownership %",
+              type: 'number',
+              description: 'Ownership percentage after this round',
+            },
+            {
+              name: 'coInvestors',
+              title: 'Co-Investors in this Round',
+              type: 'array',
+              of: [{ type: 'string' }],
+            },
+          ],
+          preview: {
+            select: {
+              title: 'roundName',
+              date: 'investmentDate',
+              investment: 'yaliInvestment',
+            },
+            prepare({ title, date, investment }) {
+              const roundLabel = title ? title.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Round';
+              return {
+                title: roundLabel,
+                subtitle: `${date ? new Date(date).getFullYear() : ''} ${investment ? `• ₹${investment} Cr` : ''}`.trim(),
+              };
+            },
+          },
+        },
+      ],
+    },
+
+    // ===== FIRST ROUND ECONOMICS (part of Investment Details) =====
     {
       name: 'preMoneyValuation',
       title: 'Pre-Money Valuation (₹ Crores)',
       type: 'number',
-      group: 'round',
+      group: 'investment',
+      description: 'Pre-money valuation at first investment',
     },
     {
       name: 'totalRoundSize',
       title: 'Total Round Size (₹ Crores)',
       type: 'number',
-      group: 'round',
+      group: 'investment',
+      description: 'Total round size at first investment',
     },
     {
       name: 'postMoneyValuation',
       title: 'Post-Money Valuation (₹ Crores)',
       type: 'number',
-      group: 'round',
+      group: 'investment',
+      description: 'Post-money valuation at first investment',
     },
     {
       name: 'coInvestors',
-      title: 'Co-Investors',
+      title: 'Co-Investors (First Round)',
       type: 'array',
       of: [{ type: 'string' }],
-      description: 'List of co-investor names',
-      group: 'round',
+      description: 'Co-investors in the first round',
+      group: 'investment',
     },
 
     // ===== QUARTERLY PERFORMANCE =====

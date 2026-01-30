@@ -23,14 +23,15 @@ export function middleware(request) {
     hostname.startsWith('partners-'); // Vercel preview domains
 
   if (isPartnersSubdomain) {
-    // If already on /partners path, continue
+    // If URL has /partners prefix, redirect to clean URL (strip /partners)
+    // This prevents partners.yali.vc/partners/... URLs
     if (url.pathname.startsWith('/partners')) {
-      const response = NextResponse.next();
-      response.headers.set('x-pathname', url.pathname);
-      return response;
+      const cleanPath = url.pathname.replace(/^\/partners/, '') || '/';
+      url.pathname = cleanPath;
+      return NextResponse.redirect(url);
     }
 
-    // Rewrite to /partners routes
+    // Rewrite clean URLs to /partners routes internally
     const rewritePath = `/partners${url.pathname === '/' ? '' : url.pathname}`;
     url.pathname = rewritePath;
     const response = NextResponse.rewrite(url);

@@ -18,12 +18,27 @@ html, body {
   --color-text: #363636;            /* Text color */
   --color-background: #efefef;      /* Background color */
 
-  /* Chart/Highlight Colors */
-  --color-highlight-yellow: #ebde84;   /* Primary Highlight 1 */
-  --color-highlight-teal: #66bdd4;     /* Primary Highlight 2 */
-  --color-accent-pink: #d75d86;        /* Chart accent - LP Portal */
-  --color-accent-purple: #9f7ae4;      /* Special accent #1 - minority cases only */
-  --color-accent-green: #0d835b;       /* Special accent #2 */
+  /* Secondary Colors (for charts, highlights, accents) */
+  --color-highlight-yellow: #ebde84;   /* Secondary - Gold */
+  --color-highlight-teal: #66bdd4;     /* Secondary - Teal */
+  --color-accent-pink: #d75d86;        /* Secondary - Pink */
+
+  /* Tertiary Color */
+  --color-accent-copper: #c28d55;      /* Tertiary - Copper/Bronze */
+
+  /* Additional Chart Colors */
+  --color-accent-purple: #9f7ae4;      /* Chart accent - Purple */
+  --color-accent-green: #0d835b;       /* Chart accent - Green */
+  --color-accent-amber: #f5a623;       /* Chart accent - Amber */
+  --color-accent-mint: #50e3c2;        /* Chart accent - Mint */
+
+  /*
+   * COLOR USAGE GUIDE:
+   * - Primary (#830D35 burgundy): Branding, headers, CTAs, navigation
+   * - Secondary: Charts, data visualizations, highlights
+   * - Tertiary (#c28d55 copper): Pie charts, supplementary visuals
+   * - DO NOT use burgundy in pie charts - use secondary/tertiary only
+   */
 }
 
 body {

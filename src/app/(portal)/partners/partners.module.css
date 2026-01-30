@@ -2516,6 +2516,74 @@
   margin: 0;
 }
 
+/* Round Metrics Section */
+.roundMetricsSection {
+  margin-bottom: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.tableFootnote {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+/* Multi-Round Investment Table */
+.roundsTableWrapper {
+  overflow-x: auto;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.roundsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid #830D35;
+}
+
+.roundsTable thead th {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #830D35;
+  background: #fafafa;
+}
+
+.roundsTable thead th:first-child {
+  width: 200px;
+}
+
+.roundsTable tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+.roundsTable tbody td:first-child {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+}
+
+.roundsTable tbody td:not(:first-child) {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-align: left;
+}
+
+.roundsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
 /* Quarterly Updates Section */
 .quarterlyUpdatesSection {
   margin-top: 2rem;

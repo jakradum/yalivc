@@ -183,7 +183,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
               </div>
             </div>
 
-            {/* Investment Details Table */}
+            {/* Performance Summary Table */}
             <table className={styles.investmentDetailsTable}>
               <tbody>
                 <tr>
@@ -238,6 +238,88 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                 </p>
               </div>
             )}
+
+            {/* Investment Round Details Table - Combined: Investment Details (first round) + Follow-on Rounds */}
+            {(() => {
+              // Build combined rounds array: Investment Details as first round + investmentRounds as follow-ons
+              const allRounds = [];
+
+              // First round from Investment Details tab (if any investment data exists)
+              const hasFirstRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation || company.totalRoundSize || company.postMoneyValuation;
+              if (hasFirstRound) {
+                allRounds.push({
+                  roundName: company.fundingRound || 'Initial',
+                  investmentDate: company.investmentDate,
+                  preMoneyValuation: company.preMoneyValuation,
+                  totalRoundSize: company.totalRoundSize,
+                  postMoneyValuation: company.postMoneyValuation,
+                  yaliInvestment: company.yaliInvestmentAmount,
+                  yaliOwnership: company.yaliOwnershipPercent,
+                  coInvestors: company.coInvestors,
+                  isFirstRound: true, // Mark as coming from Investment Details
+                });
+              }
+
+              // Follow-on rounds from investmentRounds array
+              if (company.investmentRounds?.length > 0) {
+                allRounds.push(...company.investmentRounds.map(r => ({ ...r, isFirstRound: false })));
+              }
+
+              // Only show section if there's round data
+              if (allRounds.length === 0) return null;
+
+              return (
+                <div className={styles.roundMetricsSection}>
+                  <h3 className={styles.companyAboutTitle}>Investment round details</h3>
+
+                  <div className={styles.roundsTableWrapper}>
+                    <table className={styles.roundsTable}>
+                      <thead>
+                        <tr>
+                          <th></th>
+                          {allRounds.map((round, idx) => (
+                            <th key={idx}>{formatRound(round.roundName)}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Pre-money valuation</td>
+                          {allRounds.map((round, idx) => (
+                            <td key={idx}>{round.preMoneyValuation ? formatCurrency(round.preMoneyValuation) : '-'}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td>Total investment</td>
+                          {allRounds.map((round, idx) => (
+                            <td key={idx}>{round.totalRoundSize ? formatCurrency(round.totalRoundSize) : '-'}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td>Post-money valuation</td>
+                          {allRounds.map((round, idx) => (
+                            <td key={idx}>{round.postMoneyValuation ? formatCurrency(round.postMoneyValuation) : '-'}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td>Yali's investment</td>
+                          {allRounds.map((round, idx) => (
+                            <td key={idx}>{round.yaliInvestment ? formatCurrency(round.yaliInvestment) : '-'}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td>Yali's ownership in %</td>
+                          {allRounds.map((round, idx) => (
+                            <td key={idx}>{round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'}</td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                </div>
+              );
+            })()}
 
             {/* Quarterly Updates Section */}
             <div className={styles.quarterlyUpdatesSection}>
