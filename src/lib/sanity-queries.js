@@ -752,7 +752,16 @@ export async function getLPFundSettings() {
       additionalContacts,
       website,
       "logoLight": logoLight.asset->url,
-      "logoDark": logoDark.asset->url
+      "logoDark": logoDark.asset->url,
+      // Performance metrics from Sanity
+      amountDrawnDown,
+      totalInvested,
+      fairMarketValue,
+      portfolioCompanies,
+      amountReturned,
+      moic,
+      tvpi,
+      dpi
     }`
   );
 }

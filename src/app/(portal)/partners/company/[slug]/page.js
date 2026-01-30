@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs } from '@/lib/sanity-queries';
+import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport } from '@/lib/sanity-queries';
 import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 60;
@@ -34,11 +34,20 @@ export async function generateMetadata({ params }) {
 
 export default async function CompanyPage({ params }) {
   const { slug } = await params;
-  const company = await getLPInvestmentByCompanySlug(slug);
+  const [company, latestReport] = await Promise.all([
+    getLPInvestmentByCompanySlug(slug),
+    getLatestLPQuarterlyReport(),
+  ]);
 
   if (!company) {
     notFound();
   }
 
-  return <CompanyDetailClient company={company} />;
+  // Get current report period
+  const currentReportPeriod = {
+    quarter: latestReport?.quarter || 'Q3',
+    fiscalYear: latestReport?.fiscalYear || 'FY26',
+  };
+
+  return <CompanyDetailClient company={company} currentReportPeriod={currentReportPeriod} />;
 }

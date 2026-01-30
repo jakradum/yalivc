@@ -10,6 +10,7 @@ export default {
     { name: 'strategy', title: 'Strategy' },
     { name: 'contacts', title: 'Contacts' },
     { name: 'branding', title: 'Branding' },
+    { name: 'performance', title: 'Current Performance' },
   ],
 
   fields: [
@@ -77,6 +78,58 @@ export default {
       title: 'Target Fund Size ($ Million)',
       type: 'number',
       group: 'fundSize'
+    },
+    {
+      name: 'amountDrawnDown',
+      title: 'Amount Drawn Down as per Bank',
+      type: 'number',
+      group: 'performance',
+      description: 'Total capital drawn from LPs'
+    },
+    {
+      name: 'totalInvested',
+      title: 'Total Invested in Portfolio',
+      type: 'number',
+      group: 'performance',
+      description: 'Capital actually deployed into companies'
+    },
+    {
+      name: 'fairMarketValue',
+      title: 'Fair Market Value (FMV)',
+      type: 'number',
+      group: 'performance',
+      description: 'FMV including realised value'
+    },
+    {
+      name: 'portfolioCompanies',
+      title: 'Number of Portfolio Companies',
+      type: 'number',
+      group: 'performance'
+    },
+    {
+      name: 'amountReturned',
+      title: 'Amount Returned',
+      type: 'number',
+      group: 'performance',
+      description: 'Including passive income returned'
+    },
+    {
+      name: 'moic',
+      title: 'MOIC',
+      type: 'string', // String allows "0.00x" formatting, or use number
+      group: 'performance'
+    },
+    {
+      name: 'tvpi',
+      title: 'TVPI',
+      type: 'string',
+      group: 'performance'
+    },
+    {
+      name: 'dpi',
+      title: 'DPI',
+      type: 'string',
+      group: 'performance'
     },
 
     // STRATEGY

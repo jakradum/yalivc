@@ -10,7 +10,7 @@ import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company }) {
+export default function CompanyDetailClient({ company, currentReportPeriod }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -50,8 +50,41 @@ export default function CompanyDetailClient({ company }) {
     return round.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const latestQuarter = company.latestQuarter || company.quarterlyUpdates?.[0];
-  const previousQuarters = company.quarterlyUpdates?.slice(1) || [];
+  // Helper to render update notes - converts line breaks to bullets if multiple lines
+  const renderUpdateNotes = (notes) => {
+    if (!notes) return null;
+
+    // Split by line breaks and filter out empty lines
+    const lines = notes.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
+
+    // If single line, render as paragraph
+    if (lines.length === 1) {
+      return <p className={styles.quarterUpdateNotes}>{lines[0]}</p>;
+    }
+
+    // If multiple lines, render as bullet list
+    return (
+      <ul className={styles.quarterUpdateHighlights}>
+        {lines.map((line, idx) => (
+          <li key={idx}>{line}</li>
+        ))}
+      </ul>
+    );
+  };
+
+  // Find quarterly update matching the current report period
+  const allQuarterlyUpdates = company.quarterlyUpdates || [];
+  const currentQuarterUpdate = allQuarterlyUpdates.find(
+    q => q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear
+  );
+
+  // Previous quarters = all quarters that are NOT the current report period
+  const previousQuarters = allQuarterlyUpdates.filter(
+    q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear)
+  );
+
+  // For FMV display in investment table, use current quarter data if available, else most recent
+  const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
 
   // Menu items matching the main portal
   const menuItems = [
@@ -95,7 +128,7 @@ export default function CompanyDetailClient({ company }) {
         </div>
         <div className={styles.headerRight}>
           <span className={styles.quarterLabel}>
-            {latestQuarter?.quarter} {latestQuarter?.fiscalYear}
+            {currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}
           </span>
         </div>
       </header>
@@ -207,16 +240,17 @@ export default function CompanyDetailClient({ company }) {
             )}
 
             {/* Quarterly Updates Section */}
-            {latestQuarter && (
-              <div className={styles.quarterlyUpdatesSection}>
-                <h2 className={styles.quarterlyUpdatesTitle}>
-                  Quarterly Updates for {latestQuarter.quarter} {latestQuarter.fiscalYear}
-                </h2>
+            <div className={styles.quarterlyUpdatesSection}>
+              <h2 className={styles.quarterlyUpdatesTitle}>
+                Quarterly Updates for {currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}
+              </h2>
 
+              {currentQuarterUpdate ? (
+                /* Show current quarter data if it exists */
                 <div className={styles.currentQuarterUpdate}>
                   <div className={styles.quarterUpdateHeader}>
                     <span className={styles.quarterUpdatePeriod}>
-                      {latestQuarter.quarter} {latestQuarter.fiscalYear}
+                      {currentQuarterUpdate.quarter} {currentQuarterUpdate.fiscalYear}
                     </span>
                   </div>
 
@@ -224,82 +258,122 @@ export default function CompanyDetailClient({ company }) {
                     <div className={styles.quarterUpdateMetric}>
                       <span className={styles.quarterUpdateMetricLabel}>FMV</span>
                       <span className={styles.quarterUpdateMetricValue}>
-                        ₹{formatCurrency(latestQuarter.currentFMV)} Cr
+                        ₹{formatCurrency(currentQuarterUpdate.currentFMV)} Cr
                       </span>
                     </div>
                     <div className={styles.quarterUpdateMetric}>
                       <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
                       <span className={styles.quarterUpdateMetricValue}>
-                        {latestQuarter.multipleOfInvestment?.toFixed(2) || '1.00'}x
+                        {currentQuarterUpdate.multipleOfInvestment?.toFixed(2) || '1.00'}x
                       </span>
                     </div>
-                    {latestQuarter.revenueINR && (
+                    {currentQuarterUpdate.revenueINR && (
                       <div className={styles.quarterUpdateMetric}>
                         <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
                         <span className={styles.quarterUpdateMetricValue}>
-                          ₹{formatCurrency(latestQuarter.revenueINR)} Cr
+                          ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
                         </span>
                       </div>
                     )}
-                    {latestQuarter.teamSize && (
+                    {currentQuarterUpdate.teamSize && (
                       <div className={styles.quarterUpdateMetric}>
                         <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
                         <span className={styles.quarterUpdateMetricValue}>
-                          {latestQuarter.teamSize}
+                          {currentQuarterUpdate.teamSize}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {latestQuarter.updateNotes && (
-                    <p className={styles.quarterUpdateNotes}>{latestQuarter.updateNotes}</p>
-                  )}
+                  {renderUpdateNotes(currentQuarterUpdate.updateNotes)}
 
-                  {latestQuarter.highlights?.length > 0 && (
+                  {currentQuarterUpdate.highlights?.length > 0 && (
                     <ul className={styles.quarterUpdateHighlights}>
-                      {latestQuarter.highlights.map((highlight, idx) => (
+                      {currentQuarterUpdate.highlights.map((highlight, idx) => (
                         <li key={idx}>{highlight}</li>
                       ))}
                     </ul>
                   )}
                 </div>
+              ) : (
+                /* No data for current quarter */
+                <div className={styles.noQuarterUpdate}>
+                  <p className={styles.noQuarterUpdateText}>
+                    No updates entered for {currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}
+                  </p>
+                </div>
+              )}
 
-                {/* Previous Quarters (Collapsed) */}
-                {previousQuarters.length > 0 && (
-                  <div className={styles.previousQuartersSection}>
-                    <button
-                      className={styles.previousQuartersToggle}
-                      onClick={() => setShowPreviousQuarters(!showPreviousQuarters)}
-                    >
-                      <span className={`${styles.previousQuartersArrow} ${showPreviousQuarters ? styles.previousQuartersArrowOpen : ''}`}>
-                        ▼
-                      </span>
-                      Previous Quarters ({previousQuarters.length})
-                    </button>
+              {/* Previous Quarters (Collapsed) */}
+              {previousQuarters.length > 0 && (
+                <div className={styles.previousQuartersSection}>
+                  <button
+                    className={styles.previousQuartersToggle}
+                    onClick={() => setShowPreviousQuarters(!showPreviousQuarters)}
+                  >
+                    <span className={`${styles.previousQuartersArrow} ${showPreviousQuarters ? styles.previousQuartersArrowOpen : ''}`}>
+                      ▼
+                    </span>
+                    Previous Quarters ({previousQuarters.length})
+                  </button>
 
-                    {showPreviousQuarters && (
-                      <div className={styles.previousQuartersList}>
-                        {previousQuarters.map((quarter, idx) => (
-                          <div key={idx} className={styles.previousQuarterItem}>
-                            <div className={styles.previousQuarterHeader}>
-                              <span className={styles.previousQuarterPeriod}>
-                                {quarter.quarter} {quarter.fiscalYear}
-                              </span>
-                              <span className={styles.previousQuarterFMV}>
-                                FMV: ₹{formatCurrency(quarter.currentFMV)} Cr
+                  {showPreviousQuarters && (
+                    <div className={styles.previousQuartersList}>
+                      {previousQuarters.map((quarter, idx) => (
+                        <div key={idx} className={styles.previousQuarterItem}>
+                          <div className={styles.previousQuarterHeader}>
+                            <span className={styles.previousQuarterPeriod}>
+                              {quarter.quarter} {quarter.fiscalYear}
+                            </span>
+                          </div>
+
+                          <div className={styles.quarterUpdateMetrics}>
+                            <div className={styles.quarterUpdateMetric}>
+                              <span className={styles.quarterUpdateMetricLabel}>FMV</span>
+                              <span className={styles.quarterUpdateMetricValue}>
+                                ₹{formatCurrency(quarter.currentFMV)} Cr
                               </span>
                             </div>
-                            {quarter.updateNotes && (
-                              <p className={styles.previousQuarterNotes}>{quarter.updateNotes}</p>
+                            <div className={styles.quarterUpdateMetric}>
+                              <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
+                              <span className={styles.quarterUpdateMetricValue}>
+                                {quarter.multipleOfInvestment?.toFixed(2) || '1.00'}x
+                              </span>
+                            </div>
+                            {quarter.revenueINR && (
+                              <div className={styles.quarterUpdateMetric}>
+                                <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
+                                <span className={styles.quarterUpdateMetricValue}>
+                                  ₹{formatCurrency(quarter.revenueINR)} Cr
+                                </span>
+                              </div>
+                            )}
+                            {quarter.teamSize && (
+                              <div className={styles.quarterUpdateMetric}>
+                                <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
+                                <span className={styles.quarterUpdateMetricValue}>
+                                  {quarter.teamSize}
+                                </span>
+                              </div>
                             )}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+
+                          {renderUpdateNotes(quarter.updateNotes)}
+
+                          {quarter.highlights?.length > 0 && (
+                            <ul className={styles.quarterUpdateHighlights}>
+                              {quarter.highlights.map((highlight, hIdx) => (
+                                <li key={hIdx}>{highlight}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Website Link */}
             {company.link && (
