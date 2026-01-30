@@ -611,6 +611,12 @@
   transition: color 0.2s ease;
 }
 
+/* Footer wrapper - higher z-index than sidebar to cover it */
+.footerWrapper {
+  position: relative;
+  z-index: 45; /* Higher than sidebar (40) to cover it when scrolling */
+}
+
 /* Footer */
 .portalFooter {
   background-color: #1a1a1a;
@@ -650,25 +656,32 @@
 
 /* ===== SIDEBAR LAYOUT ===== */
 .portalLayout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: calc(100vh - 64px - 80px);
-  align-items: start;
+  display: flex;
+  min-height: calc(100vh - 64px);
 }
 
+/* Fixed sidebar - extends to top, goes under navbar */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 240px;
   background-color: white;
   border-right: 1px solid #363636;
-  padding: 2rem 0;
-  position: sticky;
-  top: 64px;
-  height: calc(100vh - 64px);
-  max-height: calc(100vh - 64px);
+  z-index: 40; /* Below navbar (z-index: 50) */
   overflow-y: auto;
-  align-self: stretch;
+  transition: transform 0.3s ease;
+  padding-top: 64px; /* Account for navbar height */
+}
+
+/* Spacer no longer needed - mainArea has fixed padding */
+.sidebarSpacer {
+  display: none;
 }
 
 .sidebarNav {
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
 }
@@ -954,22 +967,23 @@
 }
 
 /* Collapsed sidebar state */
-.sidebarCollapsed {
-  grid-template-columns: 0 1fr;
+.sidebarCollapsed .sidebar {
+  transform: translateX(-100%) !important; /* Override JS transform when collapsed */
 }
+
+/* sidebarSpacer is hidden, no collapsed state needed */
 
 .sidebarHidden {
-  width: 0;
-  padding: 0;
-  overflow: hidden;
-  border-right: none;
+  transform: translateX(-100%) !important; /* Override JS transform when hidden */
 }
 
-/* Main Content Area */
+/* Main Content Area - fixed position regardless of sidebar state */
 .mainArea {
+  flex: 1;
   background-color: #efefef;
   padding: 2rem 3rem;
-  overflow-y: auto;
+  padding-left: calc(240px + 3rem); /* Sidebar width + standard padding - fixed position */
+  min-height: calc(100vh - 64px);
 }
 
 /* Cover Note Section */
@@ -1618,6 +1632,20 @@
   background-color: #f0f0f0;
 }
 
+/* Clickable table rows */
+.clickableRow {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clickableRow:hover {
+  background-color: #830D35 !important;
+}
+
+.clickableRow:hover td {
+  color: white !important;
+}
+
 .portfolioTable td {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.8125rem;
@@ -1643,8 +1671,12 @@
 }
 
 @media (max-width: 1024px) {
-  .portalLayout {
-    grid-template-columns: 200px 1fr;
+  .sidebar {
+    width: 200px;
+  }
+
+  .mainArea {
+    padding-left: calc(200px + 2rem); /* Match tablet sidebar width */
   }
 
   .statsGrid {
@@ -1670,29 +1702,16 @@
 
 @media (max-width: 768px) {
   .portalLayout {
-    grid-template-columns: 180px 1fr;
-  }
-
-  .portalLayout.sidebarCollapsed {
-    grid-template-columns: 0 1fr;
+    display: block;
   }
 
   .sidebar {
-    position: fixed;
-    left: 0;
-    top: 64px;
-    height: calc(100vh - 64px);
-    z-index: 100;
-    transition: transform 0.3s ease, width 0.3s ease;
-  }
-
-  .sidebarHidden {
-    transform: translateX(-100%);
+    width: 240px;
   }
 
   .mainArea {
     padding: 1rem;
-    grid-column: 1 / -1;
+    padding-left: 1rem; /* No sidebar offset on mobile */
   }
 
   .coverNoteSection,
@@ -2345,6 +2364,28 @@
 }
 
 /* ===== COMPANY DETAIL PAGE ===== */
+/* Company page main area - consistent left spacing to match portal with sidebar */
+.companyMainArea {
+  flex: 1;
+  background-color: #efefef;
+  padding: 2rem 3rem;
+  padding-left: calc(240px + 3rem); /* Sidebar width + standard padding */
+  min-height: calc(100vh - 64px);
+}
+
+@media (max-width: 1024px) {
+  .companyMainArea {
+    padding-left: calc(200px + 2rem); /* Match tablet sidebar width */
+  }
+}
+
+@media (max-width: 768px) {
+  .companyMainArea {
+    padding: 1rem;
+    padding-left: 1rem; /* No sidebar offset on mobile */
+  }
+}
+
 .companyDetailSection {
   max-width: 900px;
 }

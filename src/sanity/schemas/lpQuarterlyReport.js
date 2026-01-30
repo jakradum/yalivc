@@ -6,6 +6,7 @@ export default {
   groups: [
     { name: 'meta', title: 'Report Info' },
     { name: 'coverNote', title: 'Cover Note' },
+    { name: 'commentary', title: 'Commentary Sections' },
     { name: 'portfolio', title: 'Portfolio' },
     { name: 'pipeline', title: 'Pipeline' },
     { name: 'media', title: 'Media' },
@@ -116,6 +117,72 @@ export default {
       to: [{ type: 'teamMember' }],
       group: 'coverNote',
       description: 'Team member who signs the cover note'
+    },
+
+    // ===== COMMENTARY SECTIONS =====
+    {
+      name: 'commentarySections',
+      title: 'Commentary Sections',
+      type: 'array',
+      group: 'commentary',
+      description: 'Add custom commentary sections with your own headers. These can be placed anywhere in the report.',
+      of: [{
+        type: 'object',
+        name: 'commentarySection',
+        title: 'Commentary Section',
+        fields: [
+          {
+            name: 'sectionHeader',
+            title: 'Section Header',
+            type: 'string',
+            description: 'Custom header for this commentary section (e.g., "Market Outlook", "Strategic Updates")',
+            validation: Rule => Rule.required()
+          },
+          {
+            name: 'placement',
+            title: 'Placement',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'After Fund Summary', value: 'after-fund-summary' },
+                { title: 'After Portfolio Summary', value: 'after-portfolio-summary' },
+                { title: 'After Portfolio Updates', value: 'after-portfolio-updates' },
+                { title: 'After Pipeline', value: 'after-pipeline' },
+                { title: 'After Media Coverage', value: 'after-media' },
+                { title: 'Before Contact Information', value: 'before-contact' }
+              ]
+            },
+            description: 'Where should this section appear in the report?'
+          },
+          {
+            name: 'content',
+            title: 'Content',
+            type: 'array',
+            of: [{ type: 'block' }],
+            description: 'Long-form text content for this section'
+          }
+        ],
+        preview: {
+          select: {
+            title: 'sectionHeader',
+            placement: 'placement'
+          },
+          prepare({ title, placement }) {
+            const placementLabels = {
+              'after-fund-summary': 'After Fund Summary',
+              'after-portfolio-summary': 'After Portfolio Summary',
+              'after-portfolio-updates': 'After Portfolio Updates',
+              'after-pipeline': 'After Pipeline',
+              'after-media': 'After Media Coverage',
+              'before-contact': 'Before Contact'
+            }
+            return {
+              title: title || 'Untitled Section',
+              subtitle: placementLabels[placement] || 'No placement set'
+            }
+          }
+        }
+      }]
     },
 
     // ===== PORTFOLIO (References only) =====

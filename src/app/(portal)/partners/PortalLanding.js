@@ -1,12 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Lightlogo } from '../../components/icons/lightlogo';
 import { Graphicfg } from '../../components/icons/background svgs/graphicfg';
 import styles from './partners.module.css';
 
+const SESSION_KEY = 'yali-portal-entered';
+
 export default function PortalLanding({ children }) {
   const [entered, setEntered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check sessionStorage on mount
+  useEffect(() => {
+    const hasEntered = sessionStorage.getItem(SESSION_KEY) === 'true';
+    if (hasEntered) {
+      setEntered(true);
+    }
+    setIsLoading(false);
+  }, []);
+
+  // Handle enter button click
+  const handleEnter = () => {
+    sessionStorage.setItem(SESSION_KEY, 'true');
+    setEntered(true);
+  };
+
+  // Show minimal loading state while checking session (prevents flash of landing page)
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#efefef' }} />
+    );
+  }
 
   if (entered) {
     return children;
@@ -42,7 +67,7 @@ export default function PortalLanding({ children }) {
         {/* Enter button */}
         <button
           className={styles.landingButton}
-          onClick={() => setEntered(true)}
+          onClick={handleEnter}
         >
           Click to Enter
         </button>

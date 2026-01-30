@@ -9,6 +9,7 @@ import { Lightlogo } from '../../components/icons/lightlogo';
 import { Openicon } from '../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../components/icons/small icons/closeicon';
 import { PortableText } from '@portabletext/react';
+import Footer from '../../components/footer';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -27,7 +28,7 @@ const getFiscalYearNumber = (fy) => {
 
 // Calculate the "As of" date from quarter and fiscal year
 const calculateAsOfDate = (quarter, fiscalYear) => {
-  if (!quarter || !fiscalYear) return 'December 2025';
+  if (!quarter || !fiscalYear) return null;
   const month = QUARTER_END_MONTHS[quarter];
   const fyNum = getFiscalYearNumber(fiscalYear);
   // Indian FY26 runs Apr 2025 - Mar 2026
@@ -147,14 +148,8 @@ function PortalContentInner({
   const menuItems = [
     { id: 'cover-note', label: 'Cover note' },
     { id: 'fund-summary', label: 'Fund summary' },
-    {
-      id: 'portfolio-investments',
-      label: 'Portfolio investments',
-      children: [
-        { id: 'portfolio-investment-summary', label: 'Portfolio investment summary' },
-        { id: 'portfolio-company-updates', label: 'Portfolio company updates' },
-      ]
-    },
+    { id: 'portfolio-investment-summary', label: 'Portfolio investment summary' },
+    { id: 'portfolio-company-updates', label: 'Portfolio company updates' },
     { id: 'fund-financials', label: 'Fund financials' },
     { id: 'pipeline-summary', label: 'Pipeline summary' },
     { id: 'media-coverage', label: 'Media coverage' },
@@ -270,7 +265,7 @@ function PortalContentInner({
 
       {/* Main Layout with Sidebar */}
       <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''}`}>
-        {/* Sidebar */}
+        {/* Fixed Sidebar */}
         <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
           <nav className={styles.sidebarNav}>
             <ul className={styles.menuList}>
@@ -308,6 +303,9 @@ function PortalContentInner({
           </nav>
         </aside>
 
+        {/* Spacer to push content (since sidebar is fixed) */}
+        <div className={styles.sidebarSpacer}></div>
+
         {/* Main Content */}
         <main className={styles.mainArea}>
           {/* Cover Note Section */}
@@ -319,20 +317,24 @@ function PortalContentInner({
                   <Lightlogo />
                 </div>
                 <div className={styles.letterheadInfo}>
-                  <span className={styles.letterheadName}>{fundSettings?.fundManagerName || 'Yali Partners LLP'}</span>
-                  <span className={styles.letterheadDescriptor}>{fundSettings?.fundManagerDescriptor || 'Investment Manager - Deep Tech Focus'}</span>
+                  <span className={styles.letterheadName}>{fundSettings?.fundManagerName || '-'}</span>
+                  <span className={styles.letterheadDescriptor}>{fundSettings?.fundManagerDescriptor || '-'}</span>
                 </div>
               </div>
 
               {/* Date */}
-              <div className={styles.letterDate}>
-                {calculatedAsOfDate}
-              </div>
+              {calculatedAsOfDate && (
+                <div className={styles.letterDate}>
+                  {calculatedAsOfDate}
+                </div>
+              )}
 
               {/* Greeting */}
-              <div className={styles.letterGreeting}>
-                {report?.coverNoteGreeting || 'Dear Partners,'}
-              </div>
+              {report?.coverNoteGreeting && (
+                <div className={styles.letterGreeting}>
+                  {report.coverNoteGreeting}
+                </div>
+              )}
 
               <div className={styles.coverNoteContent}>
                 {report?.coverNoteIntro && report.coverNoteIntro.length > 0 && (
@@ -379,21 +381,25 @@ function PortalContentInner({
               </div>
 
               {/* Author Attribution */}
-              <div className={styles.coverNoteAuthor}>
-                <div className={styles.authorPhoto}>
-                  <Image
-                    src={gani?.photo || '/images/gani.webp'}
-                    alt={gani?.name || 'Gani'}
-                    width={80}
-                    height={80}
-                    style={{ objectFit: 'cover' }}
-                  />
+              {(gani?.photo || gani?.name) && (
+                <div className={styles.coverNoteAuthor}>
+                  {gani?.photo && (
+                    <div className={styles.authorPhoto}>
+                      <Image
+                        src={gani.photo}
+                        alt={gani?.name || 'Signatory'}
+                        width={80}
+                        height={80}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
+                  )}
+                  <div className={styles.authorInfo}>
+                    {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
+                    {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
+                  </div>
                 </div>
-                <div className={styles.authorInfo}>
-                  <p className={styles.authorName}>{gani?.name || "Ganapathy 'Gani' Subramaniam"}</p>
-                  <p className={styles.authorRole}>{gani?.role || 'Founding Managing Partner'}</p>
-                </div>
-              </div>
+              )}
             </section>
           )}
 
@@ -403,9 +409,11 @@ function PortalContentInner({
               <div className={styles.fundSummaryContent}>
                 {/* Title */}
                 <h1 className={styles.fundSummaryTitle}>Fund Summary</h1>
-                <p className={styles.fundSummarySubtitle}>
-                  Combined size of both funds at final close: ₹{fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose || 893} crore
-                </p>
+                {(fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose) && (
+                  <p className={styles.fundSummarySubtitle}>
+                    Combined size of both funds at final close: ₹{fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose} crore
+                  </p>
+                )}
 
                 {/* View Toggle */}
                 <div className={styles.viewToggle}>
@@ -427,34 +435,45 @@ function PortalContentInner({
                   <div className={styles.chartContainer}>
                     {/* Dates Row */}
                     <div className={styles.chartDatesRow}>
-                      <div className={styles.chartDateItem}>
-                        <span className={styles.chartDateLabel}>As of</span>
-                        <span className={styles.chartDateValue}>{calculatedAsOfDate}</span>
-                      </div>
-                      <div className={styles.chartDateItem}>
-                        <span className={styles.chartDateLabel}>First close date</span>
-                        <span className={styles.chartDateValue}>
-                          {fundSettings?.firstCloseDate
-                            ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                            : "15 Jul '24"}
-                        </span>
-                      </div>
-                      <div className={styles.chartDateItem}>
-                        <span className={styles.chartDateLabel}>Final close date</span>
-                        <span className={styles.chartDateValue}>
-                          {fundSettings?.finalCloseDate
-                            ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                            : "14 Jul '25"}
-                        </span>
-                      </div>
+                      {calculatedAsOfDate && (
+                        <div className={styles.chartDateItem}>
+                          <span className={styles.chartDateLabel}>As of</span>
+                          <span className={styles.chartDateValue}>{calculatedAsOfDate}</span>
+                        </div>
+                      )}
+                      {fundSettings?.firstCloseDate && (
+                        <div className={styles.chartDateItem}>
+                          <span className={styles.chartDateLabel}>First close date</span>
+                          <span className={styles.chartDateValue}>
+                            {new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
+                          </span>
+                        </div>
+                      )}
+                      {fundSettings?.finalCloseDate && (
+                        <div className={styles.chartDateItem}>
+                          <span className={styles.chartDateLabel}>Final close date</span>
+                          <span className={styles.chartDateValue}>
+                            {new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Pie Chart */}
                     <div className={styles.pieChartContainer}>
                       {(() => {
-                        const fundSize = fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose || 879.44;
-                        const amountDrawn = fundMetrics?.amountDrawnDown || 204.37;
-                        const totalInvested = fundMetrics?.totalInvestedInPortfolio || 162.62;
+                        const fundSize = fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose;
+                        const amountDrawn = fundMetrics?.amountDrawnDown;
+                        const totalInvested = fundMetrics?.totalInvestedInPortfolio;
+
+                        // Don't render chart if no data
+                        if (!fundSize || !amountDrawn || !totalInvested) {
+                          return (
+                            <p className={styles.noContentMessage}>
+                              Fund metrics will appear here once data is added in Sanity CMS.
+                            </p>
+                          );
+                        }
 
                         // Calculate segments
                         const undrawnCapital = fundSize - amountDrawn;
@@ -571,7 +590,7 @@ function PortalContentInner({
                   <table className={styles.fundTable}>
                     <thead className={styles.fundTableHeader}>
                       <tr>
-                        <th>As of {calculatedAsOfDate}</th>
+                        <th>As of {calculatedAsOfDate || '-'}</th>
                         <th>Amount in ₹ crores</th>
                       </tr>
                     </thead>
@@ -656,10 +675,15 @@ function PortalContentInner({
                   <tbody>
                     {investments && investments.length > 0 ? (
                       investments.map((investment, idx) => (
-                        <tr key={investment._id || idx}>
+                        <tr
+                          key={investment._id || idx}
+                          className={styles.clickableRow}
+                          onClick={() => router.push(`/partners/company/${investment.slug}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <td>{idx + 1}</td>
                           <td className={styles.companyNameCell}>
-                            {investment.name || 'Unknown Company'}
+                            {investment.name || '-'}
                           </td>
                           <td>{investment.sector || '-'}</td>
                           <td>
@@ -689,7 +713,7 @@ function PortalContentInner({
                   {(() => {
                     const chartData = investments
                       .map(inv => ({
-                        name: inv.name || 'Unknown',
+                        name: inv.name || '-',
                         sector: inv.sector || '-',
                         value: inv.yaliInvestmentAmount || 0,
                         slug: inv.slug
@@ -767,10 +791,18 @@ function PortalContentInner({
                 </div>
               )}
 
+            </section>
+          )}
+
+          {activeSection === 'portfolio-company-updates' && (
+            <section className={`${styles.contentSection} ${styles.portfolioHubSection}`}>
+              <div className={styles.sectionHeader}>
+                <h1 className={styles.sectionPageTitle}>Portfolio Company Updates</h1>
+              </div>
+
               {/* Company Tiles */}
-              {investments && investments.length > 0 && (
+              {investments && investments.length > 0 ? (
                 <div className={styles.companyTilesSection}>
-                  <h3 className={styles.companyTilesTitle}>Portfolio Companies</h3>
                   <div className={styles.companyTilesGrid}>
                     {investments.map((company, idx) => (
                       <Link
@@ -789,7 +821,7 @@ function PortalContentInner({
                             />
                           ) : (
                             <div className={styles.companyTileLogoPlaceholder}>
-                              {company.name?.charAt(0) || '?'}
+                              {company.name?.charAt(0) || '-'}
                             </div>
                           )}
                           <div className={styles.companyTileInfo}>
@@ -797,37 +829,30 @@ function PortalContentInner({
                             <span className={styles.companyTileSector}>{company.sector || '-'}</span>
                           </div>
                         </div>
-                        <p className={styles.companyTileOneLiner}>{company.oneLiner || company.detail || 'Deep tech innovation.'}</p>
+                        <p className={styles.companyTileOneLiner}>{company.oneLiner || company.detail || '-'}</p>
                         <div className={styles.companyTileMetrics}>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Invested</span>
-                            <span className={styles.companyTileMetricValue}>₹{company.yaliInvestmentAmount?.toFixed(1) || '0'} Cr</span>
+                            <span className={styles.companyTileMetricValue}>{company.yaliInvestmentAmount ? `₹${company.yaliInvestmentAmount.toFixed(1)} Cr` : '-'}</span>
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>FMV</span>
-                            <span className={styles.companyTileMetricValue}>₹{company.latestQuarter?.currentFMV?.toFixed(1) || company.yaliInvestmentAmount?.toFixed(1) || '0'} Cr</span>
+                            <span className={styles.companyTileMetricValue}>{(company.latestQuarter?.currentFMV || company.yaliInvestmentAmount) ? `₹${(company.latestQuarter?.currentFMV || company.yaliInvestmentAmount).toFixed(1)} Cr` : '-'}</span>
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Multiple</span>
-                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.multipleOfInvestment?.toFixed(2) || '1.00'}x</span>
+                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.multipleOfInvestment ? `${company.latestQuarter.multipleOfInvestment.toFixed(2)}x` : '-'}</span>
                           </div>
                         </div>
                       </Link>
                     ))}
                   </div>
                 </div>
+              ) : (
+                <div className={styles.placeholderContent}>
+                  <p>Portfolio company updates will be displayed here once data is added in Sanity CMS.</p>
+                </div>
               )}
-            </section>
-          )}
-
-          {activeSection === 'portfolio-company-updates' && (
-            <section className={styles.contentSection}>
-              <div className={styles.sectionHeader}>
-                <h1 className={styles.sectionPageTitle}>Portfolio Company Updates</h1>
-              </div>
-              <div className={styles.placeholderContent}>
-                <p>Portfolio company updates will be displayed here once data is added in Sanity CMS.</p>
-              </div>
             </section>
           )}
 
@@ -903,18 +928,10 @@ function PortalContentInner({
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className={styles.portalFooter}>
-        <div className={styles.footerContent}>
-          <span className={styles.footerText}>
-            © {new Date().getFullYear()} Yali Capital. Confidential - For LP use only.
-          </span>
-          <div className={styles.footerLinks}>
-            <a href="https://yali.vc" className={styles.footerLink}>Main Site</a>
-            <a href={`mailto:${fundSettings?.investorRelationsEmail || 'sunil@yali.vc'}`} className={styles.footerLink}>Contact IR</a>
-          </div>
-        </div>
-      </footer>
+      {/* Footer - Main website footer (z-index higher than sidebar to cover it) */}
+      <div className={styles.footerWrapper}>
+        <Footer />
+      </div>
     </div>
   );
 }
