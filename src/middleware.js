@@ -1,6 +1,18 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-export function middleware(request) {
+// Define which routes require authentication
+const isProtectedRoute = createRouteMatcher([
+  '/partners(.*)',
+]);
+
+// Define public routes that don't need auth (sign-in page)
+const isPublicRoute = createRouteMatcher([
+  '/partners/sign-in(.*)',
+  '/sign-in(.*)',
+]);
+
+export default clerkMiddleware(async (auth, request) => {
   const hostname = request.headers.get('host') || '';
   const url = request.nextUrl.clone();
 
@@ -34,6 +46,17 @@ export function middleware(request) {
     // Rewrite clean URLs to /partners routes internally
     const rewritePath = `/partners${url.pathname === '/' ? '' : url.pathname}`;
     url.pathname = rewritePath;
+
+    // Check if this is a protected route and user is not signed in
+    if (isProtectedRoute(request) && !isPublicRoute(request)) {
+      const { userId } = await auth();
+      if (!userId) {
+        // Redirect to sign-in page on the subdomain
+        const signInUrl = new URL('/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
+
     const response = NextResponse.rewrite(url);
     response.headers.set('x-pathname', rewritePath);
     return response;
@@ -44,6 +67,17 @@ export function middleware(request) {
     // Redirect to home if trying to access partners on main domain
     url.pathname = '/';
     return NextResponse.redirect(url);
+  }
+
+  // Protect partner routes in local dev too
+  if (url.pathname.startsWith('/partners') && isLocalDev) {
+    if (isProtectedRoute(request) && !isPublicRoute(request)) {
+      const { userId } = await auth();
+      if (!userId) {
+        const signInUrl = new URL('/partners/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
   }
 
   // Block individual company and category pages on production (only allow on staging/dev)
@@ -61,7 +95,7 @@ export function middleware(request) {
   const response = NextResponse.next();
   response.headers.set('x-pathname', url.pathname);
   return response;
-}
+});
 
 export const config = {
   matcher: [
