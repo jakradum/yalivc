@@ -19,15 +19,6 @@ export default function SignUpPage() {
         <div className={styles.signInWrapper}>
           <SignUp
             appearance={{
-              elements: {
-                rootBox: styles.clerkRoot,
-                card: styles.clerkCard,
-                headerTitle: styles.clerkHeaderTitle,
-                headerSubtitle: styles.clerkHeaderSubtitle,
-                socialButtonsBlockButton: styles.clerkSocialButton,
-                formButtonPrimary: styles.clerkPrimaryButton,
-                footerActionLink: styles.clerkFooterLink,
-              },
               variables: {
                 colorPrimary: '#830D35',
                 colorBackground: '#ffffff',
@@ -36,10 +27,7 @@ export default function SignUpPage() {
                 borderRadius: '8px',
               },
             }}
-            routing="path"
-            path="/partners/sign-up"
-            signInUrl="/partners/sign-in"
-            afterSignUpUrl="/partners"
+            forceRedirectUrl="/"
           />
         </div>
       </div>
