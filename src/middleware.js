@@ -1,16 +1,5 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-
-// Define which routes require authentication
-const isProtectedRoute = createRouteMatcher([
-  '/partners(.*)',
-]);
-
-// Define public routes that don't need auth (sign-in page)
-const isPublicRoute = createRouteMatcher([
-  '/partners/sign-in(.*)',
-  '/sign-in(.*)',
-]);
 
 export default clerkMiddleware(async (auth, request) => {
   const hostname = request.headers.get('host') || '';
@@ -43,12 +32,12 @@ export default clerkMiddleware(async (auth, request) => {
       return NextResponse.redirect(url);
     }
 
-    // Rewrite clean URLs to /partners routes internally
-    const rewritePath = `/partners${url.pathname === '/' ? '' : url.pathname}`;
-    url.pathname = rewritePath;
+    // Check if this is the sign-in page (public route)
+    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
+    const isSignUpPage = url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up');
 
-    // Check if this is a protected route and user is not signed in
-    if (isProtectedRoute(request) && !isPublicRoute(request)) {
+    // Protect all routes except sign-in/sign-up
+    if (!isSignInPage && !isSignUpPage) {
       const { userId } = await auth();
       if (!userId) {
         // Redirect to sign-in page on the subdomain
@@ -56,6 +45,10 @@ export default clerkMiddleware(async (auth, request) => {
         return NextResponse.redirect(signInUrl);
       }
     }
+
+    // Rewrite clean URLs to /partners routes internally
+    const rewritePath = `/partners${url.pathname === '/' ? '' : url.pathname}`;
+    url.pathname = rewritePath;
 
     const response = NextResponse.rewrite(url);
     response.headers.set('x-pathname', rewritePath);
@@ -71,7 +64,10 @@ export default clerkMiddleware(async (auth, request) => {
 
   // Protect partner routes in local dev too
   if (url.pathname.startsWith('/partners') && isLocalDev) {
-    if (isProtectedRoute(request) && !isPublicRoute(request)) {
+    const isSignInPage = url.pathname.startsWith('/partners/sign-in');
+    const isSignUpPage = url.pathname.startsWith('/partners/sign-up');
+
+    if (!isSignInPage && !isSignUpPage) {
       const { userId } = await auth();
       if (!userId) {
         const signInUrl = new URL('/partners/sign-in', request.url);
