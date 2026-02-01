@@ -3,40 +3,40 @@ import { getTeamMembers, getAllBlogPosts } from '@/lib/sanity-queries';
 export default async function sitemap() {
   const baseUrl = 'https://yali.vc';
 
-  // Static pages
+  // Static pages - all URLs must have trailing slashes to match next.config trailingSlash: true
   const staticPages = [
     {
-      url: baseUrl,
+      url: `${baseUrl}/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: `${baseUrl}/about-yali`,
+      url: `${baseUrl}/about-yali/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/investments`,
+      url: `${baseUrl}/investments/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/newsroom`,
+      url: `${baseUrl}/newsroom/`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/contact/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/investor-relations`,
+      url: `${baseUrl}/investor-relations/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.6,
@@ -50,7 +50,7 @@ export default async function sitemap() {
     teamPages = teamMembers
       .filter(member => member.slug?.current)
       .map((member) => ({
-        url: `${baseUrl}/about-yali/${member.slug.current}`,
+        url: `${baseUrl}/about-yali/${member.slug.current}/`,
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
@@ -66,7 +66,7 @@ export default async function sitemap() {
     blogPages = posts
       .filter(post => post.slug)
       .map((post) => ({
-        url: `${baseUrl}/insights/blog/${post.slug}`,
+        url: `${baseUrl}/insights/blog/${post.slug}/`,
         lastModified: post.publishedAt ? new Date(post.publishedAt) : new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
