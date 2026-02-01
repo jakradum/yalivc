@@ -5,6 +5,13 @@ export default clerkMiddleware(async (auth, request) => {
   const hostname = request.headers.get('host') || '';
   const url = request.nextUrl.clone();
 
+  // Redirect www to non-www for SEO canonicalization
+  if (hostname.startsWith('www.')) {
+    const newUrl = new URL(request.url);
+    newUrl.host = hostname.replace('www.', '');
+    return NextResponse.redirect(newUrl, 301);
+  }
+
   // Skip middleware for static files, API routes, and console
   if (
     url.pathname.startsWith('/_next') ||
