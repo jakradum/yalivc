@@ -95,7 +95,7 @@ export default function TeamDetails({teamMembers}) {
                 <Graphicfg />
               )}
               {member.enableTeamPage && (
-                <p className={styles.viewProfileBadge}>View profile</p>
+                <p className={styles.viewProfileBadge}>View page</p>
               )}
             </div>
             <div className={styles.viewmoreButton} onClick={(e) => e.stopPropagation()}>
