@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from './detail-styles.module.css';
 import Image from 'next/image';
@@ -27,15 +27,47 @@ const TruncatedBio = ({ bio, enableTeamPage, slug }) => {
 };
 
 export default function TeamDetails({teamMembers}) {
+  const [cursorTooltip, setCursorTooltip] = useState({ visible: false, x: 0, y: 0 });
+
+  const handleMouseMove = (e, hasProfilePage) => {
+    if (hasProfilePage) {
+      setCursorTooltip({
+        visible: true,
+        x: e.clientX + 15,
+        y: e.clientY + 15
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setCursorTooltip({ visible: false, x: 0, y: 0 });
+  };
 
   return (
     <div className={styles.teamListContainer}>
+      {/* Cursor tooltip */}
+      {cursorTooltip.visible && (
+        <div
+          className={styles.cursorTooltip}
+          style={{
+            position: 'fixed',
+            left: cursorTooltip.x,
+            top: cursorTooltip.y,
+            pointerEvents: 'none',
+            zIndex: 9999
+          }}
+        >
+          Click to see profile
+        </div>
+      )}
       {teamMembers.map((member, index) => {
         const MemberWrapper = member.enableTeamPage ? Link : 'article';
         const wrapperProps = member.enableTeamPage
           ? {
               href: `/about-yali/${member.slug?.current || member.slug}`,
-              style: { textDecoration: 'none', color: 'inherit', cursor: 'pointer' }
+              style: { textDecoration: 'none', color: 'inherit', cursor: 'pointer' },
+              onMouseMove: (e) => handleMouseMove(e, true),
+              onMouseLeave: handleMouseLeave
             }
           : { style: { cursor: 'default' } };
 

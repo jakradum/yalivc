@@ -100,6 +100,7 @@
 
 .bioText p {
   margin: 0;
+  white-space: pre-line;
 }
 
 .inWordsSection {
