@@ -36,13 +36,26 @@
   background-color: #830D35;
 }
 
+/* Overlay to reduce pattern opacity */
+.photoInner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(131, 13, 53, 0.2);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .memberPhoto {
   position: relative;
   z-index: 2;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
 }
 
 /* Pattern 1 - Waves */
