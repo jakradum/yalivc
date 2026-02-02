@@ -150,19 +150,16 @@ background-color: white;
 
 .viewProfileBadge {
     display: none;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: #000;
-    margin: 0;
-    font-weight: 300;
+    margin: 0.75rem auto 0;
+    font-weight: 400;
     text-align: center;
 }
 
 @media (max-width: 768px) {
     .viewProfileBadge {
         display: block;
-        margin-top: 0.5rem;
-        position: static;
-        transform: none;
     }
 }
 
