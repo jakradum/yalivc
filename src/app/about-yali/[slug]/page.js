@@ -1,4 +1,4 @@
-import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers } from '@/lib/sanity-queries';
+import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers, getSocialUpdatesByTeamMember } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
 import teamStyles from './team-profile.module.css';
 import Breadcrumb from '../../components/breadcrumb';
@@ -34,14 +34,16 @@ export async function generateMetadata({ params }) {
 
 export default async function TeamMemberPage({ params }) {
   const { slug } = await params;
-  const [member, otherMembers] = await Promise.all([
-    getTeamMemberBySlug(slug),
-    getOtherTeamMembers(slug, 4)
-  ]);
+  const member = await getTeamMemberBySlug(slug);
 
   if (!member || !member.enableTeamPage) {
     notFound();
   }
+
+  const [otherMembers, featuredPosts] = await Promise.all([
+    getOtherTeamMembers(slug, 4),
+    getSocialUpdatesByTeamMember(member._id)
+  ]);
 
   // Random pattern on each server render (changes every 60s due to revalidate)
   const patternIndex = Math.floor(Math.random() * 7) + 1;
@@ -169,6 +171,51 @@ export default async function TeamMemberPage({ params }) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Featured In Section */}
+      {featuredPosts && featuredPosts.length > 0 && (
+        <div className={teamStyles.featuredInSection}>
+          <h2 className={teamStyles.sectionTitle}>Featured In</h2>
+          <div className={teamStyles.featuredPostsGrid}>
+            {featuredPosts.map((post) => (
+              <a
+                key={post._id}
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={teamStyles.featuredPostCard}
+              >
+                {post.image && (
+                  <div className={teamStyles.featuredPostImage}>
+                    <Image
+                      src={post.image}
+                      alt="Featured post"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, 300px"
+                    />
+                  </div>
+                )}
+                <div className={teamStyles.featuredPostContent}>
+                  <span className={teamStyles.featuredPostPlatform}>
+                    {post.platform === 'linkedin' ? 'LinkedIn' : post.platform === 'twitter' ? 'Twitter/X' : 'Post'}
+                  </span>
+                  <p className={teamStyles.featuredPostExcerpt}>
+                    {post.excerpt?.length > 100 ? post.excerpt.substring(0, 100) + '...' : post.excerpt}
+                  </p>
+                  <span className={teamStyles.featuredPostDate}>
+                    {new Date(post.date).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       )}
 

@@ -5,6 +5,7 @@ import category from './schemas/category'
 import sector from './schemas/sector'
 import investmentPhilosophy from './schemas/investmentPhilosophy'
 import faq from './schemas/faq'
+import socialUpdate from './schemas/socialUpdate'
 import publication from './schemas/publication'
 import blogPost from './schemas/blogPost'
 import newsletter from './schemas/newsletter'
@@ -30,6 +31,7 @@ export const schemaTypes = [
   category,
   investmentPhilosophy,
   faq,
+  socialUpdate,
   publication,
   blogPost,
   newsletter,

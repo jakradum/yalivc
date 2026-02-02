@@ -182,6 +182,44 @@ export async function getFAQs(type) {
   );
 }
 
+export async function getSocialUpdates(limit = 6) {
+  return client.fetch(
+    `*[_type == "socialUpdate" && featured == true] | order(date desc) [0...$limit] {
+      _id,
+      platform,
+      url,
+      "image": image.asset->url,
+      excerpt,
+      date,
+      featuredTeamMember->{
+        _id,
+        name,
+        "slug": slug.current
+      },
+      featuredCompany->{
+        _id,
+        name,
+        "slug": slug.current
+      }
+    }`,
+    { limit }
+  );
+}
+
+export async function getSocialUpdatesByTeamMember(teamMemberId) {
+  return client.fetch(
+    `*[_type == "socialUpdate" && featuredTeamMember._ref == $teamMemberId] | order(date desc) {
+      _id,
+      platform,
+      url,
+      "image": image.asset->url,
+      excerpt,
+      date
+    }`,
+    { teamMemberId }
+  );
+}
+
 // UNIFIED CONTENT QUERIES (News + Blogs)
 export async function getContentByCompany(companySlug) {
   const news = await client.fetch(

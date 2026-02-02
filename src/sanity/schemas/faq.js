@@ -22,6 +22,7 @@ const faq = {
       type: 'string',
       options: {
         list: [
+          { title: 'Homepage FAQs', value: 'homepage' },
           { title: 'Contact Page - Pitch FAQs', value: 'pitch' },
           { title: 'About Page - Company FAQs', value: 'company' },
         ],

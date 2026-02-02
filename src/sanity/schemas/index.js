@@ -8,6 +8,8 @@ import teamMember from './teamMember'
 import sector from './sector'
 import investmentPhilosophy from './investmentPhilosophy'
 import newsletter from './newsletter'
+import faq from './faq'
+import socialUpdate from './socialUpdate'
 import {
   openingNoteSection,
   essaySection,
@@ -46,5 +48,8 @@ export const schemaTypes = [
   // LP Portal
   lpQuarterlyReport,
   lpFundSettings,
-  lpPipelineDeal
+  lpPipelineDeal,
+  // Homepage sections
+  faq,
+  socialUpdate
 ]

@@ -42,6 +42,7 @@ export default defineConfig({
                     S.listItem().title('Blog Posts').child(S.documentTypeList('blogPost').title('Blog Posts')),
                     S.listItem().title('Newsletter (Tattva)').child(S.documentTypeList('newsletter').title('Newsletters')),
                     S.listItem().title('News Articles').child(S.documentTypeList('news').title('News')),
+                    S.listItem().title('Social Updates').child(S.documentTypeList('socialUpdate').title('Social Updates')),
                     S.listItem().title('Publications').child(S.documentTypeList('publication').title('Publications')),
                     S.listItem().title('FAQ').child(S.documentTypeList('faq').title('FAQ')),
                   ])
