@@ -137,8 +137,16 @@ background-color: white;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    margin: 0 auto;
+    margin: 1rem auto 0; /* Top padding between photo and border */
     position: relative;
+    order: -1; /* Photo appears first on desktop */
+}
+
+@media (max-width: 768px) {
+    .memberImage {
+        order: 0; /* Reset to normal order on mobile */
+        margin: 0 auto; /* Remove top margin on mobile */
+    }
 }
 
 .memberImage img {
