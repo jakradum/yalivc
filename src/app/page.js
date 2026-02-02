@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { getCompanies, getNews, getTeamMembers, getCategories } from '@/lib/sanity-queries';
+import { getCompanies, getNews, getTeamMembers, getCategories, getSocialUpdates, getFAQs } from '@/lib/sanity-queries';
 import landingStyles from './landing page styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
@@ -15,6 +15,8 @@ import companyStyles from './landing page styles/companies.module.css';
 import CompanyGrid from './components/companygrid';
 import NewsSection from './components/newssection.js';
 import TeamsLPComponent from './components/teams LP component';
+import SocialUpdates from './components/socialupdates';
+import FAQSection from './components/faqsection';
 import Button from './components/button';
 
 export const revalidate = 60;
@@ -46,10 +48,14 @@ const TechnologiesArticle = ({ categories }) => {
 };
 
 export default async function HomePage() {
-  const companies = await getCompanies();
-  const news = await getNews();
-  const sanityTeam = await getTeamMembers();
-  const categories = await getCategories();
+  const [companies, news, sanityTeam, categories, socialUpdates, faqs] = await Promise.all([
+    getCompanies(),
+    getNews(),
+    getTeamMembers(),
+    getCategories(),
+    getSocialUpdates(5),
+    getFAQs('homepage'),
+  ]);
 
 const team = sanityTeam;
 
@@ -108,12 +114,30 @@ const team = sanityTeam;
         <TeamsLPComponent teamMembers={team} />
       </section>
 
+      {socialUpdates && socialUpdates.length > 0 && (
+        <section>
+          <div className={companyStyles.titleSec}>
+            <HeaderFlex title="Featured" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
+          </div>
+          <SocialUpdates updates={socialUpdates} />
+        </section>
+      )}
+
       <section>
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Yali in the news" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
         </div>
         <NewsSection news={news} />
       </section>
+
+      {faqs && faqs.length > 0 && (
+        <section>
+          <div className={companyStyles.titleSec}>
+            <HeaderFlex title="Frequently asked questions" color="black" desktopMaxWidth={'50%'} mobileMaxWidth={'90%'} />
+          </div>
+          <FAQSection faqs={faqs} />
+        </section>
+      )}
     </main>
   );
 }
