@@ -34,6 +34,7 @@
   height: calc(100vh - 150px);
   max-height: 650px;
   background-color: #830D35;
+  overflow: hidden;
 }
 
 /* Overlay to reduce pattern opacity */
