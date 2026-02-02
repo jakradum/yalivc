@@ -33,7 +33,7 @@ const AccordionItem = ({ question, answer, isOpen, onToggle }) => {
 };
 
 export default function FAQSection({ faqs = [] }) {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState(1);
 
   if (!faqs || faqs.length === 0) {
     return null;

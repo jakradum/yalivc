@@ -1,16 +1,45 @@
 .faqSection {
   padding: 1rem 0 2rem;
+  position: relative;
+  min-height: 500px;
 }
 
 .accordionContainer {
-  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 3rem;
+}
+
+/* Separator line after section */
+.faqSection::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100vw;
+  height: 1px;
+  background-color: black;
+  transform: translateX(-50%);
+}
+
+.faqLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.faqTitleColumn {
+  padding: 0;
+}
+
+.faqTitle {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  margin: 0;
+  color: #000;
 }
 
 .accordionItem {
-  border-bottom: 1px solid #000;
-}
-
-.accordionItem:first-child {
   border-top: 1px solid #000;
 }
 
@@ -35,6 +64,7 @@
   font-size: 1.125rem;
   font-weight: 500;
   color: #363636;
+  padding-left: 1rem;
   padding-right: 2rem;
   transition: color 0.2s ease;
 }
@@ -50,6 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-right: 1rem;
 }
 
 .chevron {
@@ -78,7 +109,8 @@
   font-size: 1rem;
   line-height: 1.7;
   color: #565656;
-  padding-right: 3rem;
+  padding-left: 1rem;
+  padding-right: 2rem;
 }
 
 /* Open state styling */
@@ -92,6 +124,15 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .faqSection {
+    min-height: auto;
+  }
+
+  .accordionContainer {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
   .accordionHeader {
     padding: 1.25rem 0;
   }
