@@ -149,17 +149,21 @@ background-color: white;
 }
 
 .viewProfileBadge {
-    position: absolute;
-    bottom: 0.75rem;
-    left: 50%;
-    transform: translateX(-50%);
+    display: none;
     font-size: 0.65rem;
-    color: #efefef;
+    color: #000;
     margin: 0;
     font-weight: 300;
-    opacity: 0.8;
     text-align: center;
-    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .viewProfileBadge {
+        display: block;
+        margin-top: 0.5rem;
+        position: static;
+        transform: none;
+    }
 }
 
 .loadMore {
