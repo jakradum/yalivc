@@ -19,6 +19,7 @@ export const TeamsLPComponent = ({ teamMembers = [] }) => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [tableHeight, setTableHeight] = useState(0);
   const [cursorTooltip, setCursorTooltip] = useState({ visible: false, x: 0, y: 0 });
+  const [imageLoading, setImageLoading] = useState(false);
   const containerRef = useRef(null);
 
   
@@ -51,6 +52,10 @@ const finalTeam = teamMembers;
     if (isMobile) {
       setExpandedRow(expandedRow === index ? null : index);
     } else {
+      // Set loading when switching to a different member with a photo
+      if (member !== selectedMember && member.photo) {
+        setImageLoading(true);
+      }
       setSelectedMember(member);
       setSelectedIndex(index);
     }
@@ -273,7 +278,7 @@ const finalTeam = teamMembers;
           {selectedMember ? (
             <header className={styles.headerSec}>
               <div className={styles.memberImageContainer}>
-                <TeamsDefaultSVG />
+                <TeamsDefaultSVG loading={imageLoading} />
                 {selectedMember.photo ? (
                   <Image
                     loader={imageLoader}
@@ -282,7 +287,8 @@ const finalTeam = teamMembers;
                     className={styles.memberImage}
                     width={300}
                     height={300}
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'cover', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+                    onLoad={() => setImageLoading(false)}
                   />
                 ) : (
                   <Graphicfg className={styles.memberImage} />

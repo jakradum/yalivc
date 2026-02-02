@@ -1,6 +1,35 @@
-export const TeamsDefaultSVG = () => {
+export const TeamsDefaultSVG = ({ loading = false }) => {
   return (
     <svg width="740" height="740" viewBox="0 0 740 740" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      {`
+        @keyframes pulseOut {
+          0% {
+            opacity: 0.3;
+            transform: scale(0.95);
+          }
+          50% {
+            opacity: 0.7;
+          }
+          100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+        }
+        .halo-outer {
+          transform-origin: center;
+          animation: ${loading ? 'pulseOut 2s ease-in-out infinite' : 'none'};
+        }
+        .halo-middle {
+          transform-origin: center;
+          animation: ${loading ? 'pulseOut 2s ease-in-out infinite 0.3s' : 'none'};
+        }
+        .halo-inner {
+          transform-origin: center;
+          animation: ${loading ? 'pulseOut 2s ease-in-out infinite 0.6s' : 'none'};
+        }
+      `}
+    </style>
     <g opacity="0.5" clipPath="url(#clip0_667_2)">
     <path d="M418.022 449.796C421.774 446.375 423.631 441.999 423.872 437.047C424.104 432.261 423.872 427.451 423.934 422.65C424.061 411.721 426.424 401.283 430.747 391.242C434.83 381.754 440.216 372.984 445.423 364.115C451.127 354.405 456.22 344.392 458.758 333.392C460.842 324.348 461.22 315.12 460.35 305.788C459.278 294.258 455.965 283.471 450.782 273.241C447.186 266.148 442.598 259.699 437.164 253.835C430.029 246.137 421.916 239.829 412.612 234.939C402.571 229.656 391.968 226.495 380.741 225.011C367.473 223.258 354.516 224.624 341.811 228.413C330.035 231.924 319.376 237.661 309.93 245.594C302.044 252.219 295.296 259.836 290.141 268.752C284.542 278.434 280.733 288.758 278.938 299.881C277.794 306.974 277.827 314.076 278.186 321.135C278.64 330.141 281.088 338.831 284.717 347.095C289.319 357.58 295.807 366.992 301.911 376.618C307.137 384.854 312.137 393.222 315.095 402.596C316.545 407.189 317.339 411.91 317.826 416.739C318.388 422.296 317.434 427.758 317.641 433.277C317.812 437.666 318.733 441.626 321.492 445.075" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
     <path d="M358.788 404.94C361.231 401.878 364.227 399.799 368.224 399.251C372.737 398.637 376.356 400.659 380.047 402.781C383.26 404.633 385.046 407.756 386.752 410.672C389.322 415.071 391.033 419.919 390.915 425.239C390.787 430.9 390.877 436.57 390.886 442.236C390.891 446.025 391.553 447.084 395.139 447.603C397.846 447.996 400.719 448.284 403.375 447.811C410.004 446.625 411.19 443.856 411.592 437.274C411.89 432.412 411.781 427.517 411.625 422.64C411.138 407.459 414.663 393.255 421.808 379.916C425.748 372.559 429.855 365.291 433.819 357.948C437.887 350.412 440.84 342.431 442.764 334.105C444.517 326.512 445.476 318.777 445.117 310.981C444.262 292.373 438.837 275.329 426.958 260.714C419.407 251.43 410.344 243.969 399.373 238.974C390.589 234.977 381.389 232.576 371.759 231.901C353.577 230.62 336.661 235.123 320.548 243.222C320.326 243.331 320.08 243.383 319.844 243.463" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
@@ -29,10 +58,10 @@ export const TeamsDefaultSVG = () => {
     <path d="M419.442 504.56C422.088 509.068 420.061 512.3 416.375 513.533" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
     <path d="M399.621 528.876C399.441 530.624 398.364 531.952 397.476 533.346C396.639 534.66 395.6 535.846 395.137 537.372" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
     <path d="M328.116 506.214C325.899 506.138 326.235 508.09 325.819 509.304C325.597 509.956 325.531 510.717 325.285 511.407" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
-    <path d="M370.003 739.532C574.088 739.532 739.532 574.088 739.532 370.002C739.532 165.917 574.088 0.472412 370.003 0.472412C165.917 0.472412 0.472656 165.917 0.472656 370.002C0.472656 574.088 165.917 739.532 370.003 739.532Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
-    <path d="M370.001 680.742C541.618 680.742 680.741 541.619 680.741 370.002C680.741 198.386 541.618 59.2627 370.001 59.2627C198.385 59.2627 59.2617 198.386 59.2617 370.002C59.2617 541.619 198.385 680.742 370.001 680.742Z" stroke="white" strokeWidth="1.68" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="10.09 10.09"/>
-    <path d="M370 613.163C504.294 613.163 613.161 504.296 613.161 370.002C613.161 235.709 504.294 126.842 370 126.842C235.707 126.842 126.84 235.709 126.84 370.002C126.84 504.296 235.707 613.163 370 613.163Z" stroke="white" strokeWidth="1.32" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="7.9 7.9"/>
-    <path d="M370 613.163C504.294 613.163 613.161 504.296 613.161 370.002C613.161 235.709 504.294 126.842 370 126.842C235.707 126.842 126.84 235.709 126.84 370.002C126.84 504.296 235.707 613.163 370 613.163Z" stroke="white" strokeWidth="1.32" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="7.9 7.9"/>
+    {/* Halo circles - outer to inner with staggered animation */}
+    <path className="halo-outer" d="M370.003 739.532C574.088 739.532 739.532 574.088 739.532 370.002C739.532 165.917 574.088 0.472412 370.003 0.472412C165.917 0.472412 0.472656 165.917 0.472656 370.002C0.472656 574.088 165.917 739.532 370.003 739.532Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="12 12"/>
+    <path className="halo-middle" d="M370.001 680.742C541.618 680.742 680.741 541.619 680.741 370.002C680.741 198.386 541.618 59.2627 370.001 59.2627C198.385 59.2627 59.2617 198.386 59.2617 370.002C59.2617 541.619 198.385 680.742 370.001 680.742Z" stroke="white" strokeWidth="1.68" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="10.09 10.09"/>
+    <path className="halo-inner" d="M370 613.163C504.294 613.163 613.161 504.296 613.161 370.002C613.161 235.709 504.294 126.842 370 126.842C235.707 126.842 126.84 235.709 126.84 370.002C126.84 504.296 235.707 613.163 370 613.163Z" stroke="white" strokeWidth="1.32" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="7.9 7.9"/>
     </g>
     <defs>
     <clipPath id="clip0_667_2">
@@ -40,6 +69,6 @@ export const TeamsDefaultSVG = () => {
     </clipPath>
     </defs>
     </svg>
-    
+
   );
 };
