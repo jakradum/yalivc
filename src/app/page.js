@@ -117,7 +117,7 @@ const team = sanityTeam;
       {socialUpdates && socialUpdates.length > 0 && (
         <section>
           <div className={companyStyles.titleSec}>
-            <HeaderFlex title="Featured" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
+            <HeaderFlex title="From our socials" color="black" desktopMaxWidth={'35%'} mobileMaxWidth={'80%'} />
           </div>
           <SocialUpdates updates={socialUpdates} />
         </section>
