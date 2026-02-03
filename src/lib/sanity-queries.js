@@ -1122,9 +1122,12 @@ export async function getAvailableLPQuarters() {
   return client.fetch(
     `*[_type == "lpQuarterlyReport" && isPublished == true] | order(fiscalYear desc, quarter desc) {
       _id,
+      title,
       "slug": slug.current,
       quarter,
-      fiscalYear
+      fiscalYear,
+      publishDate,
+      "pdfUrl": generatedPdf.asset->url
     }`
   );
 }
