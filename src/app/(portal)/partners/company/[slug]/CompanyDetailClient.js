@@ -8,7 +8,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
-import { ExpandIcon } from '../../../../components/icons/small icons/expandIcon';
+
 import Footer from '../../../../components/footer';
 
 export default function CompanyDetailClient({ company, currentReportPeriod }) {
@@ -87,8 +87,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
   );
 
   // Previous quarters = all quarters that are NOT the current report period, sorted most recent first
+  // Only show quarters that have update notes text
   const previousQuarters = allQuarterlyUpdates
     .filter(q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear))
+    .filter(q => q.updateNotes?.trim())
     .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
 
   // For FMV display in investment table, use current quarter data if available, else most recent
@@ -212,15 +214,15 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                 </tr>
                 <tr>
                   <td>FMV</td>
-                  <td>{formatCurrency(latestQuarter?.currentFMV || company.yaliInvestmentAmount)}</td>
+                  <td>{latestQuarter?.currentFMV != null ? formatCurrency(latestQuarter.currentFMV) : '-'}</td>
                 </tr>
                 <tr>
                   <td>Amount returned to investors</td>
-                  <td>{latestQuarter?.amountReturned ? formatCurrency(latestQuarter.amountReturned) : '-'}</td>
+                  <td>{latestQuarter?.amountReturned != null ? formatCurrency(latestQuarter.amountReturned) : '-'}</td>
                 </tr>
                 <tr>
                   <td>Multiple of investment</td>
-                  <td>{latestQuarter?.multipleOfInvestment?.toFixed(2) || '1.00'}</td>
+                  <td>{latestQuarter?.multipleOfInvestment != null ? latestQuarter.multipleOfInvestment.toFixed(2) : '-'}</td>
                 </tr>
                 {company.coInvestors?.length > 0 && (
                   <tr>
@@ -260,7 +262,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
               const hasFirstRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation || company.totalRoundSize || company.postMoneyValuation;
               if (hasFirstRound) {
                 allRounds.push({
-                  roundName: company.fundingRound || 'Initial',
+                  roundName: company.fundingRound,
                   investmentDate: company.investmentDate,
                   preMoneyValuation: company.preMoneyValuation,
                   totalRoundSize: company.totalRoundSize,
@@ -333,6 +335,64 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
               );
             })()}
 
+            {/* Financials / Key Matrix */}
+            {(() => {
+              // Only show for revenue-making companies with quarterly data
+              const quartersWithFinancials = allQuarterlyUpdates
+                .filter(q => q.revenueINR != null || q.patINR != null)
+                .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
+
+              if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
+
+              // Format FY label: FY26 -> 2025-26
+              const formatFYLabel = (quarter, fy) => {
+                if (!fy) return `${quarter}`;
+                const yearNum = parseInt(fy.replace('FY', ''), 10);
+                const fullYear = yearNum < 50 ? 2000 + yearNum : 1900 + yearNum;
+                return `${quarter} ${fullYear - 1}-${String(fullYear).slice(2)}`;
+              };
+
+              // Format PAT: negative in parentheses
+              const formatPAT = (value) => {
+                if (value == null) return '-';
+                if (value < 0) return `(${Math.abs(value).toFixed(2)})`;
+                return value.toFixed(2);
+              };
+
+              return (
+                <div className={styles.roundMetricsSection}>
+                  <h3 className={styles.companyAboutTitle}>Financials / Key matrix</h3>
+                  <div className={styles.roundsTableWrapper}>
+                    <table className={styles.roundsTable}>
+                      <thead>
+                        <tr>
+                          <th>Particulars</th>
+                          {quartersWithFinancials.map((q, idx) => (
+                            <th key={idx}>{formatFYLabel(q.quarter, q.fiscalYear)}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Revenue</td>
+                          {quartersWithFinancials.map((q, idx) => (
+                            <td key={idx}>{q.revenueINR != null ? q.revenueINR.toFixed(2) : '-'}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td>PAT</td>
+                          {quartersWithFinancials.map((q, idx) => (
+                            <td key={idx}>{formatPAT(q.patINR)}</td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                </div>
+              );
+            })()}
+
             {/* Quarterly Updates Section */}
             <div className={styles.quarterlyUpdatesSection}>
               <h2 className={styles.quarterlyUpdatesTitle}>
@@ -348,55 +408,61 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                     </span>
                   </div>
 
-                  <div className={styles.quarterUpdateMetrics}>
-                    <div className={styles.quarterUpdateMetric}>
-                      <span className={styles.quarterUpdateMetricLabel}>FMV</span>
-                      <span className={styles.quarterUpdateMetricValue}>
-                        ₹{formatCurrency(currentQuarterUpdate.currentFMV)} Cr
-                      </span>
+                  {(currentQuarterUpdate.currentFMV != null || currentQuarterUpdate.multipleOfInvestment != null || currentQuarterUpdate.revenueINR != null || currentQuarterUpdate.patINR != null || currentQuarterUpdate.teamSize) && (
+                    <div className={styles.quarterUpdateMetrics}>
+                      {currentQuarterUpdate.currentFMV != null && (
+                        <div className={styles.quarterUpdateMetric}>
+                          <span className={styles.quarterUpdateMetricLabel}>FMV</span>
+                          <span className={styles.quarterUpdateMetricValue}>
+                            ₹{formatCurrency(currentQuarterUpdate.currentFMV)} Cr
+                          </span>
+                        </div>
+                      )}
+                      {currentQuarterUpdate.multipleOfInvestment != null && (
+                        <div className={styles.quarterUpdateMetric}>
+                          <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
+                          <span className={styles.quarterUpdateMetricValue}>
+                            {currentQuarterUpdate.multipleOfInvestment.toFixed(2)}x
+                          </span>
+                        </div>
+                      )}
+                      {company.isRevenueMaking ? (
+                        <>
+                          {currentQuarterUpdate.revenueINR != null && (
+                            <div className={styles.quarterUpdateMetric}>
+                              <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
+                              <span className={styles.quarterUpdateMetricValue}>
+                                ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
+                              </span>
+                            </div>
+                          )}
+                          {currentQuarterUpdate.patINR != null && (
+                            <div className={styles.quarterUpdateMetric}>
+                              <span className={styles.quarterUpdateMetricLabel}>PAT</span>
+                              <span className={styles.quarterUpdateMetricValue}>
+                                ₹{formatCurrency(currentQuarterUpdate.patINR)} Cr
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className={styles.quarterUpdateMetric}>
+                          <span className={styles.quarterUpdateMetricLabel}>Financials</span>
+                          <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
+                            This company is pre-revenue
+                          </span>
+                        </div>
+                      )}
+                      {currentQuarterUpdate.teamSize && (
+                        <div className={styles.quarterUpdateMetric}>
+                          <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
+                          <span className={styles.quarterUpdateMetricValue}>
+                            {currentQuarterUpdate.teamSize}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    <div className={styles.quarterUpdateMetric}>
-                      <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
-                      <span className={styles.quarterUpdateMetricValue}>
-                        {currentQuarterUpdate.multipleOfInvestment?.toFixed(2) || '1.00'}x
-                      </span>
-                    </div>
-                    {company.isRevenueMaking ? (
-                      <>
-                        {currentQuarterUpdate.revenueINR != null && (
-                          <div className={styles.quarterUpdateMetric}>
-                            <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
-                            <span className={styles.quarterUpdateMetricValue}>
-                              ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
-                            </span>
-                          </div>
-                        )}
-                        {currentQuarterUpdate.patINR != null && (
-                          <div className={styles.quarterUpdateMetric}>
-                            <span className={styles.quarterUpdateMetricLabel}>PAT</span>
-                            <span className={styles.quarterUpdateMetricValue}>
-                              ₹{formatCurrency(currentQuarterUpdate.patINR)} Cr
-                            </span>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <div className={styles.quarterUpdateMetric}>
-                        <span className={styles.quarterUpdateMetricLabel}>Financials</span>
-                        <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
-                          This company is pre-revenue
-                        </span>
-                      </div>
-                    )}
-                    {currentQuarterUpdate.teamSize && (
-                      <div className={styles.quarterUpdateMetric}>
-                        <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
-                        <span className={styles.quarterUpdateMetricValue}>
-                          {currentQuarterUpdate.teamSize}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  )}
 
                   {renderUpdateNotes(currentQuarterUpdate.updateNotes)}
                 </div>
@@ -416,12 +482,12 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                     className={styles.previousQuartersToggle}
                     onClick={() => setShowPreviousQuarters(!showPreviousQuarters)}
                   >
+                    <span className={styles.previousQuartersIcon}>
+                      {showPreviousQuarters ? '−' : '+'}
+                    </span>
                     <h2 className={styles.previousQuartersHeading}>
                       Previous Quarters ({previousQuarters.length})
                     </h2>
-                    <span className={styles.previousQuartersChevron}>
-                      <ExpandIcon isExpanded={showPreviousQuarters} />
-                    </span>
                   </button>
 
                   {showPreviousQuarters && (
@@ -434,47 +500,53 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                             </span>
                           </div>
 
-                          <div className={styles.quarterUpdateMetrics}>
-                            <div className={styles.quarterUpdateMetric}>
-                              <span className={styles.quarterUpdateMetricLabel}>FMV</span>
-                              <span className={styles.quarterUpdateMetricValue}>
-                                ₹{formatCurrency(quarter.currentFMV)} Cr
-                              </span>
+                          {(quarter.currentFMV != null || quarter.multipleOfInvestment != null || quarter.revenueINR != null || quarter.teamSize) && (
+                            <div className={styles.quarterUpdateMetrics}>
+                              {quarter.currentFMV != null && (
+                                <div className={styles.quarterUpdateMetric}>
+                                  <span className={styles.quarterUpdateMetricLabel}>FMV</span>
+                                  <span className={styles.quarterUpdateMetricValue}>
+                                    ₹{formatCurrency(quarter.currentFMV)} Cr
+                                  </span>
+                                </div>
+                              )}
+                              {quarter.multipleOfInvestment != null && (
+                                <div className={styles.quarterUpdateMetric}>
+                                  <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
+                                  <span className={styles.quarterUpdateMetricValue}>
+                                    {quarter.multipleOfInvestment.toFixed(2)}x
+                                  </span>
+                                </div>
+                              )}
+                              {company.isRevenueMaking ? (
+                                <>
+                                  {quarter.revenueINR != null && (
+                                    <div className={styles.quarterUpdateMetric}>
+                                      <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
+                                      <span className={styles.quarterUpdateMetricValue}>
+                                        ₹{formatCurrency(quarter.revenueINR)} Cr
+                                      </span>
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <div className={styles.quarterUpdateMetric}>
+                                  <span className={styles.quarterUpdateMetricLabel}>Financials</span>
+                                  <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
+                                    This company is pre-revenue
+                                  </span>
+                                </div>
+                              )}
+                              {quarter.teamSize && (
+                                <div className={styles.quarterUpdateMetric}>
+                                  <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
+                                  <span className={styles.quarterUpdateMetricValue}>
+                                    {quarter.teamSize}
+                                  </span>
+                                </div>
+                              )}
                             </div>
-                            <div className={styles.quarterUpdateMetric}>
-                              <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
-                              <span className={styles.quarterUpdateMetricValue}>
-                                {quarter.multipleOfInvestment?.toFixed(2) || '1.00'}x
-                              </span>
-                            </div>
-                            {company.isRevenueMaking ? (
-                              <>
-                                {quarter.revenueINR != null && (
-                                  <div className={styles.quarterUpdateMetric}>
-                                    <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
-                                    <span className={styles.quarterUpdateMetricValue}>
-                                      ₹{formatCurrency(quarter.revenueINR)} Cr
-                                    </span>
-                                  </div>
-                                )}
-                              </>
-                            ) : (
-                              <div className={styles.quarterUpdateMetric}>
-                                <span className={styles.quarterUpdateMetricLabel}>Financials</span>
-                                <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
-                                  This company is pre-revenue
-                                </span>
-                              </div>
-                            )}
-                            {quarter.teamSize && (
-                              <div className={styles.quarterUpdateMetric}>
-                                <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
-                                <span className={styles.quarterUpdateMetricValue}>
-                                  {quarter.teamSize}
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                          )}
 
                           {renderUpdateNotes(quarter.updateNotes)}
                         </div>
@@ -487,7 +559,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
 
             {/* Website Link */}
             {company.link && (
-              <div style={{ marginTop: '2rem' }}>
+              <div className={styles.visitWebsiteSection}>
                 <a
                   href={company.link}
                   target="_blank"
