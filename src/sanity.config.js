@@ -71,6 +71,10 @@ export default defineConfig({
                     S.listItem()
                       .title('LP Quarterly Reports')
                       .child(S.documentTypeList('lpQuarterlyReport').title('LP Reports')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Portal Users')
+                      .child(S.documentTypeList('portalUser').title('Portal Users')),
                   ])
               ),
           ]),

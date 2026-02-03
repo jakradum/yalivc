@@ -106,6 +106,38 @@
   cursor: not-allowed;
 }
 
+.codeInput {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.4rem;
+}
+
+.secondaryActions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: #830D35;
+  font-size: 0.875rem;
+  font-family: var(--font-inter);
+  cursor: pointer;
+  padding: 0;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+.linkButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .error {
   color: #dc2626;
   font-size: 0.875rem;

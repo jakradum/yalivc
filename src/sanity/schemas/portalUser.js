@@ -16,13 +16,6 @@ const portalUser = {
       description: 'LP name or organization',
     },
     {
-      name: 'accessCode',
-      title: 'Access Code',
-      type: 'string',
-      description: 'Unique access code for this user',
-      validation: (Rule) => Rule.required().min(6),
-    },
-    {
       name: 'isActive',
       title: 'Active',
       type: 'boolean',
