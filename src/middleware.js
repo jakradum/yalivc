@@ -1,7 +1,6 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-export default clerkMiddleware(async (auth, request) => {
+export default async function middleware(request) {
   const hostname = request.headers.get('host') || '';
   const url = request.nextUrl.clone();
 
@@ -32,25 +31,18 @@ export default clerkMiddleware(async (auth, request) => {
 
   if (isPartnersSubdomain) {
     // If URL has /partners prefix, redirect to clean URL (strip /partners)
-    // This prevents partners.yali.vc/partners/... URLs
     if (url.pathname.startsWith('/partners')) {
       const cleanPath = url.pathname.replace(/^\/partners/, '') || '/';
       url.pathname = cleanPath;
       return NextResponse.redirect(url);
     }
 
-    // Check if this is the sign-in page (public route)
-    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
-    const isSignUpPage = url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up');
-
-    // Protect all routes except sign-in/sign-up
-    if (!isSignInPage && !isSignUpPage) {
-      const { userId } = await auth();
-      if (!userId) {
-        // Redirect to sign-in page on the subdomain
-        const signInUrl = new URL('/sign-in', request.url);
-        return NextResponse.redirect(signInUrl);
-      }
+    // Skip sign-in/sign-up pages (no longer needed but keep routing clean)
+    if (url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in') ||
+        url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
+      // Redirect to portal home since auth is disabled
+      const homeUrl = new URL('/', request.url);
+      return NextResponse.redirect(homeUrl);
     }
 
     // Rewrite clean URLs to /partners routes internally
@@ -64,33 +56,17 @@ export default clerkMiddleware(async (auth, request) => {
 
   // For main site, block access to /partners routes (but allow in local dev)
   if (url.pathname.startsWith('/partners') && !isLocalDev) {
-    // Redirect to home if trying to access partners on main domain
     url.pathname = '/';
     return NextResponse.redirect(url);
-  }
-
-  // Protect partner routes in local dev too
-  if (url.pathname.startsWith('/partners') && isLocalDev) {
-    const isSignInPage = url.pathname.startsWith('/partners/sign-in');
-    const isSignUpPage = url.pathname.startsWith('/partners/sign-up');
-
-    if (!isSignInPage && !isSignUpPage) {
-      const { userId } = await auth();
-      if (!userId) {
-        const signInUrl = new URL('/partners/sign-in', request.url);
-        return NextResponse.redirect(signInUrl);
-      }
-    }
   }
 
   // Block individual company and category pages on production (only allow on staging/dev)
   const isProduction = hostname.includes('yali.vc') && !hostname.includes('staging') && !isLocalDev;
   const isCompanyOrCategoryPage =
-    url.pathname.match(/^\/investments\/[^\/]+$/) && // Matches /investments/something but not /investments
+    url.pathname.match(/^\/investments\/[^\/]+$/) &&
     url.pathname !== '/investments';
 
   if (isCompanyOrCategoryPage && isProduction) {
-    // Redirect to investments page on production
     url.pathname = '/investments';
     return NextResponse.redirect(url);
   }
@@ -98,7 +74,7 @@ export default clerkMiddleware(async (auth, request) => {
   const response = NextResponse.next();
   response.headers.set('x-pathname', url.pathname);
   return response;
-});
+}
 
 export const config = {
   matcher: [

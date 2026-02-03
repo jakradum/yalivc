@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Footer from './components/footer';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ProviderWrapper from './data/provider-wrapper';
-import { ClerkProvider } from '@clerk/nextjs';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -58,9 +57,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         {isPortalRoute ? (
-          <ClerkProvider>
-            {children}
-          </ClerkProvider>
+          children
         ) : (
           <>
             <Navbar />
