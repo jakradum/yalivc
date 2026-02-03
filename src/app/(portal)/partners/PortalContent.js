@@ -409,9 +409,9 @@ function PortalContentInner({
               <div className={styles.fundSummaryContent}>
                 {/* Title */}
                 <h1 className={styles.fundSummaryTitle}>Fund Summary</h1>
-                {(fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose) && (
+                {(fundSettings?.fundSizeAtClose != null || fundMetrics?.fundSizeAtClose != null) && (
                   <p className={styles.fundSummarySubtitle}>
-                    Combined size of both funds at final close: ₹{fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose} crore
+                    Combined size of both funds at final close: ₹{fundSettings?.fundSizeAtClose ?? fundMetrics?.fundSizeAtClose} crore
                   </p>
                 )}
 
@@ -462,7 +462,7 @@ function PortalContentInner({
                     {/* Pie Chart */}
                     <div className={styles.pieChartContainer}>
                       {(() => {
-                        const fundSize = fundSettings?.fundSizeAtClose || fundMetrics?.fundSizeAtClose;
+                        const fundSize = fundSettings?.fundSizeAtClose ?? fundMetrics?.fundSizeAtClose;
                         const amountDrawn = fundMetrics?.amountDrawnDown;
                         const totalInvested = fundMetrics?.totalInvestedInPortfolio;
 
@@ -568,23 +568,23 @@ function PortalContentInner({
                     <div className={styles.kpiRow}>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>No. of portfolio companies</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.numberOfPortfolioCompanies || investments?.length || 0}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>Amount returned</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.amountReturned ? `₹${fundMetrics.amountReturned.toFixed(2)} Cr` : '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.amountReturned != null ? `₹${fundMetrics.amountReturned.toFixed(2)} Cr` : '-'}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>MOIC</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.moic?.toFixed(2) || '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.moic != null ? fundMetrics.moic.toFixed(2) : '-'}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>TVPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.tvpi?.toFixed(2) || '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.tvpi != null ? fundMetrics.tvpi.toFixed(2) : '-'}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>DPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.dpi?.toFixed(4) || '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.dpi != null ? fundMetrics.dpi.toFixed(4) : '-'}</span>
                       </div>
                     </div>
                   </div>
@@ -616,39 +616,39 @@ function PortalContentInner({
                       </tr>
                       <tr>
                         <td>Fund size at final close</td>
-                        <td>{fundSettings?.fundSizeAtClose?.toFixed(2) || fundMetrics?.fundSizeAtClose?.toFixed(2) || '-'}</td>
+                        <td>{fundSettings?.fundSizeAtClose != null ? fundSettings.fundSizeAtClose.toFixed(2) : (fundMetrics?.fundSizeAtClose != null ? fundMetrics.fundSizeAtClose.toFixed(2) : '-')}</td>
                       </tr>
                       <tr>
                         <td>Amount drawn down as per bank</td>
-                        <td>{fundMetrics?.amountDrawnDown?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.amountDrawnDown != null ? fundMetrics.amountDrawnDown.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>Total invested in portfolio</td>
-                        <td>{fundMetrics?.totalInvestedInPortfolio?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.totalInvestedInPortfolio != null ? fundMetrics.totalInvestedInPortfolio.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>Fair Market Value of Portfolio Investments (including realised value)</td>
-                        <td>{fundMetrics?.fmvOfPortfolio?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.fmvOfPortfolio != null ? fundMetrics.fmvOfPortfolio.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>Number of portfolio companies</td>
-                        <td>{fundMetrics?.numberOfPortfolioCompanies || investments?.length || 0}</td>
+                        <td>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</td>
                       </tr>
                       <tr>
                         <td>Amount returned (including passive income returned)</td>
-                        <td>{fundMetrics?.amountReturned?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.amountReturned != null ? fundMetrics.amountReturned.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>MOIC</td>
-                        <td>{fundMetrics?.moic?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.moic != null ? fundMetrics.moic.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>TVPI</td>
-                        <td>{fundMetrics?.tvpi?.toFixed(2) || '-'}</td>
+                        <td>{fundMetrics?.tvpi != null ? fundMetrics.tvpi.toFixed(2) : '-'}</td>
                       </tr>
                       <tr>
                         <td>DPI</td>
-                        <td>{fundMetrics?.dpi?.toFixed(4) || '-'}</td>
+                        <td>{fundMetrics?.dpi != null ? fundMetrics.dpi.toFixed(4) : '-'}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -694,8 +694,8 @@ function PortalContentInner({
                               ? new Date(investment.investmentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
                               : '-'}
                           </td>
-                          <td>{investment.yaliInvestmentAmount?.toFixed(2) || '-'}</td>
-                          <td>{investment.yaliOwnershipPercent?.toFixed(2) || '-'}</td>
+                          <td>{investment.yaliInvestmentAmount != null ? investment.yaliInvestmentAmount.toFixed(2) : '-'}</td>
+                          <td>{investment.yaliOwnershipPercent != null ? investment.yaliOwnershipPercent.toFixed(2) : '-'}</td>
                         </tr>
                       ))
                     ) : (
@@ -844,7 +844,7 @@ function PortalContentInner({
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>FMV</span>
-                            <span className={styles.companyTileMetricValue}>{(company.latestQuarter?.currentFMV || company.yaliInvestmentAmount) ? `₹${(company.latestQuarter?.currentFMV || company.yaliInvestmentAmount).toFixed(1)} Cr` : '-'}</span>
+                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.currentFMV != null ? `₹${company.latestQuarter.currentFMV.toFixed(1)} Cr` : '-'}</span>
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Multiple</span>
