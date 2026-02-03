@@ -1,5 +1,37 @@
 import { NextResponse } from 'next/server';
 
+const COOKIE_NAME = 'portal-session';
+const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
+
+async function verifyHMAC(cookieValue) {
+  if (!AUTH_SECRET || !cookieValue) return false;
+
+  const parts = cookieValue.split(':');
+  if (parts.length !== 3) return false;
+
+  const [email, timestamp, signature] = parts;
+  const data = `${email}:${timestamp}`;
+
+  try {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(AUTH_SECRET),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
+    const expectedSig = Array.from(new Uint8Array(sig))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return expectedSig === signature;
+  } catch {
+    return false;
+  }
+}
+
 export default async function middleware(request) {
   const hostname = request.headers.get('host') || '';
   const url = request.nextUrl.clone();
@@ -37,12 +69,24 @@ export default async function middleware(request) {
       return NextResponse.redirect(url);
     }
 
-    // Skip sign-in/sign-up pages (no longer needed but keep routing clean)
-    if (url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in') ||
-        url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
-      // Redirect to portal home since auth is disabled
-      const homeUrl = new URL('/', request.url);
-      return NextResponse.redirect(homeUrl);
+    // Sign-in page is public
+    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
+
+    // Redirect sign-up to sign-in
+    if (url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
+      const signInUrl = new URL('/sign-in', request.url);
+      return NextResponse.redirect(signInUrl);
+    }
+
+    // Protect all routes except sign-in
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
     }
 
     // Rewrite clean URLs to /partners routes internally
@@ -58,6 +102,21 @@ export default async function middleware(request) {
   if (url.pathname.startsWith('/partners') && !isLocalDev) {
     url.pathname = '/';
     return NextResponse.redirect(url);
+  }
+
+  // Protect partner routes in local dev too
+  if (url.pathname.startsWith('/partners') && isLocalDev) {
+    const isSignInPage = url.pathname.startsWith('/partners/sign-in');
+
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/partners/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
   }
 
   // Block individual company and category pages on production (only allow on staging/dev)
