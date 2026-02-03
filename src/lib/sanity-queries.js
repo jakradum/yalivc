@@ -2,7 +2,7 @@ import { client } from '@/sanity/client';
 
 export async function getCompanies() {
   return client.fetch(
-    `*[_type == "company"] | order(order asc) {
+    `*[_type == "company" && showOnMainWebsite == true] | order(order asc) {
       _id,
       name,
       slug,
@@ -21,7 +21,7 @@ export async function getCompanies() {
 
 export async function getCompanyBySlug(slug) {
   return client.fetch(
-    `*[_type == "company" && slug.current == $slug][0]{
+    `*[_type == "company" && slug.current == $slug && showOnMainWebsite == true][0]{
       _id,
       name,
       slug,

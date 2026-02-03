@@ -70,6 +70,14 @@ export default {
       type: 'number',
       group: 'basic',
     },
+    {
+      name: 'showOnMainWebsite',
+      title: 'Show on Main Website',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Toggle off to hide from the public website while keeping in LP reports',
+      group: 'basic',
+    },
 
     // ===== INVESTMENT DETAILS =====
     {
