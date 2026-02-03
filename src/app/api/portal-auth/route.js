@@ -71,18 +71,35 @@ export async function POST(request) {
       // Send OTP via Resend
       const resend = new Resend(RESEND_API_KEY);
       await resend.emails.send({
-        from: 'YALI Capital <noreply@yali.vc>',
+        from: 'Yali Partners <noreply@yali.vc>',
         to: normalizedEmail,
-        subject: 'Your LP Portal verification code',
+        subject: 'Your code to log in to the Yali Partners portal',
         html: `
-          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-            <h2 style="color: #830D35;">YALI Capital LP Portal</h2>
-            <p>Hi${user.name ? ` ${user.name}` : ''},</p>
-            <p>Your verification code is:</p>
-            <div style="background: #f5f5f5; padding: 1.5rem; text-align: center; margin: 1.5rem 0;">
-              <span style="font-size: 2rem; font-weight: 700; letter-spacing: 0.3rem; color: #1a1a1a;">${otp}</span>
+          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff;">
+            <!-- Letterhead -->
+            <div style="border-bottom: 1px solid #e0e0e0; padding: 24px 0; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+              <img src="https://yali.vc/yali-logo.png" alt="Yali Partners" style="height: 36px; width: auto;" />
+              <div style="text-align: right;">
+                <div style="font-size: 14px; font-weight: 600; color: #830D35;">Yali Partners LLP</div>
+                <div style="font-size: 12px; color: #666;">LP Partners Portal</div>
+              </div>
             </div>
-            <p style="color: #666; font-size: 0.875rem;">This code expires in 10 minutes. If you didn't request this, you can ignore this email.</p>
+
+            <!-- Body -->
+            <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">Hi${user.name ? ` ${user.name}` : ''},</p>
+            <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">Your verification code is:</p>
+
+            <!-- Code -->
+            <div style="background: #f5f5f5; padding: 24px; text-align: center; margin: 0 0 20px 0;">
+              <span style="font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Courier New', monospace; font-size: 32px; font-weight: 700; letter-spacing: 0.4em; color: #1a1a1a;">${otp}</span>
+            </div>
+
+            <p style="color: #666; font-size: 13px; line-height: 1.5; margin: 0 0 32px 0;">This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.</p>
+
+            <!-- Footer -->
+            <div style="border-top: 1px solid #e0e0e0; padding-top: 16px;">
+              <p style="color: #999; font-size: 11px; line-height: 1.4; margin: 0; text-align: center;">This is a system-generated email. Please do not reply.</p>
+            </div>
           </div>
         `,
       });
