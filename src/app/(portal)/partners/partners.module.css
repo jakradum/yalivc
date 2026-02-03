@@ -2493,6 +2493,12 @@
   line-height: 1.5;
 }
 
+.coInvestorSingle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: #1a1a1a;
+}
+
 /* About Section */
 .companyAboutSection {
   margin-bottom: 2rem;
@@ -2701,13 +2707,10 @@
 .previousQuartersToggle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
   background: none;
   border: none;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #830D35;
   cursor: pointer;
   padding: 0;
   transition: color 0.2s ease;
@@ -2717,13 +2720,22 @@
   color: #5a0925;
 }
 
-.previousQuartersArrow {
-  font-size: 0.625rem;
-  transition: transform 0.2s ease;
+.previousQuartersHeading {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
 }
 
-.previousQuartersArrowOpen {
-  transform: rotate(180deg);
+.previousQuartersChevron {
+  display: flex;
+  align-items: center;
+}
+
+.previousQuartersChevron svg {
+  width: 20px;
+  height: 20px;
 }
 
 .previousQuartersList {

@@ -78,6 +78,22 @@ export default {
       description: 'Toggle off to hide from the public website while keeping in LP reports',
       group: 'basic',
     },
+    {
+      name: 'aboutCompany',
+      title: 'About the Company',
+      type: 'text',
+      rows: 6,
+      description: 'For LP reports only; will not be shown on main website',
+      group: 'basic',
+    },
+    {
+      name: 'isRevenueMaking',
+      title: 'Revenue Making',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Toggle off for pre-revenue companies. Revenue and PAT fields will be greyed out in quarterly updates.',
+      group: 'basic',
+    },
 
     // ===== INVESTMENT DETAILS =====
     {
@@ -283,8 +299,12 @@ export default {
               name: 'fiscalYear',
               title: 'Fiscal Year',
               type: 'string',
+              description: 'Financial year ending March of this year',
               options: {
-                list: ['FY24', 'FY25', 'FY26', 'FY27', 'FY28', 'FY29', 'FY30']
+                list: Array.from({ length: 12 }, (_, i) => {
+                  const year = 2024 + i;
+                  return { title: `FY${String(year).slice(2)} (Apr ${year - 1} – Mar ${year})`, value: `FY${String(year).slice(2)}` };
+                }),
               },
               validation: (Rule) => Rule.required(),
             },
@@ -318,12 +338,14 @@ export default {
               title: 'Revenue (₹ Crores)',
               type: 'number',
               description: 'Quarterly revenue',
+              readOnly: ({ document }) => !document?.isRevenueMaking,
             },
             {
               name: 'patINR',
               title: 'Profit After Tax (₹ Crores)',
               type: 'number',
               description: 'Use negative for losses',
+              readOnly: ({ document }) => !document?.isRevenueMaking,
             },
             {
               name: 'teamSize',
@@ -359,13 +381,6 @@ export default {
               type: 'text',
               rows: 10,
               description: 'Detailed narrative update for this quarter (long form)',
-            },
-            {
-              name: 'highlights',
-              title: 'Key Highlights',
-              type: 'array',
-              of: [{ type: 'string' }],
-              description: 'Bullet point highlights for this quarter',
             },
           ],
           preview: {

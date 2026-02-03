@@ -8,6 +8,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
+import { ExpandIcon } from '../../../../components/icons/small icons/expandIcon';
 import Footer from '../../../../components/footer';
 
 export default function CompanyDetailClient({ company, currentReportPeriod }) {
@@ -72,16 +73,23 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
     );
   };
 
+  // Helper to get a sortable number from quarter data (higher = more recent)
+  const quarterSortKey = (q) => {
+    const yearNum = parseInt(q.fiscalYear?.replace('FY', '') || '0', 10);
+    const qNum = parseInt(q.quarter?.replace('Q', '') || '0', 10);
+    return yearNum * 10 + qNum;
+  };
+
   // Find quarterly update matching the current report period
   const allQuarterlyUpdates = company.quarterlyUpdates || [];
   const currentQuarterUpdate = allQuarterlyUpdates.find(
     q => q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear
   );
 
-  // Previous quarters = all quarters that are NOT the current report period
-  const previousQuarters = allQuarterlyUpdates.filter(
-    q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear)
-  );
+  // Previous quarters = all quarters that are NOT the current report period, sorted most recent first
+  const previousQuarters = allQuarterlyUpdates
+    .filter(q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear))
+    .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
 
   // For FMV display in investment table, use current quarter data if available, else most recent
   const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
@@ -218,11 +226,15 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                   <tr>
                     <td>Key co-investors</td>
                     <td>
-                      <ol className={styles.coInvestorsList}>
-                        {company.coInvestors.map((investor, idx) => (
-                          <li key={idx}>{idx + 1}. {investor}</li>
-                        ))}
-                      </ol>
+                      {company.coInvestors.length === 1 ? (
+                        <span className={styles.coInvestorSingle}>{company.coInvestors[0]}</span>
+                      ) : (
+                        <ol className={styles.coInvestorsList}>
+                          {company.coInvestors.map((investor, idx) => (
+                            <li key={idx}>{idx + 1}. {investor}</li>
+                          ))}
+                        </ol>
+                      )}
                     </td>
                   </tr>
                 )}
@@ -230,11 +242,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
             </table>
 
             {/* About Section */}
-            {(company.detail || company.oneLiner) && (
+            {(company.aboutCompany || company.detail || company.oneLiner) && (
               <div className={styles.companyAboutSection}>
                 <h3 className={styles.companyAboutTitle}>About the Company</h3>
                 <p className={styles.companyAboutText}>
-                  {company.detail || company.oneLiner}
+                  {company.aboutCompany || company.detail || company.oneLiner}
                 </p>
               </div>
             )}
@@ -349,11 +361,30 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                         {currentQuarterUpdate.multipleOfInvestment?.toFixed(2) || '1.00'}x
                       </span>
                     </div>
-                    {currentQuarterUpdate.revenueINR && (
+                    {company.isRevenueMaking ? (
+                      <>
+                        {currentQuarterUpdate.revenueINR != null && (
+                          <div className={styles.quarterUpdateMetric}>
+                            <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
+                            <span className={styles.quarterUpdateMetricValue}>
+                              ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
+                            </span>
+                          </div>
+                        )}
+                        {currentQuarterUpdate.patINR != null && (
+                          <div className={styles.quarterUpdateMetric}>
+                            <span className={styles.quarterUpdateMetricLabel}>PAT</span>
+                            <span className={styles.quarterUpdateMetricValue}>
+                              ₹{formatCurrency(currentQuarterUpdate.patINR)} Cr
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    ) : (
                       <div className={styles.quarterUpdateMetric}>
-                        <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
-                        <span className={styles.quarterUpdateMetricValue}>
-                          ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
+                        <span className={styles.quarterUpdateMetricLabel}>Financials</span>
+                        <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
+                          This company is pre-revenue
                         </span>
                       </div>
                     )}
@@ -368,14 +399,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                   </div>
 
                   {renderUpdateNotes(currentQuarterUpdate.updateNotes)}
-
-                  {currentQuarterUpdate.highlights?.length > 0 && (
-                    <ul className={styles.quarterUpdateHighlights}>
-                      {currentQuarterUpdate.highlights.map((highlight, idx) => (
-                        <li key={idx}>{highlight}</li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
               ) : (
                 /* No data for current quarter */
@@ -393,10 +416,12 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                     className={styles.previousQuartersToggle}
                     onClick={() => setShowPreviousQuarters(!showPreviousQuarters)}
                   >
-                    <span className={`${styles.previousQuartersArrow} ${showPreviousQuarters ? styles.previousQuartersArrowOpen : ''}`}>
-                      ▼
+                    <h2 className={styles.previousQuartersHeading}>
+                      Previous Quarters ({previousQuarters.length})
+                    </h2>
+                    <span className={styles.previousQuartersChevron}>
+                      <ExpandIcon isExpanded={showPreviousQuarters} />
                     </span>
-                    Previous Quarters ({previousQuarters.length})
                   </button>
 
                   {showPreviousQuarters && (
@@ -422,11 +447,22 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                                 {quarter.multipleOfInvestment?.toFixed(2) || '1.00'}x
                               </span>
                             </div>
-                            {quarter.revenueINR && (
+                            {company.isRevenueMaking ? (
+                              <>
+                                {quarter.revenueINR != null && (
+                                  <div className={styles.quarterUpdateMetric}>
+                                    <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
+                                    <span className={styles.quarterUpdateMetricValue}>
+                                      ₹{formatCurrency(quarter.revenueINR)} Cr
+                                    </span>
+                                  </div>
+                                )}
+                              </>
+                            ) : (
                               <div className={styles.quarterUpdateMetric}>
-                                <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
-                                <span className={styles.quarterUpdateMetricValue}>
-                                  ₹{formatCurrency(quarter.revenueINR)} Cr
+                                <span className={styles.quarterUpdateMetricLabel}>Financials</span>
+                                <span className={styles.quarterUpdateMetricValue} style={{ fontSize: '0.8125rem', color: '#666' }}>
+                                  This company is pre-revenue
                                 </span>
                               </div>
                             )}
@@ -441,14 +477,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                           </div>
 
                           {renderUpdateNotes(quarter.updateNotes)}
-
-                          {quarter.highlights?.length > 0 && (
-                            <ul className={styles.quarterUpdateHighlights}>
-                              {quarter.highlights.map((highlight, hIdx) => (
-                                <li key={hIdx}>{highlight}</li>
-                              ))}
-                            </ul>
-                          )}
                         </div>
                       ))}
                     </div>
