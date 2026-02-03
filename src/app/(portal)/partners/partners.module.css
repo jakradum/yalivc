@@ -38,37 +38,6 @@
   z-index: 5;
 }
 
-.landingGraphic {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  cursor: pointer;
-}
-
-.landingGraphic svg {
-  width: 60vw;
-  max-width: 600px;
-  height: auto;
-  fill: transparent;
-  transition: fill 0.6s ease;
-}
-
-.landingGraphic svg path {
-  stroke: rgba(255, 255, 255, 0.4);
-  transition: stroke 0.3s ease;
-}
-
-/* Hover effect - fill the logo */
-.landingGraphic:hover svg {
-  fill: rgba(255, 255, 255, 0.15);
-}
-
-.landingGraphic:hover svg path {
-  stroke: rgba(255, 255, 255, 0.6);
-}
-
 .landingTitle {
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(2.5rem, 6vw, 4.5rem);
@@ -90,35 +59,66 @@
   z-index: 5;
 }
 
-.landingDisclaimer {
-  font-family: var(--font-inter);
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.6);
+.landingDisclaimerBox {
+  background: #ffffff;
+  padding: 1.5rem 2rem;
   max-width: 520px;
-  line-height: 1.6;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 2rem 0;
   position: relative;
   z-index: 5;
 }
 
-.landingButton {
+.landingDisclaimer {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #363636;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.landingActions {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  z-index: 5;
+}
+
+.landingAgreeButton {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.875rem;
   color: white;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #ffffff;
+  background: white;
+  color: #830D35;
+  border: 1px solid white;
   padding: 0.875rem 2.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  position: relative;
-  z-index: 5;
+  font-weight: 600;
 }
 
-.landingButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: white;
+.landingAgreeButton:hover {
+  background: #f0f0f0;
+}
+
+.landingExitButton {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.875rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.landingExitButton:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* ===== MAIN PORTAL ===== */

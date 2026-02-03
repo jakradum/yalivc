@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Lightlogo } from '../../components/icons/lightlogo';
-import { Graphicfg } from '../../components/icons/background svgs/graphicfg';
 import styles from './partners.module.css';
 
 const SESSION_KEY = 'yali-portal-entered';
@@ -20,10 +19,15 @@ export default function PortalLanding({ children }) {
     setIsLoading(false);
   }, []);
 
-  // Handle enter button click
-  const handleEnter = () => {
+  // Handle agree button click
+  const handleAgree = () => {
     sessionStorage.setItem(SESSION_KEY, 'true');
     setEntered(true);
+  };
+
+  // Handle exit button click
+  const handleExit = () => {
+    window.location.href = 'https://yali.vc';
   };
 
   // Show minimal loading state while checking session (prevents flash of landing page)
@@ -46,11 +50,6 @@ export default function PortalLanding({ children }) {
 
       {/* Center content */}
       <div className={styles.landingContent}>
-        {/* Yali logo - dotted outline, fills on hover */}
-        <div className={styles.landingGraphic}>
-          <Graphicfg />
-        </div>
-
         {/* Title */}
         <h1 className={styles.landingTitle}>Quarterly Report</h1>
 
@@ -59,18 +58,28 @@ export default function PortalLanding({ children }) {
           Yali Partners LLP | Investment Manager - Deep Tech Focus
         </p>
 
-        {/* Disclaimer */}
-        <p className={styles.landingDisclaimer}>
-          Dear Limited Partner, This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.
-        </p>
+        {/* Disclaimer in white box */}
+        <div className={styles.landingDisclaimerBox}>
+          <p className={styles.landingDisclaimer}>
+            Dear Limited Partner, This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.
+          </p>
+        </div>
 
-        {/* Enter button */}
-        <button
-          className={styles.landingButton}
-          onClick={handleEnter}
-        >
-          Click to Enter
-        </button>
+        {/* Action buttons */}
+        <div className={styles.landingActions}>
+          <button
+            className={styles.landingAgreeButton}
+            onClick={handleAgree}
+          >
+            Agree
+          </button>
+          <button
+            className={styles.landingExitButton}
+            onClick={handleExit}
+          >
+            Exit
+          </button>
+        </div>
       </div>
     </div>
   );
