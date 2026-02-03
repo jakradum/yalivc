@@ -41,49 +41,84 @@
   text-align: center;
 }
 
-.signInWrapper {
+.form {
   width: 100%;
-}
-
-/* Clerk Component Overrides */
-.clerkRoot {
-  width: 100%;
-}
-
-.clerkCard {
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.clerkHeaderTitle {
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #363636;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d0d0d0;
+  font-size: 1rem;
   font-family: var(--font-inter);
-  font-weight: 600;
+  color: #1a1a1a;
+  background: #fff;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
-.clerkHeaderSubtitle {
+.input:focus {
+  outline: none;
+  border-color: #830D35;
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.875rem;
+  background: #830D35;
+  color: #ffffff;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
   font-family: var(--font-inter);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
 }
 
-.clerkSocialButton {
-  font-family: var(--font-inter);
-  border-radius: 8px;
+.submitButton:hover:not(:disabled) {
+  background: #6b0a2b;
 }
 
-.clerkPrimaryButton {
-  font-family: var(--font-inter);
-  background: #830D35 !important;
-  border-radius: 8px;
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.clerkPrimaryButton:hover {
-  background: #6b0a2b !important;
+.error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  text-align: center;
+  margin: 0;
 }
 
-.clerkFooterLink {
-  color: #830D35;
-}
+@media (max-width: 480px) {
+  .form {
+    padding: 1.5rem;
+  }
 
-.clerkFooterLink:hover {
-  color: #6b0a2b;
+  .title {
+    font-size: 1.5rem;
+  }
 }

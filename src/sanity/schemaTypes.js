@@ -23,6 +23,7 @@ import {
 import lpFundSettings from './schemas/lpFundSettings'
 import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
+import portalUser from './schemas/portalUser'
 
 export const schemaTypes = [
   company,
@@ -45,5 +46,6 @@ export const schemaTypes = [
   // LP Portal
   lpFundSettings,
   lpPipelineDeal,
-  lpQuarterlyReport
+  lpQuarterlyReport,
+  portalUser
 ]
