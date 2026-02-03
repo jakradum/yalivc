@@ -34,9 +34,10 @@ export async function generateMetadata({ params }) {
 
 export default async function CompanyPage({ params }) {
   const { slug } = await params;
-  const [company, latestReport] = await Promise.all([
+  const [company, latestReport, allSlugs] = await Promise.all([
     getLPInvestmentByCompanySlug(slug),
     getLatestLPQuarterlyReport(),
+    getAllLPInvestmentSlugs(),
   ]);
 
   if (!company) {
@@ -49,5 +50,16 @@ export default async function CompanyPage({ params }) {
     fiscalYear: latestReport?.fiscalYear || 'FY26',
   };
 
-  return <CompanyDetailClient company={company} currentReportPeriod={currentReportPeriod} />;
+  // Build ordered list of company slugs for next/prev navigation
+  const allCompanySlugs = (allSlugs || [])
+    .filter(item => item.slug)
+    .map(item => ({ slug: item.slug, name: item.name }));
+
+  return (
+    <CompanyDetailClient
+      company={company}
+      currentReportPeriod={currentReportPeriod}
+      allCompanySlugs={allCompanySlugs}
+    />
+  );
 }

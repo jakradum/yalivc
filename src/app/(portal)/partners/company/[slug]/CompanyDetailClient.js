@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -11,11 +11,13 @@ import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod }) {
+export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const headerRef = useRef(null);
 
   // Detect mobile and set default sidebar state
   useEffect(() => {
@@ -31,6 +33,37 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Scroll-responsive header (hide on scroll down, show on scroll up)
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 100) {
+        if (currentScrollY > lastScrollY) {
+          setHeaderHidden(true);
+        } else {
+          setHeaderHidden(false);
+        }
+      } else {
+        setHeaderHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Next/prev company navigation
+  const currentCompanyIndex = allCompanySlugs?.findIndex(c => c.slug === company.slug) ?? -1;
+  const prevCompany = currentCompanyIndex > 0 ? allCompanySlugs[currentCompanyIndex - 1] : null;
+  const nextCompany = currentCompanyIndex >= 0 && currentCompanyIndex < (allCompanySlugs?.length || 0) - 1
+    ? allCompanySlugs[currentCompanyIndex + 1]
+    : null;
 
   const formatCurrency = (value, decimals = 2) => {
     if (!value && value !== 0) return '-';
@@ -124,7 +157,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
   return (
     <div className={styles.portalContainer}>
       {/* Header */}
-      <header className={styles.portalHeader}>
+      <header
+        ref={headerRef}
+        className={`${styles.portalHeader} ${headerHidden ? styles.portalHeaderHidden : ''}`}
+      >
         <div className={styles.headerLeft}>
           <button
             className={styles.sidebarToggle}
@@ -163,6 +199,14 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
             </ul>
           </nav>
         </aside>
+
+        {/* Mobile sidebar overlay - closes sidebar on outside click */}
+        {isMobile && sidebarOpen && (
+          <div
+            className={styles.sidebarOverlay}
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
 
         {/* Main Content */}
         <main className={styles.mainArea}>
@@ -565,6 +609,38 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
                     </div>
                   )}
                 </div>
+              )}
+            </div>
+
+            {/* Next/Prev Company Navigation */}
+            <div className={styles.sectionNavigation}>
+              {prevCompany ? (
+                <Link
+                  href={`/partners/company/${prevCompany.slug}`}
+                  className={styles.sectionNavBtn}
+                >
+                  <span className={styles.sectionNavArrow}>←</span>
+                  <span className={styles.sectionNavLabel}>{prevCompany.name}</span>
+                </Link>
+              ) : (
+                <div></div>
+              )}
+              {nextCompany ? (
+                <Link
+                  href={`/partners/company/${nextCompany.slug}`}
+                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
+                >
+                  <span className={styles.sectionNavLabel}>{nextCompany.name}</span>
+                  <span className={styles.sectionNavArrow}>→</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/partners?section=fund-financials"
+                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
+                >
+                  <span className={styles.sectionNavLabel}>Fund Financials</span>
+                  <span className={styles.sectionNavArrow}>→</span>
+                </Link>
               )}
             </div>
 

@@ -1111,8 +1111,9 @@ export async function getLatestLPQuarterlyReport() {
 // Get all portfolio company slugs (for static generation)
 export async function getAllLPInvestmentSlugs() {
   return client.fetch(
-    `*[_type == "company" && investmentStatus == "active"] {
-      "slug": slug.current
+    `*[_type == "company" && investmentStatus == "active"] | order(name asc) {
+      "slug": slug.current,
+      name
     }`
   );
 }
