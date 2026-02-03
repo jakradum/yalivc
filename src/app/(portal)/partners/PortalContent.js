@@ -56,6 +56,7 @@ function PortalContentInner({
   const router = useRouter();
   const searchParams = useSearchParams();
   const dropdownRef = useRef(null);
+  const dropdownTimerRef = useRef(null);
   const headerRef = useRef(null);
 
   // Get initial section from URL or default to 'cover-note'
@@ -69,7 +70,6 @@ function PortalContentInner({
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
   const [hoveredSegment, setHoveredSegment] = useState(null);
   const [headerHidden, setHeaderHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Calculate the "as of" date from quarter/fiscal year
   const calculatedAsOfDate = calculateAsOfDate(quarter, fiscalYear);
@@ -91,6 +91,8 @@ function PortalContentInner({
 
   // Scroll-responsive header (hide on scroll down, show on scroll up)
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
@@ -104,12 +106,12 @@ function PortalContentInner({
         setHeaderHidden(false);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollY = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -224,7 +226,10 @@ function PortalContentInner({
           <div
             className={styles.fyDropdown}
             ref={dropdownRef}
-            onMouseLeave={() => setFyDropdownOpen(false)}
+            onMouseEnter={() => clearTimeout(dropdownTimerRef.current)}
+            onMouseLeave={() => {
+              dropdownTimerRef.current = setTimeout(() => setFyDropdownOpen(false), 400);
+            }}
           >
             <button
               className={styles.fyDropdownBtn}
@@ -303,6 +308,14 @@ function PortalContentInner({
             </ul>
           </nav>
         </aside>
+
+        {/* Mobile sidebar overlay - closes sidebar on outside click */}
+        {isMobile && sidebarOpen && (
+          <div
+            className={styles.sidebarOverlay}
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
 
         {/* Spacer to push content (since sidebar is fixed) */}
         <div className={styles.sidebarSpacer}></div>
@@ -903,24 +916,86 @@ function PortalContentInner({
           )}
 
           {activeSection === 'pipeline-summary' && (
-            <section className={styles.contentSection}>
+            <section className={`${styles.contentSection} ${styles.portfolioHubSection}`}>
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Pipeline Summary</h1>
               </div>
-              <div className={styles.placeholderContent}>
-                <p>Pipeline summary content will be displayed here once data is added in Sanity CMS.</p>
-              </div>
+              {report?.pipelineNotes && report.pipelineNotes.length > 0 && (
+                <div className={styles.coverNoteContent} style={{ marginBottom: '1.5rem' }}>
+                  <PortableText value={report.pipelineNotes} />
+                </div>
+              )}
+              {report?.pipelineDeals && report.pipelineDeals.length > 0 ? (
+                <div className={styles.portfolioTableWrapper}>
+                  <table className={styles.portfolioTable}>
+                    <thead>
+                      <tr>
+                        <th>Sl No.</th>
+                        <th>Company</th>
+                        <th>Sector</th>
+                        <th>Amount in ₹ (Crores)</th>
+                        <th>Stage of Evaluation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {report.pipelineDeals.map((deal, idx) => (
+                        <tr key={deal._id || idx}>
+                          <td>{idx + 1}</td>
+                          <td className={styles.companyNameCell}>{deal.companyName || '-'}</td>
+                          <td>{deal.sector || '-'}</td>
+                          <td>{deal.proposedAmountINR != null ? deal.proposedAmountINR.toFixed(2) : '-'}</td>
+                          <td>{deal.stage ? deal.stage.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className={styles.placeholderContent}>
+                  <p>No pipeline deals for this quarter.</p>
+                </div>
+              )}
             </section>
           )}
 
           {activeSection === 'media-coverage' && (
-            <section className={styles.contentSection}>
+            <section className={`${styles.contentSection} ${styles.portfolioHubSection}`}>
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Media Coverage</h1>
               </div>
-              <div className={styles.placeholderContent}>
-                <p>Media coverage content will be displayed here once data is added in Sanity CMS.</p>
-              </div>
+              {report?.mediaNotes && report.mediaNotes.length > 0 && (
+                <div className={styles.coverNoteContent} style={{ marginBottom: '1.5rem' }}>
+                  <PortableText value={report.mediaNotes} />
+                </div>
+              )}
+              {report?.mediaFromNews && report.mediaFromNews.length > 0 ? (
+                <div className={styles.mediaCoverageGrid}>
+                  {report.mediaFromNews.map((item) => (
+                    <a
+                      key={item._id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.mediaCoverageCard}
+                    >
+                      <div className={styles.mediaCoverageCardContent}>
+                        <span className={styles.mediaCoveragePublication}>{item.publicationName || 'News'}</span>
+                        <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
+                        {item.date && (
+                          <span className={styles.mediaCoverageDate}>
+                            {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                      <span className={styles.mediaCoverageArrow}>→</span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <div className={styles.placeholderContent}>
+                  <p>No media coverage for this quarter.</p>
+                </div>
+              )}
             </section>
           )}
 
@@ -929,9 +1004,46 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Contact Information</h1>
               </div>
-              <div className={styles.placeholderContent}>
-                <p>Contact information will be displayed here once data is added in Sanity CMS.</p>
-              </div>
+              {(fundSettings?.investorRelationsEmail || fundSettings?.additionalContacts?.length > 0 || fundSettings?.website) ? (
+                <div className={styles.contactInfoSection}>
+                  {fundSettings.investorRelationsEmail && (
+                    <div className={styles.contactInfoBlock}>
+                      <span className={styles.contactInfoLabel}>Investor Relations</span>
+                      <a href={`mailto:${fundSettings.investorRelationsEmail}`} className={styles.contactInfoValue}>
+                        {fundSettings.investorRelationsEmail}
+                      </a>
+                    </div>
+                  )}
+                  {fundSettings.website && (
+                    <div className={styles.contactInfoBlock}>
+                      <span className={styles.contactInfoLabel}>Website</span>
+                      <a href={fundSettings.website} target="_blank" rel="noopener noreferrer" className={styles.contactInfoValue}>
+                        {fundSettings.website}
+                      </a>
+                    </div>
+                  )}
+                  {fundSettings.additionalContacts?.length > 0 && (
+                    <>
+                      <div className={styles.contactInfoDivider} />
+                      {fundSettings.additionalContacts.map((contact, idx) => (
+                        <div key={idx} className={styles.contactInfoBlock}>
+                          <span className={styles.contactInfoLabel}>{contact.role || 'Contact'}</span>
+                          <span className={styles.contactInfoName}>{contact.name}</span>
+                          {contact.email && (
+                            <a href={`mailto:${contact.email}`} className={styles.contactInfoValue}>
+                              {contact.email}
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className={styles.placeholderContent}>
+                  <p>Contact information will be displayed here once data is added in Sanity CMS.</p>
+                </div>
+              )}
             </section>
           )}
 

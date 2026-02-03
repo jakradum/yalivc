@@ -11,6 +11,21 @@ import PortalContent from './PortalContent';
 
 export const revalidate = 0;
 
+// Get the end date of a quarter in Indian fiscal year
+// Q1 FY26 → June 30, 2025; Q2 FY26 → Sep 30, 2025; Q3 FY26 → Dec 31, 2025; Q4 FY26 → Mar 31, 2026
+function getQuarterEndDate(quarter, fiscalYear) {
+  if (!quarter || !fiscalYear) return null;
+  const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
+  const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
+  switch (quarter) {
+    case 'Q1': return new Date(fullYear - 1, 5, 30); // June 30
+    case 'Q2': return new Date(fullYear - 1, 8, 30); // Sep 30
+    case 'Q3': return new Date(fullYear - 1, 11, 31); // Dec 31
+    case 'Q4': return new Date(fullYear, 2, 31); // Mar 31
+    default: return null;
+  }
+}
+
 export default async function PartnersPortal() {
   const [fundSettings, latestReport, investments, teamMembers, availableQuarters] = await Promise.all([
     getLPFundSettings(),
@@ -33,6 +48,15 @@ export default async function PartnersPortal() {
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
 
+  // Filter investments: only show companies invested during or before this quarter
+  const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
+  const filteredInvestments = quarterEndDate
+    ? investments?.filter(inv => {
+        if (!inv.investmentDate) return true; // include if no date set
+        return new Date(inv.investmentDate) <= quarterEndDate;
+      })
+    : investments;
+
   // Find Gani from team members or use fallback
   const gani = teamMembers.find(t =>
     t.name?.toLowerCase().includes('gani') ||
@@ -47,8 +71,8 @@ export default async function PartnersPortal() {
   const computeFundMetrics = () => {
     const fundSize = fundSettings?.fundSizeAtClose;
 
-    // Sum up invested amounts from all portfolio companies (for fallback)
-    const computedTotalInvested = investments?.reduce((sum, inv) =>
+    // Sum up invested amounts from filtered portfolio companies (for fallback)
+    const computedTotalInvested = filteredInvestments?.reduce((sum, inv) =>
       sum + (inv.yaliInvestmentAmount || 0), 0) || 0;
 
     // Get quarterly data for the report period to compute FMV (for fallback)
@@ -58,7 +82,7 @@ export default async function PartnersPortal() {
     let computedTotalFMV = 0;
     let computedTotalReturned = 0;
 
-    investments?.forEach(inv => {
+    filteredInvestments?.forEach(inv => {
       const quarterData = inv.latestQuarter ||
         inv.quarterlyUpdates?.find(q =>
           q.quarter === reportQuarter && q.fiscalYear === reportFY
@@ -90,7 +114,7 @@ export default async function PartnersPortal() {
       amountDrawnDown: fundSettings?.amountDrawnDown,
       totalInvestedInPortfolio: totalInvested,
       fmvOfPortfolio: totalFMV,
-      numberOfPortfolioCompanies: fundSettings?.portfolioCompanies ?? investments?.length ?? 0,
+      numberOfPortfolioCompanies: fundSettings?.portfolioCompanies ?? filteredInvestments?.length ?? 0,
       amountReturned: totalReturned,
       moic: parsedMoic ?? computedMoic,
       tvpi: parsedTvpi ?? computedTvpi,
@@ -110,7 +134,7 @@ export default async function PartnersPortal() {
         reportingDate={reportingDate}
         gani={gani}
         fundMetrics={fundMetrics}
-        investments={investments}
+        investments={filteredInvestments}
         allReports={availableQuarters || []}
       />
     </PortalLanding>
