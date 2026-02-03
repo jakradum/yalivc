@@ -384,21 +384,48 @@ function PortalContentInner({
               {/* Author Attribution */}
               {(gani?.photo || gani?.name) && (
                 <div className={styles.coverNoteAuthor}>
-                  {gani?.photo && (
-                    <div className={styles.authorPhoto}>
-                      <Image
-                        src={gani.photo}
-                        alt={gani?.name || 'Signatory'}
-                        width={80}
-                        height={80}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    </div>
+                  {gani?.slug?.current ? (
+                    <a
+                      href={`https://yali.vc/about-yali/${gani.slug.current}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.authorLink}
+                    >
+                      {gani?.photo && (
+                        <div className={styles.authorPhoto}>
+                          <Image
+                            src={gani.photo}
+                            alt={gani?.name || 'Signatory'}
+                            width={80}
+                            height={80}
+                            style={{ objectFit: 'cover' }}
+                          />
+                        </div>
+                      )}
+                      <div className={styles.authorInfo}>
+                        {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
+                        {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
+                      </div>
+                    </a>
+                  ) : (
+                    <>
+                      {gani?.photo && (
+                        <div className={styles.authorPhoto}>
+                          <Image
+                            src={gani.photo}
+                            alt={gani?.name || 'Signatory'}
+                            width={80}
+                            height={80}
+                            style={{ objectFit: 'cover' }}
+                          />
+                        </div>
+                      )}
+                      <div className={styles.authorInfo}>
+                        {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
+                        {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
+                      </div>
+                    </>
                   )}
-                  <div className={styles.authorInfo}>
-                    {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
-                    {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
-                  </div>
                 </div>
               )}
             </section>

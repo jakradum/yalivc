@@ -615,6 +615,9 @@
 .footerWrapper {
   position: relative;
   z-index: 45; /* Higher than sidebar (40) to cover it when scrolling */
+  border-top: 1px solid #363636;
+  margin-top: 1rem;
+  padding-top: 1rem;
 }
 
 /* Footer */
@@ -1114,11 +1117,15 @@
   border-top: 1px solid #363636;
 }
 
+.coverNoteAuthor:has(.authorLink) {
+  display: block;
+}
+
 .authorPhoto {
   width: 80px;
   height: 80px;
   overflow: hidden;
-  border: 1px solid #363636;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
@@ -1126,6 +1133,20 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+}
+
+.authorLink {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.authorLink:hover {
+  opacity: 0.7;
 }
 
 .authorInfo {
