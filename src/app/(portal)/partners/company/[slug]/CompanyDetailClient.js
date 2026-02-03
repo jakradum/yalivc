@@ -106,6 +106,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
     { id: 'pipeline-summary', label: 'Pipeline summary' },
     { id: 'media-coverage', label: 'Media coverage' },
     { id: 'contact-information', label: 'Contact Information' },
+    { id: 'download-centre', label: 'Download Centre' },
   ];
 
   // Handle menu click - navigate to main portal with section
@@ -190,6 +191,16 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
               <div className={styles.companyDetailHeaderInfo}>
                 <h1 className={styles.companyDetailName}>{company.name}</h1>
                 <span className={styles.companyDetailSector}>{company.sector || '-'}</span>
+                {company.link && (
+                  <a
+                    href={company.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.companyHeaderLink}
+                  >
+                    Visit Website →
+                  </a>
+                )}
               </div>
             </div>
 
@@ -557,19 +568,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod }) {
               )}
             </div>
 
-            {/* Website Link */}
-            {company.link && (
-              <div className={styles.visitWebsiteSection}>
-                <a
-                  href={company.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.modalLink}
-                >
-                  Visit Website →
-                </a>
-              </div>
-            )}
           </section>
         </main>
       </div>
