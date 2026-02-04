@@ -918,6 +918,59 @@
   color: #363636;
 }
 
+/* Older Report Banner */
+.olderReportBanner {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 2rem;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.olderReportBannerLink {
+  color: white;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.olderReportBannerLink:hover {
+  color: #e0e0e0;
+}
+
+.olderReportBannerClose {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.olderReportBannerClose:hover {
+  color: white;
+}
+
+.portalLayoutWithBanner {
+  padding-top: 96px;
+}
+
+.portalLayoutWithBanner .sidebar {
+  padding-top: 96px;
+}
+
 /* Section Navigation (Prev/Next) */
 .sectionNavigation {
   display: flex;

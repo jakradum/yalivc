@@ -10,23 +10,26 @@ import PortalLanding from './PortalLanding';
 import PortalContent from './PortalContent';
 
 export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
-// Get the end date of a quarter in Indian fiscal year
-// Q1 FY26 → June 30, 2025; Q2 FY26 → Sep 30, 2025; Q3 FY26 → Dec 31, 2025; Q4 FY26 → Mar 31, 2026
+// Get the end date string of a quarter in Indian fiscal year (YYYY-MM-DD)
+// Q1 FY26 → 2025-06-30; Q2 FY26 → 2025-09-30; Q3 FY26 → 2025-12-31; Q4 FY26 → 2026-03-31
 function getQuarterEndDate(quarter, fiscalYear) {
   if (!quarter || !fiscalYear) return null;
   const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
   const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
   switch (quarter) {
-    case 'Q1': return new Date(fullYear - 1, 5, 30); // June 30
-    case 'Q2': return new Date(fullYear - 1, 8, 30); // Sep 30
-    case 'Q3': return new Date(fullYear - 1, 11, 31); // Dec 31
-    case 'Q4': return new Date(fullYear, 2, 31); // Mar 31
+    case 'Q1': return `${fullYear - 1}-06-30`;
+    case 'Q2': return `${fullYear - 1}-09-30`;
+    case 'Q3': return `${fullYear - 1}-12-31`;
+    case 'Q4': return `${fullYear}-03-31`;
     default: return null;
   }
 }
 
-export default async function PartnersPortal() {
+export default async function PartnersPortal({ searchParams }) {
+  const { report: reportSlug, section: initialSection } = await searchParams;
+
   const [fundSettings, latestReport, investments, teamMembers, availableQuarters] = await Promise.all([
     getLPFundSettings(),
     getLatestLPQuarterlyReport(),
@@ -35,10 +38,11 @@ export default async function PartnersPortal() {
     getAvailableLPQuarters(),
   ]);
 
-  // Fetch full report data
+  // Fetch selected report, or fall back to latest
+  const selectedSlug = reportSlug || latestReport?.slug;
   let report = null;
-  if (latestReport?.slug) {
-    report = await getLPQuarterlyReportBySlug(latestReport.slug);
+  if (selectedSlug) {
+    report = await getLPQuarterlyReportBySlug(selectedSlug);
   }
 
   // Get report period
@@ -48,12 +52,14 @@ export default async function PartnersPortal() {
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
 
-  // Filter investments: only show companies invested during or before this quarter
+  // Filter investments: for the latest report show all companies;
+  // for older reports only show companies invested on or before that quarter
+  const isLatestReport = !reportSlug || selectedSlug === latestReport?.slug;
   const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
-  const filteredInvestments = quarterEndDate
+  const filteredInvestments = (!isLatestReport && quarterEndDate)
     ? investments?.filter(inv => {
-        if (!inv.investmentDate) return true; // include if no date set
-        return new Date(inv.investmentDate) <= quarterEndDate;
+        if (!inv.investmentDate) return false;
+        return inv.investmentDate <= quarterEndDate;
       })
     : investments;
 
@@ -136,6 +142,9 @@ export default async function PartnersPortal() {
         fundMetrics={fundMetrics}
         investments={filteredInvestments}
         allReports={availableQuarters || []}
+        isLatestReport={isLatestReport}
+        initialSection={initialSection || 'cover-note'}
+        reportSlug={reportSlug || null}
       />
     </PortalLanding>
   );
