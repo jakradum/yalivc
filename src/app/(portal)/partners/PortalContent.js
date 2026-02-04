@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './partners.module.css';
@@ -51,16 +51,15 @@ function PortalContentInner({
   gani,
   fundMetrics,
   investments,
-  allReports
+  allReports,
+  isLatestReport,
+  initialSection,
+  reportSlug
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const dropdownRef = useRef(null);
   const dropdownTimerRef = useRef(null);
   const headerRef = useRef(null);
-
-  // Get initial section from URL or default to 'cover-note'
-  const initialSection = searchParams?.get('section') || 'cover-note';
 
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -70,6 +69,7 @@ function PortalContentInner({
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
   const [hoveredSegment, setHoveredSegment] = useState(null);
   const [headerHidden, setHeaderHidden] = useState(false);
+  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(false);
 
   // Calculate the "as of" date from quarter/fiscal year
   const calculatedAsOfDate = calculateAsOfDate(quarter, fiscalYear);
@@ -159,11 +159,16 @@ function PortalContentInner({
     { id: 'download-centre', label: 'Download Centre' },
   ];
 
-  // Handle menu click - update state and URL
+  // Handle menu click - update state and URL without triggering navigation
   const handleMenuClick = (id) => {
     setActiveSection(id);
-    // Update URL without full page reload
-    router.push(`/partners?section=${id}`, { scroll: false });
+    // Update URL without triggering a server re-render
+    const url = new URL(window.location.href);
+    url.searchParams.set('section', id);
+    if (reportSlug) {
+      url.searchParams.set('report', reportSlug);
+    }
+    window.history.replaceState({}, '', url.toString());
     // Close sidebar on mobile after selection
     if (isMobile) {
       setSidebarOpen(false);
@@ -243,7 +248,7 @@ function PortalContentInner({
                 {allReports.map((r) => (
                   <a
                     key={r.slug}
-                    href={`/partners?report=${r.slug}`}
+                    href={`/partners?report=${r.slug}&section=${activeSection}`}
                     className={`${styles.fyDropdownItem} ${r.slug === report?.slug ? styles.fyDropdownItemActive : ''}`}
                     onClick={() => setFyDropdownOpen(false)}
                   >
@@ -255,6 +260,25 @@ function PortalContentInner({
           </div>
         </div>
       </header>
+
+      {/* Older Report Banner */}
+      {!isLatestReport && !olderReportBannerDismissed && (
+        <div className={styles.olderReportBanner}>
+          <span>
+            You are viewing an older report ({quarter} {fiscalYear}).{' '}
+            <a href={`/partners?section=${activeSection}`} className={styles.olderReportBannerLink}>
+              Switch to the latest →
+            </a>
+          </span>
+          <button
+            className={styles.olderReportBannerClose}
+            onClick={() => setOlderReportBannerDismissed(true)}
+            aria-label="Dismiss banner"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {/* Collapse Popup */}
       {showCollapsePopup && (
@@ -270,7 +294,7 @@ function PortalContentInner({
       )}
 
       {/* Main Layout with Sidebar */}
-      <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''}`}>
+      <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''} ${(!isLatestReport && !olderReportBannerDismissed) ? styles.portalLayoutWithBanner : ''}`}>
         {/* Fixed Sidebar */}
         <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
           <nav className={styles.sidebarNav}>
@@ -770,8 +794,8 @@ function PortalContentInner({
                     // Pie chart colors - secondary/tertiary palette (no burgundy primary)
                     // Secondary: #d75d86 (pink), #66bdd4 (teal), #ebde84 (gold)
                     // Tertiary: #c28d55 (copper/bronze)
-                    // Additional: #9f7ae4 (purple), #0d835b (green), #f5a623 (amber), #50e3c2 (mint)
-                    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2'];
+                    // Additional: #9f7ae4 (purple), #0d835b (green), #f5a623 (amber), #50e3c2 (mint), #B11248 (crimson)
+                    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2', '#B11248'];
 
                     // SVG Pie Chart calculations
                     const size = 220;
@@ -1134,22 +1158,6 @@ function PortalContentInner({
   );
 }
 
-// Loading fallback for Suspense
-function PortalContentFallback() {
-  return (
-    <div className={styles.portalContainer}>
-      <div className={styles.loadingContainer}>
-        <p>Loading...</p>
-      </div>
-    </div>
-  );
-}
-
-// Main export with Suspense wrapper
 export default function PortalContent(props) {
-  return (
-    <Suspense fallback={<PortalContentFallback />}>
-      <PortalContentInner {...props} />
-    </Suspense>
-  );
+  return <PortalContentInner {...props} />;
 }
