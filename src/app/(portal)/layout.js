@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import './portal-globals.css';
+import NavigationLoader from './partners/NavigationLoader';
 
 export const metadata = {
   title: 'Partners Portal | Yali Capital',
@@ -7,5 +9,12 @@ export const metadata = {
 };
 
 export default function PortalLayout({ children }) {
-  return children;
+  return (
+    <>
+      <Suspense fallback={null}>
+        <NavigationLoader />
+      </Suspense>
+      {children}
+    </>
+  );
 }
