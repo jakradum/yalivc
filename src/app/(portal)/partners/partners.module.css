@@ -2973,6 +2973,31 @@
   color: #666;
 }
 
+/* Full-screen loading overlay spinner */
+.loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 239, 239, 0.85);
+  backdrop-filter: blur(2px);
+}
+
+.loadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #830D35;
+  border-radius: 50%;
+  animation: portalSpin 0.7s linear infinite;
+}
+
+@keyframes portalSpin {
+  to { transform: rotate(360deg); }
+}
+
 .noContentMessage {
   font-family: var(--font-inter);
   font-size: 1rem;
