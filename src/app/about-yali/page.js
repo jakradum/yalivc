@@ -10,6 +10,9 @@ export const metadata = {
   title: 'About Yali Capital | Bangalore Venture Capital for Deep Tech',
   description: 'Bangalore-based venture capital firm funding India\'s deep tech companies. 60+ years of combined experience in tech investing across semiconductors, AI, robotics, genomics, and aerospace sectors.',
   keywords: 'bangalore venture capital, deep tech venture capital, tech investing in India, venture capital india, deep tech VC',
+  alternates: {
+    canonical: 'https://yali.vc/about-yali/',
+  },
 };
 
 export default async function AboutYali() {

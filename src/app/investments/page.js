@@ -22,6 +22,9 @@ export const metadata = {
   keywords: categories.emergingTechnologies.map(tech =>
     `${tech} investing, investing in ${tech} companies`
   ).join(', ') + ', deep tech venture capital, tech investing in India, bangalore venture capital',
+  alternates: {
+    canonical: 'https://yali.vc/investments/',
+  },
 };
 
 export default async function Investments() {
