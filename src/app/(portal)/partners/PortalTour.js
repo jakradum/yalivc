@@ -18,6 +18,16 @@ export default function PortalTour() {
     }
   }, []);
 
+  // Listen for custom event to replay tour
+  useEffect(() => {
+    const handleReplayTour = () => {
+      setShowTour(true);
+    };
+
+    window.addEventListener('portal-tour-replay', handleReplayTour);
+    return () => window.removeEventListener('portal-tour-replay', handleReplayTour);
+  }, []);
+
   useEffect(() => {
     if (showTour) {
       // Auto-dismiss after 5 seconds
@@ -61,4 +71,9 @@ export default function PortalTour() {
       </button>
     </div>
   );
+}
+
+// Export helper function to trigger tour replay
+export function replayPortalTour() {
+  window.dispatchEvent(new CustomEvent('portal-tour-replay'));
 }

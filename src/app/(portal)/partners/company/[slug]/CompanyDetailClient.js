@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { PortableText } from '@portabletext/react';
 import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
@@ -99,26 +100,50 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return round.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  // Helper to render update notes - converts line breaks to bullets if multiple lines
+  // PortableText components for rendering rich text
+  const portableTextComponents = {
+    block: {
+      normal: ({ children }) => <p className={styles.quarterUpdateNotes}>{children}</p>,
+      h3: ({ children }) => <h3 className={styles.quarterUpdateHeading}>{children}</h3>,
+      h4: ({ children }) => <h4 className={styles.quarterUpdateSubheading}>{children}</h4>,
+    },
+    list: {
+      bullet: ({ children }) => <ul className={styles.quarterUpdateHighlights}>{children}</ul>,
+      number: ({ children }) => <ol className={styles.quarterUpdateHighlights}>{children}</ol>,
+    },
+    listItem: {
+      bullet: ({ children }) => <li>{children}</li>,
+      number: ({ children }) => <li>{children}</li>,
+    },
+    marks: {
+      link: ({ children, value }) => (
+        <a href={value?.href} target="_blank" rel="noopener noreferrer" className={styles.quarterUpdateLink}>
+          {children}
+        </a>
+      ),
+    },
+  };
+
+  // Helper to render update notes - supports both Portable Text (new) and plain text (legacy)
   const renderUpdateNotes = (notes) => {
     if (!notes) return null;
 
-    // Split by line breaks and filter out empty lines
-    const lines = notes.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
-
-    // If single line, render as paragraph
-    if (lines.length === 1) {
-      return <p className={styles.quarterUpdateNotes}>{lines[0]}</p>;
+    // Check if notes is Portable Text (array of blocks) or legacy string
+    if (Array.isArray(notes)) {
+      // New Portable Text format
+      return (
+        <div className={styles.quarterUpdateNotesContainer}>
+          <PortableText value={notes} components={portableTextComponents} />
+        </div>
+      );
     }
 
-    // If multiple lines, render as bullet list
-    return (
-      <ul className={styles.quarterUpdateHighlights}>
-        {lines.map((line, idx) => (
-          <li key={idx}>{line}</li>
-        ))}
-      </ul>
-    );
+    // Legacy string format - render as plain paragraph (no auto-bulletisation)
+    if (typeof notes === 'string') {
+      return <p className={styles.quarterUpdateNotes}>{notes}</p>;
+    }
+
+    return null;
   };
 
   // Helper to get a sortable number from quarter data (higher = more recent)
@@ -134,11 +159,19 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     q => q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear
   );
 
+  // Helper to check if update notes have content (works for both Portable Text and legacy strings)
+  const hasUpdateNotes = (notes) => {
+    if (!notes) return false;
+    if (Array.isArray(notes)) return notes.length > 0;
+    if (typeof notes === 'string') return notes.trim().length > 0;
+    return false;
+  };
+
   // Previous quarters = all quarters that are NOT the current report period, sorted most recent first
-  // Only show quarters that have update notes text
+  // Only show quarters that have update notes
   const previousQuarters = allQuarterlyUpdates
     .filter(q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear))
-    .filter(q => q.updateNotes?.trim())
+    .filter(q => hasUpdateNotes(q.updateNotes))
     .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
 
   // For FMV display in investment table, use current quarter data if available, else most recent

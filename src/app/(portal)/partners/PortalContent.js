@@ -10,7 +10,7 @@ import { Openicon } from '../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../components/icons/small icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
-import PortalTour from './PortalTour';
+import PortalTour, { replayPortalTour } from './PortalTour';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -55,7 +55,9 @@ function PortalContentInner({
   allReports,
   isLatestReport,
   initialSection,
-  reportSlug
+  reportSlug,
+  quarterNews,
+  quarterSocialUpdates
 }) {
   const router = useRouter();
   const dropdownRef = useRef(null);
@@ -1019,30 +1021,71 @@ function PortalContentInner({
                   <PortableText value={report.mediaNotes} />
                 </div>
               )}
-              {report?.mediaFromNews && report.mediaFromNews.length > 0 ? (
-                <div className={styles.mediaCoverageGrid}>
-                  {report.mediaFromNews.map((item) => (
-                    <a
-                      key={item._id}
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.mediaCoverageCard}
-                    >
-                      <div className={styles.mediaCoverageCardContent}>
-                        <span className={styles.mediaCoveragePublication}>{item.publicationName || 'News'}</span>
-                        <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
-                        {item.date && (
-                          <span className={styles.mediaCoverageDate}>
-                            {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+
+              {/* News Articles - auto-fetched by quarter date range */}
+              {quarterNews && quarterNews.length > 0 && (
+                <>
+                  <h2 className={styles.mediaSectionTitle}>News Articles</h2>
+                  <div className={styles.mediaCoverageGrid}>
+                    {quarterNews.map((item) => (
+                      <a
+                        key={item._id}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.mediaCoverageCard}
+                      >
+                        <div className={styles.mediaCoverageCardContent}>
+                          <span className={styles.mediaCoveragePublication}>{item.publicationName || 'News'}</span>
+                          <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
+                          {item.date && (
+                            <span className={styles.mediaCoverageDate}>
+                              {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
+                        <span className={styles.mediaCoverageArrow}>→</span>
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Social Updates - auto-fetched by quarter date range */}
+              {quarterSocialUpdates && quarterSocialUpdates.length > 0 && (
+                <>
+                  <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
+                  <div className={styles.mediaCoverageGrid}>
+                    {quarterSocialUpdates.map((item) => (
+                      <a
+                        key={item._id}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.mediaCoverageCard}
+                      >
+                        <div className={styles.mediaCoverageCardContent}>
+                          <span className={styles.mediaCoveragePublication}>
+                            {item.platform === 'linkedin' ? 'LinkedIn' : item.platform === 'twitter' ? 'Twitter/X' : 'Social'}
                           </span>
-                        )}
-                      </div>
-                      <span className={styles.mediaCoverageArrow}>→</span>
-                    </a>
-                  ))}
-                </div>
-              ) : (
+                          <h3 className={styles.mediaCoverageHeadline}>
+                            {item.excerpt?.length > 100 ? item.excerpt.substring(0, 100) + '...' : item.excerpt}
+                          </h3>
+                          {item.date && (
+                            <span className={styles.mediaCoverageDate}>
+                              {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
+                        <span className={styles.mediaCoverageArrow}>→</span>
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Show placeholder if no news or social updates */}
+              {(!quarterNews || quarterNews.length === 0) && (!quarterSocialUpdates || quarterSocialUpdates.length === 0) && (
                 <div className={styles.placeholderContent}>
                   <p>No media coverage for this quarter.</p>
                 </div>
@@ -1095,6 +1138,16 @@ function PortalContentInner({
                   <p>Contact information will be displayed here once data is added in Sanity CMS.</p>
                 </div>
               )}
+              {/* Take a tour link */}
+              <div className={styles.tourReplaySection}>
+                <button
+                  type="button"
+                  className={styles.tourReplayLink}
+                  onClick={replayPortalTour}
+                >
+                  Take a tour of the portal
+                </button>
+              </div>
             </section>
           )}
 

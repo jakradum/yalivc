@@ -378,9 +378,45 @@ export default {
             {
               name: 'updateNotes',
               title: 'Quarter Update Notes',
-              type: 'text',
-              rows: 10,
-              description: 'Detailed narrative update for this quarter (long form)',
+              type: 'array',
+              of: [
+                {
+                  type: 'block',
+                  styles: [
+                    { title: 'Normal', value: 'normal' },
+                    { title: 'Heading', value: 'h3' },
+                    { title: 'Subheading', value: 'h4' },
+                  ],
+                  lists: [
+                    { title: 'Bullet', value: 'bullet' },
+                    { title: 'Numbered', value: 'number' },
+                  ],
+                  marks: {
+                    decorators: [
+                      { title: 'Bold', value: 'strong' },
+                      { title: 'Italic', value: 'em' },
+                    ],
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'URL',
+                        fields: [
+                          {
+                            name: 'href',
+                            type: 'url',
+                            title: 'URL',
+                            validation: (Rule) => Rule.uri({
+                              scheme: ['http', 'https', 'mailto', 'tel'],
+                            }),
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              ],
+              description: 'Detailed narrative update for this quarter (supports headings, lists, and links)',
             },
           ],
           preview: {

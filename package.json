@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^15.5.4",
+    "@portabletext/react": "^6.0.2",
     "@sanity/client": "^7.12.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",

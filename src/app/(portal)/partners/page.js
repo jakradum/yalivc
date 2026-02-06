@@ -5,12 +5,29 @@ import {
   getLPInvestments,
   getTeamMembers,
   getAvailableLPQuarters,
+  getNewsByDateRange,
+  getSocialUpdatesByDateRange,
 } from '@/lib/sanity-queries';
 import PortalLanding from './PortalLanding';
 import PortalContent from './PortalContent';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
+
+// Get the start date string of a quarter in Indian fiscal year (YYYY-MM-DD)
+// Q1 FY26 → 2025-04-01; Q2 FY26 → 2025-07-01; Q3 FY26 → 2025-10-01; Q4 FY26 → 2026-01-01
+function getQuarterStartDate(quarter, fiscalYear) {
+  if (!quarter || !fiscalYear) return null;
+  const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
+  const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
+  switch (quarter) {
+    case 'Q1': return `${fullYear - 1}-04-01`;
+    case 'Q2': return `${fullYear - 1}-07-01`;
+    case 'Q3': return `${fullYear - 1}-10-01`;
+    case 'Q4': return `${fullYear}-01-01`;
+    default: return null;
+  }
+}
 
 // Get the end date string of a quarter in Indian fiscal year (YYYY-MM-DD)
 // Q1 FY26 → 2025-06-30; Q2 FY26 → 2025-09-30; Q3 FY26 → 2025-12-31; Q4 FY26 → 2026-03-31
@@ -132,6 +149,17 @@ export default async function PartnersPortal({ searchParams }) {
 
   const fundMetrics = computeFundMetrics();
 
+  // Fetch news and social updates for the quarter date range
+  const quarterStartDate = getQuarterStartDate(quarter, fiscalYear);
+  const [quarterNews, quarterSocialUpdates] = await Promise.all([
+    quarterStartDate && quarterEndDate
+      ? getNewsByDateRange(quarterStartDate, quarterEndDate)
+      : Promise.resolve([]),
+    quarterStartDate && quarterEndDate
+      ? getSocialUpdatesByDateRange(quarterStartDate, quarterEndDate)
+      : Promise.resolve([]),
+  ]);
+
   return (
     <PortalLanding>
       <PortalContent
@@ -147,6 +175,8 @@ export default async function PartnersPortal({ searchParams }) {
         isLatestReport={isLatestReport}
         initialSection={initialSection || 'cover-note'}
         reportSlug={reportSlug || null}
+        quarterNews={quarterNews || []}
+        quarterSocialUpdates={quarterSocialUpdates || []}
       />
     </PortalLanding>
   );

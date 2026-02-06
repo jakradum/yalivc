@@ -1133,3 +1133,35 @@ export async function getAvailableLPQuarters() {
     }`
   );
 }
+
+// Get news articles within a date range (for quarterly media coverage)
+export async function getNewsByDateRange(startDate, endDate) {
+  return client.fetch(
+    `*[_type == "news" && date >= $startDate && date <= $endDate] | order(date desc) {
+      _id,
+      headlineEdited,
+      date,
+      url,
+      isVideo,
+      "publicationName": publication->name
+    }`,
+    { startDate, endDate }
+  );
+}
+
+// Get social updates within a date range (for quarterly media coverage)
+export async function getSocialUpdatesByDateRange(startDate, endDate) {
+  return client.fetch(
+    `*[_type == "socialUpdate" && date >= $startDate && date <= $endDate] | order(date desc) {
+      _id,
+      platform,
+      url,
+      excerpt,
+      date,
+      "imageUrl": image.asset->url,
+      "teamMemberName": featuredTeamMember->name,
+      "companyName": featuredCompany->name
+    }`,
+    { startDate, endDate }
+  );
+}
