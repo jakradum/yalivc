@@ -3242,3 +3242,151 @@
   flex-shrink: 0;
   transition: color 0.2s ease;
 }
+
+/* ===== PORTAL TOUR ===== */
+.tourOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(0, 0, 0, 0.5);
+  animation: tourFadeIn 0.3s ease;
+}
+
+@keyframes tourFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tourCallout {
+  position: absolute;
+  background: white;
+  padding: 0.875rem 1rem;
+  border-radius: 6px;
+  max-width: 240px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  animation: tourSlideIn 0.4s ease;
+}
+
+@keyframes tourSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tourCallout p {
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.tourArrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+}
+
+/* Sidebar callout - positioned to left of sidebar toggle */
+.tourCalloutSidebar {
+  top: 80px;
+  left: 70px;
+  animation-delay: 0.1s;
+}
+
+.tourCalloutSidebar .tourArrow {
+  top: -16px;
+  left: 20px;
+  border-bottom-color: white;
+  border-top: none;
+}
+
+/* Quarter selector callout - positioned below dropdown */
+.tourCalloutQuarter {
+  top: 80px;
+  right: 20px;
+  animation-delay: 0.2s;
+}
+
+.tourCalloutQuarter .tourArrow {
+  top: -16px;
+  right: 30px;
+  border-bottom-color: white;
+  border-top: none;
+}
+
+/* Portfolio callout - positioned near portfolio section in sidebar */
+.tourCalloutPortfolio {
+  top: 280px;
+  left: 70px;
+  animation-delay: 0.3s;
+}
+
+.tourCalloutPortfolio .tourArrow {
+  left: -16px;
+  top: 10px;
+  border-right-color: white;
+  border-left: none;
+}
+
+.tourDismissBtn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #830D35;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  animation: tourSlideIn 0.4s ease 0.4s both;
+}
+
+.tourDismissBtn:hover {
+  background: #6a0a2b;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .tourCallout {
+    max-width: 200px;
+    padding: 0.75rem;
+  }
+
+  .tourCallout p {
+    font-size: 0.75rem;
+  }
+
+  .tourCalloutSidebar {
+    top: 75px;
+    left: 10px;
+  }
+
+  .tourCalloutQuarter {
+    top: 75px;
+    right: 10px;
+  }
+
+  .tourCalloutPortfolio {
+    top: 200px;
+    left: 10px;
+  }
+
+  .tourDismissBtn {
+    bottom: 30px;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.8125rem;
+  }
+}

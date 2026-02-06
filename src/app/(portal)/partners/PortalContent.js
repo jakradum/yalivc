@@ -10,6 +10,7 @@ import { Openicon } from '../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../components/icons/small icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
+import PortalTour from './PortalTour';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -206,6 +207,9 @@ function PortalContentInner({
 
   return (
     <div className={styles.portalContainer}>
+      {/* First-time user tour */}
+      <PortalTour />
+
       {/* Header */}
       <header
         ref={headerRef}
