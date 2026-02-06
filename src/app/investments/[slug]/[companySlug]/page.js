@@ -14,7 +14,7 @@ import teamLPstyles from '../../../landing page styles/team.module.css';
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
-  const { companySlug } = await params;
+  const { slug, companySlug } = await params;
   const company = await getCompanyBySlug(companySlug);
 
   if (!company) {
@@ -28,6 +28,9 @@ export async function generateMetadata({ params }) {
     description: company.detail
       ? `${company.detail.substring(0, 155)}...`
       : `${company.name} is a portfolio company of Yali Capital, a deep tech venture capital firm based in Bangalore, India.`,
+    alternates: {
+      canonical: `https://yali.vc/investments/${slug}/${companySlug}/`,
+    },
   };
 }
 

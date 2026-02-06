@@ -29,6 +29,9 @@ export async function generateMetadata({ params }) {
   return {
     title: `${member.name} | Yali Capital`,
     description: member.oneLiner || `${member.name}, ${member.role} at Yali Capital`,
+    alternates: {
+      canonical: `https://yali.vc/about-yali/${slug}/`,
+    },
   };
 }
 
