@@ -11,13 +11,14 @@ import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports }) {
+export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports, isLatestReport }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
+  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(false);
   const headerRef = useRef(null);
   const dropdownRef = useRef(null);
   const dropdownTimerRef = useRef(null);
@@ -222,8 +223,27 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
         </div>
       </header>
 
+      {/* Older Report Banner */}
+      {!isLatestReport && !olderReportBannerDismissed && (
+        <div className={`${styles.olderReportBanner} ${headerHidden ? styles.olderReportBannerHidden : ''}`}>
+          <span>
+            You are viewing an older report ({currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}).{' '}
+            <a href={`/partners/company/${company.slug}`} className={styles.olderReportBannerLink}>
+              Switch to the latest →
+            </a>
+          </span>
+          <button
+            className={styles.olderReportBannerClose}
+            onClick={() => setOlderReportBannerDismissed(true)}
+            aria-label="Dismiss banner"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Main Layout with Sidebar */}
-      <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''}`}>
+      <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''} ${(!isLatestReport && !olderReportBannerDismissed) ? styles.portalLayoutWithBanner : ''}`}>
         {/* Fixed Sidebar */}
         <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
           <nav className={styles.sidebarNav}>
