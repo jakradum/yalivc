@@ -9,6 +9,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
+import { getQuarterEndDate } from '@/lib/quarterly-utils';
 
 import Footer from '../../../../components/footer';
 
@@ -405,12 +406,21 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
 
             {/* Investment Round Details Table - Combined: Investment Details (first round) + Follow-on Rounds */}
             {(() => {
+              // Get quarter end date for filtering rounds
+              const quarterEndDate = getQuarterEndDate(
+                currentReportPeriod?.quarter,
+                currentReportPeriod?.fiscalYear
+              );
+
               // Build combined rounds array: Investment Details as first round + investmentRounds as follow-ons
               const allRounds = [];
 
               // First round from Investment Details tab (if any investment data exists)
+              // Only include if invested on or before the quarter end date
               const hasFirstRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation || company.totalRoundSize || company.postMoneyValuation;
-              if (hasFirstRound) {
+              const firstRoundInScope = !quarterEndDate || !company.investmentDate || company.investmentDate <= quarterEndDate;
+
+              if (hasFirstRound && firstRoundInScope) {
                 allRounds.push({
                   roundName: company.fundingRound,
                   investmentDate: company.investmentDate,
@@ -425,8 +435,17 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               }
 
               // Follow-on rounds from investmentRounds array
+              // Only include rounds that occurred on or before the quarter end date
               if (company.investmentRounds?.length > 0) {
-                allRounds.push(...company.investmentRounds.map(r => ({ ...r, isFirstRound: false })));
+                const filteredFollowOnRounds = company.investmentRounds
+                  .filter(r => {
+                    // Rounds without date are included (legacy data)
+                    if (!r.investmentDate) return true;
+                    // Only include if on or before quarter end date
+                    return !quarterEndDate || r.investmentDate <= quarterEndDate;
+                  })
+                  .map(r => ({ ...r, isFirstRound: false }));
+                allRounds.push(...filteredFollowOnRounds);
               }
 
               // Only show section if there's round data
