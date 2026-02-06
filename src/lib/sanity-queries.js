@@ -1038,6 +1038,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
         "photo": photo.asset->url
       },
       "pdfUrl": generatedPdf.asset->url,
+      "fundFinancialsPdfUrl": fundFinancialsPdf.asset->url,
       // Portfolio (references to Core Content)
       "portfolioCompanies": portfolioCompanies[]->{
         _id,

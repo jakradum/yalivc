@@ -242,6 +242,16 @@ export default {
 
     // ===== OUTPUT =====
     {
+      name: 'fundFinancialsPdf',
+      title: 'Fund Financials PDF',
+      type: 'file',
+      group: 'output',
+      options: {
+        accept: 'application/pdf'
+      },
+      description: 'Upload the fund financials PDF for this quarter'
+    },
+    {
       name: 'generatedPdf',
       title: 'Generated PDF',
       type: 'file',
