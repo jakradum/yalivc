@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug } from '@/lib/sanity-queries';
+import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
 import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 0;
@@ -37,10 +37,11 @@ export default async function CompanyPage({ params, searchParams }) {
   const { slug } = await params;
   const { report: reportSlug } = await searchParams;
 
-  const [company, latestReport, allSlugs] = await Promise.all([
+  const [company, latestReport, allSlugs, availableQuarters] = await Promise.all([
     getLPInvestmentByCompanySlug(slug),
     getLatestLPQuarterlyReport(),
     getAllLPInvestmentSlugs(),
+    getAvailableLPQuarters(),
   ]);
 
   if (!company) {
@@ -70,6 +71,7 @@ export default async function CompanyPage({ params, searchParams }) {
       currentReportPeriod={currentReportPeriod}
       allCompanySlugs={allCompanySlugs}
       reportSlug={reportSlug || null}
+      allReports={availableQuarters || []}
     />
   );
 }
