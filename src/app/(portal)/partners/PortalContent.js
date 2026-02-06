@@ -263,7 +263,7 @@ function PortalContentInner({
 
       {/* Older Report Banner */}
       {!isLatestReport && !olderReportBannerDismissed && (
-        <div className={styles.olderReportBanner}>
+        <div className={`${styles.olderReportBanner} ${headerHidden ? styles.olderReportBannerHidden : ''}`}>
           <span>
             You are viewing an older report ({quarter} {fiscalYear}).{' '}
             <a href={`/partners?section=${activeSection}`} className={styles.olderReportBannerLink}>
@@ -746,7 +746,7 @@ function PortalContentInner({
                         <tr
                           key={investment._id || idx}
                           className={styles.clickableRow}
-                          onClick={() => router.push(`/partners/company/${investment.slug}`)}
+                          onClick={() => router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`)}
                           style={{ cursor: 'pointer' }}
                         >
                           <td>{idx + 1}</td>
@@ -879,7 +879,7 @@ function PortalContentInner({
                     {investments.map((company, idx) => (
                       <Link
                         key={company._id || idx}
-                        href={`/partners/company/${company.slug}`}
+                        href={`/partners/company/${company.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
                         className={styles.companyTile}
                       >
                         <div className={styles.companyTileHeader}>
