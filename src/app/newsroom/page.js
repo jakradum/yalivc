@@ -13,6 +13,9 @@ export const metadata = {
   title: 'Newsroom | Yali Capital - Deep Tech VC News & Updates',
   description: 'Latest news, press releases, and media coverage about Yali Capital. Stay updated on our deep tech investments, portfolio company announcements, and venture capital insights from Bangalore.',
   keywords: 'Yali Capital news, deep tech VC news, venture capital India news, Bangalore VC updates, startup funding news India',
+  alternates: {
+    canonical: 'https://yali.vc/newsroom/',
+  },
 };
 
 export default async function Newsroom() {
