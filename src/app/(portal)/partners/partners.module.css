@@ -3073,6 +3073,21 @@
   font-weight: 500;
 }
 
+/* ===== FUND FINANCIALS ===== */
+.fundFinancialsDownload {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.fundFinancialsDesc {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+  margin: 0;
+}
+
 .downloadButton {
   display: inline-flex;
   align-items: center;
@@ -3086,6 +3101,7 @@
   border: 1px solid #830D35;
   transition: all 0.2s ease;
   letter-spacing: 0.02em;
+  width: fit-content;
 }
 
 .downloadButton:hover {
