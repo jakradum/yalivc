@@ -54,6 +54,9 @@ export default async function CompanyPage({ params, searchParams }) {
     selectedReport = await getLPQuarterlyReportBySlug(reportSlug);
   }
 
+  // Determine if viewing the latest report
+  const isLatestReport = !reportSlug || reportSlug === latestReport?.slug;
+
   // Get current report period from selected report
   const currentReportPeriod = {
     quarter: selectedReport?.quarter || 'Q3',
@@ -72,6 +75,7 @@ export default async function CompanyPage({ params, searchParams }) {
       allCompanySlugs={allCompanySlugs}
       reportSlug={reportSlug || null}
       allReports={availableQuarters || []}
+      isLatestReport={isLatestReport}
     />
   );
 }
