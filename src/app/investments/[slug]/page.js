@@ -29,6 +29,9 @@ export async function generateMetadata({ params }) {
   return {
     title: `${category.name.charAt(0).toUpperCase() + category.name.slice(1)} | Yali Capital`,
     description: category.description || `Learn about YALI Capital's investments in ${category.name}`,
+    alternates: {
+      canonical: `https://yali.vc/investments/${slug}/`,
+    },
   };
 }
 

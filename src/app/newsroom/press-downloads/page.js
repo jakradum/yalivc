@@ -9,6 +9,9 @@ export const metadata = {
   title: 'Press Downloads | Yali Capital - Media Resources',
   description: 'Download official Yali Capital media assets including logos, team photos, and press materials. Resources for journalists and media covering our deep tech venture capital investments.',
   keywords: 'Yali Capital press kit, media downloads, VC logo download, press materials, media resources',
+  alternates: {
+    canonical: 'https://yali.vc/newsroom/press-downloads/',
+  },
 };
 
 export const revalidate = 60;
