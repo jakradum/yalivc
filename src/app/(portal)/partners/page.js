@@ -52,13 +52,15 @@ export default async function PartnersPortal({ searchParams }) {
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
 
-  // Filter investments: for the latest report show all companies;
-  // for older reports only show companies invested on or before that quarter
+  // Filter investments: only show companies invested on or before the report quarter
+  // This applies to ALL reports (including latest) to exclude future companies
   const isLatestReport = !reportSlug || selectedSlug === latestReport?.slug;
   const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
-  const filteredInvestments = (!isLatestReport && quarterEndDate)
+  const filteredInvestments = quarterEndDate
     ? investments?.filter(inv => {
-        if (!inv.investmentDate) return false;
+        // Companies without investment date are included (legacy data)
+        if (!inv.investmentDate) return true;
+        // Only show companies invested on or before the quarter end date
         return inv.investmentDate <= quarterEndDate;
       })
     : investments;

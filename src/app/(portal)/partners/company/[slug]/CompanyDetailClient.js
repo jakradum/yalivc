@@ -11,7 +11,7 @@ import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs }) {
+export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -142,9 +142,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     { id: 'download-centre', label: 'Download Centre' },
   ];
 
-  // Handle menu click - navigate to main portal with section
+  // Handle menu click - navigate to main portal with section (preserve report context)
   const handleMenuClick = (id) => {
-    router.push(`/partners?section=${id}`);
+    const reportParam = reportSlug ? `&report=${reportSlug}` : '';
+    router.push(`/partners?section=${id}${reportParam}`);
     if (isMobile) {
       setSidebarOpen(false);
     }
@@ -212,7 +213,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
         <main className={styles.mainArea}>
           <section className={`${styles.contentSection} ${styles.companyDetailSection}`}>
             {/* Back Link */}
-            <Link href="/partners?section=portfolio-company-updates" className={styles.backLink}>
+            <Link href={`/partners?section=portfolio-company-updates${reportSlug ? `&report=${reportSlug}` : ''}`} className={styles.backLink}>
               <span className={styles.backLinkArrow}>←</span>
               Back to Portfolio
             </Link>
@@ -616,7 +617,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
             <div className={styles.sectionNavigation}>
               {prevCompany ? (
                 <Link
-                  href={`/partners/company/${prevCompany.slug}`}
+                  href={`/partners/company/${prevCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
                   className={styles.sectionNavBtn}
                 >
                   <span className={styles.sectionNavArrow}>←</span>
@@ -627,7 +628,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               )}
               {nextCompany ? (
                 <Link
-                  href={`/partners/company/${nextCompany.slug}`}
+                  href={`/partners/company/${nextCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
                   className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
                 >
                   <span className={styles.sectionNavLabel}>{nextCompany.name}</span>
@@ -635,7 +636,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 </Link>
               ) : (
                 <Link
-                  href="/partners?section=fund-financials"
+                  href={`/partners?section=fund-financials${reportSlug ? `&report=${reportSlug}` : ''}`}
                   className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
                 >
                   <span className={styles.sectionNavLabel}>Fund Financials</span>
