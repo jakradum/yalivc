@@ -23,6 +23,8 @@ import {
 import lpQuarterlyReport from './lpQuarterlyReport'
 import lpFundSettings from './lpFundSettings'
 import lpPipelineDeal from './lpPipelineDeal'
+import lpDownloadConsent from './lpDownloadConsent'
+import lpPortalFeedback from './lpPortalFeedback'
 
 export const schemaTypes = [
   // Existing schemas
@@ -49,6 +51,8 @@ export const schemaTypes = [
   lpQuarterlyReport,
   lpFundSettings,
   lpPipelineDeal,
+  lpDownloadConsent,
+  lpPortalFeedback,
   // Homepage sections
   faq,
   socialUpdate
