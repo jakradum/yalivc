@@ -1,5 +1,6 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
+import { getPortfolioCompaniesForQuarter } from '@/lib/quarterly-utils';
 import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 0;
@@ -63,8 +64,26 @@ export default async function CompanyPage({ params, searchParams }) {
     fiscalYear: selectedReport?.fiscalYear || 'FY26',
   };
 
-  // Build ordered list of company slugs for next/prev navigation
-  const allCompanySlugs = (allSlugs || [])
+  // Filter companies by quarter using centralized quarterly logic
+  // This is the single source of truth for what companies are visible in each quarter
+  const companiesInScope = getPortfolioCompaniesForQuarter(
+    allSlugs,
+    currentReportPeriod.quarter,
+    currentReportPeriod.fiscalYear
+  );
+
+  // Check if current company should be visible in this quarter
+  // If not, redirect to the portfolio page (company was invested after this quarter)
+  const isCompanyInScope = companiesInScope.some(c => c.slug === slug);
+  if (!isCompanyInScope) {
+    const redirectUrl = reportSlug
+      ? `/partners?section=portfolio-company-updates&report=${reportSlug}`
+      : '/partners?section=portfolio-company-updates';
+    redirect(redirectUrl);
+  }
+
+  // Build ordered list of company slugs for next/prev navigation (filtered by quarter)
+  const allCompanySlugs = companiesInScope
     .filter(item => item.slug)
     .map(item => ({ slug: item.slug, name: item.name }));
 
