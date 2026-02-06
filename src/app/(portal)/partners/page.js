@@ -8,41 +8,16 @@ import {
   getNewsByDateRange,
   getSocialUpdatesByDateRange,
 } from '@/lib/sanity-queries';
+import {
+  getQuarterStartDate,
+  getQuarterEndDate,
+  getPortfolioCompaniesForQuarter,
+} from '@/lib/quarterly-utils';
 import PortalLanding from './PortalLanding';
 import PortalContent from './PortalContent';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
-
-// Get the start date string of a quarter in Indian fiscal year (YYYY-MM-DD)
-// Q1 FY26 → 2025-04-01; Q2 FY26 → 2025-07-01; Q3 FY26 → 2025-10-01; Q4 FY26 → 2026-01-01
-function getQuarterStartDate(quarter, fiscalYear) {
-  if (!quarter || !fiscalYear) return null;
-  const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
-  const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
-  switch (quarter) {
-    case 'Q1': return `${fullYear - 1}-04-01`;
-    case 'Q2': return `${fullYear - 1}-07-01`;
-    case 'Q3': return `${fullYear - 1}-10-01`;
-    case 'Q4': return `${fullYear}-01-01`;
-    default: return null;
-  }
-}
-
-// Get the end date string of a quarter in Indian fiscal year (YYYY-MM-DD)
-// Q1 FY26 → 2025-06-30; Q2 FY26 → 2025-09-30; Q3 FY26 → 2025-12-31; Q4 FY26 → 2026-03-31
-function getQuarterEndDate(quarter, fiscalYear) {
-  if (!quarter || !fiscalYear) return null;
-  const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
-  const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
-  switch (quarter) {
-    case 'Q1': return `${fullYear - 1}-06-30`;
-    case 'Q2': return `${fullYear - 1}-09-30`;
-    case 'Q3': return `${fullYear - 1}-12-31`;
-    case 'Q4': return `${fullYear}-03-31`;
-    default: return null;
-  }
-}
 
 export default async function PartnersPortal({ searchParams }) {
   const { report: reportSlug, section: initialSection } = await searchParams;
@@ -69,18 +44,10 @@ export default async function PartnersPortal({ searchParams }) {
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
 
-  // Filter investments: only show companies invested on or before the report quarter
-  // This applies to ALL reports (including latest) to exclude future companies
+  // Filter investments using centralized quarterly logic
+  // Only show companies invested on or before the report quarter
   const isLatestReport = !reportSlug || selectedSlug === latestReport?.slug;
-  const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
-  const filteredInvestments = quarterEndDate
-    ? investments?.filter(inv => {
-        // Companies without investment date are included (legacy data)
-        if (!inv.investmentDate) return true;
-        // Only show companies invested on or before the quarter end date
-        return inv.investmentDate <= quarterEndDate;
-      })
-    : investments;
+  const filteredInvestments = getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear);
 
   // Find Gani from team members or use fallback
   const gani = teamMembers.find(t =>
@@ -139,7 +106,8 @@ export default async function PartnersPortal({ searchParams }) {
       amountDrawnDown: fundSettings?.amountDrawnDown,
       totalInvestedInPortfolio: totalInvested,
       fmvOfPortfolio: totalFMV,
-      numberOfPortfolioCompanies: fundSettings?.portfolioCompanies ?? filteredInvestments?.length ?? 0,
+      // Always calculate from filtered investments - single source of truth via quarterly-utils
+      numberOfPortfolioCompanies: filteredInvestments?.length ?? 0,
       amountReturned: totalReturned,
       moic: parsedMoic ?? computedMoic,
       tvpi: parsedTvpi ?? computedTvpi,
@@ -151,6 +119,7 @@ export default async function PartnersPortal({ searchParams }) {
 
   // Fetch news and social updates for the quarter date range
   const quarterStartDate = getQuarterStartDate(quarter, fiscalYear);
+  const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
   const [quarterNews, quarterSocialUpdates] = await Promise.all([
     quarterStartDate && quarterEndDate
       ? getNewsByDateRange(quarterStartDate, quarterEndDate)
