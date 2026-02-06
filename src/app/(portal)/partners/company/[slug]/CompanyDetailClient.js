@@ -11,13 +11,16 @@ import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug }) {
+export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [headerHidden, setHeaderHidden] = useState(false);
+  const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
   const headerRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const dropdownTimerRef = useRef(null);
 
   // Detect mobile and set default sidebar state
   useEffect(() => {
@@ -56,6 +59,17 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setFyDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Next/prev company navigation
@@ -175,9 +189,36 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
           </Link>
         </div>
         <div className={styles.headerRight}>
-          <span className={styles.quarterLabel}>
-            {currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}
-          </span>
+          <div
+            className={styles.fyDropdown}
+            ref={dropdownRef}
+            onMouseEnter={() => clearTimeout(dropdownTimerRef.current)}
+            onMouseLeave={() => {
+              dropdownTimerRef.current = setTimeout(() => setFyDropdownOpen(false), 400);
+            }}
+          >
+            <button
+              className={styles.fyDropdownBtn}
+              onClick={() => setFyDropdownOpen(!fyDropdownOpen)}
+            >
+              <span>{currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}</span>
+              <span className={styles.fyDropdownArrow}>▼</span>
+            </button>
+            {fyDropdownOpen && allReports && allReports.length > 0 && (
+              <div className={styles.fyDropdownMenu}>
+                {allReports.map((r) => (
+                  <a
+                    key={r.slug}
+                    href={`/partners/company/${company.slug}?report=${r.slug}`}
+                    className={`${styles.fyDropdownItem} ${r.slug === reportSlug ? styles.fyDropdownItemActive : ''}`}
+                    onClick={() => setFyDropdownOpen(false)}
+                  >
+                    {r.quarter} {r.fiscalYear}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
