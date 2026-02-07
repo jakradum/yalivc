@@ -1302,8 +1302,8 @@ function PortalContentInner({
                       ))}
                     </div>
                     <div className={styles.npsLabels}>
-                      <span className={styles.npsLabel}>Not likely</span>
-                      <span className={styles.npsLabel}>Very likely</span>
+                      <span className={styles.npsLabel}>Not satisfied</span>
+                      <span className={styles.npsLabel}>Very satisfied</span>
                     </div>
 
                     {npsScore !== null && npsScore < 8 && (
