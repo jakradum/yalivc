@@ -9,7 +9,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
-import { getQuarterEndDate } from '@/lib/quarterly-utils';
+import { getQuarterEndDate, getQuartersBefore, sortQuartersDescending } from '@/lib/quarterly-utils';
 
 import Footer from '../../../../components/footer';
 
@@ -147,13 +147,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return null;
   };
 
-  // Helper to get a sortable number from quarter data (higher = more recent)
-  const quarterSortKey = (q) => {
-    const yearNum = parseInt(q.fiscalYear?.replace('FY', '') || '0', 10);
-    const qNum = parseInt(q.quarter?.replace('Q', '') || '0', 10);
-    return yearNum * 10 + qNum;
-  };
-
   // Find quarterly update matching the current report period
   const allQuarterlyUpdates = company.quarterlyUpdates || [];
   const currentQuarterUpdate = allQuarterlyUpdates.find(
@@ -168,12 +161,13 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return false;
   };
 
-  // Previous quarters = all quarters that are NOT the current report period, sorted most recent first
+  // Previous quarters = quarters chronologically BEFORE the current report period (using centralized utility)
   // Only show quarters that have update notes
-  const previousQuarters = allQuarterlyUpdates
-    .filter(q => !(q.quarter === currentReportPeriod?.quarter && q.fiscalYear === currentReportPeriod?.fiscalYear))
-    .filter(q => hasUpdateNotes(q.updateNotes))
-    .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
+  const previousQuarters = getQuartersBefore(
+    allQuarterlyUpdates,
+    currentReportPeriod?.quarter,
+    currentReportPeriod?.fiscalYear
+  ).filter(q => hasUpdateNotes(q.updateNotes));
 
   // For FMV display in investment table, use current quarter data if available, else most recent
   const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
@@ -507,9 +501,9 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
             {/* Financials / Key Matrix */}
             {(() => {
               // Only show for revenue-making companies with quarterly data
-              const quartersWithFinancials = allQuarterlyUpdates
-                .filter(q => q.revenueINR != null || q.patINR != null)
-                .sort((a, b) => quarterSortKey(b) - quarterSortKey(a));
+              const quartersWithFinancials = sortQuartersDescending(
+                allQuarterlyUpdates.filter(q => q.revenueINR != null || q.patINR != null)
+              );
 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
 
