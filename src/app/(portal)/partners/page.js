@@ -59,25 +59,27 @@ export default async function PartnersPortal({ searchParams }) {
     photo: "/images/gani.webp"
   };
 
-  // Compute fund metrics - prefer Sanity data, fall back to computed values
+  // Compute fund metrics - use quarter-specific data from Sanity, fall back to computed values
   const computeFundMetrics = () => {
     const fundSize = fundSettings?.fundSizeAtClose;
+
+    // Find the matching quarter's performance data from fundSettings
+    const quarterPerformance = fundSettings?.quarterlyPerformance?.find(
+      qp => qp.quarter === quarter && qp.fiscalYear === fiscalYear
+    );
 
     // Sum up invested amounts from filtered portfolio companies (for fallback)
     const computedTotalInvested = filteredInvestments?.reduce((sum, inv) =>
       sum + (inv.yaliInvestmentAmount || 0), 0) || 0;
 
     // Get quarterly data for the report period to compute FMV (for fallback)
-    const reportQuarter = report?.quarter;
-    const reportFY = report?.fiscalYear;
-
     let computedTotalFMV = 0;
     let computedTotalReturned = 0;
 
     filteredInvestments?.forEach(inv => {
       const quarterData = inv.latestQuarter ||
         inv.quarterlyUpdates?.find(q =>
-          q.quarter === reportQuarter && q.fiscalYear === reportFY
+          q.quarter === quarter && q.fiscalYear === fiscalYear
         ) || inv.quarterlyUpdates?.[0];
 
       if (quarterData) {
@@ -86,32 +88,27 @@ export default async function PartnersPortal({ searchParams }) {
       }
     });
 
-    // Use Sanity data if available, otherwise use computed values
-    const totalInvested = fundSettings?.totalInvested ?? computedTotalInvested;
-    const totalFMV = fundSettings?.fairMarketValue ?? computedTotalFMV;
-    const totalReturned = fundSettings?.amountReturned ?? computedTotalReturned;
+    // Use quarter-specific Sanity data if available, otherwise use computed values
+    const totalInvested = quarterPerformance?.totalInvested ?? computedTotalInvested;
+    const totalFMV = quarterPerformance?.fairMarketValue ?? computedTotalFMV;
+    const totalReturned = quarterPerformance?.amountReturned ?? computedTotalReturned;
 
-    // Parse MOIC/TVPI/DPI from Sanity (stored as strings) or compute
-    const parsedMoic = fundSettings?.moic ? parseFloat(fundSettings.moic) : null;
-    const parsedTvpi = fundSettings?.tvpi ? parseFloat(fundSettings.tvpi) : null;
-    const parsedDpi = fundSettings?.dpi ? parseFloat(fundSettings.dpi) : null;
-
-    // Compute fallback metrics
+    // Use quarter-specific MOIC/TVPI/DPI from Sanity or compute
     const computedMoic = totalInvested > 0 ? (totalFMV + totalReturned) / totalInvested : 0;
     const computedDpi = totalInvested > 0 ? totalReturned / totalInvested : 0;
     const computedTvpi = computedMoic;
 
     return {
       fundSizeAtClose: fundSize,
-      amountDrawnDown: fundSettings?.amountDrawnDown,
+      amountDrawnDown: quarterPerformance?.amountDrawnDown,
       totalInvestedInPortfolio: totalInvested,
       fmvOfPortfolio: totalFMV,
       // Always calculate from filtered investments - single source of truth via quarterly-utils
       numberOfPortfolioCompanies: filteredInvestments?.length ?? 0,
       amountReturned: totalReturned,
-      moic: parsedMoic ?? computedMoic,
-      tvpi: parsedTvpi ?? computedTvpi,
-      dpi: parsedDpi ?? computedDpi,
+      moic: quarterPerformance?.moic ?? computedMoic,
+      tvpi: quarterPerformance?.tvpi ?? computedTvpi,
+      dpi: quarterPerformance?.dpi ?? computedDpi,
     };
   };
 

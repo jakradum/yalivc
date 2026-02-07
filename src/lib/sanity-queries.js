@@ -791,15 +791,18 @@ export async function getLPFundSettings() {
       website,
       "logoLight": logoLight.asset->url,
       "logoDark": logoDark.asset->url,
-      // Performance metrics from Sanity
-      amountDrawnDown,
-      totalInvested,
-      fairMarketValue,
-      portfolioCompanies,
-      amountReturned,
-      moic,
-      tvpi,
-      dpi
+      // Quarterly performance array
+      quarterlyPerformance[] {
+        quarter,
+        fiscalYear,
+        amountDrawnDown,
+        totalInvested,
+        fairMarketValue,
+        amountReturned,
+        moic,
+        tvpi,
+        dpi
+      }
     }`
   );
 }
