@@ -74,6 +74,76 @@ function PortalContentInner({
   const [headerHidden, setHeaderHidden] = useState(false);
   const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(false);
 
+  // Download disclaimer state
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [pendingDownload, setPendingDownload] = useState(null);
+  const [isLoggingConsent, setIsLoggingConsent] = useState(false);
+
+  // NPS Feedback state
+  const [npsScore, setNpsScore] = useState(null);
+  const [feedbackDetails, setFeedbackDetails] = useState('');
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+
+  // Handle download click - show disclaimer first
+  const handleDownloadClick = (downloadUrl, downloadType, reportQuarter, fileName) => {
+    setPendingDownload({ url: downloadUrl, type: downloadType, quarter: reportQuarter, fileName });
+    setDisclaimerOpen(true);
+  };
+
+  // Handle disclaimer agreement
+  const handleDisclaimerAgree = async () => {
+    if (!pendingDownload) return;
+
+    setIsLoggingConsent(true);
+    try {
+      // Log consent to Sanity
+      await fetch('/api/portal-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          downloadType: pendingDownload.type,
+          reportQuarter: pendingDownload.quarter,
+          fileName: pendingDownload.fileName,
+        }),
+      });
+
+      // Proceed with download
+      window.open(pendingDownload.url, '_blank');
+    } catch (error) {
+      console.error('Failed to log download consent:', error);
+      // Still allow download even if logging fails
+      window.open(pendingDownload.url, '_blank');
+    } finally {
+      setIsLoggingConsent(false);
+      setDisclaimerOpen(false);
+      setPendingDownload(null);
+    }
+  };
+
+  // Handle feedback submission
+  const handleFeedbackSubmit = async () => {
+    if (npsScore === null) return;
+
+    setIsSubmittingFeedback(true);
+    try {
+      await fetch('/api/portal-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          npsScore,
+          reportQuarter: `${quarter} ${fiscalYear}`,
+          feedbackDetails: npsScore < 8 ? feedbackDetails : null,
+        }),
+      });
+      setFeedbackSubmitted(true);
+    } catch (error) {
+      console.error('Failed to submit feedback:', error);
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
+  };
+
   // Calculate the "as of" date from quarter/fiscal year
   const calculatedAsOfDate = calculateAsOfDate(quarter, fiscalYear);
 
@@ -944,10 +1014,14 @@ function PortalContentInner({
                   <p className={styles.fundFinancialsDesc}>
                     Download the fund financials report for {quarter} {fiscalYear}.
                   </p>
-                  <a
-                    href={report.fundFinancialsPdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => handleDownloadClick(
+                      report.fundFinancialsPdfUrl,
+                      'fund-financials',
+                      `${quarter} ${fiscalYear}`,
+                      'Fund Financials'
+                    )}
                     className={styles.downloadButton}
                   >
                     <svg className={styles.pdfIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -958,7 +1032,7 @@ function PortalContentInner({
                       <line x1="15" y1="15" x2="12" y2="18" />
                     </svg>
                     Download Fund Financials (PDF)
-                  </a>
+                  </button>
                 </div>
               ) : (
                 <div className={styles.placeholderContent}>
@@ -1167,17 +1241,21 @@ function PortalContentInner({
                       </tr>
                     </thead>
                     <tbody>
-                      {allReports.filter(r => r.pdfUrl).map((report) => (
-                        <tr key={report._id}>
+                      {allReports.filter(r => r.pdfUrl).map((rpt) => (
+                        <tr key={rpt._id}>
                           <td className={styles.downloadReportName}>
-                            {report.title || `${report.quarter} ${report.fiscalYear} Report`}
+                            {rpt.title || `${rpt.quarter} ${rpt.fiscalYear} Report`}
                           </td>
-                          <td>{report.quarter} {report.fiscalYear}</td>
+                          <td>{rpt.quarter} {rpt.fiscalYear}</td>
                           <td>
-                            <a
-                              href={report.pdfUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadClick(
+                                rpt.pdfUrl,
+                                'quarterly-report',
+                                `${rpt.quarter} ${rpt.fiscalYear}`,
+                                rpt.title || `${rpt.quarter} ${rpt.fiscalYear} Report`
+                              )}
                               className={styles.downloadButton}
                             >
                               <svg className={styles.pdfIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1187,7 +1265,7 @@ function PortalContentInner({
                                 <path d="M9 15L12 18L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
                               PDF
-                            </a>
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -1199,6 +1277,62 @@ function PortalContentInner({
                   <p>No reports available for download yet. Upload PDFs in Sanity under each quarterly report.</p>
                 </div>
               )}
+
+              {/* NPS Feedback Form */}
+              <div className={styles.feedbackSection}>
+                <h3 className={styles.feedbackTitle}>How was your experience?</h3>
+                <p className={styles.feedbackSubtitle}>Rate your experience viewing this report on the portal</p>
+
+                {feedbackSubmitted ? (
+                  <div className={styles.feedbackSuccess}>
+                    <p>Thank you for your feedback!</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className={styles.npsScale}>
+                      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
+                        <button
+                          key={score}
+                          type="button"
+                          onClick={() => setNpsScore(score)}
+                          className={`${styles.npsScoreBtn} ${npsScore === score ? styles.npsScoreBtnSelected : ''}`}
+                        >
+                          {score}
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.npsLabels}>
+                      <span className={styles.npsLabel}>Not likely</span>
+                      <span className={styles.npsLabel}>Very likely</span>
+                    </div>
+
+                    {npsScore !== null && npsScore < 8 && (
+                      <>
+                        <label className={styles.feedbackTextareaLabel}>
+                          We&apos;d love to hear more about how we can improve:
+                        </label>
+                        <textarea
+                          className={styles.feedbackTextarea}
+                          value={feedbackDetails}
+                          onChange={(e) => setFeedbackDetails(e.target.value)}
+                          placeholder="Please share your thoughts..."
+                        />
+                      </>
+                    )}
+
+                    {npsScore !== null && (
+                      <button
+                        type="button"
+                        onClick={handleFeedbackSubmit}
+                        disabled={isSubmittingFeedback}
+                        className={styles.feedbackSubmitBtn}
+                      >
+                        {isSubmittingFeedback ? 'Submitting...' : 'Submit Feedback'}
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
             </section>
           )}
 
@@ -1229,6 +1363,56 @@ function PortalContentInner({
           </div>
         </main>
       </div>
+
+      {/* Download Disclaimer Dialog */}
+      {disclaimerOpen && (
+        <div className={styles.disclaimerOverlay}>
+          <div className={styles.disclaimerDialog}>
+            <h2 className={styles.disclaimerTitle}>Confidentiality Agreement</h2>
+            <div className={styles.disclaimerContent}>
+              <p>
+                The material you are about to download contains confidential and proprietary
+                information belonging to Yali Capital. By proceeding with this download, you
+                acknowledge and agree to the following:
+              </p>
+              <p>
+                <strong>1.</strong> You will not copy, reproduce, distribute, publish, display,
+                or transmit any part of this material to any third party without prior written
+                consent from Yali Capital.
+              </p>
+              <p>
+                <strong>2.</strong> You will use this material solely for your own internal
+                review purposes as a Limited Partner and will maintain its confidentiality.
+              </p>
+              <p>
+                <strong>3.</strong> You understand that unauthorised disclosure of this
+                information may cause significant harm to Yali Capital and its portfolio
+                companies.
+              </p>
+            </div>
+            <div className={styles.disclaimerActions}>
+              <button
+                type="button"
+                onClick={() => {
+                  setDisclaimerOpen(false);
+                  setPendingDownload(null);
+                }}
+                className={styles.disclaimerCancelBtn}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDisclaimerAgree}
+                disabled={isLoggingConsent}
+                className={styles.disclaimerAgreeBtn}
+              >
+                {isLoggingConsent ? 'Processing...' : 'I Agree & Download'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer - Main website footer (z-index higher than sidebar to cover it) */}
       <div className={styles.footerWrapper}>

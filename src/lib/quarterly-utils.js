@@ -150,3 +150,170 @@ export function isQuarterBefore(q1, fy1, q2, fy2) {
   const key2 = getQuarterSortKey({ quarter: q2, fiscalYear: fy2 });
   return key1 < key2;
 }
+
+/**
+ * Filter investment rounds to only show rounds made on or before quarter end
+ * @param {Array} rounds - Array of investment round objects with investmentDate
+ * @param {string} quarterEndDate - Quarter end date in YYYY-MM-DD format
+ * @returns {Array} Filtered rounds
+ */
+export function filterInvestmentRounds(rounds, quarterEndDate) {
+  if (!rounds || !Array.isArray(rounds) || !quarterEndDate) return rounds || [];
+  return rounds.filter(round => {
+    if (!round.investmentDate) return true; // Include rounds without dates
+    return round.investmentDate <= quarterEndDate;
+  });
+}
+
+/**
+ * Get fund performance metrics for a specific quarter
+ * @param {object} fundSettings - Fund settings with quarterlyPerformance array
+ * @param {string} quarter - Quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Fiscal year (e.g., "FY26")
+ * @returns {object|null} Matching quarter performance or null
+ */
+export function getFundQuarterPerformance(fundSettings, quarter, fiscalYear) {
+  if (!fundSettings?.quarterlyPerformance || !Array.isArray(fundSettings.quarterlyPerformance)) {
+    return null;
+  }
+  return fundSettings.quarterlyPerformance.find(
+    qp => qp.quarter === quarter && qp.fiscalYear === fiscalYear
+  ) || null;
+}
+
+/**
+ * =============================================================================
+ * REPORT BUILDER - Single source of truth for all report data
+ * =============================================================================
+ *
+ * Takes raw data and returns everything gated/filtered for a specific quarter.
+ * This function is the authoritative source for what data appears in each report.
+ *
+ * @param {object} params - All raw data
+ * @param {string} params.quarter - Report quarter (Q1, Q2, Q3, Q4)
+ * @param {string} params.fiscalYear - Report fiscal year (e.g., "FY26")
+ * @param {object} params.fundSettings - Fund settings from Sanity
+ * @param {Array} params.investments - All portfolio companies from Sanity
+ * @param {Array} params.news - All news items
+ * @param {Array} params.socialUpdates - All social updates
+ * @returns {object} All data filtered for the specified quarter
+ */
+export function buildReportData({
+  quarter,
+  fiscalYear,
+  fundSettings,
+  investments,
+  news = [],
+  socialUpdates = [],
+}) {
+  // Calculate quarter boundaries
+  const quarterStartDate = getQuarterStartDate(quarter, fiscalYear);
+  const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
+
+  // 1. Filter portfolio companies - only those invested on or before quarter end
+  const portfolioCompanies = getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear);
+
+  // 2. Get fund performance for this specific quarter
+  const fundPerformance = getFundQuarterPerformance(fundSettings, quarter, fiscalYear);
+
+  // 3. Compute fund metrics - use Sanity data if available, otherwise calculate
+  const computedTotalInvested = portfolioCompanies.reduce(
+    (sum, inv) => sum + (inv.yaliInvestmentAmount || 0), 0
+  );
+
+  let computedTotalFMV = 0;
+  let computedTotalReturned = 0;
+
+  portfolioCompanies.forEach(inv => {
+    const quarterData = getCompanyQuarterData(inv, quarter, fiscalYear) ||
+      inv.latestQuarter ||
+      inv.quarterlyUpdates?.[0];
+
+    if (quarterData) {
+      computedTotalFMV += quarterData.currentFMV || 0;
+      computedTotalReturned += quarterData.amountReturned || 0;
+    }
+  });
+
+  const totalInvested = fundPerformance?.totalInvested ?? computedTotalInvested;
+  const totalFMV = fundPerformance?.fairMarketValue ?? computedTotalFMV;
+  const totalReturned = fundPerformance?.amountReturned ?? computedTotalReturned;
+
+  const computedMoic = totalInvested > 0 ? (totalFMV + totalReturned) / totalInvested : 0;
+  const computedDpi = totalInvested > 0 ? totalReturned / totalInvested : 0;
+
+  const fundMetrics = {
+    fundSizeAtClose: fundSettings?.fundSizeAtClose,
+    amountDrawnDown: fundPerformance?.amountDrawnDown,
+    totalInvestedInPortfolio: totalInvested,
+    fmvOfPortfolio: totalFMV,
+    numberOfPortfolioCompanies: portfolioCompanies.length,
+    amountReturned: totalReturned,
+    moic: fundPerformance?.moic ?? computedMoic,
+    tvpi: fundPerformance?.tvpi ?? computedMoic,
+    dpi: fundPerformance?.dpi ?? computedDpi,
+  };
+
+  // 4. Filter news and social updates by quarter date range
+  const quarterNews = quarterStartDate && quarterEndDate
+    ? news.filter(item => item.date >= quarterStartDate && item.date <= quarterEndDate)
+    : [];
+
+  const quarterSocialUpdates = quarterStartDate && quarterEndDate
+    ? socialUpdates.filter(item => item.date >= quarterStartDate && item.date <= quarterEndDate)
+    : [];
+
+  // 5. Process each company with quarter-specific data
+  const processedCompanies = portfolioCompanies.map(company => {
+    // Get this company's quarterly data for the report period
+    const quarterData = getCompanyQuarterData(company, quarter, fiscalYear);
+
+    // Filter investment rounds to only show those made by quarter end
+    const filteredRounds = filterInvestmentRounds(company.investmentRounds, quarterEndDate);
+
+    return {
+      ...company,
+      // Quarter-specific performance data
+      quarterData,
+      // Filtered investment rounds
+      investmentRounds: filteredRounds,
+      // Convenience: current metrics from quarter data
+      currentFMV: quarterData?.currentFMV ?? null,
+      currentOwnership: quarterData?.currentOwnershipPercent ?? company.yaliOwnershipPercent,
+      multipleOfInvestment: quarterData?.multipleOfInvestment ?? null,
+    };
+  });
+
+  // 6. Build navigation list (for next/prev in company detail)
+  const companyNavList = processedCompanies
+    .filter(c => c.slug)
+    .map(c => ({ slug: c.slug, name: c.name }));
+
+  return {
+    // Quarter info
+    quarter,
+    fiscalYear,
+    quarterStartDate,
+    quarterEndDate,
+
+    // Fund data
+    fundSettings,
+    fundPerformance,
+    fundMetrics,
+
+    // Portfolio data
+    portfolioCompanies: processedCompanies,
+    portfolioCount: processedCompanies.length,
+    companyNavList,
+
+    // Media data
+    quarterNews,
+    quarterSocialUpdates,
+
+    // Helper to check if a company is in scope
+    isCompanyInScope: (slug) => companyNavList.some(c => c.slug === slug),
+
+    // Helper to get a specific company's processed data
+    getCompany: (slug) => processedCompanies.find(c => c.slug === slug) || null,
+  };
+}
