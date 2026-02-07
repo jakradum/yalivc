@@ -152,6 +152,33 @@ export function isQuarterBefore(q1, fy1, q2, fy2) {
 }
 
 /**
+ * Filter and sort an array of quarter objects to only those chronologically before a reference quarter
+ * Returns quarters sorted most recent first (descending)
+ * @param {Array} quarters - Array of objects with quarter and fiscalYear properties
+ * @param {string} refQuarter - Reference quarter (Q1, Q2, Q3, Q4)
+ * @param {string} refFiscalYear - Reference fiscal year (e.g., "FY26")
+ * @returns {Array} Filtered and sorted quarters (most recent first)
+ */
+export function getQuartersBefore(quarters, refQuarter, refFiscalYear) {
+  if (!quarters || !Array.isArray(quarters) || !refQuarter || !refFiscalYear) {
+    return [];
+  }
+  return quarters
+    .filter(q => isQuarterBefore(q.quarter, q.fiscalYear, refQuarter, refFiscalYear))
+    .sort((a, b) => getQuarterSortKey(b) - getQuarterSortKey(a));
+}
+
+/**
+ * Sort an array of quarter objects chronologically (most recent first)
+ * @param {Array} quarters - Array of objects with quarter and fiscalYear properties
+ * @returns {Array} Sorted quarters (most recent first)
+ */
+export function sortQuartersDescending(quarters) {
+  if (!quarters || !Array.isArray(quarters)) return [];
+  return [...quarters].sort((a, b) => getQuarterSortKey(b) - getQuarterSortKey(a));
+}
+
+/**
  * Filter investment rounds to only show rounds made on or before quarter end
  * @param {Array} rounds - Array of investment round objects with investmentDate
  * @param {string} quarterEndDate - Quarter end date in YYYY-MM-DD format
