@@ -25,6 +25,7 @@ import lpFundSettings from './lpFundSettings'
 import lpPipelineDeal from './lpPipelineDeal'
 import lpDownloadConsent from './lpDownloadConsent'
 import lpPortalFeedback from './lpPortalFeedback'
+import investor from './investor'
 
 export const schemaTypes = [
   // Existing schemas
@@ -53,6 +54,7 @@ export const schemaTypes = [
   lpPipelineDeal,
   lpDownloadConsent,
   lpPortalFeedback,
+  investor,
   // Homepage sections
   faq,
   socialUpdate

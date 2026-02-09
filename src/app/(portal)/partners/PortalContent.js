@@ -43,6 +43,41 @@ const calculateAsOfDate = (quarter, fiscalYear) => {
   return `${month} ${year}`;
 };
 
+// ===== INVESTMENT ROUNDS HELPERS =====
+// Get initial investment date from investmentRounds array
+const getInitialInvestmentDate = (company) => {
+  const rounds = company?.investmentRounds || [];
+  if (rounds.length === 0) return null;
+  const initialRound = rounds.find(r => r.isInitialRound) || rounds[0];
+  return initialRound?.investmentDate || null;
+};
+
+// Calculate total investment from investmentRounds
+const getTotalInvestment = (company) => {
+  const rounds = company?.investmentRounds || [];
+  return rounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
+};
+
+// Get latest ownership from investmentRounds (most recent round)
+const getLatestOwnership = (company) => {
+  const rounds = company?.investmentRounds || [];
+  if (rounds.length === 0) return null;
+  // Rounds are already sorted by date ascending, so last one is most recent
+  return rounds[rounds.length - 1]?.yaliOwnership || null;
+};
+
+// Get latest funding round name
+const getLatestRoundName = (company) => {
+  const rounds = company?.investmentRounds || [];
+  if (rounds.length === 0) return null;
+  const latest = rounds[rounds.length - 1];
+  if (latest?.roundLabel) return latest.roundLabel;
+  if (latest?.roundName) {
+    return latest.roundName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
+  return null;
+};
+
 function PortalContentInner({
   fundSettings,
   report,
@@ -831,12 +866,21 @@ function PortalContentInner({
                           </td>
                           <td>{investment.sector || '-'}</td>
                           <td>
-                            {investment.investmentDate
-                              ? new Date(investment.investmentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                              : '-'}
+                            {(() => {
+                              const initDate = getInitialInvestmentDate(investment);
+                              return initDate
+                                ? new Date(initDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
+                                : '-';
+                            })()}
                           </td>
-                          <td>{investment.yaliInvestmentAmount != null ? investment.yaliInvestmentAmount.toFixed(2) : '-'}</td>
-                          <td>{investment.yaliOwnershipPercent != null ? investment.yaliOwnershipPercent.toFixed(2) : '-'}</td>
+                          <td>{(() => {
+                            const total = getTotalInvestment(investment);
+                            return total > 0 ? total.toFixed(2) : '-';
+                          })()}</td>
+                          <td>{(() => {
+                            const ownership = getLatestOwnership(investment);
+                            return ownership != null ? ownership.toFixed(2) : '-';
+                          })()}</td>
                         </tr>
                       ))
                     ) : (
@@ -859,7 +903,7 @@ function PortalContentInner({
                       .map(inv => ({
                         name: inv.name || '-',
                         sector: inv.sector || '-',
-                        value: inv.yaliInvestmentAmount || 0,
+                        value: getTotalInvestment(inv),
                         slug: inv.slug
                       }))
                       .filter(d => d.value > 0);
@@ -981,7 +1025,10 @@ function PortalContentInner({
                         <div className={styles.companyTileMetrics}>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Invested</span>
-                            <span className={styles.companyTileMetricValue}>{company.yaliInvestmentAmount ? `₹${company.yaliInvestmentAmount.toFixed(1)} Cr` : '-'}</span>
+                            <span className={styles.companyTileMetricValue}>{(() => {
+                              const total = getTotalInvestment(company);
+                              return total > 0 ? `₹${total.toFixed(1)} Cr` : '-';
+                            })()}</span>
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>FMV</span>

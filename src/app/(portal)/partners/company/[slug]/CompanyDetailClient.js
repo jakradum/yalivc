@@ -118,7 +118,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
 
   const sortedRoundsNewestFirst = [...sortedRoundsOldestFirst].reverse();
 
-  // Get initial round (marked with isInitialRound flag, or first by date, or legacy fields)
+  // Get initial round (marked with isInitialRound flag, or first by date)
   const getInitialRound = () => {
     // First, check for round marked as initial
     const markedInitial = allRounds.find(r => r.isInitialRound);
@@ -127,22 +127,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     // Fall back to first round by date
     if (sortedRoundsOldestFirst.length > 0) {
       return sortedRoundsOldestFirst[0];
-    }
-
-    // Legacy fallback: construct from old fields
-    if (company.fundingRound || company.yaliInvestmentAmount) {
-      return {
-        roundName: company.fundingRound,
-        investmentDate: company.investmentDate,
-        yaliInvestment: company.yaliInvestmentAmount,
-        yaliOwnership: company.yaliOwnershipPercent,
-        preMoneyValuation: company.preMoneyValuation,
-        totalRoundSize: company.totalRoundSize,
-        postMoneyValuation: company.postMoneyValuation,
-        coInvestors: company.coInvestors,
-        isInitialRound: true,
-        isLegacy: true,
-      };
     }
 
     return null;
@@ -158,37 +142,33 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
 
   // Calculate total investment across all rounds
   const getTotalInvestment = () => {
-    if (allRounds.length > 0) {
-      return allRounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
-    }
-    // Legacy fallback
-    return company.yaliInvestmentAmount || 0;
+    return allRounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
   };
 
-  // Get all co-investors across all rounds (deduplicated)
+  // Get all co-investors across all rounds (deduplicated by name)
   const getAllCoInvestors = () => {
-    const investors = new Set();
+    const investorMap = new Map();
     allRounds.forEach(r => {
       if (r.coInvestors) {
-        r.coInvestors.forEach(inv => investors.add(inv));
+        r.coInvestors.forEach(inv => {
+          if (inv && inv.name) {
+            investorMap.set(inv.name, inv);
+          }
+        });
       }
     });
-    // Legacy fallback
-    if (investors.size === 0 && company.coInvestors) {
-      company.coInvestors.forEach(inv => investors.add(inv));
-    }
-    return Array.from(investors);
+    return Array.from(investorMap.values());
   };
 
   // Get date of first investment
   const getFirstInvestmentDate = () => {
     const initial = getInitialRound();
-    return initial?.investmentDate || company.investmentDate;
+    return initial?.investmentDate || null;
   };
 
   const initialRound = getInitialRound();
   const latestRound = getLatestRound();
-  const latestFundingRound = latestRound?.roundName || company.fundingRound;
+  const latestFundingRound = latestRound?.roundName;
   const totalInvestment = getTotalInvestment();
   const allCoInvestors = getAllCoInvestors();
   const firstInvestmentDate = getFirstInvestmentDate();
@@ -447,7 +427,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 </tr>
                 <tr>
                   <td>Ownership fully diluted</td>
-                  <td>{latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : (company.yaliOwnershipPercent ? `${company.yaliOwnershipPercent.toFixed(2)}%` : '-')}</td>
+                  <td>{latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-'}</td>
                 </tr>
                 <tr>
                   <td>FMV</td>
@@ -466,11 +446,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                     <td>Key co-investors</td>
                     <td>
                       {allCoInvestors.length === 1 ? (
-                        <span className={styles.coInvestorSingle}>{allCoInvestors[0]}</span>
+                        <span className={styles.coInvestorSingle}>{allCoInvestors[0].name}</span>
                       ) : (
                         <ol className={styles.coInvestorsList}>
                           {allCoInvestors.map((investor, idx) => (
-                            <li key={idx}>{idx + 1}. {investor}</li>
+                            <li key={investor._id || idx}>{idx + 1}. {investor.name}</li>
                           ))}
                         </ol>
                       )}
@@ -498,36 +478,12 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 currentReportPeriod?.fiscalYear
               );
 
-              // Use unified investmentRounds array (new approach)
-              // Fall back to constructing from legacy fields if investmentRounds is empty
-              let displayRounds = [];
-
-              if (allRounds.length > 0) {
-                // New unified approach: filter by quarter end date and sort by date
-                displayRounds = sortedRoundsOldestFirst
-                  .filter(r => {
-                    if (!r.investmentDate) return true;
-                    return !quarterEndDate || r.investmentDate <= quarterEndDate;
-                  });
-              } else {
-                // Legacy fallback: construct from old fields
-                const hasLegacyRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation;
-                const legacyInScope = !quarterEndDate || !company.investmentDate || company.investmentDate <= quarterEndDate;
-
-                if (hasLegacyRound && legacyInScope) {
-                  displayRounds.push({
-                    roundName: company.fundingRound,
-                    roundLabel: null,
-                    investmentDate: company.investmentDate,
-                    preMoneyValuation: company.preMoneyValuation,
-                    totalRoundSize: company.totalRoundSize,
-                    postMoneyValuation: company.postMoneyValuation,
-                    yaliInvestment: company.yaliInvestmentAmount,
-                    yaliOwnership: company.yaliOwnershipPercent,
-                    isInitialRound: true,
-                  });
-                }
-              }
+              // Use unified investmentRounds array - filter by quarter end date
+              const displayRounds = sortedRoundsOldestFirst
+                .filter(r => {
+                  if (!r.investmentDate) return true;
+                  return !quarterEndDate || r.investmentDate <= quarterEndDate;
+                });
 
               // Only show section if there's round data
               if (displayRounds.length === 0) return null;
