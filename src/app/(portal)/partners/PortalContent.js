@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -181,6 +181,20 @@ function PortalContentInner({
 
   // Calculate the "as of" date from quarter/fiscal year
   const calculatedAsOfDate = calculateAsOfDate(quarter, fiscalYear);
+
+  // Sort investments by initial investment date (oldest first)
+  const sortedInvestments = useMemo(() => {
+    if (!investments || !Array.isArray(investments)) return [];
+    return [...investments].sort((a, b) => {
+      const dateA = getInitialInvestmentDate(a);
+      const dateB = getInitialInvestmentDate(b);
+      // Companies without dates go to the end
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+      return dateA.localeCompare(dateB);
+    });
+  }, [investments]);
 
   // Detect mobile and set default sidebar state
   useEffect(() => {
@@ -852,8 +866,8 @@ function PortalContentInner({
                     </tr>
                   </thead>
                   <tbody>
-                    {investments && investments.length > 0 ? (
-                      investments.map((investment, idx) => (
+                    {sortedInvestments && sortedInvestments.length > 0 ? (
+                      sortedInvestments.map((investment, idx) => (
                         <tr
                           key={investment._id || idx}
                           className={styles.clickableRow}
@@ -895,11 +909,11 @@ function PortalContentInner({
               </div>
 
               {/* Investment Distribution Pie Chart */}
-              {investments && investments.length > 0 && (
+              {sortedInvestments && sortedInvestments.length > 0 && (
                 <div className={styles.investmentPieSection}>
                   <h3 className={styles.investmentPieTitle}>Investment Distribution by Company</h3>
                   {(() => {
-                    const chartData = investments
+                    const chartData = sortedInvestments
                       .map(inv => ({
                         name: inv.entityName || inv.name || '-',
                         sector: inv.sector || '-',
@@ -993,10 +1007,10 @@ function PortalContentInner({
               </div>
 
               {/* Company Tiles */}
-              {investments && investments.length > 0 ? (
+              {sortedInvestments && sortedInvestments.length > 0 ? (
                 <div className={styles.companyTilesSection}>
                   <div className={styles.companyTilesGrid}>
-                    {investments.map((company, idx) => (
+                    {sortedInvestments.map((company, idx) => (
                       <Link
                         key={company._id || idx}
                         href={`/partners/company/${company.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}

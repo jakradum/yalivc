@@ -78,6 +78,10 @@ export default defineConfig({
                     S.listItem()
                       .title('Portal Users')
                       .child(S.documentTypeList('portalUser').title('Portal Users')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Portal Feedback (NPS)')
+                      .child(S.documentTypeList('lpPortalFeedback').title('Portal Feedback')),
                   ])
               ),
           ]),
