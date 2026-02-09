@@ -115,6 +115,7 @@ export default {
           { title: 'Series B', value: 'series-b' },
           { title: 'Series C', value: 'series-c' },
           { title: 'Series D', value: 'series-d' },
+          { title: 'Bridge Round', value: 'bridge' },
           { title: 'Growth', value: 'growth' },
         ],
       },
