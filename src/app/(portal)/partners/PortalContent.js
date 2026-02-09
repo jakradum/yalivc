@@ -862,7 +862,7 @@ function PortalContentInner({
                         >
                           <td>{idx + 1}</td>
                           <td className={styles.companyNameCell}>
-                            {investment.name || '-'}
+                            {investment.entityName || investment.name || '-'}
                           </td>
                           <td>{investment.sector || '-'}</td>
                           <td>
@@ -901,7 +901,7 @@ function PortalContentInner({
                   {(() => {
                     const chartData = investments
                       .map(inv => ({
-                        name: inv.name || '-',
+                        name: inv.entityName || inv.name || '-',
                         sector: inv.sector || '-',
                         value: getTotalInvestment(inv),
                         slug: inv.slug
@@ -1006,18 +1006,18 @@ function PortalContentInner({
                           {company.logo ? (
                             <Image
                               src={company.logo}
-                              alt={company.name}
+                              alt={company.entityName || company.name}
                               width={48}
                               height={48}
                               className={styles.companyTileLogo}
                             />
                           ) : (
                             <div className={styles.companyTileLogoPlaceholder}>
-                              {company.name?.charAt(0) || '-'}
+                              {(company.entityName || company.name)?.charAt(0) || '-'}
                             </div>
                           )}
                           <div className={styles.companyTileInfo}>
-                            <h4 className={styles.companyTileName}>{company.name}</h4>
+                            <h4 className={styles.companyTileName}>{company.entityName || company.name}</h4>
                             <span className={styles.companyTileSector}>{company.sector || '-'}</span>
                           </div>
                         </div>

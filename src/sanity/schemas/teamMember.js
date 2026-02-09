@@ -40,6 +40,20 @@ const teamMember = {
       readOnly: ({document}) => document?.isCore === true
     },
     {
+      name: 'department',
+      title: 'Department',
+      type: 'string',
+      description: 'Used for ordering: Investment team shows before Operations',
+      options: {
+        list: [
+          { title: 'Investment', value: 'investment' },
+          { title: 'Operations', value: 'operations' },
+        ],
+      },
+      initialValue: 'investment',
+      validation: Rule => Rule.required(),
+    },
+    {
       name: 'oneLiner',
       title: 'One-Liner',
       type: 'string',

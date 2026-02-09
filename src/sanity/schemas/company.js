@@ -26,6 +26,14 @@ export default {
       type: 'string',
       validation: (Rule) => Rule.required(),
       group: 'basic',
+      description: 'Display name for the main website',
+    },
+    {
+      name: 'entityName',
+      title: 'Entity Name (for LP Reports)',
+      type: 'string',
+      group: 'basic',
+      description: 'Legal/formal entity name for LP reports. If blank, Company Name is used.',
     },
     {
       name: 'slug',
@@ -129,6 +137,13 @@ export default {
               description: 'Check if Yali was the lead investor for this specific round',
             },
             {
+              name: 'showEarlyInReport',
+              title: 'Show in Current Report (Override)',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show this round in reports even if the investment date is after the quarter end (useful for in-progress rounds)',
+            },
+            {
               name: 'roundName',
               title: 'Round Name',
               type: 'string',
@@ -186,12 +201,6 @@ export default {
               title: "Yali's Ownership % (after this round)",
               type: 'number',
               description: 'Fully diluted ownership percentage after this round',
-            },
-            {
-              name: 'moicForRound',
-              title: 'MOIC for this Round',
-              type: 'number',
-              description: 'Multiple on invested capital specific to this round',
             },
             {
               name: 'coInvestors',
@@ -296,8 +305,61 @@ export default {
             },
             {
               name: 'multipleOfInvestment',
-              title: 'Multiple of Investment (MOIC)',
+              title: 'Cumulative MOIC',
               type: 'number',
+              description: 'Cumulative multiple across all rounds = (FMV + Amount Returned) / Total Investment',
+            },
+            {
+              name: 'roundMoics',
+              title: 'Per-Round MOICs',
+              type: 'array',
+              description: 'Track MOIC for each investment round separately (only needed if multiple rounds)',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    {
+                      name: 'roundName',
+                      title: 'Round',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: 'Pre-Seed', value: 'pre-seed' },
+                          { title: 'Seed', value: 'seed' },
+                          { title: 'Pre-Series A', value: 'pre-series-a' },
+                          { title: 'Series A', value: 'series-a' },
+                          { title: 'Series B', value: 'series-b' },
+                          { title: 'Series C', value: 'series-c' },
+                          { title: 'Series D', value: 'series-d' },
+                          { title: 'Bridge Round', value: 'bridge' },
+                          { title: 'CCD Conversion', value: 'ccd-conversion' },
+                          { title: 'Follow-on', value: 'follow-on' },
+                          { title: 'Growth', value: 'growth' },
+                        ],
+                      },
+                      validation: (Rule) => Rule.required(),
+                    },
+                    {
+                      name: 'moic',
+                      title: 'MOIC',
+                      type: 'number',
+                      validation: (Rule) => Rule.required(),
+                    },
+                  ],
+                  preview: {
+                    select: {
+                      round: 'roundName',
+                      moic: 'moic',
+                    },
+                    prepare({ round, moic }) {
+                      const roundLabel = round ? round.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Round';
+                      return {
+                        title: `${roundLabel}: ${moic ? moic.toFixed(2) + 'x' : '-'}`,
+                      };
+                    },
+                  },
+                },
+              ],
             },
             // Financials
             {
@@ -340,6 +402,44 @@ export default {
                 },
               ],
               description: 'Custom metrics like "Order Book", "Customer Pipeline", etc.',
+            },
+            // Table Footnotes
+            {
+              name: 'tableFootnotes',
+              title: 'Investment Table Footnotes',
+              type: 'array',
+              description: 'Add footnotes for the investment round details table (e.g., valuation methodology notes)',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    {
+                      name: 'marker',
+                      title: 'Marker',
+                      type: 'string',
+                      description: 'e.g., "*", "†", "1", "2"',
+                      validation: (Rule) => Rule.required(),
+                    },
+                    {
+                      name: 'text',
+                      title: 'Footnote Text',
+                      type: 'string',
+                      validation: (Rule) => Rule.required(),
+                    },
+                  ],
+                  preview: {
+                    select: {
+                      marker: 'marker',
+                      text: 'text',
+                    },
+                    prepare({ marker, text }) {
+                      return {
+                        title: `${marker} ${text}`,
+                      };
+                    },
+                  },
+                },
+              ],
             },
             // Narrative Updates
             {
