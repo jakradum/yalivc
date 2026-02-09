@@ -96,9 +96,23 @@ export function getNextQuarterEndDate(quarter, fiscalYear) {
 }
 
 /**
+ * Get the earliest investment date from a company's investment rounds
+ * @param {object} company - Company object with investmentRounds array
+ * @returns {string|null} Earliest investment date in YYYY-MM-DD format, or null
+ */
+export function getEarliestInvestmentDate(company) {
+  const rounds = company?.investmentRounds || [];
+  if (rounds.length === 0) return null;
+
+  // Find round marked as initial, or use the first round (already sorted by date asc)
+  const initialRound = rounds.find(r => r.isInitialRound) || rounds[0];
+  return initialRound?.investmentDate || null;
+}
+
+/**
  * Filter investments to only include companies invested on or before a quarter's end date
  * Companies without an investment date are included (legacy data)
- * @param {Array} investments - Array of investment objects with investmentDate field
+ * @param {Array} investments - Array of investment objects with investmentRounds
  * @param {string} quarter - Quarter (Q1, Q2, Q3, Q4)
  * @param {string} fiscalYear - Fiscal year (e.g., "FY26")
  * @returns {Array} Filtered investments
@@ -110,10 +124,14 @@ export function getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear
   if (!quarterEndDate) return investments;
 
   return investments.filter(inv => {
+    // Get earliest investment date from rounds
+    const firstInvestmentDate = getEarliestInvestmentDate(inv);
+
     // Companies without investment date are included (legacy data)
-    if (!inv.investmentDate) return true;
+    if (!firstInvestmentDate) return true;
+
     // Only include companies invested on or before the quarter end date
-    return inv.investmentDate <= quarterEndDate;
+    return firstInvestmentDate <= quarterEndDate;
   });
 }
 
