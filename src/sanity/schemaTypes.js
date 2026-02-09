@@ -25,6 +25,7 @@ import lpFundSettings from './schemas/lpFundSettings'
 import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 import portalUser from './schemas/portalUser'
+import lpPortalFeedback from './schemas/lpPortalFeedback'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -49,5 +50,6 @@ export const schemaTypes = [
   lpFundSettings,
   lpPipelineDeal,
   lpQuarterlyReport,
-  portalUser
+  portalUser,
+  lpPortalFeedback
 ]
