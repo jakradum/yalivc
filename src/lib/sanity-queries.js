@@ -1145,10 +1145,13 @@ export async function getLatestLPQuarterlyReport() {
 // Get all portfolio company slugs (for static generation and navigation)
 export async function getAllLPInvestmentSlugs() {
   return client.fetch(
-    `*[_type == "company" && investmentStatus == "active"] | order(name asc) {
+    `*[_type == "company" && investmentStatus == "active"] | order(order asc, name asc) {
       "slug": slug.current,
       name,
-      investmentDate
+      "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        isInitialRound,
+        investmentDate
+      }
     }`
   );
 }
