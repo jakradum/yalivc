@@ -406,13 +406,27 @@ export default {
             // Table Footnotes
             {
               name: 'tableFootnotes',
-              title: 'Investment Table Footnotes',
+              title: 'Table Footnotes',
               type: 'array',
-              description: 'Add footnotes for the investment round details table (e.g., valuation methodology notes)',
+              description: 'Add footnotes for specific tables/sections',
               of: [
                 {
                   type: 'object',
                   fields: [
+                    {
+                      name: 'tableType',
+                      title: 'Table/Section',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: 'Investment Snapshot', value: 'snapshot' },
+                          { title: 'Investment Round Details', value: 'rounds' },
+                          { title: 'Financials / Key Metrics', value: 'financials' },
+                        ],
+                      },
+                      initialValue: 'rounds',
+                      validation: (Rule) => Rule.required(),
+                    },
                     {
                       name: 'marker',
                       title: 'Marker',
@@ -429,12 +443,18 @@ export default {
                   ],
                   preview: {
                     select: {
+                      tableType: 'tableType',
                       marker: 'marker',
                       text: 'text',
                     },
-                    prepare({ marker, text }) {
+                    prepare({ tableType, marker, text }) {
+                      const tableLabels = {
+                        'snapshot': 'Snapshot',
+                        'rounds': 'Rounds',
+                        'financials': 'Financials',
+                      };
                       return {
-                        title: `${marker} ${text}`,
+                        title: `[${tableLabels[tableType] || tableType}] ${marker} ${text}`,
                       };
                     },
                   },

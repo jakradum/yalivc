@@ -503,6 +503,18 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 )}
               </tbody>
             </table>
+            {/* Snapshot table footnotes */}
+            {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'snapshot').length > 0 && (
+              <div className={styles.tableFootnoteContainer}>
+                {latestQuarter.tableFootnotes
+                  .filter(fn => fn.tableType === 'snapshot')
+                  .map((fn, idx) => (
+                    <p key={idx} className={styles.tableFootnote}>
+                      <sup>{fn.marker}</sup> {fn.text}
+                    </p>
+                  ))}
+              </div>
+            )}
 
             {/* About Section */}
             {(company.aboutCompany || company.detail || company.oneLiner) && (
@@ -613,13 +625,15 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   </div>
                   <div className={styles.tableFootnoteContainer}>
                     <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
-                    {latestQuarter?.tableFootnotes && latestQuarter.tableFootnotes.length > 0 && (
+                    {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'rounds' || !fn.tableType).length > 0 && (
                       <div className={styles.customFootnotes}>
-                        {latestQuarter.tableFootnotes.map((fn, idx) => (
-                          <p key={idx} className={styles.tableFootnote}>
-                            <sup>{fn.marker}</sup> {fn.text}
-                          </p>
-                        ))}
+                        {latestQuarter.tableFootnotes
+                          .filter(fn => fn.tableType === 'rounds' || !fn.tableType)
+                          .map((fn, idx) => (
+                            <p key={idx} className={styles.tableFootnote}>
+                              <sup>{fn.marker}</sup> {fn.text}
+                            </p>
+                          ))}
                       </div>
                     )}
                   </div>
@@ -680,7 +694,20 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                       </tbody>
                     </table>
                   </div>
-                  <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                  <div className={styles.tableFootnoteContainer}>
+                    <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                    {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'financials').length > 0 && (
+                      <div className={styles.customFootnotes}>
+                        {latestQuarter.tableFootnotes
+                          .filter(fn => fn.tableType === 'financials')
+                          .map((fn, idx) => (
+                            <p key={idx} className={styles.tableFootnote}>
+                              <sup>{fn.marker}</sup> {fn.text}
+                            </p>
+                          ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })()}
