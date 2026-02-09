@@ -101,37 +101,97 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return round.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  // Get the latest funding round - checks investmentRounds array first, falls back to base fundingRound
-  const getLatestFundingRound = () => {
-    const rounds = company.investmentRounds || [];
+  // ===== UNIFIED INVESTMENT ROUNDS HELPERS =====
+  const allRounds = company.investmentRounds || [];
 
-    // If there are follow-on rounds, find the one with the latest date
-    if (rounds.length > 0) {
-      // Filter rounds that have a roundName and sort by date (most recent first)
-      const sortedRounds = rounds
-        .filter(r => r.roundName)
-        .sort((a, b) => {
-          // If both have dates, compare them
-          if (a.investmentDate && b.investmentDate) {
-            return new Date(b.investmentDate) - new Date(a.investmentDate);
-          }
-          // Rounds with dates come before rounds without
-          if (a.investmentDate && !b.investmentDate) return -1;
-          if (!a.investmentDate && b.investmentDate) return 1;
-          // If neither has a date, keep original order (last in array is latest)
-          return 0;
-        });
-
-      if (sortedRounds.length > 0) {
-        return sortedRounds[0].roundName;
+  // Sort rounds by date (oldest first for display, newest first for "latest")
+  const sortedRoundsOldestFirst = [...allRounds]
+    .filter(r => r.roundName)
+    .sort((a, b) => {
+      if (a.investmentDate && b.investmentDate) {
+        return new Date(a.investmentDate) - new Date(b.investmentDate);
       }
+      if (a.investmentDate && !b.investmentDate) return -1;
+      if (!a.investmentDate && b.investmentDate) return 1;
+      return 0;
+    });
+
+  const sortedRoundsNewestFirst = [...sortedRoundsOldestFirst].reverse();
+
+  // Get initial round (marked with isInitialRound flag, or first by date, or legacy fields)
+  const getInitialRound = () => {
+    // First, check for round marked as initial
+    const markedInitial = allRounds.find(r => r.isInitialRound);
+    if (markedInitial) return markedInitial;
+
+    // Fall back to first round by date
+    if (sortedRoundsOldestFirst.length > 0) {
+      return sortedRoundsOldestFirst[0];
     }
 
-    // Fall back to the base funding round
-    return company.fundingRound;
+    // Legacy fallback: construct from old fields
+    if (company.fundingRound || company.yaliInvestmentAmount) {
+      return {
+        roundName: company.fundingRound,
+        investmentDate: company.investmentDate,
+        yaliInvestment: company.yaliInvestmentAmount,
+        yaliOwnership: company.yaliOwnershipPercent,
+        preMoneyValuation: company.preMoneyValuation,
+        totalRoundSize: company.totalRoundSize,
+        postMoneyValuation: company.postMoneyValuation,
+        coInvestors: company.coInvestors,
+        isInitialRound: true,
+        isLegacy: true,
+      };
+    }
+
+    return null;
   };
 
-  const latestFundingRound = getLatestFundingRound();
+  // Get latest round by date
+  const getLatestRound = () => {
+    if (sortedRoundsNewestFirst.length > 0) {
+      return sortedRoundsNewestFirst[0];
+    }
+    return getInitialRound();
+  };
+
+  // Calculate total investment across all rounds
+  const getTotalInvestment = () => {
+    if (allRounds.length > 0) {
+      return allRounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
+    }
+    // Legacy fallback
+    return company.yaliInvestmentAmount || 0;
+  };
+
+  // Get all co-investors across all rounds (deduplicated)
+  const getAllCoInvestors = () => {
+    const investors = new Set();
+    allRounds.forEach(r => {
+      if (r.coInvestors) {
+        r.coInvestors.forEach(inv => investors.add(inv));
+      }
+    });
+    // Legacy fallback
+    if (investors.size === 0 && company.coInvestors) {
+      company.coInvestors.forEach(inv => investors.add(inv));
+    }
+    return Array.from(investors);
+  };
+
+  // Get date of first investment
+  const getFirstInvestmentDate = () => {
+    const initial = getInitialRound();
+    return initial?.investmentDate || company.investmentDate;
+  };
+
+  const initialRound = getInitialRound();
+  const latestRound = getLatestRound();
+  const latestFundingRound = latestRound?.roundName || company.fundingRound;
+  const totalInvestment = getTotalInvestment();
+  const allCoInvestors = getAllCoInvestors();
+  const firstInvestmentDate = getFirstInvestmentDate();
 
   // PortableText components for rendering rich text
   const portableTextComponents = {
@@ -375,7 +435,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               <tbody>
                 <tr>
                   <td>Date of first investment</td>
-                  <td>{formatDate(company.investmentDate)}</td>
+                  <td>{formatDate(firstInvestmentDate)}</td>
                 </tr>
                 <tr>
                   <td>Latest funding round</td>
@@ -383,11 +443,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 </tr>
                 <tr>
                   <td>Total amount invested</td>
-                  <td>{formatCurrency(company.yaliInvestmentAmount)}</td>
+                  <td>{formatCurrency(totalInvestment)}</td>
                 </tr>
                 <tr>
                   <td>Ownership fully diluted</td>
-                  <td>{company.yaliOwnershipPercent ? `${company.yaliOwnershipPercent.toFixed(2)}%` : '-'}</td>
+                  <td>{latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : (company.yaliOwnershipPercent ? `${company.yaliOwnershipPercent.toFixed(2)}%` : '-')}</td>
                 </tr>
                 <tr>
                   <td>FMV</td>
@@ -401,15 +461,15 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>Multiple of investment</td>
                   <td>{latestQuarter?.multipleOfInvestment != null ? latestQuarter.multipleOfInvestment.toFixed(2) : '-'}</td>
                 </tr>
-                {company.coInvestors?.length > 0 && (
+                {allCoInvestors.length > 0 && (
                   <tr>
                     <td>Key co-investors</td>
                     <td>
-                      {company.coInvestors.length === 1 ? (
-                        <span className={styles.coInvestorSingle}>{company.coInvestors[0]}</span>
+                      {allCoInvestors.length === 1 ? (
+                        <span className={styles.coInvestorSingle}>{allCoInvestors[0]}</span>
                       ) : (
                         <ol className={styles.coInvestorsList}>
-                          {company.coInvestors.map((investor, idx) => (
+                          {allCoInvestors.map((investor, idx) => (
                             <li key={idx}>{idx + 1}. {investor}</li>
                           ))}
                         </ol>
@@ -438,44 +498,45 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 currentReportPeriod?.fiscalYear
               );
 
-              // Build combined rounds array: Investment Details as first round + investmentRounds as follow-ons
-              const allRounds = [];
+              // Use unified investmentRounds array (new approach)
+              // Fall back to constructing from legacy fields if investmentRounds is empty
+              let displayRounds = [];
 
-              // First round from Investment Details tab (if any investment data exists)
-              // Only include if invested on or before the quarter end date
-              const hasFirstRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation || company.totalRoundSize || company.postMoneyValuation;
-              const firstRoundInScope = !quarterEndDate || !company.investmentDate || company.investmentDate <= quarterEndDate;
-
-              if (hasFirstRound && firstRoundInScope) {
-                allRounds.push({
-                  roundName: company.fundingRound,
-                  investmentDate: company.investmentDate,
-                  preMoneyValuation: company.preMoneyValuation,
-                  totalRoundSize: company.totalRoundSize,
-                  postMoneyValuation: company.postMoneyValuation,
-                  yaliInvestment: company.yaliInvestmentAmount,
-                  yaliOwnership: company.yaliOwnershipPercent,
-                  coInvestors: company.coInvestors,
-                  isFirstRound: true, // Mark as coming from Investment Details
-                });
-              }
-
-              // Follow-on rounds from investmentRounds array
-              // Only include rounds that occurred on or before the quarter end date
-              if (company.investmentRounds?.length > 0) {
-                const filteredFollowOnRounds = company.investmentRounds
+              if (allRounds.length > 0) {
+                // New unified approach: filter by quarter end date and sort by date
+                displayRounds = sortedRoundsOldestFirst
                   .filter(r => {
-                    // Rounds without date are included (legacy data)
                     if (!r.investmentDate) return true;
-                    // Only include if on or before quarter end date
                     return !quarterEndDate || r.investmentDate <= quarterEndDate;
-                  })
-                  .map(r => ({ ...r, isFirstRound: false }));
-                allRounds.push(...filteredFollowOnRounds);
+                  });
+              } else {
+                // Legacy fallback: construct from old fields
+                const hasLegacyRound = company.fundingRound || company.yaliInvestmentAmount || company.preMoneyValuation;
+                const legacyInScope = !quarterEndDate || !company.investmentDate || company.investmentDate <= quarterEndDate;
+
+                if (hasLegacyRound && legacyInScope) {
+                  displayRounds.push({
+                    roundName: company.fundingRound,
+                    roundLabel: null,
+                    investmentDate: company.investmentDate,
+                    preMoneyValuation: company.preMoneyValuation,
+                    totalRoundSize: company.totalRoundSize,
+                    postMoneyValuation: company.postMoneyValuation,
+                    yaliInvestment: company.yaliInvestmentAmount,
+                    yaliOwnership: company.yaliOwnershipPercent,
+                    isInitialRound: true,
+                  });
+                }
               }
 
               // Only show section if there's round data
-              if (allRounds.length === 0) return null;
+              if (displayRounds.length === 0) return null;
+
+              // Helper to get display label for round
+              const getRoundLabel = (round) => {
+                if (round.roundLabel) return round.roundLabel;
+                return formatRound(round.roundName);
+              };
 
               return (
                 <div className={styles.roundMetricsSection}>
@@ -486,42 +547,50 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                       <thead>
                         <tr>
                           <th></th>
-                          {allRounds.map((round, idx) => (
-                            <th key={idx}>{formatRound(round.roundName)}</th>
+                          {displayRounds.map((round, idx) => (
+                            <th key={idx}>{getRoundLabel(round)}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>Pre-money valuation</td>
-                          {allRounds.map((round, idx) => (
+                          {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.preMoneyValuation ? formatCurrency(round.preMoneyValuation) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Total investment</td>
-                          {allRounds.map((round, idx) => (
+                          <td>Total round size</td>
+                          {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.totalRoundSize ? formatCurrency(round.totalRoundSize) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>Post-money valuation</td>
-                          {allRounds.map((round, idx) => (
+                          {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.postMoneyValuation ? formatCurrency(round.postMoneyValuation) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali's investment</td>
-                          {allRounds.map((round, idx) => (
+                          <td>Yali&apos;s investment</td>
+                          {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.yaliInvestment ? formatCurrency(round.yaliInvestment) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali's ownership in %</td>
-                          {allRounds.map((round, idx) => (
+                          <td>Yali&apos;s ownership %</td>
+                          {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'}</td>
                           ))}
                         </tr>
+                        {displayRounds.some(r => r.moicForRound) && (
+                          <tr>
+                            <td>MOIC for round</td>
+                            {displayRounds.map((round, idx) => (
+                              <td key={idx}>{round.moicForRound ? round.moicForRound.toFixed(2) : '-'}</td>
+                            ))}
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
