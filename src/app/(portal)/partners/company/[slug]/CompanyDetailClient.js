@@ -101,6 +101,38 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return round.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  // Get the latest funding round - checks investmentRounds array first, falls back to base fundingRound
+  const getLatestFundingRound = () => {
+    const rounds = company.investmentRounds || [];
+
+    // If there are follow-on rounds, find the one with the latest date
+    if (rounds.length > 0) {
+      // Filter rounds that have a roundName and sort by date (most recent first)
+      const sortedRounds = rounds
+        .filter(r => r.roundName)
+        .sort((a, b) => {
+          // If both have dates, compare them
+          if (a.investmentDate && b.investmentDate) {
+            return new Date(b.investmentDate) - new Date(a.investmentDate);
+          }
+          // Rounds with dates come before rounds without
+          if (a.investmentDate && !b.investmentDate) return -1;
+          if (!a.investmentDate && b.investmentDate) return 1;
+          // If neither has a date, keep original order (last in array is latest)
+          return 0;
+        });
+
+      if (sortedRounds.length > 0) {
+        return sortedRounds[0].roundName;
+      }
+    }
+
+    // Fall back to the base funding round
+    return company.fundingRound;
+  };
+
+  const latestFundingRound = getLatestFundingRound();
+
   // PortableText components for rendering rich text
   const portableTextComponents = {
     block: {
@@ -346,8 +378,8 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>{formatDate(company.investmentDate)}</td>
                 </tr>
                 <tr>
-                  <td>Funding round</td>
-                  <td>{formatRound(company.fundingRound)}</td>
+                  <td>Latest funding round</td>
+                  <td>{formatRound(latestFundingRound)}</td>
                 </tr>
                 <tr>
                   <td>Total amount invested</td>
