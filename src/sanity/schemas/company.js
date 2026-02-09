@@ -1,28 +1,8 @@
 /**
- * MIGRATION NOTES - Investment Rounds Unification
- * ================================================
+ * Portfolio Company Schema
  *
- * As of Feb 2026, investment rounds have been unified into a single `investmentRounds` array.
- * The old separate fields (fundingRound, investmentDate, yaliInvestmentAmount, etc.) are now
- * deprecated and moved to the "Legacy Fields" tab.
- *
- * TO MIGRATE EXISTING DATA:
- * 1. For each company, go to the "Investment Rounds" tab
- * 2. Add the initial investment as the first round:
- *    - Check "Initial Round" toggle
- *    - Fill in Round Name (e.g., "Series A")
- *    - Fill in Investment Date (copy from legacy field)
- *    - Fill in Yali's Investment amount (copy from legacy field)
- *    - Fill in ownership, valuations, co-investors as needed
- * 3. Add any follow-on rounds in order
- * 4. The "Legacy Fields" tab shows the old data for reference
- *
- * DISPLAY BEHAVIOR:
- * - The portal will use investmentRounds array if populated
- * - Falls back to legacy fields if investmentRounds is empty
- * - "Latest funding round" = most recent round by date
- * - "Total investment" = sum of all rounds' yaliInvestment
- * - "Ownership" = from latest round's yaliOwnership
+ * Investment data is managed entirely through the `investmentRounds` array.
+ * Each round tracks its own economics, co-investors, and whether Yali led.
  */
 
 export default {
@@ -36,7 +16,6 @@ export default {
     { name: 'quarterly', title: 'Quarterly Performance' },
     { name: 'team', title: 'Team & Founders' },
     { name: 'story', title: 'Investment Story' },
-    { name: 'legacy', title: 'Legacy Fields (Deprecated)' },
   ],
 
   fields: [
@@ -122,49 +101,6 @@ export default {
       group: 'basic',
     },
 
-    // ===== LEGACY INVESTMENT DETAILS (Deprecated - use Investment Rounds instead) =====
-    {
-      name: 'investmentDate',
-      title: '[Legacy] Date of First Investment',
-      type: 'date',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead. This field is kept for backward compatibility.',
-    },
-    {
-      name: 'fundingRound',
-      title: '[Legacy] Funding Round',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Pre-Seed', value: 'pre-seed' },
-          { title: 'Seed', value: 'seed' },
-          { title: 'Pre-Series A', value: 'pre-series-a' },
-          { title: 'Series A', value: 'series-a' },
-          { title: 'Series B', value: 'series-b' },
-          { title: 'Series C', value: 'series-c' },
-          { title: 'Series D', value: 'series-d' },
-          { title: 'Bridge Round', value: 'bridge' },
-          { title: 'Growth', value: 'growth' },
-        ],
-      },
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-    {
-      name: 'yaliInvestmentAmount',
-      title: "[Legacy] Yali's Investment Amount (₹ Crores)",
-      type: 'number',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-    {
-      name: 'yaliOwnershipPercent',
-      title: "[Legacy] Yali's Ownership (%)",
-      type: 'number',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-
     // ===== INVESTMENT ROUNDS (Single source of truth) =====
     {
       name: 'investmentRounds',
@@ -184,6 +120,13 @@ export default {
               type: 'boolean',
               initialValue: false,
               description: 'Check this for the first investment round (only one round should have this checked)',
+            },
+            {
+              name: 'isYaliLead',
+              title: 'Yali Led This Round',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check if Yali was the lead investor for this specific round',
             },
             {
               name: 'roundName',
@@ -254,7 +197,8 @@ export default {
               name: 'coInvestors',
               title: 'Co-Investors in this Round',
               type: 'array',
-              of: [{ type: 'string' }],
+              of: [{ type: 'reference', to: [{ type: 'investor' }] }],
+              description: 'Select co-investors from the centralized investor list',
             },
           ],
           preview: {
@@ -264,12 +208,14 @@ export default {
               date: 'investmentDate',
               investment: 'yaliInvestment',
               isInitial: 'isInitialRound',
+              isLead: 'isYaliLead',
             },
-            prepare({ title, label, date, investment, isInitial }) {
+            prepare({ title, label, date, investment, isInitial, isLead }) {
               const roundLabel = label || (title ? title.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Round');
               const prefix = isInitial ? '⭐ ' : '';
+              const leadBadge = isLead ? ' (Lead)' : '';
               return {
-                title: `${prefix}${roundLabel}`,
+                title: `${prefix}${roundLabel}${leadBadge}`,
                 subtitle: `${date ? new Date(date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }) : ''} ${investment ? `• ₹${investment} Cr` : ''}`.trim(),
               };
             },
@@ -278,14 +224,7 @@ export default {
       ],
     },
 
-    // ===== INVESTMENT STATUS & LEAD INVESTOR =====
-    {
-      name: 'leadInvestor',
-      title: 'Yali is Lead Investor?',
-      type: 'boolean',
-      initialValue: false,
-      group: 'rounds',
-    },
+    // ===== INVESTMENT STATUS =====
     {
       name: 'investmentStatus',
       title: 'Investment Status',
@@ -299,37 +238,6 @@ export default {
       },
       initialValue: 'active',
       group: 'rounds',
-    },
-
-    // ===== LEGACY FIRST ROUND ECONOMICS (Deprecated) =====
-    {
-      name: 'preMoneyValuation',
-      title: '[Legacy] Pre-Money Valuation (₹ Crores)',
-      type: 'number',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-    {
-      name: 'totalRoundSize',
-      title: '[Legacy] Total Round Size (₹ Crores)',
-      type: 'number',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-    {
-      name: 'postMoneyValuation',
-      title: '[Legacy] Post-Money Valuation (₹ Crores)',
-      type: 'number',
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
-    },
-    {
-      name: 'coInvestors',
-      title: '[Legacy] Co-Investors (First Round)',
-      type: 'array',
-      of: [{ type: 'string' }],
-      group: 'legacy',
-      description: '⚠️ DEPRECATED: Use Investment Rounds tab instead.',
     },
 
     // ===== QUARTERLY PERFORMANCE =====

@@ -810,7 +810,7 @@ export async function getLPFundSettings() {
 // Get all portfolio companies with investment data (for LP reports)
 export async function getLPInvestments() {
   return client.fetch(
-    `*[_type == "company" && investmentStatus == "active"] | order(order asc, investmentDate asc) {
+    `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
       _id,
       name,
       "slug": slug.current,
@@ -822,16 +822,27 @@ export async function getLPInvestments() {
       link,
       "sector": category->name,
       "sectorSlug": category->slug.current,
-      investmentDate,
-      fundingRound,
-      preMoneyValuation,
-      totalRoundSize,
-      postMoneyValuation,
-      yaliInvestmentAmount,
-      yaliOwnershipPercent,
-      coInvestors,
       investmentStatus,
       order,
+      // Investment rounds with all data
+      "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        isInitialRound,
+        isYaliLead,
+        roundName,
+        roundLabel,
+        investmentDate,
+        preMoneyValuation,
+        totalRoundSize,
+        postMoneyValuation,
+        yaliInvestment,
+        yaliOwnership,
+        moicForRound,
+        "coInvestors": coInvestors[]->{
+          _id,
+          name,
+          type
+        }
+      },
       "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
         quarter,
         fiscalYear,
@@ -873,14 +884,23 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       coInvestors,
       investmentStatus,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        isInitialRound,
+        isYaliLead,
         roundName,
+        roundLabel,
         investmentDate,
         preMoneyValuation,
         totalRoundSize,
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        coInvestors
+        moicForRound,
+        "coInvestors": coInvestors[]->{
+          _id,
+          name,
+          type,
+          "logo": logo.asset->url
+        }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
         quarter,
