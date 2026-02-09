@@ -9,7 +9,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
-import { getQuarterEndDate, getQuartersBefore, sortQuartersDescending } from '@/lib/quarterly-utils';
+import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending } from '@/lib/quarterly-utils';
 
 import Footer from '../../../../components/footer';
 
@@ -244,6 +244,20 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
   // For FMV display in investment table, use current quarter data if available, else most recent
   const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
 
+  // Cumulative MOIC: Use Sanity value if entered, otherwise auto-calculate from (FMV + Amount Returned) / Total Investment
+  const calculatedCumulativeMoic = (() => {
+    // Prefer manually entered value from Sanity
+    if (latestQuarter?.multipleOfInvestment != null) {
+      return latestQuarter.multipleOfInvestment;
+    }
+    // Fall back to auto-calculation
+    if (totalInvestment <= 0) return null;
+    const fmv = latestQuarter?.currentFMV || 0;
+    const returned = latestQuarter?.amountReturned || 0;
+    if (fmv === 0 && returned === 0) return null;
+    return (fmv + returned) / totalInvestment;
+  })();
+
   // Menu items matching the main portal
   const menuItems = [
     { id: 'cover-note', label: 'Cover note' },
@@ -384,18 +398,18 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               {company.logo ? (
                 <Image
                   src={company.logo}
-                  alt={company.name}
+                  alt={company.entityName || company.name}
                   width={80}
                   height={80}
                   className={styles.companyDetailLogo}
                 />
               ) : (
                 <div className={styles.companyDetailLogoPlaceholder}>
-                  {company.name?.charAt(0) || '?'}
+                  {(company.entityName || company.name)?.charAt(0) || '?'}
                 </div>
               )}
               <div className={styles.companyDetailHeaderInfo}>
-                <h1 className={styles.companyDetailName}>{company.name}</h1>
+                <h1 className={styles.companyDetailName}>{company.entityName || company.name}</h1>
                 <span className={styles.companyDetailSector}>{company.sector || '-'}</span>
                 {company.link && (
                   <a
@@ -421,26 +435,56 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>Latest funding round</td>
                   <td>{formatRound(latestFundingRound)}</td>
                 </tr>
+                {/* Individual round investments */}
+                {sortedRoundsOldestFirst.map((round, idx) => {
+                  const label = round.roundLabel || (round.isInitialRound ? 'Initial Investment' : formatRound(round.roundName));
+                  return (
+                    <tr key={`round-inv-${idx}`}>
+                      <td>{label}</td>
+                      <td>{round.yaliInvestment != null ? `₹${formatCurrency(round.yaliInvestment)} Cr` : '-'}</td>
+                    </tr>
+                  );
+                })}
+                {/* Total investment (only show if more than one round) */}
+                {sortedRoundsOldestFirst.length > 1 && (
+                  <tr>
+                    <td>Total Investment</td>
+                    <td>{totalInvestment > 0 ? `₹${formatCurrency(totalInvestment)} Cr` : '-'}</td>
+                  </tr>
+                )}
                 <tr>
-                  <td>Total amount invested</td>
-                  <td>{formatCurrency(totalInvestment)}</td>
-                </tr>
-                <tr>
-                  <td>Ownership fully diluted</td>
+                  <td>Ownership (FD)</td>
                   <td>{latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-'}</td>
                 </tr>
                 <tr>
-                  <td>FMV</td>
-                  <td>{latestQuarter?.currentFMV != null ? formatCurrency(latestQuarter.currentFMV) : '-'}</td>
+                  <td>Current FMV</td>
+                  <td>{latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-'}</td>
                 </tr>
-                <tr>
-                  <td>Amount returned to investors</td>
-                  <td>{latestQuarter?.amountReturned != null ? formatCurrency(latestQuarter.amountReturned) : '-'}</td>
-                </tr>
-                <tr>
-                  <td>Multiple of investment</td>
-                  <td>{latestQuarter?.multipleOfInvestment != null ? latestQuarter.multipleOfInvestment.toFixed(2) : '-'}</td>
-                </tr>
+                {/* Per-round MOIC (only show when multiple rounds exist and quarter has roundMoics) */}
+                {sortedRoundsOldestFirst.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
+                  latestQuarter.roundMoics.map((rm, idx) => {
+                    const roundLabel = formatRound(rm.roundName);
+                    return (
+                      <tr key={`moic-round-${idx}`}>
+                        <td>MOIC - {roundLabel}</td>
+                        <td>{rm.moic != null ? rm.moic.toFixed(2) : '-'}</td>
+                      </tr>
+                    );
+                  })
+                )}
+                {/* Cumulative MOIC (auto-calculated: (FMV + Returned) / Total Investment) */}
+                {calculatedCumulativeMoic != null && (
+                  <tr>
+                    <td>MOIC - Cumulative</td>
+                    <td>{calculatedCumulativeMoic.toFixed(2)}</td>
+                  </tr>
+                )}
+                {latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0 && (
+                  <tr>
+                    <td>Amount returned to investors</td>
+                    <td>₹{formatCurrency(latestQuarter.amountReturned)} Cr</td>
+                  </tr>
+                )}
                 {allCoInvestors.length > 0 && (
                   <tr>
                     <td>Key co-investors</td>
@@ -477,13 +521,27 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 currentReportPeriod?.quarter,
                 currentReportPeriod?.fiscalYear
               );
+              // Get next quarter end date for "show early" logic
+              const nextQuarterEndDate = getNextQuarterEndDate(
+                currentReportPeriod?.quarter,
+                currentReportPeriod?.fiscalYear
+              );
 
-              // Use unified investmentRounds array - filter by quarter end date
-              const displayRounds = sortedRoundsOldestFirst
-                .filter(r => {
-                  if (!r.investmentDate) return true;
-                  return !quarterEndDate || r.investmentDate <= quarterEndDate;
-                });
+              // Filter rounds:
+              // - Show if investment date is before/on quarter end (natural behavior)
+              // - OR if showEarlyInReport is true AND investment date is within the NEXT quarter
+              //   (so round shows in the quarter immediately before it closes, not in all historical quarters)
+              const displayRounds = sortedRoundsOldestFirst.filter(r => {
+                // Always show if no investment date
+                if (!r.investmentDate) return true;
+                // Natural logic: show if investment date is before/on quarter end
+                if (!quarterEndDate || r.investmentDate <= quarterEndDate) return true;
+                // Early override: show only if toggle is on AND investment is within the next quarter
+                if (r.showEarlyInReport && nextQuarterEndDate && r.investmentDate <= nextQuarterEndDate) {
+                  return true;
+                }
+                return false;
+              });
 
               // Only show section if there's round data
               if (displayRounds.length === 0) return null;
@@ -539,18 +597,32 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             <td key={idx}>{round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'}</td>
                           ))}
                         </tr>
-                        {displayRounds.some(r => r.moicForRound) && (
+                        {displayRounds.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
                           <tr>
                             <td>MOIC for round</td>
-                            {displayRounds.map((round, idx) => (
-                              <td key={idx}>{round.moicForRound ? round.moicForRound.toFixed(2) : '-'}</td>
-                            ))}
+                            {displayRounds.map((round, idx) => {
+                              const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
+                              return (
+                                <td key={idx}>{roundMoic?.moic != null ? roundMoic.moic.toFixed(2) : '-'}</td>
+                              );
+                            })}
                           </tr>
                         )}
                       </tbody>
                     </table>
                   </div>
-                  <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                  <div className={styles.tableFootnoteContainer}>
+                    <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
+                    {latestQuarter?.tableFootnotes && latestQuarter.tableFootnotes.length > 0 && (
+                      <div className={styles.customFootnotes}>
+                        {latestQuarter.tableFootnotes.map((fn, idx) => (
+                          <p key={idx} className={styles.tableFootnote}>
+                            <sup>{fn.marker}</sup> {fn.text}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })()}

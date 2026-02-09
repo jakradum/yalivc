@@ -1,11 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useData } from '../data/fetch component';
 import styles from './company inner comp.module.css';
-import categoriesData from '../data/categories.json';
 import Image from 'next/image';
-import Button from '../components/button';
 import { ExpandIcon } from '../components/icons/small icons/expandIcon';
 
 function useWindowWidth() {
@@ -22,14 +19,14 @@ function useWindowWidth() {
   return width;
 }
 
-export const CompaniesInnerComponent = ({companies}) => {
+export const CompaniesInnerComponent = ({companies, categories: sanityCategories = []}) => {
   const windowWidth = useWindowWidth();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
-  const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.emergingTechnologies || [];
-  
-  // Continue with activeCategories useMemo...
+  // Use categories from Sanity (already sorted by order)
+  const categories = sanityCategories;
+
   const toggleCategoryDropdown = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
   };
@@ -41,6 +38,11 @@ export const CompaniesInnerComponent = ({companies}) => {
     });
     return Array.from(activeCats);
   }, [companies]);
+
+  // All category names lowercased (for matching)
+  const allCategoryNames = useMemo(() => {
+    return categories.map(cat => cat.name?.toLowerCase()).filter(Boolean);
+  }, [categories]);
 
   // useEffect(() => {
   //   console.log('useData hook output:', { data, loading, error });
@@ -72,14 +74,14 @@ export const CompaniesInnerComponent = ({companies}) => {
 
   console.log('Current companies data:', companies);
 
-  const toggleCategory = (category) => {
-    console.log('Toggling category:', category);
+  const toggleCategory = (categoryName) => {
+    console.log('Toggling category:', categoryName);
     setSelectedCategories((prev) => {
-      const lowercaseCategory = category.toLowerCase();
-      if (prev.includes(lowercaseCategory)) {
-        return prev.filter((c) => c !== lowercaseCategory);
+      const lowercaseName = categoryName.toLowerCase();
+      if (prev.includes(lowercaseName)) {
+        return prev.filter((c) => c !== lowercaseName);
       } else {
-        return [...prev, lowercaseCategory];
+        return [...prev, lowercaseName];
       }
     });
     // Close the dropdown after selecting a category
@@ -94,7 +96,12 @@ export const CompaniesInnerComponent = ({companies}) => {
     return url && url.toLowerCase().includes('linkedin.com');
   };
 
-  const renderCategoriesSection = activeCategories.length > 3 && (
+  // Check if selected categories include any empty ones (no companies)
+  const selectedEmptyCategories = useMemo(() => {
+    return selectedCategories.filter(cat => !activeCategories.includes(cat));
+  }, [selectedCategories, activeCategories]);
+
+  const renderCategoriesSection = categories.length > 0 && (
     <>
       <p>Select one or more categories to filter the list below</p>
       <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
@@ -104,29 +111,29 @@ export const CompaniesInnerComponent = ({companies}) => {
             <ExpandIcon className={`${styles.expandIcon} ${isCategoryDropdownOpen ? styles.expanded : ''}`} />
           </button>
           <div className={`${styles.dropdownContent} ${isCategoryDropdownOpen ? styles.show : ''}`}>
-            {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
+            {categories.map((category) => (
               <button
-                key={index}
+                key={category._id || category.slug}
                 className={`${styles.categoryItem} ${
-                  selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
+                  selectedCategories.includes(category.name?.toLowerCase()) ? styles.selectedCategory : ''
                 }`}
-                onClick={() => toggleCategory(category)}
+                onClick={() => toggleCategory(category.name)}
               >
-                {category}
+                {category.name}
               </button>
             ))}
           </div>
         </div>
         <div className={styles.categoriesContainer}>
-          {categories.filter(category => activeCategories.includes(category.toLowerCase())).map((category, index) => (
+          {categories.map((category) => (
             <button
-              key={index}
+              key={category._id || category.slug}
               className={`${styles.categoryItem} ${
-                selectedCategories.includes(category.toLowerCase()) ? styles.selectedCategory : ''
+                selectedCategories.includes(category.name?.toLowerCase()) ? styles.selectedCategory : ''
               }`}
-              onClick={() => toggleCategory(category)}
+              onClick={() => toggleCategory(category.name)}
             >
-              {category}
+              {category.name}
             </button>
           ))}
         </div>
@@ -134,9 +141,28 @@ export const CompaniesInnerComponent = ({companies}) => {
     </>
   );
 
+  // Render placeholder for empty categories
+  const renderEmptyCategoryPlaceholder = (categoryName) => (
+    <div key={categoryName} className={styles.emptyCategoryPlaceholder}>
+      <p className={styles.emptyCategoryTitle}>{categoryName}</p>
+      <p className={styles.emptyCategoryMessage}>
+        We are actively looking to invest in startups operating in the sector.
+      </p>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       {renderCategoriesSection}
+      {/* Show placeholders for selected empty categories */}
+      {selectedEmptyCategories.length > 0 && (
+        <div className={styles.emptyCategories}>
+          {selectedEmptyCategories.map(catName => {
+            const originalCat = categories.find(c => c.name?.toLowerCase() === catName);
+            return renderEmptyCategoryPlaceholder(originalCat?.name || catName);
+          })}
+        </div>
+      )}
       <div className={styles.companiesContainer}>
         {filteredCompanies.map((company, index) => (
           <div key={index} className={styles.companyCard}>

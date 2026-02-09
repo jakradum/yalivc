@@ -2621,12 +2621,28 @@
   border-top: 1px solid #e0e0e0;
 }
 
+.tableFootnoteContainer {
+  margin-top: 1rem;
+}
+
 .tableFootnote {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.75rem;
   color: #666;
-  margin-top: 1rem;
+  margin: 0.25rem 0;
   font-style: italic;
+}
+
+.tableFootnote sup {
+  color: #830D35;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.customFootnotes {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #e0e0e0;
 }
 
 /* Multi-Round Investment Table */
@@ -2641,6 +2657,7 @@
   border-collapse: collapse;
   background: white;
   border: 1px solid #830D35;
+  table-layout: fixed;
 }
 
 .roundsTable thead th {
@@ -2652,10 +2669,6 @@
   text-align: left;
   border-bottom: 2px solid #830D35;
   background: #fafafa;
-}
-
-.roundsTable thead th:first-child {
-  width: 200px;
 }
 
 .roundsTable tbody td {

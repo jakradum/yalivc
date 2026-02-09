@@ -63,6 +63,39 @@ export function getQuarterEndDate(quarter, fiscalYear) {
 }
 
 /**
+ * Get the next quarter and fiscal year after the given one
+ * @param {string} quarter - Current quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Current fiscal year (e.g., "FY26")
+ * @returns {object} { quarter, fiscalYear } for the next quarter
+ */
+export function getNextQuarter(quarter, fiscalYear) {
+  if (!quarter || !fiscalYear) return null;
+
+  const fyNum = parseInt(fiscalYear.replace('FY', ''), 10);
+
+  switch (quarter) {
+    case 'Q1': return { quarter: 'Q2', fiscalYear };
+    case 'Q2': return { quarter: 'Q3', fiscalYear };
+    case 'Q3': return { quarter: 'Q4', fiscalYear };
+    case 'Q4': return { quarter: 'Q1', fiscalYear: `FY${fyNum + 1}` };
+    default: return null;
+  }
+}
+
+/**
+ * Get the end date of the NEXT quarter after the given one
+ * Useful for "show early" logic where a round should appear in the quarter before its close
+ * @param {string} quarter - Current quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Current fiscal year (e.g., "FY26")
+ * @returns {string|null} Date string in YYYY-MM-DD format for next quarter's end
+ */
+export function getNextQuarterEndDate(quarter, fiscalYear) {
+  const next = getNextQuarter(quarter, fiscalYear);
+  if (!next) return null;
+  return getQuarterEndDate(next.quarter, next.fiscalYear);
+}
+
+/**
  * Filter investments to only include companies invested on or before a quarter's end date
  * Companies without an investment date are included (legacy data)
  * @param {Array} investments - Array of investment objects with investmentDate field

@@ -1,3 +1,4 @@
+import investor from './schemas/investor'
 import company from './schemas/company'
 import news from './schemas/news'
 import teamMember from './schemas/teamMember'
@@ -26,6 +27,7 @@ import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 import portalUser from './schemas/portalUser'
 
 export const schemaTypes = [
+  investor,  // Must be before company (company references investor)
   company,
   news,
   teamMember,

@@ -2,26 +2,13 @@ import styles from '../about-yali/about-styles.module.css'
 import { InvestmentsGraphic } from '../components/icons/background svgs/investmentsGraphic';
 import HeaderFlex from '../components/icons/headerflex';
 import { CompaniesInnerComponent } from './companies inner component';
-import { getCompanies } from '@/lib/sanity-queries';
-import categories from '../data/categories.json';
+import { getCompanies, getCategories } from '@/lib/sanity-queries';
 export const revalidate = 60;
-
-// Generate SEO-friendly meta description based on categories
-const generateMetaDescription = () => {
-  const techs = categories.emergingTechnologies;
-  const categoryPhrases = techs.slice(0, 4).map(tech =>
-    `${tech} investing`
-  ).join(', ');
-
-  return `Deep tech venture capital investments in India. Specializing in ${categoryPhrases} and more. Bangalore-based VC firm backing India's tech startups.`;
-};
 
 export const metadata = {
   title: 'Our Investments | Deep Tech Venture Capital in India',
-  description: generateMetaDescription(),
-  keywords: categories.emergingTechnologies.map(tech =>
-    `${tech} investing, investing in ${tech} companies`
-  ).join(', ') + ', deep tech venture capital, tech investing in India, bangalore venture capital',
+  description: 'Deep tech venture capital investments in India. Specializing in robotics, AI, semiconductors, genomics and more. Bangalore-based VC firm backing India\'s tech startups.',
+  keywords: 'deep tech venture capital, tech investing in India, bangalore venture capital, robotics investing, AI investing, semiconductor investing',
   alternates: {
     canonical: 'https://yali.vc/investments/',
   },
@@ -29,15 +16,19 @@ export const metadata = {
 
 export default async function Investments() {
   let companies = [];
+  let categories = [];
   try {
-    companies = await getCompanies();
+    [companies, categories] = await Promise.all([
+      getCompanies(),
+      getCategories()
+    ]);
     console.log('Companies fetched:', companies);
+    console.log('Categories fetched:', categories);
   } catch (error) {
-    console.error('Failed to fetch companies:', error);
+    console.error('Failed to fetch data:', error);
   }
-  
+
   return (
-    // ... rest of code
     <section>
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
@@ -50,7 +41,7 @@ export default async function Investments() {
               Indian stock exchanges.{' '}
             </p>
             <p>
-              Our involvement with companies doesn't end with funding; we offer support and mentoring that helps them go
+              Our involvement with companies doesn&apos;t end with funding; we offer support and mentoring that helps them go
               to market. Sectors that excite us most include robotics investing, AI investing, semiconductor investing, smart manufacturing, and genomics investing
               to name a few.
             </p>
@@ -65,7 +56,7 @@ export default async function Investments() {
           <HeaderFlex title="Our portfolio of companies" color="black" desktopMaxWidth={'50%'}  mobileMinHeight={'8rem'}/>
         </div>
       </section>
-      <CompaniesInnerComponent companies={companies} />
+      <CompaniesInnerComponent companies={companies} categories={categories} />
     </section>
   );
-};
+}

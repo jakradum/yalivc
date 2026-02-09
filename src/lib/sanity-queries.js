@@ -77,11 +77,12 @@ export async function getInvestmentPhilosophy() {
 
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember" && showOnHomepage == true] | order(order asc) {
+    `*[_type == "teamMember" && showOnHomepage == true] | order(department asc, order asc) {
       _id,
       name,
       slug,
       role,
+      department,
       bio,
       oneLiner,
       "photo": photo.asset->url,
@@ -147,11 +148,12 @@ export async function getOtherTeamMembers(currentSlug, limit = 4) {
 
 export async function getCategories() {
   return client.fetch(
-    `*[_type == "category"] | order(name asc) {
+    `*[_type == "category"] | order(order asc, name asc) {
       _id,
       name,
       description,
-      slug
+      "slug": slug.current,
+      order
     }`
   );
 }
@@ -813,6 +815,7 @@ export async function getLPInvestments() {
     `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
       _id,
       name,
+      entityName,
       "slug": slug.current,
       oneLiner,
       detail,
@@ -828,6 +831,7 @@ export async function getLPInvestments() {
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         isYaliLead,
+        showEarlyInReport,
         roundName,
         roundLabel,
         investmentDate,
@@ -836,7 +840,6 @@ export async function getLPInvestments() {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        moicForRound,
         "coInvestors": coInvestors[]->{
           _id,
           name,
@@ -850,6 +853,8 @@ export async function getLPInvestments() {
         currentOwnershipPercent,
         amountReturned,
         multipleOfInvestment,
+        roundMoics,
+        tableFootnotes,
         updateNotes,
         revenueINR,
         patINR,
@@ -866,6 +871,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
     `*[_type == "company" && slug.current == $companySlug][0]{
       _id,
       name,
+      entityName,
       "slug": slug.current,
       oneLiner,
       detail,
@@ -886,6 +892,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         isYaliLead,
+        showEarlyInReport,
         roundName,
         roundLabel,
         investmentDate,
@@ -894,7 +901,6 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        moicForRound,
         "coInvestors": coInvestors[]->{
           _id,
           name,
@@ -909,6 +915,8 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
         currentOwnershipPercent,
         amountReturned,
         multipleOfInvestment,
+        roundMoics,
+        tableFootnotes,
         updateNotes,
         revenueINR,
         patINR,
@@ -922,6 +930,8 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
         currentOwnershipPercent,
         amountReturned,
         multipleOfInvestment,
+        roundMoics,
+        tableFootnotes,
         updateNotes,
         revenueINR,
         patINR,

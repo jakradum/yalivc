@@ -65,6 +65,9 @@ export default defineConfig({
                       ),
                     S.divider(),
                     S.listItem()
+                      .title('Investors')
+                      .child(S.documentTypeList('investor').title('Investors')),
+                    S.listItem()
                       .title('Pipeline Deals')
                       .child(S.documentTypeList('lpPipelineDeal').title('Pipeline')),
                     S.divider(),

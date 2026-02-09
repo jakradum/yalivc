@@ -31,6 +31,7 @@ export const schemaTypes = [
   // Existing schemas
   blogPost,
   category,
+  investor,  // Must be before company (company references investor)
   company,
   news,
   publication,
@@ -54,7 +55,6 @@ export const schemaTypes = [
   lpPipelineDeal,
   lpDownloadConsent,
   lpPortalFeedback,
-  investor,
   // Homepage sections
   faq,
   socialUpdate
