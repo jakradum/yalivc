@@ -58,12 +58,23 @@ const getTotalInvestment = (company) => {
   return rounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
 };
 
-// Get latest ownership from investmentRounds (most recent round)
+// Get latest ownership from investmentRounds (most recent round by date)
 const getLatestOwnership = (company) => {
   const rounds = company?.investmentRounds || [];
   if (rounds.length === 0) return null;
-  // Rounds are already sorted by date ascending, so last one is most recent
-  return rounds[rounds.length - 1]?.yaliOwnership || null;
+
+  // Explicitly find the round with the latest investment date
+  // Don't rely on array order - sort by date descending and take first
+  const sortedRounds = [...rounds]
+    .filter(r => r.investmentDate) // Only consider rounds with dates
+    .sort((a, b) => b.investmentDate.localeCompare(a.investmentDate));
+
+  // If no rounds have dates, fall back to last round in array
+  if (sortedRounds.length === 0) {
+    return rounds[rounds.length - 1]?.yaliOwnership || null;
+  }
+
+  return sortedRounds[0]?.yaliOwnership || null;
 };
 
 // Get latest funding round name
