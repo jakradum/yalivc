@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -883,133 +883,43 @@ function PortalContentInner({
                       <th>Sl No.</th>
                       <th>Company</th>
                       <th>Sector</th>
-                      <th>Investment</th>
+                      <th>Initial Investment Date</th>
                       <th>Amount in ₹ (Crores)</th>
-                      <th>MOIC</th>
+                      <th>Fully Diluted Ownership (%)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedInvestments && sortedInvestments.length > 0 ? (
-                      sortedInvestments.map((investment, idx) => {
-                        const rounds = investment.investmentRounds || [];
-                        const initialRound = rounds.find(r => r.isInitialRound) || rounds[0];
-                        const followOnRounds = rounds.filter(r => !r.isInitialRound && r !== rounds[0]);
-                        const hasMultipleRounds = rounds.length > 1;
-                        const roundMoics = investment.latestQuarter?.roundMoics || [];
-
-                        // Helper to format round name
-                        const formatRoundName = (round) => {
-                          if (round?.roundLabel) return round.roundLabel;
-                          if (round?.roundName) {
-                            return round.roundName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                          }
-                          return 'Investment';
-                        };
-
-                        // Helper to get MOIC for a specific round
-                        const getRoundMoic = (roundName) => {
-                          const moicEntry = roundMoics.find(m => m.roundName === roundName);
-                          return moicEntry?.moic;
-                        };
-
-                        return (
-                          <React.Fragment key={investment._id || `investment-${idx}`}>
-                            {/* Main company row with initial investment */}
-                            <tr
-                              className={styles.clickableRow}
-                              onClick={() => router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <td>{idx + 1}</td>
-                              <td className={styles.companyNameCell}>
-                                {investment.entityName || investment.name || '-'}
-                              </td>
-                              <td>{investment.sector || '-'}</td>
-                              <td>
-                                <div className={styles.investmentRoundInfo}>
-                                  <span className={styles.roundLabel}>
-                                    Initial Investment ({formatRoundName(initialRound)})
-                                  </span>
-                                  {initialRound?.investmentDate && (
-                                    <span className={styles.roundDate}>
-                                      {new Date(initialRound.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
-                                    </span>
-                                  )}
-                                </div>
-                              </td>
-                              <td>{initialRound?.yaliInvestment != null ? initialRound.yaliInvestment.toFixed(2) : '-'}</td>
-                              <td>
-                                {hasMultipleRounds && initialRound?.roundName ? (
-                                  getRoundMoic(initialRound.roundName) != null ? `${getRoundMoic(initialRound.roundName).toFixed(2)}x` : '-'
-                                ) : (
-                                  investment.latestQuarter?.multipleOfInvestment != null ? `${investment.latestQuarter.multipleOfInvestment.toFixed(2)}x` : '-'
-                                )}
-                              </td>
-                            </tr>
-
-                            {/* Follow-on Rounds Header (only if there are follow-on rounds) */}
-                            {hasMultipleRounds && followOnRounds.length > 0 && (
-                              <tr className={styles.followOnHeaderRow}>
-                                <td></td>
-                                <td colSpan={5} className={styles.followOnHeaderCell}>
-                                  Follow-on Rounds
-                                </td>
-                              </tr>
-                            )}
-
-                            {/* Follow-on Round Rows */}
-                            {hasMultipleRounds && followOnRounds.map((round, roundIdx) => (
-                              <tr
-                                key={`${investment._id || idx}-round-${roundIdx}`}
-                                className={styles.followOnRoundRow}
-                                onClick={() => router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td className={styles.followOnRoundName}>
-                                  <span className={styles.indentedRound}>
-                                    {formatRoundName(round)}
-                                    {round.investmentDate && (
-                                      <span className={styles.roundDate}>
-                                        {' '}({new Date(round.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })})
-                                      </span>
-                                    )}
-                                  </span>
-                                </td>
-                                <td>{round.yaliInvestment != null ? round.yaliInvestment.toFixed(2) : '-'}</td>
-                                <td>
-                                  {round.roundName && getRoundMoic(round.roundName) != null
-                                    ? `${getRoundMoic(round.roundName).toFixed(2)}x`
-                                    : '-'}
-                                </td>
-                              </tr>
-                            ))}
-
-                            {/* Total Row for multi-round companies */}
-                            {hasMultipleRounds && (
-                              <tr className={styles.investmentTotalRow}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td className={styles.totalLabel}>Total Investment</td>
-                                <td className={styles.totalValue}>
-                                  {(() => {
-                                    const total = getTotalInvestment(investment);
-                                    return total > 0 ? total.toFixed(2) : '-';
-                                  })()}
-                                </td>
-                                <td className={styles.totalValue}>
-                                  {investment.latestQuarter?.multipleOfInvestment != null
-                                    ? `${investment.latestQuarter.multipleOfInvestment.toFixed(2)}x`
-                                    : '-'}
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        );
-                      })
+                      sortedInvestments.map((investment, idx) => (
+                        <tr
+                          key={investment._id || idx}
+                          className={styles.clickableRow}
+                          onClick={() => router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <td>{idx + 1}</td>
+                          <td className={styles.companyNameCell}>
+                            {investment.entityName || investment.name || '-'}
+                          </td>
+                          <td>{investment.sector || '-'}</td>
+                          <td>
+                            {(() => {
+                              const initDate = getInitialInvestmentDate(investment);
+                              return initDate
+                                ? new Date(initDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
+                                : '-';
+                            })()}
+                          </td>
+                          <td>{(() => {
+                            const total = getTotalInvestment(investment);
+                            return total > 0 ? total.toFixed(2) : '-';
+                          })()}</td>
+                          <td>{(() => {
+                            const ownership = getLatestOwnership(investment);
+                            return ownership != null ? ownership.toFixed(2) : '-';
+                          })()}</td>
+                        </tr>
+                      ))
                     ) : (
                       <tr>
                         <td colSpan={6} className={styles.noDataCell}>
