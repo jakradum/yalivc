@@ -1030,9 +1030,11 @@ export async function getLPAllPipelineDeals() {
 }
 
 // Get new LP quarterly reports list
+// Returns reports that are either internal (for @yali.vc review) or published (for all LPs)
+// Backward compatible: also includes legacy reports with isPublished=true but no visibility field
 export async function getLPQuarterlyReports() {
   return client.fetch(
-    `*[_type == "lpQuarterlyReport" && isPublished == true] | order(fiscalYear desc, quarter desc) {
+    `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc) {
       _id,
       title,
       "slug": slug.current,
@@ -1040,6 +1042,7 @@ export async function getLPQuarterlyReports() {
       fiscalYear,
       reportingDate,
       publishDate,
+      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft")),
       "pdfUrl": generatedPdf.asset->url,
       fundMetrics
     }`
@@ -1047,9 +1050,11 @@ export async function getLPQuarterlyReports() {
 }
 
 // Get new LP quarterly report by slug (full data)
+// Returns report if visibility is internal or published (frontend checks access)
+// Backward compatible: also includes legacy reports with isPublished=true but no visibility field
 export async function getLPQuarterlyReportBySlug(slug) {
   return client.fetch(
-    `*[_type == "lpQuarterlyReport" && slug.current == $slug && isPublished == true][0]{
+    `*[_type == "lpQuarterlyReport" && slug.current == $slug && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))][0]{
       _id,
       title,
       "slug": slug.current,
@@ -1057,6 +1062,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
       fiscalYear,
       reportingDate,
       publishDate,
+      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft")),
       // Cover Note (text/narrative only)
       coverNoteGreeting,
       coverNoteIntro,
@@ -1072,27 +1078,6 @@ export async function getLPQuarterlyReportBySlug(slug) {
       },
       "pdfUrl": generatedPdf.asset->url,
       "fundFinancialsPdfUrl": fundFinancialsPdf.asset->url,
-      // Portfolio (references to Core Content)
-      "portfolioCompanies": portfolioCompanies[]->{
-        _id,
-        name,
-        "slug": slug.current,
-        oneLiner,
-        detail,
-        "logo": logo.asset->url,
-        link,
-        "sector": category->name,
-        investmentDate,
-        fundingRound,
-        preMoneyValuation,
-        totalRoundSize,
-        postMoneyValuation,
-        yaliInvestmentAmount,
-        yaliOwnershipPercent,
-        coInvestors,
-        investmentStatus,
-        quarterlyUpdates
-      },
       // Pipeline (references)
       "pipelineDeals": pipelineDeals[]->{
         _id,
@@ -1118,18 +1103,26 @@ export async function getLPQuarterlyReportBySlug(slug) {
 }
 
 // Get all LP quarterly report slugs (for static generation)
+// Backward compatible: includes legacy reports with isPublished=true
 export async function getAllLPQuarterlyReportSlugs() {
   return client.fetch(
-    `*[_type == "lpQuarterlyReport" && isPublished == true] {
-      "slug": slug.current
+    `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] {
+      "slug": slug.current,
+      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft"))
     }`
   );
 }
 
 // Get the latest LP quarterly report
-export async function getLatestLPQuarterlyReport() {
+// This query is used to determine the default report - respects visibility
+// Backward compatible: treats legacy isPublished=true as "published"
+export async function getLatestLPQuarterlyReport(includeInternal = false) {
+  // Build filter that's backward compatible with legacy isPublished field
+  const visibilityFilter = includeInternal
+    ? '(visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))'
+    : '(visibility == "published" || (isPublished == true && !defined(visibility)))';
   return client.fetch(
-    `*[_type == "lpQuarterlyReport" && isPublished == true] | order(fiscalYear desc, quarter desc)[0] {
+    `*[_type == "lpQuarterlyReport" && ${visibilityFilter}] | order(fiscalYear desc, quarter desc)[0] {
       _id,
       title,
       "slug": slug.current,
@@ -1137,6 +1130,7 @@ export async function getLatestLPQuarterlyReport() {
       fiscalYear,
       reportingDate,
       publishDate,
+      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft")),
       "pdfUrl": generatedPdf.asset->url
     }`
   );
@@ -1156,16 +1150,19 @@ export async function getAllLPInvestmentSlugs() {
   );
 }
 
-// Get all available quarters from published LP reports (for dropdown)
+// Get all available quarters from LP reports (for dropdown)
+// Returns all non-draft reports; frontend filters based on user access
+// Backward compatible: treats legacy isPublished=true as "published"
 export async function getAvailableLPQuarters() {
   return client.fetch(
-    `*[_type == "lpQuarterlyReport" && isPublished == true] | order(fiscalYear desc, quarter desc) {
+    `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc) {
       _id,
       title,
       "slug": slug.current,
       quarter,
       fiscalYear,
       publishDate,
+      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft")),
       "pdfUrl": generatedPdf.asset->url
     }`
   );
