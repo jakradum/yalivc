@@ -1,4 +1,4 @@
-import { client } from '@/sanity/client';
+import { client, liveClient } from '@/sanity/client';
 
 export async function getCompanies() {
   return client.fetch(
@@ -771,7 +771,7 @@ export async function getCompaniesForLPReport() {
 
 // Get fund settings singleton
 export async function getLPFundSettings() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpFundSettings"][0]{
       fundName,
       fundManagerName,
@@ -811,7 +811,7 @@ export async function getLPFundSettings() {
 
 // Get all portfolio companies with investment data (for LP reports)
 export async function getLPInvestments() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
       _id,
       name,
@@ -867,7 +867,7 @@ export async function getLPInvestments() {
 
 // Get company investment data by slug (includes all quarterly updates)
 export async function getLPInvestmentByCompanySlug(companySlug) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "company" && slug.current == $companySlug][0]{
       _id,
       name,
@@ -945,7 +945,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
 
 // Get company quarter updates for a specific quarter
 export async function getLPQuarterUpdates(quarter, fiscalYear) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "company" && investmentStatus == "active" && count(quarterlyUpdates[quarter == $quarter && fiscalYear == $fiscalYear]) > 0] | order(order asc) {
       _id,
       name,
@@ -977,7 +977,7 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
 
 // Get historical quarterly updates for a specific company
 export async function getLPCompanyHistory(companySlug) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "company" && slug.current == $companySlug][0] {
       "quarterlyHistory": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
         quarter,
@@ -998,7 +998,7 @@ export async function getLPCompanyHistory(companySlug) {
 
 // Get active pipeline deals
 export async function getLPActivePipeline() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpPipelineDeal" && isActive == true && stage != "passed" && stage != "closed"] | order(stage asc, addedDate desc) {
       _id,
       companyName,
@@ -1013,7 +1013,7 @@ export async function getLPActivePipeline() {
 
 // Get all pipeline deals (including closed/passed for tracking)
 export async function getLPAllPipelineDeals() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpPipelineDeal"] | order(stage asc, addedDate desc) {
       _id,
       companyName,
@@ -1033,7 +1033,7 @@ export async function getLPAllPipelineDeals() {
 // Returns reports that are either internal (for @yali.vc review) or published (for all LPs)
 // Backward compatible: also includes legacy reports with isPublished=true but no visibility field
 export async function getLPQuarterlyReports() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc) {
       _id,
       title,
@@ -1053,7 +1053,7 @@ export async function getLPQuarterlyReports() {
 // Returns report if visibility is internal or published (frontend checks access)
 // Backward compatible: also includes legacy reports with isPublished=true but no visibility field
 export async function getLPQuarterlyReportBySlug(slug) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpQuarterlyReport" && slug.current == $slug && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))][0]{
       _id,
       title,
@@ -1105,7 +1105,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
 // Get all LP quarterly report slugs (for static generation)
 // Backward compatible: includes legacy reports with isPublished=true
 export async function getAllLPQuarterlyReportSlugs() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] {
       "slug": slug.current,
       "visibility": coalesce(visibility, select(isPublished == true => "published", "draft"))
@@ -1121,7 +1121,7 @@ export async function getLatestLPQuarterlyReport(includeInternal = false) {
   const visibilityFilter = includeInternal
     ? '(visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))'
     : '(visibility == "published" || (isPublished == true && !defined(visibility)))';
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpQuarterlyReport" && ${visibilityFilter}] | order(fiscalYear desc, quarter desc)[0] {
       _id,
       title,
@@ -1138,7 +1138,7 @@ export async function getLatestLPQuarterlyReport(includeInternal = false) {
 
 // Get all portfolio company slugs (for static generation and navigation)
 export async function getAllLPInvestmentSlugs() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "company" && investmentStatus == "active"] | order(order asc, name asc) {
       "slug": slug.current,
       name,
@@ -1154,7 +1154,7 @@ export async function getAllLPInvestmentSlugs() {
 // Returns all non-draft reports; frontend filters based on user access
 // Backward compatible: treats legacy isPublished=true as "published"
 export async function getAvailableLPQuarters() {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc) {
       _id,
       title,
@@ -1170,7 +1170,7 @@ export async function getAvailableLPQuarters() {
 
 // Get news articles within a date range (for quarterly media coverage)
 export async function getNewsByDateRange(startDate, endDate) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "news" && date >= $startDate && date <= $endDate] | order(date desc) {
       _id,
       headlineEdited,
@@ -1185,7 +1185,7 @@ export async function getNewsByDateRange(startDate, endDate) {
 
 // Get social updates within a date range (for quarterly media coverage)
 export async function getSocialUpdatesByDateRange(startDate, endDate) {
-  return client.fetch(
+  return liveClient.fetch(
     `*[_type == "socialUpdate" && date >= $startDate && date <= $endDate] | order(date desc) {
       _id,
       platform,
