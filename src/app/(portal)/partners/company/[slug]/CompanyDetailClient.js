@@ -442,16 +442,51 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>Latest funding round</td>
                   <td>{formatRound(latestFundingRound)}</td>
                 </tr>
-                {/* Individual round investments */}
-                {sortedRoundsOldestFirst.map((round, idx) => {
-                  const label = round.roundLabel || (round.isInitialRound ? 'Initial Investment' : formatRound(round.roundName));
+                {/* Initial Investment with round name and date */}
+                {initialRound && (
+                  <tr key="initial-investment">
+                    <td>
+                      <div className={styles.investmentRoundInfo}>
+                        <span className={styles.roundLabel}>
+                          Initial Investment ({formatRound(initialRound.roundName)})
+                        </span>
+                        {initialRound.investmentDate && (
+                          <span className={styles.roundDate}>
+                            {new Date(initialRound.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td>{initialRound.yaliInvestment != null ? `₹${formatCurrency(initialRound.yaliInvestment)} Cr` : '-'}</td>
+                  </tr>
+                )}
+                {/* Follow-on Rounds Header and Rows */}
+                {sortedRoundsOldestFirst.length > 1 && (() => {
+                  const followOnRounds = sortedRoundsOldestFirst.filter(r => r !== initialRound && !r.isInitialRound);
+                  if (followOnRounds.length === 0) return null;
                   return (
-                    <tr key={`round-inv-${idx}`}>
-                      <td>{label}</td>
-                      <td>{round.yaliInvestment != null ? `₹${formatCurrency(round.yaliInvestment)} Cr` : '-'}</td>
-                    </tr>
+                    <>
+                      <tr className={styles.followOnHeaderRow}>
+                        <td colSpan={2} className={styles.followOnHeaderCell}>Follow-on Rounds</td>
+                      </tr>
+                      {followOnRounds.map((round, idx) => (
+                        <tr key={`followon-${idx}`} className={styles.followOnRoundRow}>
+                          <td className={styles.followOnRoundName}>
+                            <span className={styles.indentedRound}>
+                              {round.roundLabel || formatRound(round.roundName)}
+                              {round.investmentDate && (
+                                <span className={styles.roundDate}>
+                                  {' '}({new Date(round.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })})
+                                </span>
+                              )}
+                            </span>
+                          </td>
+                          <td>{round.yaliInvestment != null ? `₹${formatCurrency(round.yaliInvestment)} Cr` : '-'}</td>
+                        </tr>
+                      ))}
+                    </>
                   );
-                })}
+                })()}
                 {/* Total investment (only show if more than one round) */}
                 {sortedRoundsOldestFirst.length > 1 && (
                   <tr>
