@@ -7,7 +7,6 @@ export default {
     { name: 'meta', title: 'Report Info' },
     { name: 'coverNote', title: 'Cover Note' },
     { name: 'commentary', title: 'Commentary Sections' },
-    { name: 'portfolio', title: 'Portfolio' },
     { name: 'pipeline', title: 'Pipeline' },
     { name: 'media', title: 'Media' },
     { name: 'output', title: 'Output' }
@@ -185,19 +184,6 @@ export default {
       }]
     },
 
-    // ===== PORTFOLIO (References only) =====
-    {
-      name: 'portfolioCompanies',
-      title: 'Portfolio Companies in Report',
-      type: 'array',
-      of: [{
-        type: 'reference',
-        to: [{ type: 'company' }]
-      }],
-      group: 'portfolio',
-      description: 'Select portfolio companies. Investment data and quarterly updates are pulled from Core Content → Portfolio Companies.'
-    },
-
     // ===== PIPELINE (References + Commentary) =====
     {
       name: 'pipelineDeals',
@@ -262,12 +248,20 @@ export default {
       description: 'Upload the generated PDF report'
     },
     {
-      name: 'isPublished',
-      title: 'Published to Partners Portal',
-      type: 'boolean',
+      name: 'visibility',
+      title: 'Visibility',
+      type: 'string',
       group: 'output',
-      initialValue: false,
-      description: 'When checked, this report will be visible to LPs'
+      options: {
+        list: [
+          { title: 'Draft (Sanity only)', value: 'draft' },
+          { title: 'Internal Review (@yali.vc only)', value: 'internal' },
+          { title: 'Published (All LPs)', value: 'published' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'draft',
+      description: 'Draft = only visible in Sanity. Internal = visible to @yali.vc team for review. Published = visible to all authenticated LPs.'
     },
     {
       name: 'displayOrder',
@@ -282,14 +276,19 @@ export default {
     select: {
       quarter: 'quarter',
       year: 'fiscalYear',
-      published: 'isPublished',
+      visibility: 'visibility',
       title: 'title'
     },
-    prepare({ quarter, year, published, title }) {
+    prepare({ quarter, year, visibility, title }) {
+      const visibilityLabels = {
+        draft: '○ Draft',
+        internal: '👁 Internal Review',
+        published: '✓ Published'
+      };
       return {
         title: title || `${quarter} ${year}`,
-        subtitle: published ? '✓ Published' : '○ Draft'
-      }
+        subtitle: visibilityLabels[visibility] || '○ Draft'
+      };
     }
   },
 

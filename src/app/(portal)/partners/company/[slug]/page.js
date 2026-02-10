@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
 import { getPortfolioCompaniesForQuarter } from '@/lib/quarterly-utils';
@@ -5,6 +6,21 @@ import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
+
+// Extract user email from session cookie (format: email:timestamp:signature)
+function getUserEmail(cookieStore) {
+  const sessionCookie = cookieStore.get('portal-session')?.value;
+  if (!sessionCookie) return null;
+  const parts = sessionCookie.split(':');
+  if (parts.length < 1) return null;
+  return parts[0];
+}
+
+// Check if user is internal (has @yali.vc email)
+function isInternalUser(email) {
+  if (!email) return false;
+  return email.toLowerCase().endsWith('@yali.vc');
+}
 
 // Generate static params for all portfolio companies
 export async function generateStaticParams() {
@@ -38,12 +54,22 @@ export default async function CompanyPage({ params, searchParams }) {
   const { slug } = await params;
   const { report: reportSlug } = await searchParams;
 
+  // Get user access level from session
+  const cookieStore = await cookies();
+  const userEmail = getUserEmail(cookieStore);
+  const hasInternalAccess = isInternalUser(userEmail);
+
   const [company, latestReport, allSlugs, availableQuarters] = await Promise.all([
     getLPInvestmentByCompanySlug(slug),
-    getLatestLPQuarterlyReport(),
+    getLatestLPQuarterlyReport(hasInternalAccess),
     getAllLPInvestmentSlugs(),
     getAvailableLPQuarters(),
   ]);
+
+  // Filter available quarters based on user access
+  const accessibleReports = (availableQuarters || []).filter(r =>
+    hasInternalAccess ? true : r.visibility === 'published'
+  );
 
   if (!company) {
     notFound();
@@ -53,6 +79,11 @@ export default async function CompanyPage({ params, searchParams }) {
   let selectedReport = latestReport;
   if (reportSlug && reportSlug !== latestReport?.slug) {
     selectedReport = await getLPQuarterlyReportBySlug(reportSlug);
+
+    // Security check: if user doesn't have access to this report, fall back to latest accessible
+    if (selectedReport && selectedReport.visibility === 'internal' && !hasInternalAccess) {
+      selectedReport = latestReport;
+    }
   }
 
   // Determine if viewing the latest report
@@ -93,7 +124,7 @@ export default async function CompanyPage({ params, searchParams }) {
       currentReportPeriod={currentReportPeriod}
       allCompanySlugs={allCompanySlugs}
       reportSlug={reportSlug || null}
-      allReports={availableQuarters || []}
+      allReports={accessibleReports}
       isLatestReport={isLatestReport}
     />
   );
