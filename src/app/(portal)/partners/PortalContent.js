@@ -1069,11 +1069,11 @@ function PortalContentInner({
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>FMV</span>
-                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.currentFMV != null ? `₹${company.latestQuarter.currentFMV.toFixed(1)} Cr` : '-'}</span>
+                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.currentFMVConfidential ? '**' : (company.latestQuarter?.currentFMV != null ? `₹${company.latestQuarter.currentFMV.toFixed(1)} Cr` : '-')}</span>
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Multiple</span>
-                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.multipleOfInvestment ? `${company.latestQuarter.multipleOfInvestment.toFixed(2)}x` : '-'}</span>
+                            <span className={styles.companyTileMetricValue}>{company.latestQuarter?.moicConfidential ? '**' : (company.latestQuarter?.multipleOfInvestment ? `${company.latestQuarter.multipleOfInvestment.toFixed(2)}x` : '-')}</span>
                           </div>
                         </div>
                       </Link>

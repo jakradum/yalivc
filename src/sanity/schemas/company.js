@@ -292,10 +292,24 @@ export default {
               description: 'FMV as of quarter end',
             },
             {
+              name: 'currentFMVConfidential',
+              title: 'FMV Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
+            },
+            {
               name: 'currentOwnershipPercent',
               title: 'Current Ownership (%)',
               type: 'number',
               description: 'May change due to dilution',
+            },
+            {
+              name: 'currentOwnershipConfidential',
+              title: 'Ownership Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
             },
             {
               name: 'amountReturned',
@@ -304,10 +318,24 @@ export default {
               initialValue: 0,
             },
             {
+              name: 'amountReturnedConfidential',
+              title: 'Amount Returned Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
+            },
+            {
               name: 'multipleOfInvestment',
               title: 'Cumulative MOIC',
               type: 'number',
               description: 'Cumulative multiple across all rounds = (FMV + Amount Returned) / Total Investment',
+            },
+            {
+              name: 'moicConfidential',
+              title: 'MOIC Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
             },
             {
               name: 'roundMoics',
@@ -370,6 +398,13 @@ export default {
               readOnly: ({ document }) => !document?.isRevenueMaking,
             },
             {
+              name: 'revenueConfidential',
+              title: 'Revenue Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
+            },
+            {
               name: 'patINR',
               title: 'Profit After Tax (₹ Crores)',
               type: 'number',
@@ -377,9 +412,23 @@ export default {
               readOnly: ({ document }) => !document?.isRevenueMaking,
             },
             {
+              name: 'patConfidential',
+              title: 'PAT Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
+            },
+            {
               name: 'teamSize',
               title: 'Team Size',
               type: 'number',
+            },
+            {
+              name: 'teamSizeConfidential',
+              title: 'Team Size Confidential',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Check to show "**" instead of actual value',
             },
             // Key Metrics
             {
