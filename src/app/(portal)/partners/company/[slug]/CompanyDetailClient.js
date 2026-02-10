@@ -87,6 +87,13 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return `${Number(value).toFixed(decimals)}`;
   };
 
+  // Format value with confidentiality check - returns "**" if confidential
+  const formatConfidential = (value, isConfidential, formatter = (v) => v) => {
+    if (isConfidential) return '**';
+    if (value == null) return null;
+    return formatter(value);
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('en-IN', {
@@ -454,14 +461,14 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 )}
                 <tr>
                   <td>Ownership (FD)</td>
-                  <td>{latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-'}</td>
+                  <td>{latestQuarter?.currentOwnershipConfidential ? '**' : (latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-')}</td>
                 </tr>
                 <tr>
                   <td>Current FMV</td>
-                  <td>{latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-'}</td>
+                  <td>{latestQuarter?.currentFMVConfidential ? '**' : (latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-')}</td>
                 </tr>
                 {/* Per-round MOIC (only show when multiple rounds exist and quarter has roundMoics) */}
-                {sortedRoundsOldestFirst.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
+                {sortedRoundsOldestFirst.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && !latestQuarter?.moicConfidential && (
                   latestQuarter.roundMoics.map((rm, idx) => {
                     const roundLabel = formatRound(rm.roundName);
                     return (
@@ -476,15 +483,15 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 {calculatedCumulativeMoic != null && (
                   <tr>
                     <td>MOIC - Cumulative</td>
-                    <td>{calculatedCumulativeMoic.toFixed(2)}</td>
+                    <td>{latestQuarter?.moicConfidential ? '**' : calculatedCumulativeMoic.toFixed(2)}</td>
                   </tr>
                 )}
-                {latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0 && (
+                {(latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0) || latestQuarter?.amountReturnedConfidential ? (
                   <tr>
                     <td>Amount returned to investors</td>
-                    <td>₹{formatCurrency(latestQuarter.amountReturned)} Cr</td>
+                    <td>{latestQuarter?.amountReturnedConfidential ? '**' : `₹${formatCurrency(latestQuarter.amountReturned)} Cr`}</td>
                   </tr>
-                )}
+                ) : null}
                 {allCoInvestors.length > 0 && (
                   <tr>
                     <td>Key co-investors</td>
@@ -645,7 +652,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
             {(() => {
               // Only show for revenue-making companies with quarterly data
               const quartersWithFinancials = sortQuartersDescending(
-                allQuarterlyUpdates.filter(q => q.revenueINR != null || q.patINR != null)
+                allQuarterlyUpdates.filter(q => q.revenueINR != null || q.revenueConfidential || q.patINR != null || q.patConfidential)
               );
 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
@@ -682,13 +689,13 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                         <tr>
                           <td>Revenue</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.revenueINR != null ? q.revenueINR.toFixed(2) : '-'}</td>
+                            <td key={idx}>{q.revenueConfidential ? '**' : (q.revenueINR != null ? q.revenueINR.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>PAT</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{formatPAT(q.patINR)}</td>
+                            <td key={idx}>{q.patConfidential ? '**' : formatPAT(q.patINR)}</td>
                           ))}
                         </tr>
                       </tbody>
@@ -727,39 +734,39 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                     </span>
                   </div>
 
-                  {(currentQuarterUpdate.currentFMV != null || currentQuarterUpdate.multipleOfInvestment != null || currentQuarterUpdate.revenueINR != null || currentQuarterUpdate.patINR != null || currentQuarterUpdate.teamSize) && (
+                  {(currentQuarterUpdate.currentFMV != null || currentQuarterUpdate.currentFMVConfidential || currentQuarterUpdate.multipleOfInvestment != null || currentQuarterUpdate.moicConfidential || currentQuarterUpdate.revenueINR != null || currentQuarterUpdate.revenueConfidential || currentQuarterUpdate.patINR != null || currentQuarterUpdate.patConfidential || currentQuarterUpdate.teamSize || currentQuarterUpdate.teamSizeConfidential) && (
                     <div className={styles.quarterUpdateMetrics}>
-                      {currentQuarterUpdate.currentFMV != null && (
+                      {(currentQuarterUpdate.currentFMV != null || currentQuarterUpdate.currentFMVConfidential) && (
                         <div className={styles.quarterUpdateMetric}>
                           <span className={styles.quarterUpdateMetricLabel}>FMV</span>
                           <span className={styles.quarterUpdateMetricValue}>
-                            ₹{formatCurrency(currentQuarterUpdate.currentFMV)} Cr
+                            {currentQuarterUpdate.currentFMVConfidential ? '**' : `₹${formatCurrency(currentQuarterUpdate.currentFMV)} Cr`}
                           </span>
                         </div>
                       )}
-                      {currentQuarterUpdate.multipleOfInvestment != null && (
+                      {(currentQuarterUpdate.multipleOfInvestment != null || currentQuarterUpdate.moicConfidential) && (
                         <div className={styles.quarterUpdateMetric}>
                           <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
                           <span className={styles.quarterUpdateMetricValue}>
-                            {currentQuarterUpdate.multipleOfInvestment.toFixed(2)}x
+                            {currentQuarterUpdate.moicConfidential ? '**' : `${currentQuarterUpdate.multipleOfInvestment.toFixed(2)}x`}
                           </span>
                         </div>
                       )}
                       {company.isRevenueMaking ? (
                         <>
-                          {currentQuarterUpdate.revenueINR != null && (
+                          {(currentQuarterUpdate.revenueINR != null || currentQuarterUpdate.revenueConfidential) && (
                             <div className={styles.quarterUpdateMetric}>
                               <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
                               <span className={styles.quarterUpdateMetricValue}>
-                                ₹{formatCurrency(currentQuarterUpdate.revenueINR)} Cr
+                                {currentQuarterUpdate.revenueConfidential ? '**' : `₹${formatCurrency(currentQuarterUpdate.revenueINR)} Cr`}
                               </span>
                             </div>
                           )}
-                          {currentQuarterUpdate.patINR != null && (
+                          {(currentQuarterUpdate.patINR != null || currentQuarterUpdate.patConfidential) && (
                             <div className={styles.quarterUpdateMetric}>
                               <span className={styles.quarterUpdateMetricLabel}>PAT</span>
                               <span className={styles.quarterUpdateMetricValue}>
-                                ₹{formatCurrency(currentQuarterUpdate.patINR)} Cr
+                                {currentQuarterUpdate.patConfidential ? '**' : `₹${formatCurrency(currentQuarterUpdate.patINR)} Cr`}
                               </span>
                             </div>
                           )}
@@ -772,11 +779,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                           </span>
                         </div>
                       )}
-                      {currentQuarterUpdate.teamSize && (
+                      {(currentQuarterUpdate.teamSize || currentQuarterUpdate.teamSizeConfidential) && (
                         <div className={styles.quarterUpdateMetric}>
                           <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
                           <span className={styles.quarterUpdateMetricValue}>
-                            {currentQuarterUpdate.teamSize}
+                            {currentQuarterUpdate.teamSizeConfidential ? '**' : currentQuarterUpdate.teamSize}
                           </span>
                         </div>
                       )}
@@ -819,31 +826,31 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             </span>
                           </div>
 
-                          {(quarter.currentFMV != null || quarter.multipleOfInvestment != null || quarter.revenueINR != null || quarter.teamSize) && (
+                          {(quarter.currentFMV != null || quarter.currentFMVConfidential || quarter.multipleOfInvestment != null || quarter.moicConfidential || quarter.revenueINR != null || quarter.revenueConfidential || quarter.teamSize || quarter.teamSizeConfidential) && (
                             <div className={styles.quarterUpdateMetrics}>
-                              {quarter.currentFMV != null && (
+                              {(quarter.currentFMV != null || quarter.currentFMVConfidential) && (
                                 <div className={styles.quarterUpdateMetric}>
                                   <span className={styles.quarterUpdateMetricLabel}>FMV</span>
                                   <span className={styles.quarterUpdateMetricValue}>
-                                    ₹{formatCurrency(quarter.currentFMV)} Cr
+                                    {quarter.currentFMVConfidential ? '**' : `₹${formatCurrency(quarter.currentFMV)} Cr`}
                                   </span>
                                 </div>
                               )}
-                              {quarter.multipleOfInvestment != null && (
+                              {(quarter.multipleOfInvestment != null || quarter.moicConfidential) && (
                                 <div className={styles.quarterUpdateMetric}>
                                   <span className={styles.quarterUpdateMetricLabel}>Multiple</span>
                                   <span className={styles.quarterUpdateMetricValue}>
-                                    {quarter.multipleOfInvestment.toFixed(2)}x
+                                    {quarter.moicConfidential ? '**' : `${quarter.multipleOfInvestment.toFixed(2)}x`}
                                   </span>
                                 </div>
                               )}
                               {company.isRevenueMaking ? (
                                 <>
-                                  {quarter.revenueINR != null && (
+                                  {(quarter.revenueINR != null || quarter.revenueConfidential) && (
                                     <div className={styles.quarterUpdateMetric}>
                                       <span className={styles.quarterUpdateMetricLabel}>Revenue</span>
                                       <span className={styles.quarterUpdateMetricValue}>
-                                        ₹{formatCurrency(quarter.revenueINR)} Cr
+                                        {quarter.revenueConfidential ? '**' : `₹${formatCurrency(quarter.revenueINR)} Cr`}
                                       </span>
                                     </div>
                                   )}
@@ -856,11 +863,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                                   </span>
                                 </div>
                               )}
-                              {quarter.teamSize && (
+                              {(quarter.teamSize || quarter.teamSizeConfidential) && (
                                 <div className={styles.quarterUpdateMetric}>
                                   <span className={styles.quarterUpdateMetricLabel}>Team Size</span>
                                   <span className={styles.quarterUpdateMetricValue}>
-                                    {quarter.teamSize}
+                                    {quarter.teamSizeConfidential ? '**' : quarter.teamSize}
                                   </span>
                                 </div>
                               )}
