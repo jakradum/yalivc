@@ -59,22 +59,34 @@ const getTotalInvestment = (company) => {
 };
 
 // Get latest ownership from investmentRounds (most recent round by date)
+// Matches logic in CompanyDetailClient.js for consistency
 const getLatestOwnership = (company) => {
   const rounds = company?.investmentRounds || [];
   if (rounds.length === 0) return null;
 
-  // Explicitly find the round with the latest investment date
-  // Don't rely on array order - sort by date descending and take first
+  // Sort by date: rounds WITH dates sorted by date, rounds WITHOUT dates go to end
+  // (end = most recent, since we sort oldest-first then take last)
   const sortedRounds = [...rounds]
-    .filter(r => r.investmentDate) // Only consider rounds with dates
-    .sort((a, b) => b.investmentDate.localeCompare(a.investmentDate));
+    .filter(r => r.roundName) // Only valid rounds
+    .sort((a, b) => {
+      // Both have dates: sort by date
+      if (a.investmentDate && b.investmentDate) {
+        return new Date(a.investmentDate) - new Date(b.investmentDate);
+      }
+      // Only a has date: a comes before b (b is "newer"/undated)
+      if (a.investmentDate && !b.investmentDate) return -1;
+      // Only b has date: b comes before a (a is "newer"/undated)
+      if (!a.investmentDate && b.investmentDate) return 1;
+      // Neither has date: keep original order
+      return 0;
+    });
 
-  // If no rounds have dates, fall back to last round in array
+  // Take the last one (most recent)
   if (sortedRounds.length === 0) {
     return rounds[rounds.length - 1]?.yaliOwnership || null;
   }
 
-  return sortedRounds[0]?.yaliOwnership || null;
+  return sortedRounds[sortedRounds.length - 1]?.yaliOwnership || null;
 };
 
 // Get latest funding round name
