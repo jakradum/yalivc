@@ -8,6 +8,14 @@ export const client = createClient({
   useCdn: true,
 });
 
+// Live client without CDN caching - use for LP portal and other real-time queries
+export const liveClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+});
+
 const builder = imageUrlBuilder(client);
 export const urlFor = (source) => builder.image(source);
 
