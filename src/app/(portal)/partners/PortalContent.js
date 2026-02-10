@@ -1136,7 +1136,7 @@ function PortalContentInner({
                   <PortableText value={report.pipelineNotes} />
                 </div>
               )}
-              {report?.pipelineDeals && report.pipelineDeals.length > 0 ? (
+              {report?.pipelineDeals && report.pipelineDeals.length > 0 && (
                 <div className={styles.portfolioTableWrapper}>
                   <table className={styles.portfolioTable}>
                     <thead>
@@ -1161,7 +1161,9 @@ function PortalContentInner({
                     </tbody>
                   </table>
                 </div>
-              ) : (
+              )}
+              {/* Only show placeholder if no deals AND no commentary */}
+              {(!report?.pipelineDeals || report.pipelineDeals.length === 0) && (!report?.pipelineNotes || report.pipelineNotes.length === 0) && (
                 <div className={styles.placeholderContent}>
                   <p>No pipeline deals for this quarter.</p>
                 </div>
