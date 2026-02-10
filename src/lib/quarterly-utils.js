@@ -231,15 +231,24 @@ export function sortQuartersDescending(quarters) {
 
 /**
  * Filter investment rounds to only show rounds made on or before quarter end
+ * Also respects showEarlyInReport flag for rounds in the next quarter
  * @param {Array} rounds - Array of investment round objects with investmentDate
  * @param {string} quarterEndDate - Quarter end date in YYYY-MM-DD format
+ * @param {string} nextQuarterEndDate - Next quarter end date (for showEarlyInReport logic)
  * @returns {Array} Filtered rounds
  */
-export function filterInvestmentRounds(rounds, quarterEndDate) {
+export function filterInvestmentRounds(rounds, quarterEndDate, nextQuarterEndDate = null) {
   if (!rounds || !Array.isArray(rounds) || !quarterEndDate) return rounds || [];
   return rounds.filter(round => {
-    if (!round.investmentDate) return true; // Include rounds without dates
-    return round.investmentDate <= quarterEndDate;
+    // Include rounds without dates (legacy data)
+    if (!round.investmentDate) return true;
+    // Natural logic: show if investment date is on or before quarter end
+    if (round.investmentDate <= quarterEndDate) return true;
+    // Early override: show if showEarlyInReport is true AND within next quarter
+    if (round.showEarlyInReport && nextQuarterEndDate && round.investmentDate <= nextQuarterEndDate) {
+      return true;
+    }
+    return false;
   });
 }
 
@@ -287,6 +296,7 @@ export function buildReportData({
   // Calculate quarter boundaries
   const quarterStartDate = getQuarterStartDate(quarter, fiscalYear);
   const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
+  const nextQuarterEndDate = getNextQuarterEndDate(quarter, fiscalYear);
 
   // 1. Filter portfolio companies - only those invested on or before quarter end
   const portfolioCompanies = getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear);
@@ -347,7 +357,8 @@ export function buildReportData({
     const quarterData = getCompanyQuarterData(company, quarter, fiscalYear);
 
     // Filter investment rounds to only show those made by quarter end
-    const filteredRounds = filterInvestmentRounds(company.investmentRounds, quarterEndDate);
+    // Also respects showEarlyInReport flag for rounds in the next quarter
+    const filteredRounds = filterInvestmentRounds(company.investmentRounds, quarterEndDate, nextQuarterEndDate);
 
     return {
       ...company,
