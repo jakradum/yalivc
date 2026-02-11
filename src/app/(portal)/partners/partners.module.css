@@ -2734,6 +2734,14 @@
   margin-right: 0.25rem;
 }
 
+/* Inline footnote marker (in table cells) */
+.footnoteMarker {
+  color: #830D35;
+  font-weight: 600;
+  font-size: 0.75em;
+  margin-left: 0.125rem;
+}
+
 .customFootnotes {
   margin-top: 0.5rem;
   padding-top: 0.5rem;

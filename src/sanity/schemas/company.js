@@ -477,6 +477,38 @@ export default {
                       validation: (Rule) => Rule.required(),
                     },
                     {
+                      name: 'fieldName',
+                      title: 'Assign to Field',
+                      type: 'string',
+                      description: 'Which field/value should this footnote marker appear next to?',
+                      options: {
+                        list: [
+                          // Snapshot table fields
+                          { title: '[Snapshot] Latest Funding Round', value: 'snapshot-latest-round' },
+                          { title: '[Snapshot] Initial Investment', value: 'snapshot-initial-investment' },
+                          { title: '[Snapshot] Follow-on Round', value: 'snapshot-followon' },
+                          { title: '[Snapshot] Total Investment', value: 'snapshot-total-investment' },
+                          { title: '[Snapshot] Ownership (FD)', value: 'snapshot-ownership' },
+                          { title: '[Snapshot] Current FMV', value: 'snapshot-fmv' },
+                          { title: '[Snapshot] MOIC', value: 'snapshot-moic' },
+                          { title: '[Snapshot] Amount Returned', value: 'snapshot-returned' },
+                          { title: '[Snapshot] Co-investors', value: 'snapshot-coinvestors' },
+                          // Rounds table fields
+                          { title: '[Rounds] Pre-Money Valuation', value: 'rounds-premoney' },
+                          { title: '[Rounds] Round Size', value: 'rounds-size' },
+                          { title: '[Rounds] Post-Money Valuation', value: 'rounds-postmoney' },
+                          { title: '[Rounds] Yali Investment', value: 'rounds-yali-investment' },
+                          { title: '[Rounds] Ownership', value: 'rounds-ownership' },
+                          { title: '[Rounds] Co-investors', value: 'rounds-coinvestors' },
+                          // Financials table fields
+                          { title: '[Financials] Revenue', value: 'financials-revenue' },
+                          { title: '[Financials] PAT', value: 'financials-pat' },
+                          { title: '[Financials] Team Size', value: 'financials-team' },
+                          { title: '[Financials] Key Metric', value: 'financials-metric' },
+                        ],
+                      },
+                    },
+                    {
                       name: 'marker',
                       title: 'Marker',
                       type: 'string',
@@ -493,17 +525,20 @@ export default {
                   preview: {
                     select: {
                       tableType: 'tableType',
+                      fieldName: 'fieldName',
                       marker: 'marker',
                       text: 'text',
                     },
-                    prepare({ tableType, marker, text }) {
+                    prepare({ tableType, fieldName, marker, text }) {
                       const tableLabels = {
                         'snapshot': 'Snapshot',
                         'rounds': 'Rounds',
                         'financials': 'Financials',
                       };
+                      const fieldLabel = fieldName ? fieldName.split('-').slice(1).join(' ') : '';
                       return {
                         title: `[${tableLabels[tableType] || tableType}] ${marker} ${text}`,
+                        subtitle: fieldLabel ? `Assigned to: ${fieldLabel}` : 'No field assigned',
                       };
                     },
                   },
