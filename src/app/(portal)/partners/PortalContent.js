@@ -624,7 +624,7 @@ function PortalContentInner({
                 <h1 className={styles.fundSummaryTitle}>Fund Summary</h1>
                 {(fundSettings?.fundSizeAtClose != null || fundMetrics?.fundSizeAtClose != null) && (
                   <p className={styles.fundSummarySubtitle}>
-                    Combined size of both funds at final close: ₹{fundSettings?.fundSizeAtClose ?? fundMetrics?.fundSizeAtClose} crore
+                    Combined fund size: ₹{fundSettings?.fundSizeAtClose ?? fundMetrics?.fundSizeAtClose} crore
                   </p>
                 )}
 
@@ -828,7 +828,11 @@ function PortalContentInner({
                         </td>
                       </tr>
                       <tr>
-                        <td>Fund size at final close</td>
+                        <td>Target fund size</td>
+                        <td>{fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '-'}</td>
+                      </tr>
+                      <tr>
+                        <td>Combined fund size</td>
                         <td>{fundSettings?.fundSizeAtClose != null ? fundSettings.fundSizeAtClose.toFixed(2) : (fundMetrics?.fundSizeAtClose != null ? fundMetrics.fundSizeAtClose.toFixed(2) : '-')}</td>
                       </tr>
                       <tr>
