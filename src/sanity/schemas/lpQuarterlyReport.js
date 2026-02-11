@@ -8,7 +8,6 @@ export default {
     { name: 'coverNote', title: 'Cover Note' },
     { name: 'commentary', title: 'Commentary Sections' },
     { name: 'pipeline', title: 'Pipeline' },
-    { name: 'media', title: 'Media' },
     { name: 'output', title: 'Output' }
   ],
 
@@ -203,27 +202,6 @@ export default {
       of: [{ type: 'block' }],
       group: 'pipeline',
       description: 'Narrative commentary about the pipeline'
-    },
-
-    // ===== MEDIA (References only) =====
-    {
-      name: 'mediaFromNews',
-      title: 'Media Coverage',
-      type: 'array',
-      of: [{
-        type: 'reference',
-        to: [{ type: 'news' }]
-      }],
-      group: 'media',
-      description: 'Select news articles from Site Content → News to include in this report'
-    },
-    {
-      name: 'mediaNotes',
-      title: 'Media Commentary',
-      type: 'array',
-      of: [{ type: 'block' }],
-      group: 'media',
-      description: 'Optional narrative about media coverage'
     },
 
     // ===== OUTPUT =====
