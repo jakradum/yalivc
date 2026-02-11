@@ -265,6 +265,12 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return (fmv + returned) / totalInvestment;
   })();
 
+  // Helper to get footnote marker for a specific field
+  const getFieldMarker = (fieldName) => {
+    const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+    return footnote?.marker ? <sup className={styles.footnoteMarker}>{footnote.marker}</sup> : null;
+  };
+
   // Menu items matching the main portal
   const menuItems = [
     { id: 'cover-note', label: 'Cover note' },
@@ -435,11 +441,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
             <table className={styles.investmentDetailsTable}>
               <tbody>
                 <tr>
-                  <td>Date of first investment</td>
-                  <td>{formatDate(firstInvestmentDate)}</td>
-                </tr>
-                <tr>
-                  <td>Latest funding round</td>
+                  <td>Latest funding round{getFieldMarker('snapshot-latest-round')}</td>
                   <td>{formatRound(latestFundingRound)}</td>
                 </tr>
                 {/* Initial Investment with round name and date */}
@@ -448,7 +450,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                     <td>
                       <div className={styles.investmentRoundInfo}>
                         <span className={styles.roundLabel}>
-                          Initial Investment ({formatRound(initialRound.roundName)})
+                          Initial Investment ({formatRound(initialRound.roundName)}){getFieldMarker('snapshot-initial-investment')}
                         </span>
                         {initialRound.investmentDate && (
                           <span className={styles.roundDate}>
@@ -467,10 +469,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   return (
                     <>
                       <tr className={styles.followOnHeaderRow}>
-                        <td colSpan={2} className={styles.followOnHeaderCell}>Follow-on Rounds</td>
+                        <td colSpan={2} className={styles.followOnHeaderCell}>Follow-on Rounds{getFieldMarker('snapshot-followon')}</td>
                       </tr>
                       {followOnRounds.map((round, idx) => (
-                        <tr key={`followon-${idx}`} className={styles.followOnRoundRow}>
+                        <tr key={`followon-${idx}`}>
                           <td className={styles.followOnRoundName}>
                             <span className={styles.indentedRound}>
                               {round.roundLabel || formatRound(round.roundName)}
@@ -490,16 +492,16 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 {/* Total investment (only show if more than one round) */}
                 {sortedRoundsOldestFirst.length > 1 && (
                   <tr>
-                    <td>Total Investment</td>
+                    <td>Total Investment{getFieldMarker('snapshot-total-investment')}</td>
                     <td>{totalInvestment > 0 ? `₹${formatCurrency(totalInvestment)} Cr` : '-'}</td>
                   </tr>
                 )}
                 <tr>
-                  <td>Ownership (FD)</td>
+                  <td>Ownership (FD){getFieldMarker('snapshot-ownership')}</td>
                   <td>{latestQuarter?.currentOwnershipConfidential ? '**' : (latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-')}</td>
                 </tr>
                 <tr>
-                  <td>Current FMV</td>
+                  <td>Current FMV{getFieldMarker('snapshot-fmv')}</td>
                   <td>{latestQuarter?.currentFMVConfidential ? '**' : (latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-')}</td>
                 </tr>
                 {/* Per-round MOIC (only show when multiple rounds exist and quarter has roundMoics) */}
@@ -517,19 +519,19 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 {/* Cumulative MOIC (auto-calculated: (FMV + Returned) / Total Investment) */}
                 {calculatedCumulativeMoic != null && (
                   <tr>
-                    <td>MOIC - Cumulative</td>
+                    <td>MOIC - Cumulative{getFieldMarker('snapshot-moic')}</td>
                     <td>{latestQuarter?.moicConfidential ? '**' : calculatedCumulativeMoic.toFixed(2)}</td>
                   </tr>
                 )}
                 {(latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0) || latestQuarter?.amountReturnedConfidential ? (
                   <tr>
-                    <td>Amount returned to investors</td>
+                    <td>Amount returned to investors{getFieldMarker('snapshot-returned')}</td>
                     <td>{latestQuarter?.amountReturnedConfidential ? '**' : `₹${formatCurrency(latestQuarter.amountReturned)} Cr`}</td>
                   </tr>
                 ) : null}
                 {allCoInvestors.length > 0 && (
                   <tr>
-                    <td>Key co-investors</td>
+                    <td>Key co-investors{getFieldMarker('snapshot-coinvestors')}</td>
                     <td>
                       {allCoInvestors.length === 1 ? (
                         <span className={styles.coInvestorSingle}>{allCoInvestors[0].name}</span>
