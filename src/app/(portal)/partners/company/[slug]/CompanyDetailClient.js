@@ -433,51 +433,27 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>Latest funding round{getFieldMarker('snapshot-latest-round')}</td>
                   <td>{formatRound(latestFundingRound)}</td>
                 </tr>
-                {/* Initial Investment with round name and date */}
-                {initialRound && (
-                  <tr key="initial-investment">
-                    <td>
-                      <div className={styles.investmentRoundInfo}>
-                        <span className={styles.roundLabel}>
-                          Initial Investment ({formatRound(initialRound.roundName)}){getFieldMarker('snapshot-initial-investment')}
-                        </span>
-                        {initialRound.investmentDate && (
-                          <span className={styles.roundDate}>
-                            {new Date(initialRound.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td>{initialRound.yaliInvestment != null ? `₹${formatCurrency(initialRound.yaliInvestment)} Cr` : '-'}</td>
+                {/* Investment rounds - show header if multiple rounds, then list all rounds */}
+                {sortedRoundsOldestFirst.length > 1 && (
+                  <tr className={styles.followOnHeaderRow}>
+                    <td colSpan={2} className={styles.followOnHeaderCell}>Investment rounds{getFieldMarker('snapshot-initial-investment')}</td>
                   </tr>
                 )}
-                {/* Follow-on Rounds Header and Rows */}
-                {sortedRoundsOldestFirst.length > 1 && (() => {
-                  const followOnRounds = sortedRoundsOldestFirst.filter(r => r !== initialRound && !r.isInitialRound);
-                  if (followOnRounds.length === 0) return null;
-                  return (
-                    <>
-                      <tr className={styles.followOnHeaderRow}>
-                        <td colSpan={2} className={styles.followOnHeaderCell}>Follow-on Rounds{getFieldMarker('snapshot-followon')}</td>
-                      </tr>
-                      {followOnRounds.map((round, idx) => (
-                        <tr key={`followon-${idx}`}>
-                          <td className={styles.followOnRoundName}>
-                            <span className={styles.indentedRound}>
-                              {round.roundLabel || formatRound(round.roundName)}
-                              {round.investmentDate && (
-                                <span className={styles.roundDate}>
-                                  {' '}({new Date(round.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })})
-                                </span>
-                              )}
-                            </span>
-                          </td>
-                          <td>{round.yaliInvestment != null ? `₹${formatCurrency(round.yaliInvestment)} Cr` : '-'}</td>
-                        </tr>
-                      ))}
-                    </>
-                  );
-                })()}
+                {sortedRoundsOldestFirst.map((round, idx) => (
+                  <tr key={`round-${idx}`}>
+                    <td className={sortedRoundsOldestFirst.length > 1 ? styles.followOnRoundName : ''}>
+                      <span className={sortedRoundsOldestFirst.length > 1 ? styles.indentedRound : ''}>
+                        {round.roundLabel || formatRound(round.roundName)}
+                        {round.investmentDate && (
+                          <span className={styles.roundDate}>
+                            {' '}({new Date(round.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })})
+                          </span>
+                        )}
+                      </span>
+                    </td>
+                    <td>{round.yaliInvestment != null ? `₹${formatCurrency(round.yaliInvestment)} Cr` : '-'}</td>
+                  </tr>
+                ))}
                 {/* Total investment (only show if more than one round) */}
                 {sortedRoundsOldestFirst.length > 1 && (
                   <tr>
