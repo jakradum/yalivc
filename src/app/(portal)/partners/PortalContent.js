@@ -115,7 +115,8 @@ function PortalContentInner({
   initialSection,
   reportSlug,
   quarterNews,
-  quarterSocialUpdates
+  quarterSocialUpdates,
+  isGiftCityLP = false
 }) {
   const router = useRouter();
   const dropdownRef = useRef(null);
@@ -1098,30 +1099,54 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Fund Financials</h1>
               </div>
-              {report?.fundFinancialsPdfUrl ? (
+              {report?.fundFinancialsPdfUrl || (isGiftCityLP && report?.giftCityFundFinancialsPdfUrl) ? (
                 <div className={styles.fundFinancialsDownload}>
                   <p className={styles.fundFinancialsDesc}>
-                    Download the fund financials report for {quarter} {fiscalYear}.
+                    Download the fund financials report{isGiftCityLP && report?.giftCityFundFinancialsPdfUrl ? 's' : ''} for {quarter} {fiscalYear}.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => handleDownloadClick(
-                      report.fundFinancialsPdfUrl,
-                      'fund-financials',
-                      `${quarter} ${fiscalYear}`,
-                      'Fund Financials'
-                    )}
-                    className={styles.downloadButton}
-                  >
-                    <svg className={styles.pdfIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="12" y1="18" x2="12" y2="12" />
-                      <line x1="9" y1="15" x2="12" y2="18" />
-                      <line x1="15" y1="15" x2="12" y2="18" />
-                    </svg>
-                    Download Fund Financials (PDF)
-                  </button>
+                  {report?.fundFinancialsPdfUrl && (
+                    <button
+                      type="button"
+                      onClick={() => handleDownloadClick(
+                        report.fundFinancialsPdfUrl,
+                        'fund-financials',
+                        `${quarter} ${fiscalYear}`,
+                        'Fund Financials'
+                      )}
+                      className={styles.downloadButton}
+                    >
+                      <svg className={styles.pdfIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="12" y1="18" x2="12" y2="12" />
+                        <line x1="9" y1="15" x2="12" y2="18" />
+                        <line x1="15" y1="15" x2="12" y2="18" />
+                      </svg>
+                      Download Fund Financials (PDF)
+                    </button>
+                  )}
+                  {isGiftCityLP && report?.giftCityFundFinancialsPdfUrl && (
+                    <button
+                      type="button"
+                      onClick={() => handleDownloadClick(
+                        report.giftCityFundFinancialsPdfUrl,
+                        'fund-financials-gift-city',
+                        `${quarter} ${fiscalYear}`,
+                        'GIFT City Fund Financials'
+                      )}
+                      className={styles.downloadButton}
+                      style={{ marginTop: '1rem' }}
+                    >
+                      <svg className={styles.pdfIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="12" y1="18" x2="12" y2="12" />
+                        <line x1="9" y1="15" x2="12" y2="18" />
+                        <line x1="15" y1="15" x2="12" y2="18" />
+                      </svg>
+                      Download GIFT City Fund Financials (PDF)
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className={styles.placeholderContent}>

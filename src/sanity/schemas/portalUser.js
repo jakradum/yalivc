@@ -22,6 +22,13 @@ const portalUser = {
       initialValue: true,
       description: 'Disable to revoke access without deleting the user',
     },
+    {
+      name: 'isGiftCityLP',
+      title: 'GIFT City LP',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Check if this LP should see GIFT City-specific fund financials',
+    },
   ],
   preview: {
     select: {

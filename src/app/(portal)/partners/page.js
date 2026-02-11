@@ -8,6 +8,7 @@ import {
   getAvailableLPQuarters,
   getNewsByDateRange,
   getSocialUpdatesByDateRange,
+  getPortalUserByEmail,
 } from '@/lib/sanity-queries';
 import { buildReportData, getQuarterStartDate, getQuarterEndDate } from '@/lib/quarterly-utils';
 import PortalLanding from './PortalLanding';
@@ -39,15 +40,18 @@ export default async function PartnersPortal({ searchParams }) {
   const userEmail = getUserEmail(cookieStore);
   const hasInternalAccess = isInternalUser(userEmail);
 
-  // Fetch all raw data in parallel
-  // Pass hasInternalAccess to getLatestLPQuarterlyReport to get the right default
-  const [fundSettings, latestReport, investments, teamMembers, availableQuarters] = await Promise.all([
+  // Fetch all raw data in parallel (including user info for GIFT City status)
+  const [fundSettings, latestReport, investments, teamMembers, availableQuarters, portalUser] = await Promise.all([
     getLPFundSettings(),
     getLatestLPQuarterlyReport(hasInternalAccess),
     getLPInvestments(),
     getTeamMembers(),
     getAvailableLPQuarters(),
+    getPortalUserByEmail(userEmail),
   ]);
+
+  // Check if user is a GIFT City LP
+  const isGiftCityLP = portalUser?.isGiftCityLP || false;
 
   // Filter available quarters based on user access
   // Internal users see both 'internal' and 'published' reports
@@ -127,6 +131,7 @@ export default async function PartnersPortal({ searchParams }) {
         reportSlug={reportSlug || null}
         quarterNews={reportData.quarterNews}
         quarterSocialUpdates={reportData.quarterSocialUpdates}
+        isGiftCityLP={isGiftCityLP}
       />
     </PortalLanding>
   );
