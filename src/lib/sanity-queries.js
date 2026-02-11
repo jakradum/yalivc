@@ -1099,6 +1099,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
       },
       "pdfUrl": generatedPdf.asset->url,
       "fundFinancialsPdfUrl": fundFinancialsPdf.asset->url,
+      "giftCityFundFinancialsPdfUrl": giftCityFundFinancialsPdf.asset->url,
       // Pipeline (references)
       "pipelineDeals": pipelineDeals[]->{
         _id,
@@ -1218,5 +1219,19 @@ export async function getSocialUpdatesByDateRange(startDate, endDate) {
       "companyName": featuredCompany->name
     }`,
     { startDate, endDate }
+  );
+}
+
+// Get portal user info by email (for GIFT City status check)
+export async function getPortalUserByEmail(email) {
+  if (!email) return null;
+  return liveClient.fetch(
+    `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{
+      _id,
+      email,
+      name,
+      isGiftCityLP
+    }`,
+    { email: email.toLowerCase() }
   );
 }

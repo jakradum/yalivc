@@ -213,7 +213,17 @@ export default {
       options: {
         accept: 'application/pdf'
       },
-      description: 'Upload the fund financials PDF for this quarter'
+      description: 'Upload the fund financials PDF for this quarter (shown to all LPs)'
+    },
+    {
+      name: 'giftCityFundFinancialsPdf',
+      title: 'GIFT City Fund Financials PDF',
+      type: 'file',
+      group: 'output',
+      options: {
+        accept: 'application/pdf'
+      },
+      description: 'Upload the GIFT City-specific fund financials PDF (only shown to GIFT City LPs)'
     },
     {
       name: 'generatedPdf',
