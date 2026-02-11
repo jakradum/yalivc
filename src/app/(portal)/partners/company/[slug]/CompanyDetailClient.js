@@ -251,19 +251,8 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
   // For FMV display in investment table, use current quarter data if available, else most recent
   const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
 
-  // Cumulative MOIC: Use Sanity value if entered, otherwise auto-calculate from (FMV + Amount Returned) / Total Investment
-  const calculatedCumulativeMoic = (() => {
-    // Prefer manually entered value from Sanity
-    if (latestQuarter?.multipleOfInvestment != null) {
-      return latestQuarter.multipleOfInvestment;
-    }
-    // Fall back to auto-calculation
-    if (totalInvestment <= 0) return null;
-    const fmv = latestQuarter?.currentFMV || 0;
-    const returned = latestQuarter?.amountReturned || 0;
-    if (fmv === 0 && returned === 0) return null;
-    return (fmv + returned) / totalInvestment;
-  })();
+  // Cumulative MOIC: Only show if explicitly entered in Sanity (no auto-calculation)
+  const cumulativeMoic = latestQuarter?.multipleOfInvestment ?? null;
 
   // Helper to get footnote marker for a specific field
   const getFieldMarker = (fieldName) => {
@@ -504,23 +493,23 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   <td>Current FMV{getFieldMarker('snapshot-fmv')}</td>
                   <td>{latestQuarter?.currentFMVConfidential ? '**' : (latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-')}</td>
                 </tr>
-                {/* Per-round MOIC (only show when multiple rounds exist and quarter has roundMoics) */}
-                {sortedRoundsOldestFirst.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && !latestQuarter?.moicConfidential && (
+                {/* Per-round MOIC (show for any company that has roundMoics data) */}
+                {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && !latestQuarter?.moicConfidential && (
                   latestQuarter.roundMoics.map((rm, idx) => {
                     const roundLabel = formatRound(rm.roundName);
                     return (
                       <tr key={`moic-round-${idx}`}>
-                        <td>MOIC - {roundLabel}</td>
+                        <td>MOIC - {roundLabel}{getFieldMarker('snapshot-moic')}</td>
                         <td>{rm.moic != null ? rm.moic.toFixed(2) : '-'}</td>
                       </tr>
                     );
                   })
                 )}
-                {/* Cumulative MOIC (auto-calculated: (FMV + Returned) / Total Investment) */}
-                {calculatedCumulativeMoic != null && (
+                {/* Cumulative MOIC (only shows if explicitly entered in Sanity) */}
+                {cumulativeMoic != null && (
                   <tr>
                     <td>MOIC - Cumulative{getFieldMarker('snapshot-moic')}</td>
-                    <td>{latestQuarter?.moicConfidential ? '**' : calculatedCumulativeMoic.toFixed(2)}</td>
+                    <td>{latestQuarter?.moicConfidential ? '**' : cumulativeMoic.toFixed(2)}</td>
                   </tr>
                 )}
                 {(latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0) || latestQuarter?.amountReturnedConfidential ? (
@@ -653,7 +642,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             <td key={idx}>{round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'}</td>
                           ))}
                         </tr>
-                        {displayRounds.length > 1 && latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
+                        {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
                           <tr>
                             <td>MOIC for round</td>
                             {displayRounds.map((round, idx) => {
