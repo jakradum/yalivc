@@ -167,17 +167,32 @@ function PortalContentInner({
         }),
       });
 
-      // Proceed with download
-      window.open(pendingDownload.url, '_blank');
+      // Trigger download using anchor element (works on mobile)
+      triggerDownload(pendingDownload.url, pendingDownload.fileName);
     } catch (error) {
       console.error('Failed to log download consent:', error);
       // Still allow download even if logging fails
-      window.open(pendingDownload.url, '_blank');
+      triggerDownload(pendingDownload.url, pendingDownload.fileName);
     } finally {
       setIsLoggingConsent(false);
       setDisclaimerOpen(false);
       setPendingDownload(null);
     }
+  };
+
+  // Trigger file download (mobile-friendly)
+  const triggerDownload = (url, fileName) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    // Set download attribute for proper filename (may not work for cross-origin)
+    if (fileName) {
+      link.download = fileName.endsWith('.pdf') ? fileName : `${fileName}.pdf`;
+    }
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Handle feedback submission
