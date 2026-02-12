@@ -95,7 +95,7 @@ export default function SignInPage() {
         <div className={styles.logoWrapper}>
           <Lightlogo />
         </div>
-        <h1 className={styles.title}>LP Partners Portal</h1>
+        <h1 className={styles.title}>Limited Partners' Reports</h1>
 
         {step === 'email' ? (
           <>
