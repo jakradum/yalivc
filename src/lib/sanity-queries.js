@@ -77,7 +77,7 @@ export async function getInvestmentPhilosophy() {
 
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember" && showOnHomepage == true] | order(department asc, order asc) {
+    `*[_type == "teamMember" && showOnHomepage == true] | order(order asc) {
       _id,
       name,
       slug,
