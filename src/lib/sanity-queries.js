@@ -1096,6 +1096,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
         name,
         slug,
         role,
+        profileType,
         "photo": photo.asset->url
       },
       "pdfUrl": generatedPdf.asset->url,

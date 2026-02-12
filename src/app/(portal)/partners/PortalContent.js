@@ -582,12 +582,14 @@ function PortalContentInner({
                 )}
               </div>
 
-              {/* Author Attribution */}
+              {/* Author Attribution - Groups link to /about-yali, individuals link to their profile */}
               {(signatory?.photo || signatory?.name) && (
                 <div className={styles.coverNoteAuthor}>
-                  {signatory?.slug?.current ? (
+                  {(signatory?.profileType === 'group' || signatory?.slug?.current) ? (
                     <a
-                      href={`https://yali.vc/about-yali/${signatory.slug.current}`}
+                      href={signatory?.profileType === 'group'
+                        ? 'https://yali.vc/about-yali/'
+                        : `https://yali.vc/about-yali/${signatory.slug.current}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.authorLink}
