@@ -1094,6 +1094,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
       "signatory": signatory->{
         _id,
         name,
+        slug,
         role,
         "photo": photo.asset->url
       },
