@@ -7,6 +7,20 @@ const teamMember = {
   description: 'Team members including core team',
   fields: [
     {
+      name: 'profileType',
+      title: 'Profile Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Individual', value: 'individual' },
+          { title: 'Group', value: 'group' },
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'individual',
+      description: 'Individual = person with full bio. Group = team/department (e.g., "Yali Investments Team")'
+    },
+    {
       name: 'isCore',
       title: 'Core Team Member',
       type: 'boolean',
@@ -51,7 +65,11 @@ const teamMember = {
         ],
       },
       initialValue: 'investment',
-      validation: Rule => Rule.required(),
+      validation: Rule => Rule.custom((value, context) => {
+        if (context.document?.profileType === 'group') return true;
+        return value ? true : 'Department is required for individuals';
+      }),
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'oneLiner',
@@ -66,8 +84,20 @@ const teamMember = {
       title: 'Biography',
       type: 'text',
       rows: 4,
-       validation: Rule => Rule.required(),
-      readOnly: ({document}) => document?.isCore === true
+      validation: Rule => Rule.custom((value, context) => {
+        if (context.document?.profileType === 'group') return true;
+        return value ? true : 'Biography is required for individuals';
+      }),
+      readOnly: ({document}) => document?.isCore === true,
+      hidden: ({document}) => document?.profileType === 'group'
+    },
+    {
+      name: 'groupDescription',
+      title: 'Description',
+      type: 'text',
+      rows: 4,
+      description: 'Optional longer description for this group/team',
+      hidden: ({document}) => document?.profileType !== 'group'
     },
     {
       name: 'showOnHomepage',
@@ -81,20 +111,23 @@ const teamMember = {
       name: 'personalPhilosophy',
       title: 'Personal Philosophy',
       description: 'Long-form personal philosophy written by the team member',
-      ...portableTextConfig
+      ...portableTextConfig,
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'pullQuote',
       title: 'Pull Quote',
       type: 'text',
       rows: 3,
-      description: 'A memorable quote about or from this person (displayed on profile page)'
+      description: 'A memorable quote about or from this person (displayed on profile page)',
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'pullQuoteAttribution',
       title: 'Pull Quote Attribution',
       type: 'string',
-      description: 'Who said or wrote this quote (e.g., "John Doe, Founder of XYZ")'
+      description: 'Who said or wrote this quote (e.g., "John Doe, Founder of XYZ")',
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'outsideWork',
@@ -104,7 +137,8 @@ const teamMember = {
       of: [{type: 'string'}],
       options: {
         layout: 'tags'
-      }
+      },
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'recommendation',
@@ -131,7 +165,8 @@ const teamMember = {
           type: 'string',
           description: 'e.g., "Co-founder at XYZ" or "College friend" or "Former colleague"'
         }
-      ]
+      ],
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'articles',
@@ -173,7 +208,8 @@ const teamMember = {
             }
           }
         }
-      ]
+      ],
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'photo',
@@ -189,10 +225,18 @@ const teamMember = {
       name: 'linkedIn',
       title: 'LinkedIn URL',
       type: 'url',
-      validation: Rule => Rule.uri({
-        scheme: ['http', 'https']
-      }).required(),
-      readOnly: ({document}) => document?.isCore === true
+      validation: Rule => Rule.custom((value, context) => {
+        if (context.document?.profileType === 'group') return true;
+        if (!value) return 'LinkedIn URL is required for individuals';
+        try {
+          new URL(value);
+          return true;
+        } catch {
+          return 'Please enter a valid URL';
+        }
+      }),
+      readOnly: ({document}) => document?.isCore === true,
+      hidden: ({document}) => document?.profileType === 'group'
     },
     {
       name: 'order',
@@ -223,11 +267,13 @@ const teamMember = {
       title: 'name',
       subtitle: 'role',
       media: 'photo',
-      isCore: 'isCore'
+      isCore: 'isCore',
+      profileType: 'profileType'
     },
-    prepare({title, subtitle, media, isCore}) {
+    prepare({title, subtitle, media, isCore, profileType}) {
+      const prefix = profileType === 'group' ? '👥 ' : (isCore ? '⭐ ' : '');
       return {
-        title: isCore ? `⭐ ${title}` : title,
+        title: `${prefix}${title}`,
         subtitle,
         media
       }
