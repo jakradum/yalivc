@@ -81,7 +81,7 @@ export async function POST(request) {
               <img src="https://yali.vc/yali-logo.png" alt="Yali Partners" style="height: 36px; width: auto;" />
               <div style="text-align: right;">
                 <div style="font-size: 14px; font-weight: 600; color: #830D35;">Yali Partners LLP</div>
-                <div style="font-size: 12px; color: #666;">LP Partners Portal</div>
+                <div style="font-size: 12px; color: #666;">Limited Partners' Reports</div>
               </div>
             </div>
 
