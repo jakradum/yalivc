@@ -107,7 +107,7 @@ function PortalContentInner({
   quarter,
   fiscalYear,
   reportingDate,
-  gani,
+  signatory,
   fundMetrics,
   investments,
   allReports,
@@ -568,20 +568,20 @@ function PortalContentInner({
               </div>
 
               {/* Author Attribution */}
-              {(gani?.photo || gani?.name) && (
+              {(signatory?.photo || signatory?.name) && (
                 <div className={styles.coverNoteAuthor}>
-                  {gani?.slug?.current ? (
+                  {signatory?.slug?.current ? (
                     <a
-                      href={`https://yali.vc/about-yali/${gani.slug.current}`}
+                      href={`https://yali.vc/about-yali/${signatory.slug.current}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.authorLink}
                     >
-                      {gani?.photo && (
+                      {signatory?.photo && (
                         <div className={styles.authorPhoto}>
                           <Image
-                            src={gani.photo}
-                            alt={gani?.name || 'Signatory'}
+                            src={signatory.photo}
+                            alt={signatory?.name || 'Signatory'}
                             width={80}
                             height={80}
                             style={{ objectFit: 'cover' }}
@@ -589,17 +589,17 @@ function PortalContentInner({
                         </div>
                       )}
                       <div className={styles.authorInfo}>
-                        {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
-                        {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
+                        {signatory?.name && <p className={styles.authorName}>{signatory.name}</p>}
+                        {signatory?.role && <p className={styles.authorRole}>{signatory.role}</p>}
                       </div>
                     </a>
                   ) : (
                     <>
-                      {gani?.photo && (
+                      {signatory?.photo && (
                         <div className={styles.authorPhoto}>
                           <Image
-                            src={gani.photo}
-                            alt={gani?.name || 'Signatory'}
+                            src={signatory.photo}
+                            alt={signatory?.name || 'Signatory'}
                             width={80}
                             height={80}
                             style={{ objectFit: 'cover' }}
@@ -607,8 +607,8 @@ function PortalContentInner({
                         </div>
                       )}
                       <div className={styles.authorInfo}>
-                        {gani?.name && <p className={styles.authorName}>{gani.name}</p>}
-                        {gani?.role && <p className={styles.authorRole}>{gani.role}</p>}
+                        {signatory?.name && <p className={styles.authorName}>{signatory.name}</p>}
+                        {signatory?.role && <p className={styles.authorRole}>{signatory.role}</p>}
                       </div>
                     </>
                   )}

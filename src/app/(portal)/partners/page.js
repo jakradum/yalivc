@@ -104,8 +104,8 @@ export default async function PartnersPortal({ searchParams }) {
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
 
-  // Find Gani from team members or use fallback
-  const gani = teamMembers.find(t =>
+  // Use signatory from report if set, otherwise fallback to Gani
+  const signatory = report?.signatory || teamMembers.find(t =>
     t.name?.toLowerCase().includes('gani') ||
     t.name?.toLowerCase().includes('ganapathy')
   ) || {
@@ -122,7 +122,7 @@ export default async function PartnersPortal({ searchParams }) {
         quarter={quarter}
         fiscalYear={fiscalYear}
         reportingDate={reportingDate}
-        gani={gani}
+        signatory={signatory}
         fundMetrics={reportData.fundMetrics}
         investments={reportData.portfolioCompanies}
         allReports={accessibleReports}
