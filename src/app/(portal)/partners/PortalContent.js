@@ -811,11 +811,11 @@ function PortalContentInner({
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>TVPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.tvpi != null ? fundMetrics.tvpi.toFixed(2) : '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.tvpi != null ? `${fundMetrics.tvpi.toFixed(2)}x` : '-'}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>DPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.dpi != null ? fundMetrics.dpi.toFixed(4) : '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.dpi != null ? `${fundMetrics.dpi.toFixed(4)}x` : '-'}</span>
                       </div>
                     </div>
                   </div>
@@ -875,11 +875,11 @@ function PortalContentInner({
                       </tr>
                       <tr>
                         <td>TVPI</td>
-                        <td>{fundMetrics?.tvpi != null ? fundMetrics.tvpi.toFixed(2) : '-'}</td>
+                        <td>{fundMetrics?.tvpi != null ? `${fundMetrics.tvpi.toFixed(2)}x` : '-'}</td>
                       </tr>
                       <tr>
                         <td>DPI</td>
-                        <td>{fundMetrics?.dpi != null ? fundMetrics.dpi.toFixed(4) : '-'}</td>
+                        <td>{fundMetrics?.dpi != null ? `${fundMetrics.dpi.toFixed(4)}x` : '-'}</td>
                       </tr>
                     </tbody>
                   </table>
