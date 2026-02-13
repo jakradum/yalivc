@@ -613,18 +613,18 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali&apos;s ownership %</td>
+                          <td>Yali&apos;s ownership %{latestQuarter?.currentOwnershipConfidential && getRoundsFootnoteMarker('rounds-ownership')}</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? <span>**{getRoundsFootnoteMarker('rounds-ownership')}</span> : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
+                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? '**' : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
                           <tr>
-                            <td>MOIC for round</td>
+                            <td>MOIC for round{latestQuarter?.moicConfidential && getRoundsFootnoteMarker('rounds-moic')}</td>
                             {displayRounds.map((round, idx) => {
                               const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
                               return (
-                                <td key={idx}>{latestQuarter?.moicConfidential ? <span>**{getRoundsFootnoteMarker('rounds-moic')}</span> : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
+                                <td key={idx}>{latestQuarter?.moicConfidential ? '**' : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
                               );
                             })}
                           </tr>
