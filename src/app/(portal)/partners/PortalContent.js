@@ -807,7 +807,7 @@ function PortalContentInner({
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>MOIC</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.moic != null ? fundMetrics.moic.toFixed(2) : '-'}</span>
+                        <span className={styles.kpiValue}>{fundMetrics?.moic != null ? `${fundMetrics.moic.toFixed(2)}x` : '-'}</span>
                       </div>
                       <div className={styles.kpiCard}>
                         <span className={styles.kpiLabel}>TVPI</span>
@@ -871,7 +871,7 @@ function PortalContentInner({
                       </tr>
                       <tr>
                         <td>MOIC</td>
-                        <td>{fundMetrics?.moic != null ? fundMetrics.moic.toFixed(2) : '-'}</td>
+                        <td>{fundMetrics?.moic != null ? `${fundMetrics.moic.toFixed(2)}x` : '-'}</td>
                       </tr>
                       <tr>
                         <td>TVPI</td>
