@@ -476,7 +476,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                     return (
                       <tr key={`moic-round-${idx}`}>
                         <td>MOIC - {roundLabel}{getFieldMarker('snapshot-moic')}</td>
-                        <td>{rm.moic != null ? rm.moic.toFixed(2) : '-'}</td>
+                        <td>{rm.moic != null ? `${rm.moic.toFixed(2)}x` : '-'}</td>
                       </tr>
                     );
                   })
@@ -485,7 +485,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 {cumulativeMoic != null && (
                   <tr>
                     <td>MOIC - Cumulative{getFieldMarker('snapshot-moic')}</td>
-                    <td>{latestQuarter?.moicConfidential ? '**' : cumulativeMoic.toFixed(2)}</td>
+                    <td>{latestQuarter?.moicConfidential ? '**' : `${cumulativeMoic.toFixed(2)}x`}</td>
                   </tr>
                 )}
                 {(latestQuarter?.amountReturned != null && latestQuarter.amountReturned > 0) || latestQuarter?.amountReturnedConfidential ? (
@@ -567,12 +567,6 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               // Only show section if there's round data
               if (displayRounds.length === 0) return null;
 
-              // Helper to get display label for round
-              const getRoundLabel = (round) => {
-                if (round.roundLabel) return round.roundLabel;
-                return formatRound(round.roundName);
-              };
-
               return (
                 <div className={styles.roundMetricsSection}>
                   <h3 className={styles.companyAboutTitle}>Investment round details</h3>
@@ -583,7 +577,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                         <tr>
                           <th></th>
                           {displayRounds.map((round, idx) => (
-                            <th key={idx}>{getRoundLabel(round)}</th>
+                            <th key={idx}>{formatRound(round.roundName)}</th>
                           ))}
                         </tr>
                       </thead>
@@ -624,7 +618,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             {displayRounds.map((round, idx) => {
                               const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
                               return (
-                                <td key={idx}>{roundMoic?.moic != null ? roundMoic.moic.toFixed(2) : '-'}</td>
+                                <td key={idx}>{roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-'}</td>
                               );
                             })}
                           </tr>
