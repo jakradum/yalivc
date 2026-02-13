@@ -899,7 +899,7 @@ function PortalContentInner({
                 <h1 className={styles.sectionPageTitle}>Portfolio Investment Summary</h1>
               </div>
               {(() => {
-                // Helper to get footnote marker for a field
+                // Helper to get footnote marker for a field (used next to ** values)
                 const getFootnoteMarker = (fieldName) => {
                   const footnote = report?.portfolioSummaryFootnotes?.find(fn => fn.fieldName === fieldName);
                   return footnote ? <sup>{footnote.marker}</sup> : null;
@@ -912,11 +912,11 @@ function PortalContentInner({
                   <thead>
                     <tr>
                       <th>Sl No.</th>
-                      <th>Company{getFootnoteMarker('company')}</th>
-                      <th>Sector{getFootnoteMarker('sector')}</th>
-                      <th>Initial Investment Date{getFootnoteMarker('initial-date')}</th>
-                      <th>Amount in ₹ (Crores){getFootnoteMarker('amount')}</th>
-                      <th>Fully Diluted Ownership (%){getFootnoteMarker('ownership')}</th>
+                      <th>Company</th>
+                      <th>Sector</th>
+                      <th>Initial Investment Date</th>
+                      <th>Amount in ₹ (Crores)</th>
+                      <th>Fully Diluted Ownership (%)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -947,7 +947,9 @@ function PortalContentInner({
                           })()}</td>
                           <td>{(() => {
                             // Check for confidentiality flag on quarterly update
-                            if (investment.latestQuarter?.currentOwnershipConfidential) return '**';
+                            if (investment.latestQuarter?.currentOwnershipConfidential) {
+                              return <span>**{getFootnoteMarker('ownership')}</span>;
+                            }
                             const ownership = getLatestOwnership(investment);
                             return ownership != null ? ownership.toFixed(2) : '-';
                           })()}</td>
