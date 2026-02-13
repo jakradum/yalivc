@@ -1363,7 +1363,7 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Download Centre</h1>
               </div>
-              {allReports && allReports.filter(r => r.pdfUrl).length > 0 ? (
+              {allReports && allReports.filter(r => r.pdfUrl && r.quarter && r.fiscalYear).length > 0 ? (
                 <div className={styles.downloadTableWrapper}>
                   <table className={styles.downloadTable}>
                     <thead>
@@ -1374,7 +1374,7 @@ function PortalContentInner({
                       </tr>
                     </thead>
                     <tbody>
-                      {allReports.filter(r => r.pdfUrl).map((rpt) => (
+                      {allReports.filter(r => r.pdfUrl && r.quarter && r.fiscalYear).map((rpt) => (
                         <tr key={rpt._id}>
                           <td className={styles.downloadReportName}>
                             {rpt.title || `${rpt.quarter} ${rpt.fiscalYear} Report`}
@@ -1410,62 +1410,6 @@ function PortalContentInner({
                   <p>No reports available for download yet. Upload PDFs in Sanity under each quarterly report.</p>
                 </div>
               )}
-
-              {/* NPS Feedback Form */}
-              <div className={styles.feedbackSection}>
-                <h3 className={styles.feedbackTitle}>How was your experience?</h3>
-                <p className={styles.feedbackSubtitle}>Rate your experience viewing this report on the portal</p>
-
-                {feedbackSubmitted ? (
-                  <div className={styles.feedbackSuccess}>
-                    <p>Thank you for your feedback!</p>
-                  </div>
-                ) : (
-                  <>
-                    <div className={styles.npsScale}>
-                      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
-                        <button
-                          key={score}
-                          type="button"
-                          onClick={() => setNpsScore(score)}
-                          className={`${styles.npsScoreBtn} ${npsScore === score ? styles.npsScoreBtnSelected : ''}`}
-                        >
-                          {score}
-                        </button>
-                      ))}
-                    </div>
-                    <div className={styles.npsLabels}>
-                      <span className={styles.npsLabel}>Not satisfied</span>
-                      <span className={styles.npsLabel}>Very satisfied</span>
-                    </div>
-
-                    {npsScore !== null && npsScore < 8 && (
-                      <>
-                        <label className={styles.feedbackTextareaLabel}>
-                          We&apos;d love to hear more about how we can improve:
-                        </label>
-                        <textarea
-                          className={styles.feedbackTextarea}
-                          value={feedbackDetails}
-                          onChange={(e) => setFeedbackDetails(e.target.value)}
-                          placeholder="Please share your thoughts..."
-                        />
-                      </>
-                    )}
-
-                    {npsScore !== null && (
-                      <button
-                        type="button"
-                        onClick={handleFeedbackSubmit}
-                        disabled={isSubmittingFeedback}
-                        className={styles.feedbackSubmitBtn}
-                      >
-                        {isSubmittingFeedback ? 'Submitting...' : 'Submit Feedback'}
-                      </button>
-                    )}
-                  </>
-                )}
-              </div>
             </section>
           )}
 
