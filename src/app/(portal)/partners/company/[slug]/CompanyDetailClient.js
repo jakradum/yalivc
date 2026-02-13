@@ -609,7 +609,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                         <tr>
                           <td>Yali&apos;s ownership %</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'}</td>
+                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? '**' : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
@@ -618,7 +618,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             {displayRounds.map((round, idx) => {
                               const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
                               return (
-                                <td key={idx}>{roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-'}</td>
+                                <td key={idx}>{latestQuarter?.moicConfidential ? '**' : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
                               );
                             })}
                           </tr>

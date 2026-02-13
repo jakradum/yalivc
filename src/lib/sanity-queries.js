@@ -1120,7 +1120,9 @@ export async function getLPQuarterlyReportBySlug(slug) {
         url,
         "publicationName": publication->name
       },
-      mediaNotes
+      mediaNotes,
+      // Portfolio Summary table footnotes
+      portfolioSummaryFootnotes
     }`,
     { slug }
   );

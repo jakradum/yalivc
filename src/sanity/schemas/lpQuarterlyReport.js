@@ -235,6 +235,74 @@ export default {
       },
       description: 'Upload the generated PDF report'
     },
+
+    // ===== PORTFOLIO SUMMARY FOOTNOTES =====
+    {
+      name: 'portfolioSummaryFootnotes',
+      title: 'Portfolio Summary Table Footnotes',
+      type: 'array',
+      group: 'output',
+      description: 'Add footnotes for the Portfolio Investment Summary table',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'fieldName',
+              title: 'Assign to Column/Metric',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Company Name', value: 'company' },
+                  { title: 'Sector', value: 'sector' },
+                  { title: 'Initial Investment Date', value: 'initial-date' },
+                  { title: 'Amount (₹ Crores)', value: 'amount' },
+                  { title: 'Fully Diluted Ownership (%)', value: 'ownership' },
+                  { title: 'Table Header', value: 'header' },
+                  { title: 'General (below table)', value: 'general' }
+                ]
+              },
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'marker',
+              title: 'Marker',
+              type: 'string',
+              description: 'e.g., "*", "†", "1", "2"',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'text',
+              title: 'Footnote Text',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }
+          ],
+          preview: {
+            select: {
+              fieldName: 'fieldName',
+              marker: 'marker',
+              text: 'text'
+            },
+            prepare({ fieldName, marker, text }) {
+              const fieldLabels = {
+                'company': 'Company',
+                'sector': 'Sector',
+                'initial-date': 'Initial Date',
+                'amount': 'Amount',
+                'ownership': 'Ownership',
+                'header': 'Header',
+                'general': 'General'
+              };
+              return {
+                title: `${marker} ${text}`,
+                subtitle: `Assigned to: ${fieldLabels[fieldName] || fieldName}`
+              };
+            }
+          }
+        }
+      ]
+    },
     {
       name: 'visibility',
       title: 'Visibility',

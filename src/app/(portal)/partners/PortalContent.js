@@ -898,16 +898,25 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Portfolio Investment Summary</h1>
               </div>
+              {(() => {
+                // Helper to get footnote marker for a field
+                const getFootnoteMarker = (fieldName) => {
+                  const footnote = report?.portfolioSummaryFootnotes?.find(fn => fn.fieldName === fieldName);
+                  return footnote ? <sup>{footnote.marker}</sup> : null;
+                };
+
+                return (
+                  <>
               <div className={styles.portfolioTableWrapper}>
                 <table className={styles.portfolioTable}>
                   <thead>
                     <tr>
                       <th>Sl No.</th>
-                      <th>Company</th>
-                      <th>Sector</th>
-                      <th>Initial Investment Date</th>
-                      <th>Amount in ₹ (Crores)</th>
-                      <th>Fully Diluted Ownership (%)</th>
+                      <th>Company{getFootnoteMarker('company')}</th>
+                      <th>Sector{getFootnoteMarker('sector')}</th>
+                      <th>Initial Investment Date{getFootnoteMarker('initial-date')}</th>
+                      <th>Amount in ₹ (Crores){getFootnoteMarker('amount')}</th>
+                      <th>Fully Diluted Ownership (%){getFootnoteMarker('ownership')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1049,6 +1058,19 @@ function PortalContentInner({
                 </div>
               )}
 
+              {/* Portfolio Summary Table Footnotes */}
+              {report?.portfolioSummaryFootnotes && report.portfolioSummaryFootnotes.length > 0 && (
+                <div className={styles.tableFootnoteContainer}>
+                  {report.portfolioSummaryFootnotes.map((fn, idx) => (
+                    <p key={idx} className={styles.tableFootnote}>
+                      <sup>{fn.marker}</sup> {fn.text}
+                    </p>
+                  ))}
+                </div>
+              )}
+                  </>
+                );
+              })()}
             </section>
           )}
 
