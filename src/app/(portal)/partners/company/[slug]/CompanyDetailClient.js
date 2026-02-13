@@ -567,6 +567,12 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
               // Only show section if there's round data
               if (displayRounds.length === 0) return null;
 
+              // Helper to get footnote marker for rounds table fields
+              const getRoundsFootnoteMarker = (fieldName) => {
+                const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+                return footnote ? <sup>{footnote.marker}</sup> : null;
+              };
+
               return (
                 <div className={styles.roundMetricsSection}>
                   <h3 className={styles.companyAboutTitle}>Investment round details</h3>
@@ -609,7 +615,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                         <tr>
                           <td>Yali&apos;s ownership %</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? '**' : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
+                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? <span>**{getRoundsFootnoteMarker('rounds-ownership')}</span> : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
@@ -618,7 +624,7 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                             {displayRounds.map((round, idx) => {
                               const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
                               return (
-                                <td key={idx}>{latestQuarter?.moicConfidential ? '**' : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
+                                <td key={idx}>{latestQuarter?.moicConfidential ? <span>**{getRoundsFootnoteMarker('rounds-moic')}</span> : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
                               );
                             })}
                           </tr>
