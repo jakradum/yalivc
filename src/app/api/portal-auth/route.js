@@ -17,6 +17,50 @@ const OTP_COOKIE = 'portal-otp-pending';
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 const OTP_EXPIRY = 10 * 60; // 10 minutes in seconds
 
+// Rate limiting: in-memory store (resets on server restart)
+// For production, consider using Redis or Vercel KV
+const rateLimitStore = new Map();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX_ATTEMPTS = 5;
+
+function checkRateLimit(email) {
+  const now = Date.now();
+  const key = email.toLowerCase();
+  const record = rateLimitStore.get(key);
+
+  // Clean up old entries periodically
+  if (rateLimitStore.size > 10000) {
+    for (const [k, v] of rateLimitStore.entries()) {
+      if (now - v.windowStart > RATE_LIMIT_WINDOW) {
+        rateLimitStore.delete(k);
+      }
+    }
+  }
+
+  if (!record || now - record.windowStart > RATE_LIMIT_WINDOW) {
+    rateLimitStore.set(key, { windowStart: now, attempts: 1 });
+    return { allowed: true, remaining: RATE_LIMIT_MAX_ATTEMPTS - 1 };
+  }
+
+  if (record.attempts >= RATE_LIMIT_MAX_ATTEMPTS) {
+    const resetTime = Math.ceil((record.windowStart + RATE_LIMIT_WINDOW - now) / 1000);
+    return { allowed: false, resetInSeconds: resetTime };
+  }
+
+  record.attempts++;
+  return { allowed: true, remaining: RATE_LIMIT_MAX_ATTEMPTS - record.attempts };
+}
+
+// Constant-time string comparison to prevent timing attacks
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 function generateOTP() {
   return crypto.randomInt(100000, 999999).toString();
 }
@@ -52,16 +96,26 @@ export async function POST(request) {
 
       const normalizedEmail = email.toLowerCase().trim();
 
+      // Check rate limit before processing
+      const rateLimit = checkRateLimit(normalizedEmail);
+      if (!rateLimit.allowed) {
+        return NextResponse.json(
+          { error: `Too many attempts. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+          { status: 429 }
+        );
+      }
+
       const user = await client.fetch(
         `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{ _id, name }`,
         { email: normalizedEmail }
       );
 
+      // Generic response to prevent email enumeration
+      // Always return success message, but only send email if user exists
       if (!user) {
-        return NextResponse.json(
-          { error: 'This email is not registered for portal access' },
-          { status: 401 }
-        );
+        // Delay to prevent timing-based enumeration
+        await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
+        return NextResponse.json({ success: true });
       }
 
       const otp = generateOTP();
@@ -109,7 +163,7 @@ export async function POST(request) {
       response.cookies.set(OTP_COOKIE, `${normalizedEmail}:${timestamp}:${otpSignature}`, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: 'strict',
         maxAge: OTP_EXPIRY,
         path: '/',
       });
@@ -135,9 +189,9 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
       }
 
-      // Verify the submitted code matches
+      // Verify the submitted code matches using constant-time comparison
       const expectedSignature = signOTP(storedEmail, code, storedTimestamp);
-      if (expectedSignature !== storedSignature) {
+      if (!timingSafeEqual(expectedSignature, storedSignature)) {
         return NextResponse.json({ error: 'Invalid code' }, { status: 401 });
       }
 
@@ -149,7 +203,7 @@ export async function POST(request) {
       response.cookies.set(COOKIE_NAME, sessionValue, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: 'strict',
         maxAge: COOKIE_MAX_AGE,
         path: '/',
       });

@@ -3,6 +3,16 @@ import { NextResponse } from 'next/server';
 const COOKIE_NAME = 'portal-session';
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 
+// Constant-time string comparison to prevent timing attacks
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 async function verifyHMAC(cookieValue) {
   if (!AUTH_SECRET || !cookieValue) return false;
 
@@ -11,6 +21,13 @@ async function verifyHMAC(cookieValue) {
 
   const [email, timestamp, signature] = parts;
   const data = `${email}:${timestamp}`;
+
+  // Validate session age (30 days max)
+  const sessionAge = Date.now() - parseInt(timestamp, 10);
+  const maxSessionAge = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
+  if (isNaN(sessionAge) || sessionAge > maxSessionAge || sessionAge < 0) {
+    return false;
+  }
 
   try {
     const encoder = new TextEncoder();
@@ -26,7 +43,8 @@ async function verifyHMAC(cookieValue) {
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
 
-    return expectedSig === signature;
+    // Use constant-time comparison to prevent timing attacks
+    return timingSafeEqual(expectedSig, signature);
   } catch {
     return false;
   }
