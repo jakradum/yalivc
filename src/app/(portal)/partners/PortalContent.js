@@ -520,7 +520,11 @@ function PortalContentInner({
                 </div>
                 <div className={styles.letterheadInfo}>
                   <span className={styles.letterheadName}>{fundSettings?.fundManagerName || '-'}</span>
-                  <span className={styles.letterheadDescriptor}>{fundSettings?.fundManagerDescriptor || '-'}</span>
+                  <span className={styles.letterheadDescriptor}>
+                    {fundSettings?.fundManagerDescriptor
+                      ? fundSettings.fundManagerDescriptor.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                      : '-'}
+                  </span>
                 </div>
               </div>
 
