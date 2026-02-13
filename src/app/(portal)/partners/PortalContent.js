@@ -964,6 +964,17 @@ function PortalContentInner({
                 </table>
               </div>
 
+              {/* Portfolio Summary Table Footnotes */}
+              {report?.portfolioSummaryFootnotes && report.portfolioSummaryFootnotes.length > 0 && (
+                <div className={styles.tableFootnoteContainer}>
+                  {report.portfolioSummaryFootnotes.map((fn, idx) => (
+                    <p key={idx} className={styles.tableFootnote}>
+                      <sup>{fn.marker}</sup> {fn.text}
+                    </p>
+                  ))}
+                </div>
+              )}
+
               {/* Investment Distribution Pie Chart */}
               {sortedInvestments && sortedInvestments.length > 0 && (
                 <div className={styles.investmentPieSection}>
@@ -1055,17 +1066,6 @@ function PortalContentInner({
                       </div>
                     );
                   })()}
-                </div>
-              )}
-
-              {/* Portfolio Summary Table Footnotes */}
-              {report?.portfolioSummaryFootnotes && report.portfolioSummaryFootnotes.length > 0 && (
-                <div className={styles.tableFootnoteContainer}>
-                  {report.portfolioSummaryFootnotes.map((fn, idx) => (
-                    <p key={idx} className={styles.tableFootnote}>
-                      <sup>{fn.marker}</sup> {fn.text}
-                    </p>
-                  ))}
                 </div>
               )}
                   </>
