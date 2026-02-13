@@ -512,11 +512,11 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                 )}
               </tbody>
             </table>
-            {/* Snapshot table footnotes */}
-            {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'snapshot').length > 0 && (
+            {/* Snapshot table footnotes - derive table from fieldName prefix */}
+            {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('snapshot-')).length > 0 && (
               <div className={styles.tableFootnoteContainer}>
                 {latestQuarter.tableFootnotes
-                  .filter(fn => fn.tableType === 'snapshot')
+                  .filter(fn => fn.fieldName?.startsWith('snapshot-'))
                   .map((fn, idx) => (
                     <p key={idx} className={styles.tableFootnote}>
                       <sup>{fn.marker}</sup> {fn.text}
@@ -628,10 +628,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   </div>
                   <div className={styles.tableFootnoteContainer}>
                     <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
-                    {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'rounds' || !fn.tableType).length > 0 && (
+                    {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
                       <div className={styles.customFootnotes}>
                         {latestQuarter.tableFootnotes
-                          .filter(fn => fn.tableType === 'rounds' || !fn.tableType)
+                          .filter(fn => fn.fieldName?.startsWith('rounds-'))
                           .map((fn, idx) => (
                             <p key={idx} className={styles.tableFootnote}>
                               <sup>{fn.marker}</sup> {fn.text}
@@ -699,10 +699,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
                   </div>
                   <div className={styles.tableFootnoteContainer}>
                     <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
-                    {latestQuarter?.tableFootnotes?.filter(fn => fn.tableType === 'financials').length > 0 && (
+                    {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
                       <div className={styles.customFootnotes}>
                         {latestQuarter.tableFootnotes
-                          .filter(fn => fn.tableType === 'financials')
+                          .filter(fn => fn.fieldName?.startsWith('financials-'))
                           .map((fn, idx) => (
                             <p key={idx} className={styles.tableFootnote}>
                               <sup>{fn.marker}</sup> {fn.text}
