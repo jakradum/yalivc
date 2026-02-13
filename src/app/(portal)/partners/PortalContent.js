@@ -937,6 +937,8 @@ function PortalContentInner({
                             return total > 0 ? total.toFixed(2) : '-';
                           })()}</td>
                           <td>{(() => {
+                            // Check for confidentiality flag on quarterly update
+                            if (investment.latestQuarter?.currentOwnershipConfidential) return '**';
                             const ownership = getLatestOwnership(investment);
                             return ownership != null ? ownership.toFixed(2) : '-';
                           })()}</td>
