@@ -21,7 +21,7 @@ export function SendBetaTestAction(props) {
     setStatus('loading');
 
     try {
-      const res = await fetch('/api/send-newsletter-beta', {
+      const res = await fetch('/api/send-newsletter-beta/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newsletterId: id }),
