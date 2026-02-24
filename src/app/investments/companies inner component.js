@@ -185,6 +185,11 @@ export const CompaniesInnerComponent = ({ companies, categories: sanityCategorie
                 </div>
               </div>
 
+              {/* Company name section — below logo */}
+              <div className={styles.companyNameSection}>
+                <h3 className={styles.companyNameText}>{company.name}</h3>
+              </div>
+
               {/* Sector colour band — colour resolved from --sector-color-<slug> in globals.css */}
               <div className={styles.sectorBand} style={sectorBandStyle(categorySlug)} />
 
@@ -204,11 +209,6 @@ export const CompaniesInnerComponent = ({ companies, categories: sanityCategorie
                     </a>
                   </div>
                 )}
-
-                <div className={styles.cardRow}>
-                  <span className={styles.cardLabel}>Company Name</span>
-                  <span className={styles.cardValue}>{company.name}</span>
-                </div>
 
                 {company.category?.name && (
                   <div className={styles.cardRow}>

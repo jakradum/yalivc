@@ -84,9 +84,8 @@
 /* ---------- logo area ---------- */
 .logoArea {
   width: 100%;
-  height: 200px;
+  height: 150px;
   background: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,6 +111,29 @@
   font-weight: 600;
   color: #ccc;
   font-family: var(--font-jetbrains-mono);
+}
+
+/* ---------- company name section (below logo) ---------- */
+.companyNameSection {
+  background: #ffffff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.companyNameText {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #363636;
+  margin: 0;
+  text-align: center;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 /* ---------- colour bands ---------- */
@@ -204,7 +226,7 @@
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.82);
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 7;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
