@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { client, writeClient } from '@/lib/sanity';
+import { writeClient } from '@/lib/sanity';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -224,8 +224,8 @@ export async function POST(request) {
       return NextResponse.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 });
     }
 
-    // Fetch newsletter from Sanity (draft or published)
-    const newsletter = await client.fetch(
+    // Fetch newsletter from Sanity — previewDrafts so unpublished docs are readable
+    const newsletter = await writeClient.fetch(
       `*[_type == "newsletter" && _id in [$id, "drafts." + $id]][0]{
         title, edition, shortDescription, publishedDate, status,
         sections[]{
@@ -237,7 +237,8 @@ export async function POST(request) {
           items[]{ technology, oneLiner, contributor->{name}, title, url, blurb }
         }
       }`,
-      { id: newsletterId }
+      { id: newsletterId },
+      { perspective: 'previewDrafts' }
     );
 
     if (!newsletter) {
