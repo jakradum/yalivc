@@ -244,9 +244,12 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Newsletter not found' }, { status: 404 });
     }
 
-    // Fetch beta subscribers
-    const betaSubscribers = await client.fetch(
-      `*[_type == "newsletterSubscriber" && beta == true]{email}`
+    // Fetch beta subscribers — use previewDrafts so toggled-but-unpublished
+    // subscriber docs are included (requires token)
+    const betaSubscribers = await writeClient.fetch(
+      `*[_type == "newsletterSubscriber" && beta == true]{email}`,
+      {},
+      { perspective: 'previewDrafts' }
     );
 
     if (!betaSubscribers.length) {
