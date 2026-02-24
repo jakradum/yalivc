@@ -161,7 +161,7 @@ export const CompaniesInnerComponent = ({ companies, categories: sanityCategorie
           return (
             <div key={company._id || index} className={styles.companyCard}>
               {/* Stretched overlay link — covers the full card */}
-              {href && (
+              {href && company.enableCompanyPage && (
                 <Link href={href} className={styles.cardOverlayLink} aria-label={`View ${company.name}`} />
               )}
 
