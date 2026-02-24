@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { writeClient } from '@/lib/sanity';
 
 export async function POST(request) {
   try {
@@ -11,8 +12,6 @@ export async function POST(request) {
       );
     }
 
-    // Validate email format with stricter regex
-    // Must have: local part, @, domain with at least one dot, valid TLD (2-6 chars)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -21,49 +20,22 @@ export async function POST(request) {
       );
     }
 
-    const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-    const AIRTABLE_BASE_ID = process.env.AIRTABLE_TATTVA_BASE_ID || 'appdVkGBFQCQkTIAm';
-    const AIRTABLE_TABLE_NAME = 'tblXjGA1lP040k4Kg';
+    const normalizedEmail = email.toLowerCase().trim();
 
-    if (!AIRTABLE_API_KEY) {
-      console.error('Airtable credentials not configured');
+    if (!process.env.SANITY_API_TOKEN) {
+      console.error('SANITY_API_TOKEN not configured');
       return NextResponse.json(
         { error: 'Server configuration error' },
         { status: 500 }
       );
     }
 
-    const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          records: [
-            {
-              fields: {
-                Email: email,
-                'Date of subscription': new Date().toISOString().split('T')[0],
-              },
-            },
-          ],
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Airtable error:', JSON.stringify(errorData, null, 2));
-      console.error('Base ID:', AIRTABLE_BASE_ID);
-      console.error('Table Name:', AIRTABLE_TABLE_NAME);
-      return NextResponse.json(
-        { error: 'Failed to subscribe: ' + (errorData.error?.message || 'Unknown error') },
-        { status: 500 }
-      );
-    }
+    await writeClient.create({
+      _type: 'newsletterSubscriber',
+      email: normalizedEmail,
+      subscribedAt: new Date().toISOString(),
+      source: 'homepage-footer',
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
