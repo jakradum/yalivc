@@ -10,6 +10,7 @@ import socialUpdate from './schemas/socialUpdate'
 import publication from './schemas/publication'
 import blogPost from './schemas/blogPost'
 import newsletter from './schemas/newsletter'
+import newsletterSubscriber from './schemas/newsletterSubscriber'
 import {
   openingNoteSection,
   essaySection,
@@ -39,6 +40,7 @@ export const schemaTypes = [
   publication,
   blogPost,
   newsletter,
+  newsletterSubscriber,
   openingNoteSection,
   essaySection,
   portfolioSpotlightSection,
