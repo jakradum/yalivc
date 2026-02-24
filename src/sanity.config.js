@@ -40,7 +40,17 @@ export default defineConfig({
                   .title('Site Content')
                   .items([
                     S.listItem().title('Blog Posts').child(S.documentTypeList('blogPost').title('Blog Posts')),
-                    S.listItem().title('Newsletter (Tattva)').child(S.documentTypeList('newsletter').title('Newsletters')),
+                    S.listItem()
+                      .title('Newsletter (Tattva)')
+                      .child(
+                        S.list()
+                          .title('Newsletter (Tattva)')
+                          .items([
+                            S.listItem().title('Issues').child(S.documentTypeList('newsletter').title('Newsletters')),
+                            S.divider(),
+                            S.listItem().title('Subscribers').child(S.documentTypeList('newsletterSubscriber').title('Subscribers')),
+                          ])
+                      ),
                     S.listItem().title('News Articles').child(S.documentTypeList('news').title('News')),
                     S.listItem().title('Social Updates').child(S.documentTypeList('socialUpdate').title('Social Updates')),
                     S.listItem().title('Publications').child(S.documentTypeList('publication').title('Publications')),
