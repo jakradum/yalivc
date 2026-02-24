@@ -15,7 +15,7 @@ export const revalidate = 60;
 export const metadata = {
   title: 'Blog | Yali Capital',
   description:
-    'Insights, perspectives, and stories from the Yali Capital team on deep tech, venture capital, and India's innovation ecosystem.',
+    "Insights, perspectives, and stories from the Yali Capital team on deep tech, venture capital, and India's innovation ecosystem.",
   alternates: {
     canonical: 'https://yali.vc/insights/blog/',
   },
