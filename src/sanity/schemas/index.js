@@ -26,6 +26,7 @@ import lpPipelineDeal from './lpPipelineDeal'
 import lpDownloadConsent from './lpDownloadConsent'
 import lpPortalFeedback from './lpPortalFeedback'
 import investor from './investor'
+import newsletterSubscriber from './newsletterSubscriber'
 
 export const schemaTypes = [
   // Existing schemas
@@ -57,5 +58,7 @@ export const schemaTypes = [
   lpPortalFeedback,
   // Homepage sections
   faq,
-  socialUpdate
+  socialUpdate,
+  // Newsletter signups
+  newsletterSubscriber,
 ]
