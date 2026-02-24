@@ -28,17 +28,25 @@ const newsletterSubscriber = {
       },
       initialValue: 'homepage-footer',
     },
+    {
+      name: 'beta',
+      title: 'Beta Tester',
+      type: 'boolean',
+      description: 'Include in beta sends before the newsletter goes to the full list',
+      initialValue: false,
+    },
   ],
   preview: {
     select: {
       email: 'email',
       subscribedAt: 'subscribedAt',
       source: 'source',
+      beta: 'beta',
     },
-    prepare({ email, subscribedAt, source }) {
+    prepare({ email, subscribedAt, source, beta }) {
       const date = subscribedAt ? new Date(subscribedAt).toLocaleDateString('en-IN') : '';
       return {
-        title: email,
+        title: `${beta ? '🧪 ' : ''}${email}`,
         subtitle: `${date}${source ? ` · ${source}` : ''}`,
       };
     },

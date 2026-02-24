@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
+import { SendBetaTestAction } from './sanity/actions/sendBetaTestAction';
 
 export default defineConfig({
   name: 'default',
@@ -103,6 +104,15 @@ export default defineConfig({
     components: {
       navbar: () => null
     }
+  },
+
+  document: {
+    actions: (prev, { schemaType }) => {
+      if (schemaType === 'newsletter') {
+        return [...prev, SendBetaTestAction];
+      }
+      return prev;
+    },
   },
 
   schema: {
