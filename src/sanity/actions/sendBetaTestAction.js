@@ -5,6 +5,7 @@ export function SendBetaTestAction(props) {
   const doc = draft || published;
 
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!doc) return null;
 
@@ -12,7 +13,7 @@ export function SendBetaTestAction(props) {
     idle: '🧪 Send Beta Test',
     loading: 'Sending...',
     success: 'Sent!',
-    error: 'Failed — retry?',
+    error: errorMsg ? `Error: ${errorMsg}` : 'Failed — retry?',
   }[status];
 
   const handle = async () => {
@@ -34,8 +35,9 @@ export function SendBetaTestAction(props) {
       setTimeout(() => setStatus('idle'), 4000);
     } catch (err) {
       console.error('Beta send failed:', err);
+      setErrorMsg(err.message || 'Unknown error');
       setStatus('error');
-      setTimeout(() => setStatus('idle'), 4000);
+      setTimeout(() => { setStatus('idle'); setErrorMsg(''); }, 6000);
     }
   };
 
