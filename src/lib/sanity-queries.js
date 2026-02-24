@@ -13,6 +13,7 @@ export async function getCompanies() {
       oneLiner,
       detail,
       link,
+      enableCompanyPage,
       "logo": logo.asset->url,
       order
     }`

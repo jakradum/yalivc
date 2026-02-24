@@ -93,6 +93,14 @@ export default {
       group: 'basic',
     },
     {
+      name: 'enableCompanyPage',
+      title: 'Enable Company Page',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Enable the individual company detail page. When off, the card is not clickable.',
+      group: 'basic',
+    },
+    {
       name: 'aboutCompany',
       title: 'About the Company',
       type: 'text',
