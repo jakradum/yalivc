@@ -36,7 +36,7 @@ export async function getCompanyBySlug(slug) {
       founders[]{
         name,
         role,
-        linkedin,
+        linkedIn,
         "photo": photo.asset->url
       },
       story{
@@ -44,9 +44,12 @@ export async function getCompanyBySlug(slug) {
         author->{name, role, "photo": photo.asset->url},
         content
       },
-      metrics[] | order(order asc),
-      investmentDetails,
       companyInfo,
+      "latestRound": investmentRounds | order(investmentDate desc)[0]{
+        roundName,
+        roundLabel,
+        investmentDate
+      },
       achievements[] | order(date desc)
     }`,
     { slug }

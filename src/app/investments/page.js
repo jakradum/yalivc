@@ -29,7 +29,7 @@ export default async function Investments() {
   }
 
   return (
-    <section>
+    <section className={styles.sectionLevel}>
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Our Investments</h1>

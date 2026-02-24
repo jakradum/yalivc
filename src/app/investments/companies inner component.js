@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import styles from './company inner comp.module.css';
 import Image from 'next/image';
 import { ExpandIcon } from '../components/icons/small icons/expandIcon';
@@ -10,7 +11,6 @@ function useWindowWidth() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -19,92 +19,74 @@ function useWindowWidth() {
   return width;
 }
 
-export const CompaniesInnerComponent = ({companies, categories: sanityCategories = []}) => {
+function isLinkedInLink(url) {
+  return url && url.toLowerCase().includes('linkedin.com');
+}
+
+/**
+ * Resolve the CSS variable name for a given category slug.
+ * Falls back to --sector-color-default for unrecognised slugs.
+ * The actual hex values live in globals.css (:root).
+ */
+function sectorBandStyle(categorySlug) {
+  if (!categorySlug) return { backgroundColor: 'var(--sector-color-default)' };
+  return {
+    backgroundColor: `var(--sector-color-${categorySlug}, var(--sector-color-default))`,
+  };
+}
+
+/**
+ * Compute how many card columns fit at the current window width.
+ * Thresholds account for the page wrapper's ~2rem side margins.
+ */
+function getColumnCount(windowWidth) {
+  if (windowWidth >= 1450) return 5;
+  if (windowWidth >= 1150) return 4;
+  if (windowWidth >= 850)  return 3;
+  if (windowWidth >= 540)  return 2;
+  return 1;
+}
+
+export const CompaniesInnerComponent = ({ companies, categories: sanityCategories = [] }) => {
   const windowWidth = useWindowWidth();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
-  // Use categories from Sanity (already sorted by order)
   const categories = sanityCategories;
 
-  const toggleCategoryDropdown = () => {
-    setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
-  };
+  const toggleCategoryDropdown = () => setIsCategoryDropdownOpen((prev) => !prev);
 
   const activeCategories = useMemo(() => {
     const activeCats = new Set();
-    companies.forEach(company => {
+    companies.forEach((company) => {
       activeCats.add(company.category?.name?.toLowerCase());
     });
     return Array.from(activeCats);
   }, [companies]);
 
-  // All category names lowercased (for matching)
-  const allCategoryNames = useMemo(() => {
-    return categories.map(cat => cat.name?.toLowerCase()).filter(Boolean);
-  }, [categories]);
-
-  // useEffect(() => {
-  //   console.log('useData hook output:', { data, loading, error });
-
-  //   if (loading) {
-  //     console.log('Currently loading, no action taken');
-  //     return;
-  //   }
-
-  //   if (error) {
-  //     console.log('Error fetching data, using local data:', error);
-  //     setIsUsingLocalData(true);
-  //     return;
-  //   }
-
-  //   if (data && data.status === 'success' && data.data && Array.isArray(data.data['companies-csv (1)'])) {
-  //     console.log('Fetched data successfully, updating companies');
-  //     setCompanies(data.data['companies-csv (1)']);
-  //     setIsUsingLocalData(false);
-  //   } else if (data && data.companies && Array.isArray(data.companies.data)) {
-  //     console.log('Using local data');
-  //     setCompanies(data.companies.data);
-  //     setIsUsingLocalData(true);
-  //   } else {
-  //     console.log('Data not in expected format, using local data. Data:', data);
-  //     setIsUsingLocalData(true);
-  //   }
-  // }, [data, loading, error]);
-
-  console.log('Current companies data:', companies);
-
   const toggleCategory = (categoryName) => {
-    console.log('Toggling category:', categoryName);
     setSelectedCategories((prev) => {
-      const lowercaseName = categoryName.toLowerCase();
-      if (prev.includes(lowercaseName)) {
-        return prev.filter((c) => c !== lowercaseName);
-      } else {
-        return [...prev, lowercaseName];
-      }
+      const lower = categoryName.toLowerCase();
+      return prev.includes(lower) ? prev.filter((c) => c !== lower) : [...prev, lower];
     });
-    // Close the dropdown after selecting a category
     setIsCategoryDropdownOpen(false);
   };
 
   const filteredCompanies = companies.filter(
-    (company) => selectedCategories.length === 0 || selectedCategories.includes(company.category?.name?.toLowerCase())
+    (company) =>
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(company.category?.name?.toLowerCase())
   );
 
-  const isLinkedInLink = (url) => {
-    return url && url.toLowerCase().includes('linkedin.com');
-  };
-
-  // Check if selected categories include any empty ones (no companies)
   const selectedEmptyCategories = useMemo(() => {
-    return selectedCategories.filter(cat => !activeCategories.includes(cat));
+    return selectedCategories.filter((cat) => !activeCategories.includes(cat));
   }, [selectedCategories, activeCategories]);
 
   const renderCategoriesSection = categories.length > 0 && (
     <>
       <p>Select one or more categories to filter the list below</p>
       <div className={`${styles.categoriesWrapper} ${isCategoryDropdownOpen ? styles.expanded : ''}`}>
+        {/* mobile dropdown */}
         <div className={styles.categoryDropdown}>
           <button className={styles.dropdownToggle} onClick={toggleCategoryDropdown}>
             CATEGORIES
@@ -124,6 +106,7 @@ export const CompaniesInnerComponent = ({companies, categories: sanityCategories
             ))}
           </div>
         </div>
+        {/* desktop pill row */}
         <div className={styles.categoriesContainer}>
           {categories.map((category) => (
             <button
@@ -141,12 +124,11 @@ export const CompaniesInnerComponent = ({companies, categories: sanityCategories
     </>
   );
 
-  // Render placeholder for empty categories
   const renderEmptyCategoryPlaceholder = (categoryName) => (
     <div key={categoryName} className={styles.emptyCategoryPlaceholder}>
       <p className={styles.emptyCategoryTitle}>{categoryName}</p>
       <p className={styles.emptyCategoryMessage}>
-        We are actively looking to invest in startups operating in the sector.
+        We are actively looking to invest in startups operating in this sector.
       </p>
     </div>
   );
@@ -154,43 +136,99 @@ export const CompaniesInnerComponent = ({companies, categories: sanityCategories
   return (
     <div className={styles.container}>
       {renderCategoriesSection}
-      {/* Show placeholders for selected empty categories */}
+
       {selectedEmptyCategories.length > 0 && (
         <div className={styles.emptyCategories}>
-          {selectedEmptyCategories.map(catName => {
-            const originalCat = categories.find(c => c.name?.toLowerCase() === catName);
+          {selectedEmptyCategories.map((catName) => {
+            const originalCat = categories.find((c) => c.name?.toLowerCase() === catName);
             return renderEmptyCategoryPlaceholder(originalCat?.name || catName);
           })}
         </div>
       )}
-      <div className={styles.companiesContainer}>
-        {filteredCompanies.map((company, index) => (
-          <div key={index} className={styles.companyCard}>
-            <div className={styles.companyInfo}>
-              <div className={styles.logoContainer}>
-                <Image
-                  src={company.logo || '/placeholder-logo.png'}
-                  alt={company.name}
-                  width={150}
-                  height={150}
-                  style={{ objectFit: 'contain' }}
-                />
+
+      <div
+        className={styles.companiesContainer}
+        style={{ gridTemplateColumns: `repeat(${windowWidth > 0 ? getColumnCount(windowWidth) : 4}, 1fr)` }}
+      >
+        {filteredCompanies.map((company, index) => {
+          const categorySlug = company.category?.slug?.current;
+          const companySlug = company.slug?.current;
+          const href =
+            categorySlug && companySlug
+              ? `/investments/${categorySlug}/${companySlug}/`
+              : null;
+
+          return (
+            <div key={company._id || index} className={styles.companyCard}>
+              {/* Stretched overlay link — covers the full card */}
+              {href && (
+                <Link href={href} className={styles.cardOverlayLink} aria-label={`View ${company.name}`} />
+              )}
+
+              {/* Logo area */}
+              <div className={styles.logoArea}>
+                <div className={styles.logoBox}>
+                  {company.logo ? (
+                    <Image
+                      src={company.logo}
+                      alt={`${company.name} logo`}
+                      width={98}
+                      height={98}
+                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                      sizes="98px"
+                    />
+                  ) : (
+                    <span className={styles.logoPlaceholder}>
+                      {company.name?.charAt(0) ?? '?'}
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className={styles.nameAndLink}>
-                <p className={styles.companyName}>{company.name}</p>
-                <p style={{textTransform:'uppercase',fontSize:'0.9rem'}}>{company.category?.name}</p>
+
+              {/* Sector colour band — colour resolved from --sector-color-<slug> in globals.css */}
+              <div className={styles.sectorBand} style={sectorBandStyle(categorySlug)} />
+
+              {/* Info body */}
+              <div className={styles.cardBody}>
+                {/* External link icons (above the overlay, z-index: 1) */}
                 {company.link && (
-                  <a href={company.link} className={styles.viewLink} target="_blank" rel="noopener noreferrer">
-                    {isLinkedInLink(company.link) ? 'VIEW ON LINKEDIN' : 'VIEW SITE'}
-                  </a>
+                  <div className={styles.cardIcons}>
+                    <a
+                      href={company.link}
+                      className={styles.iconLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={isLinkedInLink(company.link) ? 'LinkedIn' : 'Visit website'}
+                    >
+                      {isLinkedInLink(company.link) ? 'in' : '↗'}
+                    </a>
+                  </div>
+                )}
+
+                <div className={styles.cardRow}>
+                  <span className={styles.cardLabel}>Company Name</span>
+                  <span className={styles.cardValue}>{company.name}</span>
+                </div>
+
+                {company.category?.name && (
+                  <div className={styles.cardRow}>
+                    <span className={styles.cardLabel}>Sector</span>
+                    <span className={styles.cardValue}>{company.category.name}</span>
+                  </div>
+                )}
+
+                {company.detail && (
+                  <div className={styles.cardRow}>
+                    <span className={styles.cardLabel}>Description</span>
+                    <span className={`${styles.cardValue} ${styles.cardDescription}`}>
+                      {company.detail}
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
-            <div className={styles.companyDetail}>
-              <p>{company.detail}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
