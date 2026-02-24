@@ -58,6 +58,17 @@ const storyComponents = {
   },
 };
 
+function formatLatestRound(round) {
+  if (!round) return null;
+  const label = round.roundName
+    ? round.roundName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+    : null;
+  const date = round.investmentDate
+    ? new Date(round.investmentDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+    : null;
+  return [label, date].filter(Boolean).join(', ') || null;
+}
+
 export default async function CompanyPage({ params }) {
   const { slug, companySlug } = await params;
   const company = await getCompanyBySlug(companySlug);
@@ -67,6 +78,7 @@ export default async function CompanyPage({ params }) {
   }
 
   const allContent = await getContentByCompany(companySlug);
+  const latestRoundDisplay = formatLatestRound(company.latestRound);
 
   return (
     <section>
@@ -102,9 +114,8 @@ export default async function CompanyPage({ params }) {
 
       {/* FOUNDERS + INFO SECTION */}
       {(company.founders?.length > 0 ||
-        company.metrics?.length > 0 ||
         company.companyInfo ||
-        company.investmentDetails) && (
+        latestRoundDisplay) && (
         <section>
           <div className={styles.people}>
             <HeaderFlex
@@ -141,9 +152,9 @@ export default async function CompanyPage({ params }) {
                       <h2 className={companyStyles.founderName}>{founder.name}</h2>
                       <p className={companyStyles.founderRole}>{founder.role}</p>
                     </div>
-                    {founder.linkedin && (
+                    {founder.linkedIn && (
                       <div className={companyStyles.founderLinkedIn}>
-                        <a href={founder.linkedin} target="_blank" rel="noopener noreferrer">
+                        <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer">
                           <button className={teamLPstyles.socialButton}>in</button>
                         </a>
                       </div>
@@ -157,12 +168,6 @@ export default async function CompanyPage({ params }) {
             <div className={companyStyles.infoSection}>
               <h2>Key information</h2>
               <div className={companyStyles.infoGrid}>
-                {company.metrics?.map((metric, idx) => (
-                  <div key={idx} className={companyStyles.metricCard}>
-                    <p className={companyStyles.metricLabel}>{metric.label}</p>
-                    <p className={companyStyles.metricValue}>{metric.value}</p>
-                  </div>
-                ))}
                 {company.companyInfo?.founded && (
                   <div className={companyStyles.metricCard}>
                     <p className={companyStyles.metricLabel}>Founded</p>
@@ -175,27 +180,10 @@ export default async function CompanyPage({ params }) {
                     <p className={companyStyles.metricValue}>{company.companyInfo.headquarters}</p>
                   </div>
                 )}
-                {company.companyInfo?.teamSize && (
+                {latestRoundDisplay && (
                   <div className={companyStyles.metricCard}>
-                    <p className={companyStyles.metricLabel}>Team Size</p>
-                    <p className={companyStyles.metricValue}>{company.companyInfo.teamSize}</p>
-                  </div>
-                )}
-                {company.investmentDetails?.stage && (
-                  <div className={companyStyles.metricCard}>
-                    <p className={companyStyles.metricLabel}>Investment Stage</p>
-                    <p className={companyStyles.metricValue}>{company.investmentDetails.stage}</p>
-                  </div>
-                )}
-                {company.investmentDetails?.date && (
-                  <div className={companyStyles.metricCard}>
-                    <p className={companyStyles.metricLabel}>Investment Date</p>
-                    <p className={companyStyles.metricValue}>
-                      {new Date(company.investmentDetails.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                      })}
-                    </p>
+                    <p className={companyStyles.metricLabel}>Latest Funding Round</p>
+                    <p className={companyStyles.metricValue}>{latestRoundDisplay}</p>
                   </div>
                 )}
               </div>
@@ -208,6 +196,7 @@ export default async function CompanyPage({ params }) {
       {company.story?.content && (
         <section className={styles.sectorsSection}>
           <HeaderFlex title="Behind the deal" color="black" desktopMaxWidth={'50%'} mobileMinHeight={'6rem'} />
+          <hr className={companyStyles.storyDivider} />
 
           <article className={companyStyles.blogArticle}>
             <header className={companyStyles.articleHeader}>
@@ -243,6 +232,7 @@ export default async function CompanyPage({ params }) {
       {company.achievements?.length > 0 && (
         <section className={companyStyles.achievementsSection}>
           <HeaderFlex title="Milestones" color="black" desktopMaxWidth={'30%'} mobileMinHeight={'6rem'} />
+          <hr className={companyStyles.storyDivider} />
 
           <div className={companyStyles.timeline}>
             {[...company.achievements]

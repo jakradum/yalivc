@@ -43,6 +43,7 @@ const finalTeam = teamMembers;
 
   const getImagePath = (index) => {
     const member = finalTeam[index];
+    if (!member) return '/api/placeholder/400/400';
     const imagePath = member.photo || '/api/placeholder/400/400';
     if (imagePath.startsWith('http')) return imagePath;
     return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;

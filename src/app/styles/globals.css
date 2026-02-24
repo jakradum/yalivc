@@ -39,6 +39,41 @@ html, body {
    * - Tertiary (#c28d55 copper): Pie charts, supplementary visuals
    * - DO NOT use burgundy in pie charts - use secondary/tertiary only
    */
+
+  /* ============================================================
+   * SECTOR / CATEGORY COLORS — single source of truth
+   * Keyed by category slug (as set in Sanity).
+   * Used in: /investments company cards, LP portal pie chart,
+   *          and any future sector-level visualisation.
+   *
+   * ADDING A NEW SECTOR: add --sector-color-<slug> here.
+   * The company card and any chart that reads these vars will
+   * automatically pick up the new colour.
+   * ============================================================ */
+
+  /* Current 6 categories */
+  --sector-color-artificial-intelligence:    #d75d86;
+  --sector-color-robotics:                   #50e3c2;
+  --sector-color-fabless-semiconductor:      #f5a623;
+  --sector-color-smart-manufacturing:        #ebde84;
+  --sector-color-life-sciences:              #9f7ae4;
+  --sector-color-aerospace-and-surveillance: #66bdd4;
+
+  /* Legacy slug aliases — same hex as canonical category */
+  --sector-color-advanced-manufacturing:     #ebde84; /* → smart-manufacturing      */
+  --sector-color-genomics:                   #9f7ae4; /* → life-sciences            */
+  --sector-color-semiconductors:             #f5a623; /* → fabless-semiconductor    */
+  --sector-color-fabless-chip-design:        #f5a623; /* → fabless-semiconductor    */
+  --sector-color-defence:                    #66bdd4; /* → aerospace-and-surveillance */
+  --sector-color-aerospace:                  #66bdd4; /* → aerospace-and-surveillance */
+  --sector-color-strategic-tech:             #66bdd4; /* → aerospace-and-surveillance */
+  --sector-color-generative-ai:              #d75d86; /* → artificial-intelligence  */
+
+  /* Fallback for any unrecognised sector */
+  --sector-color-default: #c28d55;
+
+  /* Fixed second colour band on company portfolio cards (below the sector band) */
+  --sector-card-accent-band: #b84567;
 }
 
 body {

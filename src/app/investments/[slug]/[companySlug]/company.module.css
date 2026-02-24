@@ -247,6 +247,18 @@
   border: 1.5px solid #830D35;
 }
 
+/* Divider below "Behind the deal" title — extends to page borders */
+.storyDivider {
+  border: none;
+  height: 1px;
+  background-color: #363636;
+  margin: 0 0 2rem 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+}
+
 /* Horizontal Line */
 .horizontalLine {
   border: none;
