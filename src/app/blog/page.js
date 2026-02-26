@@ -1,6 +1,6 @@
-import styles from '../../about-yali/about-styles.module.css';
-import newsStyles from '../../newsroom/newscomponent.module.css';
-import HeaderFlex from '../../components/icons/headerflex';
+import styles from '../about-yali/about-styles.module.css';
+import newsStyles from '../newsroom/newscomponent.module.css';
+import HeaderFlex from '../components/icons/headerflex';
 import { getAllBlogPosts } from '@/lib/sanity-queries';
 import Link from 'next/link';
 
