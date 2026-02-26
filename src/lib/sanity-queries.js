@@ -266,7 +266,7 @@ export async function getContentByCompany(companySlug) {
       type: b.contentType || 'blog',
       date: b.publishedAt,
       title: b.title,
-      url: `/insights/blog/${b.slug.current}`,
+      url: `/blog/${b.slug.current}`,
       source: 'YALI Capital',
       isExternal: false,
     })),
@@ -312,7 +312,7 @@ export async function getContentByCategory(categorySlug) {
       type: b.contentType || 'blog',
       date: b.publishedAt,
       title: b.title,
-      url: `/insights/blog/${b.slug.current}`,
+      url: `/blog/${b.slug.current}`,
       source: 'YALI Capital',
       isExternal: false,
     })),
@@ -493,6 +493,18 @@ export async function getBlogCompanies() {
     `*[_type == "company" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
       _id,
       name
+    }`
+  );
+}
+
+export async function getPressReleases() {
+  return client.fetch(
+    `*[_type == "blogPost" && contentType == "press-release" && status == "published"] | order(publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      blurb,
+      publishedAt
     }`
   );
 }

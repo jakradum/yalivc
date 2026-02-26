@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
       post.metaDescription ||
       (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
     alternates: {
-      canonical: `https://yali.vc/insights/blog/${slug}/`,
+      canonical: `https://yali.vc/blog/${slug}/`,
     },
     ...(post.ogImage?.asset?.url && {
       openGraph: {
@@ -88,7 +88,7 @@ export default async function BlogPost({ params }) {
     <section>
       {/* Breadcrumb */}
       <div style={{ padding: '1rem 2rem', fontSize: '0.875rem', color: '#666' }}>
-        <Link href="/insights/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
+        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
           ← Blog
         </Link>
       </div>
@@ -217,7 +217,7 @@ export default async function BlogPost({ params }) {
 
       {/* Back link */}
       <div style={{ padding: '1rem 2rem', fontSize: '0.875rem' }}>
-        <Link href="/insights/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
+        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
           ← Back to Blog
         </Link>
       </div>

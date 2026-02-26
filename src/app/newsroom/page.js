@@ -4,8 +4,9 @@ import { NewsSVG } from '../components/icons/background svgs/newsSVG';
 import NewsSection from '../components/newssection';
 import NewsComponent  from './newscomponent.js';
 import PressMailingList from '../components/PressMailingList';
+import PressReleasesSection from './PressReleasesSection';
 
-import { getNews } from '@/lib/sanity-queries';
+import { getNews, getPressReleases } from '@/lib/sanity-queries';
 
 export const revalidate = 60;
 
@@ -19,7 +20,7 @@ export const metadata = {
 };
 
 export default async function Newsroom() {
-const news = await getNews();
+const [news, pressReleases] = await Promise.all([getNews(), getPressReleases()]);
 console.log('📰 page.js fetched news[0]:', news[0]);
 
     return (
@@ -40,6 +41,12 @@ console.log('📰 page.js fetched news[0]:', news[0]);
             <NewsSVG />
           </aside>
         </div>
+        <section id="press-release">
+          <div className={styles.people}>
+            <HeaderFlex title="Press Releases" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>
+          </div>
+          <PressReleasesSection releases={pressReleases} />
+        </section>
         <section id="team">
           <div className={styles.people}>
             <HeaderFlex title="About us in the news" color="black" desktopMaxWidth={'40%'} mobileMaxWidth={'90%'}/>

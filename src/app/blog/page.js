@@ -17,7 +17,7 @@ export const metadata = {
   description:
     "Insights, perspectives, and stories from the Yali Capital team on deep tech, venture capital, and India's innovation ecosystem.",
   alternates: {
-    canonical: 'https://yali.vc/insights/blog/',
+    canonical: 'https://yali.vc/blog/',
   },
 };
 
@@ -63,7 +63,7 @@ export default async function BlogListing() {
                       </span>
                     )}
                   </div>
-                  <Link href={`/insights/blog/${post.slug.current}`}>
+                  <Link href={`/blog/${post.slug.current}`}>
                     <p className={newsStyles.articleTitle}>{post.title}</p>
                   </Link>
                   {post.author && (

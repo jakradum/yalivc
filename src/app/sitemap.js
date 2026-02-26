@@ -66,7 +66,7 @@ export default async function sitemap() {
     blogPages = posts
       .filter(post => post.slug)
       .map((post) => ({
-        url: `${baseUrl}/insights/blog/${post.slug}/`,
+        url: `${baseUrl}/blog/${post.slug}/`,
         lastModified: post.publishedAt ? new Date(post.publishedAt) : new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
