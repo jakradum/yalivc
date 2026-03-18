@@ -16,6 +16,7 @@ import { ArtificialIntelligenceVector } from './icons/background svgs/category s
 import { AdvancedManufacturingVector } from './icons/background svgs/category svgs/advanced manufacturing vector';
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 import { urlFor } from '@/sanity/client';
+import { darkVectorBank } from './icons/background svgs/category svgs/dark-vector-bank';
 
 export const vectorUsageMap = {
   // New 6 categories
@@ -41,6 +42,7 @@ const CompanyTable = ({ companies }) => {
   const [currentCard, setCurrentCard] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [FillerVector, setFillerVector] = useState(() => darkVectorBank[0]);
 
   const buttonText = 'view more details';
  const minSwipeDistance = 50;
@@ -103,6 +105,11 @@ const CompanyTable = ({ companies }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const pick = darkVectorBank[Math.floor(Math.random() * darkVectorBank.length)];
+    setFillerVector(() => pick);
+  }, []);
+
   const renderDesktopLayout = () => (
     <>
       <div className={styles.sidebar}>
@@ -113,35 +120,46 @@ const CompanyTable = ({ companies }) => {
       </div>
       <table className={styles.companyTable}>
         <tbody>
-          {[0, 1].map((row) => (
-            <tr key={row}>
-              {companiesData.data.slice(row * 5, (row + 1) * 5).map((company, index) => (
-                <td key={index} className={styles.companyCell}>
-                    <article className={styles.companyContent}>
-                      <div className={styles.companyNumber}>
-                        <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
-                      </div>
-                      <h4 className={styles.companyTitle}>{company.name}</h4>
-                      <p className={styles.companyCategory}>{company.category?.name}</p>
-
-                      <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
-                      {company.logo && (
-                        <div className={styles.imagePlaceholder}>
-                          <Image
-                            src={urlFor(company.logo).width(100).url()}
-                            alt={company.name}
-                            width={100}
-                            height={100}
-                            style={{ objectFit: 'contain' }}
-                          />
+          {[0, 1].map((row) => {
+            const rowItems = companiesData.data.slice(row * 5, (row + 1) * 5);
+            const ghostCount = 5 - rowItems.length;
+            return (
+              <tr key={row}>
+                {rowItems.map((company, index) => (
+                  <td key={index} className={styles.companyCell}>
+                      <article className={styles.companyContent}>
+                        <div className={styles.companyNumber}>
+                          <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
                         </div>
-                      )}
-                      <p className={styles.companyOneLiner}>{company.oneLiner}</p>
-                    </article>
-                </td>
-              ))}
-            </tr>
-          ))}
+                        <h4 className={styles.companyTitle}>{company.name}</h4>
+                        <p className={styles.companyCategory}>{company.category?.name}</p>
+
+                        <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
+                        {company.logo && (
+                          <div className={styles.imagePlaceholder}>
+                            <Image
+                              src={urlFor(company.logo).width(100).url()}
+                              alt={company.name}
+                              width={100}
+                              height={100}
+                              style={{ objectFit: 'contain' }}
+                            />
+                          </div>
+                        )}
+                        <p className={styles.companyOneLiner}>{company.oneLiner}</p>
+                      </article>
+                  </td>
+                ))}
+                {ghostCount > 0 && (
+                  <td colSpan={ghostCount} className={styles.fillerCell}>
+                    <div className={styles.fillerVectorInner}>
+                      <FillerVector />
+                    </div>
+                  </td>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>

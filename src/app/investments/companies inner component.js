@@ -150,7 +150,13 @@ export const CompaniesInnerComponent = ({ companies, categories: sanityCategorie
         className={styles.companiesContainer}
         style={{ gridTemplateColumns: `repeat(${windowWidth > 0 ? getColumnCount(windowWidth) : 4}, 1fr)` }}
       >
-        {filteredCompanies.map((company, index) => {
+        {(() => {
+          const cols = windowWidth > 0 ? getColumnCount(windowWidth) : 4;
+          const remainder = filteredCompanies.length % cols;
+          const ghostCount = remainder === 0 ? 0 : cols - remainder;
+          return (
+            <>
+              {filteredCompanies.map((company, index) => {
           const categorySlug = company.category?.slug?.current;
           const companySlug = company.slug?.current;
           const href =
@@ -229,6 +235,12 @@ export const CompaniesInnerComponent = ({ companies, categories: sanityCategorie
             </div>
           );
         })}
+              {Array.from({ length: ghostCount }).map((_, i) => (
+                <div key={`ghost-${i}`} aria-hidden="true" style={{ visibility: 'hidden' }} />
+              ))}
+            </>
+          );
+        })()}
       </div>
     </div>
   );
