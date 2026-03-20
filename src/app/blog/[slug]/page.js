@@ -7,6 +7,7 @@ import Link from 'next/link';
 import styles from '../../about-yali/about-styles.module.css';
 import companyStyles from '../../investments/[slug]/[companySlug]/company.module.css';
 import teamLPstyles from '../../landing page styles/team.module.css';
+import ShareButtons from './ShareButtons';
 
 const CONTENT_TYPE_LABELS = {
   'blog': 'Blog Post',
@@ -87,7 +88,7 @@ export default async function BlogPost({ params }) {
   return (
     <section>
       {/* Breadcrumb */}
-      <div style={{ padding: '1rem 2rem', fontSize: '0.875rem', color: '#666' }}>
+      <div style={{ padding: '2.5rem 2rem 1rem', fontSize: '0.875rem', color: '#666' }}>
         <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
           ← Blog
         </Link>
@@ -142,8 +143,8 @@ export default async function BlogPost({ params }) {
                   <Image
                     src={post.author.photo}
                     alt={post.author.name}
-                    width={48}
-                    height={48}
+                    width={32}
+                    height={32}
                     className={companyStyles.authorPhoto}
                   />
                 )}
@@ -156,6 +157,7 @@ export default async function BlogPost({ params }) {
               <p className={companyStyles.articleDate}>{publishedDate}</p>
             )}
           </div>
+          <ShareButtons url={`https://yali.vc/blog/${slug}/`} title={post.title} />
         </header>
 
         <div className={companyStyles.articleBody} style={{ overflow: 'hidden' }}>

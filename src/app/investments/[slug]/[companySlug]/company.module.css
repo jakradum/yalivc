@@ -448,7 +448,7 @@
 .authorInfo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .authorPhoto {
@@ -458,6 +458,7 @@
 }
 
 .authorName {
+  font-size: 0.875rem;
   font-weight: 600;
   color: #830D35;
   margin: 0;
