@@ -18,7 +18,7 @@ export default function ShareButtons({ url, title }) {
 
       {/* X / Twitter */}
       <a
-        href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title + ' ' + url)}`}
         target="_blank"
         rel="noopener noreferrer"
         className={styles.btn}
@@ -31,7 +31,7 @@ export default function ShareButtons({ url, title }) {
 
       {/* LinkedIn */}
       <a
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`}
+        href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`}
         target="_blank"
         rel="noopener noreferrer"
         className={styles.btn}
