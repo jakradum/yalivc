@@ -96,7 +96,7 @@ export default async function BlogPost({ params }) {
       <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
         <header className={companyStyles.articleHeader}>
           {(post.contentType || post.categories?.length > 0) && (
-            <div style={{ marginBottom: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ marginBottom: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
               {post.contentType && (
                 <span
                   style={{
@@ -113,12 +113,12 @@ export default async function BlogPost({ params }) {
                 </span>
               )}
               {post.categories?.length > 0 && (
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginLeft: 'auto' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {post.categories.map((cat) => (
                     <span
                       key={cat._id}
                       style={{
-                        fontSize: '0.75rem',
+                        fontSize: '0.65rem',
                         fontWeight: '600',
                         color: '#830D35',
                         textTransform: 'uppercase',
@@ -149,9 +149,6 @@ export default async function BlogPost({ params }) {
                 )}
                 <div>
                   <p className={companyStyles.authorName}>{post.author.name}</p>
-                  {post.author.role && (
-                    <p className={companyStyles.authorRole}>{post.author.role}</p>
-                  )}
                 </div>
               </div>
             )}
@@ -194,9 +191,6 @@ export default async function BlogPost({ params }) {
             )}
             <div>
               <p className={companyStyles.authorName}>{post.author.name}</p>
-              {post.author.oneLiner && (
-                <p className={companyStyles.authorRole}>{post.author.oneLiner}</p>
-              )}
             </div>
             <a
               href={post.author.linkedIn}
