@@ -385,7 +385,8 @@ export async function getBlogPostBySlug(slug) {
       companies[]->{
         _id,
         name,
-        slug
+        slug,
+        category->{_id, name}
       },
       metaTitle,
       metaDescription,

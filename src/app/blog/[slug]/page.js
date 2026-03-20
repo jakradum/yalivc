@@ -77,6 +77,10 @@ export default async function BlogPost({ params }) {
     notFound();
   }
 
+  const displayCategories = post.contentType === 'press-release'
+    ? (post.companies || []).map((c) => c.category).filter(Boolean)
+    : (post.categories || []);
+
   const publishedDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -96,7 +100,7 @@ export default async function BlogPost({ params }) {
 
       <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
         <header className={companyStyles.articleHeader}>
-          {(post.contentType || post.categories?.length > 0) && (
+          {(post.contentType || displayCategories.length > 0) && (
             <div className={companyStyles.articleTagsRow}>
               {post.contentType && (
                 <span
@@ -113,9 +117,9 @@ export default async function BlogPost({ params }) {
                   {CONTENT_TYPE_LABELS[post.contentType] ?? post.contentType}
                 </span>
               )}
-              {post.categories?.length > 0 && (
+              {displayCategories.length > 0 && (
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {post.categories.map((cat) => (
+                  {displayCategories.map((cat) => (
                     <span
                       key={cat._id}
                       style={{
