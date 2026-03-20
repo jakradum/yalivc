@@ -97,7 +97,7 @@ export default async function BlogPost({ params }) {
       <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
         <header className={companyStyles.articleHeader}>
           {(post.contentType || post.categories?.length > 0) && (
-            <div style={{ marginBottom: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
+            <div className={companyStyles.articleTagsRow}>
               {post.contentType && (
                 <span
                   style={{
