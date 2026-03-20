@@ -61,7 +61,8 @@ export default {
       title: 'Related Categories',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'category'}]}],
-      description: 'Tag relevant investment categories'
+      description: 'Tag relevant investment categories',
+      hidden: ({document}) => document?.contentType === 'press-release'
     },
     {
       name: 'companies',
