@@ -92,7 +92,7 @@ export default async function BlogPost({ params }) {
   return (
     <section>
       {/* Breadcrumb */}
-      <div style={{ padding: '2.5rem 2rem 1rem', fontSize: '0.875rem', color: '#666' }}>
+      <div className={companyStyles.breadcrumb}>
         <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
           ← Blog
         </Link>

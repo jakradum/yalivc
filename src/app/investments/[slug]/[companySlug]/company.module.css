@@ -422,6 +422,12 @@
   border-bottom: 1px solid #363636;
 }
 
+.breadcrumb {
+  padding: 2.5rem 2rem 1rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
 .articleTagsRow {
   display: flex;
   align-items: center;
@@ -559,6 +565,10 @@
 @media (max-width: 768px) {
   .blogArticle {
     padding: 1rem;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-left: none;
+    border-right: none;
   }
 
   .articleTitle {
@@ -582,5 +592,9 @@
   .articleDate {
     margin-left: 0;
     width: 100%;
+  }
+
+  .breadcrumb {
+    padding: 2.5rem 1rem 1rem;
   }
 }
