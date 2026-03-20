@@ -425,6 +425,7 @@
 .articleTitle {
   font-size: 2rem;
   font-weight: 600;
+  font-family: var(--font-inter) !important;
   color: #363636;
   margin: 0 0 1.5rem 0;
   line-height: 1.3;
@@ -434,6 +435,14 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.articleDate {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+  margin-left: auto;
+  white-space: nowrap;
 }
 
 .authorInfo {
@@ -523,16 +532,38 @@
   font-style: italic;
 }
 
+.featuredImageFigure {
+  float: right;
+  width: 38%;
+  margin: 0 0 1.5rem 2rem;
+  border: 1px solid #e0e0e0;
+}
+
 @media (max-width: 768px) {
   .blogArticle {
     padding: 1rem;
   }
 
   .articleTitle {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 
   .articleBody {
     font-size: 1rem;
+  }
+
+  .featuredImageFigure {
+    float: none;
+    width: 100%;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .articleMeta {
+    flex-wrap: wrap;
+  }
+
+  .articleDate {
+    margin-left: 0;
+    width: 100%;
   }
 }

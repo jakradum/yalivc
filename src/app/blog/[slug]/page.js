@@ -156,19 +156,14 @@ export default async function BlogPost({ params }) {
               </div>
             )}
             {publishedDate && (
-              <p style={{ fontSize: '0.875rem', color: '#666', margin: 0, marginLeft: 'auto' }}>{publishedDate}</p>
+              <p className={companyStyles.articleDate}>{publishedDate}</p>
             )}
           </div>
         </header>
 
         <div className={companyStyles.articleBody} style={{ overflow: 'hidden' }}>
           {post.featuredImage?.asset?.url && (
-            <figure style={{
-              float: 'right',
-              width: '38%',
-              margin: '0 0 1.5rem 2rem',
-              border: '1px solid #e0e0e0',
-            }}>
+            <figure className={companyStyles.featuredImageFigure}>
               <Image
                 src={post.featuredImage.asset.url}
                 alt={post.featuredImage.alt || post.title}
