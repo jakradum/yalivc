@@ -132,6 +132,16 @@ a {
   font-family: var(--font-inter) !important;
 }
 
+/* Prose hyperlinks — applies to body copy, article content, etc. */
+p a,
+li a,
+blockquote a,
+figcaption a {
+  color: #830D35;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 code {
   font-family: var(--font-inter);
 }
