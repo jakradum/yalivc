@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
-import crypto from 'crypto';
+import { randomInt } from 'crypto';
 import { Resend } from 'resend';
 
 const WEBHOOK_SECRET = process.env.SANITY_INVITE_WEBHOOK_SECRET;
@@ -15,40 +15,17 @@ const writeClient = createClient({
   token: process.env.SANITY_WRITE_TOKEN,
 });
 
-// Validate Sanity webhook signature
-// Sanity signs with: HMAC-SHA256(`${timestamp}.${rawBody}`, secret)
-// Header format: `t=TIMESTAMP,v1=SIGNATURE`
-async function validateWebhookSignature(request, rawBody) {
-  if (!WEBHOOK_SECRET) return false;
-  const signatureHeader = request.headers.get('sanity-webhook-signature');
-  if (!signatureHeader) return false;
-
-  const parts = Object.fromEntries(signatureHeader.split(',').map(p => p.split('=')));
-  const { t: timestamp, v1: signature } = parts;
-  if (!timestamp || !signature) return false;
-
-  // Reject if timestamp is more than 5 minutes old
-  if (Math.abs(Date.now() - parseInt(timestamp, 10) * 1000) > 5 * 60 * 1000) return false;
-
-  const expected = crypto
-    .createHmac('sha256', WEBHOOK_SECRET)
-    .update(`${timestamp}.${rawBody}`)
-    .digest('hex');
-
-  return crypto.timingSafeEqual(Buffer.from(expected, 'hex'), Buffer.from(signature, 'hex'));
-}
-
 export async function POST(request) {
-  const rawBody = await request.text();
-
-  const isValid = await validateWebhookSignature(request, rawBody);
-  if (!isValid) {
-    return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });
+  // Validate via query-param secret (passed in the webhook URL)
+  const { searchParams } = new URL(request.url);
+  const incomingSecret = searchParams.get('secret');
+  if (!WEBHOOK_SECRET || !incomingSecret || incomingSecret !== WEBHOOK_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   let doc;
   try {
-    doc = JSON.parse(rawBody);
+    doc = await request.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
@@ -61,7 +38,7 @@ export async function POST(request) {
   }
 
   // Generate 6-digit invite code
-  const code = crypto.randomInt(100000, 999999).toString();
+  const code = randomInt(100000, 999999).toString();
   const expiry = new Date(Date.now() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000).toISOString();
 
   // Store code + expiry on the portalUser document
