@@ -68,7 +68,7 @@ export async function POST(request) {
   const normalizedEmail = email.toLowerCase().trim();
   const expiry = Date.now() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000;
   const token = buildInviteToken(normalizedEmail, expiry);
-  const magicLink = `https://yali.vc/api/portal-invite/?verify=${token}`;
+  const magicLink = `https://partners.yali.vc/api/portal-invite/?verify=${token}`;
 
   const resend = new Resend(RESEND_API_KEY);
   try {
@@ -123,19 +123,18 @@ export async function GET(request) {
   const token = searchParams.get('verify');
 
   if (!AUTH_SECRET || !token) {
-    return NextResponse.redirect(new URL('/partners/sign-in', request.url));
+    return NextResponse.redirect('https://partners.yali.vc/sign-in');
   }
 
   const email = verifyInviteToken(token);
   if (!email) {
-    // Expired or tampered — redirect to sign-in with error hint
-    return NextResponse.redirect(new URL('/partners/sign-in?expired=1', request.url));
+    return NextResponse.redirect('https://partners.yali.vc/sign-in?expired=1');
   }
 
   const sessionTimestamp = Date.now().toString();
   const sessionValue = signSession(email, sessionTimestamp);
 
-  const response = NextResponse.redirect(new URL('/partners/', request.url));
+  const response = NextResponse.redirect('https://partners.yali.vc/');
   response.cookies.set('portal-session', sessionValue, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
