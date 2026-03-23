@@ -29,6 +29,21 @@ const portalUser = {
       initialValue: false,
       description: 'Check if this LP should see GIFT City-specific fund financials',
     },
+    // System fields — managed by the invite API, not editable in Studio
+    {
+      name: 'inviteCode',
+      title: 'Invite Code',
+      type: 'string',
+      hidden: true,
+      readOnly: true,
+    },
+    {
+      name: 'inviteCodeExpiry',
+      title: 'Invite Code Expiry',
+      type: 'string',
+      hidden: true,
+      readOnly: true,
+    },
   ],
   preview: {
     select: {

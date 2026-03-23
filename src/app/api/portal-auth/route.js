@@ -177,28 +177,75 @@ export async function POST(request) {
       }
 
       const otpCookie = request.cookies.get(OTP_COOKIE)?.value;
-      if (!otpCookie) {
+
+      // --- Path A: standard OTP cookie flow ---
+      if (otpCookie) {
+        const [storedEmail, storedTimestamp, storedSignature] = otpCookie.split(':');
+
+        const elapsed = Date.now() - parseInt(storedTimestamp, 10);
+        if (elapsed > OTP_EXPIRY * 1000) {
+          return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
+        }
+
+        const expectedSignature = signOTP(storedEmail, code, storedTimestamp);
+        if (!timingSafeEqual(expectedSignature, storedSignature)) {
+          return NextResponse.json({ error: 'Invalid code' }, { status: 401 });
+        }
+
+        const sessionTimestamp = Date.now().toString();
+        const sessionValue = signSession(storedEmail, sessionTimestamp);
+        const response = NextResponse.json({ success: true });
+        response.cookies.set(COOKIE_NAME, sessionValue, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: COOKIE_MAX_AGE,
+          path: '/',
+        });
+        response.cookies.delete(OTP_COOKIE);
+        return response;
+      }
+
+      // --- Path B: invite code flow (no OTP cookie) ---
+      if (!email) {
         return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
       }
 
-      const [storedEmail, storedTimestamp, storedSignature] = otpCookie.split(':');
+      const normalizedEmail = email.toLowerCase().trim();
+      const user = await client.fetch(
+        `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{
+          _id, inviteCode, inviteCodeExpiry
+        }`,
+        { email: normalizedEmail }
+      );
 
-      // Check expiry
-      const elapsed = Date.now() - parseInt(storedTimestamp, 10);
-      if (elapsed > OTP_EXPIRY * 1000) {
+      if (!user?.inviteCode || !user?.inviteCodeExpiry) {
         return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
       }
 
-      // Verify the submitted code matches using constant-time comparison
-      const expectedSignature = signOTP(storedEmail, code, storedTimestamp);
-      if (!timingSafeEqual(expectedSignature, storedSignature)) {
+      if (new Date(user.inviteCodeExpiry) < new Date()) {
+        return NextResponse.json({ error: 'Invite code has expired. Please contact your fund manager.' }, { status: 401 });
+      }
+
+      // Constant-time comparison (pad to equal length)
+      const a = Buffer.from(code.trim().padEnd(32));
+      const b = Buffer.from(user.inviteCode.padEnd(32));
+      if (!crypto.timingSafeEqual(a, b) || code.trim() !== user.inviteCode) {
         return NextResponse.json({ error: 'Invalid code' }, { status: 401 });
       }
 
-      // Set long-lived session cookie
-      const sessionTimestamp = Date.now().toString();
-      const sessionValue = signSession(storedEmail, sessionTimestamp);
+      // Clear the invite code — one-time use only
+      const writeClient = createClient({
+        projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+        dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+        apiVersion: '2024-01-01',
+        useCdn: false,
+        token: process.env.SANITY_WRITE_TOKEN,
+      });
+      await writeClient.patch(user._id).unset(['inviteCode', 'inviteCodeExpiry']).commit();
 
+      const sessionTimestamp = Date.now().toString();
+      const sessionValue = signSession(normalizedEmail, sessionTimestamp);
       const response = NextResponse.json({ success: true });
       response.cookies.set(COOKIE_NAME, sessionValue, {
         httpOnly: true,
@@ -207,9 +254,6 @@ export async function POST(request) {
         maxAge: COOKIE_MAX_AGE,
         path: '/',
       });
-      // Clear the OTP cookie
-      response.cookies.delete(OTP_COOKIE);
-
       return response;
     }
 
