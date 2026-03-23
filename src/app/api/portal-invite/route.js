@@ -1,26 +1,53 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
-import { randomInt } from 'crypto';
+import crypto from 'crypto';
 import { Resend } from 'resend';
 
 const WEBHOOK_SECRET = process.env.SANITY_INVITE_WEBHOOK_SECRET;
+const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 24;
+const COOKIE_NAME = 'portal-session';
+const COOKIE_MAX_AGE = 30 * 24 * 60 * 60;
 
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
+// Build a stateless signed token: base64url({ email, expiry }) + '.' + hmac
+function buildInviteToken(email, expiry) {
+  const payload = Buffer.from(JSON.stringify({ email, expiry })).toString('base64url');
+  const sig = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
 
+function verifyInviteToken(token) {
+  const dot = token.lastIndexOf('.');
+  if (dot === -1) return null;
+  const payload = token.slice(0, dot);
+  const sig = token.slice(dot + 1);
+  const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
+  if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig))) return null;
+  try {
+    const { email, expiry } = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    if (Date.now() > expiry) return null;
+    return email;
+  } catch {
+    return null;
+  }
+}
+
+function signSession(email, timestamp) {
+  const data = `${email}:${timestamp}`;
+  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(data).digest('hex');
+  return `${data}:${signature}`;
+}
+
+// POST — Sanity webhook: generate invite token and send email
 export async function POST(request) {
-  // Validate via query-param secret (passed in the webhook URL)
   const { searchParams } = new URL(request.url);
   const incomingSecret = searchParams.get('secret');
   if (!WEBHOOK_SECRET || !incomingSecret || incomingSecret !== WEBHOOK_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (!AUTH_SECRET) {
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   let doc;
@@ -30,68 +57,52 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // Sanity sends the document as the payload body
-  const { _id, _type, email, name, isActive } = doc;
+  // Handle both direct document payload and wrapped { result: {...} } format
+  const record = doc?.result ?? doc;
+  const { _type, email, name, isActive } = record ?? {};
 
   if (_type !== 'portalUser' || !email || !isActive) {
     return NextResponse.json({ skipped: true });
   }
 
-  // Generate 6-digit invite code
-  const code = randomInt(100000, 999999).toString();
-  const expiry = new Date(Date.now() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000).toISOString();
+  const normalizedEmail = email.toLowerCase().trim();
+  const expiry = Date.now() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000;
+  const token = buildInviteToken(normalizedEmail, expiry);
+  const magicLink = `https://yali.vc/api/portal-invite/?verify=${token}`;
 
-  // Store code + expiry on the portalUser document
-  try {
-    await writeClient
-      .patch(_id)
-      .set({ inviteCode: code, inviteCodeExpiry: expiry })
-      .commit();
-  } catch (err) {
-    console.error('Failed to store invite code in Sanity:', err);
-    return NextResponse.json({ error: 'Failed to store invite code' }, { status: 500 });
-  }
-
-  // Send invite email
   const resend = new Resend(RESEND_API_KEY);
   try {
     await resend.emails.send({
       from: 'Yali Partners <noreply@yali.vc>',
-      to: email.toLowerCase().trim(),
+      to: normalizedEmail,
       subject: "You've been invited to view the Yali Limited Partners' Report",
       html: `
         <div style="font-family: 'Inter', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff;">
-          <!-- Letterhead -->
-          <div style="border-bottom: 1px solid #e0e0e0; padding: 24px 0; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="border-bottom: 1px solid #e0e0e0; padding: 24px 0; margin-bottom: 24px;">
             <img src="https://yali.vc/yali-logo.png" alt="Yali Partners" style="height: 36px; width: auto;" />
-            <div style="text-align: right;">
-              <div style="font-size: 14px; font-weight: 600; color: #830D35;">Yali Partners LLP</div>
-              <div style="font-size: 12px; color: #666;">Limited Partners' Reports</div>
-            </div>
           </div>
 
-          <!-- Body -->
           <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">Hi${name ? ` ${name}` : ''},</p>
           <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">You've been invited to view the Yali Limited Partners' Report.</p>
           <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 24px 0;">
-            Use <strong>${email.toLowerCase().trim()}</strong> to log in, and the one-time code below to authenticate yourself. This code is valid for ${INVITE_EXPIRY_HOURS} hours.
+            Use the button below to access the portal. This link is valid for ${INVITE_EXPIRY_HOURS} hours and can only be used once.
           </p>
 
-          <!-- Code -->
-          <div style="background: #f5f5f5; padding: 24px; text-align: center; margin: 0 0 24px 0;">
-            <span style="font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; font-size: 32px; font-weight: 700; letter-spacing: 0.4em; color: #1a1a1a;">${code}</span>
+          <div style="text-align: center; margin: 0 0 32px 0;">
+            <a href="${magicLink}" style="display: inline-block; background: #830D35; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em;">Access Partners Portal</a>
           </div>
 
-          <!-- CTA -->
-          <div style="text-align: center; margin: 0 0 32px 0;">
-            <a href="https://yali.vc/partners/sign-in" style="display: inline-block; background: #830D35; color: #ffffff; text-decoration: none; padding: 12px 28px; font-size: 14px; font-weight: 600; letter-spacing: 0.02em;">Go to Partners Portal</a>
-          </div>
+          <p style="color: #666; font-size: 13px; line-height: 1.5; margin: 0 0 8px 0;">
+            Or copy this link into your browser:
+          </p>
+          <p style="color: #830D35; font-size: 12px; line-height: 1.5; margin: 0 0 32px 0; word-break: break-all;">
+            ${magicLink}
+          </p>
 
           <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 0 0 32px 0;">
             If you were not expecting this invitation, you can safely ignore this email.
           </p>
 
-          <!-- Footer -->
           <div style="border-top: 1px solid #e0e0e0; padding-top: 16px;">
             <p style="color: #999; font-size: 11px; line-height: 1.4; margin: 0; text-align: center;">This is a system-generated email. Please do not reply.</p>
           </div>
@@ -104,4 +115,33 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ success: true });
+}
+
+// GET — magic link click: validate token, create session, redirect to portal
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const token = searchParams.get('verify');
+
+  if (!AUTH_SECRET || !token) {
+    return NextResponse.redirect(new URL('/partners/sign-in', request.url));
+  }
+
+  const email = verifyInviteToken(token);
+  if (!email) {
+    // Expired or tampered — redirect to sign-in with error hint
+    return NextResponse.redirect(new URL('/partners/sign-in?expired=1', request.url));
+  }
+
+  const sessionTimestamp = Date.now().toString();
+  const sessionValue = signSession(email, sessionTimestamp);
+
+  const response = NextResponse.redirect(new URL('/partners/', request.url));
+  response.cookies.set('portal-session', sessionValue, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: COOKIE_MAX_AGE,
+    path: '/',
+  });
+  return response;
 }
