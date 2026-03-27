@@ -1,0 +1,687 @@
+/* ============================================================
+   LP Quarterly Report — Print / PDF Styles
+   A4: 210mm × 297mm
+   ============================================================ */
+
+/* ---- Screen preview ---- */
+@media screen {
+  .printWrap {
+    background: #e8e8e8;
+    padding: 24px 0 48px;
+    min-height: 100vh;
+  }
+
+  .printDoc {
+    max-width: 210mm;
+    margin: 0 auto;
+  }
+
+  .page {
+    background: #fff;
+    margin-bottom: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Floating top bar */
+  .printBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #1a1a1a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    gap: 16px;
+  }
+
+  .printBarTitle {
+    font-weight: 500;
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .printBarActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .printBarBack {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .printBarBack:hover {
+    color: #fff;
+  }
+
+  .printBarBtn {
+    background: #830D35;
+    color: #fff;
+    border: none;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  }
+
+  .printBarBtn:hover {
+    background: #6b0b2b;
+  }
+
+  /* Push content below fixed bar */
+  .printWrap {
+    padding-top: 60px;
+  }
+}
+
+/* ---- Print / PDF ---- */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .printBar {
+    display: none !important;
+  }
+
+  .printWrap {
+    background: white;
+    padding: 0;
+  }
+
+  .printDoc {
+    max-width: none;
+  }
+
+  .page {
+    box-shadow: none;
+  }
+}
+
+/* ============================================================
+   Page base
+   ============================================================ */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+  padding: 16mm 18mm;
+  position: relative;
+  break-after: page;
+  page-break-after: always;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 9.5pt;
+  color: #363636;
+  line-height: 1.5;
+}
+
+/* Last page — no forced page break */
+.page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+/* ============================================================
+   Cover Page
+   ============================================================ */
+.coverPage {
+  background-color: #830D35;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20mm 18mm;
+}
+
+.coverTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.coverLogo {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 36pt;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #fff;
+  margin: 0;
+  line-height: 1;
+}
+
+.coverConfidential {
+  font-size: 7.5pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+.coverCenter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24mm 0 12mm;
+}
+
+.coverReportLabel {
+  font-size: 10pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin: 0 0 8px;
+}
+
+.coverTitle {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 28pt;
+  font-weight: 700;
+  margin: 0 0 6px;
+  line-height: 1.1;
+}
+
+.coverSubtitle {
+  font-size: 16pt;
+  font-weight: 400;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.coverFooter {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 10mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.coverFundName {
+  font-size: 9pt;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.coverDate {
+  font-size: 9pt;
+  opacity: 0.6;
+  margin: 0;
+  text-align: right;
+}
+
+/* ============================================================
+   Running header / footer (non-cover pages)
+   ============================================================ */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #830D35;
+  padding-bottom: 5mm;
+  margin-bottom: 7mm;
+}
+
+.pageHeaderLogo {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #830D35;
+}
+
+.pageHeaderMeta {
+  font-size: 8pt;
+  color: #999;
+  letter-spacing: 0.05em;
+  text-align: right;
+}
+
+.pageFooter {
+  position: absolute;
+  bottom: 10mm;
+  left: 18mm;
+  right: 18mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 0.75px solid #e0e0e0;
+  padding-top: 3mm;
+  font-size: 7.5pt;
+  color: #bbb;
+}
+
+/* ============================================================
+   TOC Page
+   ============================================================ */
+.tocTitle {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 18pt;
+  font-weight: 700;
+  color: #830D35;
+  margin: 0 0 10mm;
+}
+
+.tocList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tocItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 0.75px solid #ebebeb;
+  font-size: 10pt;
+  color: #363636;
+}
+
+.tocItemNum {
+  width: 22px;
+  font-size: 8pt;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.tocItemTitle {
+  flex: 1;
+}
+
+/* ============================================================
+   Section headings
+   ============================================================ */
+.sectionTitle {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 15pt;
+  font-weight: 700;
+  color: #830D35;
+  margin: 0 0 6mm;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sectionSubtitle {
+  font-size: 8.5pt;
+  color: #888;
+  margin: -4mm 0 6mm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.h3 {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: #363636;
+  margin: 5mm 0 2mm;
+}
+
+/* ============================================================
+   Cover Note (letter)
+   ============================================================ */
+.coverNotePara {
+  font-size: 9.5pt;
+  line-height: 1.65;
+  color: #363636;
+  margin: 0 0 3.5mm;
+}
+
+.coverNoteGreeting {
+  font-size: 9.5pt;
+  line-height: 1.65;
+  color: #363636;
+  margin: 0 0 5mm;
+}
+
+.signatureBlock {
+  margin-top: 10mm;
+}
+
+.sigName {
+  font-weight: 600;
+  font-size: 9.5pt;
+  margin: 0 0 1mm;
+}
+
+.sigRole {
+  font-size: 8.5pt;
+  color: #666;
+  margin: 0;
+}
+
+.sigPhoto {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 3mm;
+  display: block;
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+}
+
+.table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #830D35;
+  border-bottom: 1.5px solid #830D35;
+  padding: 3mm 2mm 2mm;
+}
+
+.table th.right,
+.table th.right {
+  text-align: right;
+}
+
+.table td {
+  padding: 2.5mm 2mm;
+  border-bottom: 0.5px solid #ebebeb;
+  vertical-align: top;
+}
+
+.table td.right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table td.bold {
+  font-weight: 600;
+}
+
+/* Standalone utility classes used via styles.right / styles.bold */
+.right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.tableFootnote {
+  font-size: 7.5pt;
+  color: #888;
+  margin-top: 2mm;
+  line-height: 1.4;
+}
+
+/* Fund summary — two-column label/value */
+.fundRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 2.5mm 0;
+  border-bottom: 0.5px solid #ebebeb;
+  font-size: 8.5pt;
+  gap: 8mm;
+}
+
+.fundRowLabel {
+  color: #555;
+  flex: 1;
+}
+
+.fundRowValue {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.fundMetricHighlight {
+  background: #830D35;
+  color: #fff;
+  border-radius: 2px;
+  padding: 1px 6px;
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+/* ============================================================
+   Per-company card
+   ============================================================ */
+.companyPage {
+  /* Inherits .page — one company per page */
+}
+
+.companyHeader {
+  display: flex;
+  align-items: center;
+  gap: 5mm;
+  margin-bottom: 6mm;
+}
+
+.companyLogo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border: 0.5px solid #e0e0e0;
+}
+
+.companyLogoPlaceholder {
+  width: 44px;
+  height: 44px;
+  background: #830D35;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.companyName {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 14pt;
+  font-weight: 700;
+  color: #830D35;
+  margin: 0 0 1mm;
+}
+
+.companyOneliner {
+  font-size: 8.5pt;
+  color: #666;
+  margin: 0;
+}
+
+.companyBody {
+  display: flex;
+  gap: 8mm;
+}
+
+.companyLeft {
+  flex: 1;
+  min-width: 0;
+}
+
+.companyRight {
+  width: 58mm;
+  flex-shrink: 0;
+}
+
+.companyAboutLabel {
+  font-size: 7pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin: 0 0 1.5mm;
+}
+
+.companyAboutText {
+  font-size: 8.5pt;
+  color: #444;
+  line-height: 1.55;
+  margin: 0 0 3mm;
+}
+
+.updateNotesLabel {
+  font-size: 7pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin: 4mm 0 1.5mm;
+}
+
+.updateNotesText {
+  font-size: 8.5pt;
+  color: #444;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.keyMetricsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.keyMetricItem {
+  font-size: 8pt;
+  color: #555;
+  padding: 1.5mm 0;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+
+/* ============================================================
+   Pipeline
+   ============================================================ */
+.pipelineRow td:first-child {
+  font-weight: 600;
+}
+
+.pipelineNotes {
+  font-size: 8.5pt;
+  color: #555;
+  line-height: 1.6;
+  margin: 4mm 0 0;
+}
+
+/* ============================================================
+   Media
+   ============================================================ */
+.mediaItem {
+  display: flex;
+  gap: 5mm;
+  padding: 3mm 0;
+  border-bottom: 0.5px solid #ebebeb;
+  align-items: baseline;
+}
+
+.mediaDate {
+  font-size: 7.5pt;
+  color: #999;
+  white-space: nowrap;
+  width: 16mm;
+  flex-shrink: 0;
+}
+
+.mediaContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.mediaTitle {
+  font-size: 8.5pt;
+  color: #363636;
+  margin: 0 0 0.5mm;
+  line-height: 1.4;
+}
+
+.mediaPub {
+  font-size: 7.5pt;
+  color: #999;
+  margin: 0;
+}
+
+/* ============================================================
+   Contact / Back page
+   ============================================================ */
+.contactPage {
+  background-color: #830D35;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20mm 18mm;
+}
+
+.contactLogo {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 36pt;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #fff;
+  margin: 0 0 12mm;
+}
+
+.contactInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4mm;
+}
+
+.contactRow {
+  font-size: 9.5pt;
+  opacity: 0.85;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.contactLink {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.disclaimer {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  padding-top: 8mm;
+  font-size: 7pt;
+  opacity: 0.55;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================================
+   Divider
+   ============================================================ */
+.divider {
+  border: none;
+  border-top: 0.75px solid #ebebeb;
+  margin: 5mm 0;
+}
+
+.sectionSpacer {
+  height: 6mm;
+}
