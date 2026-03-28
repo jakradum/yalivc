@@ -36,6 +36,19 @@ const portalUser = {
       initialValue: false,
       description: 'Grant access to dataroom.yali.vc. isActive must also be true. Disable to revoke data room access without affecting portal access.',
     },
+    {
+      name: 'source',
+      title: 'Source',
+      type: 'string',
+      initialValue: 'portal',
+      description: 'How this user was onboarded — portal (LP portal invite) or dataroom (data room import)',
+      options: {
+        list: [
+          { title: 'Portal', value: 'portal' },
+          { title: 'Data Room', value: 'dataroom' },
+        ],
+      },
+    },
     // System fields — managed by the invite API, not editable in Studio
     {
       name: 'inviteCode',

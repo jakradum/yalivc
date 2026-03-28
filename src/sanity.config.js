@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
 import { SendBetaTestAction } from './sanity/actions/sendBetaTestAction';
+import { SendDataroomInviteAction } from './sanity/actions/sendDataroomInviteAction';
 
 export default defineConfig({
   name: 'default',
@@ -123,6 +124,9 @@ export default defineConfig({
     actions: (prev, { schemaType }) => {
       if (schemaType === 'newsletter') {
         return [...prev, SendBetaTestAction];
+      }
+      if (schemaType === 'portalUser') {
+        return [...prev, SendDataroomInviteAction];
       }
       return prev;
     },
