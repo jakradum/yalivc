@@ -11,11 +11,13 @@ export function InviteButtons() {
   const [portalStatus, setPortalStatus] = useState('idle');
   const [dataroomStatus, setDataroomStatus] = useState('idle');
 
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://yali.vc';
+
   const sendPortalInvite = async () => {
     if (portalStatus === 'loading') return;
     setPortalStatus('loading');
     try {
-      const res = await fetch('/api/portal-invite-manual/', {
+      const res = await fetch(`${origin}/api/portal-invite-manual/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),
@@ -35,7 +37,7 @@ export function InviteButtons() {
     if (dataroomStatus === 'loading') return;
     setDataroomStatus('loading');
     try {
-      const res = await fetch('/api/dataroom-invite-manual/', {
+      const res = await fetch(`${origin}/api/dataroom-invite-manual/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),

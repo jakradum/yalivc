@@ -8,6 +8,16 @@ const INVITE_EXPIRY_HOURS = 72; // 3 days for manually-sent invites
 const COOKIE_NAME = 'dataroom-session';
 const COOKIE_MAX_AGE = 6 * 30 * 24 * 60 * 60;
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': 'https://yali.vc',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 function buildInviteToken(email, expiry) {
   const payload = Buffer.from(JSON.stringify({ email, expiry })).toString('base64url');
   const sig = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
@@ -39,19 +49,19 @@ function signSession(email, timestamp) {
 // POST — called from Sanity Studio action to send a manual invite
 export async function POST(request) {
   if (!AUTH_SECRET) {
-    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500, headers: CORS_HEADERS });
   }
 
   let body;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: CORS_HEADERS });
   }
 
   const { email, name } = body ?? {};
   if (!email) {
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    return NextResponse.json({ error: 'Email is required' }, { status: 400, headers: CORS_HEADERS });
   }
 
   const normalizedEmail = email.toLowerCase().trim();
@@ -105,10 +115,10 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error('Failed to send dataroom invite email:', err);
-    return NextResponse.json({ error: 'Failed to send invite email' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to send invite email' }, { status: 500, headers: CORS_HEADERS });
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true }, { headers: CORS_HEADERS });
 }
 
 // GET — reuse same magic link verification as /api/dataroom-invite
