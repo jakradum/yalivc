@@ -121,15 +121,15 @@ export async function POST(request) {
 <div class="wrapper">
   <div class="header">
     <div class="header-tag">LP Portal</div>
-    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 28px; width: auto;" />
   </div>
   <div class="hero">
+    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="position: absolute; top: 20px; right: 32px; height: 24px; width: auto; filter: brightness(0) invert(1);" />
     <div class="hero-label">Investor Access</div>
     <div class="hero-title">You&#8217;ve been invited to view the <span>LP Portal</span></div>
   </div>
   <div class="body">
     <p class="greeting">
-      This email is an invitation to access the Yali Capital LP Portal &#8212; a private, secure environment built exclusively for our limited partners. Inside, you will find:
+      This email is an invitation to access the Yali Capital LP Portal: a secure environment built exclusively for our limited partners. Inside, you will find:
     </p>
     <div class="section-label">What&#8217;s inside</div>
     <ul class="feature-list">

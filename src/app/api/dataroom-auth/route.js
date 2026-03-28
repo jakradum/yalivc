@@ -170,9 +170,9 @@ export async function POST(request) {
 <div class="wrapper">
   <div class="header">
     <div class="header-tag">Data Room</div>
-    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 28px; width: auto;" />
   </div>
   <div class="hero">
+    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="position: absolute; top: 20px; right: 32px; height: 24px; width: auto; filter: brightness(0) invert(1);" />
     <div class="hero-label">Sign-In Code</div>
     <div class="hero-title">Your one-time <span>access code</span></div>
   </div>

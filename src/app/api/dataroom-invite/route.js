@@ -125,15 +125,14 @@ export async function POST(request) {
 <div class="wrapper">
   <div class="header">
     <div class="header-tag">Data Room</div>
-    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 28px; width: auto;" />
   </div>
   <div class="hero">
-    <div class="hero-label">Due Diligence Access</div>
+    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="position: absolute; top: 20px; right: 32px; height: 24px; width: auto; filter: brightness(0) invert(1);" />
     <div class="hero-title">You&#8217;ve been invited to view the <span>Data Room</span></div>
   </div>
   <div class="body">
     <p class="greeting">
-      This email is an invitation to access the Yali Capital Data Room &#8212; a secure, private environment for prospective and existing limited partners conducting due diligence. Inside, you will find:
+      This email is an invitation to access the Yali Capital Data Room: a secure environment for prospective and existing limited partners to view our fund details. Inside, you will find:
     </p>
     <div class="section-label">What&#8217;s inside</div>
     <ul class="feature-list">
