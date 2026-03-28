@@ -108,6 +108,11 @@ export default defineConfig({
                       .child(S.documentTypeList('dataRoomDocument').title('Data Room Documents')),
                   ])
               ),
+            S.divider(),
+            // Track Record
+            S.listItem()
+              .title('Track Record')
+              .child(S.documentTypeList('trackRecord').title('Track Record')),
           ]),
     }),
     visionTool(),
