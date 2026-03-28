@@ -9,21 +9,23 @@ export function SendPortalInviteAction(props) {
 
   if (!doc) return null;
 
-  const { email, name, isActive } = doc;
+  const { email, name } = doc;
+  const isActive = doc.isActive === true;
+  const notReady = !isActive;
 
-  const isDisabled = !isActive || status === 'loading';
-
-  const disabledReason = !isActive ? 'Activate this user first' : null;
+  const idleLabel = notReady
+    ? '✉ Send Portal Invite — Activate user first'
+    : '✉ Send Portal Invite';
 
   const label = {
-    idle: '✉ Send Portal Invite',
+    idle: idleLabel,
     loading: 'Sending...',
     success: 'Invite sent!',
     error: errorMsg ? `Error: ${errorMsg}` : 'Failed — retry?',
   }[status];
 
   const handle = async () => {
-    if (isDisabled) return;
+    if (status === 'loading' || notReady) return;
     setStatus('loading');
 
     try {
@@ -47,9 +49,9 @@ export function SendPortalInviteAction(props) {
   };
 
   return {
-    label: disabledReason ? `✉ Send Portal Invite — ${disabledReason}` : label,
+    label,
     tone: status === 'error' ? 'critical' : status === 'success' ? 'positive' : 'default',
     onHandle: handle,
-    disabled: isDisabled,
+    disabled: status === 'loading',
   };
 }

@@ -9,25 +9,24 @@ export function SendDataroomInviteAction(props) {
 
   if (!doc) return null;
 
-  const { email, name, isActive, dataRoomAccess } = doc;
+  const { email, name } = doc;
+  const isActive = doc.isActive === true;
+  const dataRoomAccess = doc.dataRoomAccess === true;
+  const notReady = !isActive || !dataRoomAccess;
 
-  const isDisabled = !isActive || !dataRoomAccess || status === 'loading';
-
-  const disabledReason = !dataRoomAccess
-    ? 'Enable Data Room Access first'
-    : !isActive
-    ? 'Activate this user first'
-    : null;
+  const idleLabel = notReady
+    ? `✉ Send Data Room Invite — ${!dataRoomAccess ? 'Enable Data Room Access first' : 'Activate user first'}`
+    : '✉ Send Data Room Invite';
 
   const label = {
-    idle: '✉ Send Data Room Invite',
+    idle: idleLabel,
     loading: 'Sending...',
     success: 'Invite sent!',
     error: errorMsg ? `Error: ${errorMsg}` : 'Failed — retry?',
   }[status];
 
   const handle = async () => {
-    if (isDisabled) return;
+    if (status === 'loading' || notReady) return;
     setStatus('loading');
 
     try {
@@ -51,9 +50,9 @@ export function SendDataroomInviteAction(props) {
   };
 
   return {
-    label: disabledReason ? `✉ Send Data Room Invite — ${disabledReason}` : label,
+    label,
     tone: status === 'error' ? 'critical' : status === 'success' ? 'positive' : 'default',
     onHandle: handle,
-    disabled: isDisabled,
+    disabled: status === 'loading',
   };
 }
