@@ -1,6 +1,18 @@
 import { useState } from 'react';
-import { Button, Flex, Text, Box } from '@sanity/ui';
 import { useFormValue } from 'sanity';
+
+const btnStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '6px 14px',
+  fontSize: '13px',
+  fontFamily: 'inherit',
+  fontWeight: 500,
+  border: '1px solid currentColor',
+  borderRadius: '3px',
+  cursor: 'pointer',
+  background: 'transparent',
+};
 
 export function InviteButtons() {
   const email = useFormValue(['email']);
@@ -69,23 +81,31 @@ export function InviteButtons() {
     '✉ Send Data Room Invite';
 
   return (
-    <Box padding={1}>
-      <Flex gap={3} wrap="wrap">
-        <Button
-          text={portalLabel}
-          tone={portalStatus === 'error' ? 'critical' : portalStatus === 'success' ? 'positive' : 'default'}
-          mode="ghost"
-          disabled={!isActive || portalStatus === 'loading'}
-          onClick={sendPortalInvite}
-        />
-        <Button
-          text={dataroomLabel}
-          tone={dataroomStatus === 'error' ? 'critical' : dataroomStatus === 'success' ? 'positive' : 'default'}
-          mode="ghost"
-          disabled={!isActive || !dataRoomAccess || dataroomStatus === 'loading'}
-          onClick={sendDataroomInvite}
-        />
-      </Flex>
-    </Box>
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', padding: '4px 0' }}>
+      <button
+        type="button"
+        style={{
+          ...btnStyle,
+          opacity: !isActive || portalStatus === 'loading' ? 0.4 : 1,
+          color: portalStatus === 'success' ? '#2e7d32' : portalStatus === 'error' ? '#c62828' : '#4b5563',
+        }}
+        disabled={!isActive || portalStatus === 'loading'}
+        onClick={sendPortalInvite}
+      >
+        {portalLabel}
+      </button>
+      <button
+        type="button"
+        style={{
+          ...btnStyle,
+          opacity: !isActive || !dataRoomAccess || dataroomStatus === 'loading' ? 0.4 : 1,
+          color: dataroomStatus === 'success' ? '#2e7d32' : dataroomStatus === 'error' ? '#c62828' : '#4b5563',
+        }}
+        disabled={!isActive || !dataRoomAccess || dataroomStatus === 'loading'}
+        onClick={sendDataroomInvite}
+      >
+        {dataroomLabel}
+      </button>
+    </div>
   );
 }
