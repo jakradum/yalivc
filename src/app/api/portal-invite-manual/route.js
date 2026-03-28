@@ -5,8 +5,6 @@ import { Resend } from 'resend';
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 72; // 3 days for manually-sent invites
-const COOKIE_NAME = 'portal-session';
-const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': 'https://yali.vc',
@@ -24,27 +22,6 @@ function buildInviteToken(email, expiry) {
   return `${payload}.${sig}`;
 }
 
-function verifyInviteToken(token) {
-  const dot = token.lastIndexOf('.');
-  if (dot === -1) return null;
-  const payload = token.slice(0, dot);
-  const sig = token.slice(dot + 1);
-  const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
-  if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig))) return null;
-  try {
-    const { email, expiry } = JSON.parse(Buffer.from(payload, 'base64url').toString());
-    if (Date.now() > expiry) return null;
-    return email;
-  } catch {
-    return null;
-  }
-}
-
-function signSession(email, timestamp) {
-  const data = `${email}:${timestamp}`;
-  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(data).digest('hex');
-  return `${data}:${signature}`;
-}
 
 // POST — called from Sanity Studio action to send a manual portal invite
 export async function POST(request) {
@@ -67,7 +44,7 @@ export async function POST(request) {
   const normalizedEmail = email.toLowerCase().trim();
   const expiry = Date.now() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000;
   const token = buildInviteToken(normalizedEmail, expiry);
-  const magicLink = `https://partners.yali.vc/api/portal-invite-manual/?verify=${token}`;
+  const magicLink = `https://partners.yali.vc/api/portal-invite/?verify=${token}`;
 
   const resend = new Resend(RESEND_API_KEY);
   try {
@@ -110,32 +87,4 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ success: true }, { headers: CORS_HEADERS });
-}
-
-// GET — magic link click: validate token, set session cookie, redirect to portal
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('verify');
-
-  if (!AUTH_SECRET || !token) {
-    return NextResponse.redirect('https://partners.yali.vc/sign-in');
-  }
-
-  const email = verifyInviteToken(token);
-  if (!email) {
-    return NextResponse.redirect('https://partners.yali.vc/sign-in?expired=1');
-  }
-
-  const sessionTimestamp = Date.now().toString();
-  const sessionValue = signSession(email, sessionTimestamp);
-
-  const response = NextResponse.redirect('https://partners.yali.vc/');
-  response.cookies.set(COOKIE_NAME, sessionValue, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: COOKIE_MAX_AGE,
-    path: '/',
-  });
-  return response;
 }
