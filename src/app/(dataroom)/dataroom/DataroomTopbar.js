@@ -1,0 +1,23 @@
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import styles from './dataroom.module.css';
+import SignOutButton from './SignOutButton';
+
+export default async function DataroomTopbar() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('dataroom-session')?.value;
+  const email = session ? session.split(':')[0] : null;
+
+  return (
+    <div className={styles.topbar}>
+      <Link href="/" className={styles.logo}>
+        Yali<span className={styles.logoDot}>.</span>Capital
+        <span className={styles.portalTag}>/ Data Room</span>
+      </Link>
+      <div className={styles.topbarRight}>
+        {email && <span className={styles.userEmail}>{email}</span>}
+        <SignOutButton />
+      </div>
+    </div>
+  );
+}
