@@ -64,6 +64,27 @@ export default async function middleware(request) {
     return NextResponse.redirect(newUrl, 301);
   }
 
+  // CORS for manual invite routes — called from Sanity Studio (cross-origin fetch)
+  const isManualInviteRoute =
+    url.pathname.startsWith('/api/dataroom-invite-manual') ||
+    url.pathname.startsWith('/api/portal-invite-manual');
+
+  if (isManualInviteRoute) {
+    if (request.method === 'OPTIONS') {
+      return new NextResponse(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        },
+      });
+    }
+    const res = NextResponse.next();
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
+  }
+
   // Skip middleware for static files, API routes, and console
   if (
     url.pathname.startsWith('/_next') ||
