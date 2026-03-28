@@ -122,7 +122,7 @@ export async function POST(request) {
     </ul>
     <div class="cta-block">
       <div class="cta-label">Access the data room</div>
-      <a href="${magicLink}" class="cta-button">Click to Access Data Room</a>
+      <a href="${magicLink}" class="cta-button" style="color: #efefef !important;">Click to Access Data Room</a>
     </div>
     <div class="access-note">
       <p>

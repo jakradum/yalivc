@@ -140,7 +140,7 @@ export async function POST(request) {
     </ul>
     <div class="cta-block">
       <div class="cta-label">Access the portal</div>
-      <a href="${magicLink}" class="cta-button">Click to Access Portal</a>
+      <a href="${magicLink}" class="cta-button" style="color: #efefef !important;">Click to Access Portal</a>
     </div>
     <div class="access-note">
       <p>
