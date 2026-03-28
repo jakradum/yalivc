@@ -95,6 +95,23 @@ export default defineConfig({
                       .child(S.documentTypeList('lpPortalFeedback').title('Portal Feedback')),
                   ])
               ),
+            S.divider(),
+            // Data Room
+            S.listItem()
+              .title('Data Room')
+              .child(
+                S.list()
+                  .title('Data Room')
+                  .items([
+                    S.listItem()
+                      .title('Documents')
+                      .child(
+                        S.documentTypeList('dataRoomDocument')
+                          .title('Data Room Documents')
+                          .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
+                      ),
+                  ])
+              ),
           ]),
     }),
     visionTool(),

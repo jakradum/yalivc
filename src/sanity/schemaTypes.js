@@ -27,6 +27,8 @@ import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 import portalUser from './schemas/portalUser'
 import lpPortalFeedback from './schemas/lpPortalFeedback'
+// Data Room Schemas
+import dataRoomDocument from './schemas/dataRoomDocument'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -53,5 +55,7 @@ export const schemaTypes = [
   lpPipelineDeal,
   lpQuarterlyReport,
   portalUser,
-  lpPortalFeedback
+  lpPortalFeedback,
+  // Data Room
+  dataRoomDocument,
 ]

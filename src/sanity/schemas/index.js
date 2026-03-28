@@ -27,6 +27,8 @@ import lpDownloadConsent from './lpDownloadConsent'
 import lpPortalFeedback from './lpPortalFeedback'
 import investor from './investor'
 import newsletterSubscriber from './newsletterSubscriber'
+// Data Room schemas
+import dataRoomDocument from './dataRoomDocument'
 
 export const schemaTypes = [
   // Existing schemas
@@ -61,4 +63,6 @@ export const schemaTypes = [
   socialUpdate,
   // Newsletter signups
   newsletterSubscriber,
+  // Data Room
+  dataRoomDocument,
 ]

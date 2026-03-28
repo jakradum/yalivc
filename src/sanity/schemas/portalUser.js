@@ -29,6 +29,13 @@ const portalUser = {
       initialValue: false,
       description: 'Check if this LP should see GIFT City-specific fund financials',
     },
+    {
+      name: 'dataRoomAccess',
+      title: 'Data Room Access',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Grant access to dataroom.yali.vc. isActive must also be true. Disable to revoke data room access without affecting portal access.',
+    },
     // System fields — managed by the invite API, not editable in Studio
     {
       name: 'inviteCode',
@@ -50,11 +57,16 @@ const portalUser = {
       title: 'email',
       subtitle: 'name',
       active: 'isActive',
+      dataRoom: 'dataRoomAccess',
     },
-    prepare({ title, subtitle, active }) {
+    prepare({ title, subtitle, active, dataRoom }) {
+      const flags = [
+        active ? 'Active' : 'Inactive',
+        dataRoom ? 'Data Room' : '',
+      ].filter(Boolean).join(' · ');
       return {
         title: title,
-        subtitle: `${subtitle || 'No name'} — ${active ? 'Active' : 'Inactive'}`,
+        subtitle: `${subtitle || 'No name'} — ${flags}`,
       };
     },
   },
