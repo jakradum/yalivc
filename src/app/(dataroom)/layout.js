@@ -1,4 +1,10 @@
+import { JetBrains_Mono } from 'next/font/google';
 import './dataroom-globals.css';
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Data Room | Yali Capital',
@@ -7,5 +13,5 @@ export const metadata = {
 };
 
 export default function DataroomLayout({ children }) {
-  return children;
+  return <div className={jetbrainsMono.className}>{children}</div>;
 }

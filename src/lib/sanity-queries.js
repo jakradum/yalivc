@@ -1290,3 +1290,34 @@ export async function getPortalUserByEmail(email) {
     { email: email.toLowerCase() }
   );
 }
+
+export async function getDataRoomTrackRecords() {
+  return client.fetch(
+    `*[_type == "trackRecord"] | order(investor->name asc, year desc) {
+      _id,
+      investeeName,
+      investmentOrg,
+      year,
+      sector,
+      amountInvested,
+      status,
+      exitYear,
+      exitAmountOrValuation,
+      irr,
+      "investorName": investor->name
+    }`
+  );
+}
+
+export async function getDataRoomTeamMembers() {
+  return client.fetch(
+    `*[_type == "teamMember" && showOnHomepage == true && (department == "investment" || lower(role) match "*advisor*")] | order(coalesce(order, 999) asc) {
+      _id,
+      name,
+      role,
+      oneLiner,
+      "photo": photo.asset->url,
+      linkedIn
+    }`
+  );
+}

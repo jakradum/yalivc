@@ -1,11 +1,6 @@
-/* Dataroom-specific global overrides — mirrors portal-globals.css */
+/* Dataroom-specific global overrides */
 
 body {
   padding: 0 !important;
   margin: 0 !important;
-  background-color: #fafafa !important;
-}
-
-.page-wrapper {
-  display: none !important;
 }
