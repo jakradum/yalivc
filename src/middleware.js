@@ -61,7 +61,7 @@ export default async function middleware(request) {
   if (hostname.startsWith('www.')) {
     const newUrl = new URL(request.url);
     newUrl.host = hostname.replace('www.', '');
-    return NextResponse.redirect(newUrl, 301);
+    return NextResponse.redirect(newUrl, 308);
   }
 
   // CORS for manual invite routes — called from Sanity Studio (cross-origin fetch)
