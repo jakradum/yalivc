@@ -3,8 +3,6 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
 import { SendBetaTestAction } from './sanity/actions/sendBetaTestAction';
-import { SendDataroomInviteAction } from './sanity/actions/sendDataroomInviteAction';
-import { SendPortalInviteAction } from './sanity/actions/sendPortalInviteAction';
 
 export default defineConfig({
   name: 'default',
@@ -126,10 +124,7 @@ export default defineConfig({
       if (schemaType === 'newsletter') {
         return [...prev, SendBetaTestAction];
       }
-      if (schemaType === 'portalUser') {
-        return [...prev, SendPortalInviteAction, SendDataroomInviteAction];
-      }
-      return prev;
+return prev;
     },
   },
 

@@ -1,3 +1,5 @@
+import { InviteButtons } from '../components/InviteButtons';
+
 const portalUser = {
   name: 'portalUser',
   title: 'Portal User',
@@ -48,6 +50,14 @@ const portalUser = {
           { title: 'Data Room', value: 'dataroom' },
         ],
       },
+    },
+    // Invite action buttons — rendered as a custom input component
+    {
+      name: 'inviteActions',
+      title: 'Send Invites',
+      type: 'string',
+      readOnly: true,
+      components: { input: InviteButtons },
     },
     // System fields — managed by the invite API, not editable in Studio
     {
