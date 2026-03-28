@@ -29,6 +29,8 @@ import portalUser from './schemas/portalUser'
 import lpPortalFeedback from './schemas/lpPortalFeedback'
 // Data Room Schemas
 import dataRoomDocument from './schemas/dataRoomDocument'
+// Track Record
+import trackRecord from './schemas/trackRecord'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -58,4 +60,6 @@ export const schemaTypes = [
   lpPortalFeedback,
   // Data Room
   dataRoomDocument,
+  // Track Record
+  trackRecord,
 ]
