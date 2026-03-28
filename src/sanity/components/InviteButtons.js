@@ -17,7 +17,7 @@ export function InviteButtons() {
     if (portalStatus === 'loading') return;
     setPortalStatus('loading');
     try {
-      const res = await fetch(`${origin}/api/portal-invite-manual`, {
+      const res = await fetch(`${origin}/api/portal-invite-manual/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),
@@ -37,7 +37,7 @@ export function InviteButtons() {
     if (dataroomStatus === 'loading') return;
     setDataroomStatus('loading');
     try {
-      const res = await fetch(`${origin}/api/dataroom-invite-manual`, {
+      const res = await fetch(`${origin}/api/dataroom-invite-manual/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),
