@@ -126,35 +126,77 @@ export async function POST(request) {
       await resend.emails.send({
         from: 'Yali Partners <noreply@yali.vc>',
         to: normalizedEmail,
-        subject: 'Your code to access the Yali Capital Data Room',
-        html: `
-          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff;">
-            <!-- Letterhead -->
-            <div style="border-bottom: 1px solid #e0e0e0; padding: 24px 0; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
-              <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 36px; width: auto;" />
-              <div style="text-align: right;">
-                <div style="font-size: 14px; font-weight: 600; color: #830D35;">Yali Partners LLP</div>
-                <div style="font-size: 12px; color: #666;">Data Room</div>
-              </div>
-            </div>
-
-            <!-- Body -->
-            <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">Hi${user?.name ? ` ${user.name}` : ''},</p>
-            <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">Your verification code is:</p>
-
-            <!-- Code -->
-            <div style="background: #f5f5f5; padding: 24px; text-align: center; margin: 0 0 20px 0;">
-              <span style="font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Courier New', monospace; font-size: 32px; font-weight: 700; letter-spacing: 0.4em; color: #1a1a1a;">${otp}</span>
-            </div>
-
-            <p style="color: #666; font-size: 13px; line-height: 1.5; margin: 0 0 32px 0;">This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.</p>
-
-            <!-- Footer -->
-            <div style="border-top: 1px solid #e0e0e0; padding-top: 16px;">
-              <p style="color: #999; font-size: 11px; line-height: 1.4; margin: 0; text-align: center;">This is a system-generated email. Please do not reply.</p>
-            </div>
-          </div>
-        `,
+        subject: 'Your sign-in code for Yali Capital Data Room',
+        html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yali Capital &#8212; Your Sign-In Code</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background-color: #d0d0d0; font-family: 'Inter', sans-serif; color: #363636; padding: 40px 20px; }
+  .wrapper { max-width: 600px; margin: 0 auto; background: #efefef; }
+  .header { background: #363636; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .logo-accent { color: #830d35; }
+  .header-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #ebde84; letter-spacing: 0.15em; text-transform: uppercase; }
+  .hero { background: #830d35; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; right: 0; width: 120px; height: 120px; border-left: 1px solid rgba(235,222,132,0.2); border-bottom: 1px solid rgba(235,222,132,0.2); }
+  .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #ebde84; margin-bottom: 16px; }
+  .hero-title { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; color: #efefef; line-height: 1.2; max-width: 420px; }
+  .hero-title span { color: #ebde84; }
+  .body { padding: 40px; }
+  .greeting { font-family: 'Inter', sans-serif; font-size: 15px; color: #363636; line-height: 1.7; margin-bottom: 32px; }
+  .code-block { background: #363636; padding: 36px 40px; text-align: center; margin: 0 -40px 0; }
+  .code-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #ebde84; margin-bottom: 20px; }
+  .otp-code { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: #efefef; letter-spacing: 0.25em; }
+  .expiry-note { margin-top: 16px; font-family: 'Inter', sans-serif; font-size: 12px; color: #999; letter-spacing: 0.05em; }
+  .note { padding: 28px 40px; border-left: 3px solid #ebde84; margin: 36px 0 0; background: #e8e8e8; }
+  .note p { font-family: 'Inter', sans-serif; font-size: 13px; color: #363636; line-height: 1.7; }
+  .footer { padding: 32px 40px; border-top: 1px solid #d0d0d0; }
+  .footer-contact { font-family: 'Inter', sans-serif; font-size: 13px; color: #555; line-height: 1.8; margin-bottom: 24px; }
+  .footer-contact a { color: #830d35; text-decoration: none; }
+  .footer-divider { border: none; border-top: 1px solid #d0d0d0; margin: 24px 0; }
+  .footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #999; letter-spacing: 0.1em; text-transform: uppercase; }
+  @media (max-width: 480px) {
+    .otp-code { font-size: 36px; letter-spacing: 0.15em; }
+    .hero-title { font-size: 22px; }
+    .body, .footer, .header { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="header-tag">Data Room</div>
+    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 28px; width: auto;" />
+  </div>
+  <div class="hero">
+    <div class="hero-label">Sign-In Code</div>
+    <div class="hero-title">Your one-time <span>access code</span></div>
+  </div>
+  <div class="body">
+    <p class="greeting">Enter the code below to sign in to the Yali Capital Data Room. This code is valid for 10 minutes.</p>
+    <div class="code-block">
+      <div class="code-label">Your code</div>
+      <div class="otp-code">${otp}</div>
+      <div class="expiry-note">Expires in 10 minutes</div>
+    </div>
+    <div class="note">
+      <p>If you did not request this code, you can safely ignore this email. Do not share this code with anyone.</p>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-contact">
+      Questions? Write to us at <a href="mailto:investor-relations@yali.vc">investor-relations@yali.vc</a> or <a href="mailto:sunil@yali.vc">sunil@yali.vc</a>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-meta">Yali Capital &nbsp;&middot;&nbsp; Confidential &nbsp;&middot;&nbsp; For authorised recipients only</div>
+  </div>
+</div>
+</body>
+</html>`,
       });
 
       const response = NextResponse.json({ success: true });

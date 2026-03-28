@@ -56,39 +56,91 @@ export async function POST(request) {
       from: 'Yali Partners <noreply@yali.vc>',
       to: normalizedEmail,
       subject: "You've been invited to access the Yali Capital Data Room",
-      html: `
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff;">
-          <div style="border-bottom: 1px solid #e0e0e0; padding: 24px 0; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
-            <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 36px; width: auto;" />
-            <div style="text-align: right;">
-              <div style="font-size: 14px; font-weight: 600; color: #830D35;">Yali Partners LLP</div>
-              <div style="font-size: 12px; color: #666;">Data Room</div>
-            </div>
-          </div>
-
-          <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">Hi${name ? ` ${name}` : ''},</p>
-          <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">You've been granted access to the Yali Capital Data Room.</p>
-          <p style="color: #363636; font-size: 14px; line-height: 1.6; margin: 0 0 24px 0;">
-            Use the button below to sign in. This link is valid for ${INVITE_EXPIRY_HOURS} hours.
-          </p>
-
-          <div style="text-align: center; margin: 0 0 32px 0;">
-            <a href="${magicLink}" style="display: inline-block; background: #830D35; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em;">Access Data Room</a>
-          </div>
-
-          <p style="color: #666; font-size: 13px; line-height: 1.5; margin: 0 0 8px 0;">Or copy this link into your browser:</p>
-          <p style="color: #830D35; font-size: 12px; line-height: 1.5; margin: 0 0 32px 0; word-break: break-all;">${magicLink}</p>
-
-          <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 0 0 32px 0;">
-            After your first sign-in, you can log in at any time using your email and a verification code.
-            If you were not expecting this, you can safely ignore this email.
-          </p>
-
-          <div style="border-top: 1px solid #e0e0e0; padding-top: 16px;">
-            <p style="color: #999; font-size: 11px; line-height: 1.4; margin: 0; text-align: center;">This is a system-generated email. Please do not reply.</p>
-          </div>
-        </div>
-      `,
+      html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yali Capital &#8212; Data Room Invitation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background-color: #d0d0d0; font-family: 'Inter', sans-serif; color: #363636; padding: 40px 20px; }
+  .wrapper { max-width: 600px; margin: 0 auto; background: #efefef; }
+  .header { background: #363636; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .header-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #ebde84; letter-spacing: 0.15em; text-transform: uppercase; }
+  .hero { background: #830d35; padding: 48px 40px 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; right: 0; width: 120px; height: 120px; border-left: 1px solid rgba(235,222,132,0.2); border-bottom: 1px solid rgba(235,222,132,0.2); }
+  .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #ebde84; margin-bottom: 16px; }
+  .hero-title { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; color: #efefef; line-height: 1.2; max-width: 420px; }
+  .hero-title span { color: #ebde84; }
+  .body { padding: 40px; }
+  .greeting { font-family: 'Inter', sans-serif; font-size: 15px; color: #363636; line-height: 1.7; margin-bottom: 24px; }
+  .section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #830d35; margin-bottom: 16px; }
+  .feature-list { list-style: none; margin-bottom: 36px; }
+  .feature-list li { font-family: 'Inter', sans-serif; font-size: 14px; color: #363636; padding: 12px 0 12px 20px; border-bottom: 1px solid #d8d8d8; position: relative; line-height: 1.5; }
+  .feature-list li:first-child { border-top: 1px solid #d8d8d8; }
+  .feature-list li::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; background: #830d35; }
+  .cta-block { background: #363636; padding: 32px 40px; text-align: center; margin: 0 -40px; }
+  .cta-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #ebde84; margin-bottom: 20px; }
+  .cta-button { display: inline-block; background: #830d35; color: #efefef; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; padding: 18px 48px; }
+  .access-note { padding: 28px 40px; border-left: 3px solid #ebde84; margin: 36px 0 0; background: #e8e8e8; }
+  .access-note p { font-family: 'Inter', sans-serif; font-size: 13px; color: #363636; line-height: 1.7; }
+  .footer { padding: 32px 40px; border-top: 1px solid #d0d0d0; }
+  .footer-contact { font-family: 'Inter', sans-serif; font-size: 13px; color: #555; line-height: 1.8; margin-bottom: 24px; }
+  .footer-contact a { color: #830d35; text-decoration: none; }
+  .footer-divider { border: none; border-top: 1px solid #d0d0d0; margin: 24px 0; }
+  .footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #999; letter-spacing: 0.1em; text-transform: uppercase; }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 22px; }
+    .body, .footer, .header { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="header-tag">Data Room</div>
+    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="height: 28px; width: auto;" />
+  </div>
+  <div class="hero">
+    <div class="hero-label">Due Diligence Access</div>
+    <div class="hero-title">You&#8217;ve been invited to view the <span>Data Room</span></div>
+  </div>
+  <div class="body">
+    <p class="greeting">
+      This email is an invitation to access the Yali Capital Data Room &#8212; a secure, private environment for prospective and existing limited partners conducting due diligence. Inside, you will find:
+    </p>
+    <div class="section-label">What&#8217;s inside</div>
+    <ul class="feature-list">
+      <li>Fund documents including the PPM and contribution agreements</li>
+      <li>Investment manager track record across prior and current investments</li>
+      <li>SEBI registration and regulatory filings</li>
+      <li>Team credentials and advisory board profiles</li>
+      <li>Investor presentations and fund overview materials</li>
+      <li>Recommendation letters and third-party references</li>
+    </ul>
+    <div class="cta-block">
+      <div class="cta-label">Access the data room</div>
+      <a href="${magicLink}" class="cta-button">Click to Access Data Room</a>
+    </div>
+    <div class="access-note">
+      <p>
+        Your session will remain active for <strong>24 weeks</strong> from first sign-in. After that, you can request a one-time code to re-authenticate yourself at any time.
+      </p>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-contact">
+      Should you have any concerns with accessing the data room, please write to us at<br>
+      <a href="mailto:investor-relations@yali.vc">investor-relations@yali.vc</a> or <a href="mailto:sunil@yali.vc">sunil@yali.vc</a>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-meta">Yali Capital &nbsp;&middot;&nbsp; Confidential &nbsp;&middot;&nbsp; For authorised recipients only</div>
+  </div>
+</div>
+</body>
+</html>`,
     });
   } catch (err) {
     console.error('Failed to send dataroom invite email:', err);
