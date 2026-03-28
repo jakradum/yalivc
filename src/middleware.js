@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-const COOKIE_NAME = 'portal-session';
+const PORTAL_COOKIE_NAME = 'portal-session';
+const DATAROOM_COOKIE_NAME = 'dataroom-session';
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 
 // Constant-time string comparison to prevent timing attacks
@@ -13,7 +14,10 @@ function timingSafeEqual(a, b) {
   return result === 0;
 }
 
-async function verifyHMAC(cookieValue) {
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
+
+async function verifyHMAC(cookieValue, maxSessionAge = THIRTY_DAYS_MS) {
   if (!AUTH_SECRET || !cookieValue) return false;
 
   const parts = cookieValue.split(':');
@@ -22,9 +26,8 @@ async function verifyHMAC(cookieValue) {
   const [email, timestamp, signature] = parts;
   const data = `${email}:${timestamp}`;
 
-  // Validate session age (30 days max)
+  // Validate session age against the provided max
   const sessionAge = Date.now() - parseInt(timestamp, 10);
-  const maxSessionAge = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
   if (isNaN(sessionAge) || sessionAge > maxSessionAge || sessionAge < 0) {
     return false;
   }
@@ -74,13 +77,13 @@ export default async function middleware(request) {
   // Allow direct access to /partners in local development
   const isLocalDev = hostname.includes('localhost') || hostname.includes('127.0.0.1');
 
-  // Check if request is coming from partners subdomain
+  // ── Partners subdomain ────────────────────────────────────────────────────
   const isPartnersSubdomain =
     hostname.startsWith('partners.') ||
     hostname.startsWith('partners-'); // Vercel preview domains
 
   if (isPartnersSubdomain) {
-    // If URL has /partners prefix, redirect to clean URL (strip /partners)
+    // Strip /partners prefix from URLs if present (redirect to clean URL)
     if (url.pathname.startsWith('/partners')) {
       const cleanPath = url.pathname.replace(/^\/partners/, '') || '/';
       url.pathname = cleanPath;
@@ -96,10 +99,10 @@ export default async function middleware(request) {
       return NextResponse.redirect(signInUrl);
     }
 
-    // Protect all routes except sign-in
+    // Protect all routes except sign-in (30-day session)
     if (!isSignInPage) {
-      const sessionCookie = request.cookies.get(COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie) : false;
+      const sessionCookie = request.cookies.get(PORTAL_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
 
       if (!isValid) {
         const signInUrl = new URL('/sign-in', request.url);
@@ -122,16 +125,79 @@ export default async function middleware(request) {
     return NextResponse.redirect(url);
   }
 
-  // Protect partner routes in local dev too
+  // Protect /partners routes in local dev
   if (url.pathname.startsWith('/partners') && isLocalDev) {
     const isSignInPage = url.pathname.startsWith('/partners/sign-in');
 
     if (!isSignInPage) {
-      const sessionCookie = request.cookies.get(COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie) : false;
+      const sessionCookie = request.cookies.get(PORTAL_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
 
       if (!isValid) {
         const signInUrl = new URL('/partners/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
+  }
+
+  // ── Dataroom subdomain ─────────────────────────────────────────────────────
+  const isDataroomSubdomain =
+    hostname.startsWith('dataroom.') ||
+    hostname.startsWith('dataroom-'); // Vercel preview domains
+
+  if (isDataroomSubdomain) {
+    // Strip /dataroom prefix from URLs if present (redirect to clean URL)
+    if (url.pathname.startsWith('/dataroom')) {
+      const cleanPath = url.pathname.replace(/^\/dataroom/, '') || '/';
+      url.pathname = cleanPath;
+      return NextResponse.redirect(url);
+    }
+
+    // Sign-in page is public
+    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
+
+    // Redirect sign-up to sign-in
+    if (url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
+      const signInUrl = new URL('/sign-in', request.url);
+      return NextResponse.redirect(signInUrl);
+    }
+
+    // Protect all routes except sign-in (6-month session)
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(DATAROOM_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
+
+    // Rewrite clean URLs to /dataroom routes internally
+    const rewritePath = `/dataroom${url.pathname === '/' ? '' : url.pathname}`;
+    url.pathname = rewritePath;
+
+    const response = NextResponse.rewrite(url);
+    response.headers.set('x-pathname', rewritePath);
+    return response;
+  }
+
+  // For main site, block access to /dataroom routes (but allow in local dev)
+  if (url.pathname.startsWith('/dataroom') && !isLocalDev) {
+    url.pathname = '/';
+    return NextResponse.redirect(url);
+  }
+
+  // Protect /dataroom routes in local dev
+  if (url.pathname.startsWith('/dataroom') && isLocalDev) {
+    const isSignInPage = url.pathname.startsWith('/dataroom/sign-in');
+
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(DATAROOM_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/dataroom/sign-in', request.url);
         return NextResponse.redirect(signInUrl);
       }
     }
