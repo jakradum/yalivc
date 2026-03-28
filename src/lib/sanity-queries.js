@@ -1261,6 +1261,21 @@ export async function getSocialUpdatesByDateRange(startDate, endDate) {
   );
 }
 
+// Get all data room documents (access-level: data-room)
+export async function getDataRoomDocuments() {
+  return client.fetch(
+    `*[_type == "dataRoomDocument" && accessLevel == "data-room"] | order(category asc, publishedAt desc) {
+      _id,
+      title,
+      category,
+      description,
+      publishedAt,
+      "fileUrl": file.asset->url,
+      "fileName": file.asset->originalFilename
+    }`
+  );
+}
+
 // Get portal user info by email (for GIFT City status check)
 export async function getPortalUserByEmail(email) {
   if (!email) return null;
@@ -1269,7 +1284,8 @@ export async function getPortalUserByEmail(email) {
       _id,
       email,
       name,
-      isGiftCityLP
+      isGiftCityLP,
+      dataRoomAccess
     }`,
     { email: email.toLowerCase() }
   );
