@@ -34,7 +34,25 @@ const trackRecord = {
     {
       name: 'amountInvested',
       title: 'Amount Invested',
-      type: 'string',
+      type: 'object',
+      fields: [
+        {
+          name: 'currency',
+          title: 'Currency',
+          type: 'string',
+          options: {
+            list: [{ title: 'USD ($)', value: 'USD' }, { title: 'INR (₹)', value: 'INR' }],
+            layout: 'radio',
+          },
+          initialValue: 'USD',
+        },
+        {
+          name: 'value',
+          title: 'Amount',
+          type: 'number',
+          description: 'Enter full number e.g. 5000000 for $5M',
+        },
+      ],
     },
     {
       name: 'status',
@@ -59,7 +77,25 @@ const trackRecord = {
     {
       name: 'exitAmountOrValuation',
       title: 'Exit Amount / Valuation',
-      type: 'string',
+      type: 'object',
+      fields: [
+        {
+          name: 'currency',
+          title: 'Currency',
+          type: 'string',
+          options: {
+            list: [{ title: 'USD ($)', value: 'USD' }, { title: 'INR (₹)', value: 'INR' }],
+            layout: 'radio',
+          },
+          initialValue: 'USD',
+        },
+        {
+          name: 'value',
+          title: 'Amount',
+          type: 'number',
+          description: 'Enter full number e.g. 5000000 for $5M',
+        },
+      ],
     },
     {
       name: 'irr',

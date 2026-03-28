@@ -29,14 +29,25 @@ const client = createClient({
   token: process.env.SANITY_WRITE_TOKEN,
 });
 
-// Fix mojibake encoding from CSV (UTF-8 misread as Latin-1)
-function fixEncoding(str) {
-  if (!str) return str;
-  return str
-    .replace(/â¹/g, '₹')
-    .replace(/â‚¬/g, '€')
-    .trim();
-}
+// Structured money data keyed by investeeName
+// currency: 'USD' | 'INR', value: number in base units (e.g. 5000000 for $5M / ₹50L)
+const moneyData = {
+  'Agnikul Cosmos':                  { amountInvested: { currency: 'USD', value: 5000000 },   exitAmountOrValuation: { currency: 'USD', value: 5000000 } },
+  'Ideaforge Technologies':          { amountInvested: { currency: 'INR', value: 485000000 },  exitAmountOrValuation: { currency: 'INR', value: 743000000 } },
+  'Tonbo Imaging Pte/ Tonbo India Pvt. Ltd.': { amountInvested: { currency: 'USD', value: 7000000 }, exitAmountOrValuation: { currency: 'USD', value: 13000000 } },
+  'Aura Semi-Conductors':            { amountInvested: { currency: 'INR', value: 430000000 },  exitAmountOrValuation: { currency: 'INR', value: 900000000 } },
+  'Kyulux Japan':                    { amountInvested: { currency: 'INR', value: 600000000 },  exitAmountOrValuation: { currency: 'INR', value: 1200000000 } },
+  'Cosmic Circuits':                 { amountInvested: { currency: 'INR', value: 1200000 },    exitAmountOrValuation: { currency: 'INR', value: 600000000 } },
+  'Cirel Systems':                   { amountInvested: { currency: 'INR', value: 30000000 },   exitAmountOrValuation: { currency: 'INR', value: 270000000 } },
+  'NanoSemi':                        { amountInvested: { currency: 'USD', value: 75000 },      exitAmountOrValuation: { currency: 'USD', value: 343867 } },
+  'Haystack Analytics':              { amountInvested: { currency: 'INR', value: 2500000 },    exitAmountOrValuation: { currency: 'INR', value: 12700000 } },
+  'Ethereal Machines':               { amountInvested: { currency: 'INR', value: 80000000 },   exitAmountOrValuation: { currency: 'INR', value: 230000000 } },
+  'Galaxeye':                        { amountInvested: { currency: 'INR', value: 2500000 },    exitAmountOrValuation: { currency: 'INR', value: 10000000 } },
+  'Data Patterns':                   { amountInvested: { currency: 'INR', value: 530000000 },  exitAmountOrValuation: { currency: 'INR', value: 9000000000 } },
+  'MTAR Technologies Limited':       { amountInvested: { currency: 'INR', value: 360000000 },  exitAmountOrValuation: { currency: 'INR', value: 9000000000 } },
+  'Ideaforge Technologies Limited':  { amountInvested: { currency: 'INR', value: 930000000 },  exitAmountOrValuation: { currency: 'INR', value: 2700000000 } },
+  'Gokaldas Exports Limited':        { amountInvested: { currency: 'INR', value: 590000000 },  exitAmountOrValuation: { currency: 'INR', value: 2870000000 } },
+};
 
 function parseCSVLine(line) {
   const result = [];
@@ -62,8 +73,6 @@ async function run() {
   console.log(`Found ${teamMembers.length} team members:`);
   teamMembers.forEach(m => console.log(`  ${m._id}  name="${m.name}"  slug="${m.slug?.current}"`));
 
-  // Manual mapping from CSV investor key → teamMember _id
-  // Adjust these after reviewing the output above
   const investorMap = {};
   for (const m of teamMembers) {
     const nameLower = (m.name || '').toLowerCase();
@@ -83,7 +92,6 @@ async function run() {
   const csvPath = path.join(process.cwd(), 'scripts', 'track_record_import.csv');
   const lines = fs.readFileSync(csvPath, 'utf-8').split('\n').filter(Boolean);
   const headers = parseCSVLine(lines[0]);
-  console.log('\nHeaders:', headers);
 
   const records = lines.slice(1).map(line => {
     const values = parseCSVLine(line);
@@ -103,24 +111,26 @@ async function run() {
       continue;
     }
 
+    const money = moneyData[r.investeeName] || {};
+
     const doc = {
       _type: 'trackRecord',
       investor: { _type: 'reference', _ref: investorId },
-      investeeName: fixEncoding(r.investeeName),
-      investmentOrg: fixEncoding(r.investmentOrg) || undefined,
+      investeeName: r.investeeName,
+      investmentOrg: r.investmentOrg || undefined,
       year: r.year ? parseInt(r.year) : undefined,
-      sector: fixEncoding(r.sector) || undefined,
-      amountInvested: fixEncoding(r.amountInvested) || undefined,
+      sector: r.sector || undefined,
+      amountInvested: money.amountInvested,
       status: r.status || undefined,
       exitYear: r.exitYear ? parseInt(r.exitYear) : undefined,
-      exitAmountOrValuation: fixEncoding(r.exitAmountOrValuation) || undefined,
+      exitAmountOrValuation: money.exitAmountOrValuation,
       irr: r.irr ? parseFloat(r.irr) : undefined,
     };
 
     // Remove undefined fields
     Object.keys(doc).forEach(k => doc[k] === undefined && delete doc[k]);
 
-    console.log(`  + ${r.investor}: ${doc.investeeName} (${doc.status}, ${doc.year})`);
+    console.log(`  + ${r.investor}: ${doc.investeeName} (${doc.status}, ${doc.year}) | invested: ${JSON.stringify(doc.amountInvested)}`);
     tx.create(doc);
   }
 
