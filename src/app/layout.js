@@ -48,6 +48,7 @@ export default async function RootLayout({ children }) {
   const headersList = await headers();
   const pathname = headersList.get('x-pathname') || '';
   const isPortalRoute = pathname.startsWith('/partners');
+  const isDataroomRoute = pathname.startsWith('/dataroom');
 
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
@@ -56,7 +57,7 @@ export default async function RootLayout({ children }) {
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="6eCPyIGmj8Lj1meaCoGOIg" async></script>
       </head>
       <body className={inter.className}>
-        {isPortalRoute ? (
+        {(isPortalRoute || isDataroomRoute) ? (
           children
         ) : (
           <>
