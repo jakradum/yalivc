@@ -105,11 +105,7 @@ export default defineConfig({
                   .items([
                     S.listItem()
                       .title('Documents')
-                      .child(
-                        S.documentTypeList('dataRoomDocument')
-                          .title('Data Room Documents')
-                          .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
-                      ),
+                      .child(S.documentTypeList('dataRoomDocument').title('Data Room Documents')),
                   ])
               ),
           ]),
