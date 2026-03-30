@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { Lightlogo } from '@/app/components/icons/lightlogo';
 import styles from './dataroom.module.css';
 import SignOutButton from './SignOutButton';
 
@@ -12,7 +13,7 @@ export default async function DataroomTopbar() {
     <div className={styles.topbar}>
       <div className={styles.topbarLeft}>
         <Link href="/dataroom" className={styles.logo}>
-          Yali<span className={styles.logoDot}>.</span>Capital
+          <Lightlogo />
         </Link>
         <span className={styles.contextTag}>Data Room</span>
       </div>

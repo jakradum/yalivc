@@ -1333,8 +1333,10 @@ export async function getDataRoomFundPerformance() {
       quarterlyPerformance[] {
         quarter,
         fiscalYear,
+        amountDrawnDown,
         totalInvested,
         fairMarketValue,
+        amountReturned,
         moic,
         tvpi,
         dpi

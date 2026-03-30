@@ -51,6 +51,15 @@ function formatDate(dateStr) {
   });
 }
 
+function FundRow({ label, value }) {
+  return (
+    <tr>
+      <td className={styles.trackTd} style={{ textAlign: 'left' }}>{label}</td>
+      <td className={styles.trackTd} style={{ textAlign: 'right', fontWeight: 600 }}>{value}</td>
+    </tr>
+  );
+}
+
 function getTotalInvestment(company) {
   return (company?.investmentRounds || []).reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
 }
@@ -130,34 +139,32 @@ export default async function CategoryPage({ params }) {
             </div>
           </div>
 
-          {fundSettings && (
-            <div className={styles.fundInfoBlock}>
-              <div className={styles.sectionLabel}>Fund Details</div>
-              <div className={styles.fundInfoRow}>
-                {fundSettings.firstCloseDate && (
-                  <div className={styles.fundInfoItem}>
-                    <div className={styles.fundInfoLabel}>First Close</div>
-                    <div className={styles.fundInfoValue}>
-                      {new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </div>
-                  </div>
-                )}
-                {fundSettings.finalCloseDate && (
-                  <div className={styles.fundInfoItem}>
-                    <div className={styles.fundInfoLabel}>Final Close</div>
-                    <div className={styles.fundInfoValue}>
-                      {new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </div>
-                  </div>
-                )}
-                {fundSettings.targetFundSizeINR != null && (
-                  <div className={styles.fundInfoItem}>
-                    <div className={styles.fundInfoLabel}>Fund Size</div>
-                    <div className={styles.fundInfoValue}>₹{fundSettings.targetFundSizeINR} Cr</div>
-                  </div>
-                )}
+          {(fundSettings || perf) && (
+            <>
+              <div className={styles.sectionLabel}>Fund Summary</div>
+              <div className={styles.trackTableWrap}>
+                <table className={styles.trackTable}>
+                  <thead>
+                    <tr>
+                      <th className={styles.trackTh} style={{ textAlign: 'left' }}>As of {asOf || '—'}</th>
+                      <th className={styles.trackTh} style={{ textAlign: 'right' }}>Amount in ₹ crores</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <FundRow label="First close date" value={fundSettings?.firstCloseDate ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
+                    <FundRow label="Final close date" value={fundSettings?.finalCloseDate ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
+                    <FundRow label="Fund size at final close" value={fundSettings?.fundSizeAtClose != null ? fundSettings.fundSizeAtClose.toFixed(2) : (fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '—')} />
+                    <FundRow label="Amount drawn down as per bank" value={perf?.amountDrawnDown != null ? perf.amountDrawnDown.toFixed(2) : '—'} />
+                    <FundRow label="Total invested in portfolio" value={perf?.totalInvested != null ? perf.totalInvested.toFixed(2) : '—'} />
+                    <FundRow label="Fair Market Value of portfolio investments (including realised value)" value={perf?.fairMarketValue != null ? perf.fairMarketValue.toFixed(2) : '—'} />
+                    <FundRow label="Amount returned (including passive income returned)" value={perf?.amountReturned != null ? perf.amountReturned.toFixed(2) : '—'} />
+                    <FundRow label="MOIC" value={perf?.moic != null ? `${perf.moic.toFixed(2)}×` : '—'} />
+                    <FundRow label="TVPI" value={perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}×` : '—'} />
+                    <FundRow label="DPI" value={perf?.dpi != null ? `${perf.dpi.toFixed(4)}×` : '—'} />
+                  </tbody>
+                </table>
               </div>
-            </div>
+            </>
           )}
 
           {allQuarters.length > 0 && (
@@ -403,7 +410,14 @@ export default async function CategoryPage({ params }) {
       </div>
       <div className={styles.docList}>
         {docs.map((doc) => (
-          <div key={doc._id} className={styles.docRow}>
+          <a
+            key={doc._id}
+            href={doc.fileUrl || undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.docRow}
+            style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
+          >
             <div className={styles.docIcon}>
               <DocIcon />
             </div>
@@ -415,17 +429,7 @@ export default async function CategoryPage({ params }) {
                 {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
               </div>
             </div>
-            {doc.fileUrl && (
-              <a
-                href={doc.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.docOpen}
-              >
-                Open
-              </a>
-            )}
-          </div>
+          </a>
         ))}
         {docs.length === 0 && (
           <div className={styles.docRow}>
