@@ -13,5 +13,5 @@ export const metadata = {
 };
 
 export default function DataroomLayout({ children }) {
-  return <div className={jetbrainsMono.className}>{children}</div>;
+  return <div data-dataroom className={jetbrainsMono.className}>{children}</div>;
 }

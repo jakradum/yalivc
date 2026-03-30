@@ -27,12 +27,19 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 18px 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: linear-gradient(180deg, #242424 0%, #1a1a1a 100%);
+  padding: 0 40px;
+  height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #363636;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.topbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
 .logo {
@@ -44,7 +51,6 @@
   text-decoration: none;
   display: flex;
   align-items: baseline;
-  gap: 8px;
 }
 
 .logoDot {
@@ -52,11 +58,15 @@
   animation: dotPulse 2.8s ease-in-out infinite;
 }
 
-.portalTag {
+.contextTag {
   font-size: 9px;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(239, 239, 239, 0.25);
+  color: rgba(239, 239, 239, 0.3);
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .topbarRight {
@@ -67,13 +77,13 @@
 
 .userEmail {
   font-size: 10px;
-  color: rgba(239, 239, 239, 0.25);
+  color: rgba(239, 239, 239, 0.3);
   letter-spacing: 0.04em;
 }
 
 .signOut {
   font-size: 10px;
-  color: #830d35;
+  color: rgba(239, 239, 239, 0.5);
   cursor: pointer;
   letter-spacing: 0.04em;
   text-decoration: none;
@@ -85,7 +95,7 @@
 }
 
 .signOut:hover:not(:disabled) {
-  color: #ebde84;
+  color: #efefef;
 }
 
 .signOut:disabled {
@@ -150,7 +160,7 @@
 
 /* ── CARD ── */
 .card {
-  background: linear-gradient(160deg, #830d35 0%, #830d35 65%, #5a0924 100%);
+  background: linear-gradient(155deg, #830d35 0%, #830d35 80%, #5a0924 100%);
   border: 1px solid rgba(131, 13, 53, 0.5);
   padding: 22px;
   cursor: pointer;
@@ -165,6 +175,14 @@
   border-color: rgba(235, 222, 132, 0.45);
   filter: brightness(1.1);
 }
+
+.grid > *:nth-child(1) { background: linear-gradient(155deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(2) { background: linear-gradient(165deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(3) { background: linear-gradient(140deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(4) { background: linear-gradient(170deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(5) { background: linear-gradient(150deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(6) { background: linear-gradient(135deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
+.grid > *:nth-child(7) { background: linear-gradient(160deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
 
 .card::after {
   content: '';

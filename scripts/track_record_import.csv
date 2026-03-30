@@ -1,0 +1,16 @@
+investor,investeeName,investmentOrg,year,sector,amountInvested,status,exitYear,exitAmountOrValuation,irr
+gani,Agnikul Cosmos,Celesta,2023,Space Tech,USD 5 mn,unexited,,USD 5 M,
+gani,Ideaforge Technologies,Celesta,2017,Defence-Drones,₹48.50 crore,exited-partial,2023,INR 74.3 cr Exited +INR 230 cr balance value (being exited),41.0
+gani,Tonbo Imaging Pte/ Tonbo India Pvt. Ltd.,Celesta,2017,Defence-Electro Optics Imaging Systems,USD 7 mn,unexited,,USD 13 M,15.0
+gani,Aura Semi-Conductors,Celesta,2016,Semiconductor,₹43 crore,exited-full,2018,INR 90 cr,85.0
+gani,Kyulux Japan,Celesta,2019,"OLED emitter molecules, Display Industry",₹60 crore (USD 8.5 M),unexited,,INR 120 cr (approx) (USD 14.5 M),18.0
+gani,Cosmic Circuits,Co-founder,2005,Analog and mixed signal intellectual property.,₹0.12 crore (USD 0.03 M),exited-full,2013,INR 60 cr (approx) (USD 10.86 M),117.0
+gani,Cirel Systems,Co-founder,2013,Fabless Semicondcutor,₹3 crore (USD 0.5 M),exited-full,2023,INR 27 cr (approx) (USD 3.37 M),25.0
+gani,NanoSemi,Angel investor,2015,Fabless Semicondcutor,75000 usd,exited-full,2021,"343,867 USD",29.0
+gani,Haystack Analytics,Angel investor,2021,Genomics,25 Lakhs,series-a-raised,2024,127 Lakhs,72.0
+gani,Ethereal Machines,Angel investor,2023,CNC Machines,8 Crores,series-b-raised,2024,23 Crores,188.0
+gani,Galaxeye,Angel investor,2022,Fabless Semicondcutor,25L,series-b-raised,2024,1 Crore,100.0
+mathew,Data Patterns,Florintree,2021,Manufacturing Defence-AeroSpace,₹53 crore,exited-full,2024,~INR 900 cr,184.0
+mathew,MTAR Technologies Limited,Florintree,2017,Defence-Manufacturing,₹36 crore,exited-full,2022,~INR 900 cr,104.0
+mathew,Ideaforge Technologies Limited,Florintree,2022,Defence-UAV-Drones,₹93 crore,unexited,,~INR270 cr,75.0
+mathew,Gokaldas Exports Limited,Florintree,2017,Textile-Exports,₹59 crore,exited-partial,,~INR 287 cr in exit/ Balance holding value is ~548 cr,49.0

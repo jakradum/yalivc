@@ -10,10 +10,12 @@ export default async function DataroomTopbar() {
 
   return (
     <div className={styles.topbar}>
-      <Link href="/" className={styles.logo}>
-        Yali<span className={styles.logoDot}>.</span>Capital
-        <span className={styles.portalTag}>/ Data Room</span>
-      </Link>
+      <div className={styles.topbarLeft}>
+        <Link href="/" className={styles.logo}>
+          Yali<span className={styles.logoDot}>.</span>Capital
+        </Link>
+        <span className={styles.contextTag}>Data Room</span>
+      </div>
       <div className={styles.topbarRight}>
         {email && <span className={styles.userEmail}>{email}</span>}
         <SignOutButton />

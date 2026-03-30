@@ -4,3 +4,22 @@ body {
   padding: 0 !important;
   margin: 0 !important;
 }
+
+/*
+ * globals.css applies `font-family: var(--font-inter) !important` to:
+ *   a                                              (0,0,1)
+ *   span, p, button, input, textarea               (0,0,1)
+ *   div:not([class*="header"]):not([class*="title"]) (0,2,1)
+ *
+ * Countered here with [data-dataroom]-scoped rules at higher specificity,
+ * also marked !important. Scoped exclusively to the dataroom layout wrapper.
+ */
+[data-dataroom] a,
+[data-dataroom] span,
+[data-dataroom] p,
+[data-dataroom] button,
+[data-dataroom] input,
+[data-dataroom] textarea,
+[data-dataroom] div:not([class*="header"]):not([class*="title"]) {
+  font-family: 'JetBrains Mono', monospace !important;
+}
