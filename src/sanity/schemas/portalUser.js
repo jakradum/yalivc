@@ -39,6 +39,13 @@ const portalUser = {
       description: 'Grant access to dataroom.yali.vc. isActive must also be true. Disable to revoke data room access without affecting portal access.',
     },
     {
+      name: 'allAccess',
+      title: 'All Access (Data Room)',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Grants access to portfolio company data in the data room. Requires dataRoomAccess to also be true.',
+    },
+    {
       name: 'source',
       title: 'Source',
       type: 'string',
@@ -81,11 +88,13 @@ const portalUser = {
       subtitle: 'name',
       active: 'isActive',
       dataRoom: 'dataRoomAccess',
+      allAccess: 'allAccess',
     },
-    prepare({ title, subtitle, active, dataRoom }) {
+    prepare({ title, subtitle, active, dataRoom, allAccess }) {
       const flags = [
         active ? 'Active' : 'Inactive',
         dataRoom ? 'Data Room' : '',
+        allAccess ? 'All Access' : '',
       ].filter(Boolean).join(' · ');
       return {
         title: title,

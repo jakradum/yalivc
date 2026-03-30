@@ -4,11 +4,6 @@
   100% { background-position: 100% center; }
 }
 
-@keyframes pulseGlow {
-  0%,  100% { opacity: 0.5; transform: scale(1); }
-  50%        { opacity: 1;   transform: scale(1.2); }
-}
-
 @keyframes dotPulse {
   0%,  100% { opacity: 1; }
   50%        { opacity: 0.35; }
@@ -34,12 +29,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
 }
 
 .topbarLeft {
   display: flex;
   align-items: center;
   gap: 0;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -67,18 +65,25 @@
   margin-left: 14px;
   padding-left: 14px;
   border-left: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
 }
 
 .topbarRight {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .userEmail {
   font-size: 10px;
   color: rgba(239, 239, 239, 0.3);
   letter-spacing: 0.04em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .signOut {
@@ -92,6 +97,8 @@
   padding: 0;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
   transition: color 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .signOut:hover:not(:disabled) {
@@ -160,39 +167,23 @@
 
 /* ── CARD ── */
 .card {
-  background: linear-gradient(155deg, #830d35 0%, #830d35 80%, #5a0924 100%);
-  border: 1px solid rgba(131, 13, 53, 0.5);
+  background: #efefef;
+  border: 1px solid rgba(54, 54, 54, 0.2);
   padding: 22px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.25s, filter 0.25s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, filter 0.25s;
   text-decoration: none;
   display: block;
+  color: #363636;
 }
 
 .card:hover {
-  border-color: rgba(235, 222, 132, 0.45);
-  filter: brightness(1.1);
-}
-
-.grid > *:nth-child(1) { background: linear-gradient(155deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(2) { background: linear-gradient(165deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(3) { background: linear-gradient(140deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(4) { background: linear-gradient(170deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(5) { background: linear-gradient(150deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(6) { background: linear-gradient(135deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-.grid > *:nth-child(7) { background: linear-gradient(160deg, #830d35 0%, #830d35 80%, #5a0924 100%); }
-
-.card::after {
-  content: '';
-  position: absolute;
-  bottom: -20px;
-  right: -20px;
-  width: 90px;
-  height: 90px;
-  background: radial-gradient(circle, rgba(235, 222, 132, 0.07) 0%, transparent 70%);
-  animation: pulseGlow 2.8s ease-in-out infinite;
+  background: linear-gradient(160deg, #830d35 0%, #830d35 65%, #5a0924 100%);
+  border-color: rgba(131, 13, 53, 0.5);
+  color: #efefef;
+  filter: none;
 }
 
 .cardLast {
@@ -206,8 +197,8 @@
 .cardIcon {
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(54, 54, 54, 0.07);
+  border: 1px solid rgba(54, 54, 54, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,8 +209,8 @@
 }
 
 .card:hover .cardIcon {
-  background: rgba(235, 222, 132, 0.1);
-  border-color: rgba(235, 222, 132, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .cardTitle {
@@ -227,10 +218,11 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #efefef;
+  color: #363636;
   margin-bottom: 6px;
   position: relative;
   z-index: 1;
+  transition: color 0.2s;
 }
 
 .card:hover .cardTitle {
@@ -245,16 +237,21 @@
 .cardDesc {
   font-family: var(--font-inter), 'Inter', sans-serif;
   font-size: 11px;
-  color: rgba(239, 239, 239, 0.5);
+  color: rgba(54, 54, 54, 0.6);
   line-height: 1.6;
   position: relative;
   z-index: 1;
+  transition: color 0.2s;
+}
+
+.card:hover .cardDesc {
+  color: rgba(239, 239, 239, 0.6);
 }
 
 .cardFooter {
   margin-top: 16px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(54, 54, 54, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -266,17 +263,21 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(239, 239, 239, 0.3);
+  color: rgba(54, 54, 54, 0.4);
+}
+
+.card:hover .cardCount {
+  color: rgba(239, 239, 239, 0.6);
 }
 
 .cardArrow {
   font-size: 13px;
-  color: rgba(239, 239, 239, 0.2);
+  color: rgba(54, 54, 54, 0.3);
   transition: all 0.2s;
 }
 
 .card:hover .cardArrow {
-  color: #ebde84;
+  color: #efefef;
   transform: translateX(3px);
 }
 
@@ -504,6 +505,28 @@
   color: #ebde84;
 }
 
+.teamViewProfile {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  margin: 8px 16px 16px;
+  background: transparent;
+  border: 1px solid rgba(235, 222, 132, 0.5);
+  color: #ebde84;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  width: calc(100% - 32px);
+  text-align: center;
+}
+
+.teamViewProfile:hover {
+  border-color: #ebde84;
+}
+
 /* ── TRACK RECORD TABLE ── */
 .trackSection {
   padding: 32px 40px 48px;
@@ -599,6 +622,360 @@
   background: transparent;
 }
 
+.trackTdTotal {
+  font-weight: 700;
+  color: #363636;
+  border-top: 1px solid rgba(54, 54, 54, 0.15);
+}
+
+/* ── FUND PERFORMANCE ── */
+.perfSection {
+  padding: 32px 40px 48px;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.kpiCard {
+  background: linear-gradient(160deg, #830d35 0%, #830d35 80%, #5a0924 100%);
+  border: 1px solid rgba(131, 13, 53, 0.5);
+  padding: 22px 18px;
+}
+
+.kpiLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(239, 239, 239, 0.5);
+  margin-bottom: 10px;
+}
+
+.kpiValue {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #efefef;
+}
+
+/* ── CATEGORY SPLIT PIE ── */
+.pieSectionWrap {
+  width: 100%;
+}
+
+.pieToggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.pieToggleBtn {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  background: transparent;
+  border: 1px solid rgba(54, 54, 54, 0.2);
+  color: rgba(54, 54, 54, 0.45);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pieToggleBtnActive {
+  border-color: #830d35;
+  color: #830d35;
+}
+
+.pieChartWrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.pieChartSvg {
+  flex-shrink: 0;
+}
+
+.pieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.pieLegendRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: default;
+  transition: opacity 0.15s;
+}
+
+.pieLegendRowActive {
+  opacity: 1 !important;
+}
+
+.pieLegend:has(.pieLegendRow:hover) .pieLegendRow:not(:hover) {
+  opacity: 0.4;
+}
+
+.pieLegendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.pieLegendName {
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.8);
+  min-width: 140px;
+}
+
+.pieLegendVal {
+  font-size: 11px;
+  font-weight: 600;
+  color: #363636;
+}
+
+.pieLegendPct {
+  font-size: 10px;
+  color: rgba(54, 54, 54, 0.45);
+}
+
+/* ── PORTFOLIO GRID ── */
+.portfolioSection {
+  padding: 32px 40px 48px;
+}
+
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.portfolioCard {
+  background: #ffffff;
+  border: 1px solid rgba(54, 54, 54, 0.1);
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+
+.portfolioCard:hover {
+  border-color: rgba(131, 13, 53, 0.3);
+}
+
+.portfolioCardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.portfolioLogo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.portfolioCardMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.portfolioName {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #363636;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.portfolioSector {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 10px;
+  color: rgba(54, 54, 54, 0.45);
+  margin-top: 2px;
+}
+
+.portfolioOneLiner {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(54, 54, 54, 0.08);
+  padding-bottom: 14px;
+}
+
+.portfolioMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 16px;
+}
+
+.portfolioMetricItem {
+}
+
+.portfolioMetricLabel {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.35);
+  margin-bottom: 2px;
+}
+
+.portfolioMetricValue {
+  font-size: 12px;
+  font-weight: 600;
+  color: #363636;
+}
+
+/* ── TEAM BIO ── */
+.teamBio {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 10px;
+  color: rgba(54, 54, 54, 0.5);
+  line-height: 1.6;
+  padding: 0 16px 14px;
+}
+
+.teamBio p {
+  margin: 0 0 4px;
+}
+
+/* ── TRACK RECORD SORT/FILTER ── */
+.trackThSortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.trackThSortable:hover {
+  color: rgba(54, 54, 54, 0.7);
+}
+
+.sortIndicator {
+  margin-left: 4px;
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.4);
+  margin-right: 2px;
+}
+
+.filterPill {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid rgba(54, 54, 54, 0.2);
+  color: rgba(54, 54, 54, 0.5);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filterPill:hover {
+  border-color: rgba(131, 13, 53, 0.4);
+  color: #830d35;
+}
+
+.filterPillActive {
+  background: #830d35;
+  border-color: #830d35;
+  color: #efefef;
+}
+
+/* ── FUND INFO BLOCK ── */
+.fundInfoBlock {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.fundInfoRow {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.fundInfoItem {
+}
+
+.fundInfoLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.4);
+  margin-bottom: 4px;
+}
+
+.fundInfoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #363636;
+}
+
+/* ── RESPONSIVE: NEW SECTIONS ── */
+@media (max-width: 900px) {
+  .kpiGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .portfolioGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portfolioGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .perfSection,
+  .portfolioSection {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .grid {
@@ -625,6 +1002,11 @@
 
   .teamGrid {
     grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .topbar,

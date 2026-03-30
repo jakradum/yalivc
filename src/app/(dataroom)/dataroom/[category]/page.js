@@ -1,32 +1,35 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import {
   getDataRoomDocuments,
   getDataRoomTrackRecords,
   getDataRoomTeamMembers,
+  getDataRoomFundPerformance,
+  getDataRoomAllFundSettings,
+  getDataRoomPortfolioCompanies,
+  getPortalUserByEmail,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from '../DataroomTopbar';
+import DataroomPieChart from '../DataroomPieChart';
+import TeamGrid from '../TeamGrid';
+import TrackRecordTable from '../TrackRecordTable';
 import styles from '../dataroom.module.css';
 
 export const dynamic = 'force-dynamic';
 
 const SLUG_TO_TITLE = {
-  pipeline: 'Pipeline',
+  'pipeline': 'Pipeline',
   'ppm-agreements': 'PPM & Agreements',
-  presentations: 'Presentations',
-  recommendation: 'Recommendation',
-  sebi: 'SEBI',
-  team: 'Team',
+  'presentations': 'Presentations',
+  'recommendation': 'Recommendation',
+  'sebi': 'SEBI',
+  'team': 'Team',
   'track-record': 'Track Record',
+  'fund-performance': 'Fund Performance',
+  'category-split': 'Portfolio by Sector',
+  'portfolio': 'Portfolio',
 };
-
-const DOC_CATEGORIES = new Set([
-  'pipeline',
-  'ppm-agreements',
-  'presentations',
-  'recommendation',
-  'sebi',
-]);
 
 const DocIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -48,26 +51,19 @@ function formatDate(dateStr) {
   });
 }
 
-function formatMoney(money) {
-  if (!money || money.value == null) return '—';
-  const { currency, value } = money;
-  if (currency === 'INR') {
-    if (value >= 1e7) return `₹${(value / 1e7).toFixed(1)} cr`;
-    if (value >= 1e5) return `₹${(value / 1e5).toFixed(1)} L`;
-    return `₹${value.toLocaleString('en-IN')}`;
-  }
-  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
-  if (value >= 1e3) return `$${Math.round(value / 1e3)}K`;
-  return `$${value.toLocaleString()}`;
+function getTotalInvestment(company) {
+  return (company?.investmentRounds || []).reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
 }
 
-function TrackStatusBadge({ status }) {
-  if (!status) return <span>—</span>;
-  return (
-    <span className={styles.trackStatus} data-status={status}>
-      {status}
-    </span>
-  );
+function getLatestRound(company) {
+  const rounds = (company?.investmentRounds || []).filter(r => r.roundName);
+  if (!rounds.length) return null;
+  const sorted = [...rounds].sort((a, b) => {
+    if (!a.investmentDate) return 1;
+    if (!b.investmentDate) return -1;
+    return new Date(b.investmentDate) - new Date(a.investmentDate);
+  });
+  return sorted[0].roundLabel || sorted[0].roundName;
 }
 
 export default async function CategoryPage({ params }) {
@@ -79,142 +75,304 @@ export default async function CategoryPage({ params }) {
 
   const categoryTitle = SLUG_TO_TITLE[slug];
 
+  if (slug === 'fund-performance') {
+    const [perf, fundSettings] = await Promise.all([
+      getDataRoomFundPerformance(),
+      getDataRoomAllFundSettings(),
+    ]);
+    const asOf = perf ? `${perf.quarter} ${perf.fiscalYear}` : null;
+
+    const fyOrder = (fy) => parseInt((fy || '0').replace('FY', ''), 10);
+    const qOrder = { Q4: 4, Q3: 3, Q2: 2, Q1: 1 };
+    const allQuarters = [...(fundSettings?.quarterlyPerformance || [])].sort((a, b) => {
+      const fyDiff = fyOrder(b.fiscalYear) - fyOrder(a.fiscalYear);
+      if (fyDiff !== 0) return fyDiff;
+      return (qOrder[b.quarter] || 0) - (qOrder[a.quarter] || 0);
+    });
+
+    return (
+      <div className={styles.page}>
+        <DataroomTopbar />
+        <div className={styles.breadcrumb}>
+          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+          <span className={styles.breadcrumbSep}>/</span>
+          <span className={styles.breadcrumbCurrent}>Fund Performance</span>
+        </div>
+        <div className={styles.innerHero}>
+          <div>
+            <div className={styles.innerTitle}>Fund Performance</div>
+            <div className={styles.innerSub}>Most recent reported quarter{asOf ? ` — ${asOf}` : ''}</div>
+          </div>
+          {asOf && <div className={styles.docCountBadge}>{asOf}</div>}
+        </div>
+        <div className={styles.perfSection}>
+          <div className={styles.sectionLabel}>Headline Metrics</div>
+          <div className={styles.kpiGrid}>
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiLabel}>Total Invested</div>
+              <div className={styles.kpiValue}>{perf?.totalInvested != null ? `₹${perf.totalInvested.toFixed(2)} Cr` : '—'}</div>
+            </div>
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiLabel}>Current FMV</div>
+              <div className={styles.kpiValue}>{perf?.fairMarketValue != null ? `₹${perf.fairMarketValue.toFixed(2)} Cr` : '—'}</div>
+            </div>
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiLabel}>MOIC</div>
+              <div className={styles.kpiValue}>{perf?.moic != null ? `${perf.moic.toFixed(2)}×` : '—'}</div>
+            </div>
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiLabel}>TVPI</div>
+              <div className={styles.kpiValue}>{perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}×` : '—'}</div>
+            </div>
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiLabel}>DPI</div>
+              <div className={styles.kpiValue}>{perf?.dpi != null ? `${perf.dpi.toFixed(4)}×` : '—'}</div>
+            </div>
+          </div>
+
+          {fundSettings && (
+            <div className={styles.fundInfoBlock}>
+              <div className={styles.sectionLabel}>Fund Details</div>
+              <div className={styles.fundInfoRow}>
+                {fundSettings.firstCloseDate && (
+                  <div className={styles.fundInfoItem}>
+                    <div className={styles.fundInfoLabel}>First Close</div>
+                    <div className={styles.fundInfoValue}>
+                      {new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                  </div>
+                )}
+                {fundSettings.finalCloseDate && (
+                  <div className={styles.fundInfoItem}>
+                    <div className={styles.fundInfoLabel}>Final Close</div>
+                    <div className={styles.fundInfoValue}>
+                      {new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                  </div>
+                )}
+                {fundSettings.targetFundSizeINR != null && (
+                  <div className={styles.fundInfoItem}>
+                    <div className={styles.fundInfoLabel}>Fund Size</div>
+                    <div className={styles.fundInfoValue}>₹{fundSettings.targetFundSizeINR} Cr</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {allQuarters.length > 0 && (
+            <>
+              <div className={styles.sectionLabel}>All Quarters</div>
+              <div className={styles.trackTableWrap}>
+                <table className={styles.trackTable}>
+                  <thead>
+                    <tr>
+                      <th className={styles.trackTh}>Quarter</th>
+                      <th className={styles.trackTh}>Total Invested (₹ Cr)</th>
+                      <th className={styles.trackTh}>FMV (₹ Cr)</th>
+                      <th className={styles.trackTh}>Amount Returned (₹ Cr)</th>
+                      <th className={styles.trackTh}>MOIC</th>
+                      <th className={styles.trackTh}>TVPI</th>
+                      <th className={styles.trackTh}>DPI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allQuarters.map((q, i) => (
+                      <tr key={i}>
+                        <td className={styles.trackTd}>{q.quarter} {q.fiscalYear}</td>
+                        <td className={styles.trackTd}>{q.totalInvested != null ? q.totalInvested.toFixed(2) : '—'}</td>
+                        <td className={styles.trackTd}>{q.fairMarketValue != null ? q.fairMarketValue.toFixed(2) : '—'}</td>
+                        <td className={styles.trackTd}>{q.amountReturned != null ? q.amountReturned.toFixed(2) : '—'}</td>
+                        <td className={styles.trackTd}>{q.moic != null ? `${q.moic.toFixed(2)}×` : '—'}</td>
+                        <td className={styles.trackTd}>{q.tvpi != null ? `${q.tvpi.toFixed(2)}×` : '—'}</td>
+                        <td className={styles.trackTd}>{q.dpi != null ? `${q.dpi.toFixed(4)}×` : '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (slug === 'category-split') {
+    const companies = await getDataRoomPortfolioCompanies();
+    const all = companies || [];
+
+    const sectorTotals = all.reduce((acc, co) => {
+      const sector = co.sector || 'Other';
+      const invested = getTotalInvestment(co);
+      if (invested > 0) acc[sector] = (acc[sector] || 0) + invested;
+      return acc;
+    }, {});
+
+    const chartData = Object.entries(sectorTotals)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+
+    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2', '#B11248'];
+
+    return (
+      <div className={styles.page}>
+        <DataroomTopbar />
+        <div className={styles.breadcrumb}>
+          <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
+          <span className={styles.breadcrumbSep}>/</span>
+          <span className={styles.breadcrumbCurrent}>Portfolio by Sector</span>
+        </div>
+        <div className={styles.innerHero}>
+          <div>
+            <div className={styles.innerTitle}>Portfolio by Sector</div>
+            <div className={styles.innerSub}>Investment distribution across active portfolio companies</div>
+          </div>
+          <div className={styles.docCountBadge}>{all.length} companies</div>
+        </div>
+        <div className={styles.trackSection}>
+          <DataroomPieChart chartData={chartData} colors={colors} />
+        </div>
+      </div>
+    );
+  }
+
+  if (slug === 'portfolio') {
+    // Server-side access check
+    const cookieStore = await cookies();
+    const session = cookieStore.get('dataroom-session')?.value;
+    const email = session ? session.split(':')[0] : null;
+    const user = email ? await getPortalUserByEmail(email) : null;
+
+    if (!user?.allAccess) {
+      notFound();
+    }
+
+    const companies = await getDataRoomPortfolioCompanies();
+    const all = companies || [];
+
+    return (
+      <div className={styles.page}>
+        <DataroomTopbar />
+        <div className={styles.breadcrumb}>
+          <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
+          <span className={styles.breadcrumbSep}>/</span>
+          <span className={styles.breadcrumbCurrent}>Portfolio</span>
+        </div>
+        <div className={styles.innerHero}>
+          <div>
+            <div className={styles.innerTitle}>Portfolio</div>
+            <div className={styles.innerSub}>Active portfolio companies — performance as of most recent quarter</div>
+          </div>
+          <div className={styles.docCountBadge}>{all.length} companies</div>
+        </div>
+        <div className={styles.portfolioSection}>
+          {all.length === 0 ? (
+            <div className={styles.docTitleEmpty}>No portfolio data available.</div>
+          ) : (
+            <div className={styles.portfolioGrid}>
+              {all.map((co) => {
+                const totalInvested = getTotalInvestment(co);
+                const stage = getLatestRound(co);
+                const q = co.latestQuarter;
+                return (
+                  <div key={co._id} className={styles.portfolioCard}>
+                    <div className={styles.portfolioCardTop}>
+                      {co.logo && (
+                        <img src={co.logo} alt={co.name} className={styles.portfolioLogo} />
+                      )}
+                      <div className={styles.portfolioCardMeta}>
+                        <div className={styles.portfolioName}>{co.name}</div>
+                        {co.sector && <div className={styles.portfolioSector}>{co.sector}</div>}
+                      </div>
+                    </div>
+                    {co.oneLiner && <div className={styles.portfolioOneLiner}>{co.oneLiner}</div>}
+                    <div className={styles.portfolioMetrics}>
+                      <div className={styles.portfolioMetricItem}>
+                        <div className={styles.portfolioMetricLabel}>Stage</div>
+                        <div className={styles.portfolioMetricValue}>{stage || '—'}</div>
+                      </div>
+                      <div className={styles.portfolioMetricItem}>
+                        <div className={styles.portfolioMetricLabel}>Invested</div>
+                        <div className={styles.portfolioMetricValue}>{totalInvested > 0 ? `₹${totalInvested.toFixed(2)} Cr` : '—'}</div>
+                      </div>
+                      <div className={styles.portfolioMetricItem}>
+                        <div className={styles.portfolioMetricLabel}>FMV</div>
+                        <div className={styles.portfolioMetricValue}>
+                          {q?.currentFMVConfidential ? '—' : (q?.currentFMV != null ? `₹${q.currentFMV.toFixed(2)} Cr` : '—')}
+                        </div>
+                      </div>
+                      <div className={styles.portfolioMetricItem}>
+                        <div className={styles.portfolioMetricLabel}>MOIC</div>
+                        <div className={styles.portfolioMetricValue}>
+                          {q?.moicConfidential ? '—' : (q?.multipleOfInvestment != null ? `${q.multipleOfInvestment.toFixed(2)}×` : '—')}
+                        </div>
+                      </div>
+                      {co.isRevenueMaking && (
+                        <div className={styles.portfolioMetricItem}>
+                          <div className={styles.portfolioMetricLabel}>Revenue</div>
+                          <div className={styles.portfolioMetricValue}>
+                            {q?.revenueConfidential ? '—' : (q?.revenueINR != null ? `₹${q.revenueINR.toFixed(2)} Cr` : '—')}
+                          </div>
+                        </div>
+                      )}
+                      <div className={styles.portfolioMetricItem}>
+                        <div className={styles.portfolioMetricLabel}>Team</div>
+                        <div className={styles.portfolioMetricValue}>
+                          {q?.teamSizeConfidential ? '—' : (q?.teamSize != null ? q.teamSize : '—')}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (slug === 'team') {
     const members = (await getDataRoomTeamMembers()) || [];
     return (
       <div className={styles.page}>
         <DataroomTopbar />
         <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>
-            ← Data Room
-          </Link>
+          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
           <span className={styles.breadcrumbSep}>/</span>
           <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
         </div>
         <div className={styles.innerHero}>
           <div>
             <div className={styles.innerTitle}>{categoryTitle}</div>
-            <div className={styles.innerSub}>
-              Browse and open documents in this category
-            </div>
+            <div className={styles.innerSub}>Investment team and advisory board</div>
           </div>
-          <div className={styles.docCountBadge}>
-            {members.length} profiles
-          </div>
+          <div className={styles.docCountBadge}>{members.length} profiles</div>
         </div>
-        <div className={styles.teamGrid}>
-          {members.map((m) => (
-            <div key={m._id} className={styles.teamCard}>
-              {m.photo && (
-                <img
-                  src={m.photo}
-                  alt={m.name}
-                  className={styles.teamPhoto}
-                />
-              )}
-              <div className={styles.teamName}>{m.name}</div>
-              <div className={styles.teamRole}>{m.role}</div>
-              {m.linkedIn && (
-                <a
-                  href={m.linkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.teamLinkedIn}
-                >
-                  LinkedIn &#x2192;
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
+        <TeamGrid members={members} />
       </div>
     );
   }
 
   if (slug === 'track-record') {
     const records = (await getDataRoomTrackRecords()) || [];
-
-    // Group by investor name — Ganapathy first, Mathew second, others after
-    const investorOrder = (name) => {
-      if (!name) return 99;
-      const lower = name.toLowerCase();
-      if (lower.includes('ganapathy')) return 0;
-      if (lower.includes('mathew')) return 1;
-      return 2;
-    };
-
-    const grouped = {};
-    for (const r of records) {
-      const key = r.investorName || 'Unknown';
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(r);
-    }
-
-    const sortedInvestors = Object.keys(grouped).sort(
-      (a, b) => investorOrder(a) - investorOrder(b)
-    );
-
     return (
       <div className={styles.page}>
         <DataroomTopbar />
         <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>
-            ← Data Room
-          </Link>
+          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
           <span className={styles.breadcrumbSep}>/</span>
           <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
         </div>
         <div className={styles.innerHero}>
           <div>
             <div className={styles.innerTitle}>{categoryTitle}</div>
-            <div className={styles.innerSub}>
-              Browse and open documents in this category
-            </div>
           </div>
-          <div className={styles.docCountBadge}>
-            {records.length} investments
-          </div>
+          <div className={styles.docCountBadge}>{records.length} investments</div>
         </div>
         <div className={styles.trackSection}>
-          {sortedInvestors.map((investor) => (
-            <div key={investor}>
-              <div className={styles.trackInvestorHeading}>{investor}</div>
-              <div className={styles.trackTableWrap}>
-                <table className={styles.trackTable}>
-                  <thead>
-                    <tr>
-                      <th className={styles.trackTh}>Company</th>
-                      <th className={styles.trackTh}>Fund / Org</th>
-                      <th className={styles.trackTh}>Year</th>
-                      <th className={styles.trackTh}>Sector</th>
-                      <th className={styles.trackTh}>Amount Invested</th>
-                      <th className={styles.trackTh}>Status</th>
-                      <th className={styles.trackTh}>Exit Year</th>
-                      <th className={styles.trackTh}>Exit Value</th>
-                      <th className={styles.trackTh}>IRR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grouped[investor].map((r) => (
-                      <tr key={r._id}>
-                        <td className={styles.trackTd}>{r.investeeName || '—'}</td>
-                        <td className={styles.trackTd}>{r.investmentOrg || '—'}</td>
-                        <td className={styles.trackTd}>{r.year || '—'}</td>
-                        <td className={styles.trackTd}>{r.sector || '—'}</td>
-                        <td className={styles.trackTd}>{formatMoney(r.amountInvested)}</td>
-                        <td className={styles.trackTd}>
-                          <TrackStatusBadge status={r.status} />
-                        </td>
-                        <td className={styles.trackTd}>{r.exitYear || '—'}</td>
-                        <td className={styles.trackTd}>{formatMoney(r.exitAmountOrValuation)}</td>
-                        <td className={styles.trackTd}>{r.irr != null ? `${r.irr}%` : '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ))}
+          <TrackRecordTable records={records} />
         </div>
       </div>
     );

@@ -1285,7 +1285,8 @@ export async function getPortalUserByEmail(email) {
       email,
       name,
       isGiftCityLP,
-      dataRoomAccess
+      dataRoomAccess,
+      allAccess
     }`,
     { email: email.toLowerCase() }
   );
@@ -1312,12 +1313,100 @@ export async function getDataRoomTrackRecords() {
 export async function getDataRoomTeamMembers() {
   return client.fetch(
     `*[_type == "teamMember" && showOnHomepage == true && (department == "investment" || lower(role) match "*advisor*")] | order(coalesce(order, 999) asc) {
+      _id, name, role, oneLiner,
+      "photo": photo.asset->url, linkedIn,
+      bio,
+      dataRoomBio,
+      "previousEmployers": previousEmployers[] | order(order asc) {
+        companyName,
+        companyUrl,
+        order,
+        "logoUrl": logo.asset->url
+      }
+    }`
+  );
+}
+
+export async function getDataRoomFundPerformance() {
+  const settings = await client.fetch(
+    `*[_type == "lpFundSettings"][0]{
+      quarterlyPerformance[] {
+        quarter,
+        fiscalYear,
+        totalInvested,
+        fairMarketValue,
+        moic,
+        tvpi,
+        dpi
+      }
+    }`
+  );
+  if (!settings?.quarterlyPerformance?.length) return null;
+  // Sort descending by FY then quarter to get the most recent
+  const fyOrder = (fy) => parseInt(fy.replace('FY', ''), 10);
+  const qOrder = { Q4: 4, Q3: 3, Q2: 2, Q1: 1 };
+  const sorted = [...settings.quarterlyPerformance].sort((a, b) => {
+    const fyDiff = fyOrder(b.fiscalYear) - fyOrder(a.fiscalYear);
+    if (fyDiff !== 0) return fyDiff;
+    return (qOrder[b.quarter] || 0) - (qOrder[a.quarter] || 0);
+  });
+  return sorted[0];
+}
+
+export async function getDataRoomPortfolioCompanies() {
+  return client.fetch(
+    `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
       _id,
       name,
-      role,
+      "slug": slug.current,
       oneLiner,
-      "photo": photo.asset->url,
-      linkedIn
+      "logo": logo.asset->url,
+      "sector": category->name,
+      "sectorSlug": category->slug.current,
+      investmentStatus,
+      isRevenueMaking,
+      "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        roundName,
+        roundLabel,
+        investmentDate,
+        yaliInvestment,
+        isInitialRound
+      },
+      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+        quarter,
+        fiscalYear,
+        "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
+        currentFMVConfidential,
+        "multipleOfInvestment": select(moicConfidential == true => null, multipleOfInvestment),
+        moicConfidential,
+        "revenueINR": select(revenueConfidential == true => null, revenueINR),
+        revenueConfidential,
+        "teamSize": select(teamSizeConfidential == true => null, teamSize),
+        teamSizeConfidential
+      }
+    }`
+  );
+}
+
+export async function getDataRoomAllFundSettings() {
+  return client.fetch(
+    `*[_type == "lpFundSettings"][0]{
+      fundName,
+      fundSizeAtClose,
+      targetFundSizeINR,
+      firstCloseDate,
+      finalCloseDate,
+      quarterlyPerformance[] {
+        quarter,
+        fiscalYear,
+        amountDrawnDown,
+        totalInvested,
+        fairMarketValue,
+        amountReturned,
+        moic,
+        tvpi,
+        dpi
+      }
     }`
   );
 }

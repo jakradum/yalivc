@@ -5,6 +5,10 @@ const teamMember = {
   title: 'Team Members',
   type: 'document',
   description: 'Team members including core team',
+  groups: [
+    { name: 'main', title: 'Main', default: true },
+    { name: 'dataRoom', title: 'Data Room' },
+  ],
   fields: [
     {
       name: 'profileType',
@@ -260,7 +264,63 @@ const teamMember = {
       type: 'boolean',
       description: 'Enable to make this team member\'s detail page accessible from the website',
       initialValue: false
-    }
+    },
+    // ── DATA ROOM TAB ──
+    {
+      name: 'dataRoomBio',
+      title: 'Data Room Bio',
+      type: 'array',
+      group: 'dataRoom',
+      of: [{ type: 'block' }],
+      description: 'If left empty, the main site bio will be used as fallback in the data room.',
+    },
+    {
+      name: 'previousEmployers',
+      title: 'Work History (Logos)',
+      type: 'array',
+      group: 'dataRoom',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'companyName',
+              title: 'Company Name',
+              type: 'string',
+              description: 'Used as alt text and text fallback if no logo is uploaded.',
+              validation: Rule => Rule.required(),
+            },
+            {
+              name: 'logo',
+              title: 'Logo',
+              type: 'image',
+              description: 'Optional. If provided, logo is shown; otherwise company name is shown as text.',
+              options: { hotspot: false },
+            },
+            {
+              name: 'companyUrl',
+              title: 'Company URL',
+              type: 'url',
+              description: 'Optional link for the company.',
+            },
+            {
+              name: 'order',
+              title: 'Order',
+              type: 'number',
+              description: 'Lower numbers appear first.',
+              validation: Rule => Rule.required(),
+            },
+          ],
+          preview: {
+            select: { title: 'companyName' },
+            prepare({ title }) {
+              return { title: title || 'Unnamed employer' };
+            },
+          },
+        },
+      ],
+      options: { sortable: true },
+    },
   ],
   preview: {
     select: {

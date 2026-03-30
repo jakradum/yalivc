@@ -11,7 +11,7 @@ export default async function DataroomTopbar() {
   return (
     <div className={styles.topbar}>
       <div className={styles.topbarLeft}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/dataroom" className={styles.logo}>
           Yali<span className={styles.logoDot}>.</span>Capital
         </Link>
         <span className={styles.contextTag}>Data Room</span>
