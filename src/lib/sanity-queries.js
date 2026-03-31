@@ -890,6 +890,84 @@ export async function getLPInvestments() {
   );
 }
 
+// Get all portfolio companies with all quarterly updates (for PDF report generation)
+export async function getLPInvestmentsForPdf() {
+  return liveClient.fetch(
+    `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
+      _id,
+      name,
+      entityName,
+      "slug": slug.current,
+      oneLiner,
+      detail,
+      aboutCompany,
+      isRevenueMaking,
+      "logo": logo.asset->url,
+      link,
+      "sector": category->name,
+      "sectorSlug": category->slug.current,
+      investmentStatus,
+      order,
+      "investmentRounds": investmentRounds[] | order(investmentDate asc) {
+        isInitialRound,
+        isYaliLead,
+        showEarlyInReport,
+        roundName,
+        roundLabel,
+        investmentDate,
+        preMoneyValuation,
+        totalRoundSize,
+        postMoneyValuation,
+        yaliInvestment,
+        yaliOwnership,
+        "coInvestors": coInvestors[]->{
+          _id,
+          name,
+          type
+        }
+      },
+      "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
+        quarter,
+        fiscalYear,
+        "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
+        currentFMVConfidential,
+        "currentOwnershipPercent": select(currentOwnershipConfidential == true => null, currentOwnershipPercent),
+        currentOwnershipConfidential,
+        "amountReturned": select(amountReturnedConfidential == true => null, amountReturned),
+        amountReturnedConfidential,
+        "multipleOfInvestment": select(moicConfidential == true => null, multipleOfInvestment),
+        moicConfidential,
+        tableFootnotes,
+        updateNotes,
+        "revenueINR": select(revenueConfidential == true => null, revenueINR),
+        revenueConfidential,
+        "patINR": select(patConfidential == true => null, patINR),
+        patConfidential,
+        "teamSize": select(teamSizeConfidential == true => null, teamSize),
+        teamSizeConfidential,
+        keyMetrics,
+        "roundMoics": select(moicConfidential == true => null, roundMoics)
+      },
+      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+        quarter,
+        fiscalYear,
+        "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
+        "currentOwnershipPercent": select(currentOwnershipConfidential == true => null, currentOwnershipPercent),
+        "amountReturned": select(amountReturnedConfidential == true => null, amountReturned),
+        "multipleOfInvestment": select(moicConfidential == true => null, multipleOfInvestment),
+        tableFootnotes,
+        updateNotes,
+        "revenueINR": select(revenueConfidential == true => null, revenueINR),
+        "patINR": select(patConfidential == true => null, patINR),
+        "teamSize": select(teamSizeConfidential == true => null, teamSize),
+        teamSizeConfidential,
+        keyMetrics,
+        "roundMoics": select(moicConfidential == true => null, roundMoics)
+      }
+    }`
+  );
+}
+
 // Get company investment data by slug (includes all quarterly updates)
 export async function getLPInvestmentByCompanySlug(companySlug) {
   return liveClient.fetch(
@@ -1157,6 +1235,54 @@ export async function getLPQuarterlyReportBySlug(slug) {
       },
       mediaNotes,
       // Portfolio Summary table footnotes
+      portfolioSummaryFootnotes
+    }`,
+    { slug }
+  );
+}
+
+// Get LP quarterly report by slug — no visibility filter (for internal PDF generation)
+export async function getLPQuarterlyReportBySlugAdmin(slug) {
+  return liveClient.fetch(
+    `*[_type == "lpQuarterlyReport" && slug.current == $slug][0]{
+      _id,
+      title,
+      "slug": slug.current,
+      quarter,
+      fiscalYear,
+      reportingDate,
+      publishDate,
+      coverNoteGreeting,
+      coverNoteIntro,
+      investmentActivityNotes,
+      portfolioHighlightsNotes,
+      ecosystemNotes,
+      closingNotes,
+      "signatory": signatory->{
+        _id,
+        name,
+        slug,
+        role,
+        profileType,
+        "photo": photo.asset->url
+      },
+      "pipelineDeals": pipelineDeals[]->{
+        _id,
+        companyName,
+        "sector": coalesce(sector->name, sectorOverride),
+        proposedAmountINR,
+        stage,
+        description
+      },
+      pipelineNotes,
+      "mediaFromNews": mediaFromNews[]->{
+        _id,
+        headlineEdited,
+        date,
+        url,
+        "publicationName": publication->name
+      },
+      mediaNotes,
       portfolioSummaryFootnotes
     }`,
     { slug }

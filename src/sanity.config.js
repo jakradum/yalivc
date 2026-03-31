@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
 import { SendBetaTestAction } from './sanity/actions/sendBetaTestAction';
+import { GeneratePdfAction } from './sanity/actions/generatePdfAction';
 
 export default defineConfig({
   name: 'default',
@@ -129,7 +130,10 @@ export default defineConfig({
       if (schemaType === 'newsletter') {
         return [...prev, SendBetaTestAction];
       }
-return prev;
+      if (schemaType === 'lpQuarterlyReport') {
+        return [...prev, GeneratePdfAction];
+      }
+      return prev;
     },
   },
 

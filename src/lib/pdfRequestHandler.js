@@ -1,0 +1,194 @@
+/**
+ * pdfRequestHandler.js
+ * Shared GET handler for /api/generate-pdf/[slug].
+ * Imported by both the top-level API route (production subdomain)
+ * and the partners-prefixed route (local dev).
+ */
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import {
+  getLPFundSettings,
+  getLPQuarterlyReportBySlugAdmin,
+  getLPInvestmentsForPdf,
+  getTeamMembers,
+} from '@/lib/sanity-queries';
+import { buildReportData } from '@/lib/quarterly-utils';
+import { generatePdfHtml } from '@/lib/generateQuarterlyPdf';
+import {
+  getCoverSvgHtml,
+  getPortfolioUpdatesSvgHtml,
+  getFundFinancialsSvgHtml,
+  getPipelineSvgHtml,
+} from '@/lib/pdf-svgs';
+
+const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+const QUARTER_END_MONTHS = { Q1: 'June', Q2: 'September', Q3: 'December', Q4: 'March' };
+
+function quarterEndLabel(quarter, fiscalYear) {
+  const fyNum = parseInt((fiscalYear || 'FY26').replace('FY', ''), 10);
+  const fullYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
+  const month = QUARTER_END_MONTHS[quarter] || '';
+  const year = quarter === 'Q4' ? fullYear : fullYear - 1;
+  return `${month} ${year}`;
+}
+
+function fmtMonthYear(dateStr) {
+  if (!dateStr) return null;
+  return new Date(dateStr).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+}
+
+async function verifyPortalSession(cookieValue) {
+  if (!AUTH_SECRET || !cookieValue) return null;
+  const parts = cookieValue.split(':');
+  if (parts.length !== 3) return null;
+  const [email, timestamp, signature] = parts;
+  const sessionAge = Date.now() - parseInt(timestamp, 10);
+  if (isNaN(sessionAge) || sessionAge > THIRTY_DAYS_MS || sessionAge < 0) return null;
+  try {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(AUTH_SECRET),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(`${email}:${timestamp}`));
+    const expectedSig = Array.from(new Uint8Array(sig))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    if (expectedSig.length !== signature.length) return null;
+    let diff = 0;
+    for (let i = 0; i < expectedSig.length; i++) {
+      diff |= expectedSig.charCodeAt(i) ^ signature.charCodeAt(i);
+    }
+    return diff === 0 ? email : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function handlePdfGet(slug) {
+  // ── Auth ────────────────────────────────────────────────────
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('portal-session')?.value;
+  const email = await verifyPortalSession(sessionCookie);
+
+  if (!email) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+  if (!email.endsWith('@yali.vc')) {
+    return new NextResponse('Forbidden — internal access only', { status: 403 });
+  }
+  if (!slug || typeof slug !== 'string') {
+    return new NextResponse('Missing slug', { status: 400 });
+  }
+
+  // ── Fetch data ───────────────────────────────────────────────
+  const [fundSettings, report, investments, teamMembers] = await Promise.all([
+    getLPFundSettings(),
+    getLPQuarterlyReportBySlugAdmin(slug),
+    getLPInvestmentsForPdf(),
+    getTeamMembers(),
+  ]);
+
+  if (!report) {
+    return new NextResponse('Report not found', { status: 404 });
+  }
+
+  const { quarter, fiscalYear } = report;
+
+  const reportData = buildReportData({
+    quarter,
+    fiscalYear,
+    fundSettings,
+    investments,
+    news: [],
+    socialUpdates: [],
+  });
+
+  const { fundMetrics, portfolioCompanies } = reportData;
+
+  const asOf = report.reportingDate
+    ? fmtMonthYear(report.reportingDate)
+    : quarterEndLabel(quarter, fiscalYear);
+
+  const signatory = report.signatory ||
+    teamMembers?.find(t =>
+      t.name?.toLowerCase().includes('gani') ||
+      t.name?.toLowerCase().includes('ganapathy')
+    ) || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
+
+  // ── Build HTML ───────────────────────────────────────────────
+  const [coverSvgHtml, portfolioUpdatesSvgHtml, fundFinancialsSvgHtml, pipelineSvgHtml] =
+    await Promise.all([
+      getCoverSvgHtml(quarter),
+      getPortfolioUpdatesSvgHtml(),
+      getFundFinancialsSvgHtml(),
+      getPipelineSvgHtml(),
+    ]);
+
+  const htmlContent = generatePdfHtml({
+    quarter,
+    fiscalYear,
+    asOf,
+    reportTitle: report.title || `LP Report ${quarter} ${fiscalYear} — Yali Capital`,
+    fundSettings,
+    fundMetrics,
+    portfolioCompanies,
+    report: { ...report, signatory },
+    coverSvgHtml,
+    portfolioUpdatesSvgHtml,
+    fundFinancialsSvgHtml,
+    pipelineSvgHtml,
+  });
+
+  // ── Launch Puppeteer ─────────────────────────────────────────
+  let browser;
+  try {
+    if (process.env.VERCEL) {
+      const chromium = (await import('@sparticuz/chromium-min')).default;
+      const puppeteer = (await import('puppeteer-core')).default;
+      const CHROMIUM_URL =
+        process.env.CHROMIUM_URL ||
+        'https://github.com/Sparticuz/chromium/releases/download/v143.0.0/chromium-v143.0.0-pack.tar';
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(CHROMIUM_URL),
+        headless: true,
+      });
+    } else {
+      const puppeteer = (await import('puppeteer')).default;
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+    }
+
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: 'networkidle0', timeout: 30000 });
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+    });
+
+    return new NextResponse(pdfBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${slug}.pdf"`,
+        'Cache-Control': 'no-store',
+      },
+    });
+  } catch (err) {
+    console.error('[generate-pdf] Puppeteer error:', err);
+    return new NextResponse('PDF generation failed', { status: 500 });
+  } finally {
+    if (browser) await browser.close().catch(() => {});
+  }
+}

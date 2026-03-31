@@ -19,7 +19,7 @@ import styles from '../dataroom.module.css';
 export const dynamic = 'force-dynamic';
 
 const SLUG_TO_TITLE = {
-  'pipeline': 'Pipeline',
+  'pipeline': 'Dealflow & Pipeline',
   'ppm-agreements': 'PPM & Agreements',
   'presentations': 'Presentations',
   'recommendation': 'Recommendation',

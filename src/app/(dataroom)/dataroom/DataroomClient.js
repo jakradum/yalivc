@@ -6,7 +6,7 @@ import styles from './dataroom.module.css';
 import { Lightlogo } from '../../components/icons/lightlogo';
 
 const CATEGORY_LABELS = {
-  'pipeline':       'Pipeline',
+  'pipeline':       'Dealflow & Pipeline',
   'ppm-agreements': 'PPM & Agreements',
   'presentations':  'Presentations',
   'recommendation': 'Recommendation',

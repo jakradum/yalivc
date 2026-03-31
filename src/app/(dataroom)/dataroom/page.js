@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 const CATEGORIES = [
   {
     slug: 'pipeline',
-    title: 'Pipeline',
+    title: 'Dealflow & Pipeline',
     description: 'Deal flow and investment pipeline documentation',
     icon: 'pipeline',
   },
