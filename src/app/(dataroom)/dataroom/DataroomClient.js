@@ -10,7 +10,7 @@ const CATEGORY_LABELS = {
   'ppm-agreements': 'PPM & Agreements',
   'presentations':  'Presentations',
   'recommendation': 'Recommendation',
-  'sebi':           'SEBI',
+  'sebi':           'Regulatory Documents',
   'team':           'Team',
   'track-record':   'Track Record',
 };

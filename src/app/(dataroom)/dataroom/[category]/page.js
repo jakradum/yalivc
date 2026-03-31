@@ -23,9 +23,9 @@ const SLUG_TO_TITLE = {
   'ppm-agreements': 'PPM & Agreements',
   'presentations': 'Presentations',
   'recommendation': 'Recommendation',
-  'sebi': 'SEBI',
+  'sebi': 'Regulatory Documents',
   'team': 'Team',
-  'track-record': 'Track Record',
+  'track-record': 'Track Record & Recommendation',
   'fund-performance': 'Fund Performance',
   'category-split': 'Portfolio by Sector',
   'portfolio': 'Portfolio',
@@ -363,7 +363,13 @@ export default async function CategoryPage({ params }) {
   }
 
   if (slug === 'track-record') {
-    const records = (await getDataRoomTrackRecords()) || [];
+    const [records, allDocs] = await Promise.all([
+      getDataRoomTrackRecords(),
+      getDataRoomDocuments(),
+    ]);
+    const trackRecords = records || [];
+    const recDocs = (allDocs || []).filter((d) => d.category === 'recommendation');
+
     return (
       <div className={styles.page}>
         <DataroomTopbar />
@@ -375,12 +381,38 @@ export default async function CategoryPage({ params }) {
         <div className={styles.innerHero}>
           <div>
             <div className={styles.innerTitle}>{categoryTitle}</div>
+            <div className={styles.trackFinePrint}>Best viewed on larger devices</div>
           </div>
-          <div className={styles.docCountBadge}>{records.length} investments</div>
+          <div className={styles.docCountBadge}>{trackRecords.length + recDocs.length} items</div>
         </div>
         <div className={styles.trackSection}>
-          <TrackRecordTable records={records} />
+          <TrackRecordTable records={trackRecords} />
         </div>
+        {recDocs.length > 0 && (
+          <div className={styles.docList} style={{ marginTop: '2rem' }}>
+            <div className={styles.sectionLabel} style={{ marginBottom: '12px' }}>Recommendation</div>
+            {recDocs.map((doc) => (
+              <a
+                key={doc._id}
+                href={doc.fileUrl || undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.docRow}
+                style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
+              >
+                <div className={styles.docIcon}><DocIcon /></div>
+                <div className={styles.docInfo}>
+                  <div className={styles.docTitle}>{doc.title}</div>
+                  <div className={styles.docMeta}>
+                    <span>PDF</span>
+                    {doc.description && <span>{doc.description}</span>}
+                    {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

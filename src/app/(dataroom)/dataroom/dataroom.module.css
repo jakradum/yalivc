@@ -345,6 +345,20 @@
   margin-top: 6px;
 }
 
+.trackFinePrint {
+  display: none;
+  font-size: 10px;
+  color: rgba(54, 54, 54, 0.4);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .trackFinePrint {
+    display: block;
+  }
+}
+
 .docCountBadge {
   font-size: 9px;
   letter-spacing: 0.1em;

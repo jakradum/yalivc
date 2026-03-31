@@ -32,14 +32,8 @@ const CATEGORIES = [
     icon: 'presentations',
   },
   {
-    slug: 'recommendation',
-    title: 'Recommendation',
-    description: 'Third-party references and endorsement letters',
-    icon: 'recommendation',
-  },
-  {
     slug: 'sebi',
-    title: 'SEBI',
+    title: 'Regulatory Documents',
     description: 'Regulatory filings and AIF registration documents',
     icon: 'sebi',
   },
@@ -51,9 +45,9 @@ const CATEGORIES = [
   },
   {
     slug: 'track-record',
-    title: 'Track Record',
+    title: 'Track Record & Recommendation',
     description:
-      'Historical investments and exit performance across prior and current portfolios',
+      'Historical investments, exit performance, and third-party references',
     icon: 'chart',
   },
   {
@@ -180,7 +174,7 @@ export default async function DataroomPage() {
   // Compute per-category counts
   function getCount(cat) {
     if (cat.slug === 'team') return allTeamMembers.length;
-    if (cat.slug === 'track-record') return allTrackRecords.length;
+    if (cat.slug === 'track-record') return allTrackRecords.length + allDocs.filter((d) => d.category === 'recommendation').length;
     if (cat.slug === 'category-split') return allPortfolioCompanies.length;
     if (cat.slug === 'portfolio') return allPortfolioCompanies.length;
     if (cat.slug === 'fund-performance') return null;
@@ -189,7 +183,7 @@ export default async function DataroomPage() {
 
   function getCountLabel(cat) {
     if (cat.slug === 'team') return 'profiles';
-    if (cat.slug === 'track-record') return 'investments';
+    if (cat.slug === 'track-record') return 'items';
     if (cat.slug === 'fund-performance') return 'metrics';
     if (cat.slug === 'category-split') return 'active companies';
     if (cat.slug === 'portfolio') return 'companies';
