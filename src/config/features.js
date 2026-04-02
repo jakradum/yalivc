@@ -26,7 +26,7 @@ export const isDevelopment = ENV === 'development';
 export const features = {
   // Application form - enable only on staging and dev initially
   applicationForm: {
-    enabled: !isProduction, // true for staging/dev, false for production
+    enabled: false,
   },
 
   // Resources section (blog posts, newsletter)

@@ -24,7 +24,6 @@
 
 .sectionLevel {
     position: relative;
-    margin-bottom: 1rem;
 }
 
 .sectorsSection {
@@ -37,17 +36,6 @@
 }
 
 .sectorsSection::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 1px;
-    background-color: #000;
-}
-
-.sectionLevel::after {
     content: '';
     position: absolute;
     left: 50%;

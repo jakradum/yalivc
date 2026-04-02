@@ -428,6 +428,10 @@
   color: #666;
 }
 
+.noBottomLine::after {
+  display: none;
+}
+
 .articleTagsRow {
   display: flex;
   align-items: center;
