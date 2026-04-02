@@ -1,7 +1,6 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['cdn.sanity.io', 'yali.vc'],
     remotePatterns: [
       {
         protocol: 'https',
