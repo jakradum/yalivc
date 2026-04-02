@@ -256,6 +256,117 @@
     transition: all 0.5s ease;
 }
 
+/* ── 2-column card grid ─────────────────────────────────────── */
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-left: 0.0625rem solid black;
+  width: 75%;
+}
+
+.cardLink,
+.cardStatic {
+  border-right: 0.0625rem solid black;
+  border-bottom: 0.0625rem solid black;
+  background-color: #efefef;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
+.cardLink:hover {
+  background-color: white;
+}
+
+.cardInner {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardVisitBtn {
+  flex-shrink: 0;
+}
+
+.cardVisitBtn a {
+  font-size: 0.5rem !important;
+}
+
+.cardVisitBtn a svg {
+  height: 0.4rem !important;
+  width: auto;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardLogo {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 4px;
+}
+
+.cardLogoImg {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cardName {
+  font-family: var(--font-inter);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #363636;
+  line-height: 1.2;
+}
+
+.cardSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #830D35;
+}
+
+.cardOneLiner {
+  font-family: var(--font-inter);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────── */
+
 .mobileCompanyCardLink {
   text-decoration: none;
   color: inherit;
@@ -281,8 +392,13 @@
     }
 
     .sidebar,
-    .companyTable {
+    .companyTable,
+    .cardGrid {
         width: 100%;
+    }
+
+    .cardGrid {
+        border-top: 0.0625rem solid black;
     }
 
     .sidebar {
