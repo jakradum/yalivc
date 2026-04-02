@@ -8,7 +8,7 @@ import HeaderFlex from '../../../components/icons/headerflex';
 import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
-import teamLPstyles from '../../../landing page styles/team.module.css';
+import teamLPstyles from '../../../landing-page-styles/team.module.css';
 
 export const revalidate = 60;
 

@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import { PortableText } from '@portabletext/react';
 import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
-import { Openicon } from '../../../../components/icons/small icons/Openicon';
-import { CloseIcon } from '../../../../components/icons/small icons/closeicon';
+import { Openicon } from '../../../../components/icons/small-icons/Openicon';
+import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
 import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending } from '@/lib/quarterly-utils';
 
 import Footer from '../../../../components/footer';

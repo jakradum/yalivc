@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../../styles/headerflex.module.css';
-import { ViewfinderIcon } from './small icons/viewfinder icon.js';
+import { ViewfinderIcon } from './small-icons/viewfinder-icon.js';
 
 const HeaderFlex = ({ 
   title, 

@@ -18,7 +18,7 @@
     "@sparticuz/chromium-min": "^143.0.4",
     "dotenv": "^17.2.3",
     "next": "^16.2.2",
-    "next-sanity": "^11.6.12",
+    "next-sanity": "^11.5.0",
     "puppeteer-core": "^24.40.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../landing page styles/team.module.css';
+import styles from '../../../landing-page-styles/team.module.css';
 
 export const ExpandIcon = ({ isExpanded }) => {
   return (

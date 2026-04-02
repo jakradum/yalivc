@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import styles from '../landing page styles/newssec.module.css';
+import styles from '../landing-page-styles/newssec.module.css';
 import Button from './button';
 import Link from 'next/link';
 import fallbackData from '../data/news.json';

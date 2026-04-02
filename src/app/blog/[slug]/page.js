@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../../about-yali/about-styles.module.css';
 import companyStyles from '../../investments/[slug]/[companySlug]/company.module.css';
-import teamLPstyles from '../../landing page styles/team.module.css';
+import teamLPstyles from '../../landing-page-styles/team.module.css';
 import ShareButtons from './ShareButtons';
 
 const CONTENT_TYPE_LABELS = {

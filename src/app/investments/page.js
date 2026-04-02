@@ -1,7 +1,7 @@
 import styles from '../about-yali/about-styles.module.css'
 import { InvestmentsGraphic } from '../components/icons/background svgs/investmentsGraphic';
 import HeaderFlex from '../components/icons/headerflex';
-import { CompaniesInnerComponent } from './companies inner component';
+import { CompaniesInnerComponent } from './companies-inner-component';
 import { getCompanies, getCategories } from '@/lib/sanity-queries';
 export const revalidate = 60;
 
