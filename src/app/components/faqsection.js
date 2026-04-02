@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import styles from '../landing page styles/faqsection.module.css';
+import styles from '../landing-page-styles/faqsection.module.css';
 
 const AccordionItem = ({ question, answer, isOpen, onToggle }) => {
   return (

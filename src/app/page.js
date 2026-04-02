@@ -2,19 +2,19 @@
 
 import React from 'react';
 import { getCompanies, getNews, getTeamMembers, getCategories, getSocialUpdates, getFAQs } from '@/lib/sanity-queries';
-import landingStyles from './landing page styles/landingscroll.module.css';
+import landingStyles from './landing-page-styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
-import { ViewfinderIcon } from './components/icons/small icons/viewfinder icon';
+import { ViewfinderIcon } from './components/icons/small-icons/viewfinder-icon';
 import { Graphicfg } from './components/icons/background svgs/graphicfg';
-import missionStyles from './landing page styles/mission statement.module.css';
-import teamStyles from './landing page styles/team.module.css';
-import separatorStyles from './landing page styles/separator.module.css';
+import missionStyles from './landing-page-styles/mission-statement.module.css';
+import teamStyles from './landing-page-styles/team.module.css';
+import separatorStyles from './landing-page-styles/separator.module.css';
 import HeaderFlex from './components/icons/headerflex';
 import MissionStatement from './components/missionstatement';
-import companyStyles from './landing page styles/companies.module.css';
+import companyStyles from './landing-page-styles/companies.module.css';
 import CompanyGrid from './components/companygrid';
 import NewsSection from './components/newssection.js';
-import TeamsLPComponent from './components/teams LP component';
+import TeamsLPComponent from './components/teams-lp-component';
 import SocialUpdates from './components/socialupdates';
 import FAQSection from './components/faqsection';
 import Button from './components/button';

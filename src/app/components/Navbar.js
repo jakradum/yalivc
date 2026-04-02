@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {Logo} from './icons/logo.js'
 import {Lightlogo} from './icons/lightlogo';
-import {Openicon} from './icons/small icons/Openicon';
-import {CloseIcon} from './icons/small icons/closeicon';
+import {Openicon} from './icons/small-icons/Openicon';
+import {CloseIcon} from './icons/small-icons/closeicon';
 import {PinkLogo} from './icons/pinklogo';
 import styles from '../styles/Navbar.module.css';
 import navigationItems from '../navigationItems.json';

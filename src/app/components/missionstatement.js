@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import missionStyles from '../landing page styles/mission statement.module.css';
+import missionStyles from '../landing-page-styles/mission-statement.module.css';
 import { MissionStatementRedBG } from './icons/background svgs/mission statement red bg';
 import HeaderFlex from './icons/headerflex';
 import { Gridsvg } from './icons/background svgs/gridsvg';

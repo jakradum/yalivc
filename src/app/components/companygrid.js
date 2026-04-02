@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import localCompaniesData from '../data/companies.json';
-import styles from '../landing page styles/companies.module.css';
+import styles from '../landing-page-styles/companies.module.css';
 import Button from './button';
 import { useData } from '../data/fetch component';
 import Image from 'next/image';

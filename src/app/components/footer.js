@@ -2,7 +2,7 @@ import styles from '../styles/footer.module.css';
 import Link from 'next/link';
 import { FooterLogo } from './icons/footerLogo';
 import navigationItemsData from '../navigationItems.json';
-import { ArrowLinkOpen } from './icons/small icons/arrowLinkOpen';
+import { ArrowLinkOpen } from './icons/small-icons/arrowLinkOpen';
 import FooterSubscribe from './FooterSubscribe';
 
 export default function Footer() {

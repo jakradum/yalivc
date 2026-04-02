@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import styles from '../landing page styles/socialupdates.module.css';
+import styles from '../landing-page-styles/socialupdates.module.css';
 import Button from './button';
 
 const truncateText = (text, maxLength) => {

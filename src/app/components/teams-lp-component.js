@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 // import { useData } from '../data/fetch component';
-import styles from '../landing page styles/team.module.css';
-import { ExpandIcon } from './icons/small icons/expandIcon';
+import styles from '../landing-page-styles/team.module.css';
+import { ExpandIcon } from './icons/small-icons/expandIcon';
 import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
 import Button from './button';
 import { genericButtonText } from '../constants';
@@ -13,6 +13,7 @@ import { Graphicfg } from './icons/background svgs/graphicfg';
 import imageLoader from '../../../image-loader';
 
 export const TeamsLPComponent = ({ teamMembers = [] }) => {
+  const router = useRouter();
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -196,13 +197,10 @@ const finalTeam = teamMembers;
           onMouseEnter={() => handleCellInteraction(member, index)}
           onMouseLeave={handleCellHoverLeave}
           onMouseMove={(e) => handleMouseMove(e, true)}
+          onClick={() => router.push(`/about-yali/${member.slug?.current || member.slug}`)}
+          style={{ cursor: 'pointer' }}
         >
-          <Link
-            href={`/about-yali/${member.slug?.current || member.slug}`}
-            style={{ cursor: 'pointer', display: 'block', textDecoration: 'none', color: 'inherit', width: '100%', height: '100%' }}
-          >
-            {cellContent}
-          </Link>
+          {cellContent}
         </td>
       );
     }
@@ -224,9 +222,7 @@ const finalTeam = teamMembers;
 
   const renderKnowMoreCell = () => (
     <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
-      <Link href="/about-yali/#team" className={styles.noUnderline}>
-        <Button>{genericButtonText}</Button>
-      </Link>
+      <Button href="/about-yali/#team">{genericButtonText}</Button>
     </td>
   );
 
@@ -253,9 +249,7 @@ const finalTeam = teamMembers;
             {renderMobileView()}
             {finalTeam.length > 0 && (
               <div className={styles.mobileViewAllButtonWrapper}>
-                <Link href="/about-yali/#team" className={styles.noUnderline}>
-                  <Button>{genericButtonText}</Button>
-                </Link>
+                <Button href="/about-yali/#team">{genericButtonText}</Button>
               </div>
             )}
           </div>
@@ -266,9 +260,7 @@ const finalTeam = teamMembers;
             </table>
             {(finalTeam.length === 4 || (finalTeam.length > 4 && finalTeam.length % 2 === 0)) && (
               <div className={styles.viewAllButtonWrapper}>
-                <Link href="/about-yali/#team" className={styles.noUnderline}>
-                  <Button>{genericButtonText}</Button>
-                </Link>
+                <Button href="/about-yali/#team">{genericButtonText}</Button>
               </div>
             )}
           </>
