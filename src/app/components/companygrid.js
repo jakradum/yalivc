@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import localCompaniesData from '../data/companies.json';
 import styles from '../landing-page-styles/companies.module.css';
 import Button from './button';
@@ -38,6 +39,7 @@ export const vectorUsageMap = {
 };
 
 const CompanyTable = ({ companies }) => {
+  const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -118,50 +120,52 @@ const CompanyTable = ({ companies }) => {
           {buttonText}
         </Button>
       </div>
-      <table className={styles.companyTable}>
-        <tbody>
-          {[0, 1].map((row) => {
-            const rowItems = companiesData.data.slice(row * 5, (row + 1) * 5);
-            const ghostCount = 5 - rowItems.length;
-            return (
-              <tr key={row}>
-                {rowItems.map((company, index) => (
-                  <td key={index} className={styles.companyCell}>
-                      <article className={styles.companyContent}>
-                        <div className={styles.companyNumber}>
-                          <h2>{String(row * 5 + index + 1).padStart(2, '0')}</h2>
-                        </div>
-                        <h4 className={styles.companyTitle}>{company.name}</h4>
-                        <p className={styles.companyCategory}>{company.category?.name}</p>
+      <div className={styles.cardGrid}>
+        {companiesData.data.map((company, index) => {
+          const categorySlug = company.category?.slug?.current;
+          const companySlug = company.slug?.current;
+          const href = categorySlug && companySlug && company.enableCompanyPage
+            ? `/investments/${categorySlug}/${companySlug}/`
+            : null;
 
-                        <div className={styles.vector}>{vectorUsageMap[company.category?.name?.toLowerCase()]}</div>
-                        {company.logo && (
-                          <div className={styles.imagePlaceholder}>
-                            <Image
-                              src={urlFor(company.logo).width(100).url()}
-                              alt={company.name}
-                              width={100}
-                              height={100}
-                              style={{ objectFit: 'contain' }}
-                            />
-                          </div>
-                        )}
-                        <p className={styles.companyOneLiner}>{company.oneLiner}</p>
-                      </article>
-                  </td>
-                ))}
-                {ghostCount > 0 && (
-                  <td colSpan={ghostCount} className={styles.fillerCell}>
-                    <div className={styles.fillerVectorInner}>
-                      <FillerVector />
+          const cardContent = (
+            <div className={styles.cardInner}>
+              <div className={styles.cardTop}>
+                <div className={styles.cardHeader}>
+                  {company.logo && (
+                    <div className={styles.cardLogo}>
+                      <Image
+                        src={urlFor(company.logo).width(80).url()}
+                        alt={company.name}
+                        width={40}
+                        height={40}
+                        className={styles.cardLogoImg}
+                      />
                     </div>
-                  </td>
+                  )}
+                  <div className={styles.cardMeta}>
+                    <span className={styles.cardName}>{company.name}</span>
+                    <span className={styles.cardSector}>{company.category?.name}</span>
+                  </div>
+                </div>
+                {company.link && (
+                  <div className={styles.cardVisitBtn}>
+                    <Button href={company.link} target="_blank" color="black">visit site</Button>
+                  </div>
                 )}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              </div>
+              <p className={styles.cardOneLiner}>{company.oneLiner}</p>
+            </div>
+          );
+
+          // onClick navigation to company page disabled — re-enable later
+          return (
+            <div key={index} className={styles.cardStatic}>
+              {cardContent}
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 
