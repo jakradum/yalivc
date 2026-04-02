@@ -91,13 +91,6 @@ export default async function BlogPost({ params }) {
 
   return (
     <section>
-      {/* Breadcrumb */}
-      <div className={companyStyles.breadcrumb}>
-        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
-          ← Blog
-        </Link>
-      </div>
-
       <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
         <header className={companyStyles.articleHeader}>
           {(post.contentType || displayCategories.length > 0) && (

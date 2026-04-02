@@ -5,7 +5,6 @@ import styles from '../../../about-yali/about-styles.module.css';
 import newsStyles from '../../../newsroom/newscomponent.module.css';
 import companyStyles from './company.module.css';
 import HeaderFlex from '../../../components/icons/headerflex';
-import Breadcrumb from '../../../components/breadcrumb';
 import Image from 'next/image';
 import Button from '../../../components/button';
 import { notFound } from 'next/navigation';
@@ -82,8 +81,6 @@ export default async function CompanyPage({ params }) {
 
   return (
     <section>
-      <Breadcrumb />
-
       {/* HEADER */}
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
@@ -255,7 +252,7 @@ export default async function CompanyPage({ params }) {
       {/* RELATED CONTENT */}
       {allContent.length > 0 && <hr className={companyStyles.horizontalLine} />}
       {allContent.length > 0 && (
-        <section className={styles.sectorsSection} style={{ paddingBottom: 0, marginBottom: '1rem' }}>
+        <section className={`${styles.sectorsSection} ${companyStyles.noBottomLine}`} style={{ paddingBottom: 0, marginBottom: '1rem' }}>
           <div className={styles.people}>
             <HeaderFlex title="Related Content" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
           </div>
@@ -304,7 +301,6 @@ export default async function CompanyPage({ params }) {
           </div>
         </section>
       )}
-      <Breadcrumb />
     </section>
   );
 }

@@ -9,6 +9,8 @@ const Breadcrumb = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(segment => segment);
 
+  if (pathSegments.length < 2) return null;
+
   // Helper function to properly format segment titles
   const formatSegmentTitle = (segment) => {
     // Handle special cases

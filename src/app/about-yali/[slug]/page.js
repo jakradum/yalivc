@@ -1,7 +1,6 @@
 import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers, getSocialUpdatesByTeamMember } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
 import teamStyles from './team-profile.module.css';
-import Breadcrumb from '../../components/breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../../components/button';
@@ -53,8 +52,6 @@ export default async function TeamMemberPage({ params }) {
 
   return (
     <section className={teamStyles.container}>
-      <Breadcrumb />
-
       {/* Top Row - Photo floats left, About text wraps around */}
       <div className={teamStyles.topRow}>
         {/* Photo floats left */}
@@ -241,7 +238,6 @@ export default async function TeamMemberPage({ params }) {
         </div>
       )}
 
-      <Breadcrumb />
     </section>
   );
 }

@@ -1,7 +1,6 @@
 import styles from './press-downloads.module.css';
 import aboutStyles from '../../about-yali/about-styles.module.css';
 import HeaderFlex from '../../components/icons/headerflex';
-import Breadcrumb from '../../components/breadcrumb';
 import { getCategories, getTeamMembers } from '@/lib/sanity-queries';
 import PressDownloadsClient from './PressDownloadsClient';
 
@@ -24,8 +23,6 @@ export default async function PressDownloads() {
 
   return (
     <section className={styles.container}>
-      <Breadcrumb />
-
       <div className={aboutStyles.people}>
         <HeaderFlex
           title="Media Download Centre"

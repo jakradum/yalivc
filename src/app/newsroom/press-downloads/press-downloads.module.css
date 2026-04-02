@@ -1,7 +1,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 5%;
+  padding: 2rem 5% 0;
 }
 
 .header {
@@ -179,8 +179,7 @@
   position: relative;
 }
 
-.contactSection::before,
-.contactSection::after {
+.contactSection::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -188,14 +187,7 @@
   width: 100vw;
   height: 1px;
   background-color: #000;
-}
-
-.contactSection::before {
   top: 0;
-}
-
-.contactSection::after {
-  bottom: 0;
 }
 
 .contactSection h3 {

@@ -3,6 +3,7 @@ import './styles/globals.css';
 import { headers } from 'next/headers';
 import Navbar from './components/Navbar';
 import Footer from './components/footer';
+import Breadcrumb from './components/breadcrumb';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ProviderWrapper from './data/provider-wrapper';
 
@@ -64,7 +65,7 @@ export default async function RootLayout({ children }) {
             <Navbar />
             <div className="page-wrapper">
               <ProviderWrapper>
-                <main>{children}</main>
+                <main><Breadcrumb />{children}</main>
               </ProviderWrapper>
               <Footer />
             </div>
