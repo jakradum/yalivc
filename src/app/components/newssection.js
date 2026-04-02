@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../landing-page-styles/newssec.module.css';
 import Button from './button';
-import Link from 'next/link';
 import fallbackData from '../data/news.json';
 
 
@@ -72,9 +71,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
 
   const renderButton = () => (
     <div className={`${styles.article} ${styles.readAllButton}`}>
-      <Link style={{ textDecoration: 'none' }} href="/newsroom">
-        <Button color="black">{buttonText}</Button>
-      </Link>
+      <Button href="/newsroom" color="black">{buttonText}</Button>
     </div>
   );
 
