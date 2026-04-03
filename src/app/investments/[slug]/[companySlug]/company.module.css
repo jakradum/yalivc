@@ -154,18 +154,38 @@
 
 /* Story Section */
 .storySection {
-  padding: 0 2rem;
-  max-width: 800px;
+  border-bottom: 1px solid #363636;
+  padding: 28px 32px;
+}
+
+.storyLabel {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #fff;
+  background: #830D35;
+  display: block;
+  width: fit-content;
+  padding: 4px 10px;
+  margin: 0 auto 16px auto;
+}
+
+.storyCard {
+  border: 1px solid #363636;
+  padding: 28px;
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
+  background: #efefef;
 }
 
-.storySection h2 {
-  margin-top: 2rem;
-}
-
-.storyContent {
-  line-height: 1.8;
-  font-size: 1.0625rem;
+.storyArticle {
+  border: none;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
 }
 
 .storyImage {
@@ -202,49 +222,47 @@
 }
 
 .timeline {
-  margin-top: 0.5rem;
-  border-left: 2px solid #830D35;
-  padding-left: 2rem;
-  padding-top: 0;
-  padding-bottom: 3rem;
-  margin-left: 0.5rem;
+  margin: 0;
 }
 
 .timelineItem {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  position: relative;
-  align-items: start;
+  display: flex;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(54, 54, 54, 0.1);
+}
+
+.timelineItem:last-child {
+  border-bottom: none;
 }
 
 .timelineDate {
-  padding-top: 0.25rem;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(54, 54, 54, 0.4);
+  white-space: nowrap;
+  min-width: 80px;
+  padding-top: 2px;
 }
 
 .timelineContent {
-  padding-top: 0;
+  font-family: var(--font-inter);
+  font-size: 12px;
+  color: #363636;
+  line-height: 1.5;
 }
 
 .timelineContent h4 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: #363636;
+  margin: 0 0 4px 0;
 }
 
 .timelineContent p {
-  margin-top: 0.5rem;
-}
-
-.timelineItem::before {
-  content: '';
-  position: absolute;
-  left: -2.5rem;
-  top: 0.5rem;
-  width: 12px;
-  height: 12px;
-  background-color: #f5f5f5;
-  border: 1.5px solid #830D35;
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.6);
+  margin: 0;
 }
 
 /* Divider below "Behind the deal" title — extends to page borders */
@@ -600,5 +618,273 @@
 
   .breadcrumb {
     padding: 2.5rem 1rem 1rem;
+  }
+}
+
+/* ============================================
+   COMPANY PAGE — NEW LAYOUT (2025)
+   ============================================ */
+
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  position: relative;
+}
+
+.heroLeft {
+  padding: 44px 40px;
+  border-right: 1px solid #363636;
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.heroNameSvg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: auto;
+  pointer-events: none;
+}
+
+.heroNameSvg svg {
+  height: 100%;
+  width: auto;
+}
+
+.heroSector {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #830D35;
+  margin: 0 0 16px 0;
+}
+
+.heroName {
+  font-size: 52px;
+  font-family: var(--font-jetbrains-mono);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: #363636;
+  margin: 0 0 20px 0;
+}
+
+.heroOneLiner {
+  font-family: var(--font-inter);
+  font-size: 14px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.65;
+  max-width: 380px;
+  margin: 0;
+}
+
+.heroFooter {
+  position: relative;
+  z-index: 1;
+  margin-top: 28px;
+}
+
+.heroLink {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #830D35;
+  text-decoration: underline;
+}
+
+.heroRight {
+  background-color: #830D35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.heroLogoContainer {
+  width: 110px;
+  height: 110px;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.heroLogoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Metrics Bar */
+.metricsBar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid #363636;
+}
+
+.metricCell {
+  padding: 16px 20px;
+  border-right: 1px solid #363636;
+}
+
+.metricCell:last-child {
+  border-right: none;
+}
+
+.metricsBarLabel {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #830D35;
+  margin: 0 0 5px 0;
+}
+
+.metricsBarValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #363636;
+  margin: 0;
+}
+
+/* Founders Section */
+.foundersSection {
+  border-bottom: 1px solid #363636;
+  padding: 24px 32px;
+}
+
+.foundersLabel {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #830D35;
+  margin: 0 0 16px 0;
+}
+
+.foundersGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.foundersGridCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.founderPhotoWrap {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(54, 54, 54, 0.08);
+}
+
+.founderPhotoImg {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  display: block;
+}
+
+.foundersGridName {
+  font-family: var(--font-inter);
+  font-size: 15px;
+  font-weight: 700;
+  color: #363636;
+  margin: 0 0 3px 0;
+}
+
+.foundersGridRole {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.5);
+  margin: 0 0 6px 0;
+}
+
+.foundersGridLinkedIn {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #830D35;
+  text-decoration: underline;
+  display: block;
+}
+
+/* Milestones Section */
+.milestonesSection {
+  padding: 28px 32px;
+}
+
+.milestonesLabel {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #830D35;
+  margin: 0 0 16px 0;
+}
+
+/* Responsive — new layout sections */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .heroLeft {
+    border-right: none;
+    padding: 28px 24px;
+    min-height: auto;
+  }
+
+  .heroRight {
+    min-height: 160px;
+    padding: 24px;
+  }
+
+  .heroName {
+    font-size: 36px;
+  }
+
+  .metricsBar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metricCell {
+    border-bottom: 1px solid #363636;
+  }
+
+  .foundersSection,
+  .milestonesSection {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .storySection {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .storyArticle {
+    padding: 20px;
   }
 }
