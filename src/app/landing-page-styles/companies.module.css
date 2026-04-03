@@ -256,111 +256,175 @@
     transition: all 0.5s ease;
 }
 
-/* ── 2-column card grid ─────────────────────────────────────── */
+/* ── Portfolio area (right column) ─────────────────────────── */
 
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  border-left: 0.0625rem solid black;
-  width: 75%;
-}
-
-.cardLink,
-.cardStatic {
-  border-right: 0.0625rem solid black;
-  border-bottom: 0.0625rem solid black;
-  background-color: #efefef;
-}
-
-.cardLink {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  cursor: pointer;
-}
-
-.cardLink:hover {
-  background-color: white;
-}
-
-.cardInner {
-  padding: 1rem 1.25rem;
+.portfolioArea {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  border-left: 1px solid #363636;
 }
 
-.cardTop {
+/* ── Featured pinned row ────────────────────────────────────── */
+
+.featuredRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 29px;
+  padding: 34px 29px;
+  background: rgba(131, 13, 53, 0.05);
+  border-right: 1px solid #363636;
+}
+
+.featuredIdentity {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.cardVisitBtn {
+  gap: 14px;
   flex-shrink: 0;
 }
 
-.cardVisitBtn a {
-  font-size: 0.5rem !important;
-}
-
-.cardVisitBtn a svg {
-  height: 0.4rem !important;
-  width: auto;
-}
-
-.cardHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.cardLogo {
-  flex-shrink: 0;
-  width: 46px;
-  height: 46px;
+.featuredLogo {
+  width: 67px;
+  height: 67px;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  padding: 4px;
+  flex-shrink: 0;
+  padding: 8px;
 }
 
-.cardLogoImg {
-  width: 40px;
-  height: 40px;
+.featuredLogoImg {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-.cardMeta {
+.featuredName {
+  font-family: var(--font-inter);
+  font-size: 19px;
+  font-weight: 700;
+  color: #363636;
+  margin-bottom: 2px;
+}
+
+.featuredSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.featuredDescCol {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 10px;
 }
 
-.cardName {
-  font-family: var(--font-inter);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #363636;
-  line-height: 1.2;
-}
-
-.cardSector {
+.featuredLabel {
   font-family: var(--font-jetbrains-mono);
-  font-size: 0.65rem;
-  font-weight: 400;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #830D35;
+  color: rgba(54, 54, 54, 0.35);
 }
 
-.cardOneLiner {
+.featuredDesc {
   font-family: var(--font-inter);
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: #666;
+  font-size: 14px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 528px;
+}
+
+.featuredViewLink {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #830d35;
+  text-decoration: underline;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Company grid ───────────────────────────────────────────── */
+
+.companyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid #363636;
+}
+
+.gridCell {
+  border-right: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gridCellLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.gridCellLink:hover {
+  background: rgba(131, 13, 53, 0.03);
+}
+
+.cellIdentity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cellLogo {
+  width: 36px;
+  height: 36px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 4px;
+}
+
+.cellLogoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cellName {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 700;
+  color: #363636;
+  margin-bottom: 1px;
+}
+
+.cellSector {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.cellDesc {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.55);
   line-height: 1.5;
   margin: 0;
 }
@@ -393,12 +457,22 @@
 
     .sidebar,
     .companyTable,
-    .cardGrid {
+    .portfolioArea {
         width: 100%;
     }
 
-    .cardGrid {
-        border-top: 0.0625rem solid black;
+    .portfolioArea {
+        border-left: none;
+        border-top: 1px solid #363636;
+    }
+
+    .featuredRow,
+    .companyGrid {
+        border-left: 1px solid #363636;
+    }
+
+    .companyGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .sidebar {
@@ -604,5 +678,62 @@
     .mobileCompanyGrid > button:hover {
         background-color: #000;
         color: #fff;
+    }
+
+    /* ── Featured mobile card colour overrides ─────────────── */
+
+    .mobileFeaturedLabel {
+        font-family: var(--font-jetbrains-mono);
+        font-size: 8px;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #efefef;
+        margin-bottom: 0.25rem;
+    }
+
+    .mobileCardViewLink {
+        color: #ebde84;
+        font-family: var(--font-jetbrains-mono);
+        font-size: 0.75rem;
+        text-decoration: underline;
+    }
+
+    .mobileCompanyCardFeatured {
+        background-color: #830d35;
+        border-color: #830d35;
+    }
+
+    .mobileCompanyCardFeatured .companyNumber > h2 {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .totalCount > h3 {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .companyTitle {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .companyCategory {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured small {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured > article > p:last-of-type {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .mobileVector {
+        background-color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .mobileVector svg path {
+        stroke: #830d35;
+        stroke-width: 6;
     }
 }

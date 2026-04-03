@@ -14,6 +14,7 @@ export async function getCompanies() {
       detail,
       link,
       enableCompanyPage,
+      isFeatured,
       "logo": logo.asset->url,
       order
     }`

@@ -101,6 +101,14 @@ export default {
       group: 'basic',
     },
     {
+      name: 'isFeatured',
+      title: 'Featured on Homepage',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Pin this company as the featured card at the top of the homepage portfolio section. Only one company should be featured at a time.',
+      group: 'basic',
+    },
+    {
       name: 'aboutCompany',
       title: 'About the Company',
       type: 'text',
