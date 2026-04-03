@@ -1,87 +1,66 @@
 .breadcrumb {
-  margin-top: 0;
+  background: #efefef;
+  padding: 10px 24px;
+  border-bottom: 1px solid rgba(54, 54, 54, 0.12);
 }
 
 .breadcrumb ol {
   list-style: none;
-  padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
-  margin-bottom: 0;
+  gap: 10px;
   flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
 }
 
 .breadcrumb li {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-.breadcrumb .separator {
-  margin: 0 0.5rem;
-  color: #999;
+.separator {
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.2);
+  user-select: none;
 }
 
-.breadcrumb a {
-  text-decoration: none;
-  color: #830D35;
-  transition: color 0.2s ease;
-}
-
-.breadcrumb a:hover {
-  color: #5a0923;
-  text-decoration: underline;
-}
-
-.breadcrumb [aria-current="page"] {
-  font-weight: 400;
-  color: #666;
+.bcLink {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  color: rgba(54, 54, 54, 0.4);
+  text-decoration: none;
+}
+
+.bcLink:hover {
+  color: #363636;
 }
 
 @media (max-width: 950px) {
   .breadcrumb {
-    margin-top: 1rem;
-    padding-top: 1rem;
+    padding-top: 2rem;
+  }
+
+  .breadcrumb li {
+    display: none;
+  }
+
+  .breadcrumb li:nth-last-child(-n+2) {
+    display: flex;
   }
 }
 
-/* Mobile responsive fixes */
-@media (max-width: 768px) {
-  .breadcrumb ol {
-    padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-  }
-  
-  .breadcrumb .separator {
-    margin: 0 0.3rem;
-  }
-  
-  .breadcrumb [aria-current="page"] {
-    font-size: 0.75rem;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-@media (max-width: 480px) {
-  .breadcrumb ol {
-    padding: 0.75rem 1rem;
-    font-size: 0.75rem;
-  }
-  
-  .breadcrumb .separator {
-    margin: 0 0.25rem;
-  }
-  
-  .breadcrumb [aria-current="page"] {
-    font-size: 0.7rem;
-    max-width: 100px;
-  }
-  
-  .breadcrumb a {
-    font-size: 0.75rem;
-  }
+.bcCurrent {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #efefef;
+  background: #830d35;
+  padding: 4px 10px;
 }

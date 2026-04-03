@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import localCompaniesData from '../data/companies.json';
 import styles from '../landing-page-styles/companies.module.css';
 import Button from './button';
@@ -72,7 +73,13 @@ const CompanyTable = ({ companies }) => {
     }
   };
 
-   const companiesData = { data: companies || localCompaniesData.data };
+  const rawCompanies = companies || localCompaniesData.data;
+  const companiesData = {
+    data: [
+      ...rawCompanies.filter(c => c.isFeatured),
+      ...rawCompanies.filter(c => !c.isFeatured),
+    ],
+  };
     // ? { data: data.data['companies-csv (1)'] }
     // : localCompaniesData;
 
@@ -112,62 +119,97 @@ const CompanyTable = ({ companies }) => {
     setFillerVector(() => pick);
   }, []);
 
-  const renderDesktopLayout = () => (
-    <>
-      <div className={styles.sidebar}>
-        <p className={styles.sidebarText}>{updatedText}</p>
-        <Button href="/investments" color="black">
-          {buttonText}
-        </Button>
-      </div>
-      <div className={styles.cardGrid}>
-        {companiesData.data.map((company, index) => {
-          const categorySlug = company.category?.slug?.current;
-          const companySlug = company.slug?.current;
-          const href = categorySlug && companySlug && company.enableCompanyPage
-            ? `/investments/${categorySlug}/${companySlug}/`
-            : null;
+  const getCompanyHref = (company) => {
+    const categorySlug = company.category?.slug?.current;
+    const companySlug = company.slug?.current;
+    return categorySlug && companySlug && company.enableCompanyPage
+      ? `/investments/${categorySlug}/${companySlug}/`
+      : null;
+  };
 
-          const cardContent = (
-            <div className={styles.cardInner}>
-              <div className={styles.cardTop}>
-                <div className={styles.cardHeader}>
-                  {company.logo && (
-                    <div className={styles.cardLogo}>
-                      <Image
-                        src={urlFor(company.logo).width(80).url()}
-                        alt={company.name}
-                        width={40}
-                        height={40}
-                        className={styles.cardLogoImg}
-                      />
-                    </div>
-                  )}
-                  <div className={styles.cardMeta}>
-                    <span className={styles.cardName}>{company.name}</span>
-                    <span className={styles.cardSector}>{company.category?.name}</span>
-                  </div>
-                </div>
-                {company.link && (
-                  <div className={styles.cardVisitBtn}>
-                    <Button href={company.link} target="_blank" color="black">visit site</Button>
+  const renderDesktopLayout = () => {
+    const featuredCompany = companiesData.data.find(c => c.isFeatured);
+    const regularCompanies = companiesData.data;
+    const featuredHref = featuredCompany ? getCompanyHref(featuredCompany) : null;
+
+    return (
+      <>
+        <div className={styles.sidebar}>
+          <p className={styles.sidebarText}>{updatedText}</p>
+          <Button href="/investments" color="black">
+            {buttonText}
+          </Button>
+        </div>
+        <div className={styles.portfolioArea}>
+          {featuredCompany && (
+            <div className={styles.featuredRow}>
+              <div className={styles.featuredIdentity}>
+                {featuredCompany.logo && (
+                  <div className={styles.featuredLogo}>
+                    <Image
+                      src={urlFor(featuredCompany.logo).width(134).url()}
+                      alt={featuredCompany.name}
+                      width={67}
+                      height={67}
+                      className={styles.featuredLogoImg}
+                    />
                   </div>
                 )}
+                <div>
+                  <div className={styles.featuredName}>{featuredCompany.name}</div>
+                  <div className={styles.featuredSector}>{featuredCompany.category?.name}</div>
+                </div>
               </div>
-              <p className={styles.cardOneLiner}>{company.oneLiner}</p>
+              <div className={styles.featuredDescCol}>
+              <div className={styles.featuredLabel}>Featured Portfolio Company</div>
+              <p className={styles.featuredDesc}>{featuredCompany.oneLiner}</p>
             </div>
-          );
+              {featuredHref && (
+                <Link href={featuredHref} className={styles.featuredViewLink}>View ↗</Link>
+              )}
+            </div>
+          )}
+          <div className={styles.companyGrid}>
+            {regularCompanies.map((company, index) => {
+              const href = getCompanyHref(company);
+              const cellContent = (
+                <>
+                  <div className={styles.cellIdentity}>
+                    {company.logo && (
+                      <div className={styles.cellLogo}>
+                        <Image
+                          src={urlFor(company.logo).width(56).url()}
+                          alt={company.name}
+                          width={28}
+                          height={28}
+                          className={styles.cellLogoImg}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <div className={styles.cellName}>{company.name}</div>
+                      <div className={styles.cellSector}>{company.category?.name}</div>
+                    </div>
+                  </div>
+                  <p className={styles.cellDesc}>{company.oneLiner}</p>
+                </>
+              );
 
-          // onClick navigation to company page disabled — re-enable later
-          return (
-            <div key={index} className={styles.cardStatic}>
-              {cardContent}
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
+              return href ? (
+                <Link key={index} href={href} className={`${styles.gridCell} ${styles.gridCellLink}`}>
+                  {cellContent}
+                </Link>
+              ) : (
+                <div key={index} className={styles.gridCell}>
+                  {cellContent}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </>
+    );
+  };
 
    const renderMobileLayout = () => (
     <div className={styles.mobileCompanyGrid}>
@@ -191,10 +233,13 @@ const CompanyTable = ({ companies }) => {
           return (
               <aside
                 key={index}
-                className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''}`}
+                className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''} ${company.isFeatured ? styles.mobileCompanyCardFeatured : ''}`}
                 style={cardStyle}
               >
                 <article className={styles.keyDetails}>
+                  {company.isFeatured && (
+                    <div className={styles.mobileFeaturedLabel}>Featured</div>
+                  )}
                   <div className={styles.cardHeader}>
                     <span className={styles.companyNumber}>
                       <h2>{String(index + 1).padStart(2, '0')}</h2>

@@ -29,7 +29,7 @@ const Breadcrumb = () => {
     <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
       <ol>
         <li>
-          <Link href="/">Home</Link>
+          <Link href="/" className={styles.bcLink}>Home</Link>
         </li>
         {pathSegments.map((segment, index) => {
           const href = `/${pathSegments.slice(0, index + 1).join('/')}`;
@@ -38,11 +38,11 @@ const Breadcrumb = () => {
 
           return (
             <li key={href}>
-              <span className={styles.separator}> · </span>
+              <span className={styles.separator}>→</span>
               {isLast ? (
-                <span aria-current="page">{title}</span>
+                <span aria-current="page" className={styles.bcCurrent}>{title}</span>
               ) : (
-                <Link href={href}>{title}</Link>
+                <Link href={href} className={styles.bcLink}>{title}</Link>
               )}
             </li>
           );
