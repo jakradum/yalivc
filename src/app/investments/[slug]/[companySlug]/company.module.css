@@ -665,7 +665,7 @@
 .heroNameSvg {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 32px;
   height: 100%;
   width: auto;
   pointer-events: none;
@@ -740,7 +740,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 40px 40px 40px 56px;
 }
 
 .heroLogoContainer {
@@ -883,42 +883,392 @@
   margin: 0 0 16px 0;
 }
 
-/* Responsive — new layout sections */
-@media (max-width: 768px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
+/* Mobile hero bottom — hidden on desktop */
+.mobileHeroBottom {
+  display: none;
+}
 
-  .heroLeft {
-    border-right: none;
-    padding: 28px 24px;
-    min-height: auto;
+/* In the Press Section */
+.pressSection {
+  padding: 28px 32px;
+  border-top: 1px solid #363636;
+}
+
+.pressLabel {
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #830D35;
+  margin: 0 0 16px 0;
+}
+
+.pressList {
+  border: 1px solid #363636;
+  background: #efefef;
+}
+
+.pressRow {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px;
+  align-items: stretch;
+  border-bottom: 1px solid #363636;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pressRow:last-child {
+  border-bottom: none;
+}
+
+.pressIndex {
+  padding: 20px 16px;
+  border-right: 1px solid #363636;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(54, 54, 54, 0.1);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pressContent {
+  padding: 18px 22px;
+  border-right: 1px solid #363636;
+}
+
+.pressDate {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 9px;
+  color: rgba(54, 54, 54, 0.4);
+  margin: 0 0 8px 0;
+}
+
+.pressHeadline {
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.pressRule {
+  width: 28px;
+  height: 2px;
+  background: #830D35;
+  margin-top: 8px;
+}
+
+.pressMeta {
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pressSeeMore {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pressPub {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.4);
+  text-align: right;
+  margin: 0;
+}
+
+/* ================================================================
+   MOBILE — max-width: 950px
+   ================================================================ */
+@media (max-width: 950px) {
+
+  /* ── HERO ── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    background: #830D35;
+    border-top: 1px solid #363636;
+    border-bottom: none;
   }
 
   .heroRight {
-    min-height: 160px;
-    padding: 24px;
+    order: -1;
+    background: transparent;
+    padding: 20px 16px 0;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
+  .heroLogoContainer {
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+  }
+
+  .heroLeft {
+    background: transparent;
+    border-right: none;
+    padding: 12px 16px 20px;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .heroNameSvg {
+    display: none;
+  }
+
+  .heroContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .heroSector {
+    font-family: var(--font-jetbrains-mono);
+    font-size: 8px;
+    color: rgba(239, 239, 239, 0.55);
+    background: transparent;
+    padding-right: 0;
+    margin: 0 0 8px 0;
+  }
+
+  .heroName {
+    font-family: var(--font-inter);
+    font-size: 18px;
+    font-weight: 700;
+    color: #efefef;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .heroOneLiner {
+    display: none;
+  }
+
+  .heroFooter {
+    display: none;
+  }
+
+  /* ── MOBILE ONE-LINER + LINK ── */
+  .mobileHeroBottom {
+    display: block;
+    padding: 14px 16px;
+    border-bottom: 1px solid #363636;
+    background: #efefef;
+  }
+
+  .mobileOneLinerText {
+    font-family: var(--font-inter);
+    font-size: 12px;
+    color: rgba(54, 54, 54, 0.6);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .mobileVisitLink {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-jetbrains-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #830D35;
+    text-decoration: underline;
+  }
+
+  /* ── METRICS BAR ── */
   .metricsBar {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .metricCell {
+    padding: 10px 12px;
     border-bottom: 1px solid #363636;
   }
 
-  .foundersSection,
-  .milestonesSection {
-    padding-left: 24px;
-    padding-right: 24px;
+  .metricsBarLabel {
+    font-size: 7px;
   }
 
+  .metricsBarValue {
+    font-size: 13px;
+  }
+
+  /* ── FOUNDERS ── */
+  .foundersSection {
+    padding: 12px 16px;
+  }
+
+  .foundersLabel {
+    font-size: 8px;
+    margin-bottom: 20px;
+  }
+
+  .foundersGrid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 20px;
+  }
+
+  .foundersGridCard {
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .founderPhotoWrap {
+    width: 28px;
+    height: auto;
+    align-self: stretch;
+  }
+
+  .founderPhotoImg {
+    width: 28px;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .foundersGridName {
+    font-size: 11px;
+  }
+
+  .foundersGridRole {
+    font-size: 10px;
+  }
+
+  .founderLinkWrapper a {
+    font-size: 8px !important;
+  }
+
+  .founderLinkWrapper svg {
+    height: 8px !important;
+  }
+
+  /* ── BEHIND THE DEAL ── */
   .storySection {
-    padding: 16px;
+    padding: 12px 16px;
+  }
+
+  .storyLabel {
+    font-size: 8px;
+    background: transparent;
+    color: #830D35;
+    margin: 0 0 10px 0;
+    padding: 0;
   }
 
   .storyCard {
-    padding: 20px;
+    padding: 14px;
+  }
+
+  .articleTitle {
+    font-family: var(--font-jetbrains-mono);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .authorInfo {
+    gap: 8px;
+  }
+
+  .authorPhoto {
+    width: 28px;
+    height: 28px;
+  }
+
+  .authorName {
+    font-size: 10px;
+  }
+
+  .authorRole {
+    font-size: 9px;
+  }
+
+  .articleBody {
+    font-size: 12px;
+  }
+
+  /* ── MILESTONES ── */
+  .milestonesSection {
+    padding: 12px 16px;
+    border-bottom: 1px solid #363636;
+  }
+
+  .milestonesLabel {
+    font-size: 8px;
+    margin-bottom: 10px;
+  }
+
+  .timelineDate {
+    font-size: 9px;
+    min-width: 60px;
+  }
+
+  .timelineContent {
+    font-size: 11px;
+  }
+
+  .timelineContent h4 {
+    font-size: 11px;
+  }
+
+  .timelineContent p {
+    font-size: 11px;
+  }
+
+  /* ── IN THE PRESS ── */
+  .pressSection {
+    padding: 12px 16px;
+  }
+
+  .pressLabel {
+    font-size: 8px;
+    margin-bottom: 10px;
+  }
+
+  .pressRow {
+    display: block;
+  }
+
+  .pressIndex {
+    display: none;
+  }
+
+  .pressContent {
+    border-right: none;
+    padding: 12px 0 8px;
+  }
+
+  .pressRule {
+    width: 20px;
+  }
+
+  .pressMeta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 12px;
+    gap: 0;
   }
 }

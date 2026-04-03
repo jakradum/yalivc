@@ -1,10 +1,7 @@
 import { getCompanyBySlug, getContentByCompany } from '@/lib/sanity-queries';
 import { urlFor } from '@/sanity/client';
 import { PortableText } from '@portabletext/react';
-import styles from '../../../about-yali/about-styles.module.css';
-import newsStyles from '../../../newsroom/newscomponent.module.css';
 import companyStyles from './company.module.css';
-import HeaderFlex from '../../../components/icons/headerflex';
 import Button from '../../../components/button';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -145,6 +142,25 @@ export default async function CompanyPage({ params }) {
         </div>
       </div>
 
+      {/* MOBILE: one-liner + visit website (hidden on desktop) */}
+      {(company.oneLiner || company.link) && (
+        <div className={companyStyles.mobileHeroBottom}>
+          {company.oneLiner && (
+            <p className={companyStyles.mobileOneLinerText}>{company.oneLiner}</p>
+          )}
+          {company.link && (
+            <a
+              href={company.link}
+              className={companyStyles.mobileVisitLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit website ↗
+            </a>
+          )}
+        </div>
+      )}
+
       {/* METRICS BAR */}
       {(company.companyInfo?.founded || company.companyInfo?.headquarters || roundName || investedDate) && (
         <div className={companyStyles.metricsBar}>
@@ -268,56 +284,52 @@ export default async function CompanyPage({ params }) {
         </div>
       )}
 
-      {/* RELATED CONTENT */}
-      {allContent.length > 0 && <hr className={companyStyles.horizontalLine} />}
+      {/* IN THE PRESS */}
       {allContent.length > 0 && (
-        <section className={`${styles.sectorsSection} ${companyStyles.noBottomLine}`} style={{ paddingBottom: 0, marginBottom: '1rem' }}>
-          <div className={styles.people}>
-            <HeaderFlex title="Related Content" color="black" desktopMaxWidth={'40%'} mobileMinHeight={'6rem'} />
-          </div>
-
-          <div className={newsStyles.newsArticles}>
-            {allContent.map((item) => {
-              const date = new Date(item.date);
-              const day = date.getDate().toString().padStart(2, '0');
-              const month = date.toLocaleString('default', { month: 'short' });
-              const year = date.getFullYear();
-
-              return (
-                <article key={item._id} className={newsStyles.article}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '0.5rem',
-                    }}
+        <section className={companyStyles.pressSection}>
+          <p className={companyStyles.pressLabel}>In the press</p>
+          <div className={companyStyles.pressList}>
+            {[...allContent]
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .slice(0, 3)
+              .map((item, idx) => {
+                const date = new Date(item.date);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = date.toLocaleString('default', { month: 'short' });
+                const year = date.getFullYear();
+                const RowTag = item.url ? 'a' : 'div';
+                return (
+                  <RowTag
+                    key={item._id}
+                    className={companyStyles.pressRow}
+                    {...(item.url ? {
+                      href: item.url,
+                      target: item.isExternal ? '_blank' : undefined,
+                      rel: item.isExternal ? 'noopener noreferrer' : undefined,
+                    } : {})}
                   >
-                    <p className={newsStyles.articleDate}>{`${day} ${month} ${year}`}</p>
-                    <span
-                      style={{
-                        fontSize: '0.75rem',
-                        fontWeight: '600',
-                        color: '#830D35',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {item.type}
-                    </span>
-                  </div>
-                  <a
-                    href={item.url}
-                    target={item.isExternal ? '_blank' : undefined}
-                    rel={item.isExternal ? 'noopener noreferrer' : undefined}
-                  >
-                    <p className={newsStyles.articleTitle}>{item.title}</p>
-                  </a>
-                  <p className={newsStyles.articleMeta}>{item.source}</p>
-                </article>
-              );
-            })}
+                    <div className={companyStyles.pressIndex}>
+                      {String(idx + 1).padStart(2, '0')}
+                    </div>
+                    <div className={companyStyles.pressContent}>
+                      {item.source && <p className={companyStyles.pressDate}>{item.source}</p>}
+                      <p className={companyStyles.pressHeadline}>{item.title}</p>
+                      <div className={companyStyles.pressRule}></div>
+                    </div>
+                    <div className={companyStyles.pressMeta}>
+                      <p className={companyStyles.pressPub}>{`${day} ${month} ${year}`}</p>
+                    </div>
+                  </RowTag>
+                );
+              })}
           </div>
+          {allContent.length > 3 && (
+            <div className={companyStyles.pressSeeMore}>
+              <Button href="/newsroom" color="#830D35">
+                See more
+              </Button>
+            </div>
+          )}
         </section>
       )}
     </section>
