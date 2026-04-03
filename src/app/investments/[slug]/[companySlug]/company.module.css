@@ -707,6 +707,14 @@
   text-decoration: underline;
 }
 
+.heroLinkWrapper a {
+  font-size: 10px !important;
+}
+
+.heroLinkWrapper svg {
+  height: 10px !important;
+}
+
 .heroRight {
   background-color: #830D35;
   display: flex;
@@ -828,6 +836,14 @@
   color: #830D35;
   text-decoration: underline;
   display: block;
+}
+
+.founderLinkWrapper a {
+  font-size: 9px !important;
+}
+
+.founderLinkWrapper svg {
+  height: 9px !important;
 }
 
 /* Milestones Section */

@@ -5,6 +5,7 @@ import styles from '../../../about-yali/about-styles.module.css';
 import newsStyles from '../../../newsroom/newscomponent.module.css';
 import companyStyles from './company.module.css';
 import HeaderFlex from '../../../components/icons/headerflex';
+import Button from '../../../components/button';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { DefenceVector } from '../../../components/icons/background svgs/category svgs/defence vector';
@@ -121,14 +122,11 @@ export default async function CompanyPage({ params }) {
           </div>
           {company.link && (
             <div className={companyStyles.heroFooter}>
-              <a
-                href={company.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={companyStyles.heroLink}
-              >
-                Visit website ↗
-              </a>
+              <div className={companyStyles.heroLinkWrapper}>
+                <Button href={company.link} color="#830D35" target="_blank">
+                  Visit website
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -201,14 +199,11 @@ export default async function CompanyPage({ params }) {
                   <p className={companyStyles.foundersGridName}>{founder.name}</p>
                   <p className={companyStyles.foundersGridRole}>{founder.role}</p>
                   {founder.linkedIn && (
-                    <a
-                      href={founder.linkedIn}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={companyStyles.foundersGridLinkedIn}
-                    >
-                      LinkedIn ↗
-                    </a>
+                    <div className={companyStyles.founderLinkWrapper}>
+                      <Button href={founder.linkedIn} color="#830D35" target="_blank">
+                        LinkedIn
+                      </Button>
+                    </div>
                   )}
                 </div>
               </div>
