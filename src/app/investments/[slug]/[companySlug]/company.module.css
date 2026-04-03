@@ -156,10 +156,11 @@
 .storySection {
   border-bottom: 1px solid #363636;
   padding: 28px 32px;
+  overflow: hidden;
 }
 
 .storyLabel {
-  font-size: 9px;
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -175,9 +176,10 @@
   border: 1px solid #363636;
   padding: 28px;
   max-width: 900px;
-  width: 100%;
   margin: 0 auto;
   background: #efefef;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .storyArticle {
@@ -237,7 +239,7 @@
 }
 
 .timelineDate {
-  font-size: 10px;
+  font-size: clamp(13px, calc(17.36px - 0.3636vw), 16px);
   font-weight: 600;
   color: rgba(54, 54, 54, 0.4);
   white-space: nowrap;
@@ -247,20 +249,20 @@
 
 .timelineContent {
   font-family: var(--font-inter);
-  font-size: 12px;
+  font-size: clamp(12px, calc(16.36px - 0.3636vw), 15px);
   color: #363636;
   line-height: 1.5;
 }
 
 .timelineContent h4 {
-  font-size: 12px;
+  font-size: clamp(12px, calc(16.36px - 0.3636vw), 15px);
   font-weight: 600;
   color: #363636;
   margin: 0 0 4px 0;
 }
 
 .timelineContent p {
-  font-size: 11px;
+  font-size: clamp(11px, calc(15.36px - 0.3636vw), 14px);
   color: rgba(54, 54, 54, 0.6);
   margin: 0;
 }
@@ -541,6 +543,12 @@
   font-size: 1.0625rem;
   line-height: 1.8;
   color: #363636;
+  overflow-wrap: break-word;
+}
+
+.articleBody img {
+  max-width: 100%;
+  height: auto;
 }
 
 .articleBody p {
@@ -625,6 +633,10 @@
    COMPANY PAGE — NEW LAYOUT (2025)
    ============================================ */
 
+.pageOuter {
+  overflow-x: hidden;
+}
+
 /* Hero */
 .hero {
   display: grid;
@@ -665,16 +677,19 @@
 }
 
 .heroSector {
-  font-size: 10px;
+  font-size: clamp(10px, calc(14.36px - 0.3636vw), 13px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: #830D35;
   margin: 0 0 16px 0;
+  display: inline-block;
+  background: #efefef;
+  padding-right: 16px;
 }
 
 .heroName {
-  font-size: 52px;
+  font-size: clamp(36px, calc(28.73px + 1.939vw), 52px);
   font-family: var(--font-jetbrains-mono);
   font-weight: 700;
   line-height: 0.95;
@@ -685,17 +700,22 @@
 
 .heroOneLiner {
   font-family: var(--font-inter);
-  font-size: 14px;
+  font-size: clamp(14px, calc(18.36px - 0.3636vw), 17px);
   color: rgba(54, 54, 54, 0.6);
   line-height: 1.65;
   max-width: 380px;
   margin: 0;
+  background: #efefef;
+  padding-right: 16px;
 }
 
 .heroFooter {
   position: relative;
   z-index: 1;
   margin-top: 28px;
+  display: inline-block;
+  background: #efefef;
+  padding-right: 16px;
 }
 
 .heroLink {
@@ -708,11 +728,11 @@
 }
 
 .heroLinkWrapper a {
-  font-size: 10px !important;
+  font-size: clamp(10px, calc(14.36px - 0.3636vw), 13px) !important;
 }
 
 .heroLinkWrapper svg {
-  height: 10px !important;
+  height: clamp(10px, calc(14.36px - 0.3636vw), 13px) !important;
 }
 
 .heroRight {
@@ -756,7 +776,7 @@
 }
 
 .metricsBarLabel {
-  font-size: 9px;
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -765,7 +785,7 @@
 }
 
 .metricsBarValue {
-  font-size: 16px;
+  font-size: clamp(16px, calc(20.36px - 0.3636vw), 19px);
   font-weight: 700;
   color: #363636;
   margin: 0;
@@ -778,7 +798,7 @@
 }
 
 .foundersLabel {
-  font-size: 9px;
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -815,7 +835,7 @@
 
 .foundersGridName {
   font-family: var(--font-inter);
-  font-size: 15px;
+  font-size: clamp(15px, calc(19.36px - 0.3636vw), 18px);
   font-weight: 700;
   color: #363636;
   margin: 0 0 3px 0;
@@ -823,7 +843,7 @@
 
 .foundersGridRole {
   font-family: var(--font-inter);
-  font-size: 11px;
+  font-size: clamp(11px, calc(15.36px - 0.3636vw), 14px);
   color: rgba(54, 54, 54, 0.5);
   margin: 0 0 6px 0;
 }
@@ -839,11 +859,14 @@
 }
 
 .founderLinkWrapper a {
-  font-size: 9px !important;
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px) !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .founderLinkWrapper svg {
-  height: 9px !important;
+  height: clamp(9px, calc(13.36px - 0.3636vw), 12px) !important;
 }
 
 /* Milestones Section */
@@ -852,7 +875,7 @@
 }
 
 .milestonesLabel {
-  font-size: 9px;
+  font-size: clamp(9px, calc(13.36px - 0.3636vw), 12px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -877,10 +900,6 @@
     padding: 24px;
   }
 
-  .heroName {
-    font-size: 36px;
-  }
-
   .metricsBar {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -896,11 +915,10 @@
   }
 
   .storySection {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 16px;
   }
 
-  .storyArticle {
+  .storyCard {
     padding: 20px;
   }
 }

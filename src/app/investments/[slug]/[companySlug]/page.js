@@ -106,7 +106,7 @@ export default async function CompanyPage({ params }) {
   const investedDate = formatInvestedDate(company.latestRound);
 
   return (
-    <section>
+    <section className={companyStyles.pageOuter}>
       {/* HERO */}
       <div className={companyStyles.hero}>
         <div className={companyStyles.heroLeft}>
