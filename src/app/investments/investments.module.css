@@ -1,0 +1,414 @@
+.hero {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  border-bottom: 1px solid #363636;
+}
+
+.heroLeft {
+  background: #efefef;
+  padding: 44px 40px;
+  border-right: 1px solid #363636;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  min-height: 280px;
+}
+
+.heroTag {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin: 0 0 16px 0;
+}
+
+.heroHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 44px;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0 0 40px 0;
+}
+
+.heroSubhead {
+  font-family: var(--font-inter);
+  font-size: 16px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 2;
+  max-width: 480px;
+  margin: 0;
+}
+
+.heroStats {
+  display: flex;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.statValue {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 20px;
+  font-weight: 700;
+  color: #363636;
+  margin: 0 0 3px 0;
+  display: block;
+}
+
+.statLabel {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.4);
+  margin: 0;
+}
+
+.heroRight {
+  background: #830d35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 950px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .heroLeft {
+    border-right: none;
+    padding: 28px 24px;
+  }
+
+  .heroHeadline {
+    font-size: 24px;
+  }
+
+  .heroRight {
+    min-height: 200px;
+  }
+}
+
+/* ── SECTION LABEL ── */
+.sectionLabel {
+  padding: 14px 28px;
+  border-bottom: 1px solid #363636;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.sectionLabelBordered {
+  padding: 14px 28px;
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.thesisDivider {
+  border: none;
+  border-top: 1px solid #363636;
+  margin: 0;
+}
+
+/* ── THESIS ROWS ── */
+.thesisRowOdd {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  border-bottom: 1px solid #363636;
+  --tr-text: #363636;
+  --tr-sector: #830d35;
+  --tr-body: rgba(54, 54, 54, 0.6);
+  --tr-label: #363636;
+  --tr-divider: #363636;
+  transition: background 0.2s ease;
+}
+
+.thesisRowOddLast {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  border-bottom: 1px solid #363636;
+  --tr-text: #363636;
+  --tr-sector: #830d35;
+  --tr-body: rgba(54, 54, 54, 0.6);
+  --tr-label: #363636;
+  --tr-divider: #363636;
+  transition: background 0.2s ease;
+}
+
+.thesisRowEven {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  border-bottom: 1px solid #363636;
+  background: rgba(131, 13, 53, 0.03);
+  --tr-text: #363636;
+  --tr-sector: #830d35;
+  --tr-body: rgba(54, 54, 54, 0.6);
+  --tr-label: #363636;
+  --tr-divider: #363636;
+  transition: background 0.2s ease;
+}
+
+.thesisRowEvenLast {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  border-bottom: 1px solid #363636;
+  background: rgba(131, 13, 53, 0.03);
+  --tr-text: #363636;
+  --tr-sector: #830d35;
+  --tr-body: rgba(54, 54, 54, 0.6);
+  --tr-label: #363636;
+  --tr-divider: #363636;
+  transition: background 0.2s ease;
+}
+
+.thesisRowOdd:hover,
+.thesisRowOddLast:hover,
+.thesisRowEven:hover,
+.thesisRowEvenLast:hover {
+  background: #830d35;
+  --tr-text: #efefef;
+  --tr-sector: rgba(239, 239, 239, 0.7);
+  --tr-body: rgba(239, 239, 239, 0.65);
+  --tr-label: rgba(239, 239, 239, 0.7);
+  --tr-divider: rgba(239, 239, 239, 0.2);
+}
+
+.thesisText {
+  padding: 22px 28px;
+  border-right: 1px solid var(--tr-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.thesisTextRight {
+  padding: 22px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.thesisSector {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--tr-sector);
+  margin-bottom: 2px;
+  transition: color 0.2s ease;
+}
+
+.thesisHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 1.21rem;
+  font-weight: 700;
+  color: var(--tr-text);
+  line-height: 1.3;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.thesisBody {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  color: var(--tr-body);
+  line-height: 1.55;
+  margin-top: 2px;
+}
+
+.thesisCompany {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(54, 54, 54, 0.1);
+  flex-wrap: wrap;
+}
+
+.thesisLogo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: rgba(54, 54, 54, 0.06);
+}
+
+.thesisCompanyName {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 700;
+  color: #830d35;
+  text-decoration: underline;
+  letter-spacing: 0.04em;
+}
+
+.thesisStatOdd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 16px;
+}
+
+.thesisStatEven {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  padding: 20px 16px;
+  border-right: 1px solid var(--tr-divider);
+}
+
+.thesisStatValue {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--tr-text);
+  line-height: 1;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.thesisStatLabel {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 0.46rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tr-label);
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+/* ── PORTFOLIO GRID ── */
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.portfolioCell {
+  border-right: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  --cell-name-color: #363636;
+  --cell-sector-color: #830d35;
+  transition: background 0.2s ease;
+}
+
+.portfolioCellLink:hover {
+  background: #830d35;
+  --cell-name-color: #efefef;
+  --cell-sector-color: #efefef;
+}
+
+.portfolioLogo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: #ffffff;
+  padding: 10px;
+}
+
+.portfolioName {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cell-name-color);
+  margin-bottom: 4px;
+  transition: color 0.2s ease;
+}
+
+.portfolioSector {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cell-sector-color);
+  transition: color 0.2s ease;
+}
+
+/* ── CTA BAND ── */
+.ctaBand {
+  background: #830d35;
+  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+
+.ctaHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 16px;
+  font-weight: 700;
+  color: #efefef;
+  margin-bottom: 6px;
+}
+
+.ctaBody {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  color: rgba(239, 239, 239, 0.65);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0;
+}
+
+@media (max-width: 950px) {
+  .thesisRowOdd,
+  .thesisRowOddLast,
+  .thesisRowEven,
+  .thesisRowEvenLast {
+    grid-template-columns: 1fr;
+  }
+
+  .thesisText {
+    border-right: none;
+    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  }
+
+  .thesisStatEven {
+    border-right: none;
+    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  }
+
+  .thesisStatOdd {
+    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  }
+
+  .portfolioGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ctaBand {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
