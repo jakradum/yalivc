@@ -1042,7 +1042,7 @@
 
   .heroSector {
     font-family: var(--font-jetbrains-mono);
-    font-size: 8px;
+    font-size: 9px;
     color: rgba(239, 239, 239, 0.55);
     background: transparent;
     padding-right: 0;
@@ -1051,7 +1051,7 @@
 
   .heroName {
     font-family: var(--font-inter);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     color: #efefef;
     text-align: center;
@@ -1078,7 +1078,7 @@
 
   .mobileOneLinerText {
     font-family: var(--font-inter);
-    font-size: 12px;
+    font-size: 13px;
     color: rgba(54, 54, 54, 0.6);
     line-height: 1.6;
     margin: 0;
@@ -1088,7 +1088,7 @@
     display: block;
     margin-top: 10px;
     font-family: var(--font-jetbrains-mono);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -1103,15 +1103,23 @@
 
   .metricCell {
     padding: 10px 12px;
+    border-right: none;
+  }
+
+  .metricCell:nth-child(odd) {
+    border-right: 1px solid #363636;
+  }
+
+  .metricCell:not(:nth-last-child(-n+2)) {
     border-bottom: 1px solid #363636;
   }
 
   .metricsBarLabel {
-    font-size: 7px;
+    font-size: 8px;
   }
 
   .metricsBarValue {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   /* ── FOUNDERS ── */
@@ -1120,48 +1128,50 @@
   }
 
   .foundersLabel {
-    font-size: 8px;
+    font-size: 9px;
     margin-bottom: 20px;
   }
 
   .foundersGrid {
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 16px;
-    row-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
   .foundersGridCard {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
-    align-items: stretch;
+    border: 1px solid #363636;
+    padding: 14px;
   }
 
   .founderPhotoWrap {
-    width: 28px;
-    height: auto;
-    align-self: stretch;
+    width: 100%;
+    height: 120px;
+    align-self: auto;
   }
 
   .founderPhotoImg {
-    width: 28px;
+    width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
   .foundersGridName {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .foundersGridRole {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .founderLinkWrapper a {
-    font-size: 8px !important;
+    font-size: 9px !important;
   }
 
   .founderLinkWrapper svg {
-    height: 8px !important;
+    height: 9px !important;
   }
 
   /* ── BEHIND THE DEAL ── */
@@ -1170,7 +1180,7 @@
   }
 
   .storyLabel {
-    font-size: 8px;
+    font-size: 9px;
     background: transparent;
     color: #830D35;
     margin: 0 0 10px 0;
@@ -1183,7 +1193,7 @@
 
   .articleTitle {
     font-family: var(--font-jetbrains-mono);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     margin-bottom: 10px;
   }
@@ -1198,15 +1208,15 @@
   }
 
   .authorName {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .authorRole {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .articleBody {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   /* ── MILESTONES ── */
@@ -1216,25 +1226,25 @@
   }
 
   .milestonesLabel {
-    font-size: 8px;
+    font-size: 9px;
     margin-bottom: 10px;
   }
 
   .timelineDate {
-    font-size: 9px;
+    font-size: 10px;
     min-width: 60px;
   }
 
   .timelineContent {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .timelineContent h4 {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .timelineContent p {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   /* ── IN THE PRESS ── */
@@ -1243,7 +1253,7 @@
   }
 
   .pressLabel {
-    font-size: 8px;
+    font-size: 9px;
     margin-bottom: 10px;
   }
 
@@ -1257,7 +1267,7 @@
 
   .pressContent {
     border-right: none;
-    padding: 12px 0 8px;
+    padding: 12px 14px 8px;
   }
 
   .pressRule {
@@ -1268,7 +1278,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0 12px;
+    padding: 0 14px 12px;
     gap: 0;
   }
 }
