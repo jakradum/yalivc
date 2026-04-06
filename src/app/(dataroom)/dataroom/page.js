@@ -32,10 +32,10 @@ const CATEGORIES = [
     icon: 'presentations',
   },
   {
-    slug: 'sebi',
+    slug: 'regulatory-documents',
     title: 'Regulatory Documents',
     description: 'Regulatory filings and AIF registration documents',
-    icon: 'sebi',
+    icon: 'regulatory-documents',
   },
   {
     slug: 'team',
@@ -98,7 +98,7 @@ function CategoryIcon({ icon }) {
           <path d="M3 14c0-2.76 2.24-4 5-4s5 1.24 5 4" stroke="currentColor" strokeWidth="1.2" fill="none" />
         </svg>
       );
-    case 'sebi':
+    case 'regulatory-documents':
       return (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M8 2l1 3h3l-2.5 2 1 3L8 8.5 5.5 10l1-3L4 5h3z" stroke="currentColor" strokeWidth="1.1" fill="none" />

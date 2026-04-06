@@ -30,7 +30,7 @@ export default {
           { title: 'PPM and Contribution Agreements', value: 'ppm-agreements' },
           { title: 'Presentations',               value: 'presentations' },
           { title: 'Recommendation',              value: 'recommendation' },
-          { title: 'SEBI',                        value: 'sebi' },
+          { title: 'Regulatory Documents',        value: 'regulatory-documents' },
           { title: 'Team',                        value: 'team' },
           { title: 'Track Record',                value: 'track-record' },
         ],
@@ -129,7 +129,7 @@ export default {
         'ppm-agreements': 'PPM & Agreements',
         'presentations': 'Presentations',
         'recommendation': 'Recommendation',
-        'sebi': 'SEBI',
+        'regulatory-documents': 'Regulatory Documents',
         'team': 'Team',
         'track-record': 'Track Record',
       };

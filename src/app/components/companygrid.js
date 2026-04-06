@@ -39,7 +39,7 @@ export const vectorUsageMap = {
   'strategic tech': <DefenceVector/>,
 };
 
-const CompanyTable = ({ companies }) => {
+const CompanyTable = ({ companies, companyCount }) => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
@@ -83,7 +83,7 @@ const CompanyTable = ({ companies }) => {
     // ? { data: data.data['companies-csv (1)'] }
     // : localCompaniesData;
 
-  const numberOfCompanies = companiesData.data.length;
+  const numberOfCompanies = companyCount ?? companiesData.data.length;
   const currentDate = new Date();
   const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
   const numberToWords = (num) => {

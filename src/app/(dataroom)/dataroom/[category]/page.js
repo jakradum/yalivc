@@ -23,7 +23,7 @@ const SLUG_TO_TITLE = {
   'ppm-agreements': 'PPM & Agreements',
   'presentations': 'Presentations',
   'recommendation': 'Recommendation',
-  'sebi': 'Regulatory Documents',
+  'regulatory-documents': 'Regulatory Documents',
   'team': 'Team',
   'track-record': 'Track Record & Recommendation',
   'fund-performance': 'Fund Performance',

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { getCompanies, getNews, getTeamMembers, getCategories, getSocialUpdates, getFAQs } from '@/lib/sanity-queries';
+import { getSiteStats } from '@/lib/site-stats';
 import landingStyles from './landing-page-styles/landingscroll.module.css';
 import { DottedLogoGraphic } from './components/icons/background svgs/graphic bg';
 import { ViewfinderIcon } from './components/icons/small-icons/viewfinder-icon';
@@ -51,13 +52,14 @@ const TechnologiesArticle = ({ categories }) => {
 };
 
 export default async function HomePage() {
-  const [companies, news, sanityTeam, categories, socialUpdates, faqs] = await Promise.all([
+  const [companies, news, sanityTeam, categories, socialUpdates, faqs, siteStats] = await Promise.all([
     getCompanies(),
     getNews(),
     getTeamMembers(),
     getCategories(),
     getSocialUpdates(5),
     getFAQs('homepage'),
+    getSiteStats(),
   ]);
 
 const team = sanityTeam;
@@ -99,7 +101,7 @@ const team = sanityTeam;
         <div className={companyStyles.titleSec}>
           <HeaderFlex title="Our companies make us proud" color="black" desktopMaxWidth={'45%'} />
         </div>
-        <CompanyGrid companies={companies} />
+        <CompanyGrid companies={companies} companyCount={siteStats.companyCount} />
       </section>
 
       <section className={teamStyles.teamSec}>

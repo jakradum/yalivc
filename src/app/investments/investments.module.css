@@ -1,0 +1,375 @@
+.hero {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  border-bottom: 1px solid #363636;
+}
+
+.heroLeft {
+  background: #efefef;
+  padding: 44px 40px;
+  border-right: 1px solid #363636;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  min-height: 280px;
+}
+
+.heroTag {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin: 0 0 16px 0;
+}
+
+.heroHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 44px;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0 0 40px 0;
+}
+
+.heroSubhead {
+  font-family: var(--font-inter);
+  font-size: 16px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 2;
+  max-width: 480px;
+  margin: 0;
+}
+
+.heroStats {
+  display: flex;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.statValue {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 20px;
+  font-weight: 700;
+  color: #363636;
+  margin: 0 0 3px 0;
+  display: block;
+}
+
+.statLabel {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 54, 0.4);
+  margin: 0;
+}
+
+.heroRight {
+  background: #830d35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 950px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .heroLeft {
+    border-right: none;
+    padding: 28px 24px;
+  }
+
+  .heroHeadline {
+    font-size: 24px;
+  }
+
+  .heroRight {
+    display: none;
+  }
+}
+
+/* ── SECTION LABEL ── */
+.sectionLabel {
+  padding: 14px 28px;
+  border-bottom: 1px solid #363636;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.sectionLabelBordered {
+  padding: 14px 28px;
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+}
+
+.thesisDivider {
+  border: none;
+  border-top: 1px solid #363636;
+  margin: 0;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.mobileTicker {
+  display: none;
+}
+
+.tickerTrack {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  animation: tickerScroll 28s linear infinite;
+}
+
+@media (max-width: 950px) {
+  .mobileTicker {
+    display: block;
+  }
+}
+
+/* ── THESIS TABLE ── */
+.thesisTable {
+  border-bottom: 1px solid #363636;
+}
+
+.thesisRow {
+  display: grid;
+  grid-template-columns: 56px 1fr 120px;
+  align-items: stretch;
+  border-bottom: 1px solid #363636;
+}
+
+.thesisRow:last-child {
+  border-bottom: none;
+}
+
+.thesisIndex {
+  border-right: 1px solid #363636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 38px;
+  font-weight: 700;
+  color: rgba(54, 54, 54, 0.1);
+  padding: 20px 20px;
+  line-height: 1;
+  margin: 0;
+}
+
+.thesisContent {
+  padding: 22px 24px;
+}
+
+.thesisContentSector {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.thesisContentHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 16px;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1.3;
+  margin: 0 0 8px 0;
+}
+
+.thesisContentBody {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.thesisTag {
+  border-left: 1px solid #363636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 10px;
+}
+
+.thesisTagText {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #830d35;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+/* ── PORTFOLIO GRID ── */
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.portfolioCell {
+  border-right: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  --cell-name-color: #363636;
+  --cell-sector-color: #830d35;
+  transition: background 0.2s ease;
+}
+
+.portfolioCellLink:hover {
+  background: rgba(131, 13, 53, 0.03);
+}
+
+.portfolioLogo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: #ffffff;
+  padding: 10px;
+}
+
+.portfolioName {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cell-name-color);
+  margin-bottom: 4px;
+  transition: color 0.2s ease;
+}
+
+.portfolioSector {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cell-sector-color);
+  transition: color 0.2s ease;
+}
+
+.portfolioOneLiner {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.5;
+  margin: 4px 0 0 0;
+}
+
+.portfolioViewMore {
+  display: none;
+}
+
+/* ── CTA BAND ── */
+.ctaBand {
+  background: #830d35;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.ctaHeadline {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 16px;
+  font-weight: 700;
+  color: #efefef;
+  margin-bottom: 6px;
+}
+
+.ctaBody {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  color: rgba(239, 239, 239, 0.65);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0;
+}
+
+@media (max-width: 950px) {
+  .thesisRow {
+    grid-template-columns: 64px 1fr;
+  }
+
+  .thesisTag {
+    display: none;
+  }
+
+  .portfolioGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolioCell {
+    padding: 20px;
+    gap: 14px;
+    align-items: flex-start;
+    border-right: none;
+  }
+
+  .portfolioLogo {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .portfolioName {
+    font-size: 1.1rem;
+  }
+
+  .portfolioViewMore {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-family: var(--font-inter);
+    font-size: 0.75rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #363636;
+    border: 1px solid #363636;
+    padding: 6px 12px;
+  }
+
+  .ctaBand {
+    padding: 24px 20px;
+  }
+}
