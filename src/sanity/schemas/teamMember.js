@@ -61,14 +61,15 @@ const teamMember = {
       name: 'department',
       title: 'Department',
       type: 'string',
-      description: 'Used for ordering: Investment team shows before Operations',
+      description: 'Controls which section this person appears in on the About page',
       options: {
         list: [
-          { title: 'Investment', value: 'investment' },
+          { title: 'Advisory', value: 'advisory' },
+          { title: 'Investments', value: 'investments' },
           { title: 'Operations', value: 'operations' },
         ],
       },
-      initialValue: 'investment',
+      initialValue: 'investments',
       validation: Rule => Rule.custom((value, context) => {
         if (context.document?.profileType === 'group') return true;
         return value ? true : 'Department is required for individuals';
