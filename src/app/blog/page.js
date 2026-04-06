@@ -1,4 +1,3 @@
-import styles from '../about-yali/about-styles.module.css';
 import newsStyles from '../newsroom/newscomponent.module.css';
 import HeaderFlex from '../components/icons/headerflex';
 import { getAllBlogPosts } from '@/lib/sanity-queries';
@@ -25,7 +24,7 @@ export default async function BlogListing() {
   const { posts = [] } = await getAllBlogPosts({ limit: 50 });
 
   return (
-    <section className={styles.sectionLevel}>
+    <section>
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Blog</h1>

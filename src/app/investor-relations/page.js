@@ -1,4 +1,3 @@
-import styles from '../about-yali/about-styles.module.css';
 
 export const metadata = {
   title: 'Investor Relations | Yali Capital - SEBI Registered AIF',
@@ -11,7 +10,7 @@ export const metadata = {
 
 export default function InvestorRelations() {
   return (
-    <section className={styles.sectionLevel}>
+    <section>
       <div className={styles.mainAbout}>
         <article className={styles.textContent}>
           <h1>Investor relations</h1>

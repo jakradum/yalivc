@@ -4,7 +4,6 @@ import { PortableText } from '@portabletext/react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from '../../about-yali/about-styles.module.css';
 import companyStyles from '../../investments/[slug]/[companySlug]/company.module.css';
 import teamLPstyles from '../../landing-page-styles/team.module.css';
 import ShareButtons from './ShareButtons';

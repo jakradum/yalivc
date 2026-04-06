@@ -24,7 +24,7 @@ const [news, pressReleases] = await Promise.all([getNews(), getPressReleases()])
 console.log('📰 page.js fetched news[0]:', news[0]);
 
     return (
-      <section className={styles.sectionLevel}>
+      <section>
         <div className={styles.mainAbout}>
           <article className={styles.textContent}>
             <h1>The latest from Yali Capital</h1>

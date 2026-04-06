@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../about-yali/about-styles.module.css';
 import invStyles from './investments.module.css';
 import { InvestmentsGraphic } from '../components/icons/background svgs/investmentsGraphic';
 import { getCompanies } from '@/lib/sanity-queries';
@@ -80,7 +79,7 @@ export default async function Investments() {
   }
 
   return (
-    <section className={styles.sectionLevel}>
+    <section>
       {/* HERO */}
       <div className={invStyles.hero}>
         <div className={invStyles.heroLeft}>
