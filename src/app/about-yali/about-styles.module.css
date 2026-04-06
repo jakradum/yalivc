@@ -474,11 +474,15 @@
   .advisoryPhoto {
     border-right: none;
     border-bottom: 1px solid #efefef;
-    min-height: 180px;
+    min-height: 252px;
   }
 
   .advisoryQuote {
-    font-size: 18px;
+    font-size: 21px;
+  }
+
+  .advisoryAttribution {
+    font-size: 12px;
   }
 
   .investmentsGrid {
@@ -491,14 +495,39 @@
   }
 
   .investmentsPhoto {
-    height: 160px;
+    height: 224px;
+  }
+
+  .investmentsQuote {
+    font-size: 14px;
+  }
+
+  .investmentsAttribution {
+    font-size: 9px;
   }
 
   .opsGrid {
     grid-template-columns: 1fr;
+    border-left: none;
+    border-right: none;
   }
 
   .opsCell {
     border-right: none;
+    padding: 23px;
+    gap: 14px;
+  }
+
+  .opsPhoto {
+    width: 46px;
+    height: 46px;
+  }
+
+  .opsName {
+    font-size: 14px;
+  }
+
+  .opsRole {
+    font-size: 10px;
   }
 }
