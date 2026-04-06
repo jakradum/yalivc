@@ -56,8 +56,7 @@ export default async function TeamMemberPage({ params }) {
       <div className={teamStyles.topRow}>
         {/* Photo floats left */}
         <div className={teamStyles.photoCell}>
-          <div className={`${teamStyles.patternBg} ${teamStyles[`pattern${patternIndex}`]}`} aria-hidden="true" />
-          <div className={teamStyles.photoInner}>
+          <div className={`${teamStyles.photoInner} ${teamStyles[`pattern${patternIndex}`]}`}>
             {member.photo && (
               <Image
                 src={member.photo}
