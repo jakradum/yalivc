@@ -1,6 +1,6 @@
 .hero {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 3fr 2fr;
   border-bottom: 1px solid #363636;
 }
 
@@ -93,7 +93,7 @@
   }
 
   .heroRight {
-    min-height: 200px;
+    display: none;
   }
 }
 
@@ -127,178 +127,109 @@
   margin: 0;
 }
 
-/* ── THESIS ROWS ── */
-.thesisRowOdd {
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  border-bottom: 1px solid #363636;
-  --tr-text: #363636;
-  --tr-sector: #830d35;
-  --tr-body: rgba(54, 54, 54, 0.6);
-  --tr-label: #363636;
-  --tr-divider: #363636;
-  transition: background 0.2s ease;
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
-.thesisRowOddLast {
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  border-bottom: 1px solid #363636;
-  --tr-text: #363636;
-  --tr-sector: #830d35;
-  --tr-body: rgba(54, 54, 54, 0.6);
-  --tr-label: #363636;
-  --tr-divider: #363636;
-  transition: background 0.2s ease;
+.mobileTicker {
+  display: none;
 }
 
-.thesisRowEven {
-  display: grid;
-  grid-template-columns: 3fr 7fr;
-  border-bottom: 1px solid #363636;
-  background: rgba(131, 13, 53, 0.03);
-  --tr-text: #363636;
-  --tr-sector: #830d35;
-  --tr-body: rgba(54, 54, 54, 0.6);
-  --tr-label: #363636;
-  --tr-divider: #363636;
-  transition: background 0.2s ease;
-}
-
-.thesisRowEvenLast {
-  display: grid;
-  grid-template-columns: 3fr 7fr;
-  border-bottom: 1px solid #363636;
-  background: rgba(131, 13, 53, 0.03);
-  --tr-text: #363636;
-  --tr-sector: #830d35;
-  --tr-body: rgba(54, 54, 54, 0.6);
-  --tr-label: #363636;
-  --tr-divider: #363636;
-  transition: background 0.2s ease;
-}
-
-.thesisRowOdd:hover,
-.thesisRowOddLast:hover,
-.thesisRowEven:hover,
-.thesisRowEvenLast:hover {
-  background: #830d35;
-  --tr-text: #efefef;
-  --tr-sector: rgba(239, 239, 239, 0.7);
-  --tr-body: rgba(239, 239, 239, 0.65);
-  --tr-label: rgba(239, 239, 239, 0.7);
-  --tr-divider: rgba(239, 239, 239, 0.2);
-}
-
-.thesisText {
-  padding: 22px 28px;
-  border-right: 1px solid var(--tr-divider);
+.tickerTrack {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  animation: tickerScroll 28s linear infinite;
 }
 
-.thesisTextRight {
-  padding: 22px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+@media (max-width: 950px) {
+  .mobileTicker {
+    display: block;
+  }
 }
 
-.thesisSector {
-  font-family: var(--font-jetbrains-mono) !important;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--tr-sector);
-  margin-bottom: 2px;
-  transition: color 0.2s ease;
+/* ── THESIS TABLE ── */
+.thesisTable {
+  border-bottom: 1px solid #363636;
 }
 
-.thesisHeadline {
-  font-family: var(--font-jetbrains-mono) !important;
-  font-size: 1.21rem;
-  font-weight: 700;
-  color: var(--tr-text);
-  line-height: 1.3;
-  margin: 0;
-  transition: color 0.2s ease;
+.thesisRow {
+  display: grid;
+  grid-template-columns: 56px 1fr 120px;
+  align-items: stretch;
+  border-bottom: 1px solid #363636;
 }
 
-.thesisBody {
-  font-family: var(--font-inter);
-  font-size: 11px;
-  color: var(--tr-body);
-  line-height: 1.55;
-  margin-top: 2px;
+.thesisRow:last-child {
+  border-bottom: none;
 }
 
-.thesisCompany {
+.thesisIndex {
+  border-right: 1px solid #363636;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(54, 54, 54, 0.1);
-  flex-wrap: wrap;
-}
-
-.thesisLogo {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  flex-shrink: 0;
-  background: rgba(54, 54, 54, 0.06);
-}
-
-.thesisCompanyName {
-  font-family: var(--font-jetbrains-mono) !important;
-  font-size: 9px;
-  font-weight: 700;
-  color: #830d35;
-  text-decoration: underline;
-  letter-spacing: 0.04em;
-}
-
-.thesisStatOdd {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 20px 16px;
-}
-
-.thesisStatEven {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  text-align: right;
-  padding: 20px 16px;
-  border-right: 1px solid var(--tr-divider);
-}
-
-.thesisStatValue {
   font-family: var(--font-jetbrains-mono) !important;
-  font-size: 1.65rem;
+  font-size: 38px;
   font-weight: 700;
-  color: var(--tr-text);
+  color: rgba(54, 54, 54, 0.1);
+  padding: 20px 20px;
   line-height: 1;
-  margin-bottom: 5px;
+  margin: 0;
+}
+
+.thesisContent {
+  padding: 22px 24px;
+}
+
+.thesisContentSector {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin-bottom: 10px;
   display: block;
 }
 
-.thesisStatLabel {
+.thesisContentHeadline {
   font-family: var(--font-jetbrains-mono) !important;
-  font-size: 0.46rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1.3;
+  margin: 0 0 8px 0;
+}
+
+.thesisContentBody {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.thesisTag {
+  border-left: 1px solid #363636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 10px;
+}
+
+.thesisTagText {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tr-label);
-  line-height: 1.4;
-  transition: color 0.2s ease;
+  color: #830d35;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  white-space: nowrap;
 }
 
 /* ── PORTFOLIO GRID ── */
@@ -321,9 +252,7 @@
 }
 
 .portfolioCellLink:hover {
-  background: #830d35;
-  --cell-name-color: #efefef;
-  --cell-sector-color: #efefef;
+  background: rgba(131, 13, 53, 0.03);
 }
 
 .portfolioLogo {
@@ -354,14 +283,28 @@
   transition: color 0.2s ease;
 }
 
+.portfolioOneLiner {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  color: rgba(54, 54, 54, 0.6);
+  line-height: 1.5;
+  margin: 4px 0 0 0;
+}
+
+.portfolioViewMore {
+  display: none;
+}
+
 /* ── CTA BAND ── */
 .ctaBand {
   background: #830d35;
   padding: 28px 32px;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24px;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .ctaHeadline {
@@ -382,33 +325,51 @@
 }
 
 @media (max-width: 950px) {
-  .thesisRowOdd,
-  .thesisRowOddLast,
-  .thesisRowEven,
-  .thesisRowEvenLast {
-    grid-template-columns: 1fr;
+  .thesisRow {
+    grid-template-columns: 64px 1fr;
   }
 
-  .thesisText {
-    border-right: none;
-    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
-  }
-
-  .thesisStatEven {
-    border-right: none;
-    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
-  }
-
-  .thesisStatOdd {
-    border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  .thesisTag {
+    display: none;
   }
 
   .portfolioGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .portfolioCell {
+    padding: 20px;
+    gap: 14px;
+    align-items: flex-start;
+    border-right: none;
+  }
+
+  .portfolioLogo {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .portfolioName {
+    font-size: 1.1rem;
+  }
+
+  .portfolioViewMore {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-family: var(--font-inter);
+    font-size: 0.75rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #363636;
+    border: 1px solid #363636;
+    padding: 6px 12px;
   }
 
   .ctaBand {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    padding: 24px 20px;
   }
 }

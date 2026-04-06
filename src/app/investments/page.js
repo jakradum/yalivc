@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../components/button';
 import HeaderFlex from '../components/icons/headerflex';
-import { ThesisRows } from './thesis-rows';
+import separatorStyles from '../landing-page-styles/separator.module.css';
 export const revalidate = 60;
 
 export const metadata = {
@@ -22,66 +22,42 @@ export const metadata = {
 
 const THESIS = [
   {
+    index: '01',
     sector: 'Life Sciences',
-    headline: 'Genomics and precision medicine represent a generational shift.',
-    body: "Indian clinical data is underrepresented globally. That's the opportunity.",
-    stat: '$150B+',
-    statLabel: 'India cancer care market by 2030',
-    companyNames: ['4baseCare'],
-    isOdd: true,
+    headline: 'The shift from healthcare service providers to healthcare innovation.',
+    body: 'From cancer-care to medical devices, we are seeing the emergence of new and original ideas — often at a fraction of global costs — here in India.',
   },
   {
+    index: '02',
     sector: 'Robotics',
-    headline: 'Dextrous automation is at a genuine inflection point.',
-    body: "The race is for the software stack, not the hardware shell. That's where moats are built.",
-    stat: '$39B',
-    statLabel: 'Figure AI valuation · 2025',
-    companyNames: ['Perceptyne'],
-    isOdd: false,
+    headline: "Intelligence gets into the physical world, and we're here for it.",
+    body: 'From warehousing to defence to agriculture, the entry of physical AI devices and intelligence layers on existing infrastructure gives us the conviction needed to back companies in this space.',
   },
   {
+    index: '03',
     sector: 'Fabless Semiconductor',
-    headline: "India's chip design talent is world-class.",
-    body: 'IP-driven, capital-efficient, globally scalable. 20% of global semiconductor design headcount is here.',
-    stat: '$12.2B',
-    statLabel: 'VC invested globally · 2025',
-    companyNames: ['C2i'],
-    isOdd: true,
+    headline: "We've always had the talent; we're now building for ourselves.",
+    body: "Two-fifths of the global chip design workforce has come from India. We're now seeing that homegrown talent building IP-first companies that compete globally.",
   },
   {
+    index: '04',
     sector: 'Artificial Intelligence',
-    headline: 'Not AI for its own sake.',
-    body: 'AI as infrastructure enabling every other sector in this portfolio to compound.',
-    stat: '1,700+',
-    statLabel: 'GCCs in India driving AI demand',
-    companyNames: ['LatentForce', 'PointAI'],
-    isOdd: false,
+    headline: 'A multi-moat approach to our most consequential tech.',
+    body: "From sovereign AI to infrastructure, India is racing to build across the AI stack. Our conviction lies with founders who can translate AI's capability into real-world productivity gains across India's workforce.",
   },
   {
+    index: '05',
     sector: 'Smart Manufacturing',
-    headline: "India's manufacturing push creates a 10-year tailwind.",
-    body: 'The investable gap is factory software, not hardware. IP-led startups build durable margins here.',
-    stat: '$26B',
-    statLabel: 'PLI investments realised · India',
-    companyNames: ['Deeplase'],
-    isOdd: true,
+    headline: 'Manufacturing in 2026 needs a whole new thesis.',
+    body: "In a world with fragile supply chains and economic shocks, we're counting on productivity gains through automation, shopfloor reliability & uptime, and intelligence layers that keep our manufacturing sector adaptable.",
   },
   {
+    index: '06',
     sector: 'Aerospace & Surveillance',
-    headline: 'Defence and dual-use tech at a strategic inflection.',
-    body: "India's modernisation agenda and export ambitions are creating real demand, not just policy.",
-    stat: '$9.1B',
-    statLabel: 'India defence modernisation outlay',
-    companyNames: ['Tonbo Imaging'],
-    isOdd: false,
+    headline: 'The defence stack is slowly being built at home.',
+    body: "From specialised components to full-system solutions, India's private defence industry is expanding fast. We've got the appetite, the talent, and the governmental support. All the industry needs is the right kind of capital.",
   },
 ];
-
-function findCompany(name, companies) {
-  return companies.find(
-    (c) => c.name?.toLowerCase() === name.toLowerCase()
-  );
-}
 
 function getCompanyHref(company) {
   const catSlug = company?.category?.slug?.current;
@@ -123,7 +99,7 @@ export default async function Investments() {
               <p className={invStyles.statLabel}>Deep tech sectors</p>
             </div>
             <div>
-              <strong className={invStyles.statValue}>Seed–A</strong>
+              <strong className={invStyles.statValue}>Early &amp; late stage</strong>
               <p className={invStyles.statLabel}>Stage focus</p>
             </div>
           </div>
@@ -133,10 +109,38 @@ export default async function Investments() {
         </div>
       </div>
 
+      {/* MOBILE SECTOR TICKER */}
+      <div className={invStyles.mobileTicker}>
+        <div className={separatorStyles.containerWrapper}>
+          <div className={invStyles.tickerTrack}>
+            {[...Array(10)].flatMap(() => THESIS.map(r => r.sector)).map((sector, index) => (
+              <React.Fragment key={`${sector}-${index}`}>
+                {index > 0 && <span className={separatorStyles.separator}>·</span>}
+                <span className={separatorStyles.technology}>{sector}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* SECTOR THESIS */}
-      <HeaderFlex title="Our investment thesis" color="black" desktopMaxWidth="60%" />
+      <HeaderFlex title="Where we invest" color="black" desktopMaxWidth="60%" />
       <hr className={invStyles.thesisDivider} />
-      <ThesisRows rows={THESIS} />
+      <div className={invStyles.thesisTable}>
+        {THESIS.map((row) => (
+          <div key={row.sector} className={invStyles.thesisRow}>
+            <p className={invStyles.thesisIndex}>{row.index}</p>
+            <div className={invStyles.thesisContent}>
+              <strong className={invStyles.thesisContentSector}>{row.sector}</strong>
+              <h3 className={invStyles.thesisContentHeadline}>{row.headline}</h3>
+              <p className={invStyles.thesisContentBody}>{row.body}</p>
+            </div>
+            <div className={invStyles.thesisTag}>
+              <span className={invStyles.thesisTagText}>{row.sector}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* ALL PORTFOLIO COMPANIES */}
       <HeaderFlex title="All portfolio companies" color="black" desktopMaxWidth="60%" />
@@ -158,6 +162,12 @@ export default async function Investments() {
               <div>
                 <div className={invStyles.portfolioName}>{company.name}</div>
                 <div className={invStyles.portfolioSector}>{company.category?.name}</div>
+                {company.oneLiner && (
+                  <p className={invStyles.portfolioOneLiner}>{company.oneLiner}</p>
+                )}
+                {href && (
+                  <span className={invStyles.portfolioViewMore}>View more ↗</span>
+                )}
               </div>
             </>
           );
@@ -180,11 +190,8 @@ export default async function Investments() {
 
       {/* CTA BAND */}
       <div className={invStyles.ctaBand}>
-        <div>
-          <div className={invStyles.ctaHeadline}>Building something in deep tech?</div>
-          <p className={invStyles.ctaBody}>We back founders at the earliest stage. If you&apos;re working on a hard problem in one of our sectors, we want to hear from you.</p>
-        </div>
-        <Button href="/contact" color="#efefef">Get in touch ↗</Button>
+        <h2 className={invStyles.ctaHeadline}>Building something in deep tech?</h2>
+        <Button href="/contact" color="#efefef">Get in touch</Button>
       </div>
     </section>
   );
