@@ -1,10 +1,10 @@
-import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers, getSocialUpdatesByTeamMember } from '@/lib/sanity-queries';
+import { getTeamMemberBySlug, getAllTeamMemberSlugs, getOtherTeamMembers } from '@/lib/sanity-queries';
 import { PortableText } from '@portabletext/react';
 import teamStyles from './team-profile.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
-import Button from '../../components/button';
 import { notFound } from 'next/navigation';
+import QuoteMarks from '../../components/icons/background svgs/quotemarks';
 
 export const revalidate = 60;
 
@@ -42,196 +42,142 @@ export default async function TeamMemberPage({ params }) {
     notFound();
   }
 
-  const [otherMembers, featuredPosts] = await Promise.all([
-    getOtherTeamMembers(slug, 4),
-    getSocialUpdatesByTeamMember(member._id)
-  ]);
+  const otherMembers = await getOtherTeamMembers(slug, 8);
 
   // Random pattern on each server render (changes every 60s due to revalidate)
   const patternIndex = Math.floor(Math.random() * 7) + 1;
 
+  const firstName = member.name?.split(' ')[0] ?? 'their';
+
+  // If name contains a nickname in single quotes (e.g. "Ganapathy 'Gani' Subramaniam"),
+  // surface the nickname + surname. Otherwise fall back to first name with hyphen-break.
+  const nicknameMatch = member.name?.match(/^.*?'(.+?)'\s*(.*)$/);
+  const nameParts = member.name?.split(/\s+/) ?? [];
+  const lastNamePart = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const heroDisplayName = nicknameMatch ? nicknameMatch[1] : firstName;
+  const displayName = heroDisplayName.split(' ').map((word, i) => (
+    <span key={i} className={teamStyles.heroNameWord}>{word}</span>
+  ));
+
   return (
     <section className={teamStyles.container}>
-      {/* Top Row - Photo floats left, About text wraps around */}
-      <div className={teamStyles.topRow}>
-        {/* Photo floats left */}
-        <div className={teamStyles.photoCell}>
-          <div className={`${teamStyles.photoInner} ${teamStyles[`pattern${patternIndex}`]}`}>
-            {member.photo && (
-              <Image
-                src={member.photo}
-                alt={member.name}
-                width={400}
-                height={400}
-                className={teamStyles.memberPhoto}
-                style={{ objectFit: 'cover' }}
-              />
-            )}
-          </div>
+
+      {/* ── Section 1: Hero ── */}
+      <div className={teamStyles.hero}>
+        <div className={`${teamStyles.heroPhoto} ${teamStyles[`pattern${patternIndex}`]}`}>
+          {member.photo && (
+            <Image
+              src={member.photo}
+              alt={member.name}
+              fill
+              className={teamStyles.heroPhotoImg}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          )}
         </div>
-
-        {/* About section - text wraps around photo */}
-        <h1 className={teamStyles.aboutTitle}>About {member.name}</h1>
-        <div className={teamStyles.bioText}>
-          <p>{member.bio}</p>
-        </div>
-        {member.personalPhilosophy && (
-          <div className={teamStyles.inWordsSection}>
-            <h2 className={teamStyles.inWordsTitle}>In {member.name.split(' ')[0]}&apos;s words</h2>
-            <div className={teamStyles.inWordsContent}>
-              <PortableText value={member.personalPhilosophy} />
-            </div>
-          </div>
-        )}
-        {member.linkedIn && (
-          <div className={teamStyles.linkedInButton}>
-            <Button href={member.linkedIn} color="black" target="_blank">
-              View on LinkedIn
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Row - Quote and Outside Work */}
-      <div className={teamStyles.bottomRow}>
-        {/* Bottom Left - Pull Quote (only show if pullQuote exists) */}
-        {member.pullQuote && (
-          <div className={teamStyles.quoteCell}>
-            <blockquote className={teamStyles.pullQuote}>
-              <p>{member.pullQuote}</p>
-              {member.pullQuoteAttribution && (
-                <footer className={teamStyles.quoteAttribution}>
-                  — {member.pullQuoteAttribution}
-                </footer>
-              )}
-            </blockquote>
-          </div>
-        )}
-
-        {/* Bottom Right - Outside of Work */}
-        <div className={teamStyles.outsideWorkCell}>
-          {member.outsideWork && member.outsideWork.length > 0 && (
-            <>
-              <h2 className={teamStyles.outsideWorkTitle}>Outside of Work:</h2>
-              <div className={teamStyles.outsideWorkTags}>
-                {member.outsideWork.map((item, idx) => (
-                  <span key={idx} className={teamStyles.outsideWorkTag}>{item}</span>
-                ))}
-              </div>
-            </>
+        <div className={teamStyles.heroInfo}>
+          {member.department && (
+            <p className={teamStyles.heroDept}>{`${member.department.charAt(0).toUpperCase()}${member.department.slice(1)} Team`}</p>
+          )}
+          <h1 className={teamStyles.heroName}>{displayName}</h1>
+          {member.linkedIn && (
+            <a
+              href={member.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={teamStyles.heroLinkedIn}
+            >
+              LinkedIn ↗
+            </a>
           )}
         </div>
       </div>
 
-      {/* Recommendation Section */}
-      {member.recommendation?.text && (
-        <div className={teamStyles.recommendationSection}>
-          <h2 className={teamStyles.sectionTitle}>What Others Say</h2>
-          <div className={teamStyles.recommendationCard}>
-            <div className={teamStyles.recommendationContent}>
-              <div className={teamStyles.quoteIcon}>&ldquo;</div>
-              <p className={teamStyles.recommendationText}>{member.recommendation.text}</p>
+      {/* ── Section 2: Bio + Sidebar ── */}
+      <div className={teamStyles.bioSection}>
+        <div className={teamStyles.bioMain}>
+          {member.bio && (
+            <>
+              <span className={teamStyles.sectionLabel}>About</span>
+              <div className={teamStyles.bioText}>
+                <p>{member.bio}</p>
+              </div>
+            </>
+          )}
+          {/* personalNote field does not exist in Sanity — using personalPhilosophy (PortableText) */}
+          {member.personalPhilosophy && (
+            <div className={teamStyles.inWordsBlock}>
+              <span className={teamStyles.sectionLabel}>In {firstName}&apos;s words</span>
+              <div className={teamStyles.inWordsContent}>
+                <PortableText value={member.personalPhilosophy} />
+              </div>
             </div>
-            <div className={teamStyles.recommendationAuthor}>
-              <span className={teamStyles.authorName}>{member.recommendation.authorName}</span>
-              {member.recommendation.authorTitle && (
-                <span className={teamStyles.authorTitle}>, {member.recommendation.authorTitle}</span>
-              )}
-            </div>
-          </div>
+          )}
         </div>
-      )}
-
-      {/* Articles Section */}
-      {member.articles && member.articles.length > 0 && (
-        <div className={teamStyles.articlesSection}>
-          <h2 className={teamStyles.sectionTitle}>Articles by {member.name.split(' ')[0]}</h2>
-          <ul className={teamStyles.articlesList}>
-            {member.articles.map((article, idx) => (
-              <li key={idx} className={teamStyles.articleItem}>
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={teamStyles.articleLink}
-                >
-                  <span className={teamStyles.articleTitle}>{article.title}</span>
-                  <span className={teamStyles.articleMeta}>
-                    {article.publication && <span>{article.publication}</span>}
-                    {article.date && (
-                      <span className={teamStyles.articleDate}>
-                        {new Date(article.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
+        <div className={teamStyles.bioSidebar}>
+          {/* hobbies field does not exist in Sanity — using outsideWork array */}
+          {member.outsideWork && member.outsideWork.length > 0 && (
+            <>
+              <span className={teamStyles.sectionLabel}>Outside of work</span>
+              <div className={teamStyles.hobbyTags}>
+                {member.outsideWork.map((item, idx) => (
+                  <span key={idx} className={teamStyles.hobbyTag}>{item}</span>
+                ))}
+              </div>
+            </>
+          )}
+          {/* peerQuotes array does not exist in Sanity — using single recommendation object. */}
+          {member.recommendation?.text && (
+            <div className={teamStyles.sidebarQuoteBlock}>
+              <span className={teamStyles.sectionLabel}>What others say</span>
+              <div className={teamStyles.quoteCard}>
+                <QuoteMarks className={teamStyles.quoteMarksBackground} fill="#830d35" />
+                <div className={teamStyles.quoteCardInner}>
+                  <p className={teamStyles.quoteBody}>{member.recommendation.text}</p>
+                  <div className={teamStyles.quoteAttribution}>
+                    {member.recommendation.authorName && (
+                      <span className={teamStyles.quoteAuthorName}>
+                        {member.recommendation.authorName}
                       </span>
                     )}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+                    {member.recommendation.authorTitle && (
+                      <span className={teamStyles.quoteAuthorTitle}>
+                        {member.recommendation.authorTitle}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Featured In Section */}
-      {featuredPosts && featuredPosts.length > 0 && (
-        <div className={teamStyles.featuredInSection}>
-          <h2 className={teamStyles.sectionTitle}>Featured In</h2>
-          <div className={teamStyles.featuredPostsGrid}>
-            {featuredPosts.map((post) => (
-              <a
-                key={post._id}
-                href={post.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={teamStyles.featuredPostCard}
+      {/* ── Section 4: View Others in the Team ── */}
+      {otherMembers && otherMembers.length > 0 && (
+        <div className={teamStyles.othersSection}>
+          <span className={teamStyles.sectionLabel}>Advisory Team</span>
+          <div className={teamStyles.othersGrid}>
+            {otherMembers.map((other) => (
+              <Link
+                key={other._id}
+                href={`/about-yali/${other.slug.current}`}
+                className={teamStyles.otherCard}
               >
-                {post.image && (
-                  <div className={teamStyles.featuredPostImage}>
+                <div className={teamStyles.otherCardInfo}>
+                  <span className={teamStyles.otherCardName}>{other.name}</span>
+                </div>
+                {other.photo && (
+                  <div className={teamStyles.otherCardPhotoWrap}>
                     <Image
-                      src={post.image}
-                      alt="Featured post"
+                      src={other.photo}
+                      alt={other.name}
                       fill
-                      style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 100vw, 300px"
+                      className={teamStyles.otherCardPhoto}
+                      sizes="56px"
                     />
                   </div>
                 )}
-                <div className={teamStyles.featuredPostContent}>
-                  <span className={teamStyles.featuredPostPlatform}>
-                    {post.platform === 'linkedin' ? 'LinkedIn' : post.platform === 'twitter' ? 'Twitter/X' : 'Post'}
-                  </span>
-                  <p className={teamStyles.featuredPostExcerpt}>
-                    {post.excerpt?.length > 100 ? post.excerpt.substring(0, 100) + '...' : post.excerpt}
-                  </p>
-                  <span className={teamStyles.featuredPostDate}>
-                    {new Date(post.date).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric'
-                    })}
-                  </span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* View Others in Team Section */}
-      {otherMembers && otherMembers.length > 0 && (
-        <div className={teamStyles.otherMembersSection}>
-          <h2 className={teamStyles.sectionTitle}>View Others in the Team</h2>
-          <div className={teamStyles.otherMembersGrid}>
-            {otherMembers.map((otherMember) => (
-              <Link
-                key={otherMember._id}
-                href={`/about-yali/${otherMember.slug.current}`}
-                className={teamStyles.otherMemberCard}
-              >
-                <span className={teamStyles.otherMemberName}>{otherMember.name}</span>
-                <span className={teamStyles.otherMemberRole}>{otherMember.role}</span>
               </Link>
             ))}
           </div>

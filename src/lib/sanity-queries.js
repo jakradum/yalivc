@@ -128,7 +128,8 @@ export async function getTeamMemberBySlug(slug) {
       "photo": photo.asset->url,
       linkedIn,
       status,
-      enableTeamPage
+      enableTeamPage,
+      department
     }`,
     { slug }
   );
@@ -148,7 +149,9 @@ export async function getOtherTeamMembers(currentSlug, limit = 4) {
       _id,
       name,
       slug,
-      role
+      role,
+      department,
+      "photo": photo.asset->url
     }`,
     { currentSlug, limit }
   );

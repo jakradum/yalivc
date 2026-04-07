@@ -2,130 +2,138 @@
   background-color: #efefef;
 }
 
-/* Top Row - Photo and About with text wrapping */
-.topRow {
-  border-top: 1px solid #363636;
-  border-bottom: 1px solid #363636;
-  padding: 2rem;
-  overflow: hidden; /* Clear floats */
-  background-color: white;
-}
+/* ─── Section 1: Hero ─────────────────────────────────────────────────────── */
 
-/* Bottom Row - Quote and Outside Work */
-.bottomRow {
+.hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid #363636;
+  align-items: stretch;
+  min-height: 531px;
+  border-bottom: 0.5px solid #363636;
 }
 
-/* Left Column - Photo Cell (floated) */
-.photoCell {
-  float: left;
-  margin-right: 2rem;
-  margin-bottom: 1rem;
-  background-color: white;
-  max-width: 50%;
-}
-
-.photoInner {
+.heroPhoto {
   position: relative;
-  width: 100%;
-  max-width: 500px;
-  height: calc(100vh - 150px);
-  max-height: 650px;
-  background-color: #830D35;
+  background-color: #830d35;
   overflow: hidden;
+  min-height: 531px;
 }
 
-/* Overlay to reduce pattern opacity */
-.photoInner::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(131, 13, 53, 0.2);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.memberPhoto {
-  position: relative;
-  z-index: 2;
+.heroPhotoImg {
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  z-index: 1;
 }
 
-/* Pattern 1 - Waves */
-.pattern1 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+.heroInfo {
+  background-color: #efefef;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  position: relative;
 }
 
-/* Pattern 2 - Crosshatch */
-.pattern2 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20' patternTransform='scale(2) rotate(60)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M 10,-2.55e-7 V 20 Z M -1.1677362e-8,10 H 20 Z'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-12,0)' fill='url(%23a)'/></svg>");
+.heroDept {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
 }
 
-/* Pattern 3 - Circles */
-.pattern3 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M10 15a5 5 0 110-10 5 5 0 010 10z'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-}
-
-/* Pattern 4 - Hexagons */
-.pattern4 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-}
-
-/* Pattern 5 - Honeycomb */
-.pattern5 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-}
-
-/* Pattern 6 - Circuit */
-.pattern6 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='160' height='160' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M121.5 39.5V9.169c0-2.827 1.724-4.707 3.473-5.602l.707-.362c2.086-1.068 4.702-.631 6.359 1.026l1.985 1.985c1.349 1.349 3.235 2.018 5.14 2.128 12.336 0 12.336-18.505 0-18.505M40.75 39.499V9.17c0-2.827-1.724-4.707-3.473-5.602l-.707-.362c-2.086-1.068-4.702-.631-6.359 1.026l-1.985 1.985c-1.349 1.349-3.236 2.018-5.14 2.128-12.336 0-12.336-18.505 0-18.505m146.575 111.248c0-12.337-18.505-12.337-18.505 0 .11 1.904.78 3.79 2.128 5.139l1.985 1.985c1.657 1.657 2.094 4.273 1.026 6.36l-.362.706c-.895 1.75-2.775 3.474-5.602 3.474l-30.33-.001m49.66-63.086c0 12.336-18.505 12.336-18.505 0 .11-1.904.78-3.791 2.128-5.14l1.985-1.985c1.657-1.657 2.094-4.273 1.026-6.359l-.362-.707c-.895-1.749-2.775-3.474-5.602-3.473h-30.33m19.162 130.344c12.337 0 12.337-18.505 0-18.505-1.631 0-3.99.98-5.139 2.128l-1.985 1.985c-1.656 1.656-4.274 2.094-6.36 1.027l-.706-.362c-2.086-1.069-3.474-3.258-3.474-5.602v-34.302l.001-26.228c0-2.344-1.427-4.458-3.473-5.602l-.707-.361a5.83 5.83 0 00-6.36 1.026l-1.984 1.985c-1.144 1.152-3.508 2.128-5.14 2.128-12.336 0-12.336-18.505 0-18.505 1.904.11 3.715.86 5.14 2.128l1.985 1.985a5.812 5.812 0 006.359 1.026l.707-.362c1.287-1.485 3.473-2.775 3.473-5.602v-30.33M23.086 168.343c-12.336 0-12.336-18.505 0-18.505 1.632 0 3.992.98 5.14 2.128l1.985 1.985c1.656 1.656 4.274 2.094 6.359 1.027l.707-.362c2.086-1.069 3.474-3.258 3.474-5.602l-.001-34.302V88.485c0-2.344 1.387-4.533 3.473-5.602l.707-.361c2.085-1.068 4.703-.63 6.359 1.026l1.985 1.985c1.148 1.148 3.508 2.128 5.14 2.128 12.336 0 12.336-18.505 0-18.505-1.905.11-3.791.78-5.14 2.128l-1.985 1.985c-1.657 1.657-4.273 2.094-6.36 1.026l-.706-.362c-1.75-.895-3.474-2.775-3.474-5.602v-30.33m80.75 80.749H91.17c-2.827 0-4.707 1.724-5.602 3.473l-.362.707c-1.068 2.086-.631 4.702 1.026 6.359l1.985 1.985c1.349 1.349 2.018 3.236 2.128 5.14 0 12.336-18.505 12.336-18.505 0 0-1.632.98-3.992 2.128-5.14l1.985-1.985c1.656-1.656 2.094-4.274 1.026-6.359l-.361-.707c-1.069-2.086-3.258-3.474-5.602-3.473h-60.53c-2.344 0-4.533-1.387-5.602-3.473l-.362-.707c-1.067-2.085-.63-4.703 1.027-6.359l1.985-1.985c1.148-1.148 2.128-3.508 2.128-5.14 0-12.336-18.505-12.336-18.505 0M121.5 38H91.169c-2.827 0-4.707-1.724-5.602-3.473l-.362-.707c-1.068-2.086-.631-4.702 1.026-6.359l1.985-1.985c1.349-1.349 2.018-3.235 2.128-5.14C90.344 8 71.84 8 71.84 20.337c0 1.632.977 3.994 2.128 5.14.663.66 1.343 1.305 1.985 1.985 1.608 1.703 2.003 4.23 1.026 6.36-.11.24-.233.474-.361.706C75.48 36.577 73.359 38 71.015 38H36.712L10.485 38c-2.344 0-4.533 1.387-5.602 3.473-.12.236-.24.471-.362.707-1.067 2.085-.63 4.703 1.027 6.36l1.985 1.984c1.148 1.148 2.128 3.508 2.128 5.14C9.66 68-8.844 68-8.844 55.664'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-}
-
-/* Pattern 7 - Stars */
-.pattern7 {
-  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='47.35' height='47.8' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='m23.67 15 8.66-15 15.02 8.66-8.67 15.01Zm0-30 8.66 15 15.02-8.66-8.67-15.01zM0-8.33v17m47.35-17v17M15.01 0h17.32m-8.66 32.8 8.66 15 15.02-8.66-8.67-15.01zM0 39.47v17m47.35-17v17M15.01 47.8h17.32m-56-32.8L-15 0 0 8.65l-8.66 15.01Zm47.35 0L15 0 0 8.65l8.67 15.01Zm0-30L15 0 0-8.66l8.67-15.01Zm47.33 30L62.35 0 47.33 8.65 56 23.67ZM23.67 62.8l8.66-15 15.02 8.66-8.67 15.01zm47.34-30-8.66 15-15.02-8.66L56 24.13Zm-47.33 30L15 47.8 0 56.45l8.67 15.01Zm-47.35-30 8.67 15 15-8.65-8.66-15.01zm47.35 0L15 47.8 0 39.15l8.67-15.01Z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-}
-
-/* Right Column - About Cell (flows around photo) */
-.aboutCell {
-  overflow: hidden; /* Creates new block formatting context */
-}
-
-.aboutTitle {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+.heroName {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(8rem, 15vw, 14rem);
   font-weight: 400;
-  margin: 0 0 1.5rem 0;
-  color: #000;
+  line-height: 0.88;
+  color: transparent;
+  -webkit-text-stroke: 1px #830d35;
+  opacity: 0.7;
+  margin: 0;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.heroNameWord {
+  display: block;
+}
+
+.heroTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  color: #666;
+  margin: 0;
+}
+
+.heroLinkedIn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #830d35;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+}
+
+.heroLinkedIn:hover {
+  text-decoration: underline;
+}
+
+/* ─── Section 2: Bio + Sidebar ────────────────────────────────────────────── */
+
+.bioSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  border-top: 0.5px solid #363636;
+  background-color: white;
+}
+
+.bioMain {
+  padding: 2rem;
+  border-right: 0.5px solid #363636;
+}
+
+.bioSidebar {
+  padding: 2rem;
+}
+
+.sectionLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 0.75rem 0;
+  display: block;
 }
 
 .bioText {
   font-size: 1rem;
   line-height: 1.7;
   color: #333;
+  margin: 0 0 2rem 0;
 }
 
 .bioText p {
-  margin: 0;
+  margin: 0 0 1rem 0;
   white-space: pre-line;
 }
 
-.inWordsSection {
-  margin-top: 2rem;
+.bioText p:last-child {
+  margin-bottom: 0;
 }
 
-.inWordsTitle {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin: 0 0 1rem 0;
-  color: #000;
+.inWordsBlock {
+  margin-top: 2rem;
 }
 
 .inWordsContent {
@@ -142,430 +150,286 @@
   margin-bottom: 0;
 }
 
-.linkedInButton {
+.hobbyTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sidebarQuoteBlock {
   margin-top: 2rem;
 }
 
-/* Bottom Left - Quote Cell */
-.quoteCell {
-  padding: 2.5rem;
-  display: flex;
-  align-items: center;
-  border-right: 1px solid #363636;
+.hobbyTag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #333;
+  border: 0.5px solid #363636;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0;
+  background: none;
 }
 
-.pullQuote {
-  margin: 0;
+/* ─── Section 3: Quotes ───────────────────────────────────────────────────── */
+
+.quotesSection {
+  border-top: 0.5px solid #363636;
   padding: 2rem;
   background-color: white;
-  border-left: 4px solid #830D35;
-  font-size: 1.25rem;
-  line-height: 1.5;
-  font-style: italic;
-  color: #363636;
 }
 
-.pullQuote p {
-  margin: 0;
+.quotesGrid {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.quoteCard {
+  background-color: #efefef;
+  border-left: 2px solid #830d35;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-height: 200px;
+}
+
+.quoteCardSingle {
+  max-width: 55%;
+}
+
+.quoteMarksBackground {
+  position: absolute;
+  bottom: -30px;
+  right: -12px;
+  width: 140px;
+  height: 105px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quoteCardInner {
+  position: relative;
+  z-index: 1;
+}
+
+.quoteBody {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 0 1rem 0;
 }
 
 .quoteAttribution {
+  border-top: 0.5px solid #363636;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.quoteAuthorName {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
   display: block;
-  margin-top: 1rem;
-  font-size: 1rem;
-  font-style: normal;
+}
+
+.quoteAuthorTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
   color: #666;
-  font-weight: 600;
+  display: block;
+  margin-top: 0.1rem;
 }
 
-.philosophyContent {
-  padding-left: 1.5rem;
-  border-left: 4px solid #830D35;
-  font-size: 1.125rem;
-  line-height: 1.6;
-}
+/* ─── Section 4: View Others in the Team ─────────────────────────────────── */
 
-.philosophyContent p {
-  margin: 0 0 1rem 0;
-}
-
-.philosophyContent p:last-child {
-  margin-bottom: 0;
-}
-
-/* Bottom Right - Outside Work Cell */
-.outsideWorkCell {
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.outsideWorkTitle {
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  font-weight: 400;
-  margin: 0 0 1.5rem 0;
-  color: #000;
-}
-
-.outsideWorkTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.outsideWorkTag {
-  background-color: #fff;
-  border: 1px solid #000;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  text-transform: capitalize;
-  white-space: nowrap;
-  color: #333;
-}
-
-/* Section Title - shared */
-.sectionTitle {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 400;
-  margin: 0 0 1.5rem 0;
-  color: #000;
-}
-
-/* Recommendation Section */
-.recommendationSection {
-  padding: 3rem 2rem;
-  border-bottom: 1px solid #363636;
-}
-
-.recommendationCard {
-  background-color: #f9f9f9;
+.othersSection {
+  border-top: 0.5px solid #363636;
   padding: 2rem;
-  position: relative;
-}
-
-.recommendationContent {
-  position: relative;
-}
-
-.quoteIcon {
-  font-size: 4rem;
-  color: #830D35;
-  opacity: 0.3;
-  line-height: 1;
-  position: absolute;
-  top: -1rem;
-  left: -0.5rem;
-  font-family: Georgia, serif;
-}
-
-.recommendationText {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: #333;
-  margin: 0;
-  padding-left: 2rem;
-  font-style: italic;
-}
-
-.recommendationAuthor {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
-  font-size: 1rem;
-  color: #666;
-}
-
-.authorName {
-  font-weight: 600;
-  color: #000;
-}
-
-.authorTitle {
-  font-weight: 400;
-}
-
-/* Articles Section */
-.articlesSection {
-  padding: 3rem 2rem;
-  border-bottom: 1px solid #363636;
-}
-
-.articlesList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.articleItem {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.articleItem:last-child {
-  border-bottom: none;
-}
-
-.articleLink {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 0;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.2s ease;
-}
-
-.articleLink:hover {
-  background-color: #f9f9f9;
-  padding-left: 1rem;
-  margin-left: -1rem;
-  padding-right: 1rem;
-  margin-right: -1rem;
-}
-
-.articleTitle {
-  font-size: 1.125rem;
-  color: #830D35;
-  flex: 1;
-  padding-right: 1rem;
-}
-
-.articleMeta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.875rem;
-  color: #666;
-  flex-shrink: 0;
-}
-
-.articleDate {
-  color: #999;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .topRow {
-    padding: 1.5rem;
-  }
-
-  .bottomRow {
-    grid-template-columns: 1fr;
-  }
-
-  .photoCell {
-    float: none;
-    margin-right: 0;
-    margin-bottom: 1.5rem;
-    max-width: 100%;
-  }
-
-  .photoInner {
-    height: auto;
-    max-height: none;
-    max-width: 350px;
-    aspect-ratio: 1;
-    margin: 0 auto;
-  }
-
-  .quoteCell,
-  .outsideWorkCell {
-    padding: 1.5rem;
-    border-right: none;
-  }
-
-  .quoteCell {
-    border-bottom: 1px solid #363636;
-  }
-
-  .aboutTitle,
-  .outsideWorkTitle {
-    font-size: 1.5rem;
-  }
-
-  .pullQuote,
-  .philosophyContent {
-    font-size: 1rem;
-  }
-
-  .recommendationSection,
-  .articlesSection {
-    padding: 2rem 1.5rem;
-  }
-
-  .recommendationCard {
-    padding: 1.5rem;
-  }
-
-  .quoteIcon {
-    font-size: 3rem;
-  }
-
-  .recommendationText {
-    font-size: 1rem;
-    padding-left: 1.5rem;
-  }
-
-  .articleLink {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .articleMeta {
-    flex-direction: row;
-    gap: 0.75rem;
-  }
-}
-
-/* Featured In Section */
-.featuredInSection {
-  padding: 3rem 2rem;
-  border-bottom: 1px solid #363636;
-}
-
-.featuredPostsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.featuredPostCard {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #363636;
   background-color: white;
-  text-decoration: none;
-  color: inherit;
-  overflow: hidden;
-  transition: background-color 0.2s ease;
 }
 
-.featuredPostCard:hover {
-  background-color: #f9f9f9;
-}
-
-.featuredPostImage {
-  position: relative;
-  width: 100%;
-  height: 160px;
-  background-color: #f5f5f5;
-}
-
-.featuredPostContent {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.featuredPostPlatform {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #830D35;
-  margin-bottom: 0.5rem;
-}
-
-.featuredPostExcerpt {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #565656;
-  margin: 0 0 1rem 0;
-  flex: 1;
-}
-
-.featuredPostDate {
-  font-size: 0.75rem;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-@media (max-width: 1024px) {
-  .featuredPostsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .featuredInSection {
-    padding: 2rem 1.5rem;
-  }
-
-  .featuredPostsGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .featuredPostImage {
-    height: 140px;
-  }
-
-  .featuredPostContent {
-    padding: 1rem;
-  }
-}
-
-/* Other Team Members Section */
-.otherMembersSection {
-  padding: 3rem 2rem;
-}
-
-.otherMembersGrid {
+.othersGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 8px;
+  margin-top: 1rem;
 }
 
-.otherMemberCard {
+.otherCard {
+  display: flex;
+  align-items: stretch;
+  border: 0.5px solid #363636;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+  min-height: 80px;
+  overflow: hidden;
+}
+
+.otherCard:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.otherCardInfo {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid #000;
-  background-color: white;
-  padding: 1.5rem;
-  min-height: 6rem;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
-.otherMemberCard:hover {
-  background-color: #f5f5f5;
+.otherCardName {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.3;
 }
 
-.otherMemberName {
-  font-size: 1.35rem;
-  color: #830D35;
-  font-weight: 300;
+.otherCardDept {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
 }
 
-.otherMemberRole {
-  font-size: 0.84rem;
-  color: #363636;
-  margin-top: 0.5rem;
+.otherCardPhotoWrap {
+  flex-shrink: 0;
+  width: 56px;
+  position: relative;
+  margin-left: 0.75rem;
+  align-self: stretch;
 }
 
-@media (max-width: 1024px) {
-  .otherMembersGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.otherCardPhoto {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
-@media (max-width: 500px) {
-  .otherMembersSection {
-    padding: 2rem 1.5rem;
-  }
+/* ─── Pattern variants ────────────────────────────────────────────────────── */
+/* Patterns applied via ::before so opacity only affects the yellow strokes,
+   not the photo. background-color: #830d35 on .heroPhoto provides the base. */
 
-  .otherMembersGrid {
+.pattern1::before,
+.pattern2::before,
+.pattern3::before,
+.pattern4::before,
+.pattern5::before,
+.pattern6::before,
+.pattern7::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  z-index: 0;
+}
+
+.pattern1::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern2::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20' patternTransform='scale(2) rotate(60)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M 10,-2.55e-7 V 20 Z M -1.1677362e-8,10 H 20 Z'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-12,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern3::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M10 15a5 5 0 110-10 5 5 0 010 10z'  stroke-width='0.5' stroke='%23ebde84ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern4::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern5::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern6::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='160' height='160' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='M121.5 39.5V9.169c0-2.827 1.724-4.707 3.473-5.602l.707-.362c2.086-1.068 4.702-.631 6.359 1.026l1.985 1.985c1.349 1.349 3.235 2.018 5.14 2.128 12.336 0 12.336-18.505 0-18.505M40.75 39.499V9.17c0-2.827-1.724-4.707-3.473-5.602l-.707-.362c-2.086-1.068-4.702-.631-6.359 1.026l-1.985 1.985c-1.349 1.349-3.236 2.018-5.14 2.128-12.336 0-12.336-18.505 0-18.505m146.575 111.248c0-12.337-18.505-12.337-18.505 0 .11 1.904.78 3.79 2.128 5.139l1.985 1.985c1.657 1.657 2.094 4.273 1.026 6.36l-.362.706c-.895 1.75-2.775 3.474-5.602 3.474l-30.33-.001m49.66-63.086c0 12.336-18.505 12.336-18.505 0 .11-1.904.78-3.791 2.128-5.14l1.985-1.985c1.657-1.657 2.094-4.273 1.026-6.359l-.362-.707c-.895-1.749-2.775-3.474-5.602-3.473h-30.33m19.162 130.344c12.337 0 12.337-18.505 0-18.505-1.631 0-3.99.98-5.139 2.128l-1.985 1.985c-1.656 1.656-4.274 2.094-6.36 1.027l-.706-.362c-2.086-1.069-3.474-3.258-3.474-5.602v-34.302l.001-26.228c0-2.344-1.427-4.458-3.473-5.602l-.707-.361a5.83 5.83 0 00-6.36 1.026l-1.984 1.985c-1.144 1.152-3.508 2.128-5.14 2.128-12.336 0-12.336-18.505 0-18.505 1.904.11 3.715.86 5.14 2.128l1.985 1.985a5.812 5.812 0 006.359 1.026l.707-.362c1.287-1.485 3.473-2.775 3.473-5.602v-30.33M23.086 168.343c-12.336 0-12.336-18.505 0-18.505 1.632 0 3.992.98 5.14 2.128l1.985 1.985c1.656 1.656 4.274 2.094 6.359 1.027l.707-.362c2.086-1.069 3.474-3.258 3.474-5.602l-.001-34.302V88.485c0-2.344 1.387-4.533 3.473-5.602l.707-.361c2.085-1.068 4.703-.63 6.359 1.026l1.985 1.985c1.148 1.148 3.508 2.128 5.14 2.128 12.336 0 12.336-18.505 0-18.505-1.905.11-3.791.78-5.14 2.128l-1.985 1.985c-1.657 1.657-4.273 2.094-6.36 1.026l-.706-.362c-1.75-.895-3.474-2.775-3.474-5.602v-30.33m80.75 80.749H91.17c-2.827 0-4.707 1.724-5.602 3.473l-.362.707c-1.068 2.086-.631 4.702 1.026 6.359l1.985 1.985c1.349 1.349 2.018 3.236 2.128 5.14 0 12.336-18.505 12.336-18.505 0 0-1.632.98-3.992 2.128-5.14l1.985-1.985c1.656-1.656 2.094-4.274 1.026-6.359l-.361-.707c-1.069-2.086-3.258-3.474-5.602-3.473h-60.53c-2.344 0-4.533-1.387-5.602-3.473l-.362-.707c-1.067-2.085-.63-4.703 1.027-6.359l1.985-1.985c1.148-1.148 2.128-3.508 2.128-5.14 0-12.336-18.505-12.336-18.505 0M121.5 38H91.169c-2.827 0-4.707-1.724-5.602-3.473l-.362-.707c-1.068-2.086-.631-4.702 1.026-6.359l1.985-1.985c1.349-1.349 2.018-3.235 2.128-5.14C90.344 8 71.84 8 71.84 20.337c0 1.632.977 3.994 2.128 5.14.663.66 1.343 1.305 1.985 1.985 1.608 1.703 2.003 4.23 1.026 6.36-.11.24-.233.474-.361.706C75.48 36.577 73.359 38 71.015 38H36.712L10.485 38c-2.344 0-4.533 1.387-5.602 3.473-.12.236-.24.471-.362.707-1.067 2.085-.63 4.703 1.027 6.36l1.985 1.984c1.148 1.148 2.128 3.508 2.128 5.14C9.66 68-8.844 68-8.844 55.664'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+.pattern7::before {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='47.35' height='47.8' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23830d35ff'/><path d='m23.67 15 8.66-15 15.02 8.66-8.67 15.01Zm0-30 8.66 15 15.02-8.66-8.67-15.01zM0-8.33v17m47.35-17v17M15.01 0h17.32m-8.66 32.8 8.66 15 15.02-8.66-8.67-15.01zM0 39.47v17m47.35-17v17M15.01 47.8h17.32m-56-32.8L-15 0 0 8.65l-8.66 15.01Zm47.35 0L15 0 0 8.65l8.67 15.01Zm0-30L15 0 0-8.66l8.67-15.01Zm47.33 30L62.35 0 47.33 8.65 56 23.67ZM23.67 62.8l8.66-15 15.02 8.66-8.67 15.01zm47.34-30-8.66 15-15.02-8.66L56 24.13Zm-47.33 30L15 47.8 0 56.45l8.67 15.01Zm-47.35-30 8.67 15 15-8.65-8.66-15.01zm47.35 0L15 47.8 0 39.15l8.67-15.01Z'  stroke-width='0.5' stroke='%23ebde85ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+
+/* ─── Responsive name font sizes ─────────────────────────────────────────── */
+
+@media (max-width: 1400px) {
+  .heroName { font-size: 180px; }
+}
+
+@media (max-width: 1100px) {
+  .heroName { font-size: 140px; }
+}
+
+@media (max-width: 900px) {
+  .heroName { font-size: 110px; }
+}
+
+/* ─── Mobile ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 800px) {
+  .hero {
     grid-template-columns: 1fr;
+    align-items: stretch;
   }
 
-  .otherMemberCard {
+  .heroPhoto {
+    height: 260px;
+    min-height: unset;
+  }
+
+  .heroInfo {
     padding: 1.25rem;
   }
 
-  .otherMemberName {
-    font-size: 1.2rem;
+  .heroName {
+    font-size: 18vw;
+  }
+
+  .heroNameWord {
+    display: block;
+  }
+
+  .bioSection {
+    grid-template-columns: 1fr;
+  }
+
+  .bioMain {
+    border-right: none;
+    border-bottom: 0.5px solid #363636;
+  }
+
+  .bioSidebar {
+    border-top: 0.5px solid #363636;
+  }
+
+  .quotesGrid {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .quoteCardSingle {
+    max-width: 100%;
+  }
+
+  .othersGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .otherCardPhotoWrap {
+    width: 44px;
   }
 }
