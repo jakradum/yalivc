@@ -11,7 +11,7 @@ export default function SubscribeBar() {
     e.preventDefault();
     setStatus('loading');
     try {
-      const res = await fetch('/api/subscribe-tattva', {
+      const res = await fetch('/api/subscribe-newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

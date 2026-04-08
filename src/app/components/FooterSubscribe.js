@@ -26,7 +26,7 @@ export default function FooterSubscribe() {
     setStatus('loading');
 
     try {
-      const response = await fetch('/api/subscribe-tattva', {
+      const response = await fetch('/api/subscribe-newsletter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
