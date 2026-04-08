@@ -345,7 +345,7 @@ export async function batchSend(resend, newsletter, subscribers) {
   const emailObjects = subscribers.map((s) => {
     const unsubscribeUrl = getUnsubscribeUrl(s.email);
     return {
-      from: 'Yali Capital Newsletter <tattva@yali.vc>',
+      from: 'Yali Capital Newsletter <newsletter@yali.vc>',
       to: [s.email],
       subject,
       html: buildEmail(newsletter, unsubscribeUrl),
