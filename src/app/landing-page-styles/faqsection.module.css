@@ -1,13 +1,6 @@
 .faqSection {
   padding: 1rem 0 2rem;
   position: relative;
-  min-height: 500px;
-}
-
-.accordionContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.625rem 3rem;
 }
 
 /* Separator line after section */
@@ -22,140 +15,121 @@
   transform: translateX(-50%);
 }
 
-.faqLayout {
+.faqList {
+  border: 0.5px solid #d0d0d0;
+  border-bottom: none;
+}
+
+.faqItem {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  border-bottom: 0.5px solid #d0d0d0;
+  cursor: pointer;
+}
+
+.faqContent {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
-.faqTitleColumn {
-  padding: 0;
-}
-
-.faqTitle {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 400;
-  margin: 0;
-  color: #000;
-}
-
-.accordionItem {
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.accordionHeader {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.75rem 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  transition: color 0.2s ease;
-}
-
-.accordionHeader:hover {
-  color: #830D35;
-}
-
-.question {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #363636;
-  padding-left: 1rem;
-  padding-right: 2rem;
-  transition: color 0.2s ease;
-}
-
-.accordionHeader:hover .question {
-  color: #830D35;
-}
-
-.icon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+.faqIndex {
+  background: #f5f5f5;
+  border-right: 0.5px solid #d0d0d0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 1rem;
+  font-size: 13px;
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  color: #999;
+  padding: 18px 0;
+  transition: background 0.15s, color 0.15s;
 }
 
-.chevron {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
+.faqQuestionCol {
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.faqQuestion {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-jetbrains-mono), monospace !important;
   color: #363636;
+  line-height: 1.4;
+  transition: color 0.15s;
 }
 
-.chevronOpen {
-  transform: rotate(180deg);
+.faqToggle {
+  font-size: 21px;
+  font-weight: 300;
+  color: #aaa;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s;
+  font-family: var(--font-inter), sans-serif;
 }
 
-.accordionContent {
+.faqAnswerCol {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
+  transition: max-height 0.35s ease;
 }
 
-.contentOpen {
-  max-height: 500px;
-  padding-bottom: 2rem;
+.faqAnswerColOpen {
+  max-height: 600px;
 }
 
-.answer {
-  font-size: 1rem;
+.faqAnswer {
+  padding: 0 20px 20px 68px;
+  font-size: 15px;
+  font-family: var(--font-inter), sans-serif;
+  color: #555;
   line-height: 1.7;
-  color: #565656;
-  padding-left: 1rem;
-  padding-right: 2rem;
-  padding-top: 0.5rem;
 }
 
-/* Open state styling */
-.open .question {
-  color: #830D35;
+/* Open state */
+.faqItemOpen .faqIndex {
+  background: #830d35;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.open .chevron {
-  color: #830D35;
+.faqItemOpen .faqQuestion {
+  color: #830d35;
 }
 
-/* Responsive */
+.faqItemOpen .faqToggle {
+  color: #830d35;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .faqSection {
-    min-height: auto;
+  .faqItem {
+    grid-template-columns: 36px 1fr;
   }
 
-  .accordionContainer {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .faqIndex {
+    font-size: 12px;
+    padding: 16px 0;
   }
 
-  .accordionHeader {
-    padding: 1.5rem 0;
+  .faqQuestionCol {
+    padding: 16px 14px;
+    gap: 12px;
   }
 
-  .question {
-    font-size: 1rem;
-    padding-right: 1rem;
+  .faqQuestion {
+    font-size: 14px;
   }
 
-  .answer {
-    font-size: 0.9375rem;
-    padding-right: 1rem;
+  .faqToggle {
+    font-size: 18px;
   }
 
-  .icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  .chevron {
-    width: 16px;
-    height: 16px;
+  .faqAnswer {
+    padding: 0 14px 16px 50px;
+    font-size: 14px;
   }
 }
