@@ -76,9 +76,9 @@ function blocksToHtml(blocks = []) {
     flushList();
 
     if (style === 'h2') {
-      rows.push(`<h2 style="font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:500;margin:24px 0 10px;color:#363636;line-height:1.3;">${content}</h2>`);
+      rows.push(`<h2 style="font-family:'Courier New',Courier,monospace;font-size:21px;font-weight:700;margin:24px 0 10px;color:#363636;line-height:1.3;">${content}</h2>`);
     } else if (style === 'h3') {
-      rows.push(`<h3 style="font-family:'Courier New',Courier,monospace;font-size:15px;font-weight:500;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
+      rows.push(`<h3 style="font-family:'Courier New',Courier,monospace;font-size:17px;font-weight:700;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
     } else if (style === 'blockquote') {
       rows.push(`<blockquote style="margin:16px 0;padding:0 0 0 16px;border-left:2px solid #830d35;"><p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#666;font-style:italic;line-height:1.65;">${content}</p></blockquote>`);
     } else {
@@ -93,7 +93,7 @@ function blocksToHtml(blocks = []) {
 // ─── Section renderers ────────────────────────────────────────────────────────
 
 function sectionLabel(text) {
-  return `<p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#830d35;margin:0 0 14px 0;line-height:1.2;">${text}</p>`;
+  return `<p style="font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#830d35;margin:0 0 14px 0;line-height:1.2;">${text}</p>`;
 }
 
 function renderSection(section) {
@@ -240,7 +240,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
           <tr>
             <td style="padding:12px 16px;border-bottom:1px solid #e0e0e0;background:#f7f7f7;text-align:center;">
               <span style="font-size:11px;font-family:Arial,sans-serif;color:#555;">
-                Forwarded this?
+                Someone sent this to you?
                 <a href="${SUBSCRIBE_URL}" style="color:#830d35;font-family:'Courier New',monospace;text-decoration:none;font-size:11px;" target="_blank">Subscribe here ↗</a>
               </span>
             </td>
@@ -249,7 +249,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
           <tr>
             <td style="background-color:#830d35;padding:28px 24px 24px 24px;">
               ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 12px 0;">${dateStr}</p>` : ''}
-              <h1 style="font-family:'Courier New',Courier,monospace;font-size:34px;font-weight:500;color:#ebde84;margin:0 0 14px 0;line-height:1.2;">${title || ''}</h1>
+              <h1 style="font-family:'Courier New',Courier,monospace;font-size:39px;font-weight:700;color:#ebde84;margin:0 0 14px 0;line-height:1.2;">${title || ''}</h1>
               ${shortDescription ? `<p style="font-family:Arial,sans-serif;font-size:16px;color:#f5edbe;line-height:1.6;margin:0 0 20px 0;">${shortDescription}</p>` : ''}
               ${authorName ? `
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
