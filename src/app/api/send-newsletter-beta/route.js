@@ -165,14 +165,21 @@ function renderSection(section) {
 
 // ─── Email template ───────────────────────────────────────────────────────────
 
+const SUBSCRIBE_URL = 'https://yali.vc/newsletter/';
+
+function getUnsubscribeUrl(email) {
+  const token = Buffer.from(email).toString('base64');
+  return `https://yali.vc/unsubscribe?token=${token}`;
+}
+
 function getYoutubeId(url) {
   if (!url) return null;
   const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\n?#]+)/);
   return match ? match[1] : null;
 }
 
-function buildEmail(newsletter) {
-  const { title, edition, sections = [], publishedDate, podcastUrl, author, slug } = newsletter;
+function buildEmail(newsletter, unsubscribeUrl) {
+  const { title, edition, shortDescription, sections = [], publishedDate, podcastUrl, author, slug } = newsletter;
 
   const dateStr = publishedDate
     ? new Date(publishedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -183,7 +190,12 @@ function buildEmail(newsletter) {
   const encodedTitle = encodeURIComponent(title || '');
   const shareSubject = encodeURIComponent(`${title} — Yali Capital Newsletter`);
   const shareBody = encodeURIComponent(`Thought you'd find this interesting: ${pageUrl}`);
-  const authorFirstName = author?.name ? author.name.split(' ')[0] : null;
+
+  const authorName = author?.name || null;
+  // Sanity CDN URL — append crop params for square thumbnail
+  const authorImageUrl = author?.image?.asset?.url
+    ? `${author.image.asset.url}?w=112&h=112&fit=crop&auto=format`
+    : null;
 
   const sectionsHtml = sections.map(renderSection).join('');
 
@@ -194,9 +206,9 @@ function buildEmail(newsletter) {
     if (videoId) {
       episodeHtml = `
         <div style="padding:28px 0 0 0;">
-          <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">YALI CAPITAL PODCAST · EP.${edition || '?'}</p>
+          <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">YALI CAPITAL PODCAST &middot; EP.${edition || '?'}</p>
           <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="display:block;text-decoration:none;">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch ${title || 'episode'} on YouTube" width="560" style="display:block;width:100%;height:auto;border:0;" />
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch ${title || 'episode'} on YouTube" width="552" style="display:block;width:100%;height:auto;border:0;" />
           </a>
           <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;display:inline-block;margin-top:8px;">Watch on YouTube ↗</a>
         </div>`;
@@ -206,7 +218,7 @@ function buildEmail(newsletter) {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td>
-                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">YALI CAPITAL PODCAST · EP.${edition || '?'}</p>
+                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">YALI CAPITAL PODCAST &middot; EP.${edition || '?'}</p>
                 <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">${title || ''}</p>
               </td>
               <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
@@ -235,39 +247,54 @@ function buildEmail(newsletter) {
 
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;">
 
-          <!-- Breadcrumb / view in browser -->
+          <!-- ── Forwarded / subscribe bar ── -->
           <tr>
-            <td style="padding:10px 24px;">
+            <td style="padding:12px 16px;border-bottom:1px solid #e0e0e0;background:#f7f7f7;text-align:center;">
+              <span style="font-size:11px;font-family:Arial,sans-serif;color:#555;">
+                Forwarded this?
+                <a href="${SUBSCRIBE_URL}" style="color:#830d35;font-family:'Courier New',monospace;text-decoration:none;font-size:11px;" target="_blank">Subscribe here ↗</a>
+              </span>
+            </td>
+          </tr>
+
+          <!-- ── Masthead (crimson band) ── -->
+          <tr>
+            <td style="background-color:#830d35;padding:28px 24px 24px 24px;">
+              ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 12px 0;">${dateStr}</p>` : ''}
+              <h1 style="font-family:'Courier New',Courier,monospace;font-size:34px;font-weight:500;color:#ebde84;margin:0 0 14px 0;line-height:1.2;">${title || ''}</h1>
+              ${shortDescription ? `<p style="font-family:Arial,sans-serif;font-size:16px;color:#f5edbe;line-height:1.6;margin:0 0 20px 0;">${shortDescription}</p>` : ''}
+              ${authorName ? `
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;">
-                    Newsletter&nbsp;/&nbsp;Issue&nbsp;${edition || '?'}
+                  <td style="vertical-align:middle;">
+                    <p style="font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#efefef;margin:0 0 2px 0;">${authorName}</p>
+                    ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:rgba(239,239,239,0.65);margin:0;">${dateStr}</p>` : ''}
                   </td>
-                  <td align="right">
-                    <a href="${pageUrl}" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;text-decoration:none;">View in browser ↗</a>
-                  </td>
+                  ${authorImageUrl ? `
+                  <td align="right" style="vertical-align:middle;padding-left:12px;">
+                    <img src="${authorImageUrl}" width="56" height="56" alt="${authorName}" style="display:block;width:56px;height:56px;object-fit:cover;border:0;" />
+                  </td>` : ''}
                 </tr>
-              </table>
+              </table>` : ''}
             </td>
           </tr>
 
-          <!-- Masthead -->
+          <!-- ── Content ── -->
           <tr>
-            <td style="background-color:#830d35;padding:28px 24px;">
-              ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 10px 0;">${dateStr}</p>` : ''}
-              <h1 style="font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:500;color:#ebde84;margin:0 0 10px 0;line-height:1.25;">${title || ''}</h1>
-              ${authorFirstName ? `<p style="font-family:Arial,sans-serif;font-size:13px;color:#ebde84;margin:0;">By ${authorFirstName} &middot; Yali Capital Newsletter</p>` : ''}
-            </td>
-          </tr>
-
-          <!-- Content -->
-          <tr>
-            <td style="padding:0 24px 28px 24px;">
+            <td style="padding:0 24px 0 24px;">
               ${sectionsHtml}
               ${episodeHtml}
 
-              <!-- Share -->
+              <!-- Liked this / forward -->
               <div style="padding:28px 0 0 0;">
+                <p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0;">
+                  Liked this edition?
+                  <a href="mailto:?subject=${shareSubject}&body=${shareBody}" style="color:#830d35;text-decoration:none;">Forward this email.</a>
+                </p>
+              </div>
+
+              <!-- Share links -->
+              <div style="padding:16px 0 0 0;">
                 <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">Share this article</p>
                 <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
                   <a href="https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">X&nbsp;/&nbsp;Twitter</a>
@@ -281,7 +308,7 @@ function buildEmail(newsletter) {
               </div>
 
               <!-- Footer strip -->
-              <div style="padding:20px 0 0 0;">
+              <div style="padding:24px 0 0 0;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">
@@ -293,15 +320,23 @@ function buildEmail(newsletter) {
                   </tr>
                 </table>
               </div>
+
+              <!-- View on web button -->
+              <div style="padding:20px 0 28px 0;text-align:center;">
+                <a href="${pageUrl}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#830d35;text-decoration:none;border:1px solid #830d35;padding:11px 28px;display:inline-block;">View on web</a>
+              </div>
             </td>
           </tr>
 
-          <!-- Unsubscribe -->
+          <!-- ── Bottom bar ── -->
           <tr>
-            <td style="background-color:#f0f0f0;padding:10px 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.05em;color:#999;margin:0;">
+            <td style="background-color:#f0f0f0;padding:14px 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#888;margin:0 0 4px 0;text-align:center;">
+                &copy; Yali Capital 2026 &nbsp;|&nbsp; Bangalore, India
+              </p>
+              <p style="font-family:Arial,sans-serif;font-size:11px;color:#aaa;margin:0;text-align:center;">
                 You received this because you subscribed at yali.vc.
-                &nbsp;<a href="{{unsubscribeUrl}}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
+                &nbsp;<a href="${unsubscribeUrl}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
               </p>
             </td>
           </tr>
@@ -334,7 +369,7 @@ export async function POST(request) {
       `*[_type == "newsletter" && _id in [$id, "drafts." + $id]][0]{
         title, edition, shortDescription, publishedDate, status,
         slug, podcastUrl,
-        author->{ name },
+        author->{ name, image { asset->{ url } } },
         sections[]{
           _type,
           sectionTitle, title,
@@ -353,7 +388,7 @@ export async function POST(request) {
     }
 
     const betaSubscribers = await writeClient.fetch(
-      `*[_type == "newsletterSubscriber" && beta == true]{email}`,
+      `*[_type == "newsletterSubscriber" && beta == true && unsubscribed != true]{email}`,
       {},
       { perspective: 'previewDrafts' }
     );
@@ -362,27 +397,38 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No beta subscribers found' }, { status: 400 });
     }
 
-    const emailHtml = buildEmail(newsletter);
     const subject = `Yali Capital Newsletter #${newsletter.edition || '?'} — ${newsletter.title}`;
-    const toAddresses = betaSubscribers.map((s) => s.email);
 
-    const { data, error } = await resend.emails.send({
-      from: 'Yali Capital Newsletter <tattva@yali.vc>',
-      to: toAddresses,
-      subject,
-      html: emailHtml,
+    // Build one personalised email object per subscriber (unique unsubscribe token)
+    const emailObjects = betaSubscribers.map((s) => {
+      const unsubscribeUrl = getUnsubscribeUrl(s.email);
+      return {
+        from: 'Yali Capital Newsletter <tattva@yali.vc>',
+        to: [s.email],
+        subject,
+        html: buildEmail(newsletter, unsubscribeUrl),
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
+      };
     });
 
-    if (error) {
-      console.error('Resend error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    // Send in batches of 100
+    const BATCH_SIZE = 100;
+    for (let i = 0; i < emailObjects.length; i += BATCH_SIZE) {
+      const batch = emailObjects.slice(i, i + BATCH_SIZE);
+      const { error } = await resend.batch.send(batch);
+      if (error) {
+        console.error('Resend batch error:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
     }
 
     return NextResponse.json({
       success: true,
-      sent: toAddresses.length,
-      recipients: toAddresses,
-      resendId: data?.id,
+      sent: betaSubscribers.length,
+      recipients: betaSubscribers.map((s) => s.email),
     });
   } catch (err) {
     console.error('send-newsletter-beta error:', err);

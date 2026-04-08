@@ -35,6 +35,17 @@ const newsletterSubscriber = {
       description: 'Include in beta sends before the newsletter goes to the full list',
       initialValue: false,
     },
+    {
+      name: 'unsubscribed',
+      title: 'Unsubscribed',
+      type: 'boolean',
+      initialValue: false,
+    },
+    {
+      name: 'unsubscribedAt',
+      title: 'Unsubscribed At',
+      type: 'datetime',
+    },
   ],
   preview: {
     select: {

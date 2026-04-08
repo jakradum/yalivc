@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getAllNewsletters } from '@/lib/sanity-queries';
+import SubscribeBar from './SubscribeBar';
 import styles from './page.module.css';
 
 export const revalidate = 60;
@@ -41,10 +42,7 @@ export default async function NewsletterArchive() {
         </div>
 
         {/* Subscribe bar */}
-        <div className={styles.subscribeBar}>
-          <span className={styles.subscribeText}>Get new editions by email</span>
-          <a href="#subscribe" className={styles.subscribeLink}>Subscribe ↗</a>
-        </div>
+        <SubscribeBar />
 
         {/* Edition list */}
         <div className={styles.editionList}>
