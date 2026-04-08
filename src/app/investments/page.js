@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../components/button';
 import HeaderFlex from '../components/icons/headerflex';
+import { ViewfinderIcon } from '../components/icons/small-icons/viewfinder-icon';
 import separatorStyles from '../landing-page-styles/separator.module.css';
 export const revalidate = 60;
 
@@ -85,7 +86,11 @@ export default async function Investments() {
         <div className={invStyles.heroLeft}>
           <div>
             <p className={invStyles.heroTag}>Our Investments</p>
-            <h1 className={invStyles.heroHeadline}>We back founders<br />leading from<br />the front.</h1>
+            <div className={invStyles.heroHeadlineWrap}>
+              <ViewfinderIcon />
+              <h1 className={invStyles.heroHeadline}>We back founders<br />leading from<br />the front.</h1>
+              <ViewfinderIcon />
+            </div>
             <p className={invStyles.heroSubhead}>We invest in deep tech companies with founders solving original problems, or just hard problems in new and original ways.</p>
           </div>
           <div className={invStyles.heroStats}>
