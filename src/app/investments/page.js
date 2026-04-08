@@ -54,8 +54,8 @@ const THESIS = [
   {
     index: '06',
     sector: 'Aerospace & Surveillance',
-    headline: 'The defence stack is slowly being built at home.',
-    body: "From specialised components to full-system solutions, India's private defence industry is expanding fast. We've got the appetite, the talent, and the governmental support. All the industry needs is the right kind of capital.",
+    headline: 'The aerospace stack is slowly being built at home.',
+    body: "From specialised components to full-system solutions, India's aerospace industry is expanding fast. We've got the appetite, the talent, and the governmental support. All the industry needs is the right kind of capital.",
   },
 ];
 
