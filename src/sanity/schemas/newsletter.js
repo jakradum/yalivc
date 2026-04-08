@@ -37,6 +37,13 @@ export default {
       validation: Rule => Rule.required()
     },
     {
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'teamMember' }],
+      description: 'Author of this newsletter edition'
+    },
+    {
       name: 'edition',
       title: 'Edition Number',
       type: 'number',
@@ -71,6 +78,13 @@ export default {
           description: 'Important for SEO and accessibility'
         }
       ]
+    },
+    {
+      name: 'podcastUrl',
+      title: 'Podcast / Video URL',
+      type: 'url',
+      description: 'YouTube or Spotify link for the episode CTA. Leave blank to hide the CTA.',
+      validation: Rule => Rule.uri({ scheme: ['http', 'https'] }).optional()
     },
     {
       name: 'sections',

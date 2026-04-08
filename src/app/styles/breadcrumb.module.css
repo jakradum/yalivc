@@ -1,7 +1,7 @@
 .breadcrumb {
   background: #efefef;
   padding: 10px 24px;
-  border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  border-bottom: 1px solid #363636;
 }
 
 .breadcrumb ol {

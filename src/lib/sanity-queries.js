@@ -544,6 +544,8 @@ export async function getNewsletterBySlug(slug) {
       edition,
       publishedDate,
       shortDescription,
+      podcastUrl,
+      author->{ name },
       coverImage {
         asset->{url},
         alt

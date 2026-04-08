@@ -288,7 +288,7 @@
 /* ── INNER PAGE: BREADCRUMB ── */
 .breadcrumb {
   padding: 18px 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid #363636;
   display: flex;
   align-items: center;
   gap: 10px;

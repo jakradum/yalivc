@@ -1,0 +1,480 @@
+.page {
+  width: 100%;
+  padding: 40px 0 80px;
+}
+
+.column {
+  max-width: 704px;
+  margin: 0 auto;
+}
+
+/* ── Breadcrumb ── */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.breadcrumbLink {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: #830d35;
+  text-decoration: none;
+}
+
+.breadcrumbLink:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbSep {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  color: #830d35;
+}
+
+.breadcrumbCurrent {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: #830d35;
+}
+
+/* ── Masthead ── */
+
+.masthead {
+  background: #830d35;
+  padding: 32px max(1rem, calc((100% - 704px) / 2));
+  margin-bottom: 40px;
+}
+
+.mastheadInner {
+  max-width: 704px;
+  margin: 0 auto;
+}
+
+.mastheadDate {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  color: #efefef;
+  margin: 0 0 10px 0;
+}
+
+.mastheadTitle {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 36px;
+  font-weight: 500;
+  color: #ebde84;
+  line-height: 1.2;
+  margin: 0 0 10px 0;
+}
+
+.mastheadByline {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  color: #ebde84;
+  margin: 0;
+}
+
+/* ── Sections ── */
+
+.sections {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  padding: 28px 0;
+}
+
+/* ── Section label ── */
+
+.sectionLabel {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+/* ── PortableText elements ── */
+
+.ptBody {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  color: #363636;
+  line-height: 1.75;
+  margin: 0 0 1em 0;
+}
+
+.ptBody:last-child {
+  margin-bottom: 0;
+}
+
+.ptH2 {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 18.5px;
+  font-weight: 500;
+  color: #363636;
+  margin: 1.5rem 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.ptH3 {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 15px;
+  font-weight: 500;
+  color: #363636;
+  margin: 1.2rem 0 0.4rem 0;
+  line-height: 1.3;
+}
+
+.ptPullQuote,
+.ptBlockQuote {
+  border-left: 2px solid #830d35;
+  padding-left: 16px;
+  margin: 1.2rem 0;
+}
+
+.ptPullQuote p,
+.ptBlockQuote p {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.ptCite {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  color: #830d35;
+  margin-top: 6px;
+}
+
+.ptLink {
+  color: #830d35;
+  text-decoration: none;
+}
+
+.ptLink:hover {
+  text-decoration: underline;
+}
+
+.ptCode {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 14px;
+  background: #f5f5f5;
+  padding: 2px 6px;
+  color: #363636;
+}
+
+.ptImage {
+  margin: 1.2rem 0;
+}
+
+.ptImageEl {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ptCaption {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  color: #830d35;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ── Author attribution ── */
+
+.authorAttribution {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  color: #830d35;
+  margin: 12px 0 0 0;
+}
+
+/* ── Guest meta ── */
+
+.guestMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.guestName {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: #363636;
+}
+
+.guestRole {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  color: #830d35;
+}
+
+/* ── Radar ── */
+
+.radarList {
+  display: flex;
+  flex-direction: column;
+}
+
+.radarRow {
+  display: grid;
+  grid-template-columns: 160px 1fr 100px;
+  gap: 16px;
+  align-items: baseline;
+  padding: 10px 0;
+}
+
+.radarTech {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: #363636;
+}
+
+.radarOneLiner {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.radarContributor {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11.5px;
+  color: #830d35;
+  text-align: right;
+}
+
+/* ── Reading list ── */
+
+.readingList {
+  display: flex;
+  flex-direction: column;
+}
+
+.readingRow {
+  padding: 10px 0;
+}
+
+.readingTitle {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 14px;
+  color: #830d35;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.readingTitle:hover {
+  text-decoration: underline;
+}
+
+.readingBlurb {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ── YouTube embed ── */
+
+.youtubeBlock {
+  margin-top: 32px;
+}
+
+.youtubeWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+}
+
+.youtubeFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.youtubeCaption {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: #830d35;
+  margin: 8px 0 0 0;
+}
+
+/* ── Spotify / other episode CTA ── */
+
+.episodeCta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  margin-top: 32px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.episodeCtaLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.episodeCtaLabel {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: #830d35;
+}
+
+.episodeCtaTitle {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 14px;
+  color: #363636;
+}
+
+.episodeCtaLink {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: #830d35;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.episodeCta:hover .episodeCtaLink {
+  text-decoration: underline;
+}
+
+/* ── Spread the word ── */
+
+.spreadBlock {
+  margin-top: 24px;
+  padding-top: 16px;
+}
+
+.spreadLabel {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin: 0 0 8px 0;
+}
+
+.shareIcons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.shareIcon {
+  display: flex;
+  align-items: center;
+  color: #830d35;
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+
+.shareIcon:hover {
+  opacity: 0.6;
+}
+
+/* ── Footer strip ── */
+
+.footerStrip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  margin-top: 24px;
+}
+
+.footerLeft {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: #830d35;
+}
+
+.footerRight {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: #830d35;
+  text-decoration: none;
+}
+
+.footerRight:hover {
+  text-decoration: underline;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 768px) {
+  .page {
+    padding: 28px 0 60px;
+  }
+
+  .mastheadTitle {
+    font-size: 28px;
+  }
+
+  .sectionLabel {
+    font-size: 20px;
+  }
+
+  .ptBody {
+    font-size: 14px;
+  }
+
+  .ptPullQuote p,
+  .ptBlockQuote p {
+    font-size: 14px;
+  }
+
+  .radarRow {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 0;
+  }
+
+  .radarContributor {
+    text-align: left;
+  }
+
+  .readingRow {
+    padding: 12px 0;
+  }
+
+  .episodeCta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

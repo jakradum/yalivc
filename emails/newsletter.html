@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>{{title}}</title>
+  <meta name="format-detection" content="telephone=no" />
+</head>
+<body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+  <!-- Preview text — hidden in email body, shown in inbox snippet -->
+  <div style="display:none;font-size:1px;color:#f0f0f0;max-height:0;max-width:0;opacity:0;overflow:hidden;">{{previewText}}</div>
+
+  <!-- Outer wrapper -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f0f0;">
+    <tr>
+      <td align="center" style="padding:24px 16px;">
+
+        <!-- Email card -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;">
+
+          <!-- ── View-in-browser / breadcrumb ── -->
+          <tr>
+            <td style="padding:10px 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;">
+                    Newsletter&nbsp;/&nbsp;Issue&nbsp;{{edition}}
+                  </td>
+                  <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;">
+                    <a href="{{webUrl}}" style="color:#830d35;text-decoration:none;">View in browser ↗</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Masthead (crimson band) ── -->
+          <tr>
+            <td style="background-color:#830d35;padding:28px 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 10px 0;">
+                {{publishedDate}}
+              </p>
+              <h1 style="font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:500;color:#ebde84;margin:0 0 10px 0;line-height:1.25;">
+                {{title}}
+              </h1>
+              <p style="font-family:Arial,sans-serif;font-size:13px;color:#ebde84;margin:0;">
+                By {{authorFirstName}} &middot; Yali Capital Newsletter
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── Opening note ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
+                {{section_openingNote}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── Essay ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                {{section_essayTitle}}
+              </p>
+              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
+                {{section_essay}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── Portfolio spotlight ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                PORTFOLIO &middot; {{section_spotlightCompany}}
+              </p>
+              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
+                {{section_spotlight}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── On our radar ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                ON OUR RADAR
+              </p>
+            </td>
+          </tr>
+
+          <!-- Radar item — repeat this block per item -->
+          <tr>
+            <td style="padding:0 24px 12px 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:600;color:#363636;padding-bottom:3px;">
+                    {{section_radarTech_1}}
+                  </td>
+                  <td align="right" style="font-family:Arial,sans-serif;font-size:11px;color:#830d35;">
+                    {{section_radarContributor_1}}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="font-family:Arial,sans-serif;font-size:12px;color:#666;line-height:1.55;">
+                    {{section_radarOneLiner_1}}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Reading list ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                READING LIST
+              </p>
+            </td>
+          </tr>
+
+          <!-- Reading item — repeat this block per item -->
+          <tr>
+            <td style="padding:0 24px 14px 24px;">
+              <a href="{{section_readingUrl_1}}" style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#830d35;text-decoration:none;display:block;margin-bottom:4px;">
+                {{section_readingTitle_1}} ↗
+              </a>
+              <p style="font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.55;margin:0;">
+                {{section_readingBlurb_1}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── Episode CTA ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">
+                      YALI CAPITAL PODCAST &middot; EP.{{edition}}
+                    </p>
+                    <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">
+                      {{podcastTitle}}
+                    </p>
+                  </td>
+                  <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
+                    <a href="{{podcastUrl}}" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">
+                      Listen ↗
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Share this article ── -->
+          <tr>
+            <td style="padding:28px 24px 0 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">
+                Share this article
+              </p>
+              <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
+                <a href="https://twitter.com/intent/tweet?text={{encodedTitle}}&url={{encodedUrl}}" style="color:#830d35;text-decoration:none;">X&nbsp;/&nbsp;Twitter</a>
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{encodedUrl}}" style="color:#830d35;text-decoration:none;">LinkedIn</a>
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                <a href="https://api.whatsapp.com/send?text={{encodedTitle}}%20{{encodedUrl}}" style="color:#830d35;text-decoration:none;">WhatsApp</a>
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                <a href="mailto:?subject={{shareSubject}}&body={{shareBody}}" style="color:#830d35;text-decoration:none;">Email</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── Footer strip ── -->
+          <tr>
+            <td style="padding:20px 24px 24px 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">
+                    YALI CAPITAL &middot; DEEP TECH FUND
+                  </td>
+                  <td align="right">
+                    <a href="https://yali.vc/newsletter/" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">
+                      All editions ↗
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Unsubscribe ── -->
+          <tr>
+            <td style="background-color:#f0f0f0;padding:10px 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.05em;color:#999;margin:0;">
+                You received this because you subscribed at yali.vc.
+                &nbsp;<a href="{{unsubscribeUrl}}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /Email card -->
+
+      </td>
+    </tr>
+  </table>
+  <!-- /Outer wrapper -->
+
+</body>
+</html>
