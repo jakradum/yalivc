@@ -8,6 +8,17 @@ import QuoteMarks from '../../components/icons/background svgs/quotemarks';
 
 export const revalidate = 60;
 
+function formatCardName(fullName) {
+  if (!fullName) return '';
+  const nicknameMatch = fullName.match(/^.*?['\u2018\u2019](.+?)['\u2018\u2019]\s*(.+)$/);
+  if (nicknameMatch) {
+    const nickname = nicknameMatch[1];
+    const surname = nicknameMatch[2].trim().split(/\s+/).pop();
+    return `${nickname} ${surname}`;
+  }
+  return fullName;
+}
+
 export async function generateStaticParams() {
   const members = await getAllTeamMemberSlugs();
   return members.map((member) => ({
@@ -51,7 +62,7 @@ export default async function TeamMemberPage({ params }) {
 
   // If name contains a nickname in single quotes (e.g. "Ganapathy 'Gani' Subramaniam"),
   // surface the nickname + surname. Otherwise fall back to first name with hyphen-break.
-  const nicknameMatch = member.name?.match(/^.*?'(.+?)'\s*(.*)$/);
+  const nicknameMatch = member.name?.match(/^.*?['\u2018\u2019](.+?)['\u2018\u2019]\s*(.*)$/);
   const nameParts = member.name?.split(/\s+/) ?? [];
   const lastNamePart = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
   const heroDisplayName = nicknameMatch ? nicknameMatch[1] : firstName;
@@ -107,7 +118,7 @@ export default async function TeamMemberPage({ params }) {
           {/* personalNote field does not exist in Sanity — using personalPhilosophy (PortableText) */}
           {member.personalPhilosophy && (
             <div className={teamStyles.inWordsBlock}>
-              <span className={teamStyles.sectionLabel}>In {firstName}&apos;s words</span>
+              <span className={teamStyles.sectionLabel}>In {heroDisplayName}&apos;s words</span>
               <div className={teamStyles.inWordsContent}>
                 <PortableText value={member.personalPhilosophy} />
               </div>
@@ -126,28 +137,44 @@ export default async function TeamMemberPage({ params }) {
               </div>
             </>
           )}
-          {/* peerQuotes array does not exist in Sanity — using single recommendation object. */}
-          {member.recommendation?.text && (
+          {(member.pullQuote || member.recommendation?.text) && (
             <div className={teamStyles.sidebarQuoteBlock}>
               <span className={teamStyles.sectionLabel}>What others say</span>
-              <div className={teamStyles.quoteCard}>
-                <QuoteMarks className={teamStyles.quoteMarksBackground} fill="#830d35" />
-                <div className={teamStyles.quoteCardInner}>
-                  <p className={teamStyles.quoteBody}>{member.recommendation.text}</p>
-                  <div className={teamStyles.quoteAttribution}>
-                    {member.recommendation.authorName && (
-                      <span className={teamStyles.quoteAuthorName}>
-                        {member.recommendation.authorName}
-                      </span>
-                    )}
-                    {member.recommendation.authorTitle && (
-                      <span className={teamStyles.quoteAuthorTitle}>
-                        {member.recommendation.authorTitle}
-                      </span>
+              {member.recommendation?.text && (
+                <div className={teamStyles.quoteCard}>
+                  <QuoteMarks className={teamStyles.quoteMarksBackground} stroke="#830d35" />
+                  <div className={teamStyles.quoteCardInner}>
+                    <p className={teamStyles.quoteBody}>{member.recommendation.text}</p>
+                    <div className={teamStyles.quoteAttribution}>
+                      {member.recommendation.authorName && (
+                        <span className={teamStyles.quoteAuthorName}>
+                          {member.recommendation.authorName}
+                        </span>
+                      )}
+                      {member.recommendation.authorTitle && (
+                        <span className={teamStyles.quoteAuthorTitle}>
+                          {member.recommendation.authorTitle}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {member.pullQuote && (
+                <div className={teamStyles.quoteCard}>
+                  <QuoteMarks className={teamStyles.quoteMarksBackground} stroke="#830d35" />
+                  <div className={teamStyles.quoteCardInner}>
+                    <p className={teamStyles.quoteBody}>{member.pullQuote}</p>
+                    {member.pullQuoteAttribution && (
+                      <div className={teamStyles.quoteAttribution}>
+                        <span className={teamStyles.quoteAuthorName}>
+                          {member.pullQuoteAttribution}
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>
@@ -156,16 +183,17 @@ export default async function TeamMemberPage({ params }) {
       {/* ── Section 4: View Others in the Team ── */}
       {otherMembers && otherMembers.length > 0 && (
         <div className={teamStyles.othersSection}>
-          <span className={teamStyles.sectionLabel}>Advisory Team</span>
+          <span className={teamStyles.sectionLabel}>See others in the team</span>
           <div className={teamStyles.othersGrid}>
             {otherMembers.map((other) => (
               <Link
                 key={other._id}
                 href={`/about-yali/${other.slug.current}`}
-                className={teamStyles.otherCard}
+                className={`${teamStyles.otherCard} ${other.department !== 'investments' ? teamStyles.otherCardNonInvestments : ''}`}
               >
                 <div className={teamStyles.otherCardInfo}>
-                  <span className={teamStyles.otherCardName}>{other.name}</span>
+                  <span className={teamStyles.otherCardName}>{formatCardName(other.name)}</span>
+                  <span className={teamStyles.otherCardViewBtn}>View</span>
                 </div>
                 {other.photo && (
                   <div className={teamStyles.otherCardPhotoWrap}>
@@ -174,7 +202,7 @@ export default async function TeamMemberPage({ params }) {
                       alt={other.name}
                       fill
                       className={teamStyles.otherCardPhoto}
-                      sizes="56px"
+                      sizes="90px"
                     />
                   </div>
                 )}

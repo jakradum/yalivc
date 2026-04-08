@@ -145,7 +145,7 @@ export async function getAllTeamMemberSlugs() {
 
 export async function getOtherTeamMembers(currentSlug, limit = 4) {
   return client.fetch(
-    `*[_type == "teamMember" && showOnHomepage == true && enableTeamPage == true && slug.current != $currentSlug] | order(order asc) [0...$limit] {
+    `*[_type == "teamMember" && showOnHomepage == true && enableTeamPage == true && slug.current != $currentSlug] | order(select(department == "investments" => 0, 1) asc, order asc) [0...$limit] {
       _id,
       name,
       slug,
