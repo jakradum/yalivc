@@ -32,7 +32,12 @@ export default function SocialUpdates({ updates = [] }) {
       <div className={`${styles.grid} ${!hasSecondary ? styles.gridSingle : ''}`}>
 
         {/* Featured post */}
-        <div className={`${styles.featured} ${!hasSecondary ? styles.featuredOnly : ''}`}>
+        <a
+          href={featured.url || '#'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${styles.featured} ${!hasSecondary ? styles.featuredOnly : ''}`}
+        >
           {featured.image && (
             <div className={styles.featuredImageWrap}>
               <Image
@@ -50,25 +55,19 @@ export default function SocialUpdates({ updates = [] }) {
               <span className={styles.featuredDate}>{formatDate(featured.date)}</span>
             </div>
             <p className={styles.featuredSnippet}>{truncateText(featured.excerpt, 220)}</p>
-            {featured.url && (
-              <a
-                href={featured.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.featuredLink}
-              >
-                View post ↗
-              </a>
-            )}
+            <span className={styles.featuredLink}>View post ↗</span>
           </div>
-        </div>
+        </a>
 
         {/* Secondary stack */}
         {hasSecondary && (
           <div className={styles.secondaryStack}>
             {secondary.map((post, i) => (
-              <div
+              <a
                 key={post._id || i}
+                href={post.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`${styles.secondaryRow} ${i === secondary.length - 1 ? styles.secondaryRowLast : ''}`}
               >
                 {post.image && (
@@ -86,19 +85,10 @@ export default function SocialUpdates({ updates = [] }) {
                   <p className={styles.secondarySnippet}>{truncateText(post.excerpt, 110)}</p>
                   <div className={styles.secondaryFooter}>
                     <span className={styles.secondaryDate}>{formatDate(post.date)}</span>
-                    {post.url && (
-                      <a
-                        href={post.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.secondaryLink}
-                      >
-                        View ↗
-                      </a>
-                    )}
+                    <span className={styles.secondaryLink}>View ↗</span>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         )}

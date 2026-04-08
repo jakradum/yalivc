@@ -29,6 +29,9 @@
 
 .featured {
   border-right: 1px solid #363636;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .featuredOnly {
@@ -104,6 +107,8 @@
   gap: 12px;
   align-items: flex-start;
   flex: 1;
+  text-decoration: none;
+  color: inherit;
 }
 
 .secondaryRowLast {
