@@ -4,16 +4,6 @@
 }
 
 /* Separator line after section */
-.faqSection::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 100vw;
-  height: 1px;
-  background-color: black;
-  transform: translateX(-50%);
-}
 
 .faqList {
   border: 0.5px solid #d0d0d0;
