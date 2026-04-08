@@ -22,18 +22,18 @@ export async function POST(request) {
     }
 
     const subscribers = await writeClient.fetch(
-      `*[_type == "newsletterSubscriber" && beta == true && unsubscribed != true]{email}`,
+      `*[_type == "newsletterSubscriber" && unsubscribed != true]{email}`,
       {},
       { perspective: 'previewDrafts' }
     );
     if (!subscribers.length) {
-      return NextResponse.json({ error: 'No beta subscribers found' }, { status: 400 });
+      return NextResponse.json({ error: 'No subscribers found' }, { status: 400 });
     }
 
     const sent = await batchSend(resend, newsletter, subscribers);
     return NextResponse.json({ success: true, sent, recipients: subscribers.map((s) => s.email) });
   } catch (err) {
-    console.error('send-newsletter-beta error:', err);
+    console.error('send-newsletter error:', err);
     return NextResponse.json({ error: err.message || 'Unexpected error' }, { status: 500 });
   }
 }

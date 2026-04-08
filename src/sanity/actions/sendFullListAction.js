@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export function SendBetaTestAction(props) {
+export function SendFullListAction(props) {
   const { draft, published, id } = props;
   const doc = draft || published;
 
@@ -13,7 +13,7 @@ export function SendBetaTestAction(props) {
   if (!doc) return null;
 
   const label = {
-    idle: '🧪 Send Beta Test',
+    idle: '📨 Send to Full List',
     confirm: '⚠️ Click again to confirm',
     loading: 'Sending...',
     success: 'Sent!',
@@ -33,7 +33,7 @@ export function SendBetaTestAction(props) {
     setStatus('loading');
 
     try {
-      const res = await fetch('/api/send-newsletter-beta/', {
+      const res = await fetch('/api/send-newsletter/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newsletterId: id }),
@@ -43,7 +43,7 @@ export function SendBetaTestAction(props) {
       setStatus('success');
       setTimeout(() => setStatus('idle'), 4000);
     } catch (err) {
-      console.error('Beta send failed:', err);
+      console.error('Full list send failed:', err);
       setErrorMsg(err.message || 'Unknown error');
       setStatus('error');
       setTimeout(() => { setStatus('idle'); setErrorMsg(''); }, 6000);
