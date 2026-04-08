@@ -20,7 +20,7 @@
         <!-- Email card -->
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;">
 
-          <!-- ── View-in-browser / breadcrumb ── -->
+          <!-- ── Breadcrumb / view in browser ── -->
           <tr>
             <td style="padding:10px 24px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -28,8 +28,8 @@
                   <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;">
                     Newsletter&nbsp;/&nbsp;Issue&nbsp;{{edition}}
                   </td>
-                  <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;">
-                    <a href="{{webUrl}}" style="color:#830d35;text-decoration:none;">View in browser ↗</a>
+                  <td align="right">
+                    <a href="{{webUrl}}" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;text-decoration:none;">View in browser ↗</a>
                   </td>
                 </tr>
               </table>
@@ -51,146 +51,124 @@
             </td>
           </tr>
 
-          <!-- ── Opening note ── -->
+          <!-- ── Content ── -->
           <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
-                {{section_openingNote}}
-              </p>
-            </td>
-          </tr>
+            <td style="padding:0 24px 28px 24px;">
 
-          <!-- ── Essay ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
-                {{section_essayTitle}}
-              </p>
-              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
-                {{section_essay}}
-              </p>
-            </td>
-          </tr>
+              <!-- Opening note (no label) -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0 0 16px 0;">
+                  {{section_openingNote}}
+                </p>
+              </div>
 
-          <!-- ── Portfolio spotlight ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
-                PORTFOLIO &middot; {{section_spotlightCompany}}
-              </p>
-              <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0;">
-                {{section_spotlight}}
-              </p>
-            </td>
-          </tr>
+              <!-- Essay -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                  {{section_essayTitle}}
+                </p>
+                <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0 0 16px 0;">
+                  {{section_essay}}
+                </p>
+              </div>
 
-          <!-- ── On our radar ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
-                ON OUR RADAR
-              </p>
-            </td>
-          </tr>
+              <!-- Portfolio spotlight -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                  PORTFOLIO &middot; {{section_spotlightCompany}}
+                </p>
+                <p style="font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;margin:0 0 16px 0;">
+                  {{section_spotlight}}
+                </p>
+              </div>
 
-          <!-- Radar item — repeat this block per item -->
-          <tr>
-            <td style="padding:0 24px 12px 24px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:600;color:#363636;padding-bottom:3px;">
-                    {{section_radarTech_1}}
-                  </td>
-                  <td align="right" style="font-family:Arial,sans-serif;font-size:11px;color:#830d35;">
-                    {{section_radarContributor_1}}
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" style="font-family:Arial,sans-serif;font-size:12px;color:#666;line-height:1.55;">
-                    {{section_radarOneLiner_1}}
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+              <!-- On our radar -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                  ON OUR RADAR
+                </p>
+                <!-- Radar item — repeat per item -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+                  <tr>
+                    <td style="font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:500;color:#363636;">{{section_radarTech_1}}</td>
+                    <td align="right" style="font-family:Arial,sans-serif;font-size:12px;color:#830d35;">{{section_radarContributor_1}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="font-family:Arial,sans-serif;font-size:12px;color:#666;line-height:1.55;padding-top:2px;">{{section_radarOneLiner_1}}</td>
+                  </tr>
+                </table>
+              </div>
 
-          <!-- ── Reading list ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
-                READING LIST
-              </p>
-            </td>
-          </tr>
+              <!-- Reading list -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;color:#830d35;text-transform:uppercase;margin:0 0 14px 0;line-height:1.2;">
+                  READING LIST
+                </p>
+                <!-- Reading item — repeat per item -->
+                <div style="margin-bottom:14px;">
+                  <a href="{{section_readingUrl_1}}" style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#830d35;text-decoration:none;display:block;margin-bottom:4px;" target="_blank">
+                    {{section_readingTitle_1}} ↗
+                  </a>
+                  <p style="font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.55;margin:0;">{{section_readingBlurb_1}}</p>
+                </div>
+              </div>
 
-          <!-- Reading item — repeat this block per item -->
-          <tr>
-            <td style="padding:0 24px 14px 24px;">
-              <a href="{{section_readingUrl_1}}" style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#830d35;text-decoration:none;display:block;margin-bottom:4px;">
-                {{section_readingTitle_1}} ↗
-              </a>
-              <p style="font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.55;margin:0;">
-                {{section_readingBlurb_1}}
-              </p>
-            </td>
-          </tr>
+              <!-- ── YouTube episode (linked thumbnail) ── -->
+              <!-- Use this block when podcastUrl is a YouTube link -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">
+                  YALI CAPITAL PODCAST &middot; EP.{{edition}}
+                </p>
+                <a href="{{podcastUrl}}" target="_blank" style="display:block;text-decoration:none;">
+                  <img src="https://img.youtube.com/vi/{{youtubeVideoId}}/hqdefault.jpg" alt="Watch {{title}} on YouTube" width="552" style="display:block;width:100%;height:auto;border:0;" />
+                </a>
+                <a href="{{podcastUrl}}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;display:inline-block;margin-top:8px;">Watch on YouTube ↗</a>
+              </div>
 
-          <!-- ── Episode CTA ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td>
-                    <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">
-                      YALI CAPITAL PODCAST &middot; EP.{{edition}}
-                    </p>
-                    <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">
-                      {{podcastTitle}}
-                    </p>
-                  </td>
-                  <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
-                    <a href="{{podcastUrl}}" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">
-                      Listen ↗
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+              <!-- ── Spotify / other episode (text CTA) ── -->
+              <!-- Use this block when podcastUrl is Spotify or other -->
+              <div style="padding:28px 0 0 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td>
+                      <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">YALI CAPITAL PODCAST &middot; EP.{{edition}}</p>
+                      <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">{{title}}</p>
+                    </td>
+                    <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
+                      <a href="{{podcastUrl}}" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;" target="_blank">Listen ↗</a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
 
-          <!-- ── Share this article ── -->
-          <tr>
-            <td style="padding:28px 24px 0 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">
-                Share this article
-              </p>
-              <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
-                <a href="https://twitter.com/intent/tweet?text={{encodedTitle}}&url={{encodedUrl}}" style="color:#830d35;text-decoration:none;">X&nbsp;/&nbsp;Twitter</a>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{encodedUrl}}" style="color:#830d35;text-decoration:none;">LinkedIn</a>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://api.whatsapp.com/send?text={{encodedTitle}}%20{{encodedUrl}}" style="color:#830d35;text-decoration:none;">WhatsApp</a>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="mailto:?subject={{shareSubject}}&body={{shareBody}}" style="color:#830d35;text-decoration:none;">Email</a>
-              </p>
-            </td>
-          </tr>
+              <!-- ── Share this article ── -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">Share this article</p>
+                <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
+                  <a href="https://twitter.com/intent/tweet?text={{encodedTitle}}&url={{encodedUrl}}" style="color:#830d35;text-decoration:none;" target="_blank">X&nbsp;/&nbsp;Twitter</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{encodedUrl}}" style="color:#830d35;text-decoration:none;" target="_blank">LinkedIn</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="https://api.whatsapp.com/send?text={{encodedTitle}}%20{{encodedUrl}}" style="color:#830d35;text-decoration:none;" target="_blank">WhatsApp</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="mailto:?subject={{shareSubject}}&body={{shareBody}}" style="color:#830d35;text-decoration:none;">Email</a>
+                </p>
+              </div>
 
-          <!-- ── Footer strip ── -->
-          <tr>
-            <td style="padding:20px 24px 24px 24px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">
-                    YALI CAPITAL &middot; DEEP TECH FUND
-                  </td>
-                  <td align="right">
-                    <a href="https://yali.vc/newsletter/" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">
-                      All editions ↗
-                    </a>
-                  </td>
-                </tr>
-              </table>
+              <!-- ── Footer strip ── -->
+              <div style="padding:20px 0 0 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">
+                      YALI CAPITAL &middot; DEEP TECH FUND
+                    </td>
+                    <td align="right">
+                      <a href="https://yali.vc/newsletter/" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">All editions ↗</a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
             </td>
           </tr>
 
@@ -205,12 +183,10 @@
           </tr>
 
         </table>
-        <!-- /Email card -->
 
       </td>
     </tr>
   </table>
-  <!-- /Outer wrapper -->
 
 </body>
 </html>

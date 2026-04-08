@@ -14,7 +14,7 @@ function marksToHtml(text, marks = []) {
   for (const mark of marks) {
     if (mark === 'strong') out = `<strong>${out}</strong>`;
     else if (mark === 'em') out = `<em>${out}</em>`;
-    else if (mark === 'code') out = `<code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;font-size:0.9em;">${out}</code>`;
+    else if (mark === 'code') out = `<code style="font-family:'Courier New',Courier,monospace;background:#f5f5f5;padding:2px 6px;font-size:13px;">${out}</code>`;
   }
   return out;
 }
@@ -30,7 +30,7 @@ function spansToHtml(spans, markDefs = []) {
       );
       let html = marksToHtml(span.text || '', plainMarks);
       if (activeLinkDef?.href) {
-        html = `<a href="${activeLinkDef.href}" style="color:#1a1a1a;text-decoration:underline;" target="${activeLinkDef.blank ? '_blank' : '_self'}">${html}</a>`;
+        html = `<a href="${activeLinkDef.href}" style="color:#830d35;text-decoration:none;" target="${activeLinkDef.blank ? '_blank' : '_self'}">${html}</a>`;
       }
       return html;
     }
@@ -41,7 +41,6 @@ function spansToHtml(spans, markDefs = []) {
 function blocksToHtml(blocks = []) {
   if (!blocks.length) return '';
   const markDefs = [];
-  // collect all markDefs
   for (const b of blocks) {
     if (b.markDefs) markDefs.push(...b.markDefs);
   }
@@ -69,20 +68,20 @@ function blocksToHtml(blocks = []) {
     if (block.listItem) {
       if (listType && listType !== block.listItem) flushList();
       listType = block.listItem;
-      listBuffer.push(`<li style="margin-bottom:6px;">${content}</li>`);
+      listBuffer.push(`<li style="margin-bottom:6px;font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;">${content}</li>`);
       continue;
     }
 
     flushList();
 
     if (style === 'h2') {
-      rows.push(`<h2 style="font-size:20px;font-weight:600;margin:28px 0 12px;color:#1a1a1a;">${content}</h2>`);
+      rows.push(`<h2 style="font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:500;margin:24px 0 10px;color:#363636;line-height:1.3;">${content}</h2>`);
     } else if (style === 'h3') {
-      rows.push(`<h3 style="font-size:17px;font-weight:600;margin:22px 0 10px;color:#1a1a1a;">${content}</h3>`);
+      rows.push(`<h3 style="font-family:'Courier New',Courier,monospace;font-size:15px;font-weight:500;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
     } else if (style === 'blockquote') {
-      rows.push(`<blockquote style="margin:16px 0;padding:12px 16px;border-left:3px solid #d1d5db;color:#555;font-style:italic;">${content}</blockquote>`);
+      rows.push(`<blockquote style="margin:16px 0;padding:0 0 0 16px;border-left:2px solid #830d35;"><p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#666;font-style:italic;line-height:1.65;">${content}</p></blockquote>`);
     } else {
-      rows.push(`<p style="margin:0 0 16px;line-height:1.7;color:#333;">${content}</p>`);
+      rows.push(`<p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#363636;">${content}</p>`);
     }
   }
 
@@ -92,69 +91,73 @@ function blocksToHtml(blocks = []) {
 
 // ─── Section renderers ────────────────────────────────────────────────────────
 
-function sectionWrapper(label, content) {
-  return `
-    <div style="margin:40px 0;padding-top:32px;border-top:1px solid #e5e7eb;">
-      <p style="margin:0 0 20px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#6b7280;">${label}</p>
-      ${content}
-    </div>`;
+function sectionLabel(text) {
+  return `<p style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#830d35;margin:0 0 14px 0;line-height:1.2;">${text}</p>`;
 }
 
 function renderSection(section) {
   const type = section._type;
+  const wrapper = (label, content) =>
+    `<div style="padding:28px 0 0 0;">${sectionLabel(label)}${content}</div>`;
 
   if (type === 'openingNote') {
-    return sectionWrapper(
-      section.sectionTitle || 'Opening Note',
-      blocksToHtml(section.body)
-    );
+    const body = blocksToHtml(section.body);
+    const attr = section.author?.name
+      ? `<p style="font-family:Arial,sans-serif;font-size:14px;color:#830d35;margin:12px 0 0 0;">— ${section.author.name}</p>`
+      : '';
+    return `<div style="padding:28px 0 0 0;">${body}${attr}</div>`;
   }
 
   if (type === 'essay') {
-    return sectionWrapper(
-      section.title || 'Essay',
-      blocksToHtml(section.body)
-    );
+    const body = blocksToHtml(section.body);
+    const attr = section.author?.name
+      ? `<p style="font-family:Arial,sans-serif;font-size:14px;color:#830d35;margin:12px 0 0 0;">— ${section.author.name}</p>`
+      : '';
+    return wrapper(section.title || 'Essay', body + attr);
   }
 
   if (type === 'portfolioSpotlight') {
-    return sectionWrapper(
-      section.sectionTitle || 'Portfolio Spotlight',
-      blocksToHtml(section.body)
-    );
+    const label = section.company?.name
+      ? `PORTFOLIO · ${section.company.name}`
+      : (section.sectionTitle || 'PORTFOLIO SPOTLIGHT');
+    return wrapper(label, blocksToHtml(section.body));
   }
 
   if (type === 'guestColumn') {
     const byline = [section.guestTitle, section.guestCompany].filter(Boolean).join(' · ');
-    return sectionWrapper(
-      section.sectionTitle || 'Guest Column',
-      `<p style="margin:0 0 16px;font-weight:600;color:#1a1a1a;">${section.guestName || ''}${byline ? `<span style="font-weight:400;color:#6b7280;"> — ${byline}</span>` : ''}</p>
-       ${blocksToHtml(section.body)}`
-    );
+    const meta = section.guestName
+      ? `<p style="font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:500;color:#363636;margin:0 0 2px 0;">${section.guestName}</p>${byline ? `<p style="font-family:Arial,sans-serif;font-size:13px;color:#830d35;margin:0 0 12px 0;">${byline}</p>` : ''}`
+      : '';
+    return wrapper(section.sectionTitle || 'GUEST', meta + blocksToHtml(section.body));
   }
 
   if (type === 'radar') {
     const items = (section.items || []).map((item) =>
-      `<div style="margin-bottom:18px;">
-         <p style="margin:0 0 4px;font-weight:600;color:#1a1a1a;">${item.technology || ''}</p>
-         <p style="margin:0;color:#555;line-height:1.6;">${item.oneLiner || ''}</p>
-       </div>`
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+         <tr>
+           <td style="font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:500;color:#363636;">${item.technology || ''}</td>
+           ${item.contributor?.name ? `<td align="right" style="font-family:Arial,sans-serif;font-size:12px;color:#830d35;">${item.contributor.name}</td>` : ''}
+         </tr>
+         <tr>
+           <td colspan="2" style="font-family:Arial,sans-serif;font-size:12px;color:#666;line-height:1.55;padding-top:2px;">${item.oneLiner || ''}</td>
+         </tr>
+       </table>`
     ).join('');
-    return sectionWrapper(section.sectionTitle || 'The Radar', items);
+    return wrapper(section.sectionTitle || 'ON OUR RADAR', items);
   }
 
   if (type === 'reading') {
     const items = (section.items || []).map((item) =>
-      `<div style="margin-bottom:18px;">
-         <p style="margin:0 0 4px;"><a href="${item.url || '#'}" style="font-weight:600;color:#1a1a1a;text-decoration:underline;" target="_blank">${item.title || ''}</a></p>
-         ${item.blurb ? `<p style="margin:0;color:#555;line-height:1.6;">${item.blurb}</p>` : ''}
+      `<div style="margin-bottom:14px;">
+         <a href="${item.url || '#'}" style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#830d35;text-decoration:none;display:block;margin-bottom:4px;" target="_blank">${item.title || ''} ↗</a>
+         ${item.blurb ? `<p style="font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.55;margin:0;">${item.blurb}</p>` : ''}
        </div>`
     ).join('');
-    return sectionWrapper(section.sectionTitle || "What We're Reading", items);
+    return wrapper(section.sectionTitle || 'READING LIST', items);
   }
 
   if (type === 'freeform') {
-    return sectionWrapper(section.title || 'Note', blocksToHtml(section.body));
+    return wrapper(section.title || '', blocksToHtml(section.body));
   }
 
   return '';
@@ -162,50 +165,153 @@ function renderSection(section) {
 
 // ─── Email template ───────────────────────────────────────────────────────────
 
+function getYoutubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\n?#]+)/);
+  return match ? match[1] : null;
+}
+
 function buildEmail(newsletter) {
-  const { title, edition, shortDescription, sections = [], publishedDate } = newsletter;
+  const { title, edition, sections = [], publishedDate, podcastUrl, author, slug } = newsletter;
+
   const dateStr = publishedDate
-    ? new Date(publishedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(publishedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
     : '';
+
+  const pageUrl = `https://yali.vc/newsletter/${slug?.current || ''}`;
+  const encodedUrl = encodeURIComponent(pageUrl);
+  const encodedTitle = encodeURIComponent(title || '');
+  const shareSubject = encodeURIComponent(`${title} — Yali Capital Newsletter`);
+  const shareBody = encodeURIComponent(`Thought you'd find this interesting: ${pageUrl}`);
+  const authorFirstName = author?.name ? author.name.split(' ')[0] : null;
 
   const sectionsHtml = sections.map(renderSection).join('');
 
+  // Episode block
+  let episodeHtml = '';
+  if (podcastUrl) {
+    const videoId = getYoutubeId(podcastUrl);
+    if (videoId) {
+      episodeHtml = `
+        <div style="padding:28px 0 0 0;">
+          <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">YALI CAPITAL PODCAST · EP.${edition || '?'}</p>
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="display:block;text-decoration:none;">
+            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch ${title || 'episode'} on YouTube" width="560" style="display:block;width:100%;height:auto;border:0;" />
+          </a>
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;display:inline-block;margin-top:8px;">Watch on YouTube ↗</a>
+        </div>`;
+    } else {
+      episodeHtml = `
+        <div style="padding:28px 0 0 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td>
+                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">YALI CAPITAL PODCAST · EP.${edition || '?'}</p>
+                <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">${title || ''}</p>
+              </td>
+              <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
+                <a href="${podcastUrl}" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;" target="_blank">Listen ↗</a>
+              </td>
+            </tr>
+          </table>
+        </div>`;
+    }
+  }
+
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${title}</title></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <div style="max-width:620px;margin:40px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>${title || ''}</title>
+  <meta name="format-detection" content="telephone=no" />
+</head>
+<body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-    <!-- Header -->
-    <div style="padding:32px 40px 24px;border-bottom:1px solid #e5e7eb;">
-      <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#6b7280;">YALI Capital · Tattva</p>
-      <h1 style="margin:0 0 8px;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1.3;">${title}</h1>
-      <p style="margin:0;font-size:13px;color:#9ca3af;">Edition #${edition || '?'}${dateStr ? ` · ${dateStr}` : ''}</p>
-    </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f0f0;">
+    <tr>
+      <td align="center" style="padding:24px 16px;">
 
-    <!-- Beta badge -->
-    <div style="padding:10px 40px;background:#fef3c7;border-bottom:1px solid #fde68a;">
-      <p style="margin:0;font-size:12px;color:#92400e;">🧪 <strong>Beta send</strong> — you're receiving this as a beta tester before it goes to the full list.</p>
-    </div>
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;">
 
-    <!-- Short description -->
-    ${shortDescription ? `<div style="padding:24px 40px 0;"><p style="margin:0;font-size:16px;line-height:1.7;color:#555;font-style:italic;">${shortDescription}</p></div>` : ''}
+          <!-- Breadcrumb / view in browser -->
+          <tr>
+            <td style="padding:10px 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;">
+                    Newsletter&nbsp;/&nbsp;Issue&nbsp;${edition || '?'}
+                  </td>
+                  <td align="right">
+                    <a href="${pageUrl}" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#830d35;text-decoration:none;">View in browser ↗</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-    <!-- Sections -->
-    <div style="padding:0 40px 40px;">
-      ${sectionsHtml}
-    </div>
+          <!-- Masthead -->
+          <tr>
+            <td style="background-color:#830d35;padding:28px 24px;">
+              ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 10px 0;">${dateStr}</p>` : ''}
+              <h1 style="font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:500;color:#ebde84;margin:0 0 10px 0;line-height:1.25;">${title || ''}</h1>
+              ${authorFirstName ? `<p style="font-family:Arial,sans-serif;font-size:13px;color:#ebde84;margin:0;">By ${authorFirstName} &middot; Yali Capital Newsletter</p>` : ''}
+            </td>
+          </tr>
 
-    <!-- Footer -->
-    <div style="padding:24px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-      <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
-        You're on this list as a beta tester for Tattva, YALI Capital's newsletter.<br>
-        <a href="https://yali.vc" style="color:#6b7280;">yali.vc</a>
-      </p>
-    </div>
+          <!-- Content -->
+          <tr>
+            <td style="padding:0 24px 28px 24px;">
+              ${sectionsHtml}
+              ${episodeHtml}
 
-  </div>
+              <!-- Share -->
+              <div style="padding:28px 0 0 0;">
+                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">Share this article</p>
+                <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
+                  <a href="https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">X&nbsp;/&nbsp;Twitter</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">LinkedIn</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">WhatsApp</a>
+                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                  <a href="mailto:?subject=${shareSubject}&body=${shareBody}" style="color:#830d35;text-decoration:none;">Email</a>
+                </p>
+              </div>
+
+              <!-- Footer strip -->
+              <div style="padding:20px 0 0 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">
+                      YALI CAPITAL &middot; DEEP TECH FUND
+                    </td>
+                    <td align="right">
+                      <a href="https://yali.vc/newsletter/" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">All editions ↗</a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Unsubscribe -->
+          <tr>
+            <td style="background-color:#f0f0f0;padding:10px 24px;">
+              <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.05em;color:#999;margin:0;">
+                You received this because you subscribed at yali.vc.
+                &nbsp;<a href="{{unsubscribeUrl}}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>`;
 }
@@ -224,17 +330,18 @@ export async function POST(request) {
       return NextResponse.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 });
     }
 
-    // Fetch newsletter from Sanity — previewDrafts so unpublished docs are readable
     const newsletter = await writeClient.fetch(
       `*[_type == "newsletter" && _id in [$id, "drafts." + $id]][0]{
         title, edition, shortDescription, publishedDate, status,
+        slug, podcastUrl,
+        author->{ name },
         sections[]{
           _type,
           sectionTitle, title,
-          body, author->{name},
-          company->{name},
+          body, author->{ name },
+          company->{ name },
           guestName, guestTitle, guestCompany,
-          items[]{ technology, oneLiner, contributor->{name}, title, url, blurb }
+          items[]{ technology, oneLiner, contributor->{ name }, title, url, blurb }
         }
       }`,
       { id: newsletterId },
@@ -245,8 +352,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Newsletter not found' }, { status: 404 });
     }
 
-    // Fetch beta subscribers — use previewDrafts so toggled-but-unpublished
-    // subscriber docs are included (requires token)
     const betaSubscribers = await writeClient.fetch(
       `*[_type == "newsletterSubscriber" && beta == true]{email}`,
       {},
@@ -258,11 +363,11 @@ export async function POST(request) {
     }
 
     const emailHtml = buildEmail(newsletter);
-    const subject = `[Beta] Tattva #${newsletter.edition || '?'} — ${newsletter.title}`;
+    const subject = `Yali Capital Newsletter #${newsletter.edition || '?'} — ${newsletter.title}`;
     const toAddresses = betaSubscribers.map((s) => s.email);
 
     const { data, error } = await resend.emails.send({
-      from: 'Tattva by YALI Capital <tattva@yali.vc>',
+      from: 'Yali Capital Newsletter <tattva@yali.vc>',
       to: toAddresses,
       subject,
       html: emailHtml,

@@ -43,10 +43,10 @@ export default defineConfig({
                   .items([
                     S.listItem().title('Blog Posts').child(S.documentTypeList('blogPost').title('Blog Posts')),
                     S.listItem()
-                      .title('Newsletter (Tattva)')
+                      .title('Newsletter')
                       .child(
                         S.list()
-                          .title('Newsletter (Tattva)')
+                          .title('Newsletter')
                           .items([
                             S.listItem().title('Issues').child(S.documentTypeList('newsletter').title('Newsletters')),
                             S.divider(),

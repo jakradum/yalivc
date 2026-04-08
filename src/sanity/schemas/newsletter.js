@@ -10,7 +10,7 @@ import {
 
 export default {
   name: 'newsletter',
-  title: 'Newsletter (Tattva)',
+  title: 'Newsletter',
   type: 'document',
   fields: [
     {
@@ -24,7 +24,7 @@ export default {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      description: 'e.g., "tattva-01" - URL-friendly identifier',
+      description: 'e.g., "newsletter-01" - URL-friendly identifier',
       options: {
         source: 'title',
         maxLength: 96,
@@ -149,7 +149,7 @@ export default {
       }) : '';
 
       return {
-        title: `${statusEmoji[status] || '📝'} Tattva #${edition || '?'}`,
+        title: `${statusEmoji[status] || '📝'} Newsletter #${edition || '?'}`,
         subtitle: `${title}${formattedDate ? ` • ${formattedDate}` : ''}`,
         media
       };
