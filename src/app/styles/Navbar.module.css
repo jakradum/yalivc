@@ -275,12 +275,13 @@
   .verticalText {
     transform: rotate(-180deg);
     writing-mode: vertical-rl;
-    font-family: 'JetBrains Mono';
+    font-family: var(--font-jetbrains-mono), monospace !important;
     color: #EFEFEF;
+    opacity: 0.6;
     position: absolute;
     bottom: 1rem;
     margin-left: 1rem;
-    font-size: 2.439rem;
+    font-size: 4.878rem;
     letter-spacing: -0.241rem;
     font-weight: 400;
   }
@@ -326,7 +327,8 @@
   }
 
   /* Styling for the last child (Contact) in the mobile menu */
-  .mobileMenuList a {
+  .mobileMenuList a,
+  .mobileMenuList span {
     text-decoration: none;
     display: block;
     font-size: 1.2rem;
