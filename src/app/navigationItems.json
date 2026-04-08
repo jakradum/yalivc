@@ -6,13 +6,7 @@
       },
       {
         "name": "About Us",
-        "path": "/about-yali",
-        "subItems": [
-          {
-            "name": "Team",
-            "path": "/about-yali#team"
-          }
-        ]
+        "path": "/about-yali"
       },
       {
         "name": "Investments",
