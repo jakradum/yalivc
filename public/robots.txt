@@ -8,5 +8,8 @@ Allow: /
 Disallow: /partners/
 Disallow: /api/
 
+# Disallow Next.js build artefacts (not real pages)
+Disallow: /_next/
+
 # Sitemap location
 Sitemap: https://yali.vc/sitemap.xml
