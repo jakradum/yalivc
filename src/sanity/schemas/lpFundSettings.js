@@ -44,6 +44,22 @@ export default {
       description: 'e.g., "Taking India\'s Deep Tech to new heights"',
       group: 'identity'
     },
+    {
+      name: 'collectiveExperience',
+      title: 'Collective Deep Tech Experience (years)',
+      type: 'number',
+      description: 'Shown on homepage stat strip. e.g. 60',
+      group: 'identity',
+      initialValue: 60,
+    },
+    {
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+      description: 'Shown on homepage stat strip. e.g. Bangalore',
+      group: 'identity',
+      initialValue: 'Bangalore',
+    },
 
     // KEY DATES
     {

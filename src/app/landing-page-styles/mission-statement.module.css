@@ -1,94 +1,73 @@
+@keyframes flyAcross {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(120vw); }
+}
+
+/* ── SECTION ── */
+.sectionWrapper {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #363636;
+}
+
 .sectionBG {
   margin: 1rem;
   background-color: #830D35;
   position: relative;
   height: 80vh;
-  overflow: visible;
-  transition: height 0.3s ease-out;
-  padding-bottom: 1rem;
+  overflow: hidden;
 }
 
-.sectionBG::after {
-  content: '';
-  position: absolute;
-  left: -100vw; /* Extend to the left edge of the screen */
-  right: -100vw; /* Extend to the right edge of the screen */
-  bottom: -1rem; /* Position it 1rem below the container */
-  height: 1px; /* Increased thickness for visibility */
-  background-color: #000; /* Ensure this contrasts with your background */
-  z-index: 10; /* Increased to ensure it's above other elements */
-}
-
-.sectionBG.expanded {
-  height: calc(80vh + 2rem + var(--header-height));
-}
-
+/* ── GRID BACKGROUND ── */
 .backgroundSVG {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80vh;
+  height: 100%;
   z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
 .backgroundSVG > svg {
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   position: absolute;
-  opacity: 80%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.backgroundSVG > svg:first-child { /* MissionStatementRedBG */
-  height: 95%; /* Scale down from original size */
-  width: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  object-fit: contain;
+  top: 0;
+  left: 0;
+  opacity: 0.35;
 }
 
+/* ── TWO-COLUMN LAYOUT ── */
 .content {
   position: relative;
   z-index: 2;
   height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 0 5%;
+  gap: 4%;
+}
+
+/* ── LEFT COLUMN ── */
+.leftColumn {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end; /* This aligns items to bottom */
-  padding-bottom: 2rem;
-  width: 100%;
-  justify-content: space-between; /* This helps maintain spacing */
-  bottom: 0; /* Ensure it's at the bottom */
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
 }
 
 .headerWrapper {
-  position: relative;
-  margin-left: 5%;
-  width: 90%;
-  align-self: flex-end;
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .bodyText {
   color: white;
-  width: 45%;
-  position: relative;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-  margin-left: 2rem;
-  margin-right: 5%;
-  margin-bottom: 0; /* Remove bottom margin */
-  align-self: flex-end; /* Explicitly align to bottom */
 }
 
 .bodyText.visible {
@@ -97,7 +76,7 @@
 }
 
 .bodyText p {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   line-height: 1.5;
   background-color: #830D35;
@@ -111,67 +90,131 @@
   transform: translateY(0);
 }
 
-.bodyText p:nth-child(2) {
-  transition-delay: 0.2s; /* Delay the second paragraph's animation */
+/* ── STAT STRIP ── */
+.statStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 0.5px solid rgba(235, 222, 132, 0.2);
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease-in-out 0.2s, transform 0.5s ease-in-out 0.2s;
 }
+
+.statStrip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.statCell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 0 16px 0;
+  padding-right: 12px;
+  border-right: 0.5px solid rgba(235, 222, 132, 0.15);
+}
+
+.statCellLast {
+  border-right: none;
+}
+
+.statValue {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 500;
+  color: #ebde84;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* ── RIGHT COLUMN (illustration) ── */
+.rightColumn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.rightColumn > svg {
+  height: 60%;
+  width: auto;
+  max-height: 100%;
+  display: block;
+}
+
+/* ── MOBILE ── */
 @media (max-width: 800px) {
+  .sectionBG {
+    margin: 0.5rem;
+    height: auto;
+    min-height: 70vh;
+    overflow: hidden;
+  }
+
   .content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 2rem;
+    grid-template-columns: 1fr;
+    padding: 2.5rem 6%;
+    gap: 0;
+    align-items: flex-start;
     position: relative;
   }
-  .bodyText>p {
-    font-size: clamp(0.8rem, 2.5vw, 1rem); /* Adjust min, preferred, and max values as needed */
- }
-  
-  .bodyText {
-    width: 85%;
-    max-width: 85%;
-    padding: 0;
+
+  .rightColumn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+  }
+
+  .rightColumn > svg {
+    height: 100%;
+    width: auto;
+    animation: flyAcross 28s linear infinite;
+  }
+
+  .leftColumn {
     position: relative;
-    transform: none;
-    order: 1;
-    margin-top: 15vh; /* Reduced from 25vh to move text up */
-    margin-right: 2rem;
-    margin-bottom: 1rem;
+    z-index: 1;
   }
 
   .headerWrapper {
-    width: 90%;
-    padding: 0;
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-57.5%); /* Reset to just handle X-axis */
-    margin: 0;
-}
-  .headerWrapper h1,
-  .headerWrapper p {
-    text-align: left;
-    margin-left: 2rem; /* Add some left padding to the text */
+    margin-bottom: 1rem;
   }
 
-  .sectionBG {
-    margin: 0.5rem;
-    height: 70vh;
-    overflow: hidden;
+  .bodyText p {
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
   }
-  .backgroundSVG {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    position: absolute;
+
+  .statStrip {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 1rem;
   }
-  .backgroundSVG > svg:first-child {
-    z-index: 2;
-    height: 10%; /* Increase size */
-    width: auto;
-    position: absolute;
-    top: 50%;
-    left: -90%; /* Pull to the left to crop that side */
-    transform: translateY(-50%);
-    object-fit: cover;
+
+  .statCell:nth-child(2) {
+    border-right: none;
+  }
+
+  .statCell:nth-child(3) {
+    border-top: 0.5px solid rgba(235, 222, 132, 0.15);
+  }
+
+  .statCell:nth-child(4) {
+    border-top: 0.5px solid rgba(235, 222, 132, 0.15);
   }
 }

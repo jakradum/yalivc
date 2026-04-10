@@ -230,35 +230,51 @@ const CompanyTable = ({ companies, companyCount }) => {
               }
             : { display: 'none' };
   
-          return (
-              <aside
-                key={index}
-                className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''} ${company.isFeatured ? styles.mobileCompanyCardFeatured : ''}`}
-                style={cardStyle}
-              >
-                <article className={styles.keyDetails}>
-                  {company.isFeatured && (
-                    <div className={styles.mobileFeaturedLabel}>Featured</div>
-                  )}
-                  <div className={styles.cardHeader}>
-                    <span className={styles.companyNumber}>
-                      <h2>{String(index + 1).padStart(2, '0')}</h2>
-                    </span>
-                    <span className={styles.totalCount}>
-                      <h3>/{companiesData.data.length}</h3>
-                    </span>
-                  </div>
-                  <h4 className={styles.companyTitle}>{company.name}</h4>
-                  <p className={styles.companyCategory}>{company.category?.name}</p>
+          const href = getCompanyHref(company);
+          const cardInner = (
+            <article className={styles.keyDetails}>
+              {company.isFeatured && (
+                <div className={styles.mobileFeaturedLabel}>Featured</div>
+              )}
+              <div className={styles.cardHeader}>
+                <span className={styles.companyNumber}>
+                  <h2>{String(index + 1).padStart(2, '0')}</h2>
+                </span>
+                <span className={styles.totalCount}>
+                  <h3>/{companiesData.data.length}</h3>
+                </span>
+              </div>
+              <h4 className={styles.companyTitle}>{company.name}</h4>
+              <p className={styles.companyCategory}>{company.category?.name}</p>
 
-                  <div className={styles.mobileVector}>
-                    {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
-                  </div>
+              <div className={styles.mobileVector}>
+                {vectorUsageMap[company.category?.name?.toLowerCase()] || <GenericVector />}
+              </div>
 
-                  <small>{company.oneLiner?.length > 100 ? `${company.oneLiner.substring(0, 100)}...` : company.oneLiner}</small>
-                  <p>Swipe to view next</p>
-                </article>
-              </aside>
+              <small>{company.oneLiner?.length > 100 ? `${company.oneLiner.substring(0, 100)}...` : company.oneLiner}</small>
+              <p className={styles.mobileCardHint}>
+                {href ? 'Tap for more' : ''}{href ? ' · ' : ''}Swipe for next
+              </p>
+            </article>
+          );
+
+          return href ? (
+            <Link
+              key={index}
+              href={href}
+              className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''} ${company.isFeatured ? styles.mobileCompanyCardFeatured : ''}`}
+              style={cardStyle}
+            >
+              {cardInner}
+            </Link>
+          ) : (
+            <aside
+              key={index}
+              className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''} ${company.isFeatured ? styles.mobileCompanyCardFeatured : ''}`}
+              style={cardStyle}
+            >
+              {cardInner}
+            </aside>
           );
         })}
       </section>

@@ -436,6 +436,18 @@
   color: inherit;
   display: block;
 }
+
+.mobileCardHint {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+  margin-top: auto;
+}
+
+a.mobileCompanyCard {
+  text-decoration: none;
+  color: inherit;
+}
   
   
   
@@ -529,8 +541,9 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 100%;
         align-items: flex-start;
-        padding: 1rem 0; /* Remove padding */
+        padding: 1rem 0;
         margin: 0;
     }
     .keyDetails p:last-of-type {

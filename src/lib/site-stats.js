@@ -12,14 +12,17 @@ import { client } from '@/sanity/client';
  * - categoryCount: unique categories represented by those companies
  */
 export async function getSiteStats() {
-  const categoryNames = await client.fetch(
-    `*[_type == "company" && showOnMainWebsite == true][].category->name`
-  );
+  const [categoryNames, fundSettings] = await Promise.all([
+    client.fetch(`*[_type == "company" && showOnMainWebsite == true][].category->name`),
+    client.fetch(`*[_type == "lpFundSettings"][0]{ collectiveExperience, location }`),
+  ]);
 
   const unique = new Set((categoryNames || []).filter(Boolean));
 
   return {
     companyCount: categoryNames?.length ?? 0,
     categoryCount: unique.size,
+    collectiveExperience: fundSettings?.collectiveExperience ?? 60,
+    location: fundSettings?.location ?? 'Bangalore',
   };
 }
