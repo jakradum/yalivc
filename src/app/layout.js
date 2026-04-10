@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { DM_Sans, JetBrains_Mono } from 'next/font/google';
 import './styles/globals.css';
 import { headers } from 'next/headers';
 import Navbar from './components/Navbar';
@@ -7,11 +7,11 @@ import Breadcrumb from './components/breadcrumb';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ProviderWrapper from './data/provider-wrapper';
 
-const inter = Inter({
+const inter = DM_Sans({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '700'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
