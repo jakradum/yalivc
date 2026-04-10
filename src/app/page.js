@@ -94,7 +94,7 @@ const team = sanityTeam;
        <TechnologiesArticle categories={categories} /> {/* test comment for feature branch */}
 
       <section className={missionStyles.sectionBG}>
-        <MissionStatement />
+        <MissionStatement stats={siteStats} />
       </section>
 
       <section className={companyStyles.section}>
