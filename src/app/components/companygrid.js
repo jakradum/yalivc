@@ -58,18 +58,18 @@ const CompanyTable = ({ companies, companyCount }) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const onTouchEnd = () => {
+  const onTouchEnd = (totalCards) => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     if (isLeftSwipe) {
-      setCurrentCard((prev) => (prev + 1) % companiesData.data.length);
+      setCurrentCard((prev) => (prev + 1) % totalCards);
     }
     if (isRightSwipe) {
-      setCurrentCard((prev) => (prev - 1 + companiesData.data.length) % companiesData.data.length);
+      setCurrentCard((prev) => (prev - 1 + totalCards) % totalCards);
     }
   };
 
@@ -205,31 +205,53 @@ const CompanyTable = ({ companies, companyCount }) => {
                 </div>
               );
             })}
+            <Link href="/contact" className={`${styles.gridCell} ${styles.pitchCell}`}>
+              <div className={styles.cellIdentity}>
+                <div className={styles.cellLogo} />
+                <div>
+                  <div className={styles.pitchName}>YourStartup</div>
+                </div>
+              </div>
+              <p className={styles.pitchDesc}>See yourself being a part of our portfolio? We&rsquo;re looking for the next big idea too.</p>
+              <span className={styles.pitchCta}>Pitch to us →</span>
+            </Link>
           </div>
         </div>
       </>
     );
   };
 
-   const renderMobileLayout = () => (
+   const renderMobileLayout = () => {
+    const totalCards = companiesData.data.length + 1;
+    const pitchIndex = companiesData.data.length;
+    const pitchVisible = pitchIndex >= currentCard && pitchIndex < currentCard + 4;
+    const pitchCardStyle = pitchVisible
+      ? {
+          zIndex: totalCards - (pitchIndex - currentCard),
+          transform: `translateX(${(pitchIndex - currentCard) * 20}px) scale(${1 - (pitchIndex - currentCard) * 0.05})`,
+          opacity: 1 - (pitchIndex - currentCard) * 0.2,
+        }
+      : { display: 'none' };
+
+    return (
     <div className={styles.mobileCompanyGrid}>
       <p className={styles.sidebarText}>{updatedText}</p>
-      <section 
+      <section
         className={styles.carouselContainer}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+        onTouchEnd={() => onTouchEnd(totalCards)}
       >
         {companiesData.data.map((company, index) => {
           const isVisible = index >= currentCard && index < currentCard + 4;
           const cardStyle = isVisible
             ? {
-                zIndex: companiesData.data.length - (index - currentCard),
+                zIndex: totalCards - (index - currentCard),
                 transform: `translateX(${(index - currentCard) * 20}px) scale(${1 - (index - currentCard) * 0.05})`,
                 opacity: 1 - (index - currentCard) * 0.2,
               }
             : { display: 'none' };
-  
+
           const href = getCompanyHref(company);
           const cardInner = (
             <article className={styles.keyDetails}>
@@ -277,12 +299,26 @@ const CompanyTable = ({ companies, companyCount }) => {
             </aside>
           );
         })}
+        <Link
+          href="/contact"
+          className={`${styles.mobileCompanyCard} ${styles.mobilePitchCard} ${pitchIndex === currentCard ? styles.activeCard : ''}`}
+          style={pitchCardStyle}
+        >
+          <article className={styles.keyDetails}>
+            <div className={styles.mobilePitchLogoBox} />
+            <h4 className={styles.companyTitle} style={{ fontStyle: 'italic', color: 'rgba(54,54,54,0.45)' }}>YourStartup</h4>
+            <p className={styles.companyCategory} style={{ color: 'rgba(54,54,54,0.3)' }}>&nbsp;</p>
+            <p className={styles.mobilePitchDesc}>See yourself being a part of our portfolio? We&rsquo;re looking for the next big idea too.</p>
+            <p className={styles.mobileCardHint}>Tap to pitch · Swipe for next</p>
+          </article>
+        </Link>
       </section>
       <Button href="/investments" color="black">
         {buttonText}
       </Button>
     </div>
-  );
+    );
+  };
 
   return (
     <div className={styles.companyTableContainer}>
