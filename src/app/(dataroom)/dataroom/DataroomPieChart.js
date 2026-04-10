@@ -10,9 +10,9 @@ export default function DataroomPieChart({ chartData, colors }) {
 
   const total = chartData.reduce((sum, d) => sum + d.value, 0);
 
-  const size = 220;
+  const size = 360;
   const center = size / 2;
-  const radius = 90;
+  const radius = 148;
 
   const getCoords = (percent) => [
     Math.cos(2 * Math.PI * percent),
@@ -91,26 +91,26 @@ export default function DataroomPieChart({ chartData, colors }) {
           <table className={styles.trackTable}>
             <thead>
               <tr>
-                <th className={styles.trackTh}>Sector</th>
-                <th className={styles.trackTh}>Invested (₹ Cr)</th>
-                <th className={styles.trackTh}>Share</th>
+                <th className={styles.trackTh} style={{ textAlign: 'left', width: '60%' }}>Sector</th>
+                <th className={styles.trackTh} style={{ textAlign: 'right' }}>Invested (₹ Cr)</th>
+                <th className={styles.trackTh} style={{ textAlign: 'right' }}>Share</th>
               </tr>
             </thead>
             <tbody>
               {chartData.map((row, idx) => (
                 <tr key={idx}>
                   <td className={styles.trackTd}>
-                    <span className={styles.pieLegendDot} style={{ background: colors[idx % colors.length] }} />
+                    <span className={styles.pieLegendDot} style={{ background: colors[idx % colors.length], marginRight: 10 }} />
                     {row.name}
                   </td>
-                  <td className={styles.trackTd}>{row.value.toFixed(2)}</td>
-                  <td className={styles.trackTd}>{((row.value / total) * 100).toFixed(1)}%</td>
+                  <td className={styles.trackTd} style={{ textAlign: 'right' }}>₹{row.value.toFixed(2)} Cr</td>
+                  <td className={styles.trackTd} style={{ textAlign: 'right' }}>{((row.value / total) * 100).toFixed(1)}%</td>
                 </tr>
               ))}
               <tr>
                 <td className={`${styles.trackTd} ${styles.trackTdTotal}`}>Total</td>
-                <td className={`${styles.trackTd} ${styles.trackTdTotal}`}>{total.toFixed(2)}</td>
-                <td className={`${styles.trackTd} ${styles.trackTdTotal}`}>100%</td>
+                <td className={`${styles.trackTd} ${styles.trackTdTotal}`} style={{ textAlign: 'right' }}>₹{total.toFixed(2)} Cr</td>
+                <td className={`${styles.trackTd} ${styles.trackTdTotal}`} style={{ textAlign: 'right' }}>100%</td>
               </tr>
             </tbody>
           </table>

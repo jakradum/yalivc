@@ -17,7 +17,6 @@ export default function DataroomLayout({ children }) {
   return (
     <div data-dataroom className={jetbrainsMono.className}>
       {children}
-      <div style={{ margin: '1rem 0', borderTop: '1px solid #363636' }} />
       <Footer />
     </div>
   );
