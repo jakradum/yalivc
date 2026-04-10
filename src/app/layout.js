@@ -25,6 +25,25 @@ export const metadata = {
   description:
     'Deep tech venture capital firm in Bangalore investing in AI, robotics, semiconductors, genomics, and aerospace. Tech investing in India\'s most promising startups with cutting-edge innovation.',
   keywords: 'deep tech venture capital, tech investing in india, bangalore venture capital, tech venture capital, AI investing, robotics investing, semiconductor investing',
+  metadataBase: new URL('https://yali.vc'),
+  openGraph: {
+    siteName: 'Yali Capital',
+    type: 'website',
+    locale: 'en_IN',
+    images: [
+      {
+        url: '/yali-logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Yali Capital — Deep Tech Venture Capital',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@yalicapital',
+    images: ['/yali-logo.png'],
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32' },

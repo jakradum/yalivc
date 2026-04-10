@@ -18,6 +18,16 @@ export const metadata = {
   alternates: {
     canonical: 'https://yali.vc/investments/',
   },
+  openGraph: {
+    title: 'Our Investments | Yali Capital',
+    description: 'Deep tech venture capital investments in India — robotics, AI, semiconductors, life sciences, aerospace, and smart manufacturing.',
+    url: 'https://yali.vc/investments/',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Our Investments | Yali Capital',
+    description: 'Deep tech venture capital investments in India — robotics, AI, semiconductors, life sciences, aerospace, and smart manufacturing.',
+  },
 };
 
 const THESIS = [

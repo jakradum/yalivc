@@ -7,6 +7,7 @@ import Link from 'next/link';
 import companyStyles from '../../investments/[slug]/[companySlug]/company.module.css';
 import teamLPstyles from '../../landing-page-styles/team.module.css';
 import ShareButtons from './ShareButtons';
+import JsonLd from '../../components/JsonLd';
 
 const CONTENT_TYPE_LABELS = {
   'blog': 'Blog Post',
@@ -37,11 +38,21 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: `https://yali.vc/blog/${slug}/`,
     },
-    ...(post.ogImage?.asset?.url && {
-      openGraph: {
-        images: [{ url: post.ogImage.asset.url }],
-      },
-    }),
+    openGraph: {
+      title: post.metaTitle || `${post.title} | Yali Capital`,
+      description: post.metaDescription || (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
+      url: `https://yali.vc/blog/${slug}/`,
+      type: 'article',
+      ...(post.publishedAt && { publishedTime: post.publishedAt }),
+      ...(post.ogImage?.asset?.url && {
+        images: [{ url: post.ogImage.asset.url, alt: post.title }],
+      }),
+    },
+    twitter: {
+      title: post.metaTitle || `${post.title} | Yali Capital`,
+      description: post.metaDescription || (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
+      ...(post.ogImage?.asset?.url && { images: [post.ogImage.asset.url] }),
+    },
   };
 }
 
@@ -90,6 +101,26 @@ export default async function BlogPost({ params }) {
 
   return (
     <section>
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.metaDescription || post.blurb,
+        url: `https://yali.vc/blog/${slug}/`,
+        ...(post.publishedAt && { datePublished: post.publishedAt }),
+        ...(post.ogImage?.asset?.url && { image: post.ogImage.asset.url }),
+        author: {
+          '@type': 'Organization',
+          name: 'Yali Capital',
+          url: 'https://yali.vc',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Yali Capital',
+          url: 'https://yali.vc',
+          logo: { '@type': 'ImageObject', url: 'https://yali.vc/yali-logo.png' },
+        },
+      }} />
       <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
         <header className={companyStyles.articleHeader}>
           {(post.contentType || displayCategories.length > 0) && (

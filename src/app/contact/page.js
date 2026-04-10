@@ -7,6 +7,16 @@ export const metadata = {
   alternates: {
     canonical: 'https://yali.vc/contact/',
   },
+  openGraph: {
+    title: 'Contact Yali Capital',
+    description: 'Pitch your deep tech startup or reach out for media and partnership inquiries.',
+    url: 'https://yali.vc/contact/',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Contact Yali Capital',
+    description: 'Pitch your deep tech startup or reach out for media and partnership inquiries.',
+  },
 };
 
 export default function Contact() {

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import QuoteMarks from '../../components/icons/background svgs/quotemarks';
+import JsonLd from '../../components/JsonLd';
 
 export const revalidate = 60;
 
@@ -42,6 +43,20 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: `https://yali.vc/about-yali/${slug}/`,
     },
+    openGraph: {
+      title: `${member.name} | Yali Capital`,
+      description: member.oneLiner || `${member.name}, ${member.role} at Yali Capital`,
+      url: `https://yali.vc/about-yali/${slug}/`,
+      type: 'profile',
+      ...(member.photo && {
+        images: [{ url: member.photo, alt: member.name }],
+      }),
+    },
+    twitter: {
+      title: `${member.name} | Yali Capital`,
+      description: member.oneLiner || `${member.name}, ${member.role} at Yali Capital`,
+      ...(member.photo && { images: [member.photo] }),
+    },
   };
 }
 
@@ -56,7 +71,7 @@ export default async function TeamMemberPage({ params }) {
   const otherMembers = await getOtherTeamMembers(slug, 8);
 
   // Random pattern on each server render (changes every 60s due to revalidate)
-  const patternIndex = Math.floor(Math.random() * 7) + 1;
+  const patternIndex = (slug.charCodeAt(0) % 7) + 1;
 
   const firstName = member.name?.split(' ')[0] ?? 'their';
 
@@ -72,6 +87,21 @@ export default async function TeamMemberPage({ params }) {
 
   return (
     <section className={teamStyles.container}>
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: member.name,
+        jobTitle: member.role,
+        description: member.oneLiner || member.bio,
+        url: `https://yali.vc/about-yali/${slug}/`,
+        ...(member.photo && { image: member.photo }),
+        ...(member.linkedIn && { sameAs: [member.linkedIn] }),
+        worksFor: {
+          '@type': 'Organization',
+          name: 'Yali Capital',
+          url: 'https://yali.vc',
+        },
+      }} />
 
       {/* ── Section 1: Hero ── */}
       <div className={teamStyles.hero}>

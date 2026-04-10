@@ -42,13 +42,29 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const description = company.detail
+    ? `${company.detail.substring(0, 155)}...`
+    : `${company.name} is a portfolio company of Yali Capital, a deep tech venture capital firm based in Bangalore, India.`;
+
   return {
     title: `${company.name} | Yali Capital Portfolio`,
-    description: company.detail
-      ? `${company.detail.substring(0, 155)}...`
-      : `${company.name} is a portfolio company of Yali Capital, a deep tech venture capital firm based in Bangalore, India.`,
+    description,
     alternates: {
       canonical: `https://yali.vc/investments/${slug}/${companySlug}/`,
+    },
+    openGraph: {
+      title: `${company.name} | Yali Capital Portfolio`,
+      description,
+      url: `https://yali.vc/investments/${slug}/${companySlug}/`,
+      type: 'website',
+      ...(company.logo && {
+        images: [{ url: company.logo, alt: company.name }],
+      }),
+    },
+    twitter: {
+      title: `${company.name} | Yali Capital Portfolio`,
+      description,
+      ...(company.logo && { images: [company.logo] }),
     },
   };
 }

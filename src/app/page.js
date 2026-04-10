@@ -19,6 +19,7 @@ import TeamsLPComponent from './components/teams-lp-component';
 import SocialUpdates from './components/socialupdates';
 import FAQSection from './components/faqsection';
 import Button from './components/button';
+import JsonLd from './components/JsonLd';
 
 export const revalidate = 60;
 
@@ -27,6 +28,16 @@ export const metadata = {
   description: 'Yali Capital is a Bangalore-based venture capital firm investing in early-stage deep tech startups across Semiconductors, Robotics, Genomics, Aerospace, and AI. Helping India\'s tech innovation soar.',
   alternates: {
     canonical: 'https://yali.vc/',
+  },
+  openGraph: {
+    title: 'Yali Capital | Deep Tech Venture Capital in Bangalore, India',
+    description: 'Yali Capital is a Bangalore-based venture capital firm investing in early-stage deep tech startups across Semiconductors, Robotics, Genomics, Aerospace, and AI.',
+    url: 'https://yali.vc/',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Yali Capital | Deep Tech Venture Capital in Bangalore, India',
+    description: 'Yali Capital is a Bangalore-based venture capital firm investing in early-stage deep tech startups across Semiconductors, Robotics, Genomics, Aerospace, and AI.',
   },
 };
 
@@ -66,6 +77,22 @@ const team = sanityTeam;
 
   return (
     <main>
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Yali Capital',
+        url: 'https://yali.vc',
+        logo: 'https://yali.vc/yali-logo.png',
+        description: 'Deep tech venture capital firm in Bangalore investing in AI, robotics, semiconductors, life sciences, and aerospace.',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Bangalore',
+          addressCountry: 'IN',
+        },
+        sameAs: [
+          'https://www.linkedin.com/company/yali-capital',
+        ],
+      }} />
       <section className={landingStyles.heroSection}>
         <aside className={landingStyles.contentWrapper}>
           <div className={landingStyles.headingBox}>

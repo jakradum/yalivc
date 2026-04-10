@@ -16,6 +16,16 @@ export const metadata = {
   alternates: {
     canonical: 'https://yali.vc/about-yali/',
   },
+  openGraph: {
+    title: 'About Yali Capital | Bangalore Venture Capital for Deep Tech',
+    description: 'Bangalore-based venture capital firm funding India\'s deep tech companies. 60+ years of combined experience in tech investing.',
+    url: 'https://yali.vc/about-yali/',
+    type: 'website',
+  },
+  twitter: {
+    title: 'About Yali Capital | Bangalore Venture Capital for Deep Tech',
+    description: 'Bangalore-based venture capital firm funding India\'s deep tech companies. 60+ years of combined experience in tech investing.',
+  },
 };
 
 function memberHref(member) {

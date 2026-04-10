@@ -1,4 +1,4 @@
-import { getTeamMembers, getAllBlogPosts } from '@/lib/sanity-queries';
+import { getTeamMembers, getAllBlogPosts, getCompanies } from '@/lib/sanity-queries';
 
 export default async function sitemap() {
   const baseUrl = 'https://yali.vc';
@@ -48,7 +48,7 @@ export default async function sitemap() {
   try {
     const teamMembers = await getTeamMembers();
     teamPages = teamMembers
-      .filter(member => member.slug?.current)
+      .filter(member => member.slug?.current && member.enableTeamPage)
       .map((member) => ({
         url: `${baseUrl}/about-yali/${member.slug.current}/`,
         lastModified: new Date(),
@@ -75,5 +75,21 @@ export default async function sitemap() {
     console.error('Error fetching blog posts for sitemap:', error);
   }
 
-  return [...staticPages, ...teamPages, ...blogPages];
+  // Dynamic company pages
+  let companyPages = [];
+  try {
+    const companies = await getCompanies();
+    companyPages = companies
+      .filter(c => c.enableCompanyPage && c.slug?.current && c.category?.slug)
+      .map((c) => ({
+        url: `${baseUrl}/investments/${c.category.slug}/${c.slug.current}/`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      }));
+  } catch (error) {
+    console.error('Error fetching companies for sitemap:', error);
+  }
+
+  return [...staticPages, ...teamPages, ...companyPages, ...blogPages];
 }

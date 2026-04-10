@@ -17,6 +17,16 @@ export const metadata = {
   alternates: {
     canonical: 'https://yali.vc/newsroom/',
   },
+  openGraph: {
+    title: 'Newsroom | Yali Capital',
+    description: 'Latest news, press releases, and media coverage about Yali Capital and our deep tech portfolio.',
+    url: 'https://yali.vc/newsroom/',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Newsroom | Yali Capital',
+    description: 'Latest news, press releases, and media coverage about Yali Capital and our deep tech portfolio.',
+  },
 };
 
 export default async function Newsroom() {
