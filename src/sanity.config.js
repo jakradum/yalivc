@@ -106,8 +106,28 @@ export default defineConfig({
                   .title('Data Room')
                   .items([
                     S.listItem()
-                      .title('Documents')
-                      .child(S.documentTypeList('dataRoomDocument').title('Data Room Documents')),
+                      .title('Section Visibility')
+                      .child(S.document().schemaType('dataroomSectionVisibility').documentId('dataroomSectionVisibility')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Dealflow & Pipeline')
+                      .child(S.documentList().title('Dealflow & Pipeline').filter('_type == "dataRoomDocument" && category == "pipeline"').schemaType('dataRoomDocument')),
+                    S.listItem()
+                      .title('PPM & Agreements')
+                      .child(S.documentList().title('PPM & Agreements').filter('_type == "dataRoomDocument" && category == "ppm-agreements"').schemaType('dataRoomDocument')),
+                    S.listItem()
+                      .title('Presentations')
+                      .child(S.documentList().title('Presentations').filter('_type == "dataRoomDocument" && category == "presentations"').schemaType('dataRoomDocument')),
+                    S.listItem()
+                      .title('Regulatory Documents')
+                      .child(S.documentList().title('Regulatory Documents').filter('_type == "dataRoomDocument" && category == "regulatory-documents"').schemaType('dataRoomDocument')),
+                    S.listItem()
+                      .title('Track Record / Recommendation')
+                      .child(S.documentList().title('Track Record / Recommendation').filter('_type == "dataRoomDocument" && category == "recommendation"').schemaType('dataRoomDocument')),
+                    S.divider(),
+                    S.listItem()
+                      .title('All Documents')
+                      .child(S.documentTypeList('dataRoomDocument').title('All Documents')),
                   ])
               ),
             S.divider(),

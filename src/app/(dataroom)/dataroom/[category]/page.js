@@ -9,6 +9,7 @@ import {
   getDataRoomAllFundSettings,
   getDataRoomPortfolioCompanies,
   getPortalUserByEmail,
+  getDataroomSectionVisibility,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from '../DataroomTopbar';
 import DataroomPieChart from '../DataroomPieChart';
@@ -29,6 +30,18 @@ const SLUG_TO_TITLE = {
   'fund-performance': 'Fund Performance',
   'category-split': 'Portfolio by Sector',
   'portfolio': 'Portfolio',
+};
+
+const SLUG_TO_VISIBILITY_KEY = {
+  'pipeline': 'pipeline',
+  'ppm-agreements': 'ppmAgreements',
+  'presentations': 'presentations',
+  'regulatory-documents': 'regulatoryDocuments',
+  'team': 'team',
+  'track-record': 'trackRecord',
+  'fund-performance': 'fundPerformance',
+  'category-split': 'categorySplit',
+  'portfolio': 'portfolio',
 };
 
 const DocIcon = () => (
@@ -82,6 +95,14 @@ export default async function CategoryPage({ params }) {
     notFound();
   }
 
+  const visibilityKey = SLUG_TO_VISIBILITY_KEY[slug];
+  if (visibilityKey) {
+    const vis = await getDataroomSectionVisibility();
+    if (vis && vis[visibilityKey] === false) {
+      notFound();
+    }
+  }
+
   const categoryTitle = SLUG_TO_TITLE[slug];
 
   if (slug === 'fund-performance') {
@@ -90,14 +111,6 @@ export default async function CategoryPage({ params }) {
       getDataRoomAllFundSettings(),
     ]);
     const asOf = perf ? `${perf.quarter} ${perf.fiscalYear}` : null;
-
-    const fyOrder = (fy) => parseInt((fy || '0').replace('FY', ''), 10);
-    const qOrder = { Q4: 4, Q3: 3, Q2: 2, Q1: 1 };
-    const allQuarters = [...(fundSettings?.quarterlyPerformance || [])].sort((a, b) => {
-      const fyDiff = fyOrder(b.fiscalYear) - fyOrder(a.fiscalYear);
-      if (fyDiff !== 0) return fyDiff;
-      return (qOrder[b.quarter] || 0) - (qOrder[a.quarter] || 0);
-    });
 
     return (
       <div className={styles.page}>
@@ -112,7 +125,6 @@ export default async function CategoryPage({ params }) {
             <div className={styles.innerTitle}>Fund Performance</div>
             <div className={styles.innerSub}>Most recent reported quarter{asOf ? ` — ${asOf}` : ''}</div>
           </div>
-          {asOf && <div className={styles.docCountBadge}>{asOf}</div>}
         </div>
         <div className={styles.perfSection}>
           <div className={styles.sectionLabel}>Headline Metrics</div>
@@ -127,21 +139,21 @@ export default async function CategoryPage({ params }) {
             </div>
             <div className={styles.kpiCard}>
               <div className={styles.kpiLabel}>MOIC</div>
-              <div className={styles.kpiValue}>{perf?.moic != null ? `${perf.moic.toFixed(2)}×` : '—'}</div>
+              <div className={styles.kpiValue}>{perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'}</div>
             </div>
             <div className={styles.kpiCard}>
               <div className={styles.kpiLabel}>TVPI</div>
-              <div className={styles.kpiValue}>{perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}×` : '—'}</div>
+              <div className={styles.kpiValue}>{perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'}</div>
             </div>
             <div className={styles.kpiCard}>
               <div className={styles.kpiLabel}>DPI</div>
-              <div className={styles.kpiValue}>{perf?.dpi != null ? `${perf.dpi.toFixed(4)}×` : '—'}</div>
+              <div className={styles.kpiValue}>{perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'}</div>
             </div>
           </div>
 
           {(fundSettings || perf) && (
             <>
-              <div className={styles.sectionLabel}>Fund Summary</div>
+              <div className={styles.perfTitle}>Fund Summary</div>
               <div className={styles.trackTableWrap}>
                 <table className={styles.trackTable}>
                   <thead>
@@ -158,48 +170,15 @@ export default async function CategoryPage({ params }) {
                     <FundRow label="Total invested in portfolio" value={perf?.totalInvested != null ? perf.totalInvested.toFixed(2) : '—'} />
                     <FundRow label="Fair Market Value of portfolio investments (including realised value)" value={perf?.fairMarketValue != null ? perf.fairMarketValue.toFixed(2) : '—'} />
                     <FundRow label="Amount returned (including passive income returned)" value={perf?.amountReturned != null ? perf.amountReturned.toFixed(2) : '—'} />
-                    <FundRow label="MOIC" value={perf?.moic != null ? `${perf.moic.toFixed(2)}×` : '—'} />
-                    <FundRow label="TVPI" value={perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}×` : '—'} />
-                    <FundRow label="DPI" value={perf?.dpi != null ? `${perf.dpi.toFixed(4)}×` : '—'} />
+                    <FundRow label="MOIC" value={perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'} />
+                    <FundRow label="TVPI" value={perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'} />
+                    <FundRow label="DPI" value={perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'} />
                   </tbody>
                 </table>
               </div>
             </>
           )}
 
-          {allQuarters.length > 0 && (
-            <>
-              <div className={styles.sectionLabel}>All Quarters</div>
-              <div className={styles.trackTableWrap}>
-                <table className={styles.trackTable}>
-                  <thead>
-                    <tr>
-                      <th className={styles.trackTh}>Quarter</th>
-                      <th className={styles.trackTh}>Total Invested (₹ Cr)</th>
-                      <th className={styles.trackTh}>FMV (₹ Cr)</th>
-                      <th className={styles.trackTh}>Amount Returned (₹ Cr)</th>
-                      <th className={styles.trackTh}>MOIC</th>
-                      <th className={styles.trackTh}>TVPI</th>
-                      <th className={styles.trackTh}>DPI</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allQuarters.map((q, i) => (
-                      <tr key={i}>
-                        <td className={styles.trackTd}>{q.quarter} {q.fiscalYear}</td>
-                        <td className={styles.trackTd}>{q.totalInvested != null ? q.totalInvested.toFixed(2) : '—'}</td>
-                        <td className={styles.trackTd}>{q.fairMarketValue != null ? q.fairMarketValue.toFixed(2) : '—'}</td>
-                        <td className={styles.trackTd}>{q.amountReturned != null ? q.amountReturned.toFixed(2) : '—'}</td>
-                        <td className={styles.trackTd}>{q.moic != null ? `${q.moic.toFixed(2)}×` : '—'}</td>
-                        <td className={styles.trackTd}>{q.tvpi != null ? `${q.tvpi.toFixed(2)}×` : '—'}</td>
-                        <td className={styles.trackTd}>{q.dpi != null ? `${q.dpi.toFixed(4)}×` : '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
         </div>
       </div>
     );
@@ -312,7 +291,7 @@ export default async function CategoryPage({ params }) {
                       <div className={styles.portfolioMetricItem}>
                         <div className={styles.portfolioMetricLabel}>MOIC</div>
                         <div className={styles.portfolioMetricValue}>
-                          {q?.moicConfidential ? '—' : (q?.multipleOfInvestment != null ? `${q.multipleOfInvestment.toFixed(2)}×` : '—')}
+                          {q?.moicConfidential ? '—' : (q?.multipleOfInvestment != null ? `${q.multipleOfInvestment.toFixed(2)}x` : '—')}
                         </div>
                       </div>
                       {co.isRevenueMaking && (

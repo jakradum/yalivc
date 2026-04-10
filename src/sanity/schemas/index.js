@@ -29,6 +29,7 @@ import investor from './investor'
 import newsletterSubscriber from './newsletterSubscriber'
 // Data Room schemas
 import dataRoomDocument from './dataRoomDocument'
+import dataroomSectionVisibility from './dataroomSectionVisibility'
 // Track Record
 import trackRecord from './trackRecord'
 
@@ -67,6 +68,7 @@ export const schemaTypes = [
   newsletterSubscriber,
   // Data Room
   dataRoomDocument,
+  dataroomSectionVisibility,
   // Track Record
   trackRecord,
 ]

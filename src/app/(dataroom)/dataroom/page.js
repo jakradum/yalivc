@@ -5,7 +5,9 @@ import {
   getDataRoomTrackRecords,
   getDataRoomTeamMembers,
   getDataRoomPortfolioCompanies,
+  getDataRoomFundPerformance,
   getPortalUserByEmail,
+  getDataroomSectionVisibility,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from './DataroomTopbar';
 import styles from './dataroom.module.css';
@@ -15,36 +17,42 @@ export const dynamic = 'force-dynamic';
 const CATEGORIES = [
   {
     slug: 'pipeline',
+    visibilityKey: 'pipeline',
     title: 'Dealflow & Pipeline',
     description: 'Deal flow and investment pipeline documentation',
     icon: 'pipeline',
   },
   {
     slug: 'ppm-agreements',
+    visibilityKey: 'ppmAgreements',
     title: 'PPM & Agreements',
     description: 'Private placement memo and contribution agreements',
     icon: 'ppm',
   },
   {
     slug: 'presentations',
+    visibilityKey: 'presentations',
     title: 'Presentations',
     description: 'Fund pitch decks and investor-facing materials',
     icon: 'presentations',
   },
   {
     slug: 'regulatory-documents',
+    visibilityKey: 'regulatoryDocuments',
     title: 'Regulatory Documents',
     description: 'Regulatory filings and AIF registration documents',
     icon: 'regulatory-documents',
   },
   {
     slug: 'team',
+    visibilityKey: 'team',
     title: 'Team',
     description: 'Investment team credentials and advisory board profiles',
     icon: 'team',
   },
   {
     slug: 'track-record',
+    visibilityKey: 'trackRecord',
     title: 'Track Record & Recommendation',
     description:
       'Historical investments, exit performance, and third-party references',
@@ -52,12 +60,14 @@ const CATEGORIES = [
   },
   {
     slug: 'fund-performance',
+    visibilityKey: 'fundPerformance',
     title: 'Fund Performance',
     description: 'Headline fund metrics and performance indicators',
     icon: 'chart',
   },
   {
     slug: 'category-split',
+    visibilityKey: 'categorySplit',
     title: 'Portfolio by Sector',
     description: 'Investment distribution across active portfolio companies',
     icon: 'pie',
@@ -148,11 +158,13 @@ export default async function DataroomPage() {
   const user = email ? await getPortalUserByEmail(email) : null;
   const hasAllAccess = user?.allAccess || false;
 
-  const [docs, trackRecords, teamMembers, portfolioCompanies] = await Promise.all([
+  const [docs, trackRecords, teamMembers, portfolioCompanies, fundPerf, sectionVisibility] = await Promise.all([
     getDataRoomDocuments(),
     getDataRoomTrackRecords(),
     getDataRoomTeamMembers(),
     getDataRoomPortfolioCompanies(),
+    getDataRoomFundPerformance(),
+    getDataroomSectionVisibility(),
   ]);
 
   const allDocs = docs || [];
@@ -160,16 +172,28 @@ export default async function DataroomPage() {
   const allTeamMembers = teamMembers || [];
   const allPortfolioCompanies = portfolioCompanies || [];
 
-  // Build display categories — conditionally include portfolio for allAccess users
+  // Auto-hide: compute whether each section has content
+  function hasContent(slug) {
+    if (slug === 'team') return allTeamMembers.length > 0;
+    if (slug === 'track-record') return allTrackRecords.length > 0 || allDocs.some((d) => d.category === 'recommendation');
+    if (slug === 'fund-performance') return fundPerf != null;
+    if (slug === 'category-split') return allPortfolioCompanies.length > 0;
+    if (slug === 'portfolio') return allPortfolioCompanies.length > 0;
+    return allDocs.some((d) => d.category === slug);
+  }
+
+  // Build display categories — hide if manually toggled off OR empty
+  const vis = sectionVisibility || {};
   const displayCategories = [
-    ...CATEGORIES,
-    ...(hasAllAccess ? [{
+    ...CATEGORIES.filter((cat) => vis[cat.visibilityKey] !== false && hasContent(cat.slug)),
+    ...(hasAllAccess && vis.portfolio !== false && hasContent('portfolio') ? [{
       slug: 'portfolio',
+      visibilityKey: 'portfolio',
       title: 'Portfolio',
       description: 'Active portfolio company performance and metrics',
       icon: 'briefcase',
     }] : []),
-  ].map((cat, idx, arr) => idx === arr.length - 1 ? { ...cat, last: true } : cat);
+  ];
 
   // Compute per-category counts
   function getCount(cat) {
@@ -218,14 +242,17 @@ export default async function DataroomPage() {
       <div className={styles.content}>
         <div className={styles.sectionLabel}>Categories</div>
         <div className={styles.grid}>
-          {displayCategories.map((cat) => {
+          {displayCategories.map((cat, idx) => {
             const count = getCount(cat);
             const label = getCountLabel(cat);
+            const isLast = idx === displayCategories.length - 1;
+            const lastSpan = 3 - ((displayCategories.length - 1) % 3);
             return (
               <Link
                 key={cat.slug}
                 href={`/dataroom/${cat.slug}`}
-                className={`${styles.card}${cat.last ? ' ' + styles.cardLast : ''}`}
+                className={styles.card}
+                style={isLast && lastSpan > 1 ? { gridColumn: `span ${lastSpan}` } : undefined}
               >
                 <div className={styles.cardIcon}>
                   <CategoryIcon icon={cat.icon} />

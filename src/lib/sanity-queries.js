@@ -1525,6 +1525,15 @@ export async function getDataRoomPortfolioCompanies() {
   );
 }
 
+export async function getDataroomSectionVisibility() {
+  return client.fetch(
+    `*[_type == "dataroomSectionVisibility"][0]{
+      pipeline, ppmAgreements, presentations, regulatoryDocuments,
+      team, trackRecord, fundPerformance, categorySplit, portfolio
+    }`
+  );
+}
+
 export async function getDataRoomAllFundSettings() {
   return client.fetch(
     `*[_type == "lpFundSettings"][0]{

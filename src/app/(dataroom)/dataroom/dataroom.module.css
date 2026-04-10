@@ -11,7 +11,10 @@
 
 /* ── PAGE SHELL ── */
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: linear-gradient(160deg, #efefef 0%, #e2ddd8 100%);
   color: #363636;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
@@ -148,7 +151,9 @@
 
 /* ── HOME: CONTENT & GRID ── */
 .content {
-  padding: 32px 40px 48px;
+  flex: 1;
+  min-height: 0;
+  padding: 32px 40px;
 }
 
 .sectionLabel {
@@ -188,11 +193,7 @@
   filter: none;
 }
 
-.cardLast {
-  grid-column: 1 / -1;
-}
-
-.cardLast .cardDesc {
+.card[style*="span"] .cardDesc {
   max-width: 480px;
 }
 
@@ -647,6 +648,16 @@
 }
 
 /* ── FUND PERFORMANCE ── */
+.perfTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #363636;
+  margin: 36px 0 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #363636;
+}
+
 .perfSection {
   padding: 32px 40px 48px;
 }
@@ -658,7 +669,7 @@
 }
 
 .kpiCard {
-  background: linear-gradient(160deg, #830d35 0%, #830d35 80%, #5a0924 100%);
+  background: linear-gradient(160deg, #830d35 0%, #780d30 50%, #6a0c2b 100%);
   border: 1px solid rgba(131, 13, 53, 0.5);
   padding: 22px 18px;
 }
@@ -674,7 +685,7 @@
 
 .kpiValue {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: -0.02em;
   color: #efefef;
 }
@@ -1000,10 +1011,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .cardLast {
-    grid-column: 1 / -1;
-  }
-
   .teamGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1012,10 +1019,6 @@
 @media (max-width: 560px) {
   .grid {
     grid-template-columns: 1fr;
-  }
-
-  .cardLast {
-    grid-column: 1;
   }
 
   .teamGrid {
