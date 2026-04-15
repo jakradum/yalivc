@@ -64,7 +64,7 @@ export default function MissionStatement({ stats = {} }) {
           <div className={`${missionStyles.statStrip} ${isVisible ? missionStyles.visible : ''}`}>
             <div className={missionStyles.statCell}>
               <span className={missionStyles.statValue}>{categoryCount}</span>
-              <span className={missionStyles.statLabel}>Sectors</span>
+              <span className={missionStyles.statLabel}> Active sectors</span>
             </div>
             <div className={missionStyles.statCell}>
               <span className={missionStyles.statValue}>{companyCount}</span>

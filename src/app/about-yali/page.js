@@ -202,7 +202,7 @@ export default async function AboutYali() {
           Our founding partners bring decades of hands-on experience, from co-founding India&apos;s early semiconductor companies to executing landmark private equity investments and leading turnarounds at global technology firms. The investment team combines deep scientific training, entrepreneurship, and operating experience across semiconductors, life sciences, AI, and other frontier tech. Several of us have founded companies, led acquisitions, and sat on the other side of the table.
         </p>
         <p className={styles.prowessText}>
-          Our advisors, Lip-Bu Tan and Mathew Cyriac, have built and backed some of the most significant tech companies of the last three decades. Their counsel shapes how we think about what endures.
+          Our advisor Lip-Bu Tan and founding partner Mathew Cyriac, have built and backed some of the most significant tech companies of the last three decades. Their counsel shapes how we think about what endures.
         </p>
         <p className={styles.prowessText}>
           Supporting the firm is an operations team with deep experience in fund administration, compliance, and finance: the kind of institutional rigour that early-stage deep tech companies rarely get, but always need.
