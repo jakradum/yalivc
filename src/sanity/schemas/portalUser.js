@@ -1,4 +1,5 @@
 import { InviteButtons } from '../components/InviteButtons';
+import { NoAccessToggle } from '../components/NoAccessToggle';
 
 const portalUser = {
   name: 'portalUser',
@@ -18,11 +19,26 @@ const portalUser = {
       description: 'LP name or organization',
     },
     {
-      name: 'isActive',
-      title: 'Active',
+      name: 'lpPortalAccess',
+      title: 'LP Portal Access',
       type: 'boolean',
       initialValue: true,
-      description: 'Disable to revoke access without deleting the user',
+      description: 'Grants access to the Partners Portal. Should be true for all active LPs.',
+    },
+    {
+      name: 'investorDataRoomAccess',
+      title: 'Investor Data Room Access',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Grants access to the Yali Investors Data Room. Enabling this automatically grants LP Portal access. For a select few LPs only.',
+    },
+    {
+      name: 'noAccess',
+      title: 'No Access (Kill Switch)',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Kill switch. Toggle on to immediately revoke all access without deleting the record. Overrides all other access flags.',
+      components: { input: NoAccessToggle },
     },
     {
       name: 'isGiftCityLP',
@@ -30,20 +46,6 @@ const portalUser = {
       type: 'boolean',
       initialValue: false,
       description: 'Check if this LP should see GIFT City-specific fund financials',
-    },
-    {
-      name: 'dataRoomAccess',
-      title: 'Data Room Access',
-      type: 'boolean',
-      initialValue: false,
-      description: 'Grant access to dataroom.yali.vc. isActive must also be true. Disable to revoke data room access without affecting portal access.',
-    },
-    {
-      name: 'allAccess',
-      title: 'All Access (Data Room)',
-      type: 'boolean',
-      initialValue: false,
-      description: 'Grants access to portfolio company data in the data room. Requires dataRoomAccess to also be true.',
     },
     {
       name: 'source',
@@ -86,19 +88,19 @@ const portalUser = {
     select: {
       title: 'email',
       subtitle: 'name',
-      active: 'isActive',
-      dataRoom: 'dataRoomAccess',
-      allAccess: 'allAccess',
+      noAccess: 'noAccess',
+      lpPortal: 'lpPortalAccess',
+      dataRoom: 'investorDataRoomAccess',
     },
-    prepare({ title, subtitle, active, dataRoom, allAccess }) {
+    prepare({ title, subtitle, noAccess, lpPortal, dataRoom }) {
       const flags = [
-        active ? 'Active' : 'Inactive',
+        noAccess ? '🚫 No Access' : '',
+        lpPortal ? 'Portal' : '',
         dataRoom ? 'Data Room' : '',
-        allAccess ? 'All Access' : '',
       ].filter(Boolean).join(' · ');
       return {
         title: title,
-        subtitle: `${subtitle || 'No name'} — ${flags}`,
+        subtitle: `${subtitle || 'No name'} — ${flags || 'No access flags set'}`,
       };
     },
   },

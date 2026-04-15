@@ -47,12 +47,6 @@ export default {
       initialValue: true,
     },
     {
-      name: 'categorySplit',
-      title: 'Portfolio by Sector',
-      type: 'boolean',
-      initialValue: true,
-    },
-    {
       name: 'portfolio',
       title: 'Portfolio (allAccess users only)',
       type: 'boolean',

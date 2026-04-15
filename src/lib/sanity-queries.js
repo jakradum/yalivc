@@ -1332,6 +1332,47 @@ export async function getLatestLPQuarterlyReport(includeInternal = false) {
   );
 }
 
+// Get the latest LP report for the Data Room (returns generatedPdf URL)
+// Separate from getLatestLPQuarterlyReport — surfaces the compiled report PDF only
+export async function getLatestLPReportForDataRoom() {
+  return client.fetch(
+    `*[_type == "lpQuarterlyReport" && (visibility == "published" || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc)[0] {
+      _id,
+      title,
+      quarter,
+      fiscalYear,
+      "pdfUrl": generatedPdf.asset->url
+    }`
+  );
+}
+
+// Get the dataroomFundContent singleton — Fund I, Fund II, and Common section assets
+export async function getDataroomFundContent() {
+  return client.fetch(
+    `*[_type == "dataroomFundContent"][0] {
+      "fundISlideDeckUrl": fundISlideDeck.asset->url,
+      fundILpReport->{
+        _id,
+        title,
+        quarter,
+        fiscalYear,
+        "pdfUrl": generatedPdf.asset->url
+      },
+      "fundIIThesisPresentationUrl": fundIIThesisPresentation.asset->url,
+      commonTeamMembers[]->{
+        _id,
+        name,
+        "slug": slug.current
+      },
+      "commonTrackRecordUrl": commonTrackRecord.asset->url,
+      commonRecommendationDocuments[]->{
+        title,
+        "fileUrl": file.asset->url
+      }
+    }`
+  );
+}
+
 // Get all portfolio company slugs (for static generation and navigation)
 export async function getAllLPInvestmentSlugs() {
   return liveClient.fetch(
@@ -1411,17 +1452,18 @@ export async function getDataRoomDocuments() {
   );
 }
 
-// Get portal user info by email (for GIFT City status check)
+// Get portal user info by email (for session-level access checks)
+// Backward-compatible: accepts lpPortalAccess or legacy isActive (before migration)
 export async function getPortalUserByEmail(email) {
   if (!email) return null;
   return liveClient.fetch(
-    `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{
+    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || investorDataRoomAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{
       _id,
       email,
       name,
       isGiftCityLP,
-      dataRoomAccess,
-      allAccess
+      lpPortalAccess,
+      investorDataRoomAccess
     }`,
     { email: email.toLowerCase() }
   );

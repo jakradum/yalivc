@@ -101,13 +101,13 @@ export async function POST(request) {
         );
       }
 
-      // @yali.vc addresses always have access — no Sanity lookup needed
-      const isYaliEmail = normalizedEmail.endsWith('@yali.vc');
+      // @yali.vc and @florintree.com always have access — no Sanity lookup needed
+      const isTrustedDomain = normalizedEmail.endsWith('@yali.vc') || normalizedEmail.endsWith('@florintree.com');
 
       let user = null;
-      if (!isYaliEmail) {
+      if (!isTrustedDomain) {
         user = await client.fetch(
-          `*[_type == "portalUser" && lower(email) == $email && isActive == true && dataRoomAccess == true][0]{ _id, name }`,
+          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{ _id, name }`,
           { email: normalizedEmail }
         );
 
@@ -253,7 +253,7 @@ export async function POST(request) {
 
       const normalizedEmail = email.toLowerCase().trim();
       const user = await client.fetch(
-        `*[_type == "portalUser" && lower(email) == $email && isActive == true && dataRoomAccess == true][0]{
+        `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{
           _id, inviteCode, inviteCodeExpiry
         }`,
         { email: normalizedEmail }

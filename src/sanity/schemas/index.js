@@ -30,6 +30,7 @@ import newsletterSubscriber from './newsletterSubscriber'
 // Data Room schemas
 import dataRoomDocument from './dataRoomDocument'
 import dataroomSectionVisibility from './dataroomSectionVisibility'
+import dataroomFundContent from './dataroomFundContent'
 // Track Record
 import trackRecord from './trackRecord'
 
@@ -69,6 +70,7 @@ export const schemaTypes = [
   // Data Room
   dataRoomDocument,
   dataroomSectionVisibility,
+  dataroomFundContent,
   // Track Record
   trackRecord,
 ]

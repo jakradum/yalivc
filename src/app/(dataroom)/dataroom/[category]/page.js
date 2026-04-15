@@ -12,7 +12,6 @@ import {
   getDataroomSectionVisibility,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from '../DataroomTopbar';
-import DataroomPieChart from '../DataroomPieChart';
 import TeamGrid from '../TeamGrid';
 import TrackRecordTable from '../TrackRecordTable';
 import styles from '../dataroom.module.css';
@@ -28,7 +27,6 @@ const SLUG_TO_TITLE = {
   'team': 'Team',
   'track-record': 'Track Record & Recommendation',
   'fund-performance': 'Fund Performance',
-  'category-split': 'Portfolio by Sector',
   'portfolio': 'Portfolio',
 };
 
@@ -40,7 +38,6 @@ const SLUG_TO_VISIBILITY_KEY = {
   'team': 'team',
   'track-record': 'trackRecord',
   'fund-performance': 'fundPerformance',
-  'category-split': 'categorySplit',
   'portfolio': 'portfolio',
 };
 
@@ -184,45 +181,6 @@ export default async function CategoryPage({ params }) {
     );
   }
 
-  if (slug === 'category-split') {
-    const companies = await getDataRoomPortfolioCompanies();
-    const all = companies || [];
-
-    const sectorTotals = all.reduce((acc, co) => {
-      const sector = co.sector || 'Other';
-      const invested = getTotalInvestment(co);
-      if (invested > 0) acc[sector] = (acc[sector] || 0) + invested;
-      return acc;
-    }, {});
-
-    const chartData = Object.entries(sectorTotals)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
-
-    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2', '#B11248'];
-
-    return (
-      <div className={styles.page}>
-        <DataroomTopbar />
-        <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>Portfolio by Sector</span>
-        </div>
-        <div className={styles.innerHero}>
-          <div>
-            <div className={styles.innerTitle}>Portfolio by Sector</div>
-            <div className={styles.innerSub}>Investment distribution across active portfolio companies</div>
-          </div>
-          <div className={styles.docCountBadge}>{all.length} companies</div>
-        </div>
-        <div className={styles.trackSection}>
-          <DataroomPieChart chartData={chartData} colors={colors} />
-        </div>
-      </div>
-    );
-  }
-
   if (slug === 'portfolio') {
     // Server-side access check
     const cookieStore = await cookies();
@@ -230,7 +188,7 @@ export default async function CategoryPage({ params }) {
     const email = session ? session.split(':')[0] : null;
     const user = email ? await getPortalUserByEmail(email) : null;
 
-    if (!user?.allAccess) {
+    if (!user?.investorDataRoomAccess) {
       notFound();
     }
 
@@ -364,34 +322,39 @@ export default async function CategoryPage({ params }) {
           </div>
           <div className={styles.docCountBadge}>{trackRecords.length + recDocs.length} items</div>
         </div>
-        <div className={styles.trackSection}>
-          <TrackRecordTable records={trackRecords} />
-        </div>
-        {recDocs.length > 0 && (
-          <div className={styles.docList} style={{ marginTop: '2rem' }}>
-            <div className={styles.sectionLabel} style={{ marginBottom: '12px' }}>Recommendation</div>
-            {recDocs.map((doc) => (
-              <a
-                key={doc._id}
-                href={doc.fileUrl || undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.docRow}
-                style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
-              >
-                <div className={styles.docIcon}><DocIcon /></div>
-                <div className={styles.docInfo}>
-                  <div className={styles.docTitle}>{doc.title}</div>
-                  <div className={styles.docMeta}>
-                    <span>PDF</span>
-                    {doc.description && <span>{doc.description}</span>}
-                    {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
-                  </div>
-                </div>
-              </a>
-            ))}
+        <div className={styles.trackPageContent}>
+          <div className={styles.trackSection}>
+            <TrackRecordTable records={trackRecords} />
           </div>
-        )}
+          {recDocs.length > 0 && (
+            <>
+              <div className={styles.trackRecSeparator} />
+              <div className={styles.trackRecSection}>
+                <div className={styles.sectionLabel}>Recommendation</div>
+                {recDocs.map((doc) => (
+                  <a
+                    key={doc._id}
+                    href={doc.fileUrl || undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.docRow}
+                    style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
+                  >
+                    <div className={styles.docIcon}><DocIcon /></div>
+                    <div className={styles.docInfo}>
+                      <div className={styles.docTitle}>{doc.title}</div>
+                      <div className={styles.docMeta}>
+                        <span>PDF</span>
+                        {doc.description && <span>{doc.description}</span>}
+                        {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     );
   }

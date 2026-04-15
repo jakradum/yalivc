@@ -9,7 +9,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   title: 'Data Room | Yali Capital',
-  description: 'Yali Capital Investor Data Room',
+  description: "Yali Capital Investors' Data Room",
   robots: 'noindex, nofollow',
 };
 

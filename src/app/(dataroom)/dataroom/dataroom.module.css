@@ -153,7 +153,9 @@
 .content {
   flex: 1;
   min-height: 0;
+  overflow-y: auto;
   padding: 32px 40px;
+  scroll-behavior: smooth;
 }
 
 .sectionLabel {
@@ -554,11 +556,23 @@
 }
 
 /* ── TRACK RECORD TABLE ── */
-.trackSection {
+.trackPageContent {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+}
+
+.trackSection {
   padding: 32px 40px;
+}
+
+.trackRecSeparator {
+  border-bottom: 1px solid rgba(54, 54, 54, 0.12);
+  margin: 0 40px;
+}
+
+.trackRecSection {
+  padding: 28px 40px 40px;
 }
 
 .trackInvestorHeading {
@@ -1020,9 +1034,15 @@
   .perfSection,
   .portfolioSection,
   .trackSection,
+  .trackRecSection,
   .docList {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .trackRecSeparator {
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
 
@@ -1058,7 +1078,8 @@
   .innerHero,
   .docList,
   .teamGrid,
-  .trackSection {
+  .trackSection,
+  .trackRecSection {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -1081,3 +1102,124 @@
     padding-right: 20px;
   }
 }
+
+/* ── INVESTOR DOCUMENTS CARD VARIANT ── */
+.cardInvestorDocs {
+  border-color: #830d35;
+}
+
+.cardIconCrimson {
+  color: #830d35;
+  border-color: rgba(131, 13, 53, 0.2);
+  background: rgba(131, 13, 53, 0.05);
+}
+
+.cardTitleCrimson {
+  color: #830d35;
+}
+
+.cardArrowDown {
+  font-size: 15px;
+  color: #830d35;
+  transition: transform 0.2s;
+}
+
+.card:hover .cardArrowDown {
+  color: #efefef;
+  transform: translateY(3px);
+}
+
+/* ── INVESTOR DOCUMENTS TABLE ── */
+.investorDocsWrap {
+  margin-top: 28px;
+  scroll-margin-top: 24px;
+}
+
+.investorDocsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.investorDocsTh {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  background: #830d35;
+  padding: 11px 16px;
+  text-align: left;
+}
+
+.investorDocsTr td {
+  border-bottom: 0.5px solid #e8e4de;
+}
+
+.investorDocsTrLast td {
+  border-bottom: none;
+}
+
+.investorDocsTd {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #363636;
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.investorDocsTdSection {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #830d35;
+  white-space: nowrap;
+  width: 80px;
+}
+
+.investorDocsTdDocMeta {
+  display: block;
+  font-size: 10px;
+  color: rgba(54, 54, 54, 0.45);
+  margin-top: 3px;
+  letter-spacing: 0.03em;
+}
+
+.investorDocsTdActions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.investorDocsAction {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #830d35;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: text-decoration 0.1s;
+}
+
+.investorDocsAction:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.investorDocsComingSoon {
+  color: rgba(54, 54, 54, 0.35);
+  font-style: italic;
+}
+
+@media (max-width: 560px) {
+  .investorDocsTh,
+  .investorDocsTd {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .investorDocsTdSection {
+    display: none;
+  }
+}
+

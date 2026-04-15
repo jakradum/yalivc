@@ -17,13 +17,19 @@ const btnStyle = {
 export function InviteButtons() {
   const email = useFormValue(['email']);
   const name = useFormValue(['name']);
-  const isActive = useFormValue(['isActive']);
-  const dataRoomAccess = useFormValue(['dataRoomAccess']);
+  const noAccess = useFormValue(['noAccess']);
+  const lpPortalAccess = useFormValue(['lpPortalAccess']);
+  const isActive = useFormValue(['isActive']); // backward-compat fallback (pre-migration)
+  const investorDataRoomAccess = useFormValue(['investorDataRoomAccess']);
 
   const [portalStatus, setPortalStatus] = useState('idle');
   const [dataroomStatus, setDataroomStatus] = useState('idle');
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://yali.vc';
+
+  // lpPortalAccess ?? isActive: use new field if set, fall back to old field before migration
+  const portalDisabled = noAccess || !(lpPortalAccess ?? isActive);
+  const dataroomDisabled = noAccess || !investorDataRoomAccess;
 
   const sendPortalInvite = async () => {
     if (portalStatus === 'loading') return;
@@ -69,15 +75,16 @@ export function InviteButtons() {
     portalStatus === 'loading' ? 'Sending...' :
     portalStatus === 'success' ? '✓ Portal invite sent!' :
     portalStatus === 'error' ? 'Failed — retry?' :
-    !isActive ? '✉ Portal Invite (user inactive)' :
+    noAccess ? '✉ Portal Invite (access revoked)' :
+    portalDisabled ? '✉ Portal Invite (LP Portal Access not enabled)' :
     '✉ Send Portal Invite';
 
   const dataroomLabel =
     dataroomStatus === 'loading' ? 'Sending...' :
     dataroomStatus === 'success' ? '✓ Data Room invite sent!' :
     dataroomStatus === 'error' ? 'Failed — retry?' :
-    !isActive ? '✉ Data Room Invite (user inactive)' :
-    !dataRoomAccess ? '✉ Data Room Invite (access not enabled)' :
+    noAccess ? '✉ Data Room Invite (access revoked)' :
+    !investorDataRoomAccess ? '✉ Data Room Invite (Investor Data Room Access not enabled)' :
     '✉ Send Data Room Invite';
 
   return (
@@ -86,10 +93,10 @@ export function InviteButtons() {
         type="button"
         style={{
           ...btnStyle,
-          opacity: !isActive || portalStatus === 'loading' ? 0.4 : 1,
+          opacity: portalDisabled || portalStatus === 'loading' ? 0.4 : 1,
           color: portalStatus === 'success' ? '#2e7d32' : portalStatus === 'error' ? '#c62828' : '#4b5563',
         }}
-        disabled={!isActive || portalStatus === 'loading'}
+        disabled={portalDisabled || portalStatus === 'loading'}
         onClick={sendPortalInvite}
       >
         {portalLabel}
@@ -98,10 +105,10 @@ export function InviteButtons() {
         type="button"
         style={{
           ...btnStyle,
-          opacity: !isActive || !dataRoomAccess || dataroomStatus === 'loading' ? 0.4 : 1,
+          opacity: dataroomDisabled || dataroomStatus === 'loading' ? 0.4 : 1,
           color: dataroomStatus === 'success' ? '#2e7d32' : dataroomStatus === 'error' ? '#c62828' : '#4b5563',
         }}
-        disabled={!isActive || !dataRoomAccess || dataroomStatus === 'loading'}
+        disabled={dataroomDisabled || dataroomStatus === 'loading'}
         onClick={sendDataroomInvite}
       >
         {dataroomLabel}

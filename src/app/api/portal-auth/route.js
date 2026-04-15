@@ -105,17 +105,23 @@ export async function POST(request) {
         );
       }
 
-      const user = await client.fetch(
-        `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{ _id, name }`,
-        { email: normalizedEmail }
-      );
+      // @yali.vc and @florintree.com always have access — no Sanity lookup needed
+      const isTrustedDomain = normalizedEmail.endsWith('@yali.vc') || normalizedEmail.endsWith('@florintree.com');
 
-      // Generic response to prevent email enumeration
-      // Always return success message, but only send email if user exists
-      if (!user) {
-        // Delay to prevent timing-based enumeration
-        await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
-        return NextResponse.json({ success: true });
+      let user = null;
+      if (!isTrustedDomain) {
+        user = await client.fetch(
+          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && ((lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true)) || investorDataRoomAccess == true)][0]{ _id, name }`,
+          { email: normalizedEmail }
+        );
+
+        // Generic response to prevent email enumeration
+        // Always return success message, but only send email if user exists
+        if (!user) {
+          // Delay to prevent timing-based enumeration
+          await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
+          return NextResponse.json({ success: true });
+        }
       }
 
       const otp = generateOTP();
@@ -256,7 +262,7 @@ export async function POST(request) {
 
       const normalizedEmail = email.toLowerCase().trim();
       const user = await client.fetch(
-        `*[_type == "portalUser" && lower(email) == $email && isActive == true][0]{
+        `*[_type == "portalUser" && lower(email) == $email && noAccess != true && ((lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true)) || investorDataRoomAccess == true)][0]{
           _id, inviteCode, inviteCodeExpiry
         }`,
         { email: normalizedEmail }

@@ -10,11 +10,13 @@ export function SendPortalInviteAction(props) {
   if (!doc) return null;
 
   const { email, name } = doc;
-  const isActive = doc.isActive === true;
-  const notReady = !isActive;
+  const noAccess = doc.noAccess === true;
+  const isActive = doc.isActive === true; // backward-compat fallback
+  const lpPortalAccess = doc.lpPortalAccess;
+  const notReady = noAccess || !(lpPortalAccess ?? isActive);
 
   const idleLabel = notReady
-    ? '✉ Send Portal Invite — Activate user first'
+    ? `✉ Send Portal Invite — ${noAccess ? 'Access revoked' : 'Enable LP Portal Access first'}`
     : '✉ Send Portal Invite';
 
   const label = {

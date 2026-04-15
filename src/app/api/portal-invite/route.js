@@ -59,9 +59,10 @@ export async function POST(request) {
 
   // Handle both direct document payload and wrapped { result: {...} } format
   const record = doc?.result ?? doc;
-  const { _type, email, name, isActive } = record ?? {};
+  // noAccess/lpPortalAccess are the new fields; isActive is the backward-compat fallback
+  const { _type, email, name, noAccess, lpPortalAccess, isActive } = record ?? {};
 
-  if (_type !== 'portalUser' || !email || !isActive) {
+  if (_type !== 'portalUser' || !email || noAccess || !(lpPortalAccess ?? isActive)) {
     return NextResponse.json({ skipped: true });
   }
 

@@ -58,10 +58,11 @@ export async function POST(request) {
 
   // Handle both direct document payload and wrapped { result: {...} } format
   const record = doc?.result ?? doc;
-  const { _type, email, name, isActive, dataRoomAccess } = record ?? {};
+  // noAccess/investorDataRoomAccess are the new fields; isActive/dataRoomAccess are backward-compat fallbacks
+  const { _type, email, name, noAccess, investorDataRoomAccess, dataRoomAccess } = record ?? {};
 
-  // Only send invite for active portalUsers with data room access
-  if (_type !== 'portalUser' || !email || !isActive || !dataRoomAccess) {
+  // Only send invite if access is not revoked and Data Room access is enabled
+  if (_type !== 'portalUser' || !email || noAccess || !(investorDataRoomAccess ?? dataRoomAccess)) {
     return NextResponse.json({ skipped: true });
   }
 

@@ -10,12 +10,13 @@ export function SendDataroomInviteAction(props) {
   if (!doc) return null;
 
   const { email, name } = doc;
-  const isActive = doc.isActive === true;
-  const dataRoomAccess = doc.dataRoomAccess === true;
-  const notReady = !isActive || !dataRoomAccess;
+  const noAccess = doc.noAccess === true;
+  const dataRoomAccess = doc.dataRoomAccess === true; // backward-compat fallback
+  const investorDataRoomAccess = doc.investorDataRoomAccess;
+  const notReady = noAccess || !(investorDataRoomAccess ?? dataRoomAccess);
 
   const idleLabel = notReady
-    ? `✉ Send Data Room Invite — ${!dataRoomAccess ? 'Enable Data Room Access first' : 'Activate user first'}`
+    ? `✉ Send Data Room Invite — ${noAccess ? 'Access revoked' : 'Enable Investor Data Room Access first'}`
     : '✉ Send Data Room Invite';
 
   const label = {

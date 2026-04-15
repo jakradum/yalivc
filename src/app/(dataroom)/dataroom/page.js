@@ -1,13 +1,9 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import {
-  getDataRoomDocuments,
   getDataRoomTrackRecords,
-  getDataRoomTeamMembers,
-  getDataRoomPortfolioCompanies,
-  getDataRoomFundPerformance,
-  getPortalUserByEmail,
   getDataroomSectionVisibility,
+  getDataroomFundContent,
+  getLatestLPReportForDataRoom,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from './DataroomTopbar';
 import styles from './dataroom.module.css';
@@ -16,41 +12,6 @@ export const dynamic = 'force-dynamic';
 
 const CATEGORIES = [
   {
-    slug: 'pipeline',
-    visibilityKey: 'pipeline',
-    title: 'Dealflow & Pipeline',
-    description: 'Deal flow and investment pipeline documentation',
-    icon: 'pipeline',
-  },
-  {
-    slug: 'ppm-agreements',
-    visibilityKey: 'ppmAgreements',
-    title: 'PPM & Agreements',
-    description: 'Private placement memo and contribution agreements',
-    icon: 'ppm',
-  },
-  {
-    slug: 'presentations',
-    visibilityKey: 'presentations',
-    title: 'Presentations',
-    description: 'Fund pitch decks and investor-facing materials',
-    icon: 'presentations',
-  },
-  {
-    slug: 'regulatory-documents',
-    visibilityKey: 'regulatoryDocuments',
-    title: 'Regulatory Documents',
-    description: 'Regulatory filings and AIF registration documents',
-    icon: 'regulatory-documents',
-  },
-  {
-    slug: 'team',
-    visibilityKey: 'team',
-    title: 'Team',
-    description: 'Investment team credentials and advisory board profiles',
-    icon: 'team',
-  },
-  {
     slug: 'track-record',
     visibilityKey: 'trackRecord',
     title: 'Track Record & Recommendation',
@@ -58,71 +19,10 @@ const CATEGORIES = [
       'Historical investments, exit performance, and third-party references',
     icon: 'chart',
   },
-  {
-    slug: 'fund-performance',
-    visibilityKey: 'fundPerformance',
-    title: 'Fund Performance',
-    description: 'Headline fund metrics and performance indicators',
-    icon: 'chart',
-  },
-  {
-    slug: 'category-split',
-    visibilityKey: 'categorySplit',
-    title: 'Portfolio by Sector',
-    description: 'Investment distribution across active portfolio companies',
-    icon: 'pie',
-  },
 ];
 
 function CategoryIcon({ icon }) {
   switch (icon) {
-    case 'pipeline':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M4 2h6l3 3v9H4V2z" stroke="currentColor" strokeWidth="1.2" fill="none" />
-          <line x1="6" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
-          <line x1="6" y1="9" x2="10.5" y2="9" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
-          <line x1="6" y1="11" x2="8.5" y2="11" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
-        </svg>
-      );
-    case 'ppm':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="3" width="12" height="10" stroke="currentColor" strokeWidth="1.2" fill="none" />
-          <line x1="5" y1="7" x2="11" y2="7" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
-          <line x1="5" y1="9.5" x2="9" y2="9.5" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
-        </svg>
-      );
-    case 'presentations':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="2" width="12" height="9" stroke="currentColor" strokeWidth="1.2" fill="none" />
-          <line x1="8" y1="11" x2="8" y2="14" stroke="currentColor" strokeWidth="1.2" />
-          <line x1="5" y1="14" x2="11" y2="14" stroke="currentColor" strokeWidth="1.2" />
-        </svg>
-      );
-    case 'recommendation':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.2" fill="none" />
-          <path d="M3 14c0-2.76 2.24-4 5-4s5 1.24 5 4" stroke="currentColor" strokeWidth="1.2" fill="none" />
-        </svg>
-      );
-    case 'regulatory-documents':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2l1 3h3l-2.5 2 1 3L8 8.5 5.5 10l1-3L4 5h3z" stroke="currentColor" strokeWidth="1.1" fill="none" />
-        </svg>
-      );
-    case 'team':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="5" cy="6" r="2" stroke="currentColor" strokeWidth="1.1" fill="none" />
-          <circle cx="11" cy="6" r="2" stroke="currentColor" strokeWidth="1.1" fill="none" />
-          <path d="M2 14c0-1.66 1.34-3 3-3s3 1.34 3 3" stroke="currentColor" strokeWidth="1.1" fill="none" />
-          <path d="M8 14c0-1.66 1.34-3 3-3s3 1.34 3 3" stroke="currentColor" strokeWidth="1.1" fill="none" />
-        </svg>
-      );
     case 'chart':
       return (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -130,19 +30,13 @@ function CategoryIcon({ icon }) {
           <circle cx="14" cy="7" r="1.2" fill="currentColor" opacity="0.7" />
         </svg>
       );
-    case 'pie':
+    case 'investor-docs':
       return (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2v6l4.5 4.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-          <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-        </svg>
-      );
-    case 'briefcase':
-      return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="5" width="12" height="9" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-          <path d="M5 5V4a3 3 0 0 1 6 0v1" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-          <line x1="2" y1="9" x2="14" y2="9" stroke="currentColor" strokeWidth="0.9" opacity="0.5"/>
+          <rect x="2" y="1" width="10" height="2" stroke="currentColor" strokeWidth="1.1" fill="none" />
+          <rect x="2" y="4" width="12" height="11" stroke="currentColor" strokeWidth="1.1" fill="none" />
+          <line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
+          <line x1="5" y1="10.5" x2="9" y2="10.5" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
         </svg>
       );
     default:
@@ -151,108 +45,50 @@ function CategoryIcon({ icon }) {
 }
 
 export default async function DataroomPage() {
-  // Check allAccess for portfolio card
-  const cookieStore = await cookies();
-  const session = cookieStore.get('dataroom-session')?.value;
-  const email = session ? session.split(':')[0] : null;
-  const user = email ? await getPortalUserByEmail(email) : null;
-  const hasAllAccess = user?.allAccess || false;
-
-  const [docs, trackRecords, teamMembers, portfolioCompanies, fundPerf, sectionVisibility] = await Promise.all([
-    getDataRoomDocuments(),
+  const [trackRecords, sectionVisibility, fundContent, latestLPReport] = await Promise.all([
     getDataRoomTrackRecords(),
-    getDataRoomTeamMembers(),
-    getDataRoomPortfolioCompanies(),
-    getDataRoomFundPerformance(),
     getDataroomSectionVisibility(),
+    getDataroomFundContent(),
+    getLatestLPReportForDataRoom(),
   ]);
 
-  const allDocs = docs || [];
   const allTrackRecords = trackRecords || [];
-  const allTeamMembers = teamMembers || [];
-  const allPortfolioCompanies = portfolioCompanies || [];
 
-  // Auto-hide: compute whether each section has content
-  function hasContent(slug) {
-    if (slug === 'team') return allTeamMembers.length > 0;
-    if (slug === 'track-record') return allTrackRecords.length > 0 || allDocs.some((d) => d.category === 'recommendation');
-    if (slug === 'fund-performance') return fundPerf != null;
-    if (slug === 'category-split') return allPortfolioCompanies.length > 0;
-    if (slug === 'portfolio') return allPortfolioCompanies.length > 0;
-    return allDocs.some((d) => d.category === slug);
-  }
-
-  // Build display categories — hide if manually toggled off OR empty
   const vis = sectionVisibility || {};
-  const displayCategories = [
-    ...CATEGORIES.filter((cat) => vis[cat.visibilityKey] !== false && hasContent(cat.slug)),
-    ...(hasAllAccess && vis.portfolio !== false && hasContent('portfolio') ? [{
-      slug: 'portfolio',
-      visibilityKey: 'portfolio',
-      title: 'Portfolio',
-      description: 'Active portfolio company performance and metrics',
-      icon: 'briefcase',
-    }] : []),
-  ];
+  const displayCategories = CATEGORIES.filter(
+    (cat) => vis[cat.visibilityKey] !== false && allTrackRecords.length > 0
+  );
 
-  // Compute per-category counts
   function getCount(cat) {
-    if (cat.slug === 'team') return allTeamMembers.length;
-    if (cat.slug === 'track-record') return allTrackRecords.length + allDocs.filter((d) => d.category === 'recommendation').length;
-    if (cat.slug === 'category-split') return allPortfolioCompanies.length;
-    if (cat.slug === 'portfolio') return allPortfolioCompanies.length;
-    if (cat.slug === 'fund-performance') return null;
-    return allDocs.filter((d) => d.category === cat.slug).length;
+    if (cat.slug === 'track-record') return allTrackRecords.length;
+    return null;
   }
 
   function getCountLabel(cat) {
-    if (cat.slug === 'team') return 'profiles';
     if (cat.slug === 'track-record') return 'items';
-    if (cat.slug === 'fund-performance') return 'metrics';
-    if (cat.slug === 'category-split') return 'active companies';
-    if (cat.slug === 'portfolio') return 'companies';
     return 'documents';
   }
-
-  // Last updated from max publishedAt
-  const dates = allDocs
-    .map((d) => d.publishedAt)
-    .filter(Boolean)
-    .sort()
-    .reverse();
-  const lastUpdated = dates[0]
-    ? new Date(dates[0]).toLocaleDateString('en-GB', {
-        month: 'short',
-        year: 'numeric',
-      })
-    : null;
 
   return (
     <div className={styles.page}>
       <DataroomTopbar />
       <div className={styles.hero}>
         <div>
-          <div className={styles.heroTitle}>Investor Virtual Data Room</div>
+          <div className={styles.heroTitle}>Yali Investors&rsquo; Data Room</div>
           <div className={styles.heroSub}>Select a category to browse documents</div>
         </div>
-        {lastUpdated && (
-          <div className={styles.lastUpdated}>Last updated {lastUpdated}</div>
-        )}
       </div>
       <div className={styles.content}>
         <div className={styles.sectionLabel}>Categories</div>
         <div className={styles.grid}>
-          {displayCategories.map((cat, idx) => {
+          {displayCategories.map((cat) => {
             const count = getCount(cat);
             const label = getCountLabel(cat);
-            const isLast = idx === displayCategories.length - 1;
-            const lastSpan = 3 - ((displayCategories.length - 1) % 3);
             return (
               <Link
                 key={cat.slug}
                 href={`/dataroom/${cat.slug}`}
                 className={styles.card}
-                style={isLast && lastSpan > 1 ? { gridColumn: `span ${lastSpan}` } : undefined}
               >
                 <div className={styles.cardIcon}>
                   <CategoryIcon icon={cat.icon} />
@@ -268,7 +104,81 @@ export default async function DataroomPage() {
               </Link>
             );
           })}
+
+          {/* Investor Documents — scrolls to table below */}
+          <a href="#investor-docs" className={`${styles.card} ${styles.cardInvestorDocs}`}>
+            <div className={`${styles.cardIcon} ${styles.cardIconCrimson}`}>
+              <CategoryIcon icon="investor-docs" />
+            </div>
+            <div className={`${styles.cardTitle} ${styles.cardTitleCrimson}`}>Investor Documents</div>
+            <div className={styles.cardDesc}>Fund I &middot; Fund II &middot; Common</div>
+            <div className={styles.cardDesc}>Presentations, reports, and team documents</div>
+            <div className={styles.cardFooter}>
+              <div />
+              <div className={styles.cardArrowDown}>&#x2193;</div>
+            </div>
+          </a>
         </div>
+
+        {/* ── Investor Documents Table ── */}
+        <div id="investor-docs" className={styles.investorDocsWrap}>
+          <table className={styles.investorDocsTable}>
+            <thead>
+              <tr>
+                <th className={styles.investorDocsTh}>Section</th>
+                <th className={styles.investorDocsTh}>Document</th>
+                <th className={styles.investorDocsTh} />
+              </tr>
+            </thead>
+            <tbody>
+              {fundContent?.fundISlideDeckUrl && (
+                <tr className={styles.investorDocsTr}>
+                  <td className={`${styles.investorDocsTd} ${styles.investorDocsTdSection}`}>Fund I</td>
+                  <td className={styles.investorDocsTd}>Fund I presentation</td>
+                  <td className={`${styles.investorDocsTd} ${styles.investorDocsTdActions}`}>
+                    <a href={fundContent.fundISlideDeckUrl} target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>View</a>
+                    <a href={fundContent.fundISlideDeckUrl} download="Fund-I-Presentation.pdf" target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>Download</a>
+                  </td>
+                </tr>
+              )}
+              {latestLPReport?.pdfUrl && (
+                <tr className={styles.investorDocsTr}>
+                  <td className={`${styles.investorDocsTd} ${styles.investorDocsTdSection}`}>Fund I</td>
+                  <td className={styles.investorDocsTd}>
+                    <span>Latest quarterly report</span>
+                    {latestLPReport.quarter && latestLPReport.fiscalYear && (
+                      <span className={styles.investorDocsTdDocMeta}>
+                        {latestLPReport.quarter} {latestLPReport.fiscalYear}
+                      </span>
+                    )}
+                  </td>
+                  <td className={`${styles.investorDocsTd} ${styles.investorDocsTdActions}`}>
+                    <a href={latestLPReport.pdfUrl} target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>View</a>
+                    <a href={latestLPReport.pdfUrl} download={`${latestLPReport.title || 'LP-Report'}.pdf`} target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>Download</a>
+                  </td>
+                </tr>
+              )}
+              <tr className={`${styles.investorDocsTr} ${styles.investorDocsTrLast}`}>
+                <td className={`${styles.investorDocsTd} ${styles.investorDocsTdSection}`}>Fund II</td>
+                {fundContent?.fundIIThesisPresentationUrl ? (
+                  <>
+                    <td className={styles.investorDocsTd}>Thesis presentation</td>
+                    <td className={`${styles.investorDocsTd} ${styles.investorDocsTdActions}`}>
+                      <a href={fundContent.fundIIThesisPresentationUrl} target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>View</a>
+                      <a href={fundContent.fundIIThesisPresentationUrl} download="Fund-II-Thesis-Presentation.pdf" target="_blank" rel="noopener noreferrer" className={styles.investorDocsAction}>Download</a>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className={`${styles.investorDocsTd} ${styles.investorDocsComingSoon}`}>Thesis presentation — coming soon</td>
+                    <td className={styles.investorDocsTd} />
+                  </>
+                )}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   );
