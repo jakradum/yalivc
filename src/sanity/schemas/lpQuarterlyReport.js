@@ -22,6 +22,13 @@ export default {
       validation: Rule => Rule.required()
     },
     {
+      name: 'subtitle',
+      title: 'Cover Subtitle',
+      type: 'string',
+      description: 'Shown on the PDF cover page below "QUARTERLY REPORT". Defaults to fund tagline.',
+      group: 'meta'
+    },
+    {
       name: 'slug',
       title: 'Slug',
       type: 'slug',

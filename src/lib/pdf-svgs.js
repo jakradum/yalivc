@@ -43,9 +43,11 @@ async function renderSector(sectorKey, strokeColor = 'white') {
   }
 }
 
-// Cover page: white stroke over burgundy background
-export async function getCoverSvgHtml(quarter) {
-  return renderSector(QUARTER_SECTOR[quarter] || 'lifeSciences', 'white');
+// Cover page: white stroke over burgundy background — randomly pick a sector each generation
+export async function getCoverSvgHtml(_quarter) {
+  const sectors = Object.keys(SECTOR_FILES);
+  const randomSector = sectors[Math.floor(Math.random() * sectors.length)];
+  return renderSector(randomSector, 'white');
 }
 
 // Separator — Portfolio Company Updates: life sciences (DNA helix), grey stroke

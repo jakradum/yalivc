@@ -287,37 +287,47 @@ body {
   PAGE 1 — COVER
 =================================================================*/
 .cover-page { background: #830d35; display: flex; flex-direction: column; }
-.cover-header { background: #eeeceb; padding: 18px 40px; display: flex; align-items: center; }
-.cover-header-line { flex: 1; height: 1.5px; background: #830d35; margin: 0 20px; }
+.cover-header { background: #efefef; height: 110px; padding: 0 36px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+.cover-logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.cover-logo-wordmark {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: #363636; letter-spacing: 0.12em;
+  text-transform: uppercase; line-height: 1.3;
+}
+.cover-header-line { flex: 1; height: 1px; background: #830d35; margin: 0 16px; }
 .cover-quarter {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.15em; color: #363636;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.1em; color: #363636; flex-shrink: 0;
 }
-.cover-body { flex: 1; padding: 48px 56px 0; display: flex; flex-direction: column; }
+.cover-body { flex: 1; background: #830d35; display: flex; flex-direction: column; align-items: center; padding: 52px 48px 40px; }
 .heading-xl {
   font-family: 'Inter', sans-serif;
   font-size: 72px; font-weight: 900;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: #efefef; line-height: 0.95;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: #efefef; line-height: 1.0;
+  text-align: center; margin-bottom: 20px;
 }
 .cover-tagline {
   font-family: 'Inter', sans-serif;
-  font-size: 22px; font-weight: 400;
-  color: rgba(239,239,239,0.85);
-  margin-top: 20px; line-height: 1.4;
+  font-size: 22px; font-weight: 500;
+  color: rgba(239,239,239,0.92);
+  margin-bottom: 48px; line-height: 1.4; text-align: center;
 }
 .cover-svg-wrap {
   flex: 1;
   display: flex; align-items: center; justify-content: center;
-  opacity: 0.2;
+  width: 100%;
 }
+.cover-svg-wrap svg { width: 420px; height: auto; opacity: 0.55; }
 .cover-footer-text {
-  text-align: right;
-  padding: 0 56px 48px;
+  width: 100%;
+  display: flex; justify-content: flex-end;
+  padding-top: 16px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; line-height: 1.6;
-  color: rgba(239,239,239,0.7);
+  font-size: 12px; line-height: 1.6;
+  color: rgba(239,239,239,0.75); text-align: right;
 }
 
 /*=================================================================
@@ -533,18 +543,21 @@ export function generatePdfHtml({
   const coverHtml = `
   <div class="page cover-page">
     <div class="cover-header">
-      ${logoUrl ? `<img class="logo-img" src="${esc(logoUrl)}" alt="Yali Capital">` : ''}
+      <div class="cover-logo-block">
+        ${logoUrl ? `<img class="logo-img" src="${esc(logoUrl)}" alt="Yali Capital">` : ''}
+        <div class="cover-logo-wordmark">YALI<br>CAPITAL</div>
+      </div>
       <div class="cover-header-line"></div>
       <span class="cover-quarter">${esc(quarterLabel)}</span>
     </div>
     <div class="cover-body">
       <div class="heading-xl">QUARTERLY<br>REPORT</div>
-      <div class="cover-tagline">${esc(fundSettings?.tagline || "Taking India's Deep Tech to new heights")}</div>
+      <div class="cover-tagline">${esc(report?.subtitle || fundSettings?.tagline || "Taking India's Deep Tech to new heights")}</div>
       <div class="cover-svg-wrap">${coverSvgHtml}</div>
-    </div>
-    <div class="cover-footer-text">
-      ${esc(fundSettings?.fundManagerName || fundSettings?.fundName || 'Yali Partners LLP')}<br>
-      ${esc(fundSettings?.fundManagerDescriptor || 'Investment Manager – Deep Tech Focus')}
+      <div class="cover-footer-text">
+        ${esc(fundSettings?.fundManagerName || fundSettings?.fundName || 'Yali Partners LLP')}<br>
+        ${esc(fundSettings?.fundManagerDescriptor || 'Investment Manager – Deep Tech Focus')}
+      </div>
     </div>
   </div>`;
 

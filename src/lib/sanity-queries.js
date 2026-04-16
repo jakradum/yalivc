@@ -1256,6 +1256,7 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
     `*[_type == "lpQuarterlyReport" && slug.current == $slug][0]{
       _id,
       title,
+      subtitle,
       "slug": slug.current,
       quarter,
       fiscalYear,
