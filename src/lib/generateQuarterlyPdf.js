@@ -4,6 +4,8 @@
  * Design matches pdf_report_reference.html exactly.
  */
 
+import { isQuarterBefore } from '@/lib/quarterly-utils';
+
 // ── Utility helpers ────────────────────────────────────────────
 
 function esc(str) {
@@ -812,7 +814,8 @@ export function generatePdfHtml({
     });
 
     const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
-    const prevQUpdates = allUpdates.filter(u => !(u.quarter === quarter && u.fiscalYear === fiscalYear));
+    // Only show updates from quarters strictly before the report quarter (mirrors web getQuartersBefore)
+    const prevQUpdates = allUpdates.filter(u => isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear));
 
     const currentQHtml = currentQUpdate?.updateNotes
       ? `<div class="subsection-heading">${esc(quarterFYLabel(currentQUpdate.quarter, currentQUpdate.fiscalYear))}</div>
