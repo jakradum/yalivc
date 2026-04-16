@@ -286,8 +286,9 @@ body {
 /*=================================================================
   PAGE 1 — COVER
 =================================================================*/
-.cover-page { background: #830d35; display: flex; flex-direction: column; }
-.cover-header { background: #efefef; height: 110px; padding: 0 36px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+/* Cover page: fixed A4 height to prevent overflow onto page 2 */
+.cover-page { height: 1123px; min-height: unset; overflow: hidden; background: #830d35; display: flex; flex-direction: column; }
+.cover-header { background: #efefef; height: 110px; flex-shrink: 0; padding: 0 36px; display: flex; align-items: center; gap: 20px; }
 .cover-logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .cover-logo-wordmark {
   font-family: 'Inter', sans-serif;
@@ -301,28 +302,29 @@ body {
   font-size: 13px; font-weight: 500;
   letter-spacing: 0.1em; color: #363636; flex-shrink: 0;
 }
-.cover-body { flex: 1; background: #830d35; display: flex; flex-direction: column; align-items: center; padding: 52px 48px 40px; }
+.cover-body { flex: 1; min-height: 0; background: #830d35; display: flex; flex-direction: column; align-items: center; padding: 52px 48px 40px; overflow: hidden; }
 .heading-xl {
   font-family: 'Inter', sans-serif;
   font-size: 72px; font-weight: 900;
   letter-spacing: 0.04em; text-transform: uppercase;
   color: #efefef; line-height: 1.0;
-  text-align: center; margin-bottom: 20px;
+  width: 100%; text-align: center; margin-bottom: 20px; flex-shrink: 0;
 }
 .cover-tagline {
   font-family: 'Inter', sans-serif;
   font-size: 22px; font-weight: 500;
   color: rgba(239,239,239,0.92);
   margin-bottom: 48px; line-height: 1.4; text-align: center;
+  width: 100%; flex-shrink: 0;
 }
 .cover-svg-wrap {
-  flex: 1;
+  flex: 1; min-height: 0; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   width: 100%;
 }
-.cover-svg-wrap svg { width: 420px; height: auto; opacity: 0.55; }
+.cover-svg-wrap svg { width: 420px; max-height: 100%; opacity: 0.55; }
 .cover-footer-text {
-  width: 100%;
+  width: 100%; flex-shrink: 0;
   display: flex; justify-content: flex-end;
   padding-top: 16px;
   font-family: 'JetBrains Mono', monospace;
