@@ -206,24 +206,16 @@ body {
 /* ── Page body ── */
 .page-body { padding: 28px 40px 80px; }
 
-/* ── Page number bracket ── */
+/* ── Page number — viewfinder icon ── */
 .page-number {
   position: absolute;
-  right: 40px; bottom: 28px;
+  right: 28px; bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 11px;
   color: #363636;
-  padding: 4px 8px 4px 14px;
-  border-top: 1.5px solid #363636;
-  border-right: 1.5px solid #363636;
-}
-.page-number::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 12px; height: 12px;
-  border-bottom: 1.5px solid #363636;
-  border-left: 1.5px solid #363636;
 }
 
 /* ── Confidential footer ── */
@@ -529,8 +521,10 @@ export function generatePdfHtml({
       </div>`;
   }
 
+  const viewfinderSvg = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 4C24 1.79086 25.7909 0 28 0V24V28H24H0C0 25.7909 1.79086 24 4 24L24 24V4Z" fill="#363636"/></svg>`;
+
   function pgNum(n) {
-    return `<div class="page-number">Page ${n}</div>`;
+    return `<div class="page-number">Page ${n}${viewfinderSvg}</div>`;
   }
 
   function confFooter() {
@@ -553,7 +547,6 @@ export function generatePdfHtml({
       <span class="cover-quarter">${esc(quarterLabel)}</span>
     </div>
     <div class="cover-body">
-      <div style="color:yellow;font-size:40px;font-weight:900;">HELLO WORLD</div>
       <div class="heading-xl">QUARTERLY<br>REPORT</div>
       <div class="cover-tagline">${esc(report?.subtitle || fundSettings?.tagline || "Taking India's Deep Tech to new heights")}</div>
       <div class="cover-svg-wrap">${coverSvgHtml}</div>
