@@ -1,6 +1,7 @@
 import { JetBrains_Mono } from 'next/font/google';
 import './dataroom-globals.css';
 import Footer from '@/app/components/footer';
+import PdfViewer from './dataroom/PdfViewer';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -17,7 +18,10 @@ export default function DataroomLayout({ children }) {
   return (
     <div data-dataroom className={jetbrainsMono.className}>
       {children}
-      <Footer />
+      <div style={{ position: 'relative', zIndex: 45 }}>
+        <Footer />
+      </div>
+      <PdfViewer />
     </div>
   );
 }

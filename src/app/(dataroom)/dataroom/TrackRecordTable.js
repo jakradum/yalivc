@@ -2,6 +2,12 @@
 import { useState, useMemo } from 'react';
 import styles from './dataroom.module.css';
 
+function stripNickname(name) {
+  if (!name) return '—';
+  // strip anything in single quotes (straight ' or curly ' ') wherever it appears
+  return name.replace(/\s*['\u2018][^'\u2019']*['\u2019]/g, '').trim() || name;
+}
+
 function formatMoney(money) {
   if (!money || money.value == null) return '—';
   const { currency, value } = money;
@@ -149,8 +155,8 @@ export default function TrackRecordTable({ records }) {
           <tbody>
             {sorted.map((r) => (
               <tr key={r._id}>
-                <td className={styles.trackTd}>{r.investorName || '—'}</td>
-                <td className={styles.trackTd}>{r.investeeName || '—'}</td>
+                <td className={styles.trackTd}>{stripNickname(r.investorName)}</td>
+                <td className={styles.trackTd}>{stripNickname(r.investeeName)}</td>
                 <td className={styles.trackTd}>{r.investmentOrg || '—'}</td>
                 <td className={styles.trackTd}>{r.year || '—'}</td>
                 <td className={styles.trackTd}>{r.sector || '—'}</td>

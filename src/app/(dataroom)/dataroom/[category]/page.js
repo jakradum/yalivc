@@ -10,10 +10,14 @@ import {
   getDataRoomPortfolioCompanies,
   getPortalUserByEmail,
   getDataroomSectionVisibility,
+  getDataroomFundContent,
+  getLatestLPReportForDataRoom,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from '../DataroomTopbar';
+import DrSidebar from '../DrSidebar';
 import TeamGrid from '../TeamGrid';
 import TrackRecordTable from '../TrackRecordTable';
+import DocRowLink from '../DocRowLink';
 import styles from '../dataroom.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -39,6 +43,11 @@ const SLUG_TO_VISIBILITY_KEY = {
   'track-record': 'trackRecord',
   'fund-performance': 'fundPerformance',
   'portfolio': 'portfolio',
+};
+
+const SLUG_TO_SIDEBAR_CATEGORY = {
+  'track-record': 'others',
+  'team': 'team',
 };
 
 const DocIcon = () => (
@@ -101,7 +110,30 @@ export default async function CategoryPage({ params }) {
   }
 
   const categoryTitle = SLUG_TO_TITLE[slug];
+  const activeCategory = SLUG_TO_SIDEBAR_CATEGORY[slug] || null;
 
+  // Sidebar data — fetched for all branches
+  const cookieStore = await cookies();
+  const session = cookieStore.get('dataroom-session')?.value;
+  const email = session ? session.split(':')[0] : null;
+
+  const [fundContent, latestLPReport] = await Promise.all([
+    getDataroomFundContent(),
+    getLatestLPReportForDataRoom(),
+  ]);
+  const sidebarRecDocs = fundContent?.commonRecommendationDocuments || [];
+
+  const sidebar = (
+    <DrSidebar
+      activeCategory={activeCategory}
+      fundContent={fundContent}
+      latestLPReport={latestLPReport}
+      recDocs={sidebarRecDocs}
+      email={email}
+    />
+  );
+
+  // ── Fund Performance ────────────────────────────────────────────────────────
   if (slug === 'fund-performance') {
     const [perf, fundSettings] = await Promise.all([
       getDataRoomFundPerformance(),
@@ -112,77 +144,81 @@ export default async function CategoryPage({ params }) {
     return (
       <div className={styles.page}>
         <DataroomTopbar />
-        <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>Fund Performance</span>
-        </div>
-        <div className={styles.innerHero}>
-          <div>
-            <div className={styles.innerTitle}>Fund Performance</div>
-            <div className={styles.innerSub}>Most recent reported quarter{asOf ? ` — ${asOf}` : ''}</div>
-          </div>
-        </div>
-        <div className={styles.perfSection}>
-          <div className={styles.sectionLabel}>Headline Metrics</div>
-          <div className={styles.kpiGrid}>
-            <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>Total Invested</div>
-              <div className={styles.kpiValue}>{perf?.totalInvested != null ? `₹${perf.totalInvested.toFixed(2)} Cr` : '—'}</div>
+        <div className={styles.drLayout}>
+          {sidebar}
+          <div className={styles.drInnerMain}>
+            <div className={styles.breadcrumb}>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <span className={styles.breadcrumbSep}>/</span>
+              <span className={styles.breadcrumbCurrent}>Fund Performance</span>
             </div>
-            <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>Current FMV</div>
-              <div className={styles.kpiValue}>{perf?.fairMarketValue != null ? `₹${perf.fairMarketValue.toFixed(2)} Cr` : '—'}</div>
-            </div>
-            <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>MOIC</div>
-              <div className={styles.kpiValue}>{perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'}</div>
-            </div>
-            <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>TVPI</div>
-              <div className={styles.kpiValue}>{perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'}</div>
-            </div>
-            <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>DPI</div>
-              <div className={styles.kpiValue}>{perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'}</div>
-            </div>
-          </div>
-
-          {(fundSettings || perf) && (
-            <>
-              <div className={styles.perfTitle}>Fund Summary</div>
-              <div className={styles.trackTableWrap}>
-                <table className={styles.trackTable}>
-                  <thead>
-                    <tr>
-                      <th className={styles.trackTh} style={{ textAlign: 'left' }}>As of {asOf || '—'}</th>
-                      <th className={styles.trackTh} style={{ textAlign: 'right' }}>Amount in ₹ crores</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <FundRow label="First close date" value={fundSettings?.firstCloseDate ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
-                    <FundRow label="Final close date" value={fundSettings?.finalCloseDate ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
-                    <FundRow label="Fund size at final close" value={fundSettings?.fundSizeAtClose != null ? fundSettings.fundSizeAtClose.toFixed(2) : (fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '—')} />
-                    <FundRow label="Amount drawn down as per bank" value={perf?.amountDrawnDown != null ? perf.amountDrawnDown.toFixed(2) : '—'} />
-                    <FundRow label="Total invested in portfolio" value={perf?.totalInvested != null ? perf.totalInvested.toFixed(2) : '—'} />
-                    <FundRow label="Fair Market Value of portfolio investments (including realised value)" value={perf?.fairMarketValue != null ? perf.fairMarketValue.toFixed(2) : '—'} />
-                    <FundRow label="Amount returned (including passive income returned)" value={perf?.amountReturned != null ? perf.amountReturned.toFixed(2) : '—'} />
-                    <FundRow label="MOIC" value={perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'} />
-                    <FundRow label="TVPI" value={perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'} />
-                    <FundRow label="DPI" value={perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'} />
-                  </tbody>
-                </table>
+            <div className={styles.innerHero}>
+              <div>
+                <div className={styles.innerTitle}>Fund Performance</div>
+                <div className={styles.innerSub}>Most recent reported quarter{asOf ? ` — ${asOf}` : ''}</div>
               </div>
-            </>
-          )}
+            </div>
+            <div className={styles.perfSection}>
+              <div className={styles.sectionLabel}>Headline Metrics</div>
+              <div className={styles.kpiGrid}>
+                <div className={styles.kpiCard}>
+                  <div className={styles.kpiLabel}>Total Invested</div>
+                  <div className={styles.kpiValue}>{perf?.totalInvested != null ? `₹${perf.totalInvested.toFixed(2)} Cr` : '—'}</div>
+                </div>
+                <div className={styles.kpiCard}>
+                  <div className={styles.kpiLabel}>Current FMV</div>
+                  <div className={styles.kpiValue}>{perf?.fairMarketValue != null ? `₹${perf.fairMarketValue.toFixed(2)} Cr` : '—'}</div>
+                </div>
+                <div className={styles.kpiCard}>
+                  <div className={styles.kpiLabel}>MOIC</div>
+                  <div className={styles.kpiValue}>{perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'}</div>
+                </div>
+                <div className={styles.kpiCard}>
+                  <div className={styles.kpiLabel}>TVPI</div>
+                  <div className={styles.kpiValue}>{perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'}</div>
+                </div>
+                <div className={styles.kpiCard}>
+                  <div className={styles.kpiLabel}>DPI</div>
+                  <div className={styles.kpiValue}>{perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'}</div>
+                </div>
+              </div>
 
+              {(fundSettings || perf) && (
+                <>
+                  <div className={styles.perfTitle}>Fund Summary</div>
+                  <div className={styles.trackTableWrap}>
+                    <table className={styles.trackTable}>
+                      <thead>
+                        <tr>
+                          <th className={styles.trackTh} style={{ textAlign: 'left' }}>As of {asOf || '—'}</th>
+                          <th className={styles.trackTh} style={{ textAlign: 'right' }}>Amount in ₹ crores</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <FundRow label="First close date" value={fundSettings?.firstCloseDate ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
+                        <FundRow label="Final close date" value={fundSettings?.finalCloseDate ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} />
+                        <FundRow label="Fund size at final close" value={fundSettings?.fundSizeAtClose != null ? fundSettings.fundSizeAtClose.toFixed(2) : (fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '—')} />
+                        <FundRow label="Amount drawn down as per bank" value={perf?.amountDrawnDown != null ? perf.amountDrawnDown.toFixed(2) : '—'} />
+                        <FundRow label="Total invested in portfolio" value={perf?.totalInvested != null ? perf.totalInvested.toFixed(2) : '—'} />
+                        <FundRow label="Fair Market Value of portfolio investments (including realised value)" value={perf?.fairMarketValue != null ? perf.fairMarketValue.toFixed(2) : '—'} />
+                        <FundRow label="Amount returned (including passive income returned)" value={perf?.amountReturned != null ? perf.amountReturned.toFixed(2) : '—'} />
+                        <FundRow label="MOIC" value={perf?.moic != null ? `${perf.moic.toFixed(2)}x` : '—'} />
+                        <FundRow label="TVPI" value={perf?.tvpi != null ? `${perf.tvpi.toFixed(2)}x` : '—'} />
+                        <FundRow label="DPI" value={perf?.dpi != null ? `${perf.dpi.toFixed(4)}x` : '—'} />
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
+  // ── Portfolio ───────────────────────────────────────────────────────────────
   if (slug === 'portfolio') {
-    // Server-side access check
     const cookieStore = await cookies();
     const session = cookieStore.get('dataroom-session')?.value;
     const email = session ? session.split(':')[0] : null;
@@ -198,107 +234,119 @@ export default async function CategoryPage({ params }) {
     return (
       <div className={styles.page}>
         <DataroomTopbar />
-        <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>Portfolio</span>
-        </div>
-        <div className={styles.innerHero}>
-          <div>
-            <div className={styles.innerTitle}>Portfolio</div>
-            <div className={styles.innerSub}>Active portfolio companies — performance as of most recent quarter</div>
-          </div>
-          <div className={styles.docCountBadge}>{all.length} companies</div>
-        </div>
-        <div className={styles.portfolioSection}>
-          {all.length === 0 ? (
-            <div className={styles.docTitleEmpty}>No portfolio data available.</div>
-          ) : (
-            <div className={styles.portfolioGrid}>
-              {all.map((co) => {
-                const totalInvested = getTotalInvestment(co);
-                const stage = getLatestRound(co);
-                const q = co.latestQuarter;
-                return (
-                  <div key={co._id} className={styles.portfolioCard}>
-                    <div className={styles.portfolioCardTop}>
-                      {co.logo && (
-                        <img src={co.logo} alt={co.name} className={styles.portfolioLogo} />
-                      )}
-                      <div className={styles.portfolioCardMeta}>
-                        <div className={styles.portfolioName}>{co.name}</div>
-                        {co.sector && <div className={styles.portfolioSector}>{co.sector}</div>}
-                      </div>
-                    </div>
-                    {co.oneLiner && <div className={styles.portfolioOneLiner}>{co.oneLiner}</div>}
-                    <div className={styles.portfolioMetrics}>
-                      <div className={styles.portfolioMetricItem}>
-                        <div className={styles.portfolioMetricLabel}>Stage</div>
-                        <div className={styles.portfolioMetricValue}>{stage || '—'}</div>
-                      </div>
-                      <div className={styles.portfolioMetricItem}>
-                        <div className={styles.portfolioMetricLabel}>Invested</div>
-                        <div className={styles.portfolioMetricValue}>{totalInvested > 0 ? `₹${totalInvested.toFixed(2)} Cr` : '—'}</div>
-                      </div>
-                      <div className={styles.portfolioMetricItem}>
-                        <div className={styles.portfolioMetricLabel}>FMV</div>
-                        <div className={styles.portfolioMetricValue}>
-                          {q?.currentFMVConfidential ? '—' : (q?.currentFMV != null ? `₹${q.currentFMV.toFixed(2)} Cr` : '—')}
-                        </div>
-                      </div>
-                      <div className={styles.portfolioMetricItem}>
-                        <div className={styles.portfolioMetricLabel}>MOIC</div>
-                        <div className={styles.portfolioMetricValue}>
-                          {q?.moicConfidential ? '—' : (q?.multipleOfInvestment != null ? `${q.multipleOfInvestment.toFixed(2)}x` : '—')}
-                        </div>
-                      </div>
-                      {co.isRevenueMaking && (
-                        <div className={styles.portfolioMetricItem}>
-                          <div className={styles.portfolioMetricLabel}>Revenue</div>
-                          <div className={styles.portfolioMetricValue}>
-                            {q?.revenueConfidential ? '—' : (q?.revenueINR != null ? `₹${q.revenueINR.toFixed(2)} Cr` : '—')}
+        <div className={styles.drLayout}>
+          {sidebar}
+          <div className={styles.drInnerMain}>
+            <div className={styles.breadcrumb}>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
+              <span className={styles.breadcrumbSep}>/</span>
+              <span className={styles.breadcrumbCurrent}>Portfolio</span>
+            </div>
+            <div className={styles.innerHero}>
+              <div>
+                <div className={styles.innerTitle}>Portfolio</div>
+                <div className={styles.innerSub}>Active portfolio companies — performance as of most recent quarter</div>
+              </div>
+              <div className={styles.docCountBadge}>{all.length} companies</div>
+            </div>
+            <div className={styles.portfolioSection}>
+              {all.length === 0 ? (
+                <div className={styles.docTitleEmpty}>No portfolio data available.</div>
+              ) : (
+                <div className={styles.portfolioGrid}>
+                  {all.map((co) => {
+                    const totalInvested = getTotalInvestment(co);
+                    const stage = getLatestRound(co);
+                    const q = co.latestQuarter;
+                    return (
+                      <div key={co._id} className={styles.portfolioCard}>
+                        <div className={styles.portfolioCardTop}>
+                          {co.logo && (
+                            <img src={co.logo} alt={co.name} className={styles.portfolioLogo} />
+                          )}
+                          <div className={styles.portfolioCardMeta}>
+                            <div className={styles.portfolioName}>{co.name}</div>
+                            {co.sector && <div className={styles.portfolioSector}>{co.sector}</div>}
                           </div>
                         </div>
-                      )}
-                      <div className={styles.portfolioMetricItem}>
-                        <div className={styles.portfolioMetricLabel}>Team</div>
-                        <div className={styles.portfolioMetricValue}>
-                          {q?.teamSizeConfidential ? '—' : (q?.teamSize != null ? q.teamSize : '—')}
+                        {co.oneLiner && <div className={styles.portfolioOneLiner}>{co.oneLiner}</div>}
+                        <div className={styles.portfolioMetrics}>
+                          <div className={styles.portfolioMetricItem}>
+                            <div className={styles.portfolioMetricLabel}>Stage</div>
+                            <div className={styles.portfolioMetricValue}>{stage || '—'}</div>
+                          </div>
+                          <div className={styles.portfolioMetricItem}>
+                            <div className={styles.portfolioMetricLabel}>Invested</div>
+                            <div className={styles.portfolioMetricValue}>{totalInvested > 0 ? `₹${totalInvested.toFixed(2)} Cr` : '—'}</div>
+                          </div>
+                          <div className={styles.portfolioMetricItem}>
+                            <div className={styles.portfolioMetricLabel}>FMV</div>
+                            <div className={styles.portfolioMetricValue}>
+                              {q?.currentFMVConfidential ? '—' : (q?.currentFMV != null ? `₹${q.currentFMV.toFixed(2)} Cr` : '—')}
+                            </div>
+                          </div>
+                          <div className={styles.portfolioMetricItem}>
+                            <div className={styles.portfolioMetricLabel}>MOIC</div>
+                            <div className={styles.portfolioMetricValue}>
+                              {q?.moicConfidential ? '—' : (q?.multipleOfInvestment != null ? `${q.multipleOfInvestment.toFixed(2)}x` : '—')}
+                            </div>
+                          </div>
+                          {co.isRevenueMaking && (
+                            <div className={styles.portfolioMetricItem}>
+                              <div className={styles.portfolioMetricLabel}>Revenue</div>
+                              <div className={styles.portfolioMetricValue}>
+                                {q?.revenueConfidential ? '—' : (q?.revenueINR != null ? `₹${q.revenueINR.toFixed(2)} Cr` : '—')}
+                              </div>
+                            </div>
+                          )}
+                          <div className={styles.portfolioMetricItem}>
+                            <div className={styles.portfolioMetricLabel}>Team</div>
+                            <div className={styles.portfolioMetricValue}>
+                              {q?.teamSizeConfidential ? '—' : (q?.teamSize != null ? q.teamSize : '—')}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     );
   }
 
+  // ── Team ────────────────────────────────────────────────────────────────────
   if (slug === 'team') {
     const members = (await getDataRoomTeamMembers()) || [];
     return (
       <div className={styles.page}>
         <DataroomTopbar />
-        <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
-        </div>
-        <div className={styles.innerHero}>
-          <div>
-            <div className={styles.innerTitle}>{categoryTitle}</div>
-            <div className={styles.innerSub}>Investment team and advisory board</div>
+        <div className={styles.drLayout}>
+          {sidebar}
+          <div className={styles.drInnerMain}>
+            <div className={styles.breadcrumb}>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <span className={styles.breadcrumbSep}>/</span>
+              <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
+            </div>
+            <div className={styles.innerHero}>
+              <div>
+                <div className={styles.innerTitle}>{categoryTitle}</div>
+                <div className={styles.innerSub}>Investment team and advisory board</div>
+              </div>
+              <div className={styles.docCountBadge}>{members.length} profiles</div>
+            </div>
+            <TeamGrid members={members} />
           </div>
-          <div className={styles.docCountBadge}>{members.length} profiles</div>
         </div>
-        <TeamGrid members={members} />
       </div>
     );
   }
 
+  // ── Track Record ────────────────────────────────────────────────────────────
   if (slug === 'track-record') {
     const [records, allDocs] = await Promise.all([
       getDataRoomTrackRecords(),
@@ -310,110 +358,98 @@ export default async function CategoryPage({ params }) {
     return (
       <div className={styles.page}>
         <DataroomTopbar />
-        <div className={styles.breadcrumb}>
-          <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
-        </div>
-        <div className={styles.innerHero}>
-          <div>
-            <div className={styles.innerTitle}>{categoryTitle}</div>
-            <div className={styles.trackFinePrint}>Best viewed on larger devices</div>
-          </div>
-          <div className={styles.docCountBadge}>{trackRecords.length + recDocs.length} items</div>
-        </div>
-        <div className={styles.trackPageContent}>
-          <div className={styles.trackSection}>
-            <TrackRecordTable records={trackRecords} />
-          </div>
-          {recDocs.length > 0 && (
-            <>
-              <div className={styles.trackRecSeparator} />
-              <div className={styles.trackRecSection}>
-                <div className={styles.sectionLabel}>Recommendation</div>
-                {recDocs.map((doc) => (
-                  <a
-                    key={doc._id}
-                    href={doc.fileUrl || undefined}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.docRow}
-                    style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
-                  >
-                    <div className={styles.docIcon}><DocIcon /></div>
-                    <div className={styles.docInfo}>
-                      <div className={styles.docTitle}>{doc.title}</div>
-                      <div className={styles.docMeta}>
-                        <span>PDF</span>
-                        {doc.description && <span>{doc.description}</span>}
-                        {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
-                      </div>
-                    </div>
-                  </a>
-                ))}
+        <div className={styles.drLayout}>
+          {sidebar}
+          <div className={styles.drInnerMain}>
+            <div className={styles.breadcrumb}>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <span className={styles.breadcrumbSep}>/</span>
+              <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
+            </div>
+            <div className={styles.innerHero}>
+              <div>
+                <div className={styles.innerTitle}>{categoryTitle}</div>
+                <div className={styles.trackFinePrint}>Best viewed on larger devices</div>
               </div>
-            </>
-          )}
+              <div className={styles.docCountBadge}>{trackRecords.length + recDocs.length} items</div>
+            </div>
+            <div className={styles.trackPageContent}>
+              <div className={styles.trackSection}>
+                <TrackRecordTable records={trackRecords} />
+              </div>
+              {recDocs.length > 0 && (
+                <>
+                  <div className={styles.trackRecSeparator} />
+                  <div className={styles.trackRecSection}>
+                    <div className={styles.sectionLabel}>Recommendation</div>
+                    {recDocs.map((doc) => (
+                      <DocRowLink key={doc._id} href={doc.fileUrl || undefined} label={doc.title}>
+                        <div className={styles.docIcon}><DocIcon /></div>
+                        <div className={styles.docInfo}>
+                          <div className={styles.docTitle}>{doc.title}</div>
+                          <div className={styles.docMeta}>
+                            <span>PDF</span>
+                            {doc.description && <span>{doc.description}</span>}
+                            {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
+                          </div>
+                        </div>
+                      </DocRowLink>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Default: document list
+  // ── Default: document list ──────────────────────────────────────────────────
   const allDocs = (await getDataRoomDocuments()) || [];
   const docs = allDocs.filter((d) => d.category === slug);
 
   return (
     <div className={styles.page}>
       <DataroomTopbar />
-      <div className={styles.breadcrumb}>
-        <Link href="/dataroom" className={styles.breadcrumbBack}>
-          ← Data Room
-        </Link>
-        <span className={styles.breadcrumbSep}>/</span>
-        <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
-      </div>
-      <div className={styles.innerHero}>
-        <div>
-          <div className={styles.innerTitle}>{categoryTitle}</div>
-          <div className={styles.innerSub}>
-            Browse and open documents in this category
+      <div className={styles.drLayout}>
+        {sidebar}
+        <div className={styles.drInnerMain}>
+          <div className={styles.breadcrumb}>
+            <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+            <span className={styles.breadcrumbSep}>/</span>
+            <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
+          </div>
+          <div className={styles.innerHero}>
+            <div>
+              <div className={styles.innerTitle}>{categoryTitle}</div>
+              <div className={styles.innerSub}>Browse and open documents in this category</div>
+            </div>
+            <div className={styles.docCountBadge}>{docs.length} documents</div>
+          </div>
+          <div className={styles.docList}>
+            {docs.map((doc) => (
+              <DocRowLink key={doc._id} href={doc.fileUrl || undefined} label={doc.title}>
+                <div className={styles.docIcon}><DocIcon /></div>
+                <div className={styles.docInfo}>
+                  <div className={styles.docTitle}>{doc.title}</div>
+                  <div className={styles.docMeta}>
+                    <span>PDF</span>
+                    {doc.description && <span>{doc.description}</span>}
+                    {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
+                  </div>
+                </div>
+              </DocRowLink>
+            ))}
+            {docs.length === 0 && (
+              <div className={styles.docRow}>
+                <div className={styles.docInfo}>
+                  <div className={styles.docTitleEmpty}>No documents available</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className={styles.docCountBadge}>{docs.length} documents</div>
-      </div>
-      <div className={styles.docList}>
-        {docs.map((doc) => (
-          <a
-            key={doc._id}
-            href={doc.fileUrl || undefined}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.docRow}
-            style={{ textDecoration: 'none', cursor: doc.fileUrl ? 'pointer' : 'default' }}
-          >
-            <div className={styles.docIcon}>
-              <DocIcon />
-            </div>
-            <div className={styles.docInfo}>
-              <div className={styles.docTitle}>{doc.title}</div>
-              <div className={styles.docMeta}>
-                <span>PDF</span>
-                {doc.description && <span>{doc.description}</span>}
-                {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
-              </div>
-            </div>
-          </a>
-        ))}
-        {docs.length === 0 && (
-          <div className={styles.docRow}>
-            <div className={styles.docInfo}>
-              <div className={styles.docTitleEmpty}>
-                No documents available
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

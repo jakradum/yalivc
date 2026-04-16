@@ -1489,17 +1489,11 @@ export async function getDataRoomTrackRecords() {
 
 export async function getDataRoomTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember" && showOnHomepage == true && (department == "investment" || lower(role) match "*advisor*")] | order(coalesce(order, 999) asc) {
-      _id, name, role, oneLiner,
-      "photo": photo.asset->url, linkedIn,
-      bio,
-      dataRoomBio,
-      "previousEmployers": previousEmployers[] | order(order asc) {
-        companyName,
-        companyUrl,
-        order,
-        "logoUrl": logo.asset->url
-      }
+    `*[_type == "teamMember" && profileType == "individual"] | order(coalesce(order, 999) asc) {
+      _id, name, role, department, oneLiner, order,
+      "photo": photo.asset->url,
+      "slug": slug.current,
+      enableTeamPage
     }`
   );
 }
