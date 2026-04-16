@@ -11,6 +11,9 @@ export default function DataroomTopbar() {
         <Link href="/dataroom" className={styles.logo}>
           <Lightlogo />
         </Link>
+        <Link href="/dataroom" className={styles.contextTag}>
+          Investors&rsquo; Data Room
+        </Link>
       </div>
     </div>
   );
