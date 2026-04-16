@@ -156,7 +156,7 @@ const CSS = `
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   color: #363636;
   background: #eeeceb;
   -webkit-print-color-adjust: exact;
@@ -213,7 +213,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Inter', sans-serif;
   font-size: 11px;
   color: #363636;
 }
@@ -233,7 +232,6 @@ body {
 /* ── Tables ── */
 .report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .report-table th {
-  font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 11px;
   color: #830d35;
@@ -263,16 +261,16 @@ body {
 .section-divider { width: 100%; height: 2px; background: #830d35; margin: 12px 0 16px; }
 .section-divider-light { width: 100%; height: 1px; background: #d4d0cc; margin: 12px 0; }
 
-/* ── Body text ── */
+/* ── Body text — Inter only ── */
 .body-text { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.7; color: #363636; }
 .body-text p { margin-bottom: 10px; }
 .body-text ul, .body-text ol { padding-left: 18px; margin-bottom: 10px; }
 .body-text li { margin-bottom: 5px; }
-.section-heading { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #830d35; margin-bottom: 6px; margin-top: 12px; }
-.subsection-heading { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; color: #363636; margin-bottom: 6px; }
+.section-heading { font-size: 13px; font-weight: 700; color: #830d35; margin-bottom: 6px; margin-top: 12px; }
+.subsection-heading { font-size: 12px; font-weight: 700; color: #363636; margin-bottom: 6px; }
 
 /* ── Footnotes ── */
-.footnote { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #888; margin-top: 8px; line-height: 1.6; }
+.footnote { font-size: 9px; color: #888; margin-top: 8px; line-height: 1.6; }
 .footnote-italic { font-family: 'Inter', sans-serif; font-size: 9px; font-style: italic; color: #888; margin-top: 6px; line-height: 1.6; }
 
 /*=================================================================
@@ -283,7 +281,6 @@ body {
 .cover-header { background: #efefef; height: 110px; flex-shrink: 0; padding: 0 36px; display: flex; align-items: center; gap: 20px; }
 .cover-logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .cover-logo-wordmark {
-  font-family: 'Inter', sans-serif;
   font-size: 13px; font-weight: 700;
   color: #363636; letter-spacing: 0.12em;
   text-transform: uppercase; line-height: 1.3;
@@ -296,14 +293,12 @@ body {
 }
 .cover-body { flex: 1; min-height: 0; background: #830d35; display: flex; flex-direction: column; align-items: center; padding: 52px 48px 40px; overflow: hidden; }
 .heading-xl {
-  font-family: 'Inter', sans-serif;
   font-size: 72px; font-weight: 900;
   letter-spacing: 0.04em; text-transform: uppercase;
   color: #efefef; line-height: 1.0;
   width: 100%; text-align: center; margin-bottom: 20px; flex-shrink: 0;
 }
 .cover-tagline {
-  font-family: 'Inter', sans-serif;
   font-size: 22px; font-weight: 500;
   color: rgba(239,239,239,0.92);
   margin-bottom: 48px; line-height: 1.4; text-align: center;
@@ -329,7 +324,6 @@ body {
 =================================================================*/
 .toc-wrap { position: relative; padding: 0 40px 80px; min-height: 1000px; }
 .toc-title {
-  font-family: 'Inter', sans-serif;
   font-size: 80px; font-weight: 900;
   letter-spacing: 0.04em; text-transform: uppercase;
   color: #363636; line-height: 0.95;
@@ -357,7 +351,6 @@ body {
   PAGES 3-4 — COVER NOTE
 =================================================================*/
 .cover-note-heading {
-  font-family: 'Inter', sans-serif;
   font-size: 60px; font-weight: 900;
   letter-spacing: 0.06em; text-transform: uppercase;
   color: #363636; line-height: 1;
@@ -372,13 +365,12 @@ body {
   padding-left: 10px;
 }
 .confidentiality-box { border: 1px solid #c0bfbf; padding: 16px 20px; margin-top: 8px; }
-.confidentiality-box p { font-size: 11px; color: #555; line-height: 1.6; }
+.confidentiality-box p { font-family: 'Inter', sans-serif; font-size: 11px; color: #555; line-height: 1.6; }
 
 /*=================================================================
   PAGE 5 — FUND SUMMARY
 =================================================================*/
 .fund-summary-heading {
-  font-family: 'Inter', sans-serif;
   font-size: 64px; font-weight: 300;
   letter-spacing: 0.05em; color: #363636;
   line-height: 1; margin: 12px 0 6px;
@@ -389,7 +381,6 @@ body {
   PAGE 6 — PORTFOLIO INVESTMENTS
 =================================================================*/
 .portfolio-inv-heading {
-  font-family: 'Inter', sans-serif;
   font-size: 68px; font-weight: 900;
   letter-spacing: 0.04em; text-transform: uppercase;
   color: #363636; line-height: 0.95;
@@ -400,7 +391,6 @@ body {
   SEPARATOR PAGES
 =================================================================*/
 .separator-title-mixed {
-  font-family: 'Inter', sans-serif;
   font-size: 60px; font-weight: 400;
   color: #830d35; line-height: 1.05;
   padding: 20px 40px 0;
@@ -438,7 +428,6 @@ body {
   margin: 24px 0 16px;
 }
 .prev-quarters-label {
-  font-family: 'Inter', sans-serif;
   font-size: 16px; font-weight: 700;
   color: #830d35; white-space: nowrap;
 }
