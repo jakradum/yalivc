@@ -117,6 +117,18 @@ export default async function DataroomPage() {
                   </tr>
                 )}
 
+                {/* ── Team ── */}
+                <tr id="team" className={styles.drGroupRow}>
+                  <td colSpan={3} className={styles.drGroupCell}>▾ TEAM</td>
+                </tr>
+                <DrTableRow href="/dataroom/team">
+                  <td className={styles.drTd}>Investment team</td>
+                  <td className={styles.drTd} />
+                  <td className={styles.drTdActions}>
+                    <a href="/dataroom/team" className={styles.drAction}>View →</a>
+                  </td>
+                </DrTableRow>
+
                 {/* ── Others ── */}
                 <tr id="others" className={styles.drGroupRow}>
                   <td colSpan={3} className={styles.drGroupCell}>
@@ -124,7 +136,7 @@ export default async function DataroomPage() {
                   </td>
                 </tr>
                 <DrTableRow href="/dataroom/track-record">
-                  <td className={styles.drTd}>Track record</td>
+                  <td className={styles.drTd}>Track record (prior to Yali)</td>
                   <td className={styles.drTd} />
                   <td className={styles.drTdActions}>
                     <a href="/dataroom/track-record" className={styles.drAction}>View →</a>
@@ -145,18 +157,6 @@ export default async function DataroomPage() {
                     </DrTableRow>
                   ) : null
                 )}
-
-                {/* ── Team ── */}
-                <tr id="team" className={styles.drGroupRow}>
-                  <td colSpan={3} className={styles.drGroupCell}>▾ TEAM</td>
-                </tr>
-                <DrTableRow href="/dataroom/team">
-                  <td className={styles.drTd}>Investment team</td>
-                  <td className={styles.drTd} />
-                  <td className={styles.drTdActions}>
-                    <a href="/dataroom/team" className={styles.drAction}>View →</a>
-                  </td>
-                </DrTableRow>
 
               </tbody>
             </table>

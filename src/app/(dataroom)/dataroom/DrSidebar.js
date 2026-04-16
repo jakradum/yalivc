@@ -126,6 +126,21 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
 
             <div className={styles.drSidebarItem}>
               <a
+                href="/dataroom/team"
+                className={`${styles.drSidebarLink}${activeCategory === 'team' || isActive('team') ? ` ${styles.drSidebarLinkActive}` : ''}`}
+                onClick={close}
+              >
+                Team
+              </a>
+              <div className={styles.drSidebarSubmenu}>
+                <a href="/dataroom/team" className={styles.drSidebarSubItem} onClick={close}>
+                  Investment team
+                </a>
+              </div>
+            </div>
+
+            <div className={styles.drSidebarItem}>
+              <a
                 href="/dataroom/track-record"
                 className={`${styles.drSidebarLink}${activeCategory === 'others' || isActive('others') ? ` ${styles.drSidebarLinkActive}` : ''}`}
                 onClick={close}
@@ -134,7 +149,7 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
               </a>
               <div className={styles.drSidebarSubmenu}>
                 <a href="/dataroom/track-record" className={styles.drSidebarSubItem} onClick={close}>
-                  Track record
+                  Track record (prior to Yali)
                 </a>
                 {recDocs.filter((d) => d.fileUrl).map((doc, i) => (
                   <a
@@ -146,21 +161,6 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
                     {doc.title}
                   </a>
                 ))}
-              </div>
-            </div>
-
-            <div className={styles.drSidebarItem}>
-              <a
-                href="/dataroom/team"
-                className={`${styles.drSidebarLink}${activeCategory === 'team' || isActive('team') ? ` ${styles.drSidebarLinkActive}` : ''}`}
-                onClick={close}
-              >
-                Team
-              </a>
-              <div className={styles.drSidebarSubmenu}>
-                <a href="/dataroom/team" className={styles.drSidebarSubItem} onClick={close}>
-                  Investment team
-                </a>
               </div>
             </div>
 
