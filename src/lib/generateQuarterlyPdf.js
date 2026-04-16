@@ -211,11 +211,15 @@ body {
   position: absolute;
   right: 28px; bottom: 20px;
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  gap: 8px;
   font-size: 11px;
   color: #363636;
+  line-height: 1;
 }
+.page-number span { align-self: center; }
+.page-number .pn-tl { align-self: flex-start; }
+.page-number .pn-br { align-self: flex-end; }
 
 /* ── Confidential footer ── */
 .footer-confidential {
@@ -510,10 +514,12 @@ export function generatePdfHtml({
       </div>`;
   }
 
-  const viewfinderSvg = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 4C24 1.79086 25.7909 0 28 0V24V28H24H0C0 25.7909 1.79086 24 4 24L24 24V4Z" fill="#363636"/></svg>`;
+  const vfPath = `d="M24 4C24 1.79086 25.7909 0 28 0V24V28H24H0C0 25.7909 1.79086 24 4 24L24 24V4Z"`;
+  const vfBr = `<svg class="pn-br" width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" ${vfPath} fill="#363636"/></svg>`;
+  const vfTl = `<svg class="pn-tl" width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(180deg)"><path fill-rule="evenodd" clip-rule="evenodd" ${vfPath} fill="#363636"/></svg>`;
 
   function pgNum(n) {
-    return `<div class="page-number">Page ${n}${viewfinderSvg}</div>`;
+    return `<div class="page-number">${vfTl}<span>Page ${n}</span>${vfBr}</div>`;
   }
 
   function confFooter() {
@@ -631,7 +637,6 @@ export function generatePdfHtml({
     <div class="page-body">
       <div class="fund-summary-heading">Fund Summary</div>
       <div class="fund-summary-sub">As of ${esc(asOf)}</div>
-      <div class="section-divider"></div>
       <table class="report-table">
         <thead>
           <tr>
@@ -686,7 +691,6 @@ export function generatePdfHtml({
     ${headerHtml()}
     <div class="page-body">
       <div class="portfolio-inv-heading">PORTFOLIO<br>INVESTMENTS</div>
-      <div class="section-divider"></div>
       <table class="report-table">
         <thead>
           <tr>
@@ -776,7 +780,6 @@ export function generatePdfHtml({
         </div>
         <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
       </div>
-      <div class="section-divider"></div>
       <table class="report-table">
         <tbody>
           <tr><td style="width:55%;">Latest funding round</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
@@ -887,7 +890,6 @@ export function generatePdfHtml({
 
       roundDetailsHtml = `
         <div class="section-heading" style="font-size: 16px; margin-bottom: 8px;">Investment round details</div>
-        <div class="section-divider"></div>
         <table class="report-table">
           <tbody>
             ${stageRow}
@@ -932,7 +934,6 @@ export function generatePdfHtml({
       financialsHtml = `
         <div style="margin-top: 24px;">
           <div class="section-heading" style="font-size: 16px; margin-bottom: 8px;">Financials / Key matrix</div>
-          <div class="section-divider"></div>
           <table class="report-table">
             <thead>
               <tr>
@@ -1025,14 +1026,18 @@ export function generatePdfHtml({
     return `${d.getDate()} ${months[d.getMonth()]} '${String(d.getFullYear()).slice(2)}`;
   }
 
-  const mediaCardsHtml = (report.mediaFromNews && report.mediaFromNews.length > 0)
-    ? report.mediaFromNews.map((item, idx) => `
+  const mediaItems = report.mediaFromNews && report.mediaFromNews.length > 0
+    ? report.mediaFromNews : [];
+
+  const mediaCardsHtml = mediaItems.length > 0
+    ? mediaItems.map((item, idx) => `
         <div class="media-card${idx % 2 === 1 ? ' right' : ''}">
           <div class="media-card-date">${esc(fmtShortDate(item.date))}</div>
           <div class="media-card-title">${esc(item.headlineEdited || '')}</div>
           ${item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
+          ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">Read more</a></div>` : ''}
         </div>`).join('')
-    : '<p style="color: #888; font-size: 12px; padding-top: 16px;">No media items recorded for this quarter.</p>';
+    : '<p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p>';
 
   const mediaHtml = `
   <div class="page">
@@ -1043,6 +1048,7 @@ export function generatePdfHtml({
         <div class="media-arrow">↗</div>
       </div>
       <div class="media-subhead">Key highlights and press coverage</div>
+      ${report.mediaNotes ? `<div class="body-text" style="margin: 12px 0 4px;"><p>${esc(report.mediaNotes)}</p></div>` : ''}
       <div class="section-divider-light"></div>
       <div class="media-cards">${mediaCardsHtml}</div>
     </div>

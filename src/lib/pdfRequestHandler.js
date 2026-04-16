@@ -11,6 +11,7 @@ import {
   getLPQuarterlyReportBySlugAdmin,
   getLPInvestmentsForPdf,
   getTeamMembers,
+  getNewsForQuarter,
 } from '@/lib/sanity-queries';
 import { buildReportData } from '@/lib/quarterly-utils';
 import { generatePdfHtml } from '@/lib/generateQuarterlyPdf';
@@ -99,6 +100,12 @@ export async function handlePdfGet(slug) {
   }
 
   const { quarter, fiscalYear } = report;
+
+  // Auto-pull news items for this quarter; fall back to manually-linked items
+  const quarterNews = await getNewsForQuarter(quarter, fiscalYear);
+  if (quarterNews && quarterNews.length > 0) {
+    report.mediaFromNews = quarterNews;
+  }
 
   const reportData = buildReportData({
     quarter,

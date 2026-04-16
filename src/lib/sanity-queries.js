@@ -1299,6 +1299,31 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
   );
 }
 
+// Fetch all news items that fall within a quarter's date range
+export async function getNewsForQuarter(quarter, fiscalYear) {
+  const fyNum = parseInt((fiscalYear || 'FY26').replace('FY', ''), 10);
+  const endYear = 2000 + fyNum;
+  const startYear = endYear - 1;
+  let startDate, endDate;
+  switch (quarter) {
+    case 'Q1': startDate = `${startYear}-04-01`; endDate = `${startYear}-06-30`; break;
+    case 'Q2': startDate = `${startYear}-07-01`; endDate = `${startYear}-09-30`; break;
+    case 'Q3': startDate = `${startYear}-10-01`; endDate = `${startYear}-12-31`; break;
+    case 'Q4': startDate = `${endYear}-01-01`;   endDate = `${endYear}-03-31`;   break;
+    default: return [];
+  }
+  return liveClient.fetch(
+    `*[_type == "news" && date >= $startDate && date <= $endDate] | order(date desc) {
+      _id,
+      headlineEdited,
+      date,
+      url,
+      "publicationName": publication->name
+    }`,
+    { startDate, endDate }
+  );
+}
+
 // Get all LP quarterly report slugs (for static generation)
 // Backward compatible: includes legacy reports with isPublished=true
 export async function getAllLPQuarterlyReportSlugs() {
