@@ -29,6 +29,28 @@ function RegularCard({ m }) {
           <div className={styles.drTeamName}>{m.name}</div>
           <span className={styles.drTeamRole}>{m.role}</span>
         </div>
+        {(m.emailId || m.linkedIn) && (
+          <div className={styles.drTeamContactLinks}>
+            {m.emailId && (
+              <a href={`mailto:${m.emailId}`} className={styles.drTeamContactIcon} title={`Email ${m.name}`} aria-label={`Email ${m.name}`}>
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3" fill="none"/>
+                  <path d="M1.5 3.5L8 9L14.5 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              </a>
+            )}
+            {m.linkedIn && (
+              <a href={m.linkedIn} target="_blank" rel="noopener noreferrer" className={styles.drTeamContactIcon} title={`${m.name} on LinkedIn`} aria-label={`${m.name} on LinkedIn`}>
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.3" fill="none"/>
+                  <path d="M4 6.5V12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                  <circle cx="4" cy="4.5" r="0.8" fill="currentColor"/>
+                  <path d="M7.5 6.5V12M7.5 9C7.5 7.619 8.619 6.5 10 6.5C11.381 6.5 12.5 7.619 12.5 9V12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              </a>
+            )}
+          </div>
+        )}
         {profileUrl && (
           <a href={profileUrl} target="_blank" rel="noopener noreferrer" className={styles.drTeamViewProfile}>
             <span className={styles.drTeamViewLabel}>View profile</span>
@@ -49,6 +71,7 @@ function OpsGroupCard({ members }) {
   return (
     <div className={styles.drTeamCard}>
       <div className={styles.drTeamOpsGroup}>
+        <div className={styles.drTeamOpsGroupTitle}>Operations team</div>
         {members.map(m => (
           <div key={m._id} className={styles.drTeamOpsTile}>
             <span className={styles.drTeamOpsTileName}>{m.name}</span>

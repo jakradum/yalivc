@@ -132,6 +132,10 @@ export default function TrackRecordTable({ records }) {
 
       <div className={styles.trackTableWrap}>
         <table className={styles.trackTable}>
+          <colgroup>
+            <col /><col /><col /><col /><col />
+            <col /><col /><col /><col /><col />
+          </colgroup>
           <thead>
             <tr>
               <th className={styles.trackTh}>Investor</th>

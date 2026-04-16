@@ -1519,7 +1519,9 @@ export async function getDataRoomTeamMembers() {
       _id, name, role, department, oneLiner, order,
       "photo": photo.asset->url,
       "slug": slug.current,
-      enableTeamPage
+      enableTeamPage,
+      emailId,
+      linkedIn
     }`
   );
 }

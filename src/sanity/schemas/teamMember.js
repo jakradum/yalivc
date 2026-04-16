@@ -268,6 +268,13 @@ const teamMember = {
     },
     // ── DATA ROOM TAB ──
     {
+      name: 'emailId',
+      title: 'Email Address',
+      type: 'string',
+      group: 'dataRoom',
+      description: 'If provided, shown as a clickable email icon in the data room team page.',
+    },
+    {
       name: 'dataRoomBio',
       title: 'Data Room Bio',
       type: 'array',
