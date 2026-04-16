@@ -210,6 +210,7 @@ body {
 .page-number {
   position: absolute;
   right: 28px; bottom: 20px;
+  height: 34px;
   display: flex;
   align-items: stretch;
   gap: 8px;
@@ -721,7 +722,7 @@ export function generatePdfHtml({
     <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px;">
       <div class="separator-title-mixed">Portfolio<br>Company<br>Updates</div>
       ${portfolioUpdatesSvgHtml ? `
-        <div style="position: absolute; right: -30px; top: 40px; width: 420px; opacity: 0.18;">
+        <div style="position: absolute; right: 40px; top: 40px; width: 105px; opacity: 0.18;">
           ${portfolioUpdatesSvgHtml}
         </div>` : ''}
     </div>
@@ -978,10 +979,10 @@ export function generatePdfHtml({
     <div style="padding: 24px 40px; position: relative; min-height: 900px;">
       <div class="heading-mono">Fund<br>financials</div>
       <div style="margin-top: 12px; font-size: 13px; color: #555;">
-        Available on <span style="text-decoration: underline;">partners.yali.vc</span>
+        Available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a>
       </div>
       ${fundFinancialsSvgHtml ? `
-        <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 280px; opacity: 0.18;">
+        <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; opacity: 0.18;">
           ${fundFinancialsSvgHtml}
         </div>` : ''}
     </div>
@@ -1005,7 +1006,7 @@ export function generatePdfHtml({
           ${pipelineNotesHtml}
         </div>` : ''}
       ${pipelineSvgHtml ? `
-        <div style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); width: 360px; opacity: 0.18;">
+        <div style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); width: 90px; opacity: 0.18;">
           ${pipelineSvgHtml}
         </div>` : ''}
     </div>
@@ -1071,13 +1072,13 @@ export function generatePdfHtml({
       ${websiteDisplay ? `
         <div class="contact-box">
           <div class="contact-box-text">
-            <span class="contact-box-link">${esc(websiteDisplay)}/NEWSROOM</span> FOR ALL MEDIA COVERAGE
+            <a href="${esc(fundSettings.website)}/newsroom" class="contact-box-link" style="color:#efefef;">${esc(websiteDisplay)}/NEWSROOM</a> FOR ALL MEDIA COVERAGE
           </div>
         </div>` : ''}
       ${irEmail ? `
         <div class="contact-box">
           <div class="contact-box-text">
-            <span class="contact-box-link">${esc(irEmail.toUpperCase())}</span> FOR INVESTOR QUERIES
+            <a href="mailto:${esc(irEmail)}" class="contact-box-link" style="color:#efefef;">${esc(irEmail.toUpperCase())}</a> FOR INVESTOR QUERIES
           </div>
         </div>` : ''}
       ${fundSettings?.fundName ? `
