@@ -553,6 +553,7 @@ export function generatePdfHtml({
       <span class="cover-quarter">${esc(quarterLabel)}</span>
     </div>
     <div class="cover-body">
+      <div style="color:yellow;font-size:40px;font-weight:900;">HELLO WORLD</div>
       <div class="heading-xl">QUARTERLY<br>REPORT</div>
       <div class="cover-tagline">${esc(report?.subtitle || fundSettings?.tagline || "Taking India's Deep Tech to new heights")}</div>
       <div class="cover-svg-wrap">${coverSvgHtml}</div>
