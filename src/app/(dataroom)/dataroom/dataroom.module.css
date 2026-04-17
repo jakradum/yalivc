@@ -823,7 +823,7 @@ a.drSidebarSubItem:hover {
 .trackTable colgroup col:nth-child(10) { width: 54px; }  /* IRR */
 
 .trackTh {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
