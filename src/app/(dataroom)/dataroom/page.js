@@ -94,27 +94,23 @@ export default async function DataroomPage() {
                   </DrTableRow>
                 )}
 
-                {/* ── Fund II ── */}
-                <tr id="fund-ii" className={styles.drGroupRow}>
-                  <td colSpan={3} className={styles.drGroupCell}>
-                    ▾ FUND II{fundIICount > 0 ? ` · ${fundIICount} document` : ''}
-                  </td>
-                </tr>
-                {fundContent?.fundIIThesisPresentationUrl ? (
-                  <DrTableRow
-                    href={fundContent.fundIIThesisPresentationUrl}
-                    label="Thesis presentation"
-                  >
-                    <td className={styles.drTd}>Thesis presentation</td>
-                    <td className={styles.drTd}><span className={styles.drTypeTag}>PDF</span></td>
-                    <td className={styles.drTdActions}>
-                      <a href={`${fundContent.fundIIThesisPresentationUrl}?dl=Fund-II-Thesis-Presentation.pdf`} className={styles.drAction}>Download</a>
-                    </td>
-                  </DrTableRow>
-                ) : (
-                  <tr className={styles.drTr}>
-                    <td colSpan={3} className={`${styles.drTd} ${styles.drComingSoon}`}>Thesis presentation — coming soon</td>
-                  </tr>
+                {/* ── Fund II — only shown when PDF is uploaded ── */}
+                {fundContent?.fundIIThesisPresentationUrl && (
+                  <>
+                    <tr id="fund-ii" className={styles.drGroupRow}>
+                      <td colSpan={3} className={styles.drGroupCell}>▾ FUND II · 1 document</td>
+                    </tr>
+                    <DrTableRow
+                      href={fundContent.fundIIThesisPresentationUrl}
+                      label="Thesis presentation"
+                    >
+                      <td className={styles.drTd}>Thesis presentation</td>
+                      <td className={styles.drTd}><span className={styles.drTypeTag}>PDF</span></td>
+                      <td className={styles.drTdActions}>
+                        <a href={`${fundContent.fundIIThesisPresentationUrl}?dl=Fund-II-Thesis-Presentation.pdf`} className={styles.drAction}>Download</a>
+                      </td>
+                    </DrTableRow>
+                  </>
                 )}
 
                 {/* ── Team ── */}
