@@ -16,9 +16,6 @@ function ArrowIcon() {
   );
 }
 
-const isSunil = (m) => m.name?.toLowerCase().includes('sunil');
-const isOpsOther = (m) => m.department === 'operations' && !isSunil(m);
-
 function RegularCard({ m }) {
   const profileUrl = m.enableTeamPage && m.slug ? `/about-yali/${m.slug}` : null;
   return (
@@ -67,25 +64,6 @@ function RegularCard({ m }) {
   );
 }
 
-function OpsGroupCard({ members }) {
-  return (
-    <div className={styles.drTeamCard}>
-      <div className={styles.drTeamOpsGroup}>
-        <div className={styles.drTeamOpsGroupTitle}>Operations team</div>
-        {members.map(m => (
-          <div key={m._id} className={styles.drTeamOpsTile}>
-            <span className={styles.drTeamOpsTileName}>{m.name}</span>
-            <span className={styles.drTeamOpsTileRole}>{m.role}</span>
-          </div>
-        ))}
-      </div>
-      <div className={styles.drTeamContent}>
-        <div className={styles.drTeamPattern} />
-      </div>
-    </div>
-  );
-}
-
 export default function TeamGrid({ members }) {
   const [activeDept, setActiveDept] = useState(null);
 
@@ -93,23 +71,8 @@ export default function TeamGrid({ members }) {
     ? members.filter(m => m.department === activeDept)
     : members;
 
-  // Build render list: collapse all ops-non-Sunil into one group cell at their first position
-  const opsOthers = filtered.filter(isOpsOther);
-  const renderItems = [];
-  let groupInserted = false;
-  for (const m of filtered) {
-    if (isOpsOther(m)) {
-      if (!groupInserted) {
-        renderItems.push({ type: 'ops-group' });
-        groupInserted = true;
-      }
-    } else {
-      renderItems.push({ type: 'card', member: m });
-    }
-  }
-
   const COLS = 3;
-  const remainder = renderItems.length % COLS;
+  const remainder = filtered.length % COLS;
   const ghostCount = remainder === 0 ? 0 : COLS - remainder;
 
   return (
@@ -137,11 +100,7 @@ export default function TeamGrid({ members }) {
 
       {/* ── Grid ── */}
       <div className={styles.drTeamGrid}>
-        {renderItems.map((item, idx) =>
-          item.type === 'ops-group'
-            ? <OpsGroupCard key="ops-group" members={opsOthers} />
-            : <RegularCard key={item.member._id} m={item.member} />
-        )}
+        {filtered.map(m => <RegularCard key={m._id} m={m} />)}
         {Array.from({ length: ghostCount }).map((_, i) => (
           <div key={`ghost-${i}`} className={styles.drTeamGhostCard} aria-hidden="true" />
         ))}
