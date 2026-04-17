@@ -1483,7 +1483,7 @@ export async function getDataRoomDocuments() {
 export async function getPortalUserByEmail(email) {
   if (!email) return null;
   return liveClient.fetch(
-    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || investorDataRoomAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{
+    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{
       _id,
       email,
       name,
@@ -1593,7 +1593,8 @@ export async function getDataroomSectionVisibility() {
   return client.fetch(
     `*[_type == "dataroomSectionVisibility"][0]{
       pipeline, ppmAgreements, presentations, regulatoryDocuments,
-      team, trackRecord, fundPerformance, categorySplit, portfolio
+      team, trackRecord, fundPerformance, categorySplit, portfolio,
+      exitValueAsOfDate, hiddenFunds
     }`
   );
 }

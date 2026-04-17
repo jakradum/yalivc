@@ -111,7 +111,7 @@ export async function POST(request) {
       let user = null;
       if (!isTrustedDomain) {
         user = await client.fetch(
-          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && ((lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true)) || investorDataRoomAccess == true)][0]{ _id, name }`,
+          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id, name }`,
           { email: normalizedEmail }
         );
 
@@ -262,7 +262,7 @@ export async function POST(request) {
 
       const normalizedEmail = email.toLowerCase().trim();
       const user = await client.fetch(
-        `*[_type == "portalUser" && lower(email) == $email && noAccess != true && ((lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true)) || investorDataRoomAccess == true)][0]{
+        `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{
           _id, inviteCode, inviteCodeExpiry
         }`,
         { email: normalizedEmail }

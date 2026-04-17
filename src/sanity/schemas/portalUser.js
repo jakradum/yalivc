@@ -30,7 +30,7 @@ const portalUser = {
       title: 'Investor Data Room Access',
       type: 'boolean',
       initialValue: false,
-      description: 'Grants access to the Yali Investors Data Room. Enabling this automatically grants LP Portal access. For a select few LPs only.',
+      description: 'Grants access to the Yali Investors Data Room. Independent of LP Portal access — enable each separately.',
     },
     {
       name: 'noAccess',
@@ -93,14 +93,21 @@ const portalUser = {
       dataRoom: 'investorDataRoomAccess',
     },
     prepare({ title, subtitle, noAccess, lpPortal, dataRoom }) {
-      const flags = [
-        noAccess ? '🚫 No Access' : '',
-        lpPortal ? 'Portal' : '',
-        dataRoom ? 'Data Room' : '',
-      ].filter(Boolean).join(' · ');
+      let accessTag;
+      if (noAccess) {
+        accessTag = '🚫';
+      } else if (lpPortal && dataRoom) {
+        accessTag = 'Ⓛ Ⓓ';
+      } else if (lpPortal) {
+        accessTag = 'Ⓛ';
+      } else if (dataRoom) {
+        accessTag = 'Ⓓ';
+      } else {
+        accessTag = '❌';
+      }
       return {
-        title: title,
-        subtitle: `${subtitle || 'No name'} — ${flags || 'No access flags set'}`,
+        title: `${accessTag}  ${title}`,
+        subtitle: subtitle || 'No name',
       };
     },
   },

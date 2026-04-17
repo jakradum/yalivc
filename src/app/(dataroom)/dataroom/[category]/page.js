@@ -348,12 +348,15 @@ export default async function CategoryPage({ params }) {
 
   // ── Track Record ────────────────────────────────────────────────────────────
   if (slug === 'track-record') {
-    const [records, allDocs] = await Promise.all([
+    const [records, allDocs, trSettings] = await Promise.all([
       getDataRoomTrackRecords(),
       getDataRoomDocuments(),
+      getDataroomSectionVisibility(),
     ]);
     const trackRecords = records || [];
     const recDocs = (allDocs || []).filter((d) => d.category === 'recommendation');
+    const exitValueAsOfDate = trSettings?.exitValueAsOfDate || null;
+    const hiddenFunds = trSettings?.hiddenFunds || [];
 
     return (
       <div className={styles.page}>
@@ -375,7 +378,7 @@ export default async function CategoryPage({ params }) {
             </div>
             <div className={styles.trackPageContent}>
               <div className={styles.trackSection}>
-                <TrackRecordTable records={trackRecords} />
+                <TrackRecordTable records={trackRecords} exitValueAsOfDate={exitValueAsOfDate} hiddenFunds={hiddenFunds} />
               </div>
               {recDocs.length > 0 && (
                 <>

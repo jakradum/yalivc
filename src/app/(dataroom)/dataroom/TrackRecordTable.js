@@ -37,20 +37,25 @@ const investorOrder = (name) => {
   return 2;
 };
 
-export default function TrackRecordTable({ records }) {
+export default function TrackRecordTable({ records, exitValueAsOfDate, hiddenFunds }) {
   const [sortCol, setSortCol] = useState(null);
   const [sortDir, setSortDir] = useState('desc');
   const [filterInvestor, setFilterInvestor] = useState(null);
   const [filterStatus, setFilterStatus] = useState(null);
 
+  const visibleRecords = useMemo(() => {
+    if (!hiddenFunds || hiddenFunds.length === 0) return records;
+    return records.filter(r => !hiddenFunds.includes(r.investmentOrg));
+  }, [records, hiddenFunds]);
+
   const investors = useMemo(() => {
-    const names = [...new Set(records.map(r => r.investorName).filter(Boolean))];
+    const names = [...new Set(visibleRecords.map(r => r.investorName).filter(Boolean))];
     return names.sort((a, b) => investorOrder(a) - investorOrder(b));
-  }, [records]);
+  }, [visibleRecords]);
 
   const statuses = useMemo(() => {
-    return [...new Set(records.map(r => r.status).filter(Boolean))].sort();
-  }, [records]);
+    return [...new Set(visibleRecords.map(r => r.status).filter(Boolean))].sort();
+  }, [visibleRecords]);
 
   const handleSort = (col) => {
     if (sortCol === col) {
@@ -67,12 +72,12 @@ export default function TrackRecordTable({ records }) {
   };
 
   const filtered = useMemo(() => {
-    return records.filter(r => {
+    return visibleRecords.filter(r => {
       if (filterInvestor && r.investorName !== filterInvestor) return false;
       if (filterStatus && r.status !== filterStatus) return false;
       return true;
     });
-  }, [records, filterInvestor, filterStatus]);
+  }, [visibleRecords, filterInvestor, filterStatus]);
 
   const sorted = useMemo(() => {
     const base = [...filtered];
@@ -150,7 +155,10 @@ export default function TrackRecordTable({ records }) {
                 Status {sortIndicator('status')}
               </th>
               <th className={styles.trackTh}>Exit Year</th>
-              <th className={styles.trackTh}>Exit Value</th>
+              <th className={styles.trackTh}>
+                Exit Value
+                {exitValueAsOfDate && <span className={styles.trackThFineprint}>as on {exitValueAsOfDate}</span>}
+              </th>
               <th className={`${styles.trackTh} ${styles.trackThSortable}`} onClick={() => handleSort('irr')}>
                 IRR {sortIndicator('irr')}
               </th>
