@@ -137,11 +137,9 @@ export async function POST(request) {
     </p>
     <div class="section-label">What&#8217;s inside</div>
     <ul class="feature-list">
-      <li>Fund documents including the PPM and contribution agreements</li>
-      <li>Investment manager track record across prior and current investments</li>
-      <li>SEBI registration and regulatory filings</li>
-      <li>Team credentials and advisory board profiles</li>
-      <li>Investor presentations and fund overview materials</li>
+      <li>Fund I presentation and latest quarterly LP report</li>
+      <li>Investment team overview and profiles</li>
+      <li>Investment manager track record (prior to Yali)</li>
       <li>Recommendation letters and third-party references</li>
     </ul>
     <div class="cta-block">
