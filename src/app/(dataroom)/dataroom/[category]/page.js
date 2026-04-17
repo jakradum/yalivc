@@ -329,12 +329,9 @@ export default async function CategoryPage({ params }) {
 
   // ── Track Record ────────────────────────────────────────────────────────────
   if (slug === 'track-record') {
-    const [records, allDocs] = await Promise.all([
-      getDataRoomTrackRecords(),
-      getDataRoomDocuments(),
-    ]);
+    const records = await getDataRoomTrackRecords();
     const trackRecords = records || [];
-    const recDocs = (allDocs || []).filter((d) => d.category === 'recommendation');
+    const recDocs = sidebarRecDocs.filter((d) => d.fileUrl);
     const exitValueAsOfDate = fundContent?.exitValueAsOfDate || null;
     const hiddenFunds = fundContent?.hiddenFunds || [];
 
@@ -365,16 +362,12 @@ export default async function CategoryPage({ params }) {
                   <div className={styles.trackRecSeparator} />
                   <div className={styles.trackRecSection}>
                     <div className={styles.sectionLabel}>Recommendation</div>
-                    {recDocs.map((doc) => (
-                      <DocRowLink key={doc._id} href={doc.fileUrl || undefined} label={doc.title}>
+                    {recDocs.map((doc, i) => (
+                      <DocRowLink key={doc.title || i} href={doc.fileUrl} label={doc.title}>
                         <div className={styles.docIcon}><DocIcon /></div>
                         <div className={styles.docInfo}>
                           <div className={styles.docTitle}>{doc.title}</div>
-                          <div className={styles.docMeta}>
-                            <span>PDF</span>
-                            {doc.description && <span>{doc.description}</span>}
-                            {doc.publishedAt && <span>{formatDate(doc.publishedAt)}</span>}
-                          </div>
+                          <div className={styles.docMeta}><span>PDF</span></div>
                         </div>
                       </DocRowLink>
                     ))}
