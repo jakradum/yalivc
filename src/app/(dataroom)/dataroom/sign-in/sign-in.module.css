@@ -145,6 +145,15 @@
   margin: 0;
 }
 
+.refCode {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.2);
+  text-align: center;
+  margin: 4px 0 0;
+  user-select: all;
+}
+
 @media (max-width: 480px) {
   .form {
     padding: 1.5rem;

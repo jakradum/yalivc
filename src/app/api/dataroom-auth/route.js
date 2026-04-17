@@ -114,7 +114,7 @@ export async function POST(request) {
         // Generic response to prevent email enumeration
         if (!user) {
           await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
-          return NextResponse.json({ success: true });
+          return NextResponse.json({ success: true, ref: 'DR-01' });
         }
       }
 
@@ -199,7 +199,7 @@ export async function POST(request) {
 </html>`,
       });
 
-      const response = NextResponse.json({ success: true });
+      const response = NextResponse.json({ success: true, ref: 'DR-OK' });
       response.cookies.set(OTP_COOKIE, `${normalizedEmail}:${timestamp}:${otpSignature}`, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

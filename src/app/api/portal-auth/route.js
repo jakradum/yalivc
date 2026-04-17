@@ -120,7 +120,7 @@ export async function POST(request) {
         if (!user) {
           // Delay to prevent timing-based enumeration
           await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
-          return NextResponse.json({ success: true });
+          return NextResponse.json({ success: true, ref: 'LP-01' });
         }
       }
 
@@ -208,7 +208,7 @@ export async function POST(request) {
       });
 
       // Store OTP proof in a short-lived cookie (stateless verification)
-      const response = NextResponse.json({ success: true });
+      const response = NextResponse.json({ success: true, ref: 'LP-OK' });
       response.cookies.set(OTP_COOKIE, `${normalizedEmail}:${timestamp}:${otpSignature}`, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

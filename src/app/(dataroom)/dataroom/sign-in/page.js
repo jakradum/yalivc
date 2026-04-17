@@ -12,6 +12,7 @@ export default function DataroomSignInPage() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ref, setRef] = useState('');
 
   const handleSendCode = async (e) => {
     e.preventDefault();
@@ -28,6 +29,7 @@ export default function DataroomSignInPage() {
       const data = await res.json();
 
       if (res.ok) {
+        setRef(data.ref || '');
         setStep('code');
       } else {
         setError(data.error || 'Something went wrong');
@@ -122,6 +124,7 @@ export default function DataroomSignInPage() {
         ) : (
           <>
             <p className={styles.subtitle}>We sent a 6-digit code to <strong>{email}</strong></p>
+            {ref && <p className={styles.refCode}>{ref}</p>}
             <form className={styles.form} onSubmit={handleVerifyCode}>
               <div className={styles.fieldGroup}>
                 <label className={styles.label} htmlFor="code">Verification Code</label>
