@@ -285,9 +285,9 @@ a.drSidebarSubItem:hover {
 
 .drTh {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
   background: #830d35;
@@ -301,9 +301,9 @@ a.drSidebarSubItem:hover {
 
 .drGroupCell {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #830d35;
   background: rgba(131, 13, 53, 0.06);
@@ -324,7 +324,7 @@ a.drSidebarSubItem:hover {
 
 .drTd {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 11px;
   color: #363636;
   padding: 0.875rem 1rem;
   vertical-align: middle;

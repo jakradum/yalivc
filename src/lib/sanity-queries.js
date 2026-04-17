@@ -1391,7 +1391,7 @@ export async function getDataroomFundContent() {
         "slug": slug.current
       },
       "commonTrackRecordUrl": commonTrackRecord.asset->url,
-      commonRecommendationDocuments[]->{
+      commonRecommendationDocuments[]{
         title,
         "fileUrl": file.asset->url
       },

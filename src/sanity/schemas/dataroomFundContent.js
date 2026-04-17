@@ -44,9 +44,34 @@ export default {
     {
       name: 'commonRecommendationDocuments',
       title: 'Common — Recommendation Documents',
-      description: 'Reference existing Data Room documents from the Recommendation category',
+      description: 'Upload individual PDF documents to include in the Others section of the data room.',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'dataRoomDocument' }] }],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Document Title',
+              type: 'string',
+              validation: Rule => Rule.required(),
+            },
+            {
+              name: 'file',
+              title: 'PDF File',
+              type: 'file',
+              options: { accept: '.pdf' },
+              validation: Rule => Rule.required(),
+            },
+          ],
+          preview: {
+            select: { title: 'title' },
+            prepare({ title }) {
+              return { title: title || 'Untitled document' };
+            },
+          },
+        },
+      ],
     },
 
     // ── Track Record Settings ─────────────────────────────────────────────────
