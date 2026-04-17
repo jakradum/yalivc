@@ -9,7 +9,6 @@ import {
   getDataRoomAllFundSettings,
   getDataRoomPortfolioCompanies,
   getPortalUserByEmail,
-  getDataroomSectionVisibility,
   getDataroomFundContent,
   getLatestLPReportForDataRoom,
 } from '@/lib/sanity-queries';
@@ -34,16 +33,6 @@ const SLUG_TO_TITLE = {
   'portfolio': 'Portfolio',
 };
 
-const SLUG_TO_VISIBILITY_KEY = {
-  'pipeline': 'pipeline',
-  'ppm-agreements': 'ppmAgreements',
-  'presentations': 'presentations',
-  'regulatory-documents': 'regulatoryDocuments',
-  'team': 'team',
-  'track-record': 'trackRecord',
-  'fund-performance': 'fundPerformance',
-  'portfolio': 'portfolio',
-};
 
 const SLUG_TO_SIDEBAR_CATEGORY = {
   'track-record': 'others',
@@ -99,14 +88,6 @@ export default async function CategoryPage({ params }) {
 
   if (!SLUG_TO_TITLE[slug]) {
     notFound();
-  }
-
-  const visibilityKey = SLUG_TO_VISIBILITY_KEY[slug];
-  if (visibilityKey) {
-    const vis = await getDataroomSectionVisibility();
-    if (vis && vis[visibilityKey] === false) {
-      notFound();
-    }
   }
 
   const categoryTitle = SLUG_TO_TITLE[slug];
@@ -348,15 +329,14 @@ export default async function CategoryPage({ params }) {
 
   // ── Track Record ────────────────────────────────────────────────────────────
   if (slug === 'track-record') {
-    const [records, allDocs, trSettings] = await Promise.all([
+    const [records, allDocs] = await Promise.all([
       getDataRoomTrackRecords(),
       getDataRoomDocuments(),
-      getDataroomSectionVisibility(),
     ]);
     const trackRecords = records || [];
     const recDocs = (allDocs || []).filter((d) => d.category === 'recommendation');
-    const exitValueAsOfDate = trSettings?.exitValueAsOfDate || null;
-    const hiddenFunds = trSettings?.hiddenFunds || [];
+    const exitValueAsOfDate = fundContent?.exitValueAsOfDate || null;
+    const hiddenFunds = fundContent?.hiddenFunds || [];
 
     return (
       <div className={styles.page}>

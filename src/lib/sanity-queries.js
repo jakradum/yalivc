@@ -1394,7 +1394,9 @@ export async function getDataroomFundContent() {
       commonRecommendationDocuments[]->{
         title,
         "fileUrl": file.asset->url
-      }
+      },
+      exitValueAsOfDate,
+      hiddenFunds
     }`
   );
 }
@@ -1589,15 +1591,6 @@ export async function getDataRoomPortfolioCompanies() {
   );
 }
 
-export async function getDataroomSectionVisibility() {
-  return client.fetch(
-    `*[_type == "dataroomSectionVisibility"][0]{
-      pipeline, ppmAgreements, presentations, regulatoryDocuments,
-      team, trackRecord, fundPerformance, categorySplit, portfolio,
-      exitValueAsOfDate, hiddenFunds
-    }`
-  );
-}
 
 export async function getDataRoomAllFundSettings() {
   return client.fetch(

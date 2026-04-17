@@ -106,10 +106,6 @@ export default defineConfig({
                   .title('Data Room')
                   .items([
                     S.listItem()
-                      .title('Section Visibility')
-                      .child(S.document().schemaType('dataroomSectionVisibility').documentId('dataroomSectionVisibility')),
-                    S.divider(),
-                    S.listItem()
                       .title('Fund Content')
                       .id('dataroomFundContent')
                       .child(

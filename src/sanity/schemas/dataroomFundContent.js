@@ -48,6 +48,22 @@ export default {
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'dataRoomDocument' }] }],
     },
+
+    // ── Track Record Settings ─────────────────────────────────────────────────
+    {
+      name: 'exitValueAsOfDate',
+      title: 'Track Record — Exit Value "As of" Date',
+      type: 'string',
+      description: 'Shown as fine print under the Exit Value column header (e.g. "15 Jul \'24"). Leave blank to hide.',
+    },
+    {
+      name: 'hiddenFunds',
+      title: 'Track Record — Hide Records by Fund / Org',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+      description: 'Enter exact Fund / Org values whose records should be hidden (e.g. "Fund 2"). Case-sensitive.',
+    },
   ],
   preview: {
     prepare() {

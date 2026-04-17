@@ -29,7 +29,6 @@ import portalUser from './schemas/portalUser'
 import lpPortalFeedback from './schemas/lpPortalFeedback'
 // Data Room Schemas
 import dataRoomDocument from './schemas/dataRoomDocument'
-import dataroomSectionVisibility from './schemas/dataroomSectionVisibility'
 import dataroomFundContent from './schemas/dataroomFundContent'
 // Track Record
 import trackRecord from './schemas/trackRecord'
@@ -62,7 +61,6 @@ export const schemaTypes = [
   lpPortalFeedback,
   // Data Room
   dataRoomDocument,
-  dataroomSectionVisibility,
   dataroomFundContent,
   // Track Record
   trackRecord,
