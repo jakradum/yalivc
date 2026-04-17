@@ -143,23 +143,23 @@ export default function TrackRecordTable({ records, exitValueAsOfDate, hiddenFun
           </colgroup>
           <thead>
             <tr>
-              <th className={styles.trackTh}>Investor</th>
-              <th className={styles.trackTh}>Company</th>
-              <th className={styles.trackTh}>Fund / Org</th>
-              <th className={`${styles.trackTh} ${styles.trackThSortable}`} onClick={() => handleSort('year')}>
+              <th className={styles.trackTh} title="Investor">Investor</th>
+              <th className={styles.trackTh} title="Company">Company</th>
+              <th className={styles.trackTh} title="Fund / Org">Fund / Org</th>
+              <th className={`${styles.trackTh} ${styles.trackThSortable}`} title="Year" onClick={() => handleSort('year')}>
                 Year {sortIndicator('year')}
               </th>
-              <th className={styles.trackTh}>Sector</th>
-              <th className={styles.trackTh}>Amount Invested</th>
-              <th className={`${styles.trackTh} ${styles.trackThSortable}`} onClick={() => handleSort('status')}>
+              <th className={styles.trackTh} title="Sector">Sector</th>
+              <th className={styles.trackTh} title="Amount Invested">Amount Invested</th>
+              <th className={`${styles.trackTh} ${styles.trackThSortable}`} title="Status" onClick={() => handleSort('status')}>
                 Status {sortIndicator('status')}
               </th>
-              <th className={styles.trackTh}>Exit Year</th>
-              <th className={styles.trackTh}>
+              <th className={styles.trackTh} title="Exit Year">Exit Year</th>
+              <th className={styles.trackTh} title={exitValueAsOfDate ? `Exit Value — as on ${exitValueAsOfDate}` : 'Exit Value'}>
                 Exit Value
                 {exitValueAsOfDate && <span className={styles.trackThFineprint}>as on {exitValueAsOfDate}</span>}
               </th>
-              <th className={`${styles.trackTh} ${styles.trackThSortable}`} onClick={() => handleSort('irr')}>
+              <th className={`${styles.trackTh} ${styles.trackThSortable}`} title="IRR" onClick={() => handleSort('irr')}>
                 IRR {sortIndicator('irr')}
               </th>
             </tr>
