@@ -99,16 +99,16 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
               </div>
             </div>
 
-            <div className={styles.drSidebarItem}>
-              <a
-                href="/dataroom#fund-ii"
-                className={`${styles.drSidebarLink}${isActive('fund-ii') ? ` ${styles.drSidebarLinkActive}` : ''}`}
-                onClick={close}
-              >
-                Fund II
-              </a>
-              <div className={styles.drSidebarSubmenu}>
-                {fundContent?.fundIIThesisPresentationUrl ? (
+            {fundContent?.fundIIThesisPresentationUrl && (
+              <div className={styles.drSidebarItem}>
+                <a
+                  href="/dataroom#fund-ii"
+                  className={`${styles.drSidebarLink}${isActive('fund-ii') ? ` ${styles.drSidebarLinkActive}` : ''}`}
+                  onClick={close}
+                >
+                  Fund II
+                </a>
+                <div className={styles.drSidebarSubmenu}>
                   <a
                     href={fundContent.fundIIThesisPresentationUrl}
                     className={styles.drSidebarSubItem}
@@ -116,13 +116,9 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
                   >
                     Thesis presentation
                   </a>
-                ) : (
-                  <span className={`${styles.drSidebarSubItem} ${styles.drSidebarSubItemMuted}`}>
-                    Thesis presentation — coming soon
-                  </span>
-                )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className={styles.drSidebarItem}>
               <a
