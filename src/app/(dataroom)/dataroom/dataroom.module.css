@@ -71,7 +71,7 @@
 }
 
 .contextTag {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -92,7 +92,7 @@
 }
 
 .userEmail {
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(239, 239, 239, 0.3);
   letter-spacing: 0.04em;
   min-width: 0;
@@ -102,7 +102,7 @@
 }
 
 .signOut {
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(239, 239, 239, 0.5);
   cursor: pointer;
   letter-spacing: 0.04em;
@@ -128,7 +128,7 @@
 /* Sidebar variant — dark text on white background */
 .drSidebarFooter .signOut {
   color: rgba(54, 54, 54, 0.45);
-  font-size: 17px;
+  font-size: 12px;
   text-align: left;
   padding: 0;
 }
@@ -168,7 +168,7 @@
 .drSidebarLink {
   display: block;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 20px;
+  font-size: 14px;
   color: #363636;
   text-decoration: none;
   padding: 0.625rem 1.5rem;
@@ -197,7 +197,7 @@
 .drSidebarSubItem {
   display: block;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.5);
   padding: 4px 1.5rem 4px 2.25rem;
   line-height: 1.5;
@@ -230,7 +230,7 @@ a.drSidebarSubItem:hover {
 
 .drSidebarEmail {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.4);
   letter-spacing: 0.02em;
   overflow: hidden;
@@ -263,7 +263,7 @@ a.drSidebarSubItem:hover {
 
 .drMobileTitle {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 45px;
+  font-size: 33px;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: #830d35;
@@ -285,7 +285,7 @@ a.drSidebarSubItem:hover {
 
 .drTh {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -301,7 +301,7 @@ a.drSidebarSubItem:hover {
 
 .drGroupCell {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -324,7 +324,7 @@ a.drSidebarSubItem:hover {
 
 .drTd {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 20px;
+  font-size: 14px;
   color: #363636;
   padding: 0.875rem 1rem;
   vertical-align: middle;
@@ -340,7 +340,7 @@ a.drSidebarSubItem:hover {
 
 .drDocMeta {
   display: block;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.45);
   margin-top: 3px;
   letter-spacing: 0.03em;
@@ -348,7 +348,7 @@ a.drSidebarSubItem:hover {
 
 .drTypeTag {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   color: #888;
   background: #f0ede8;
   border: 0.5px solid #d0ccc4;
@@ -358,7 +358,7 @@ a.drSidebarSubItem:hover {
 
 .drAction {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 15px;
+  font-size: 11px;
   color: #830d35;
   text-decoration: none;
   letter-spacing: 0.04em;
@@ -427,7 +427,7 @@ a.drSidebarSubItem:hover {
 
 .pdfDrawerTitle {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 17px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: rgba(239, 239, 239, 0.8);
@@ -439,7 +439,7 @@ a.drSidebarSubItem:hover {
 
 .pdfDrawerClose {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
   color: rgba(239, 239, 239, 0.4);
@@ -471,7 +471,7 @@ a.drSidebarSubItem:hover {
   right: min(65vw, 960px);
   text-align: center;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 18px;
+  font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(239, 239, 239, 0.75);
@@ -487,7 +487,7 @@ a.drSidebarSubItem:hover {
 
 /* ── SECTION LABEL (inner pages) ── */
 .sectionLabel {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -505,7 +505,7 @@ a.drSidebarSubItem:hover {
 }
 
 .breadcrumbBack {
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.5);
   cursor: pointer;
   text-decoration: none;
@@ -521,12 +521,12 @@ a.drSidebarSubItem:hover {
 }
 
 .breadcrumbSep {
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.3);
 }
 
 .breadcrumbCurrent {
-  font-size: 17px;
+  font-size: 12px;
   color: #363636;
   letter-spacing: 0.04em;
 }
@@ -542,7 +542,7 @@ a.drSidebarSubItem:hover {
 
 .innerTitle {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #363636;
@@ -550,14 +550,14 @@ a.drSidebarSubItem:hover {
 
 .innerSub {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.45);
   margin-top: 6px;
 }
 
 .trackFinePrint {
   display: none;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.4);
   margin-top: 6px;
   font-style: italic;
@@ -570,7 +570,7 @@ a.drSidebarSubItem:hover {
 }
 
 .docCountBadge {
-  font-size: 14px;
+  font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(54, 54, 54, 0.4);
@@ -624,7 +624,7 @@ a.drSidebarSubItem:hover {
 
 .docTitle {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.03em;
   color: #363636;
@@ -635,7 +635,7 @@ a.drSidebarSubItem:hover {
 
 .docMeta {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.45);
   margin-top: 3px;
   display: flex;
@@ -649,7 +649,7 @@ a.drSidebarSubItem:hover {
 }
 
 .docTitleEmpty {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.03em;
   color: rgba(54, 54, 54, 0.35);
@@ -658,7 +658,7 @@ a.drSidebarSubItem:hover {
 .docOpen {
   flex-shrink: 0;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -710,7 +710,7 @@ a.drSidebarSubItem:hover {
 
 .teamName {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: #efefef;
@@ -719,7 +719,7 @@ a.drSidebarSubItem:hover {
 
 .teamRole {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(239, 239, 239, 0.35);
   padding: 0 16px 10px;
   line-height: 1.5;
@@ -727,7 +727,7 @@ a.drSidebarSubItem:hover {
 
 .teamLinkedIn {
   display: inline-block;
-  font-size: 14px;
+  font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(239, 239, 239, 0.25);
@@ -742,7 +742,7 @@ a.drSidebarSubItem:hover {
 
 .teamViewProfile {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -783,7 +783,7 @@ a.drSidebarSubItem:hover {
 }
 
 .trackInvestorHeading {
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -806,7 +806,7 @@ a.drSidebarSubItem:hover {
 .trackTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 17px;
+  font-size: 12px;
   table-layout: fixed;
 }
 
@@ -823,7 +823,7 @@ a.drSidebarSubItem:hover {
 .trackTable colgroup col:nth-child(10) { width: 54px; }  /* IRR */
 
 .trackTh {
-  font-size: 12px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -838,7 +838,7 @@ a.drSidebarSubItem:hover {
 
 .trackTd {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.65);
   padding: 8px 8px;
   border-bottom: 1px solid rgba(54, 54, 54, 0.07);
@@ -848,14 +848,14 @@ a.drSidebarSubItem:hover {
 
 .trackTd:first-child {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 17px;
+  font-size: 12px;
   font-weight: 600;
   color: #363636;
 }
 
 .trackStatus {
   display: inline-block;
-  font-size: 12px;
+  font-size: 9px;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -901,7 +901,7 @@ a.drSidebarSubItem:hover {
 }
 
 .perfTitle {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #363636;
@@ -923,7 +923,7 @@ a.drSidebarSubItem:hover {
 }
 
 .kpiLabel {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -932,7 +932,7 @@ a.drSidebarSubItem:hover {
 }
 
 .kpiValue {
-  font-size: 33px;
+  font-size: 24px;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: #efefef;
@@ -954,7 +954,7 @@ a.drSidebarSubItem:hover {
 
 .pieToggleBtn {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1015,19 +1015,19 @@ a.drSidebarSubItem:hover {
 }
 
 .pieLegendName {
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.8);
   min-width: 140px;
 }
 
 .pieLegendVal {
-  font-size: 17px;
+  font-size: 12px;
   font-weight: 600;
   color: #363636;
 }
 
 .pieLegendPct {
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.45);
 }
 
@@ -1076,7 +1076,7 @@ a.drSidebarSubItem:hover {
 }
 
 .portfolioName {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.03em;
   color: #363636;
@@ -1087,14 +1087,14 @@ a.drSidebarSubItem:hover {
 
 .portfolioSector {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.45);
   margin-top: 2px;
 }
 
 .portfolioOneLiner {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 17px;
+  font-size: 12px;
   color: rgba(54, 54, 54, 0.6);
   line-height: 1.5;
   margin-bottom: 14px;
@@ -1112,7 +1112,7 @@ a.drSidebarSubItem:hover {
 }
 
 .portfolioMetricLabel {
-  font-size: 12px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1121,7 +1121,7 @@ a.drSidebarSubItem:hover {
 }
 
 .portfolioMetricValue {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 600;
   color: #363636;
 }
@@ -1129,7 +1129,7 @@ a.drSidebarSubItem:hover {
 /* ── TEAM BIO ── */
 .teamBio {
   font-family: var(--font-inter), 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   color: rgba(54, 54, 54, 0.5);
   line-height: 1.6;
   padding: 0 16px 14px;
@@ -1152,12 +1152,12 @@ a.drSidebarSubItem:hover {
 .sortIndicator {
   margin-left: 4px;
   opacity: 0.5;
-  font-size: 15px;
+  font-size: 11px;
 }
 
 .trackThFineprint {
   display: block;
-  font-size: 9px;
+  font-size: 7px;
   letter-spacing: 0.08em;
   text-transform: none;
   font-weight: 400;
@@ -1181,7 +1181,7 @@ a.drSidebarSubItem:hover {
 }
 
 .filterLabel {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1191,7 +1191,7 @@ a.drSidebarSubItem:hover {
 
 .filterPill {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1230,7 +1230,7 @@ a.drSidebarSubItem:hover {
 }
 
 .fundInfoLabel {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1239,7 +1239,7 @@ a.drSidebarSubItem:hover {
 }
 
 .fundInfoValue {
-  font-size: 21px;
+  font-size: 15px;
   font-weight: 600;
   color: #363636;
 }
@@ -1435,7 +1435,7 @@ a.drSidebarSubItem:hover {
 
 .drTeamFilter {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1530,14 +1530,14 @@ a.drSidebarSubItem:hover {
 }
 
 .drTeamName {
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 700;
   color: #efefef;
   margin: 0 0 2px 0;
 }
 
 .drTeamRole {
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1578,7 +1578,7 @@ a.drSidebarSubItem:hover {
   gap: 0.5rem;
   z-index: 1;
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.66rem;
   font-weight: 300;
   text-transform: uppercase;
   text-decoration: none;
@@ -1626,7 +1626,7 @@ a.drSidebarSubItem:hover {
 }
 
 .drTeamOneLiner {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 700;
   color: #363636;
   line-height: 1.35;
@@ -1662,7 +1662,7 @@ a.drSidebarSubItem:hover {
 
 .drTeamOpsGroupTitle {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1685,7 +1685,7 @@ a.drSidebarSubItem:hover {
 }
 
 .drTeamOpsTileName {
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 700;
   color: #efefef;
   display: block;
@@ -1693,7 +1693,7 @@ a.drSidebarSubItem:hover {
 }
 
 .drTeamOpsTileRole {
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
