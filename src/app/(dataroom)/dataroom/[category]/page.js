@@ -28,7 +28,7 @@ const SLUG_TO_TITLE = {
   'recommendation': 'Recommendation',
   'regulatory-documents': 'Regulatory Documents',
   'team': 'Team',
-  'track-record': 'Track Record & Recommendation',
+  'track-record': 'Track Record',
   'fund-performance': 'Fund Performance',
   'portfolio': 'Portfolio',
 };
@@ -331,7 +331,6 @@ export default async function CategoryPage({ params }) {
   if (slug === 'track-record') {
     const records = await getDataRoomTrackRecords();
     const trackRecords = records || [];
-    const recDocs = sidebarRecDocs.filter((d) => d.fileUrl);
     const exitValueAsOfDate = fundContent?.exitValueAsOfDate || null;
     const hiddenFunds = fundContent?.hiddenFunds || [];
 
@@ -351,29 +350,12 @@ export default async function CategoryPage({ params }) {
                 <div className={styles.innerTitle}>{categoryTitle}</div>
                 <div className={styles.trackFinePrint}>Best viewed on larger devices</div>
               </div>
-              <div className={styles.docCountBadge}>{trackRecords.length + recDocs.length} items</div>
+              <div className={styles.docCountBadge}>{trackRecords.length} items</div>
             </div>
             <div className={styles.trackPageContent}>
               <div className={styles.trackSection}>
                 <TrackRecordTable records={trackRecords} exitValueAsOfDate={exitValueAsOfDate} hiddenFunds={hiddenFunds} />
               </div>
-              {recDocs.length > 0 && (
-                <>
-                  <div className={styles.trackRecSeparator} />
-                  <div className={styles.trackRecSection}>
-                    <div className={styles.sectionLabel}>Recommendation</div>
-                    {recDocs.map((doc, i) => (
-                      <DocRowLink key={doc.title || i} href={doc.fileUrl} label={doc.title}>
-                        <div className={styles.docIcon}><DocIcon /></div>
-                        <div className={styles.docInfo}>
-                          <div className={styles.docTitle}>{doc.title}</div>
-                          <div className={styles.docMeta}><span>PDF</span></div>
-                        </div>
-                      </DocRowLink>
-                    ))}
-                  </div>
-                </>
-              )}
             </div>
           </div>
         </div>
