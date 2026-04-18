@@ -6,6 +6,7 @@ import {
 import DataroomTopbar from './DataroomTopbar';
 import DrSidebar from './DrSidebar';
 import DrTableRow from './DrTableRow';
+import DrCollapsibleGroup from './DrCollapsibleGroup';
 import styles from './dataroom.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -140,12 +141,7 @@ export default async function DataroomPage() {
 
                 {/* ── Recommendations ── */}
                 {recDocsFiltered.length > 0 && (
-                  <>
-                    <tr id="recommendations" className={styles.drGroupRow}>
-                      <td colSpan={3} className={styles.drGroupCell}>
-                        ▾ RECOMMENDATIONS · {recDocsFiltered.length} document{recDocsFiltered.length !== 1 ? 's' : ''}
-                      </td>
-                    </tr>
+                  <DrCollapsibleGroup label={`RECOMMENDATIONS · ${recDocsFiltered.length} document${recDocsFiltered.length !== 1 ? 's' : ''}`}>
                     {recDocsFiltered.map((doc, i) => (
                       <DrTableRow
                         key={doc.title || i}
@@ -159,7 +155,7 @@ export default async function DataroomPage() {
                         </td>
                       </DrTableRow>
                     ))}
-                  </>
+                  </DrCollapsibleGroup>
                 )}
 
               </tbody>
