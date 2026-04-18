@@ -24,7 +24,8 @@ export default async function DataroomPage() {
 
   const fundICount = [fundContent?.fundISlideDeckUrl, latestLPReport?.pdfUrl].filter(Boolean).length;
   const fundIICount = fundContent?.fundIIThesisPresentationUrl ? 1 : 0;
-  const othersCount = 1 + recDocs.filter((d) => d.fileUrl).length;
+  const recDocsFiltered = recDocs.filter((d) => d.fileUrl);
+  const othersCount = 1;
 
   const lrLabel = latestLPReport?.quarter && latestLPReport?.fiscalYear
     ? `Latest quarterly report — ${latestLPReport.quarter} ${latestLPReport.fiscalYear}`
@@ -127,9 +128,7 @@ export default async function DataroomPage() {
 
                 {/* ── Others ── */}
                 <tr id="others" className={styles.drGroupRow}>
-                  <td colSpan={3} className={styles.drGroupCell}>
-                    ▾ OTHERS{othersCount > 0 ? ` · ${othersCount} document${othersCount !== 1 ? 's' : ''}` : ''}
-                  </td>
+                  <td colSpan={3} className={styles.drGroupCell}>▾ OTHERS · 1 document</td>
                 </tr>
                 <DrTableRow href="/dataroom/track-record">
                   <td className={styles.drTd}>Track record (prior to Yali)</td>
@@ -138,20 +137,29 @@ export default async function DataroomPage() {
                     <a href="/dataroom/track-record" className={styles.drAction}>View →</a>
                   </td>
                 </DrTableRow>
-                {recDocs.map((doc, i) =>
-                  doc.fileUrl ? (
-                    <DrTableRow
-                      key={doc.title || i}
-                      href={doc.fileUrl}
-                      label={doc.title}
-                    >
-                      <td className={styles.drTd}>{doc.title}</td>
-                      <td className={styles.drTd}><span className={styles.drTypeTag}>PDF</span></td>
-                      <td className={styles.drTdActions}>
-                        <a href={`${doc.fileUrl}?dl=${encodeURIComponent(doc.title || 'Document')}.pdf`} className={styles.drAction}>Download</a>
+
+                {/* ── Recommendations ── */}
+                {recDocsFiltered.length > 0 && (
+                  <>
+                    <tr id="recommendations" className={styles.drGroupRow}>
+                      <td colSpan={3} className={styles.drGroupCell}>
+                        ▾ RECOMMENDATIONS · {recDocsFiltered.length} document{recDocsFiltered.length !== 1 ? 's' : ''}
                       </td>
-                    </DrTableRow>
-                  ) : null
+                    </tr>
+                    {recDocsFiltered.map((doc, i) => (
+                      <DrTableRow
+                        key={doc.title || i}
+                        href={doc.fileUrl}
+                        label={doc.title}
+                      >
+                        <td className={styles.drTd}>{doc.title}</td>
+                        <td className={styles.drTd}><span className={styles.drTypeTag}>PDF</span></td>
+                        <td className={styles.drTdActions}>
+                          <a href={`${doc.fileUrl}?dl=${encodeURIComponent(doc.title || 'Document')}.pdf`} className={styles.drAction}>Download</a>
+                        </td>
+                      </DrTableRow>
+                    ))}
+                  </>
                 )}
 
               </tbody>

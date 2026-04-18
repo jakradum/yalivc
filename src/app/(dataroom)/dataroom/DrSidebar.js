@@ -31,7 +31,7 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
   useEffect(() => {
     const scrollRoot = document.getElementById('dr-main-scroll');
     if (!scrollRoot) return;
-    const ids = ['fund-i', 'fund-ii', 'others', 'team'];
+    const ids = ['fund-i', 'fund-ii', 'others', 'team', 'recommendations'];
     const elements = ids.map(id => document.getElementById(id)).filter(Boolean);
     if (!elements.length) return;
     const observer = new IntersectionObserver(
@@ -147,18 +147,32 @@ export default function DrSidebar({ activeCategory, fundContent, latestLPReport,
                 <a href="/dataroom/track-record" className={styles.drSidebarSubItem} onClick={close}>
                   Track record (prior to Yali)
                 </a>
-                {recDocs.filter((d) => d.fileUrl).map((doc, i) => (
-                  <a
-                    key={i}
-                    href={doc.fileUrl}
-                    className={styles.drSidebarSubItem}
-                    onClick={(e) => { openPdf(e, doc.fileUrl, doc.title); close(); }}
-                  >
-                    {doc.title}
-                  </a>
-                ))}
               </div>
             </div>
+
+            {recDocs.filter((d) => d.fileUrl).length > 0 && (
+              <div className={styles.drSidebarItem}>
+                <a
+                  href="/dataroom#recommendations"
+                  className={`${styles.drSidebarLink}${isActive('recommendations') ? ` ${styles.drSidebarLinkActive}` : ''}`}
+                  onClick={close}
+                >
+                  Recommendations
+                </a>
+                <div className={styles.drSidebarSubmenu}>
+                  {recDocs.filter((d) => d.fileUrl).map((doc, i) => (
+                    <a
+                      key={i}
+                      href={doc.fileUrl}
+                      className={styles.drSidebarSubItem}
+                      onClick={(e) => { openPdf(e, doc.fileUrl, doc.title); close(); }}
+                    >
+                      {doc.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
 
