@@ -1,305 +1,175 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-// import { useData } from '../data/fetch component';
 import styles from '../landing-page-styles/team.module.css';
-import { ExpandIcon } from './icons/small-icons/expandIcon';
-import { TeamsDefaultSVG } from './icons/background svgs/teams default display';
-import Button from './button';
-import { genericButtonText } from '../constants';
-import { Graphicfg } from './icons/background svgs/graphicfg';
-import imageLoader from '../../../image-loader';
+
+const DEPT_LABELS = {
+  investments: 'Investments',
+  advisory: 'Advisors',
+  operations: 'Operations',
+};
+
+function getInitials(name = '') {
+  return name.split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+}
+
+function groupByDept(members) {
+  const map = new Map();
+  const order = [];
+  for (const m of members) {
+    const d = m.department || 'other';
+    if (!map.has(d)) { map.set(d, []); order.push(d); }
+    map.get(d).push(m);
+  }
+  return order.map(d => ({ dept: d, members: map.get(d) }));
+}
+
+function MagRings() {
+  return (
+    <svg className={styles.tsMagRings} width="260" height="260" viewBox="0 0 260 260" fill="none">
+      <circle cx="160" cy="100" r="55"  stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 6" />
+      <circle cx="160" cy="100" r="95"  stroke="rgba(255,255,255,0.04)" strokeWidth="1" strokeDasharray="3 8" />
+      <circle cx="160" cy="100" r="135" stroke="rgba(255,255,255,0.025)" strokeWidth="1" strokeDasharray="3 10" />
+    </svg>
+  );
+}
+
+const DEPTS = [
+  { key: null,           label: 'All' },
+  { key: 'investments',  label: 'Investments' },
+  { key: 'advisory',     label: 'Advisors' },
+  { key: 'operations',   label: 'Operations' },
+];
 
 export const TeamsLPComponent = ({ teamMembers = [] }) => {
   const router = useRouter();
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [expandedRow, setExpandedRow] = useState(null);
-  const [tableHeight, setTableHeight] = useState(0);
-  const [cursorTooltip, setCursorTooltip] = useState({ visible: false, x: 0, y: 0 });
-  const [imageLoading, setImageLoading] = useState(false);
-  const containerRef = useRef(null);
+  const [modal, setModal] = useState(null);
+  const [switching, setSwitching] = useState(false);
+  const [activeDept, setActiveDept] = useState(null);
 
-  
-
-
-const finalTeam = teamMembers;
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 800);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    const tableWrapper = document.querySelector(`.${styles.teamTableWrapper}`);
-    if (tableWrapper) {
-      setTableHeight(tableWrapper.offsetHeight);
-    }
-  }, [finalTeam]);
-
-  const getImagePath = (index) => {
-    const member = finalTeam[index];
-    if (!member) return '/api/placeholder/400/400';
-    const imagePath = member.photo || '/api/placeholder/400/400';
-    if (imagePath.startsWith('http')) return imagePath;
-    return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-  };
-
-  const handleCellInteraction = (member, index) => {
-    if (isMobile) {
-      setExpandedRow(expandedRow === index ? null : index);
+  const openModal = useCallback((member) => {
+    if (modal?._id === member._id) return;
+    if (modal) {
+      setSwitching(true);
+      setTimeout(() => {
+        setModal(member);
+        setSwitching(false);
+      }, 180);
     } else {
-      // Set loading when switching to a different member with a photo
-      if (member !== selectedMember && member.photo) {
-        setImageLoading(true);
-      }
-      setSelectedMember(member);
-      setSelectedIndex(index);
+      setModal(member);
     }
-  };
+  }, [modal]);
 
-  const handleCellHoverLeave = () => {
-    if (!isMobile) {
-      setSelectedMember(null);
-      setSelectedIndex(null);
-      setCursorTooltip({ visible: false, x: 0, y: 0 });
-    }
-  };
+  const closeModal = useCallback(() => setModal(null), []);
 
-  const handleMouseMove = (e, hasProfilePage) => {
-    if (!isMobile && hasProfilePage) {
-      setCursorTooltip({
-        visible: true,
-        x: e.clientX + 15,
-        y: e.clientY + 15
-      });
-    }
-  };
+  useEffect(() => {
+    if (!modal) return;
+    const onKey = (e) => { if (e.key === 'Escape') closeModal(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [modal, closeModal]);
 
-  const renderMobileView = () =>
-    finalTeam.map((member, index) => {
-      const handleHeaderClick = () => {
-        // Toggle expand/collapse when clicking the header
-        handleCellInteraction(member, index);
-      };
+  if (!teamMembers.length) return null;
 
-      const handleExpandedClick = () => {
-        // Navigate to team member page when clicking expanded content (if enabled)
-        if (member.enableTeamPage) {
-          window.location.href = `/about-yali/${member.slug?.current || member.slug}`;
-        }
-      };
-
-      return (
-        <div key={index} className={styles.mobileTeamMemberWrapper}>
-          <div
-            className={`${styles.mobileTeamMember} ${expandedRow === index ? styles.expanded : ''}`}
-            onClick={handleHeaderClick}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className={styles.memberInfo}>
-              <p className={styles.name}>{member.name}</p>
-              <p className={styles.desig}>{member.role}</p>
-              <div className={styles.socialLinks}>
-                {member.linkedIn && (
-                  <a href={member.linkedIn} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                    <button className={styles.socialButton}>in</button>
-                  </a>
-                )}
-              </div>
-            </div>
-            <ExpandIcon isExpanded={expandedRow === index} />
-          </div>
-          <div
-            className={`${styles.mobileExpandedContent} ${expandedRow === index ? styles.expanded : ''}`}
-            onClick={handleExpandedClick}
-            style={{ cursor: member.enableTeamPage && expandedRow === index ? 'pointer' : 'default' }}
-          >
-            <div className={styles.expandedImageContainer}>
-              <TeamsDefaultSVG />
-              {member.photo ? (
-                <Image
-                  loader={!member.photo?.startsWith('http') ? imageLoader : undefined}
-                  src={getImagePath(index)}
-                  alt={member.name}
-                  width={220}
-                  height={220}
-                  className={styles.memberImage}
-                  style={{ objectFit: 'cover' }}
-                />
-              ) : (
-                <Graphicfg className={styles.memberImage} />
-              )}
-              {member.enableTeamPage && (
-                <p className={styles.viewProfileBadge}>
-                  <span className={styles.viewProfileIcon}>+</span> View profile
-                </p>
-              )}
-            </div>
-            <p className={styles.expandedOneLiner}>{member.oneLiner}</p>
-          </div>
-        </div>
-      );
-    });
-
-  const renderTableRows = () => {
-    const rows = [];
-    for (let i = 0; i < finalTeam.length; i += 2) {
-      const isLastRow = i >= finalTeam.length - 2;
-      rows.push(
-        <tr key={i} className={styles.tableRow}>
-          {renderCell(finalTeam[i], i)}
-          {i + 1 < finalTeam.length
-            ? renderCell(finalTeam[i + 1], i + 1)
-            : isLastRow &&
-              finalTeam.length % 2 !== 0 &&
-              finalTeam.length > 4
-              ? renderKnowMoreCell()
-              : null}
-        </tr>
-      );
-    }
-    return rows;
-  };
-
-  const renderCell = (member, index) => {
-    const cellContent = (
-      <div className={styles.memberInfo}>
-        <p className={styles.name}>{member.name}</p>
-        <p className={styles.desig}>{member.role}</p>
-        <div className={styles.socialLinks}>
-          {member.linkedIn && (
-            <a
-              href={member.linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button className={styles.socialButton}>in</button>
-            </a>
-          )}
-        </div>
-      </div>
-    );
-
-    if (member.enableTeamPage) {
-      return (
-        <td
-          key={index}
-          className={`${styles.teamMember} ${
-            selectedIndex === index ? styles.selectedMember : ''
-          }`}
-          onMouseEnter={() => handleCellInteraction(member, index)}
-          onMouseLeave={handleCellHoverLeave}
-          onMouseMove={(e) => handleMouseMove(e, true)}
-          onClick={() => router.push(`/about-yali/${member.slug?.current || member.slug}`)}
-          style={{ cursor: 'pointer' }}
-        >
-          {cellContent}
-        </td>
-      );
-    }
-
-    return (
-      <td
-        key={index}
-        className={`${styles.teamMember} ${
-          selectedIndex === index ? styles.selectedMember : ''
-        }`}
-        onMouseEnter={() => handleCellInteraction(member, index)}
-        onMouseLeave={handleCellHoverLeave}
-        style={{ cursor: 'default' }}
-      >
-        {cellContent}
-      </td>
-    );
-  };
-
-  const renderKnowMoreCell = () => (
-    <td className={`${styles.teamMember} ${styles.knowMoreCell}`}>
-      <Button href="/about-yali/#team">{genericButtonText}</Button>
-    </td>
-  );
+  const filtered = activeDept ? teamMembers.filter(m => m.department === activeDept) : teamMembers;
 
   return (
-    <div className={styles.teamsLpContainer} ref={containerRef}>
-      {/* Cursor tooltip */}
-      {cursorTooltip.visible && (
-        <div
-          className={styles.cursorTooltip}
-          style={{
-            position: 'fixed',
-            left: cursorTooltip.x,
-            top: cursorTooltip.y,
-            pointerEvents: 'none',
-            zIndex: 9999
-          }}
-        >
-          Click to see profile
+    <>
+      <div className={styles.tsSection}>
+        <div className={styles.tsFilterBar}>
+          {DEPTS.map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              className={`${styles.tsFilterBtn}${activeDept === key ? ` ${styles.tsFilterBtnActive}` : ''}`}
+              onClick={() => setActiveDept(key)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-      )}
-      <div className={styles.teamTableWrapper}>
-        {isMobile ? (
-          <div className={styles.mobileTeamList}>
-            {renderMobileView()}
-            {finalTeam.length > 0 && (
-              <div className={styles.mobileViewAllButtonWrapper}>
-                <Button href="/about-yali/#team">{genericButtonText}</Button>
-              </div>
-            )}
+        <div className={styles.tsThumbList}>
+          <div className={styles.tsThumbGrid}>
+            {filtered.map((m) => (
+              <button
+                key={m._id}
+                type="button"
+                className={`${styles.tsThumbCard}${modal?._id === m._id ? ` ${styles.tsThumbCardActive}` : ''}`}
+                onClick={() => openModal(m)}
+              >
+                <div className={styles.tsThumbPhoto}>
+                  {m.photo
+                    ? <Image src={m.photo} alt={m.name} fill className={styles.tsThumbImg} sizes="200px" />
+                    : <span className={styles.tsThumbFallback}>{getInitials(m.name)}</span>
+                  }
+                </div>
+                <div className={styles.tsThumbMeta}>
+                  <div className={styles.tsThumbName}>{m.name.split(' ')[0]}</div>
+                  <div className={styles.tsThumbRole}>{m.role}</div>
+                </div>
+              </button>
+            ))}
           </div>
-        ) : (
-          <>
-            <table className={styles.teamTable}>
-              <tbody>{renderTableRows()}</tbody>
-            </table>
-            {(finalTeam.length === 4 || (finalTeam.length > 4 && finalTeam.length % 2 === 0)) && (
-              <div className={styles.viewAllButtonWrapper}>
-                <Button href="/about-yali/#team">{genericButtonText}</Button>
-              </div>
-            )}
-          </>
-        )}
+        </div>
       </div>
-      {!isMobile && (
-        <div className={styles.teamDescription}>
-          {selectedMember ? (
-            <header className={styles.headerSec}>
-              <div className={styles.memberImageContainer}>
-                <TeamsDefaultSVG loading={imageLoading} />
-                {selectedMember.photo ? (
-                  <Image
-                    loader={imageLoader}
-                    src={getImagePath(finalTeam.indexOf(selectedMember))}
-                    alt={selectedMember.name}
-                    className={styles.memberImage}
-                    width={300}
-                    height={300}
-                    style={{ objectFit: 'cover', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
-                    onLoad={() => setImageLoading(false)}
-                  />
-                ) : (
-                  <Graphicfg className={styles.memberImage} />
-                )}
+
+      {/* ── MODAL ── */}
+      {modal && (
+        <div className={styles.tsModalOverlay} onClick={closeModal}>
+          <div
+            className={`${styles.tsModalPanel}${switching ? ` ${styles.tsMagPanelSwitching}` : ''}${modal?.enableTeamPage && modal?.slug ? ` ${styles.tsModalPanelClickable}` : ''}`}
+            onClick={() => {
+              if (modal?.enableTeamPage && modal?.slug) {
+                router.push(`/about-yali/${modal.slug?.current ?? modal.slug}`);
+              }
+            }}
+          >
+            <button type="button" className={styles.tsModalClose} onClick={(e) => { e.stopPropagation(); closeModal(); }}>×</button>
+            <span className={styles.tsMagWordmark}>Yali Capital</span>
+            <MagRings />
+
+            <div className={styles.tsMagPhotoArea}>
+              <div className={styles.tsMagBgName}>{modal.name?.toUpperCase()}</div>
+              <div className={styles.tsMagHeadshot}>
+                {modal.photo
+                  ? <Image src={modal.photo} alt={modal.name} fill className={styles.tsMagHeadshotImg} sizes="200px" />
+                  : <div className={styles.tsMagFallback}>{getInitials(modal.name)}</div>
+                }
               </div>
-              <h3 className={styles.selectedMemberName}>{selectedMember.name}</h3>
-              <p className={styles.selectedMemberDesignation}>{selectedMember.role}</p>
-              <p className={styles.selectedMemberOneLiner}>{selectedMember.oneLiner}</p>
-            </header>
-          ) : (
-            <div className={styles.defaultDisplay}>
-              <TeamsDefaultSVG className={styles.defaultSVG} />
-              <p className={styles.defaultText}>Hover over a team member to view details</p>
             </div>
-          )}
+
+            <div className={styles.tsMagInfo}>
+              <div className={styles.tsMagMemberName}>{modal.name}</div>
+              <div className={styles.tsMagMemberRole}>{modal.role}</div>
+              <div className={styles.tsMagRule} />
+              <div className={styles.tsMagBio}>{modal.oneLiner}</div>
+              {modal.linkedIn && (
+                <a
+                  href={modal.linkedIn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.tsMagLinkedIn}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  LinkedIn ↗
+                </a>
+              )}
+              {modal.enableTeamPage && modal.slug && (
+                <a
+                  href={`/about-yali/${modal.slug?.current ?? modal.slug}`}
+                  className={styles.tsMagViewProfile}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  View profile →
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

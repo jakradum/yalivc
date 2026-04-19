@@ -420,6 +420,7 @@
   .hero {
     grid-template-columns: 1fr;
     align-items: stretch;
+    min-height: unset;
   }
 
   .heroPhoto {
@@ -429,6 +430,7 @@
 
   .heroInfo {
     padding: 1.25rem;
+    justify-content: flex-start;
   }
 
   .heroName {

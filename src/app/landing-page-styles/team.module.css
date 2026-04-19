@@ -572,3 +572,618 @@
       text-align: center;
     }
   }
+
+/* ═══════════════════════════════════════════════════════════════
+   TWO-PANEL TEAM SECTION
+   ═══════════════════════════════════════════════════════════════ */
+
+.tsSection {
+  background: var(--color-background);
+}
+
+/* ── FILTER BAR ── */
+.tsFilterBar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #363636;
+}
+
+.tsFilterBtn {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #363636;
+  background: none;
+  border: none;
+  border-right: 1px solid #363636;
+  padding: 11px 20px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.tsFilterBtn:hover {
+  opacity: 0.85;
+  background: #f0ebe5;
+}
+.tsFilterBtnActive {
+  opacity: 1;
+  color: var(--color-burgundy);
+  background: #ede8e2;
+}
+
+/* ── LEFT: thumbnail list ── */
+.tsThumbList {
+  padding: 0;
+  overflow-y: auto;
+}
+
+.tsDeptGroup {
+  margin-bottom: 0;
+}
+.tsDeptGroup + .tsDeptGroup {
+  margin-top: 22px;
+}
+
+.tsDeptLabel {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-burgundy);
+  border-bottom: 1px solid #b0a8a8;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.tsThumbGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+/* ── THUMBNAIL CARD ── */
+.tsThumbCard {
+  cursor: pointer;
+  border-top: none;
+  border-left: none;
+  border-right: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+  background: #e4dfd9;
+  transition: background 0.15s ease;
+  position: relative;
+  text-align: left;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: tsFadeUp 0.35s ease forwards;
+}
+.tsThumbCard:hover {
+  background: #ddd8d2;
+}
+.tsThumbCard:nth-child(6n)     { border-right: none; }
+.tsThumbCard:nth-last-child(-n+6) { border-bottom: none; }
+.tsThumbCardActive {
+  background: #d8d2cc;
+  outline: 2px solid var(--color-burgundy);
+  outline-offset: -2px;
+}
+
+.tsThumbPhoto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #c8c2bc;
+  position: relative;
+  overflow: hidden;
+}
+
+.tsThumbImg {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.tsThumbFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 13px;
+  font-weight: 600;
+  color: #999;
+}
+
+.tsThumbMeta {
+  padding: 4px 6px 5px;
+  border-top: 1px solid #36363640;
+}
+
+.tsThumbName {
+  font-family: var(--font-inter) !important;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.tsThumbRole {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 7px;
+  color: var(--color-burgundy);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* stagger-in animation */
+@keyframes tsFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.tsThumbCard:nth-child(1)  { animation-delay: 0.04s; }
+.tsThumbCard:nth-child(2)  { animation-delay: 0.08s; }
+.tsThumbCard:nth-child(3)  { animation-delay: 0.12s; }
+.tsThumbCard:nth-child(4)  { animation-delay: 0.16s; }
+.tsThumbCard:nth-child(5)  { animation-delay: 0.20s; }
+.tsThumbCard:nth-child(6)  { animation-delay: 0.24s; }
+.tsThumbCard:nth-child(7)  { animation-delay: 0.28s; }
+.tsThumbCard:nth-child(8)  { animation-delay: 0.32s; }
+.tsThumbCard:nth-child(9)  { animation-delay: 0.36s; }
+.tsThumbCard:nth-child(10) { animation-delay: 0.40s; }
+
+/* ── MAGAZINE PANEL ── */
+.tsMagPanel {
+  background: var(--color-burgundy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--color-text);
+}
+
+/* dot-grid texture */
+.tsMagPanel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* corner geometry */
+.tsMagPanel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  border-left: 1px solid rgba(235,222,132,0.2);
+  border-bottom: 1px solid rgba(235,222,132,0.2);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tsMagRings {
+  position: absolute;
+  top: -40px;
+  right: -60px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.tsMagWordmark {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 7px;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.tsMagPhotoArea {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20px;
+  min-height: 260px;
+  z-index: 1;
+}
+
+.tsMagBgName {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  padding: 0 10px;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 52px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.08);
+  line-height: 0.88;
+  letter-spacing: -2px;
+  word-break: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.18s ease;
+}
+
+.tsMagHeadshot {
+  position: relative;
+  z-index: 2;
+  width: 200px;
+  height: 260px;
+}
+
+.tsMagHeadshotImg {
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.tsMagFallback {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 26px;
+  font-weight: 600;
+  color: rgba(235,222,132,0.55);
+  margin-bottom: 10px;
+  align-self: flex-end;
+}
+
+/* ── INFO BLOCK ── */
+.tsMagInfo {
+  position: relative;
+  z-index: 3;
+  background: rgba(0,0,0,0.30);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 18px 18px;
+  transition: opacity 0.18s ease;
+}
+
+.tsMagMemberName {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-background);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.tsMagMemberRole {
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 8.5px;
+  color: var(--color-highlight-yellow);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.tsMagRule {
+  width: 28px;
+  height: 1px;
+  background: rgba(255,255,255,0.22);
+  margin-bottom: 10px;
+}
+
+.tsMagBio {
+  font-family: var(--font-inter) !important;
+  font-size: 11px;
+  color: rgba(239,239,239,0.62);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.tsMagLinkedIn {
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.28);
+  padding: 3px 9px;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 8px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.tsMagLinkedIn:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.8);
+}
+
+.tsMagViewProfile {
+  display: inline-block;
+  margin-top: 8px;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 3px 9px;
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 8px;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.tsMagViewProfile:hover {
+  border-color: rgba(255,255,255,0.9);
+  color: #fff;
+}
+
+/* switching fade */
+.tsMagPanelSwitching .tsMagBgName,
+.tsMagPanelSwitching .tsMagInfo {
+  opacity: 0;
+}
+
+/* ── MODAL ── */
+.tsModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tsModalPanel {
+  background: var(--color-burgundy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  width: 912px;
+  height: 552px;
+  max-width: 95vw;
+  max-height: 90vh;
+}
+
+.tsModalPanelClickable {
+  cursor: pointer;
+}
+
+/* ── photo column (left) ── */
+.tsModalPanel .tsMagPhotoArea {
+  width: 562px;
+  flex: none;
+  min-height: unset;
+  height: 100%;
+  padding-bottom: 0;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ghost name: sits at top so large letters overlap the head */
+.tsModalPanel .tsMagBgName {
+  bottom: auto;
+  top: 29px;
+  font-size: 130px;
+}
+
+/* headshot fills the entire photo column */
+.tsModalPanel .tsMagHeadshot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── info column (right) ── */
+.tsModalPanel .tsMagInfo {
+  flex: 1;
+  border-top: none;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 34px 29px;
+  overflow-y: auto;
+}
+
+/* scaled text inside modal info block */
+.tsModalPanel .tsMagMemberName {
+  font-size: 13px;
+  color: #efefef;
+}
+.tsModalPanel .tsMagMemberRole {
+  font-size: 10px;
+  color: #ebde84;
+}
+.tsModalPanel .tsMagRule {
+  width: 34px;
+  background: rgba(255,255,255,0.22);
+  opacity: 1;
+}
+.tsModalPanel .tsMagBio {
+  font-size: 13px;
+  color: rgba(239,239,239,0.75);
+}
+.tsModalPanel .tsMagLinkedIn {
+  font-size: 10px;
+  padding: 4px 11px;
+}
+.tsModalPanel .tsMagViewProfile {
+  font-size: 10px;
+  padding: 4px 11px;
+}
+
+/* scaled close button */
+.tsModalPanel .tsModalClose {
+  width: 31px;
+  height: 31px;
+  font-size: 14px;
+  top: 14px;
+  right: 14px;
+}
+
+/* dot-grid texture — photo column only */
+.tsModalPanel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 562px;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.tsModalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.55);
+  font-family: var(--font-jetbrains-mono) !important;
+  font-size: 12px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+.tsModalClose:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.9);
+}
+
+/* ── INTERMEDIATE ── */
+@media (max-width: 1200px) and (min-width: 950px) {
+  .tsThumbGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .tsThumbCard:nth-child(6n)        { border-right: 1px solid #363636; }
+  .tsThumbCard:nth-last-child(-n+6) { border-bottom: 1px solid #363636; }
+  .tsThumbCard:nth-child(5n)        { border-right: none; }
+  .tsThumbCard:nth-last-child(-n+5) { border-bottom: none; }
+}
+
+/* ── MOBILE (matches nav breakpoint at 950px) ── */
+@media (max-width: 949px) {
+  .tsFilterBar {
+    border-top: 1px solid #363636;
+  }
+  .tsThumbGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .tsThumbCard:nth-child(6n)        { border-right: 1px solid #363636; }
+  .tsThumbCard:nth-last-child(-n+6) { border-bottom: 1px solid #363636; }
+  .tsThumbCard:nth-child(5n)        { border-right: 1px solid #363636; }
+  .tsThumbCard:nth-last-child(-n+5) { border-bottom: 1px solid #363636; }
+  .tsThumbCard:nth-child(4n)        { border-right: 1px solid #363636; }
+  .tsThumbCard:nth-last-child(-n+4) { border-bottom: 1px solid #363636; }
+  .tsThumbCard:nth-child(2n)        { border-right: none; }
+  .tsThumbCard:nth-last-child(-n+2) { border-bottom: none; }
+
+  /* ── mobile modal ── */
+  .tsModalPanel {
+    flex-direction: column;
+    width: 90vw;
+    height: auto;
+    max-height: 90vh;
+    background: var(--color-burgundy);
+  }
+  .tsModalPanel .tsMagPhotoArea {
+    width: 100%;
+    height: 52vw;
+    min-height: unset;
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 0;
+  }
+  .tsModalPanel .tsMagHeadshot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .tsModalPanel .tsMagBgName {
+    font-size: 48px;
+    top: 12px;
+    bottom: auto;
+  }
+  .tsModalPanel .tsMagInfo {
+    flex: 1;
+    justify-content: flex-start;
+    border-left: none;
+    border-top: none;
+    background: rgba(0,0,0,0.25);
+    padding: 20px 20px 24px;
+  }
+}
+
+@media (max-width: 450px) {
+  .tsFilterBar {
+    flex-wrap: wrap;
+  }
+  .tsFilterBtn {
+    flex: 0 0 50%;
+    box-sizing: border-box;
+  }
+  /* DOM: All(1) Investments(2) Advisors(3) Operations(4)
+     Display: All | Adv / Inv | Ops */
+  .tsFilterBtn:nth-child(1) { order: 1; } /* All — row 1 left */
+  .tsFilterBtn:nth-child(3) { order: 2; } /* Advisors — row 1 right */
+  .tsFilterBtn:nth-child(2) { order: 3; } /* Investments — row 2 left */
+  .tsFilterBtn:nth-child(4) { order: 4; } /* Operations — row 2 right */
+
+  /* Row 1 (All + Advisors) gets bottom border */
+  .tsFilterBtn:nth-child(1),
+  .tsFilterBtn:nth-child(3) {
+    border-bottom: 1px solid #363636;
+  }
+  /* Right column (Advisors + Operations) — no right border */
+  .tsFilterBtn:nth-child(3),
+  .tsFilterBtn:nth-child(4) {
+    border-right: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tsThumbGrid {
+    grid-template-columns: 1fr;
+  }
+  .tsThumbCard:nth-child(2n)        { border-right: 1px solid #363636; }
+  .tsThumbCard:nth-last-child(-n+2) { border-bottom: 1px solid #363636; }
+  .tsThumbCard                      { border-right: none; }
+  .tsThumbCard:last-child           { border-bottom: none; }
+}
