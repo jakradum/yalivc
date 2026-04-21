@@ -32,6 +32,8 @@ import dataRoomDocument from './schemas/dataRoomDocument'
 import dataroomFundContent from './schemas/dataroomFundContent'
 // Track Record
 import trackRecord from './schemas/trackRecord'
+// Investor Relations
+import investorRelations from './schemas/investorRelations'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -64,4 +66,6 @@ export const schemaTypes = [
   dataroomFundContent,
   // Track Record
   trackRecord,
+  // Investor Relations
+  investorRelations,
 ]

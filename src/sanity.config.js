@@ -121,6 +121,15 @@ export default defineConfig({
             S.listItem()
               .title('Track Record')
               .child(S.documentTypeList('trackRecord').title('Track Record')),
+            S.divider(),
+            // Investor Relations
+            S.listItem()
+              .title('Investor Relations')
+              .child(
+                S.document()
+                  .schemaType('investorRelations')
+                  .documentId('investorRelations')
+              ),
           ]),
     }),
     visionTool(),
