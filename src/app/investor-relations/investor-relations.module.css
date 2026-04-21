@@ -1,0 +1,3 @@
+.noBottomBorder::after {
+  display: none;
+}
