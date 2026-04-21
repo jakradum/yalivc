@@ -1,3 +1,4 @@
+import styles from '../about-yali/about-styles.module.css';
 
 export const metadata = {
   title: 'Investor Relations | Yali Capital - SEBI Registered AIF',
