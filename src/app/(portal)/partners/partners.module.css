@@ -690,6 +690,23 @@
   padding: 2rem 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+.sidebarLogout {
+  margin-top: auto;
+  display: block;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  color: #aaa;
+  text-decoration: none;
+  border-top: 1px solid #e8e8e8;
+  transition: color 0.2s ease;
+  letter-spacing: 0.04em;
+}
+.sidebarLogout:hover {
+  color: #830D35;
 }
 
 .sidebarHeader {

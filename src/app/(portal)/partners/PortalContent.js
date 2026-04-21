@@ -494,6 +494,9 @@ function PortalContentInner({
                 </li>
               ))}
             </ul>
+            <a href="/api/portal-logout" className={styles.sidebarLogout}>
+              Sign out
+            </a>
           </nav>
         </aside>
 
