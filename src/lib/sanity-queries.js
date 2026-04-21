@@ -1448,6 +1448,17 @@ export async function getNewsByDateRange(startDate, endDate) {
   );
 }
 
+export async function getInvestorRelationsDocs() {
+  return client.fetch(
+    `*[_type == "investorRelations"][0]{
+      documents[]{
+        title,
+        "fileUrl": file.asset->url
+      }
+    }`
+  );
+}
+
 // Get social updates within a date range (for quarterly media coverage)
 export async function getSocialUpdatesByDateRange(startDate, endDate) {
   return liveClient.fetch(
