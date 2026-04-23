@@ -4,7 +4,32 @@
  * Design matches pdf_report_reference.html exactly.
  */
 
+import fs from 'fs';
+import path from 'path';
 import { isQuarterBefore } from '@/lib/quarterly-utils';
+
+function loadFontBase64(filename) {
+  try {
+    const fontPath = path.join(process.cwd(), 'public', 'fonts', filename);
+    return fs.readFileSync(fontPath).toString('base64');
+  } catch {
+    return null;
+  }
+}
+
+function buildFontFaceCSS() {
+  const fonts = [
+    { file: 'Inter-400.ttf', family: 'Inter', weight: 400 },
+    { file: 'Inter-700.ttf', family: 'Inter', weight: 700 },
+    { file: 'JetBrainsMono-400.ttf', family: 'JetBrains Mono', weight: 400 },
+    { file: 'JetBrainsMono-700.ttf', family: 'JetBrains Mono', weight: 700 },
+  ];
+  return fonts.map(({ file, family, weight }) => {
+    const b64 = loadFontBase64(file);
+    if (!b64) return '';
+    return `@font-face { font-family: '${family}'; font-weight: ${weight}; font-style: normal; src: url('data:font/truetype;base64,${b64}') format('truetype'); }`;
+  }).join('\n');
+}
 
 // ── Utility helpers ────────────────────────────────────────────
 
@@ -1099,10 +1124,7 @@ export function generatePdfHtml({
 <head>
   <meta charset="UTF-8">
   <title>${esc(reportTitle)}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>${CSS}</style>
+  <style>${buildFontFaceCSS()}\n${CSS}</style>
 </head>
 <body>
 ${coverHtml}

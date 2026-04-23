@@ -177,7 +177,7 @@ export async function handlePdfGet(slug) {
     }
 
     const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: 'networkidle0', timeout: 30000 });
+    await page.setContent(htmlContent, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
