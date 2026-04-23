@@ -4,18 +4,16 @@ import { useEffect, useState, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Lottie from 'lottie-react';
 import animationData from '@/yali-loader.json';
-import styles from './partners.module.css';
 
 const MIN_DISPLAY_MS = 600;
 
-export default function NavigationLoader() {
+export default function DataroomNavigationLoader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
   const shownAtRef = useRef(null);
   const hideTimerRef = useRef(null);
 
-  // Navigation complete — hide after minimum display time
   useEffect(() => {
     if (!visible) return;
     const elapsed = Date.now() - (shownAtRef.current || Date.now());
@@ -47,7 +45,16 @@ export default function NavigationLoader() {
   if (!visible) return null;
 
   return (
-    <div className={styles.loadingOverlay}>
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'rgba(239, 239, 239, 0.85)',
+      backdropFilter: 'blur(2px)',
+    }}>
       <Lottie animationData={animationData} loop style={{ width: 120, height: 120 }} />
     </div>
   );

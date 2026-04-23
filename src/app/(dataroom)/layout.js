@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { JetBrains_Mono } from 'next/font/google';
 import './dataroom-globals.css';
 import Footer from '@/app/components/footer';
 import PdfViewer from './dataroom/PdfViewer';
+import DataroomNavigationLoader from './NavigationLoader';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -22,6 +24,9 @@ export default function DataroomLayout({ children }) {
         <Footer />
       </div>
       <PdfViewer />
+      <Suspense>
+        <DataroomNavigationLoader />
+      </Suspense>
     </div>
   );
 }
