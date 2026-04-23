@@ -426,7 +426,7 @@
   font-size: 0.8125rem;
   color: #1a1a1a;
   padding: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .dataTable tr:last-child td {
@@ -543,7 +543,7 @@
   align-items: flex-start;
   gap: 0.625rem;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .highlightItem:last-child {
@@ -586,7 +586,7 @@
   flex-direction: column;
   gap: 0.125rem;
   padding: 0.625rem 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
   text-decoration: none;
 }
 
@@ -691,14 +691,13 @@
 }
 
 .sidebarLogout {
-  margin-top: auto;
   display: block;
   padding: 0.625rem 1.5rem;
   font-family: var(--font-jetbrains-mono);
   font-size: 0.75rem;
   color: #aaa;
   text-decoration: none;
-  border-top: 1px solid #e8e8e8;
+  border-top: 1px solid #363636;
   transition: color 0.2s ease;
   letter-spacing: 0.04em;
 }
@@ -708,7 +707,7 @@
 
 .sidebarHeader {
   padding: 0 1.5rem 1rem 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
   margin-bottom: 1rem;
 }
 
@@ -996,7 +995,7 @@
   justify-content: space-between;
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .sectionNavBtn {
@@ -1346,7 +1345,7 @@
   gap: 3rem;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .chartDateItem {
@@ -1513,7 +1512,7 @@
   display: flex;
   gap: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .kpiCard {
@@ -1562,7 +1561,7 @@
 }
 
 .fundTable tbody tr {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .fundTable tbody tr:last-child {
@@ -1586,7 +1585,7 @@
 .fundOverview {
   margin-bottom: 2.5rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .fundName {
@@ -1619,7 +1618,7 @@
 
 .metricCard {
   background-color: #f8f8f8;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -1727,7 +1726,7 @@
 }
 
 .portfolioTable tbody tr {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .portfolioTable tbody tr:nth-child(even) {
@@ -1789,7 +1788,7 @@
 /* Follow-on Rounds Header Row */
 .followOnHeaderRow {
   background-color: #f5f5f5 !important;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .followOnHeaderRow:hover {
@@ -1845,7 +1844,7 @@
 /* Investment Total Row */
 .investmentTotalRow {
   background-color: #f0f0f0 !important;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #363636;
 }
 
 .investmentTotalRow:hover {
@@ -2205,7 +2204,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .modalDetailRow:last-child {
@@ -2299,7 +2298,7 @@
 .investmentPieSection {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .investmentPieTitle {
@@ -2352,7 +2351,7 @@
 .investmentPieLegendItem:hover,
 .investmentPieLegendItemActive {
   background-color: #f5f5f5;
-  border-color: #e0e0e0;
+  border-color: #363636;
 }
 
 .investmentPieLegendColor {
@@ -2415,7 +2414,7 @@
 .companyTilesSection {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .companyTilesTitle {
@@ -2470,7 +2469,7 @@
   height: 48px;
   object-fit: contain;
   background-color: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   padding: 4px;
   flex-shrink: 0;
 }
@@ -2533,7 +2532,7 @@
   display: flex;
   gap: 1.5rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .companyTile:hover .companyTileMetrics {
@@ -2655,7 +2654,7 @@
 }
 
 .investmentDetailsTable tr {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .investmentDetailsTable tr:last-child {
@@ -2704,7 +2703,7 @@
 .companyAboutSection {
   margin-bottom: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .companyAboutTitle {
@@ -2727,7 +2726,7 @@
 .roundMetricsSection {
   margin-bottom: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .tableFootnoteContainer {
@@ -2759,7 +2758,7 @@
 .customFootnotes {
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px dashed #e0e0e0;
+  border-top: 1px dashed #363636;
 }
 
 /* Multi-Round Investment Table */
@@ -2790,7 +2789,7 @@
 
 .roundsTable tbody td {
   padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
   vertical-align: top;
 }
 
@@ -2816,7 +2815,7 @@
 .quarterlyUpdatesSection {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .quarterlyUpdatesTitle {
@@ -2829,14 +2828,14 @@
 
 .currentQuarterUpdate {
   background-color: #f8f8f8;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .noQuarterUpdate {
   background-color: #f8f8f8;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   padding: 2rem 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -2869,7 +2868,7 @@
   gap: 2rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
 }
 
 .quarterUpdateMetric {
@@ -3001,7 +3000,7 @@
 
 .previousQuarterItem {
   background-color: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   padding: 1rem 1.25rem;
 }
 
@@ -3116,7 +3115,7 @@
     z-index: 10;
     padding: 0.75rem 1.5rem;
     margin: 0 -1.5rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #363636;
   }
 }
 
@@ -3157,7 +3156,7 @@
 .loadingSpinner {
   width: 36px;
   height: 36px;
-  border: 3px solid #e0e0e0;
+  border: 3px solid #363636;
   border-top-color: #830D35;
   border-radius: 50%;
   animation: portalSpin 0.7s linear infinite;
@@ -3225,7 +3224,7 @@
 
 .downloadTable td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #363636;
   color: #363636;
 }
 
@@ -3322,7 +3321,7 @@
 }
 
 .contactInfoDivider {
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 /* ===== SIDEBAR OVERLAY (mobile) ===== */
@@ -3363,7 +3362,7 @@
   gap: 1rem;
   padding: 1.25rem;
   background: #f8f8f8;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -3574,7 +3573,7 @@
 .tourReplaySection {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .tourReplayLink {
@@ -3686,7 +3685,7 @@
 .feedbackSection {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
 }
 
 .feedbackTitle {
@@ -3717,7 +3716,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   background: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   color: #363636;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -3770,7 +3769,7 @@
   font-family: var(--font-inter);
   font-size: 0.875rem;
   line-height: 1.5;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #363636;
   resize: vertical;
   margin-bottom: 1rem;
   box-sizing: border-box;
