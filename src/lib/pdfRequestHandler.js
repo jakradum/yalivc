@@ -80,7 +80,8 @@ export async function handlePdfGet(slug) {
   if (!email) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  if (!email.endsWith('@yali.vc')) {
+  const isInternalUser = email.endsWith('@yali.vc') || email.endsWith('@florintree.com') || email === 'pranavkarnad@gmail.com';
+  if (!isInternalUser) {
     return new NextResponse('Forbidden — internal access only', { status: 403 });
   }
   if (!slug || typeof slug !== 'string') {
