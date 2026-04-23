@@ -173,6 +173,19 @@
   gap: 1rem;
 }
 
+.internalPreviewBadge {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+  background: #ebde84;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
 .quarterLabel {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.875rem;

@@ -392,6 +392,9 @@ function PortalContentInner({
           </Link>
         </div>
         <div className={styles.headerRight}>
+          {report?.visibility === 'internal' && (
+            <span className={styles.internalPreviewBadge}>internal preview</span>
+          )}
           <div
             className={styles.fyDropdown}
             ref={dropdownRef}
