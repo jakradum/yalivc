@@ -617,9 +617,6 @@
 .footerWrapper {
   position: relative;
   z-index: 45; /* Higher than sidebar (40) to cover it when scrolling */
-  border-top: 1px solid #363636;
-  margin-top: 1rem;
-  padding-top: 1rem;
 }
 
 /* Footer */
