@@ -12,6 +12,7 @@ import {
   getLPInvestmentsForPdf,
   getTeamMembers,
   getNewsForQuarter,
+  getSocialUpdatesByDateRange,
 } from '@/lib/sanity-queries';
 import { buildReportData } from '@/lib/quarterly-utils';
 import { generatePdfHtml } from '@/lib/generateQuarterlyPdf';
@@ -147,7 +148,19 @@ export async function handlePdfGet(slug) {
     socialUpdates: [],
   });
 
-  const { fundMetrics, portfolioCompanies } = reportData;
+  const { fundMetrics, portfolioCompanies, quarterStartDate, quarterEndDate } = reportData;
+
+  // Fetch social updates for the quarter, then pre-fetch their images
+  let quarterSocialUpdates = [];
+  if (quarterStartDate && quarterEndDate) {
+    try {
+      quarterSocialUpdates = await getSocialUpdatesByDateRange(quarterStartDate, quarterEndDate) || [];
+    } catch { quarterSocialUpdates = []; }
+  }
+  const socialImageFetches = quarterSocialUpdates
+    .filter(u => u.imageUrl)
+    .map(u => fetchAsDataUri(u.imageUrl).then(uri => { if (uri) u.imageUrl = uri; }));
+  await Promise.all(socialImageFetches);
 
   const asOf = report.reportingDate
     ? fmtMonthYear(report.reportingDate)
@@ -177,6 +190,7 @@ export async function handlePdfGet(slug) {
     fundMetrics,
     portfolioCompanies,
     report: { ...report, signatory },
+    quarterSocialUpdates,
     coverSvgHtml,
     portfolioUpdatesSvgHtml,
     fundFinancialsSvgHtml,

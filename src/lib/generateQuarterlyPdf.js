@@ -244,6 +244,8 @@ body {
   font-size: 11px;
   color: #363636;
   line-height: 1;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 .page-number span { align-self: center; }
 .page-number .pn-tl { align-self: flex-start; }
@@ -261,21 +263,55 @@ body {
   color: #888;
 }
 
-/* ── Company A+B flowing section (no fixed height — content determines size) ── */
-.company-ab-section {
+/* ── Company A+B flowing section — table layout so <thead> repeats on every printed page ── */
+.company-ab-table {
+  width: 794px;
+  border-collapse: collapse;
   background: #eeeceb;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
   page-break-after: always;
   break-after: page;
-  position: relative;
+}
+.company-ab-table thead tr td {
+  background: #eeeceb;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.company-ab-table tbody tr td {
+  background: #eeeceb;
+  vertical-align: top;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Media page — same table pattern so header repeats if social cards overflow ── */
+.media-page-table {
+  width: 794px;
+  border-collapse: collapse;
+  background: #eeeceb;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  page-break-after: always;
+  break-after: page;
+}
+.media-page-table thead tr td,
+.media-page-table tbody tr td {
+  background: #eeeceb;
+  padding: 0;
+  vertical-align: top;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 /* ── TOC anchor links ── */
 .toc-row a, .toc-subrow a { color: inherit; text-decoration: none; }
 
 /* ── Tables ── */
-.report-table { width: 100%; border-collapse: collapse; font-size: 12px; page-break-inside: avoid; break-inside: avoid; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+/* Only prevent table splits inside the flowing company A+B section */
+.company-ab-table .report-table { page-break-inside: avoid; break-inside: avoid; }
 .report-table th {
   font-weight: 700;
   font-size: 11px;
@@ -503,6 +539,49 @@ body {
 .media-card-source { font-size: 12px; font-weight: 700; color: #555; }
 
 /*=================================================================
+  SOCIAL UPDATE CARDS
+=================================================================*/
+.social-updates-heading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #363636; margin: 28px 0 14px;
+}
+.social-card {
+  display: flex; gap: 0;
+  border: 1px solid #c0bfbf;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.social-card-image {
+  width: 130px; flex-shrink: 0;
+  object-fit: cover; display: block;
+}
+.social-card-image-placeholder {
+  width: 130px; flex-shrink: 0;
+  background: #d4d0cc;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #888; font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.social-card-content {
+  padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 6px;
+}
+.social-card-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: #830d35; text-transform: uppercase; letter-spacing: 0.14em;
+}
+.social-card-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; color: #363636; line-height: 1.55;
+}
+.social-card-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #888; margin-top: auto;
+}
+
+/*=================================================================
   CONTACT PAGE
 =================================================================*/
 .contact-page { background: #830d35; position: relative; overflow: hidden; }
@@ -535,6 +614,7 @@ export function generatePdfHtml({
   fundMetrics,
   portfolioCompanies,
   report,
+  quarterSocialUpdates = [],
   coverSvgHtml = '',
   portfolioUpdatesSvgHtml = '',
   fundFinancialsSvgHtml = '',
@@ -818,7 +898,15 @@ export function generatePdfHtml({
     });
 
     const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
-    const prevQUpdates = allUpdates.filter(u => isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear));
+
+    // All previous quarters (most recent first), filtered to have content
+    const allPrevWithNotes = allUpdates.filter(u =>
+      isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear) && u.updateNotes
+    );
+    // Q1: show last 2 quarters (from previous FY). All other quarters: show all within the same FY.
+    const prevQUpdates = quarter === 'Q1'
+      ? allPrevWithNotes.slice(0, 2)
+      : allPrevWithNotes.filter(u => u.fiscalYear === fiscalYear);
 
     const currentQHtml = currentQUpdate?.updateNotes
       ? `<div class="subsection-heading">${esc(quarterFYLabel(currentQUpdate.quarter, currentQUpdate.fiscalYear))}</div>
@@ -826,8 +914,6 @@ export function generatePdfHtml({
       : '';
 
     const prevQHtml = prevQUpdates
-      .filter(u => u.updateNotes)
-      .slice(0, 2)
       .map(u => `
         <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
         <div class="body-text" style="color: #888;">${renderPortableText(u.updateNotes)}</div>`)
@@ -836,51 +922,56 @@ export function generatePdfHtml({
     const aboutText = company.aboutCompany || company.detail || '';
 
     // ── MERGED PAGE A+B: Snapshot table + About + Quarter Updates ───────────────
-    // No fixed height — content flows naturally; page-break-after forces A4 boundary after section.
+    // Uses <table> + <thead> so the page header repeats automatically on every printed page
+    // when content overflows to a second A4 sheet.
     const abSectionHtml = `
-  <div class="company-ab-section" data-section-end="true">
-    ${headerHtml()}
-    <div class="page-body" style="padding-bottom: 40px;">
-      <div class="company-heading-wrap">
-        <div class="company-logo-box">
-          ${company.logo
-            ? `<img src="${esc(company.logo)}" alt="${esc(company.name)}">`
-            : `<div class="company-logo-placeholder">${esc((company.name || '?')[0].toUpperCase())}</div>`}
+  <table class="company-ab-table" data-section-end="true">
+    <thead>
+      <tr><td>${headerHtml()}</td></tr>
+    </thead>
+    <tbody>
+      <tr><td class="page-body" style="padding-bottom: 40px;">
+        <div class="company-heading-wrap">
+          <div class="company-logo-box">
+            ${company.logo
+              ? `<img src="${esc(company.logo)}" alt="${esc(company.name)}">`
+              : `<div class="company-logo-placeholder">${esc((company.name || '?')[0].toUpperCase())}</div>`}
+          </div>
+          <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
         </div>
-        <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
-      </div>
-      <table class="report-table">
-        <tbody>
-          <tr><td style="width:55%;">Latest funding round</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
-          ${allRounds.length > 0 ? `
-            <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
-            ${roundsRows}` : ''}
-          <tr><td>Total investment</td><td>${totalInv ? fmt(totalInv) : '—'}</td></tr>
-          <tr><td>Ownership (FD)</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
-          <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmt(fmv) : '—')}</td></tr>
-          ${roundMoicRows}
-          <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
-          ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
-        </tbody>
-      </table>
-      ${snapshotFootnotes || defaultMoicFootnote}
-      ${aboutText ? `
-        <div class="body-text" style="margin-top: 28px;">
-          <div class="subsection-heading">About the company</div>
-          <p>${esc(aboutText)}</p>
-        </div>` : ''}
-      <div style="margin-top: 24px;">
-        <div class="prev-quarters-label" style="color: #830d35; font-size: 18px; font-weight: 700; margin-bottom: 12px;">Quarter updates</div>
-        ${currentQHtml}
-      </div>
-      ${prevQHtml ? `
-        <div class="prev-quarters-heading">
-          <div class="prev-quarters-label">Previous quarters</div>
-          <div class="prev-quarters-line"></div>
+        <table class="report-table">
+          <tbody>
+            <tr><td style="width:55%;">Latest funding round</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
+            ${allRounds.length > 0 ? `
+              <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
+              ${roundsRows}` : ''}
+            <tr><td>Total investment</td><td>${totalInv ? fmt(totalInv) : '—'}</td></tr>
+            <tr><td>Ownership (FD)</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
+            <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmt(fmv) : '—')}</td></tr>
+            ${roundMoicRows}
+            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
+            ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
+          </tbody>
+        </table>
+        ${snapshotFootnotes || defaultMoicFootnote}
+        ${aboutText ? `
+          <div class="body-text" style="margin-top: 28px;">
+            <div class="subsection-heading">About the company</div>
+            <p>${esc(aboutText)}</p>
+          </div>` : ''}
+        <div style="margin-top: 24px;">
+          <div class="prev-quarters-label" style="color: #830d35; font-size: 18px; font-weight: 700; margin-bottom: 12px;">Quarter updates</div>
+          ${currentQHtml}
         </div>
-        ${prevQHtml}` : ''}
-    </div>
-  </div>`;
+        ${prevQHtml ? `
+          <div class="prev-quarters-heading">
+            <div class="prev-quarters-label">Previous quarters</div>
+            <div class="prev-quarters-line"></div>
+          </div>
+          ${prevQHtml}` : ''}
+      </td></tr>
+    </tbody>
+  </table>`;
 
     // ── PAGE C: Round Details + Financials ───────────────────
     const pageCNum = nextPageNum(); // C gets the displayed page number
@@ -1067,12 +1158,45 @@ export function generatePdfHtml({
           ${item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
           ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">Read more</a></div>` : ''}
         </div>`).join('')
-    : '<p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p>';
+    : '';
 
+  function platformLabel(platform) {
+    if (platform === 'linkedin') return 'LinkedIn';
+    if (platform === 'twitter') return 'Twitter / X';
+    return 'Social';
+  }
+
+  const socialCardsHtml = (quarterSocialUpdates || []).length > 0
+    ? `<div class="social-updates-heading">Social Updates</div>` +
+      quarterSocialUpdates.map(item => {
+        const excerpt = item.excerpt
+          ? (item.excerpt.length > 120 ? item.excerpt.substring(0, 120) + '…' : item.excerpt)
+          : '';
+        const imageEl = item.imageUrl
+          ? `<img class="social-card-image" src="${esc(item.imageUrl)}" alt="">`
+          : `<div class="social-card-image-placeholder">${esc(platformLabel(item.platform))}</div>`;
+        const cardInner = `
+          <div class="social-card">
+            ${imageEl}
+            <div class="social-card-content">
+              <div class="social-card-platform">${esc(platformLabel(item.platform))}</div>
+              ${excerpt ? `<div class="social-card-text">${esc(excerpt)}</div>` : ''}
+              <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
+            </div>
+          </div>`;
+        return item.url
+          ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`
+          : cardInner;
+      }).join('')
+    : '';
+
+  const hasMedia = mediaItems.length > 0 || (quarterSocialUpdates || []).length > 0;
+
+  // Use <table> + <thead> so the page header repeats automatically if social cards overflow to a second page
   const mediaHtml = `
-  <div class="page">
-    ${headerHtml()}
-    <div class="page-body">
+  <table class="media-page-table">
+    <thead><tr><td>${headerHtml()}</td></tr></thead>
+    <tbody><tr><td style="padding: 28px 40px 80px;">
       <div class="media-heading-wrap">
         <div class="media-heading">IN THE MEDIA</div>
         <div class="media-arrow">↗</div>
@@ -1080,10 +1204,11 @@ export function generatePdfHtml({
       <div class="media-subhead">Key highlights and press coverage</div>
       ${report.mediaNotes ? `<div class="body-text" style="margin: 12px 0 4px;"><p>${esc(report.mediaNotes)}</p></div>` : ''}
       <div class="section-divider-light"></div>
-      <div class="media-cards">${mediaCardsHtml}</div>
-    </div>
-    ${pgNum(mediaPageNum)}
-  </div>`;
+      ${mediaCardsHtml ? `<div class="media-cards">${mediaCardsHtml}</div>` : ''}
+      ${socialCardsHtml}
+      ${!hasMedia ? '<p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p>' : ''}
+    </td></tr></tbody>
+  </table>`;
 
   // ════════════════════════════════════════════════════════════
   // CONTACT INFORMATION (last page)
@@ -1128,7 +1253,7 @@ export function generatePdfHtml({
 (function() {
   var svgs = ${svgPoolJson};
   var PAGE_H = 1123;
-  var pages = document.querySelectorAll('[data-section-end]');
+  var pages = document.querySelectorAll('.page[data-section-end]');
   for (var i = 0; i < pages.length; i++) {
     var page = pages[i];
     var header = page.querySelector('.page-header');
@@ -1140,9 +1265,14 @@ export function generatePdfHtml({
     if (used >= PAGE_H * 0.5) continue;
     var idx = Math.floor(Math.random() * svgs.length);
     var wrap = document.createElement('div');
-    wrap.style.cssText = 'position:absolute;bottom:80px;right:40px;width:110px;opacity:0.14;pointer-events:none;';
+    wrap.style.cssText = 'position:absolute;bottom:80px;right:0;left:0;display:flex;justify-content:center;pointer-events:none;';
     wrap.innerHTML = svgs[idx];
-    page.style.position = 'relative';
+    var svgEl = wrap.querySelector('svg');
+    if (svgEl) {
+      svgEl.style.cssText = 'width:336px;height:auto;opacity:0.18;display:block;';
+      svgEl.removeAttribute('width');
+      svgEl.removeAttribute('height');
+    }
     page.appendChild(wrap);
   }
 })();
