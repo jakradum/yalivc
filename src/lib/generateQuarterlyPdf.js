@@ -261,8 +261,21 @@ body {
   color: #888;
 }
 
+/* ── Company A+B flowing section (no fixed height — content determines size) ── */
+.company-ab-section {
+  background: #eeeceb;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  page-break-after: always;
+  break-after: page;
+  position: relative;
+}
+
+/* ── TOC anchor links ── */
+.toc-row a, .toc-subrow a { color: inherit; text-decoration: none; }
+
 /* ── Tables ── */
-.report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 12px; page-break-inside: avoid; break-inside: avoid; }
 .report-table th {
   font-weight: 700;
   font-size: 11px;
@@ -590,11 +603,11 @@ export function generatePdfHtml({
     <div class="toc-wrap">
       <div class="toc-title">TABLE OF<br>CONTENTS</div>
       <table class="toc-table">
-        <tr class="toc-row"><td>Cover note</td><td>3</td></tr>
-        <tr class="toc-row"><td>Fund summary</td><td>5</td></tr>
-        <tr class="toc-row"><td>Portfolio investments</td><td>6</td></tr>
-        <tr class="toc-subrow"><td>• Portfolio investment summary</td><td>6</td></tr>
-        <tr class="toc-subrow"><td>• Portfolio company updates</td><td>7</td></tr>
+        <tr class="toc-row"><td><a href="#section-cover-note">Cover note</a></td><td><a href="#section-cover-note">3</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-summary">Fund summary</a></td><td><a href="#section-fund-summary">5</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates">7</a></td></tr>
         <tr class="toc-row"><td>Fund financials</td><td>—</td></tr>
         <tr class="toc-row"><td>Pipeline summary</td><td>—</td></tr>
         <tr class="toc-row"><td>Media coverage</td><td>—</td></tr>
@@ -617,7 +630,7 @@ export function generatePdfHtml({
   const closingHtml = renderPortableText(report.closingNotes);
 
   const coverNoteP1Html = `
-  <div class="page">
+  <div class="page" id="section-cover-note">
     ${headerHtml()}
     <div class="page-body">
       <div class="cover-note-heading">COVER NOTE</div>
@@ -634,7 +647,7 @@ export function generatePdfHtml({
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
   const coverNoteP2Html = `
-  <div class="page">
+  <div class="page" data-section-end="true">
     ${headerHtml()}
     <div class="page-body">
       <div class="body-text">
@@ -660,7 +673,7 @@ export function generatePdfHtml({
   const fundSumPageNum = nextPageNum(); // 5
 
   const fundSumHtml = `
-  <div class="page">
+  <div class="page" id="section-fund-summary" data-section-end="true">
     ${headerHtml()}
     <div class="page-body">
       <div class="fund-summary-heading">Fund Summary</div>
@@ -715,7 +728,7 @@ export function generatePdfHtml({
   const portInvFootnotes = renderTableFootnotes(report.portfolioSummaryFootnotes);
 
   const portInvHtml = `
-  <div class="page">
+  <div class="page" id="section-portfolio-inv" data-section-end="true">
     ${headerHtml()}
     <div class="page-body">
       <div class="portfolio-inv-heading">PORTFOLIO<br>INVESTMENTS</div>
@@ -744,10 +757,11 @@ export function generatePdfHtml({
   const portSepPageNum = nextPageNum(); // 7
 
   const portSepHtml = `
-  <div class="page">
+  <div class="page" id="section-portfolio-updates">
     ${headerHtml()}
     <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px;">
       <div class="separator-title-mixed">Portfolio<br>Company<br>Updates</div>
+      <div style="width: 50%; height: 1.5px; background: #830d35; margin-top: 24px;"></div>
       ${portfolioUpdatesSvgHtml ? `
         <div style="position: absolute; right: 40px; top: 40px; width: 105px; opacity: 0.18;">
           ${portfolioUpdatesSvgHtml}
@@ -777,8 +791,8 @@ export function generatePdfHtml({
       allRounds.flatMap(r => (r.coInvestors || []).map(ci => ci.name)).filter(Boolean)
     )];
 
-    // ── PAGE A: Investment Snapshot ──────────────────────────
-    const pageANum = nextPageNum();
+    // ── (page counter placeholder — A+B merged, only C gets a numbered page) ──
+    nextPageNum(); // A+B merged section
 
     const roundsRows = allRounds.map(r => {
       const label = r.roundLabel || roundNameToLabel(r.roundName);
@@ -796,10 +810,37 @@ export function generatePdfHtml({
       ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
       : '';
 
-    const pageAHtml = `
-  <div class="page">
+    // ── Sort all quarterly updates most recent first (needed by both A+B and C) ──
+    const allUpdates = [...(company.quarterlyUpdates || [])].sort((a, b) => {
+      const key = u => parseInt((u.fiscalYear || '').replace('FY', '') || '0', 10) * 10
+        + parseInt((u.quarter || 'Q0').replace('Q', ''), 10);
+      return key(b) - key(a);
+    });
+
+    const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
+    const prevQUpdates = allUpdates.filter(u => isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear));
+
+    const currentQHtml = currentQUpdate?.updateNotes
+      ? `<div class="subsection-heading">${esc(quarterFYLabel(currentQUpdate.quarter, currentQUpdate.fiscalYear))}</div>
+         <div class="body-text">${renderPortableText(currentQUpdate.updateNotes)}</div>`
+      : '';
+
+    const prevQHtml = prevQUpdates
+      .filter(u => u.updateNotes)
+      .slice(0, 2)
+      .map(u => `
+        <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
+        <div class="body-text" style="color: #888;">${renderPortableText(u.updateNotes)}</div>`)
+      .join('');
+
+    const aboutText = company.aboutCompany || company.detail || '';
+
+    // ── MERGED PAGE A+B: Snapshot table + About + Quarter Updates ───────────────
+    // No fixed height — content flows naturally; page-break-after forces A4 boundary after section.
+    const abSectionHtml = `
+  <div class="company-ab-section" data-section-end="true">
     ${headerHtml()}
-    <div class="page-body">
+    <div class="page-body" style="padding-bottom: 40px;">
       <div class="company-heading-wrap">
         <div class="company-logo-box">
           ${company.logo
@@ -823,46 +864,8 @@ export function generatePdfHtml({
         </tbody>
       </table>
       ${snapshotFootnotes || defaultMoicFootnote}
-    </div>
-    ${confFooter()}
-    ${pgNum(pageANum)}
-  </div>`;
-
-    // ── PAGE B: About + Quarter Updates ─────────────────────
-    const pageBNum = nextPageNum();
-
-    // Sort all quarterly updates most recent first
-    const allUpdates = [...(company.quarterlyUpdates || [])].sort((a, b) => {
-      const key = u => parseInt((u.fiscalYear || '').replace('FY', '') || '0', 10) * 10
-        + parseInt((u.quarter || 'Q0').replace('Q', ''), 10);
-      return key(b) - key(a);
-    });
-
-    const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
-    // Only show updates from quarters strictly before the report quarter (mirrors web getQuartersBefore)
-    const prevQUpdates = allUpdates.filter(u => isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear));
-
-    const currentQHtml = currentQUpdate?.updateNotes
-      ? `<div class="subsection-heading">${esc(quarterFYLabel(currentQUpdate.quarter, currentQUpdate.fiscalYear))}</div>
-         <div class="body-text">${renderPortableText(currentQUpdate.updateNotes)}</div>`
-      : '';
-
-    const prevQHtml = prevQUpdates
-      .filter(u => u.updateNotes)
-      .slice(0, 2)
-      .map(u => `
-        <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
-        <div class="body-text" style="color: #888;">${renderPortableText(u.updateNotes)}</div>`)
-      .join('');
-
-    const aboutText = company.aboutCompany || company.detail || '';
-
-    const pageBHtml = `
-  <div class="page">
-    ${headerHtml()}
-    <div class="page-body">
       ${aboutText ? `
-        <div class="body-text">
+        <div class="body-text" style="margin-top: 28px;">
           <div class="subsection-heading">About the company</div>
           <p>${esc(aboutText)}</p>
         </div>` : ''}
@@ -877,12 +880,10 @@ export function generatePdfHtml({
         </div>
         ${prevQHtml}` : ''}
     </div>
-    ${confFooter()}
-    ${pgNum(pageBNum)}
   </div>`;
 
     // ── PAGE C: Round Details + Financials ───────────────────
-    const pageCNum = nextPageNum();
+    const pageCNum = nextPageNum(); // C gets the displayed page number
 
     // Transposed investment rounds table
     let roundDetailsHtml = '';
@@ -983,7 +984,7 @@ export function generatePdfHtml({
     }
 
     const pageCHtml = `
-  <div class="page">
+  <div class="page" data-section-end="true">
     ${headerHtml()}
     <div class="page-body">
       ${roundDetailsHtml || '<p style="color: #888; font-size: 12px;">No investment round details available.</p>'}
@@ -993,7 +994,7 @@ export function generatePdfHtml({
     ${pgNum(pageCNum)}
   </div>`;
 
-    return pageAHtml + pageBHtml + pageCHtml;
+    return abSectionHtml + pageCHtml;
   }).join('');
 
   // ════════════════════════════════════════════════════════════
@@ -1117,6 +1118,37 @@ export function generatePdfHtml({
   </div>`;
 
   // ════════════════════════════════════════════════════════════
+  // SVG injection: fill sections with >50% empty space
+  // ════════════════════════════════════════════════════════════
+  const svgPool = [coverSvgHtml, portfolioUpdatesSvgHtml, fundFinancialsSvgHtml, pipelineSvgHtml].filter(Boolean);
+  const svgPoolJson = JSON.stringify(svgPool).replace(/<\/script>/gi, '<\\/script>');
+
+  const svgInjectionScript = svgPool.length > 0 ? `
+<script>
+(function() {
+  var svgs = ${svgPoolJson};
+  var PAGE_H = 1123;
+  var pages = document.querySelectorAll('[data-section-end]');
+  for (var i = 0; i < pages.length; i++) {
+    var page = pages[i];
+    var header = page.querySelector('.page-header');
+    var body = page.querySelector('.page-body');
+    if (!body) continue;
+    var headerH = header ? header.offsetHeight : 88;
+    var bodyH = body.scrollHeight;
+    var used = headerH + bodyH;
+    if (used >= PAGE_H * 0.5) continue;
+    var idx = Math.floor(Math.random() * svgs.length);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:absolute;bottom:80px;right:40px;width:110px;opacity:0.14;pointer-events:none;';
+    wrap.innerHTML = svgs[idx];
+    page.style.position = 'relative';
+    page.appendChild(wrap);
+  }
+})();
+</script>` : '';
+
+  // ════════════════════════════════════════════════════════════
   // ASSEMBLE
   // ════════════════════════════════════════════════════════════
   return `<!DOCTYPE html>
@@ -1139,6 +1171,7 @@ ${fundFinHtml}
 ${pipelineHtml}
 ${mediaHtml}
 ${contactHtml}
+${svgInjectionScript}
 </body>
 </html>`;
 }

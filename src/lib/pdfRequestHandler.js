@@ -25,6 +25,20 @@ import {
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
+async function fetchAsDataUri(url) {
+  if (!url || !url.startsWith('http')) return null;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const buffer = await res.arrayBuffer();
+    const mime = res.headers.get('content-type') || 'image/png';
+    const b64 = Buffer.from(buffer).toString('base64');
+    return `data:${mime};base64,${b64}`;
+  } catch {
+    return null;
+  }
+}
+
 const QUARTER_END_MONTHS = { Q1: 'June', Q2: 'September', Q3: 'December', Q4: 'March' };
 
 function quarterEndLabel(quarter, fiscalYear) {
@@ -107,6 +121,22 @@ export async function handlePdfGet(slug) {
   if (quarterNews && quarterNews.length > 0) {
     report.mediaFromNews = quarterNews;
   }
+
+  // Pre-fetch all images as base64 so Puppeteer doesn't need to make network requests
+  const imageFetches = [];
+  if (fundSettings?.logoLight) {
+    imageFetches.push(
+      fetchAsDataUri(fundSettings.logoLight).then(uri => { if (uri) fundSettings.logoLight = uri; })
+    );
+  }
+  for (const company of investments) {
+    if (company.logo) {
+      imageFetches.push(
+        fetchAsDataUri(company.logo).then(uri => { if (uri) company.logo = uri; })
+      );
+    }
+  }
+  await Promise.all(imageFetches);
 
   const reportData = buildReportData({
     quarter,
