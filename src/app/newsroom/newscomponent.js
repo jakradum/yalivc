@@ -28,8 +28,6 @@ const formatArticles = (articles) => {
 };
 
 export default function NewsComponent({ news = [] }) {
-  console.log('News prop received:', news);
-  console.log('News length:', news.length);
   const articles = useMemo(() => formatArticles(news.length > 0 ? news : fallbackData.data.articles), [news]);
 
   const [selectedYear, setSelectedYear] = useState('all');

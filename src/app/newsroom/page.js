@@ -31,8 +31,6 @@ export const metadata = {
 
 export default async function Newsroom() {
 const [news, pressReleases] = await Promise.all([getNews(), getPressReleases()]);
-console.log('📰 page.js fetched news[0]:', news[0]);
-
     return (
       <section>
         <div className={styles.mainAbout}>

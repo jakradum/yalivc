@@ -17,8 +17,6 @@ export function DataProvider({ children }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log('📡 Fetching data from Sanity...');
-
         const [companies, articles, sanityTeam] = await Promise.all([
           getCompanies(),
           getNews(),
@@ -43,7 +41,7 @@ export function DataProvider({ children }) {
           data: { companies, articles, team: allTeam },
         });
 
-        console.log('✅ Data fetched successfully. Team count:', allTeam.length);
+
       } catch (err) {
         console.error('❌ Error fetching from Sanity:', err);
         setError(err);
