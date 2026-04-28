@@ -15,7 +15,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const COOKIE_NAME = 'portal-session';
 const OTP_COOKIE = 'portal-otp-pending';
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
-const OTP_EXPIRY = 10 * 60; // 10 minutes in seconds
+const OTP_EXPIRY = 24 * 60 * 60; // 24 hours in seconds
 
 // Rate limiting: in-memory store (resets on server restart)
 // For production, consider using Redis or Vercel KV
@@ -185,11 +185,11 @@ export async function POST(request) {
     <div class="hero-title">Your one-time <span>access code</span></div>
   </div>
   <div class="body">
-    <p class="greeting">Enter the code below to sign in to the Yali Capital LP Portal. This code is valid for 10 minutes.</p>
+    <p class="greeting">Enter the code below to sign in to the Yali Capital LP Portal. This code is valid for 24 hours and can only be used once.</p>
     <div class="code-block">
       <div class="code-label">Your code</div>
       <div class="otp-code">${otp}</div>
-      <div class="expiry-note">Expires in 10 minutes</div>
+      <div class="expiry-note">Valid for 24 hours &middot; single use only</div>
     </div>
     <div class="note">
       <p>If you did not request this code, you can safely ignore this email. Do not share this code with anyone.</p>
