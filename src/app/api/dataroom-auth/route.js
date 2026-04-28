@@ -263,6 +263,7 @@ export async function POST(request) {
               });
               await writeClient
                 .patch(domainPriv._id)
+                .setIfMissing({ redemptionLog: [] })
                 .set({ usedCount: (domainPriv.usedCount || 0) + 1 })
                 .insert('after', 'redemptionLog[-1]', [{ _key: crypto.randomBytes(8).toString('hex'), email: normalizedEmail, redeemedAt: new Date().toISOString() }])
                 .commit();
