@@ -43,10 +43,15 @@ export async function POST(request) {
     token: SANITY_WRITE_TOKEN,
   });
 
+  // Strip drafts. prefix — always write to the published document.
+  // createIfNotExists ensures it works even if the doc hasn't been published yet.
+  const cleanId = docId.replace(/^drafts\./, '');
+
   try {
     await writeClient
-      .patch(docId)
-      .set({ inviteCode: code, codeExpiry: expiry, usedCount: 0 })
+      .transaction()
+      .createIfNotExists({ _id: cleanId, _type: 'domainPrivilege' })
+      .patch(cleanId, p => p.set({ inviteCode: code, codeExpiry: expiry, usedCount: 0 }))
       .commit();
   } catch (err) {
     console.error('Failed to write domain privilege code:', err);
