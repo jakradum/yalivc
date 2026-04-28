@@ -50,7 +50,7 @@ export default function DataroomSignInPage() {
       const res = await fetch('/api/dataroom-auth/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'verify-code', code }),
+        body: JSON.stringify({ action: 'verify-code', code, email }),
       });
 
       const data = await res.json();
