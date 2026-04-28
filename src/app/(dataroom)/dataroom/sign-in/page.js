@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import styles from './sign-in.module.css';
 import { Lightlogo } from '../../../components/icons/lightlogo';
 
 export default function DataroomSignInPage() {
-  const router = useRouter();
   const [step, setStep] = useState('email'); // 'email' or 'code'
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -77,7 +75,7 @@ export default function DataroomSignInPage() {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         window.location.href = isLocalDev ? '/dataroom' : '/';
       } else {
-        setError((data.error || 'Invalid code') + (data.detail ? ` (${data.detail})` : ''));
+        setError(data.error || 'Invalid code');
       }
     } catch {
       setError('Something went wrong. Please try again.');
