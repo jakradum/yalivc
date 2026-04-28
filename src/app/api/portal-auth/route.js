@@ -369,6 +369,6 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
     console.error('Portal auth error:', error);
-    return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Authentication failed', detail: error?.message }, { status: 500 });
   }
 }
