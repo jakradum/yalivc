@@ -34,6 +34,8 @@ import dataroomFundContent from './dataroomFundContent'
 import trackRecord from './trackRecord'
 // Investor Relations
 import investorRelations from './investorRelations'
+// Access Control
+import domainPrivilege from './domainPrivilege'
 
 export const schemaTypes = [
   // Existing schemas
@@ -75,4 +77,6 @@ export const schemaTypes = [
   trackRecord,
   // Investor Relations
   investorRelations,
+  // Access Control
+  domainPrivilege,
 ]

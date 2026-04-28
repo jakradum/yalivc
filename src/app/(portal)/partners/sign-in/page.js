@@ -123,7 +123,7 @@ export default function SignInPage() {
           </>
         ) : (
           <>
-            <p className={styles.subtitle}>We sent a 6-digit code to <strong>{email}</strong></p>
+            <p className={styles.subtitle}>{ref === 'DOMAIN-SHARED' ? 'Enter your shared access code' : <>We sent a 6-digit code to <strong>{email}</strong></>}</p>
             {ref && <p className={styles.refCode}>{ref}</p>}
             <form className={styles.form} onSubmit={handleVerifyCode}>
               <div className={styles.fieldGroup}>

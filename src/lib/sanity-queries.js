@@ -1603,6 +1603,17 @@ export async function getDataRoomPortfolioCompanies() {
 }
 
 
+export async function getDomainPrivilegeByDomain(domain) {
+  if (!domain) return null;
+  return client.fetch(
+    `*[_type == "domainPrivilege" && domain == $domain][0]{
+      _id, domain, label, lpPortalAccess, dataroomAccess,
+      requireCode, inviteCode, codeExpiry, maxUses, usedCount
+    }`,
+    { domain }
+  );
+}
+
 export async function getDataRoomAllFundSettings() {
   return client.fetch(
     `*[_type == "lpFundSettings"][0]{

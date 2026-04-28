@@ -34,6 +34,8 @@ import dataroomFundContent from './schemas/dataroomFundContent'
 import trackRecord from './schemas/trackRecord'
 // Investor Relations
 import investorRelations from './schemas/investorRelations'
+// Access Control
+import domainPrivilege from './schemas/domainPrivilege'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -68,4 +70,6 @@ export const schemaTypes = [
   trackRecord,
   // Investor Relations
   investorRelations,
+  // Access Control
+  domainPrivilege,
 ]

@@ -105,8 +105,32 @@ export async function POST(request) {
         );
       }
 
+      // Check domain privilege
+      const domain = normalizedEmail.split('@')[1];
+      const domainPriv = await client.fetch(
+        `*[_type == "domainPrivilege" && domain == $domain && lpPortalAccess == true][0]{
+          _id, requireCode, inviteCode, codeExpiry, maxUses, usedCount
+        }`,
+        { domain }
+      );
+
+      if (domainPriv?.requireCode) {
+        // Shared code mode — validate code is set up and has uses remaining
+        if (!domainPriv.inviteCode || !domainPriv.codeExpiry || new Date(domainPriv.codeExpiry) < new Date()) {
+          return NextResponse.json({ error: 'Access code not configured. Please contact your fund manager.' }, { status: 403 });
+        }
+        if ((domainPriv.usedCount || 0) >= domainPriv.maxUses) {
+          return NextResponse.json({ error: 'This access code has reached its maximum number of uses. Please contact your fund manager.' }, { status: 403 });
+        }
+        // Don't send OTP — user will enter the shared code
+        return NextResponse.json({ success: true, ref: 'DOMAIN-SHARED' });
+      }
+
       // @yali.vc and @florintree.com always have access — no Sanity lookup needed
-      const isTrustedDomain = normalizedEmail.endsWith('@yali.vc') || normalizedEmail.endsWith('@florintree.com');
+      // domainPriv with requireCode: false also grants open access
+      const isTrustedDomain = normalizedEmail.endsWith('@yali.vc') ||
+        normalizedEmail.endsWith('@florintree.com') ||
+        (domainPriv && !domainPriv.requireCode);
 
       let user = null;
       if (!isTrustedDomain) {
@@ -223,6 +247,47 @@ export async function POST(request) {
     if (action === 'verify-code') {
       if (!code) {
         return NextResponse.json({ error: 'Verification code is required' }, { status: 400 });
+      }
+
+      // --- Path 0: Domain shared code ---
+      if (email) {
+        const normalizedEmail = email.toLowerCase().trim();
+        const domain = normalizedEmail.split('@')[1];
+        const domainPriv = await client.fetch(
+          `*[_type == "domainPrivilege" && domain == $domain && lpPortalAccess == true && requireCode == true][0]{
+            _id, inviteCode, codeExpiry, maxUses, usedCount
+          }`,
+          { domain }
+        );
+
+        if (domainPriv?.inviteCode && domainPriv.codeExpiry && new Date(domainPriv.codeExpiry) >= new Date()) {
+          if ((domainPriv.usedCount || 0) < domainPriv.maxUses) {
+            const a = Buffer.from(code.trim().padEnd(32));
+            const b = Buffer.from(domainPriv.inviteCode.padEnd(32));
+            if (crypto.timingSafeEqual(a, b) && code.trim() === domainPriv.inviteCode) {
+              const writeClient = createClient({
+                projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+                dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+                apiVersion: '2024-01-01',
+                useCdn: false,
+                token: process.env.SANITY_WRITE_TOKEN,
+              });
+              await writeClient.patch(domainPriv._id).set({ usedCount: (domainPriv.usedCount || 0) + 1 }).commit();
+
+              const sessionTimestamp = Date.now().toString();
+              const sessionValue = signSession(normalizedEmail, sessionTimestamp);
+              const response = NextResponse.json({ success: true });
+              response.cookies.set(COOKIE_NAME, sessionValue, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: COOKIE_MAX_AGE,
+                path: '/',
+              });
+              return response;
+            }
+          }
+        }
       }
 
       // --- Path B: Sanity invite code (checked first so manually-issued codes always win) ---
