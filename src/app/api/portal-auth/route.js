@@ -255,7 +255,7 @@ export async function POST(request) {
         const domain = normalizedEmail.split('@')[1];
         const domainPriv = await client.fetch(
           `*[_type == "domainPrivilege" && domain == $domain && lpPortalAccess == true && requireCode == true && isActive == true][0]{
-            _id, inviteCode, codeExpiry, maxUses, usedCount
+            _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog
           }`,
           { domain }
         );
@@ -272,11 +272,11 @@ export async function POST(request) {
                 useCdn: false,
                 token: process.env.SANITY_WRITE_TOKEN,
               });
+              const logEntry = { _key: crypto.randomBytes(8).toString('hex'), email: normalizedEmail, redeemedAt: new Date().toISOString() };
+              const existingLog = Array.isArray(domainPriv.redemptionLog) ? domainPriv.redemptionLog : [];
               await writeClient
                 .patch(domainPriv._id)
-                .setIfMissing({ redemptionLog: [] })
-                .set({ usedCount: (domainPriv.usedCount || 0) + 1 })
-                .insert('after', 'redemptionLog[-1]', [{ _key: crypto.randomBytes(8).toString('hex'), email: normalizedEmail, redeemedAt: new Date().toISOString() }])
+                .set({ usedCount: (domainPriv.usedCount || 0) + 1, redemptionLog: [...existingLog, logEntry] })
                 .commit();
 
               const sessionTimestamp = Date.now().toString();
