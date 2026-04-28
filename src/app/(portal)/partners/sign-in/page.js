@@ -44,7 +44,7 @@ export default function SignInPage() {
       const data = await res.json();
       if (res.ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        router.push(isLocalDev ? '/partners' : '/');
+        window.location.href = isLocalDev ? '/partners' : '/';
       } else {
         setError((data.error || 'Invalid code') + (data.detail ? ` (${data.detail})` : ''));
       }
@@ -98,7 +98,7 @@ export default function SignInPage() {
 
       if (res.ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        router.push(isLocalDev ? '/partners' : '/');
+        window.location.href = isLocalDev ? '/partners' : '/';
       } else {
         setError((data.error || 'Verification failed') + (data.detail ? ` (${data.detail})` : ''));
       }

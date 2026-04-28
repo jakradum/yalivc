@@ -75,7 +75,7 @@ export default function DataroomSignInPage() {
 
       if (res.ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        router.push(isLocalDev ? '/dataroom' : '/');
+        window.location.href = isLocalDev ? '/dataroom' : '/';
       } else {
         setError((data.error || 'Invalid code') + (data.detail ? ` (${data.detail})` : ''));
       }
@@ -102,7 +102,7 @@ export default function DataroomSignInPage() {
 
       if (res.ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        router.push(isLocalDev ? '/dataroom' : '/');
+        window.location.href = isLocalDev ? '/dataroom' : '/';
       } else {
         setError(data.error || 'Verification failed');
       }
