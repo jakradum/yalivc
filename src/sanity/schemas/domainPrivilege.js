@@ -1,4 +1,5 @@
 import { GenerateCodeButton } from '../components/GenerateCodeButton';
+import { RedemptionLog } from '../components/RedemptionLog';
 
 export default {
   name: 'domainPrivilege',
@@ -8,9 +9,17 @@ export default {
   groups: [
     { name: 'access', title: 'Access' },
     { name: 'code', title: 'Shared Code' },
+    { name: 'log', title: 'Redemption Log' },
   ],
 
   fields: [
+    {
+      name: 'isActive',
+      title: 'Privileges Active',
+      type: 'boolean',
+      initialValue: true,
+      description: 'When off, this domain loses all portal and data room access. The record is preserved and can be reactivated at any time.',
+    },
     {
       name: 'domain',
       title: 'Email Domain',
@@ -93,6 +102,32 @@ export default {
       hidden: ({ document }) => !document?.requireCode,
       readOnly: true,
       initialValue: 0,
+    },
+    {
+      name: 'redemptionLogDisplay',
+      title: 'Code Redemption Log',
+      type: 'string',
+      group: 'log',
+      readOnly: true,
+      hidden: ({ document }) => !document?.requireCode,
+      components: { input: RedemptionLog },
+    },
+    // System field — managed by auth route on each successful redemption
+    {
+      name: 'redemptionLog',
+      title: 'Redemption Log',
+      type: 'array',
+      hidden: true,
+      readOnly: true,
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'email', title: 'Email', type: 'string' },
+            { name: 'redeemedAt', title: 'Redeemed At', type: 'datetime' },
+          ],
+        },
+      ],
     },
   ],
 

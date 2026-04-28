@@ -104,7 +104,7 @@ export async function POST(request) {
       // Check domain privilege
       const domain = normalizedEmail.split('@')[1];
       const domainPriv = await client.fetch(
-        `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true][0]{
+        `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && isActive == true][0]{
           _id, requireCode, inviteCode, codeExpiry, maxUses, usedCount
         }`,
         { domain }
@@ -243,7 +243,7 @@ export async function POST(request) {
         const normalizedEmail = email.toLowerCase().trim();
         const domain = normalizedEmail.split('@')[1];
         const domainPriv = await client.fetch(
-          `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && requireCode == true][0]{
+          `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && requireCode == true && isActive == true][0]{
             _id, inviteCode, codeExpiry, maxUses, usedCount
           }`,
           { domain }
@@ -261,7 +261,11 @@ export async function POST(request) {
                 useCdn: false,
                 token: process.env.SANITY_WRITE_TOKEN,
               });
-              await writeClient.patch(domainPriv._id).set({ usedCount: (domainPriv.usedCount || 0) + 1 }).commit();
+              await writeClient
+                .patch(domainPriv._id)
+                .set({ usedCount: (domainPriv.usedCount || 0) + 1 })
+                .insert('after', 'redemptionLog[-1]', [{ _key: crypto.randomBytes(8).toString('hex'), email: normalizedEmail, redeemedAt: new Date().toISOString() }])
+                .commit();
 
               const sessionTimestamp = Date.now().toString();
               const sessionValue = signSession(normalizedEmail, sessionTimestamp);
