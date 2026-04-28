@@ -95,6 +95,10 @@ export default defineConfig({
                     S.listItem()
                       .title('Portal Feedback (NPS)')
                       .child(S.documentTypeList('lpPortalFeedback').title('Portal Feedback')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Domain Privileges')
+                      .child(S.documentTypeList('domainPrivilege').title('Domain Privileges')),
                   ])
               ),
             S.divider(),
