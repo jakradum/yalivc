@@ -869,7 +869,8 @@ export async function getLPInvestments() {
         "coInvestors": coInvestors[]->{
           _id,
           name,
-          type
+          type,
+          displayOrder
         }
       },
       "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
@@ -932,7 +933,8 @@ export async function getLPInvestmentsForPdf() {
         "coInvestors": coInvestors[]->{
           _id,
           name,
-          type
+          type,
+          displayOrder
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
@@ -1017,7 +1019,8 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
           _id,
           name,
           type,
-          "logo": logo.asset->url
+          "logo": logo.asset->url,
+          displayOrder
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
