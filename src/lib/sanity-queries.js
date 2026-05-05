@@ -866,10 +866,11 @@ export async function getLPInvestments() {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        "coInvestors": coInvestors[]->{
-          _id,
-          name,
-          type
+        "coInvestors": coInvestors[]{
+          "displayOrder": displayOrder,
+          "_id": select(_type == "reference" => @->_id, investor->_id),
+          "name": select(_type == "reference" => @->name, investor->name),
+          "type": select(_type == "reference" => @->type, investor->type)
         }
       },
       "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
@@ -929,10 +930,11 @@ export async function getLPInvestmentsForPdf() {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        "coInvestors": coInvestors[]->{
-          _id,
-          name,
-          type
+        "coInvestors": coInvestors[]{
+          "displayOrder": displayOrder,
+          "_id": select(_type == "reference" => @->_id, investor->_id),
+          "name": select(_type == "reference" => @->name, investor->name),
+          "type": select(_type == "reference" => @->type, investor->type)
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
@@ -1017,10 +1019,11 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
           _id,
           name,
           type,
-          _id,
-          name,
-          type,
-          "logo": logo.asset->url
+          "displayOrder": displayOrder,
+          "_id": select(_type == "reference" => @->_id, investor->_id),
+          "name": select(_type == "reference" => @->name, investor->name),
+          "type": select(_type == "reference" => @->type, investor->type),
+          "logo": select(_type == "reference" => @->logo.asset->url, investor->logo.asset->url)
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
