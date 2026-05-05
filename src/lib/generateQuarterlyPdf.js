@@ -866,19 +866,10 @@ export function generatePdfHtml({
     const moicConf = qd?.moicConfidential;
     const roundMoics = qd?.roundMoics || [];
 
-    // Unique co-investors across all rounds, sorted by displayOrder then alphabetically
-    const coInvestorMap = new Map();
-    allRounds.forEach(r => (r.coInvestors || []).forEach(ci => {
-      if (ci?.name && !coInvestorMap.has(ci.name)) coInvestorMap.set(ci.name, ci);
-    }));
-    const coInvestors = [...coInvestorMap.values()]
-      .sort((a, b) => {
-        const aOrder = a.displayOrder ?? Infinity;
-        const bOrder = b.displayOrder ?? Infinity;
-        if (aOrder !== bOrder) return aOrder - bOrder;
-        return a.name.localeCompare(b.name);
-      })
-      .map(ci => ci.name);
+    // Unique co-investors across all rounds
+    const coInvestors = [...new Set(
+      allRounds.flatMap(r => (r.coInvestors || []).map(ci => ci.name)).filter(Boolean)
+    )];
 
     // ── (page counter placeholder — A+B merged, only C gets a numbered page) ──
     nextPageNum(); // A+B merged section

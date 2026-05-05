@@ -152,22 +152,19 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return allRounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
   };
 
-  // Get all co-investors across all rounds (deduplicated, sorted by displayOrder then alphabetically)
+  // Get all co-investors across all rounds (deduplicated by name)
   const getAllCoInvestors = () => {
     const investorMap = new Map();
     allRounds.forEach(r => {
       if (r.coInvestors) {
         r.coInvestors.forEach(inv => {
-          if (inv?.name && !investorMap.has(inv.name)) investorMap.set(inv.name, inv);
+          if (inv && inv.name) {
+            investorMap.set(inv.name, inv);
+          }
         });
       }
     });
-    return Array.from(investorMap.values()).sort((a, b) => {
-      const aOrder = a.displayOrder ?? Infinity;
-      const bOrder = b.displayOrder ?? Infinity;
-      if (aOrder !== bOrder) return aOrder - bOrder;
-      return a.name.localeCompare(b.name);
-    });
+    return Array.from(investorMap.values());
   };
 
   // Get date of first investment
