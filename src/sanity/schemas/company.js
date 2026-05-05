@@ -222,8 +222,31 @@ export default {
               name: 'coInvestors',
               title: 'Co-Investors in this Round',
               type: 'array',
-              of: [{ type: 'reference', to: [{ type: 'investor' }] }],
-              description: 'Select co-investors from the centralized investor list',
+              of: [{
+                type: 'object',
+                fields: [
+                  {
+                    name: 'investor',
+                    title: 'Investor',
+                    type: 'reference',
+                    to: [{ type: 'investor' }],
+                    validation: Rule => Rule.required(),
+                  },
+                  {
+                    name: 'displayOrder',
+                    title: 'Display Order',
+                    type: 'number',
+                    description: 'Optional. Lower numbers appear first. Leave blank for alphabetical.',
+                  },
+                ],
+                preview: {
+                  select: { title: 'investor.name', order: 'displayOrder' },
+                  prepare({ title, order }) {
+                    return { title: title || 'Unnamed investor', subtitle: order != null ? `Order: ${order}` : '' };
+                  },
+                },
+              }],
+              description: 'Select co-investors and optionally set a display order for each',
             },
           ],
           preview: {

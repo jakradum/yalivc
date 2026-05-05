@@ -52,12 +52,6 @@ export default {
       type: 'image',
       options: { hotspot: true },
     },
-    {
-      name: 'displayOrder',
-      title: 'Display Order',
-      type: 'number',
-      description: 'Optional. Lower numbers appear first in co-investor lists. Leave blank to sort alphabetically.',
-    },
   ],
   preview: {
     select: {

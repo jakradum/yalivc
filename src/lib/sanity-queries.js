@@ -866,11 +866,11 @@ export async function getLPInvestments() {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        "coInvestors": coInvestors[]->{
-          _id,
-          name,
-          type,
-          displayOrder
+        "coInvestors": coInvestors[]{
+          displayOrder,
+          "_id": investor->_id,
+          "name": investor->name,
+          "type": investor->type
         }
       },
       "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
@@ -930,11 +930,11 @@ export async function getLPInvestmentsForPdf() {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        "coInvestors": coInvestors[]->{
-          _id,
-          name,
-          type,
-          displayOrder
+        "coInvestors": coInvestors[]{
+          displayOrder,
+          "_id": investor->_id,
+          "name": investor->name,
+          "type": investor->type
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
@@ -1019,8 +1019,11 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
           _id,
           name,
           type,
-          "logo": logo.asset->url,
-          displayOrder
+          displayOrder,
+          "_id": investor->_id,
+          "name": investor->name,
+          "type": investor->type,
+          "logo": investor->logo.asset->url
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
