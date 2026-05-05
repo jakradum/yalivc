@@ -243,16 +243,19 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
     return false;
   };
 
-  // Previous quarters = quarters chronologically BEFORE the current report period (using centralized utility)
-  // Only show quarters that have update notes
-  const previousQuarters = getQuartersBefore(
+  // All past quarters = strictly before the current report period, most recent first
+  const allPastQuarters = getQuartersBefore(
     allQuarterlyUpdates,
     currentReportPeriod?.quarter,
     currentReportPeriod?.fiscalYear
-  ).filter(q => hasUpdateNotes(q.updateNotes));
+  );
 
-  // For FMV display in investment table, use current quarter data if available, else most recent
-  const latestQuarter = currentQuarterUpdate || company.latestQuarter || allQuarterlyUpdates[0];
+  // Previous quarters = past quarters that have update notes (for display in update history)
+  const previousQuarters = allPastQuarters.filter(q => hasUpdateNotes(q.updateNotes));
+
+  // For FMV display in investment table, use current quarter data if available,
+  // else fall back to most recent PAST quarter only (never future quarters)
+  const latestQuarter = currentQuarterUpdate || allPastQuarters[0] || null;
 
   // Cumulative MOIC: Only show if explicitly entered in Sanity (no auto-calculation)
   const cumulativeMoic = latestQuarter?.multipleOfInvestment ?? null;

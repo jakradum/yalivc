@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
-import { getPortfolioCompaniesForQuarter } from '@/lib/quarterly-utils';
+import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate } from '@/lib/quarterly-utils';
 import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 0;
@@ -118,9 +118,21 @@ export default async function CompanyPage({ params, searchParams }) {
     .filter(item => item.slug)
     .map(item => ({ slug: item.slug, name: item.name }));
 
+  // Filter investment rounds to only those on or before this quarter's end date
+  const quarterEndDate = getQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);
+  const nextQuarterEndDate = getNextQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);
+  const filteredCompany = {
+    ...company,
+    investmentRounds: filterInvestmentRounds(
+      company.investmentRounds || [],
+      quarterEndDate,
+      nextQuarterEndDate
+    ),
+  };
+
   return (
     <CompanyDetailClient
-      company={company}
+      company={filteredCompany}
       currentReportPeriod={currentReportPeriod}
       allCompanySlugs={allCompanySlugs}
       reportSlug={reportSlug || null}

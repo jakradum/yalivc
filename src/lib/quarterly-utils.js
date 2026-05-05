@@ -189,6 +189,22 @@ export function getCompanyQuarterData(company, quarter, fiscalYear) {
 }
 
 /**
+ * Get the most recent quarterly update strictly before a given quarter.
+ * Used as fallback when the target quarter has no data.
+ * Ensures future-quarter data never bleeds backward.
+ * @param {object} company - Company object with quarterlyUpdates array
+ * @param {string} quarter - Target quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Target fiscal year (e.g., "FY26")
+ * @returns {object|null} Most recent past quarterly update or null
+ */
+export function getMostRecentPastQuarterData(company, quarter, fiscalYear) {
+  const updates = company?.quarterlyUpdates;
+  if (!updates || !Array.isArray(updates)) return null;
+  const past = getQuartersBefore(updates, quarter, fiscalYear);
+  return past.length > 0 ? past[0] : null;
+}
+
+/**
  * Check if a quarter is before another quarter chronologically
  * @param {string} q1 - First quarter (Q1, Q2, Q3, Q4)
  * @param {string} fy1 - First fiscal year (e.g., "FY26")
@@ -314,8 +330,7 @@ export function buildReportData({
 
   portfolioCompanies.forEach(inv => {
     const quarterData = getCompanyQuarterData(inv, quarter, fiscalYear) ||
-      inv.latestQuarter ||
-      inv.quarterlyUpdates?.[0];
+      getMostRecentPastQuarterData(inv, quarter, fiscalYear);
 
     if (quarterData) {
       computedTotalFMV += quarterData.currentFMV || 0;
