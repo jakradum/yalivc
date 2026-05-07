@@ -13,7 +13,7 @@ import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuarte
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports, isLatestReport }) {
+export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports, isLatestReport, isInternalReport }) {
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -312,6 +312,9 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
           </Link>
         </div>
         <div className={styles.headerRight}>
+          {isInternalReport && (
+            <span className={styles.internalPreviewBadge}>internal preview</span>
+          )}
           <div
             className={styles.fyDropdown}
             ref={dropdownRef}
