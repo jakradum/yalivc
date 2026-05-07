@@ -13,7 +13,13 @@ import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuarte
 
 import Footer from '../../../../components/footer';
 
-export default function CompanyDetailClient({ company, currentReportPeriod, allCompanySlugs, reportSlug, allReports, isLatestReport, isInternalReport }) {
+export default function CompanyDetailClient({ company, report, allCompanySlugs, allReports, isLatestReport }) {
+  const quarter = report?.quarter || 'Q3';
+  const fiscalYear = report?.fiscalYear || 'FY26';
+  const reportSlug = report?.slug || null;
+  const isInternalReport = report?.visibility === 'internal';
+  const currentReportPeriod = { quarter, fiscalYear };
+
   const router = useRouter();
   const [showPreviousQuarters, setShowPreviousQuarters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

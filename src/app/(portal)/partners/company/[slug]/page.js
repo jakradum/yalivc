@@ -133,12 +133,10 @@ export default async function CompanyPage({ params, searchParams }) {
   return (
     <CompanyDetailClient
       company={filteredCompany}
-      currentReportPeriod={currentReportPeriod}
+      report={selectedReport}
       allCompanySlugs={allCompanySlugs}
-      reportSlug={reportSlug || null}
       allReports={accessibleReports}
       isLatestReport={isLatestReport}
-      isInternalReport={selectedReport?.visibility === 'internal'}
     />
   );
 }

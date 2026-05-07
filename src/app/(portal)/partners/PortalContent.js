@@ -104,20 +104,23 @@ const getLatestRoundName = (company) => {
 function PortalContentInner({
   fundSettings,
   report,
-  quarter,
-  fiscalYear,
-  reportingDate,
   signatory,
   fundMetrics,
   investments,
   allReports,
   isLatestReport,
   initialSection,
-  reportSlug,
   quarterNews,
   quarterSocialUpdates,
   isGiftCityLP = false
 }) {
+  const quarter = report?.quarter || 'Q3';
+  const fiscalYear = report?.fiscalYear || 'FY26';
+  const reportSlug = report?.slug || null;
+  const reportingDate = report?.reportingDate
+    ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
+    : 'December 2025';
+
   const router = useRouter();
   const dropdownRef = useRef(null);
   const dropdownTimerRef = useRef(null);
