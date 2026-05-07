@@ -20,7 +20,9 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
-  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(false);
+  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(() => {
+    try { return !!sessionStorage.getItem(`banner-dismissed-${reportSlug}`); } catch { return false; }
+  });
   const headerRef = useRef(null);
   const dropdownRef = useRef(null);
   const dropdownTimerRef = useRef(null);
@@ -359,7 +361,10 @@ export default function CompanyDetailClient({ company, currentReportPeriod, allC
           </span>
           <button
             className={styles.olderReportBannerClose}
-            onClick={() => setOlderReportBannerDismissed(true)}
+            onClick={() => {
+              try { sessionStorage.setItem(`banner-dismissed-${reportSlug}`, '1'); } catch {}
+              setOlderReportBannerDismissed(true);
+            }}
             aria-label="Dismiss banner"
           >
             ×
