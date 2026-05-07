@@ -99,11 +99,6 @@ export default async function PartnersPortal({ searchParams }) {
     socialUpdates,
   });
 
-  // Format reporting date for display
-  const reportingDate = report?.reportingDate
-    ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
-    : 'December 2025';
-
   // Use signatory from report if set, otherwise fallback to Gani
   const signatory = report?.signatory || teamMembers.find(t =>
     t.name?.toLowerCase().includes('gani') ||
@@ -119,16 +114,12 @@ export default async function PartnersPortal({ searchParams }) {
       <PortalContent
         fundSettings={fundSettings}
         report={report}
-        quarter={quarter}
-        fiscalYear={fiscalYear}
-        reportingDate={reportingDate}
         signatory={signatory}
         fundMetrics={reportData.fundMetrics}
         investments={reportData.portfolioCompanies}
         allReports={accessibleReports}
         isLatestReport={isLatestReport}
         initialSection={initialSection || 'cover-note'}
-        reportSlug={reportSlug || null}
         quarterNews={reportData.quarterNews}
         quarterSocialUpdates={reportData.quarterSocialUpdates}
         isGiftCityLP={isGiftCityLP}
