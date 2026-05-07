@@ -138,6 +138,7 @@ export default async function CompanyPage({ params, searchParams }) {
       reportSlug={reportSlug || null}
       allReports={accessibleReports}
       isLatestReport={isLatestReport}
+      isInternalReport={selectedReport?.visibility === 'internal'}
     />
   );
 }
