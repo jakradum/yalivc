@@ -131,7 +131,9 @@ function PortalContentInner({
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
   const [hoveredSegment, setHoveredSegment] = useState(null);
   const [headerHidden, setHeaderHidden] = useState(false);
-  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(false);
+  const [olderReportBannerDismissed, setOlderReportBannerDismissed] = useState(() => {
+    try { return !!sessionStorage.getItem(`banner-dismissed-${reportSlug}`); } catch { return false; }
+  });
 
   // Download disclaimer state
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
@@ -439,7 +441,10 @@ function PortalContentInner({
           </span>
           <button
             className={styles.olderReportBannerClose}
-            onClick={() => setOlderReportBannerDismissed(true)}
+            onClick={() => {
+              try { sessionStorage.setItem(`banner-dismissed-${reportSlug}`, '1'); } catch {}
+              setOlderReportBannerDismissed(true);
+            }}
             aria-label="Dismiss banner"
           >
             ×
