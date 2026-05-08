@@ -223,6 +223,22 @@ export function getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, 
 }
 
 /**
+ * Get the most recent quarterly update strictly before a given quarter that
+ * satisfies a predicate. Used when a metric can be stored in more than one field.
+ * @param {object} company - Company object with quarterlyUpdates array
+ * @param {string} quarter - Target quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Target fiscal year (e.g., "FY26")
+ * @param {function} predicate - Function(update) => boolean
+ * @returns {object|null}
+ */
+export function getMostRecentPastQuarterMatching(company, quarter, fiscalYear, predicate) {
+  const updates = company?.quarterlyUpdates;
+  if (!updates || !Array.isArray(updates)) return null;
+  const past = getQuartersBefore(updates, quarter, fiscalYear);
+  return past.find(predicate) || null;
+}
+
+/**
  * Check if a quarter is before another quarter chronologically
  * @param {string} q1 - First quarter (Q1, Q2, Q3, Q4)
  * @param {string} fy1 - First fiscal year (e.g., "FY26")
