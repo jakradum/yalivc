@@ -11,7 +11,7 @@ import { CloseIcon } from '../../components/icons/small-icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
 import PortalTour, { replayPortalTour } from './PortalTour';
-import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
+import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -1146,9 +1146,11 @@ function PortalContentInner({
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Multiple</span>
                             {(() => {
+                              const hasMoic = q => q && (q.moicConfidential || q.multipleOfInvestment != null || q.roundMoics?.length > 0);
                               const currentQ = getCompanyQuarterData(company, quarter, fiscalYear);
-                              const qd = (currentQ?.multipleOfInvestment != null || currentQ?.moicConfidential) ? currentQ : getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, 'multipleOfInvestment');
-                              return <span className={styles.companyTileMetricValue}>{qd?.moicConfidential ? '**' : (qd?.multipleOfInvestment ? `${qd.multipleOfInvestment.toFixed(2)}x` : '-')}</span>;
+                              const qd = hasMoic(currentQ) ? currentQ : getMostRecentPastQuarterMatching(company, quarter, fiscalYear, hasMoic);
+                              const moicValue = qd?.multipleOfInvestment ?? (qd?.roundMoics?.length === 1 ? qd.roundMoics[0]?.moic : null);
+                              return <span className={styles.companyTileMetricValue}>{qd?.moicConfidential ? '**' : (moicValue != null ? `${moicValue.toFixed(2)}x` : '-')}</span>;
                             })()}
                           </div>
                         </div>
