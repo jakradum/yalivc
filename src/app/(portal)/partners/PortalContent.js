@@ -820,22 +820,36 @@ function PortalContentInner({
                         <span className={styles.kpiLabel}>No. of portfolio companies</span>
                         <span className={styles.kpiValue}>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</span>
                       </div>
-                      <div className={styles.kpiCard}>
-                        <span className={styles.kpiLabel}>Amount returned</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.amountReturned != null ? `₹${fundMetrics.amountReturned.toFixed(2)} Cr` : '-'}</span>
-                      </div>
-                      <div className={styles.kpiCard}>
-                        <span className={styles.kpiLabel}>MOIC</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.moic != null ? `${fundMetrics.moic.toFixed(2)}x` : '-'}</span>
-                      </div>
-                      <div className={styles.kpiCard}>
-                        <span className={styles.kpiLabel}>TVPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.tvpi != null ? `${fundMetrics.tvpi.toFixed(2)}x` : '-'}</span>
-                      </div>
-                      <div className={styles.kpiCard}>
-                        <span className={styles.kpiLabel}>DPI</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.dpi != null ? `${fundMetrics.dpi.toFixed(4)}x` : '-'}</span>
-                      </div>
+                      {fundMetrics?.amountReturned != null && (
+                        <div className={styles.kpiCard}>
+                          <span className={styles.kpiLabel}>Amount returned</span>
+                          <span className={styles.kpiValue}>{`₹${fundMetrics.amountReturned.toFixed(2)} Cr`}</span>
+                        </div>
+                      )}
+                      {fundMetrics?.moic != null && (
+                        <div className={styles.kpiCard}>
+                          <span className={styles.kpiLabel}>MOIC</span>
+                          <span className={styles.kpiValue}>{`${fundMetrics.moic.toFixed(2)}x`}</span>
+                        </div>
+                      )}
+                      {fundMetrics?.tvpi != null && (
+                        <div className={styles.kpiCard}>
+                          <span className={styles.kpiLabel}>TVPI</span>
+                          <span className={styles.kpiValue}>{`${fundMetrics.tvpi.toFixed(2)}x`}</span>
+                        </div>
+                      )}
+                      {fundMetrics?.dpi != null && (
+                        <div className={styles.kpiCard}>
+                          <span className={styles.kpiLabel}>DPI</span>
+                          <span className={styles.kpiValue}>{`${fundMetrics.dpi.toFixed(4)}x`}</span>
+                        </div>
+                      )}
+                      {fundMetrics?.rvpi != null && (
+                        <div className={styles.kpiCard}>
+                          <span className={styles.kpiLabel}>RVPI</span>
+                          <span className={styles.kpiValue}>{`${fundMetrics.rvpi.toFixed(2)}x`}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -868,38 +882,58 @@ function PortalContentInner({
                         <td>Combined fund size</td>
                         <td>{fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '-'}</td>
                       </tr>
-                      <tr>
-                        <td>Amount drawn down as per bank</td>
-                        <td>{fundMetrics?.amountDrawnDown != null ? fundMetrics.amountDrawnDown.toFixed(2) : '-'}</td>
-                      </tr>
-                      <tr>
-                        <td>Total invested in portfolio</td>
-                        <td>{fundMetrics?.totalInvestedInPortfolio != null ? fundMetrics.totalInvestedInPortfolio.toFixed(2) : '-'}</td>
-                      </tr>
-                      <tr>
-                        <td>Fair Market Value of Portfolio Investments (including realised value)</td>
-                        <td>{fundMetrics?.fmvOfPortfolio != null ? fundMetrics.fmvOfPortfolio.toFixed(2) : '-'}</td>
-                      </tr>
+                      {fundMetrics?.amountDrawnDown != null && (
+                        <tr>
+                          <td>Amount drawn down as per bank</td>
+                          <td>{fundMetrics.amountDrawnDown.toFixed(2)}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.totalInvestedInPortfolio != null && (
+                        <tr>
+                          <td>Total invested in portfolio</td>
+                          <td>{fundMetrics.totalInvestedInPortfolio.toFixed(2)}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.fmvOfPortfolio != null && (
+                        <tr>
+                          <td>Fair Market Value of Portfolio Investments (including realised value)</td>
+                          <td>{fundMetrics.fmvOfPortfolio.toFixed(2)}</td>
+                        </tr>
+                      )}
                       <tr>
                         <td>Number of portfolio companies</td>
                         <td>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</td>
                       </tr>
-                      <tr>
-                        <td>Amount returned (including passive income returned)</td>
-                        <td>{fundMetrics?.amountReturned != null ? fundMetrics.amountReturned.toFixed(2) : '-'}</td>
-                      </tr>
-                      <tr>
-                        <td>MOIC</td>
-                        <td>{fundMetrics?.moic != null ? `${fundMetrics.moic.toFixed(2)}x` : '-'}</td>
-                      </tr>
-                      <tr>
-                        <td>TVPI</td>
-                        <td>{fundMetrics?.tvpi != null ? `${fundMetrics.tvpi.toFixed(2)}x` : '-'}</td>
-                      </tr>
-                      <tr>
-                        <td>DPI</td>
-                        <td>{fundMetrics?.dpi != null ? `${fundMetrics.dpi.toFixed(4)}x` : '-'}</td>
-                      </tr>
+                      {fundMetrics?.amountReturned != null && (
+                        <tr>
+                          <td>Amount returned (including passive income returned)</td>
+                          <td>{fundMetrics.amountReturned.toFixed(2)}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.moic != null && (
+                        <tr>
+                          <td>MOIC</td>
+                          <td>{`${fundMetrics.moic.toFixed(2)}x`}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.tvpi != null && (
+                        <tr>
+                          <td>TVPI</td>
+                          <td>{`${fundMetrics.tvpi.toFixed(2)}x`}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.dpi != null && (
+                        <tr>
+                          <td>DPI</td>
+                          <td>{`${fundMetrics.dpi.toFixed(4)}x`}</td>
+                        </tr>
+                      )}
+                      {fundMetrics?.rvpi != null && (
+                        <tr>
+                          <td>RVPI</td>
+                          <td>{`${fundMetrics.rvpi.toFixed(2)}x`}</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 )}

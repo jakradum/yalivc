@@ -389,6 +389,7 @@ export function buildReportData({
     moic: fundPerformance?.moic ?? computedMoic,
     tvpi: fundPerformance?.tvpi ?? computedMoic,
     dpi: fundPerformance?.dpi ?? computedDpi,
+    rvpi: fundPerformance?.rvpi ?? null,
   };
 
   // 4. Filter news and social updates by quarter date range

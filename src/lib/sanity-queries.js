@@ -829,7 +829,8 @@ export async function getLPFundSettings() {
         amountReturned,
         moic,
         tvpi,
-        dpi
+        dpi,
+        rvpi
       }
     }`
   );
@@ -1579,7 +1580,8 @@ export async function getDataRoomFundPerformance() {
         amountReturned,
         moic,
         tvpi,
-        dpi
+        dpi,
+        rvpi
       }
     }`
   );
@@ -1659,7 +1661,8 @@ export async function getDataRoomAllFundSettings() {
         amountReturned,
         moic,
         tvpi,
-        dpi
+        dpi,
+        rvpi
       }
     }`
   );
