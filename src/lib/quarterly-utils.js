@@ -205,6 +205,24 @@ export function getMostRecentPastQuarterData(company, quarter, fiscalYear) {
 }
 
 /**
+ * Get the most recent quarterly update strictly before a given quarter that has
+ * a non-null value for a specific field. Used for per-metric fallback so that
+ * a quarter with only notes (no FMV entered) doesn't block an older quarter
+ * that does have FMV.
+ * @param {object} company - Company object with quarterlyUpdates array
+ * @param {string} quarter - Target quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Target fiscal year (e.g., "FY26")
+ * @param {string} field - Field name to check for a non-null value
+ * @returns {object|null} Most recent past quarterly update with that field set, or null
+ */
+export function getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, field) {
+  const updates = company?.quarterlyUpdates;
+  if (!updates || !Array.isArray(updates)) return null;
+  const past = getQuartersBefore(updates, quarter, fiscalYear);
+  return past.find(u => u[field] != null) || null;
+}
+
+/**
  * Check if a quarter is before another quarter chronologically
  * @param {string} q1 - First quarter (Q1, Q2, Q3, Q4)
  * @param {string} fy1 - First fiscal year (e.g., "FY26")
