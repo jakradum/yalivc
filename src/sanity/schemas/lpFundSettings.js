@@ -172,6 +172,12 @@ export default {
               type: 'number',
               description: 'Distributions to Paid-In',
             },
+            {
+              name: 'rvpi',
+              title: 'RVPI',
+              type: 'number',
+              description: 'Residual Value to Paid-In',
+            },
           ],
           preview: {
             select: {
