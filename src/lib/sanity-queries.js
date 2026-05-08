@@ -873,10 +873,32 @@ export async function getLPInvestments() {
           "type": select(_type == "reference" => @->type, investor->type)
         }
       },
-      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+      "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
         quarter,
         fiscalYear,
         // Confidential data filtered at source - values are null when confidential
+        "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
+        currentFMVConfidential,
+        "currentOwnershipPercent": select(currentOwnershipConfidential == true => null, currentOwnershipPercent),
+        currentOwnershipConfidential,
+        "amountReturned": select(amountReturnedConfidential == true => null, amountReturned),
+        amountReturnedConfidential,
+        "multipleOfInvestment": select(moicConfidential == true => null, multipleOfInvestment),
+        moicConfidential,
+        "roundMoics": select(moicConfidential == true => null, roundMoics),
+        tableFootnotes,
+        updateNotes,
+        "revenueINR": select(revenueConfidential == true => null, revenueINR),
+        revenueConfidential,
+        "patINR": select(patConfidential == true => null, patINR),
+        patConfidential,
+        "teamSize": select(teamSizeConfidential == true => null, teamSize),
+        teamSizeConfidential,
+        keyMetrics
+      },
+      "latestQuarter": quarterlyUpdates[] | order(fiscalYear desc, quarter desc)[0] {
+        quarter,
+        fiscalYear,
         "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
         currentFMVConfidential,
         "currentOwnershipPercent": select(currentOwnershipConfidential == true => null, currentOwnershipPercent),
