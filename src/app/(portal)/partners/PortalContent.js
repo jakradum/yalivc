@@ -11,7 +11,7 @@ import { CloseIcon } from '../../components/icons/small-icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
 import PortalTour, { replayPortalTour } from './PortalTour';
-import { getCompanyQuarterData, getMostRecentPastQuarterData } from '@/lib/quarterly-utils';
+import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -1138,14 +1138,16 @@ function PortalContentInner({
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>FMV</span>
                             {(() => {
-                              const qd = getCompanyQuarterData(company, quarter, fiscalYear) || getMostRecentPastQuarterData(company, quarter, fiscalYear);
+                              const currentQ = getCompanyQuarterData(company, quarter, fiscalYear);
+                              const qd = (currentQ?.currentFMV != null || currentQ?.currentFMVConfidential) ? currentQ : getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, 'currentFMV');
                               return <span className={styles.companyTileMetricValue}>{qd?.currentFMVConfidential ? '**' : (qd?.currentFMV != null ? `₹${qd.currentFMV.toFixed(1)} Cr` : '-')}</span>;
                             })()}
                           </div>
                           <div className={styles.companyTileMetric}>
                             <span className={styles.companyTileMetricLabel}>Multiple</span>
                             {(() => {
-                              const qd = getCompanyQuarterData(company, quarter, fiscalYear) || getMostRecentPastQuarterData(company, quarter, fiscalYear);
+                              const currentQ = getCompanyQuarterData(company, quarter, fiscalYear);
+                              const qd = (currentQ?.multipleOfInvestment != null || currentQ?.moicConfidential) ? currentQ : getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, 'multipleOfInvestment');
                               return <span className={styles.companyTileMetricValue}>{qd?.moicConfidential ? '**' : (qd?.multipleOfInvestment ? `${qd.multipleOfInvestment.toFixed(2)}x` : '-')}</span>;
                             })()}
                           </div>
