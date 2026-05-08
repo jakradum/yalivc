@@ -28,7 +28,7 @@ export default defineConfig({
                   .items([
                     S.listItem()
                       .title('Investment Philosophy')
-                      .child(S.document().schemaType('investmentPhilosophy').documentId('investmentPhilosophy')),
+                      .child(S.document().schemaType('investmentPhilosophy').documentId('investmentPhilosophy').views([S.view.form()])),
                     S.listItem().title('Portfolio Companies').child(S.documentTypeList('company').title('Companies')),
                     S.listItem().title('Categories').child(S.documentTypeList('category').title('Categories')),
                     S.listItem().title('Team Members').child(S.documentTypeList('teamMember').title('Team')),
@@ -75,6 +75,7 @@ export default defineConfig({
                         S.document()
                           .schemaType('lpFundSettings')
                           .documentId('lpFundSettings')
+                          .views([S.view.form()])
                       ),
                     S.divider(),
                     S.listItem()
@@ -116,6 +117,7 @@ export default defineConfig({
                         S.document()
                           .schemaType('dataroomFundContent')
                           .documentId('dataroomFundContent')
+                          .views([S.view.form()])
                       ),
                     S.divider(),
                   ])
@@ -133,6 +135,7 @@ export default defineConfig({
                 S.document()
                   .schemaType('investorRelations')
                   .documentId('investorRelations')
+                  .views([S.view.form()])
               ),
           ]),
     }),
