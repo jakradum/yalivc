@@ -1038,15 +1038,12 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
         postMoneyValuation,
         yaliInvestment,
         yaliOwnership,
-        "coInvestors": coInvestors[]->{
-          _id,
-          name,
-          type,
-          "displayOrder": displayOrder,
+        "coInvestors": coInvestors[]{
           "_id": select(_type == "reference" => @->_id, investor->_id),
           "name": select(_type == "reference" => @->name, investor->name),
           "type": select(_type == "reference" => @->type, investor->type),
-          "logo": select(_type == "reference" => @->logo.asset->url, investor->logo.asset->url)
+          "logo": select(_type == "reference" => @->logo.asset->url, investor->logo.asset->url),
+          "displayOrder": select(_type == "coInvestorEntry" => displayOrder, null)
         }
       },
       "quarterlyUpdates": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
