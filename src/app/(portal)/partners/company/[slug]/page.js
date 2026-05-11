@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { getLPInvestmentByCompanySlug, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
+import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
 import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate } from '@/lib/quarterly-utils';
 import CompanyDetailClient from './CompanyDetailClient';
 
