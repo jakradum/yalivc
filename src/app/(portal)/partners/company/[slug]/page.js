@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
+import { getLPInvestmentByCompanySlug, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
 import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate } from '@/lib/quarterly-utils';
 import CompanyDetailClient from './CompanyDetailClient';
 
@@ -20,16 +20,6 @@ function getUserEmail(cookieStore) {
 function isInternalUser(email) {
   if (!email) return false;
   return email.toLowerCase().endsWith('@yali.vc');
-}
-
-// Generate static params for all portfolio companies
-export async function generateStaticParams() {
-  const slugs = await getAllLPInvestmentSlugs();
-  return slugs
-    .filter(item => item.slug)
-    .map((item) => ({
-      slug: item.slug,
-    }));
 }
 
 // Generate metadata
