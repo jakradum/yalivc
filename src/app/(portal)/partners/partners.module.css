@@ -2760,6 +2760,14 @@
   margin-right: 0.25rem;
 }
 
+.roundsDisclaimer {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
 /* Inline footnote marker (in table cells) */
 .footnoteMarker {
   color: #830D35;
