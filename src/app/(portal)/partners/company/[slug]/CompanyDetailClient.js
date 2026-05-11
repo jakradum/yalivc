@@ -9,7 +9,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
-import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending } from '@/lib/quarterly-utils';
+import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
 
 import Footer from '../../../../components/footer';
 
@@ -265,6 +265,11 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   // else fall back to most recent PAST quarter only (never future quarters)
   const latestQuarter = currentQuarterUpdate || allPastQuarters[0] || null;
 
+  // FMV-specific fallback: find the most recent quarter where currentFMV is actually populated
+  const fmvQuarter = (currentQuarterUpdate?.currentFMV != null || currentQuarterUpdate?.currentFMVConfidential)
+    ? currentQuarterUpdate
+    : getMostRecentPastQuarterWithValue(company, currentReportPeriod?.quarter, currentReportPeriod?.fiscalYear, 'currentFMV');
+
   // Cumulative MOIC: Only show if explicitly entered in Sanity (no auto-calculation)
   const cumulativeMoic = latestQuarter?.multipleOfInvestment ?? null;
 
@@ -487,7 +492,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 </tr>
                 <tr>
                   <td>Current FMV{getFieldMarker('snapshot-fmv')}</td>
-                  <td>{latestQuarter?.currentFMVConfidential ? '**' : (latestQuarter?.currentFMV != null ? `₹${formatCurrency(latestQuarter.currentFMV)} Cr` : '-')}</td>
+                  <td>{fmvQuarter?.currentFMVConfidential ? '**' : (fmvQuarter?.currentFMV != null ? `₹${formatCurrency(fmvQuarter.currentFMV)} Cr` : '-')}</td>
                 </tr>
                 {/* Per-round MOIC (show for any company that has roundMoics data) */}
                 {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && !latestQuarter?.moicConfidential && (
