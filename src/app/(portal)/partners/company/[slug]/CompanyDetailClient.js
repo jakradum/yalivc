@@ -270,6 +270,17 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
     ? currentQuarterUpdate
     : getMostRecentPastQuarterWithValue(company, currentReportPeriod?.quarter, currentReportPeriod?.fiscalYear, 'currentFMV');
 
+  // Ownership: prefer quarterly currentOwnershipPercent, fall back to most recent past quarter
+  // with a value, then fall back to the most recent round that actually closed this quarter or earlier
+  // (excludes showEarlyInReport rounds whose investmentDate is still in a future quarter)
+  const quarterEndDate = getQuarterEndDate(currentReportPeriod?.quarter, currentReportPeriod?.fiscalYear);
+  const latestClosedRound = sortedRoundsNewestFirst.find(
+    r => !r.investmentDate || r.investmentDate <= quarterEndDate
+  ) || null;
+  const ownershipQuarter = (currentQuarterUpdate?.currentOwnershipPercent != null || currentQuarterUpdate?.currentOwnershipConfidential)
+    ? currentQuarterUpdate
+    : getMostRecentPastQuarterWithValue(company, currentReportPeriod?.quarter, currentReportPeriod?.fiscalYear, 'currentOwnershipPercent');
+
   // Cumulative MOIC: Only show if explicitly entered in Sanity (no auto-calculation)
   const cumulativeMoic = latestQuarter?.multipleOfInvestment ?? null;
 
@@ -488,7 +499,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 )}
                 <tr>
                   <td>Ownership (FD){getFieldMarker('snapshot-ownership')}</td>
-                  <td>{latestQuarter?.currentOwnershipConfidential ? '**' : (latestRound?.yaliOwnership ? `${latestRound.yaliOwnership.toFixed(2)}%` : '-')}</td>
+                  <td>{ownershipQuarter?.currentOwnershipConfidential ? '**' : (ownershipQuarter?.currentOwnershipPercent != null ? `${ownershipQuarter.currentOwnershipPercent.toFixed(2)}%` : (latestClosedRound?.yaliOwnership != null ? `${latestClosedRound.yaliOwnership.toFixed(2)}%` : '-'))}</td>
                 </tr>
                 <tr>
                   <td>Current FMV{getFieldMarker('snapshot-fmv')}</td>
