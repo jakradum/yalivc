@@ -698,8 +698,13 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
             {/* Financials / Key Matrix */}
             {(() => {
               // Only show for revenue-making companies with quarterly data
+              // Restrict to current quarter and past quarters only — never show future data
+              const eligibleQuarters = [
+                ...(currentQuarterUpdate ? [currentQuarterUpdate] : []),
+                ...allPastQuarters,
+              ];
               const quartersWithFinancials = sortQuartersDescending(
-                allQuarterlyUpdates.filter(q => q.revenueINR != null || q.revenueConfidential || q.patINR != null || q.patConfidential)
+                eligibleQuarters.filter(q => q.revenueINR != null || q.revenueConfidential || q.patINR != null || q.patConfidential)
               );
 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
