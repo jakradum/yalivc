@@ -163,10 +163,18 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   // Get all co-investors across all rounds (deduplicated, sorted by displayOrder then alphabetically)
   const getAllCoInvestors = () => {
     const investorMap = new Map();
+    // Iterate oldest-first so later rounds overwrite earlier ones.
+    // This ensures displayOrder from the most recently entered round wins.
     allRounds.forEach(r => {
       if (r.coInvestors) {
         r.coInvestors.forEach(inv => {
-          if (inv?.name && !investorMap.has(inv.name)) investorMap.set(inv.name, inv);
+          if (inv?.name) {
+            const existing = investorMap.get(inv.name);
+            // Overwrite if: no existing entry, OR new entry has displayOrder and existing doesn't
+            if (!existing || (inv.displayOrder != null && existing.displayOrder == null)) {
+              investorMap.set(inv.name, inv);
+            }
+          }
         });
       }
     });
