@@ -678,32 +678,7 @@ export function generatePdfHtml({
   // PAGE 2 — TABLE OF CONTENTS
   // ════════════════════════════════════════════════════════════
   const tocPageNum = nextPageNum(); // 2
-
-  // Pages 1–7 are fixed; each company adds 2 page increments (A+B + C).
-  const N = portfolioCompanies.length;
-  const tocFundFinPage  = 8  + 2 * N;
-  const tocPipelinePage = 9  + 2 * N;
-  const tocMediaPage    = 10 + 2 * N;
-  const tocContactPage  = 11 + 2 * N;
-
-  const tocHtml = `
-  <div class="page">
-    <div class="toc-wrap">
-      <div class="toc-title">TABLE OF<br>CONTENTS</div>
-      <table class="toc-table">
-        <tr class="toc-row"><td><a href="#section-cover-note">Cover note</a></td><td><a href="#section-cover-note">3</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-fund-summary">Fund summary</a></td><td><a href="#section-fund-summary">5</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
-        <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
-        <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates">7</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-fund-fin">Fund financials</a></td><td><a href="#section-fund-fin">${tocFundFinPage}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-pipeline">Pipeline summary</a></td><td><a href="#section-pipeline">${tocPipelinePage}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-media">Media coverage</a></td><td><a href="#section-media">${tocMediaPage}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-contact">Contact information</a></td><td><a href="#section-contact">${tocContactPage}</a></td></tr>
-      </table>
-    </div>
-    ${pgNum(tocPageNum)}
-  </div>`;
+  // tocHtml is built after all sections so page numbers are accurate — see below.
 
   // ════════════════════════════════════════════════════════════
   // PAGES 3-4 — COVER NOTE
@@ -1237,6 +1212,7 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   // CONTACT INFORMATION (last page)
   // ════════════════════════════════════════════════════════════
+  const contactPageNum = nextPageNum();
   const websiteDisplay = fundSettings?.website
     ? fundSettings.website.replace(/^https?:\/\//, '').replace(/\/$/, '').toUpperCase()
     : null;
@@ -1264,6 +1240,28 @@ export function generatePdfHtml({
           <div class="contact-box-text">${esc(fundSettings.fundName.toUpperCase())}</div>
         </div>` : ''}
     </div>
+  </div>`;
+
+  // ════════════════════════════════════════════════════════════
+  // TABLE OF CONTENTS — built last so all page numbers are known
+  // ════════════════════════════════════════════════════════════
+  const tocHtml = `
+  <div class="page">
+    <div class="toc-wrap">
+      <div class="toc-title">TABLE OF<br>CONTENTS</div>
+      <table class="toc-table">
+        <tr class="toc-row"><td><a href="#section-cover-note">Cover note</a></td><td><a href="#section-cover-note">${cn1PageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-summary">Fund summary</a></td><td><a href="#section-fund-summary">${fundSumPageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv">${portInvPageNum}</a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv">${portInvPageNum}</a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates">${portSepPageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-fin">Fund financials</a></td><td><a href="#section-fund-fin">${fundFinPageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-pipeline">Pipeline summary</a></td><td><a href="#section-pipeline">${pipelinePageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-media">Media coverage</a></td><td><a href="#section-media">${mediaPageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-contact">Contact information</a></td><td><a href="#section-contact">${contactPageNum}</a></td></tr>
+      </table>
+    </div>
+    ${pgNum(tocPageNum)}
   </div>`;
 
   // ════════════════════════════════════════════════════════════
