@@ -307,6 +307,7 @@ body {
 
 /* ── TOC anchor links ── */
 .toc-row a, .toc-subrow a { color: inherit; text-decoration: none; }
+a { cursor: pointer; }
 
 /* ── Tables ── */
 .report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -678,6 +679,13 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   const tocPageNum = nextPageNum(); // 2
 
+  // Pages 1–7 are fixed; each company adds 2 page increments (A+B + C).
+  const N = portfolioCompanies.length;
+  const tocFundFinPage  = 8  + 2 * N;
+  const tocPipelinePage = 9  + 2 * N;
+  const tocMediaPage    = 10 + 2 * N;
+  const tocContactPage  = 11 + 2 * N;
+
   const tocHtml = `
   <div class="page">
     <div class="toc-wrap">
@@ -688,10 +696,10 @@ export function generatePdfHtml({
         <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
         <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv">6</a></td></tr>
         <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates">7</a></td></tr>
-        <tr class="toc-row"><td>Fund financials</td><td>—</td></tr>
-        <tr class="toc-row"><td>Pipeline summary</td><td>—</td></tr>
-        <tr class="toc-row"><td>Media coverage</td><td>—</td></tr>
-        <tr class="toc-row"><td>Contact information</td><td>—</td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-fin">Fund financials</a></td><td><a href="#section-fund-fin">${tocFundFinPage}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-pipeline">Pipeline summary</a></td><td><a href="#section-pipeline">${tocPipelinePage}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-media">Media coverage</a></td><td><a href="#section-media">${tocMediaPage}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-contact">Contact information</a></td><td><a href="#section-contact">${tocContactPage}</a></td></tr>
       </table>
     </div>
     ${pgNum(tocPageNum)}
@@ -777,6 +785,7 @@ export function generatePdfHtml({
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
           <tr><td>TVPI</td><td>${fundMetrics.tvpi != null ? fmt(fundMetrics.tvpi) + 'x' : '—'}</td></tr>
           <tr><td>DPI</td><td>${fundMetrics.dpi != null ? fmt(fundMetrics.dpi, 4) + 'x' : '—'}</td></tr>
+          ${fundMetrics.rvpi != null ? `<tr><td>RVPI</td><td>${fmt(fundMetrics.rvpi)}x</td></tr>` : ''}
         </tbody>
       </table>
     </div>
@@ -866,10 +875,16 @@ export function generatePdfHtml({
     const moicConf = qd?.moicConfidential;
     const roundMoics = qd?.roundMoics || [];
 
-    // Unique co-investors across all rounds, sorted by displayOrder then alphabetically
+    // Unique co-investors across all rounds, sorted by displayOrder then alphabetically.
+    // Iterate oldest-first so later rounds overwrite — preserving displayOrder from most recent entry.
     const coInvestorMap = new Map();
     allRounds.forEach(r => (r.coInvestors || []).forEach(ci => {
-      if (ci?.name && !coInvestorMap.has(ci.name)) coInvestorMap.set(ci.name, ci);
+      if (ci?.name) {
+        const existing = coInvestorMap.get(ci.name);
+        if (!existing || (ci.displayOrder != null && existing.displayOrder == null)) {
+          coInvestorMap.set(ci.name, ci);
+        }
+      }
     }));
     const coInvestors = [...coInvestorMap.values()]
       .sort((a, b) => {
@@ -959,7 +974,7 @@ export function generatePdfHtml({
             <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmt(fmv) : '—')}</td></tr>
             ${roundMoicRows}
             <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
-            ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
+            ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
           </tbody>
         </table>
         ${snapshotFootnotes || defaultMoicFootnote}
@@ -1103,7 +1118,7 @@ export function generatePdfHtml({
   const fundFinPageNum = nextPageNum();
 
   const fundFinHtml = `
-  <div class="page">
+  <div class="page" id="section-fund-fin">
     ${headerHtml()}
     <div style="padding: 24px 40px; position: relative; min-height: 900px;">
       <div class="heading-mono">Fund<br>financials</div>
@@ -1126,7 +1141,7 @@ export function generatePdfHtml({
   const pipelineNotesHtml = renderPortableText(report.pipelineNotes);
 
   const pipelineHtml = `
-  <div class="page">
+  <div class="page" id="section-pipeline">
     ${headerHtml()}
     <div style="padding: 24px 40px; position: relative; min-height: 900px;">
       <div class="heading-mono">Pipeline<br>summary</div>
@@ -1203,7 +1218,7 @@ export function generatePdfHtml({
 
   // Use <table> + <thead> so the page header repeats automatically if social cards overflow to a second page
   const mediaHtml = `
-  <table class="media-page-table">
+  <table class="media-page-table" id="section-media">
     <thead><tr><td>${headerHtml()}</td></tr></thead>
     <tbody><tr><td style="padding: 28px 40px 80px;">
       <div class="media-heading-wrap">
@@ -1229,7 +1244,7 @@ export function generatePdfHtml({
   const irEmail = fundSettings?.investorRelationsEmail;
 
   const contactHtml = `
-  <div class="page contact-page">
+  <div class="page contact-page" id="section-contact">
     <div class="contact-heading">CONTACT<br>INFORMATION</div>
     <div class="contact-boxes">
       ${websiteDisplay ? `
