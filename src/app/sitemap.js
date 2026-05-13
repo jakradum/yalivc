@@ -62,7 +62,7 @@ export default async function sitemap() {
   // Dynamic blog posts
   let blogPages = [];
   try {
-    const posts = await getAllBlogPosts();
+    const { posts = [] } = await getAllBlogPosts();
     blogPages = posts
       .filter(post => post.slug)
       .map((post) => ({
