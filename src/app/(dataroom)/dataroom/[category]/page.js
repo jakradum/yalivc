@@ -1,6 +1,7 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
+import { verifySession } from '@/lib/session';
 import {
   getDataRoomDocuments,
   getDataRoomTrackRecords,
@@ -11,6 +12,7 @@ import {
   getPortalUserByEmail,
   getDataroomFundContent,
   getLatestLPReportForDataRoom,
+  getDataroomDomainPrivilege,
 } from '@/lib/sanity-queries';
 import DataroomTopbar from '../DataroomTopbar';
 import DrSidebar from '../DrSidebar';
@@ -96,7 +98,21 @@ export default async function CategoryPage({ params }) {
   // Sidebar data — fetched for all branches
   const cookieStore = await cookies();
   const session = cookieStore.get('dataroom-session')?.value;
-  const email = session ? session.split(':')[0] : null;
+  const email = session ? verifySession(session) : null;
+  // Invalid signature → re-authenticate
+  if (session && email === null) redirect('/dataroom/sign-in');
+  // No session → sign in
+  if (!email) redirect('/dataroom/sign-in');
+  // Authorise: trusted domain, active domain privilege, or individual user access
+  const isTrustedDomain = email.endsWith('@yali.vc') || email.endsWith('@florintree.com');
+  if (!isTrustedDomain) {
+    const domain = email.split('@')[1];
+    const [domainPriv, user] = await Promise.all([
+      getDataroomDomainPrivilege(domain),
+      getPortalUserByEmail(email),
+    ]);
+    if (!domainPriv && !user?.investorDataRoomAccess) redirect('/dataroom/sign-in');
+  }
 
   const [fundContent, latestLPReport] = await Promise.all([
     getDataroomFundContent(),
@@ -200,13 +216,11 @@ export default async function CategoryPage({ params }) {
 
   // ── Portfolio ───────────────────────────────────────────────────────────────
   if (slug === 'portfolio') {
-    const cookieStore = await cookies();
-    const session = cookieStore.get('dataroom-session')?.value;
-    const email = session ? session.split(':')[0] : null;
+    // email is already verified at the top of this function
     const user = email ? await getPortalUserByEmail(email) : null;
 
     if (!user?.investorDataRoomAccess) {
-      notFound();
+      redirect('/dataroom/sign-in');
     }
 
     const companies = await getDataRoomPortfolioCompanies();

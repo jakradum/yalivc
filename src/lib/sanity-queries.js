@@ -711,6 +711,7 @@ export async function getLPReportBySlug(slug) {
       slug,
       quarter,
       fiscalYear,
+      visibility,
       publishedAt,
       summary,
       highlights,
@@ -1399,6 +1400,14 @@ export async function getLatestLPReportForDataRoom() {
 }
 
 // Get the dataroomFundContent singleton — Fund I, Fund II, and Common section assets
+export async function getDataroomDomainPrivilege(domain) {
+  if (!domain) return null;
+  return client.fetch(
+    `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && isActive == true][0]{ _id }`,
+    { domain }
+  );
+}
+
 export async function getDataroomFundContent() {
   return client.fetch(
     `*[_type == "dataroomFundContent"][0] {

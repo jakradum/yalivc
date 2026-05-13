@@ -1,17 +1,11 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getLPReportBySlug, getAllLPReportSlugs } from '@/lib/sanity-queries';
+import { notFound, redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { getLPReportBySlug } from '@/lib/sanity-queries';
+import { verifySession } from '@/lib/session';
 import styles from '../../partners.module.css';
 
-export const revalidate = 60;
-
-// Generate static params for all reports
-export async function generateStaticParams() {
-  const slugs = await getAllLPReportSlugs();
-  return slugs.map((item) => ({
-    slug: item.slug,
-  }));
-}
+export const dynamic = 'force-dynamic';
 
 // Generate metadata
 export async function generateMetadata({ params }) {
@@ -33,10 +27,18 @@ export async function generateMetadata({ params }) {
 
 export default async function ReportPage({ params }) {
   const { slug } = await params;
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get('portal-session')?.value;
+  const userEmail = cookieValue ? verifySession(cookieValue) : null;
+  if (cookieValue && userEmail === null) redirect('/partners/sign-in');
   const report = await getLPReportBySlug(slug);
 
   if (!report) {
     notFound();
+  }
+
+  if (report.visibility === 'internal' && !userEmail?.endsWith('@yali.vc')) {
+    redirect('/partners');
   }
 
   const formatDate = (dateString) => {
