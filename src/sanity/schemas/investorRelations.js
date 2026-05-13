@@ -20,9 +20,9 @@ export default {
             },
             {
               name: 'file',
-              title: 'PDF File',
+              title: 'File',
               type: 'file',
-              options: { accept: '.pdf' },
+              options: { accept: '.pdf,.doc,.docx' },
               validation: Rule => Rule.required(),
             },
           ],
