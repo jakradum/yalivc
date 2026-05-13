@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import {
   getLPFundSettings,
   getLatestLPQuarterlyReport,
@@ -11,20 +12,12 @@ import {
   getPortalUserByEmail,
 } from '@/lib/sanity-queries';
 import { buildReportData, getQuarterStartDate, getQuarterEndDate } from '@/lib/quarterly-utils';
+import { verifySession } from '@/lib/session';
 import PortalLanding from './PortalLanding';
 import PortalContent from './PortalContent';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
-
-// Extract user email from session cookie (format: email:timestamp:signature)
-function getUserEmail(cookieStore) {
-  const sessionCookie = cookieStore.get('portal-session')?.value;
-  if (!sessionCookie) return null;
-  const parts = sessionCookie.split(':');
-  if (parts.length < 1) return null;
-  return parts[0]; // Email is the first part
-}
 
 // Check if user is internal (has @yali.vc email)
 function isInternalUser(email) {
@@ -35,9 +28,12 @@ function isInternalUser(email) {
 export default async function PartnersPortal({ searchParams }) {
   const { report: reportSlug, section: initialSection } = await searchParams;
 
-  // Get user access level from session
+  // Get user access level from session — verify HMAC signature
   const cookieStore = await cookies();
-  const userEmail = getUserEmail(cookieStore);
+  const cookieValue = cookieStore.get('portal-session')?.value;
+  const userEmail = cookieValue ? verifySession(cookieValue) : null;
+  // Cookie present but signature invalid → redirect to sign-in
+  if (cookieValue && userEmail === null) redirect('/partners/sign-in');
   const hasInternalAccess = isInternalUser(userEmail);
 
   // Fetch all raw data in parallel (including user info for GIFT City status)

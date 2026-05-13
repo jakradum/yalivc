@@ -133,16 +133,22 @@ export async function POST(request) {
         (domainPriv && !domainPriv.requireCode);
 
       let user = null;
-      if (!isTrustedDomain) {
+      if (isTrustedDomain) {
+        // noAccess: true is a kill switch even for domain privilege and trusted domain users
+        const blocked = await client.fetch(
+          `*[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id }`,
+          { email: normalizedEmail }
+        );
+        if (blocked) {
+          await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
+          return NextResponse.json({ success: true, ref: 'LP-01' });
+        }
+      } else {
         user = await client.fetch(
           `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id, name }`,
           { email: normalizedEmail }
         );
-
-        // Generic response to prevent email enumeration
-        // Always return success message, but only send email if user exists
         if (!user) {
-          // Delay to prevent timing-based enumeration
           await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
           return NextResponse.json({ success: true, ref: 'LP-01' });
         }
@@ -154,7 +160,7 @@ export async function POST(request) {
 
       // Send OTP via Resend
       const resend = new Resend(RESEND_API_KEY);
-      await resend.emails.send({
+      const { error: resendError } = await resend.emails.send({
         from: 'Yali Partners <noreply@yali.vc>',
         to: normalizedEmail,
         subject: 'Your sign-in code for Yali Capital LP Portal',
@@ -231,6 +237,10 @@ export async function POST(request) {
 </html>`,
       });
 
+      if (resendError) {
+        console.error('[portal-auth] Resend error:', resendError);
+      }
+
       // Store OTP proof in a short-lived cookie (stateless verification)
       const response = NextResponse.json({ success: true, ref: 'LP-OK' });
       response.cookies.set(OTP_COOKIE, `${normalizedEmail}:${timestamp}:${otpSignature}`, {
@@ -265,6 +275,14 @@ export async function POST(request) {
             const a = Buffer.from(code.trim().padEnd(32));
             const b = Buffer.from(domainPriv.inviteCode.padEnd(32));
             if (crypto.timingSafeEqual(a, b) && code.trim() === domainPriv.inviteCode) {
+              // noAccess: true is a kill switch even for domain shared-code users
+              const blocked = await client.fetch(
+                `*[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id }`,
+                { email: normalizedEmail }
+              );
+              if (blocked) {
+                return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
+              }
               const writeClient = createClient({
                 projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
                 dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',

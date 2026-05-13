@@ -1,8 +1,12 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import {
   getDataroomFundContent,
   getLatestLPReportForDataRoom,
+  getDataroomDomainPrivilege,
+  getPortalUserByEmail,
 } from '@/lib/sanity-queries';
+import { verifySession } from '@/lib/session';
 import DataroomTopbar from './DataroomTopbar';
 import DrSidebar from './DrSidebar';
 import DrTableRow from './DrTableRow';
@@ -14,7 +18,21 @@ export const dynamic = 'force-dynamic';
 export default async function DataroomPage() {
   const cookieStore = await cookies();
   const session = cookieStore.get('dataroom-session')?.value;
-  const email = session ? session.split(':')[0] : null;
+  const email = session ? verifySession(session) : null;
+  // Invalid signature → re-authenticate
+  if (session && email === null) redirect('/dataroom/sign-in');
+  // No session → sign in
+  if (!email) redirect('/dataroom/sign-in');
+  // Authorise: trusted domain, active domain privilege, or individual user access
+  const isTrustedDomain = email.endsWith('@yali.vc') || email.endsWith('@florintree.com');
+  if (!isTrustedDomain) {
+    const domain = email.split('@')[1];
+    const [domainPriv, user] = await Promise.all([
+      getDataroomDomainPrivilege(domain),
+      getPortalUserByEmail(email),
+    ]);
+    if (!domainPriv && !user?.investorDataRoomAccess) redirect('/dataroom/sign-in');
+  }
 
   const [fundContent, latestLPReport] = await Promise.all([
     getDataroomFundContent(),
