@@ -95,164 +95,85 @@
 }
 
 /* ── Letter / grievance section ── */
-.letterSection {
-  padding: 40px 40px 0;
-  max-width: 820px;
+.letterWrap {
+  padding: 48px 40px;
 }
 
-.salutation {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
-  color: #363636;
-  margin: 0 0 6px 0;
-}
-
-.intro {
+.letterContent {
   font-family: var(--font-inter), sans-serif;
   font-size: 14px;
-  color: #555;
-  line-height: 1.7;
-  margin: 0 0 32px 0;
+  color: #363636;
+  line-height: 1.75;
+  max-width: 680px;
 }
 
-/* ── Grievance block ── */
-.grievanceBlock {
-  border: 1px solid #363636;
-  padding: 20px 24px;
-  margin-bottom: 32px;
+.letterContent p {
+  margin: 0 0 1.25rem 0;
 }
 
-.grievanceTitle {
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #830d35;
-  margin: 0 0 14px 0;
+.letterGreeting {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  color: #363636;
+  margin: 0 0 1.25rem 0;
 }
 
-.grievanceList {
+.letterList {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 1.25rem 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.grievanceList li {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  color: #363636;
-  line-height: 1.7;
-  padding-left: 16px;
+.letterList li {
+  padding-left: 18px;
   position: relative;
+  line-height: 1.75;
 }
 
-.grievanceList li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: #830d35;
-  font-size: 11px;
-  top: 3px;
-}
-
-.grievanceList a {
-  color: #830d35;
-  text-decoration: none;
-}
-
-.grievanceList a:hover {
-  text-decoration: underline;
-}
-
-/* ── Note block ── */
-.noteBlock {
-  background: #e8e8e8;
-  border: 1px solid #363636;
-  padding: 16px 24px;
-  margin-bottom: 32px;
-}
-
-.noteTitle {
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #555;
-  margin: 0 0 10px 0;
-}
-
-.noteList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.noteList li {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 12px;
-  color: #555;
-  line-height: 1.6;
-  padding-left: 14px;
-  position: relative;
-}
-
-.noteList li::before {
-  content: '·';
+.letterList li::before {
+  content: '–';
   position: absolute;
   left: 0;
   color: #888;
 }
 
-/* ── GIFT City address block ── */
-.giftBlock {
-  border: 1px solid #363636;
-  padding: 20px 24px;
-  margin-bottom: 40px;
-}
-
-.giftTitle {
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #830d35;
-  margin: 0 0 14px 0;
-}
-
-.giftAddress {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  color: #363636;
-  line-height: 1.9;
-  margin: 0;
-}
-
-.giftAddress a {
+.letterList a {
   color: #830d35;
   text-decoration: none;
 }
 
-.giftAddress a:hover {
+.letterList a:hover {
   text-decoration: underline;
 }
 
-/* ── Closing ── */
-.closing {
+.letterAddress {
   font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  color: #555;
+  font-size: 14px;
+  color: #363636;
   line-height: 1.9;
-  margin: 0 0 40px 0;
-  padding: 0 40px;
+  margin: 0 0 1.25rem 1rem;
+  border-left: 2px solid #d0d0d0;
+  padding-left: 16px;
+}
+
+.letterAddress a {
+  color: #830d35;
+  text-decoration: none;
+}
+
+.letterAddress a:hover {
+  text-decoration: underline;
+}
+
+.letterClosing {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  color: #363636;
+  line-height: 1.9;
+  margin: 0.5rem 0 0 0;
 }
 
 /* ── Divider ── */
@@ -344,12 +265,8 @@
     grid-template-columns: 90px 1fr;
   }
 
-  .letterSection {
-    padding: 32px 20px 0;
-  }
-
-  .closing {
-    padding: 0 20px;
+  .letterWrap {
+    padding: 32px 20px;
   }
 
   .docsSectionLabel,
