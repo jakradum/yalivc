@@ -76,14 +76,15 @@ export default async function InvestorRelations() {
       </div>
 
       {/* Letter */}
-      <div className={styles.letterSection}>
-        <p className={styles.salutation}>Dear Investors,</p>
-        <p className={styles.intro}>At Yali Ventures, investor satisfaction is our foremost agenda.</p>
+      <div className={styles.letterWrap}>
+        <div className={styles.letterContent}>
+          <p className={styles.letterGreeting}>Dear Investors,</p>
 
-        {/* Fund I grievance */}
-        <div className={styles.grievanceBlock}>
-          <p className={styles.grievanceTitle}>Yali Deeptech Fund I — Investor Grievance</p>
-          <ul className={styles.grievanceList}>
+          <p>At Yali Ventures, investor satisfaction is our foremost agenda.</p>
+
+          <p>In case of any investor grievance pertaining to Yali Deeptech Fund I:</p>
+
+          <ul className={styles.letterList}>
             <li>
               Please contact our compliance officer Mr. Sunil S Patil at{' '}
               <a href="mailto:sunil@yali.vc">sunil@yali.vc</a>
@@ -94,45 +95,46 @@ export default async function InvestorRelations() {
             </li>
             <li>
               In case you are not satisfied with our response you can lodge your grievance with SEBI at{' '}
-              <a href="https://scores.sebi.gov.in" target="_blank" rel="noopener noreferrer">scores.sebi.gov.in</a>{' '}
-              or write to any office of SEBI. For queries or assistance, contact the SEBI toll-free Helpline at{' '}
+              <a href="https://scores.sebi.gov.in" target="_blank" rel="noopener noreferrer">https://scores.sebi.gov.in</a>{' '}
+              or you may also write to any of the offices of SEBI. For any queries, feedback or assistance,
+              please contact SEBI office on toll free Helpline at{' '}
               <a href="tel:18002227575">1800 22 7575</a> / <a href="tel:18002667575">1800 266 7575</a>.
             </li>
             <li>
-              If still not satisfied, initiate dispute resolution through the ODR portal at{' '}
-              <a href="https://smartodr.in/login" target="_blank" rel="noopener noreferrer">smartodr.in/login</a>.
+              In case you are still not satisfied with the resolution through SCORES portal, you can initiate
+              the dispute resolution through ODR portal at{' '}
+              <a href="https://smartodr.in/login" target="_blank" rel="noopener noreferrer">https://smartodr.in/login</a>.
             </li>
           </ul>
-        </div>
 
-        {/* ODR note */}
-        <div className={styles.noteBlock}>
-          <p className={styles.noteTitle}>Note — dispute resolution through ODR will not be possible if:</p>
-          <ul className={styles.noteList}>
+          <p>
+            <strong>Note:</strong> The dispute resolution through ODR will not be possible, if:
+          </p>
+
+          <ul className={styles.letterList}>
             <li>The complaint or grievance is not raised with the compliance officer first and subsequently on the SCORES portal.</li>
             <li>Dispute raised is pending before any arbitral process or court or tribunal.</li>
             <li>Dispute is non-arbitrable in terms of Indian Law.</li>
             <li>Dispute is time-barred in terms of law of limitation.</li>
           </ul>
-        </div>
 
-        {/* GIFT City grievance */}
-        <div className={styles.giftBlock}>
-          <p className={styles.giftTitle}>Yali Deeptech I (GIFT City Fund) — Investor Grievance</p>
-          <p className={styles.giftAddress}>
-            Investor Grievance — CRO &amp; CRAO<br />
-            Yali Partners LLP, Unit No. B-129, Ground Floor, Nila Spaces,<br />
-            Plot No. T1–T4, Road 1A, Block 11, Zone 1, SEZ-PA,<br />
-            GIFT City, Gandhinagar, Gujarat, India – 382355<br />
-            <a href="mailto:compliance@yali.vc">compliance@yali.vc</a>
+          <p>
+            In case of any investor grievance pertaining to Yali Deeptech I (GIFT City Fund), please write to us at:
+          </p>
+
+          <p className={styles.letterAddress}>
+            Investor Grievance - CRO &amp; CRAO,<br />
+            Yali Partners LLP, Unit No. B-129, Ground Floor, Nila Spaces, Plot No. T1-T4, Road 1A, Block 11,<br />
+            Zone 1, SEZ-PA, Gift City, Gandhinagar, Gujarat, India - 382355<br />
+            Email: <a href="mailto:compliance@yali.vc">compliance@yali.vc</a>
+          </p>
+
+          <p className={styles.letterClosing}>
+            Thank you,<br />
+            Team Yali
           </p>
         </div>
       </div>
-
-      <p className={styles.closing}>
-        Thank you,<br />
-        Team Yali
-      </p>
 
       {/* Documents */}
       {docs.length > 0 && (
