@@ -1155,13 +1155,14 @@ export function generatePdfHtml({
           <div class="media-card-date">${esc(fmtShortDate(item.date))}</div>
           <div class="media-card-title">${esc(item.headlineEdited || '')}</div>
           ${item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
-          ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">Read more</a></div>` : ''}
+          ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">${item.isVideo ? 'Watch ↗' : 'Read more'}</a></div>` : ''}
         </div>`).join('')
     : '';
 
   function platformLabel(platform) {
     if (platform === 'linkedin') return 'LinkedIn';
     if (platform === 'twitter') return 'Twitter / X';
+    if (platform === 'video') return 'Video';
     return 'Social';
   }
 

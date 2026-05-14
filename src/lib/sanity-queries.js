@@ -1345,6 +1345,7 @@ export async function getNewsForQuarter(quarter, fiscalYear) {
       headlineEdited,
       date,
       url,
+      isVideo,
       "publicationName": publication->name
     }`,
     { startDate, endDate }
