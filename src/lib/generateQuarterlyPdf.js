@@ -231,7 +231,7 @@ body {
 }
 
 /* ── Page body ── */
-.page-body { padding: 28px 40px 80px; }
+.page-body { padding: 28px 40px 100px; }
 
 /* ── Page number — viewfinder icon ── */
 .page-number {
@@ -870,9 +870,7 @@ export function generatePdfHtml({
       })
       .map(ci => ci.name);
 
-    // A+B merged table always spans 2 physical pages due to content length, so advance counter twice.
-    nextPageNum(); // A+B physical page 1
-    nextPageNum(); // A+B physical page 2 (overflow)
+    nextPageNum(); // A+B merged section (page badge not shown; JS corrects C page numbers post-render)
 
     const roundsRows = allRounds.map(r => {
       const label = r.roundLabel || roundNameToLabel(r.roundName);
@@ -930,7 +928,7 @@ export function generatePdfHtml({
       <tr><td>${headerHtml()}</td></tr>
     </thead>
     <tbody>
-      <tr><td class="page-body" style="padding-bottom: 40px;">
+      <tr><td class="page-body" style="padding-bottom: 100px;">
         <div class="company-heading-wrap">
           <div class="company-logo-box">
             ${company.logo
