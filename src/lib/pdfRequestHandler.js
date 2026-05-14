@@ -223,6 +223,26 @@ export async function handlePdfGet(slug) {
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
+    // Correct page number badges by measuring actual rendered element heights.
+    // Each .page div is exactly 1 physical page; each .company-ab-table/.media-page-table
+    // may span multiple pages depending on content length.
+    await page.evaluate(() => {
+      const A4_HEIGHT = 1123;
+      let physicalPage = 0;
+      const pageEls = Array.from(document.querySelectorAll(
+        '.page, .company-ab-table, .media-page-table'
+      ));
+      for (const el of pageEls) {
+        const startPage = physicalPage + 1;
+        physicalPage += Math.max(1, Math.ceil(el.offsetHeight / A4_HEIGHT));
+        const badge = el.querySelector('.page-number');
+        if (badge) {
+          const span = badge.querySelector('span:not(.pn-tl):not(.pn-br)');
+          if (span) span.textContent = `Page ${startPage}`;
+        }
+      }
+    });
+
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
