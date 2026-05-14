@@ -1101,7 +1101,11 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   margin-bottom: 2rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
   border-bottom: 2px solid #830D35;
 }
 
@@ -1211,7 +1215,11 @@
   align-items: center;
   gap: 1.25rem;
   margin-top: 3rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
   padding-top: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-top: 1px solid #363636;
 }
 
@@ -1358,7 +1366,11 @@
   display: flex;
   gap: 3rem;
   margin-bottom: 2rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
   padding-bottom: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-bottom: 1px solid #363636;
 }
 
@@ -1525,7 +1537,11 @@
 .kpiRow {
   display: flex;
   gap: 2rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
   padding-top: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-top: 1px solid #363636;
 }
 
@@ -1940,6 +1956,16 @@
 
   .coverNoteContent {
     font-size: 0.9375rem;
+  }
+
+  .letterhead,
+  .coverNoteAuthor,
+  .chartDatesRow,
+  .kpiRow {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .coverNoteAuthor {

@@ -692,10 +692,11 @@ export function generatePdfHtml({
   const ecosystemHtml = renderPortableText(report.ecosystemNotes);
   const closingHtml = renderPortableText(report.closingNotes);
 
+  // Cover note pages use <table>+<thead> so the page header repeats automatically if content overflows.
   const coverNoteP1Html = `
-  <div class="page" id="section-cover-note">
-    ${headerHtml()}
-    <div class="page-body">
+  <table class="company-ab-table" id="section-cover-note">
+    <thead><tr><td>${headerHtml()}</td></tr></thead>
+    <tbody><tr><td class="page-body" style="padding-bottom: 60px; position: relative;">
       <div class="cover-note-heading">COVER NOTE</div>
       <div class="body-text">
         ${report.coverNoteGreeting ? `<p>${esc(report.coverNoteGreeting)}</p>` : ''}
@@ -703,16 +704,16 @@ export function generatePdfHtml({
         ${activityHtml ? `<div class="section-heading">Investment Activity</div>${activityHtml}` : ''}
         ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
       </div>
-    </div>
-    ${pgNum(cn1PageNum)}
-  </div>`;
+      ${pgNum(cn1PageNum)}
+    </td></tr></tbody>
+  </table>`;
 
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
   const coverNoteP2Html = `
-  <div class="page" data-section-end="true">
-    ${headerHtml()}
-    <div class="page-body">
+  <table class="company-ab-table" data-section-end="true">
+    <thead><tr><td>${headerHtml()}</td></tr></thead>
+    <tbody><tr><td class="page-body" style="padding-bottom: 60px; position: relative;">
       <div class="body-text">
         ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
         ${closingHtml}
@@ -726,9 +727,9 @@ export function generatePdfHtml({
           <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
         </div>
       </div>
-    </div>
-    ${pgNum(cn2PageNum)}
-  </div>`;
+      ${pgNum(cn2PageNum)}
+    </td></tr></tbody>
+  </table>`;
 
   // ════════════════════════════════════════════════════════════
   // PAGE 5 — FUND SUMMARY
@@ -823,12 +824,12 @@ export function generatePdfHtml({
   const portSepHtml = `
   <div class="page" id="section-portfolio-updates">
     ${headerHtml()}
-    <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px;">
+    <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px; display: flex; flex-direction: column;">
       <div class="separator-title-mixed">Portfolio<br>Company<br>Updates</div>
       <div style="width: 50%; height: 1.5px; background: #830d35; margin-top: 24px;"></div>
       ${portfolioUpdatesSvgHtml ? `
-        <div style="position: absolute; right: 40px; top: 40px; width: 105px; opacity: 0.18;">
-          ${portfolioUpdatesSvgHtml}
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 0; opacity: 0.15;">
+          <div style="width: 80px;">${portfolioUpdatesSvgHtml}</div>
         </div>` : ''}
     </div>
     ${confFooter()}
@@ -870,8 +871,9 @@ export function generatePdfHtml({
       })
       .map(ci => ci.name);
 
-    // ── (page counter placeholder — A+B merged, only C gets a numbered page) ──
-    nextPageNum(); // A+B merged section
+    // A+B merged table always spans 2 physical pages due to content length, so advance counter twice.
+    nextPageNum(); // A+B physical page 1
+    nextPageNum(); // A+B physical page 2 (overflow)
 
     const roundsRows = allRounds.map(r => {
       const label = r.roundLabel || roundNameToLabel(r.roundName);
