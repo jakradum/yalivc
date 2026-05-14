@@ -692,11 +692,10 @@ export function generatePdfHtml({
   const ecosystemHtml = renderPortableText(report.ecosystemNotes);
   const closingHtml = renderPortableText(report.closingNotes);
 
-  // Cover note pages use <table>+<thead> so the page header repeats automatically if content overflows.
   const coverNoteP1Html = `
-  <table class="company-ab-table" id="section-cover-note">
-    <thead><tr><td>${headerHtml()}</td></tr></thead>
-    <tbody><tr><td class="page-body" style="padding-bottom: 60px; position: relative;">
+  <div class="page" id="section-cover-note" style="max-height: 1123px; overflow: hidden;">
+    ${headerHtml()}
+    <div class="page-body">
       <div class="cover-note-heading">COVER NOTE</div>
       <div class="body-text">
         ${report.coverNoteGreeting ? `<p>${esc(report.coverNoteGreeting)}</p>` : ''}
@@ -704,16 +703,16 @@ export function generatePdfHtml({
         ${activityHtml ? `<div class="section-heading">Investment Activity</div>${activityHtml}` : ''}
         ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
       </div>
-      ${pgNum(cn1PageNum)}
-    </td></tr></tbody>
-  </table>`;
+    </div>
+    ${pgNum(cn1PageNum)}
+  </div>`;
 
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
   const coverNoteP2Html = `
-  <table class="company-ab-table" data-section-end="true">
-    <thead><tr><td>${headerHtml()}</td></tr></thead>
-    <tbody><tr><td class="page-body" style="padding-bottom: 60px; position: relative;">
+  <div class="page" data-section-end="true" style="max-height: 1123px; overflow: hidden;">
+    ${headerHtml()}
+    <div class="page-body">
       <div class="body-text">
         ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
         ${closingHtml}
@@ -727,9 +726,9 @@ export function generatePdfHtml({
           <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
         </div>
       </div>
-      ${pgNum(cn2PageNum)}
-    </td></tr></tbody>
-  </table>`;
+    </div>
+    ${pgNum(cn2PageNum)}
+  </div>`;
 
   // ════════════════════════════════════════════════════════════
   // PAGE 5 — FUND SUMMARY
@@ -824,12 +823,12 @@ export function generatePdfHtml({
   const portSepHtml = `
   <div class="page" id="section-portfolio-updates">
     ${headerHtml()}
-    <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px; display: flex; flex-direction: column;">
+    <div style="position: relative; padding: 24px 40px; overflow: hidden; min-height: 900px;">
       <div class="separator-title-mixed">Portfolio<br>Company<br>Updates</div>
       <div style="width: 50%; height: 1.5px; background: #830d35; margin-top: 24px;"></div>
       ${portfolioUpdatesSvgHtml ? `
-        <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 0; opacity: 0.15;">
-          <div style="width: 80px;">${portfolioUpdatesSvgHtml}</div>
+        <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -20%); width: 80px; opacity: 0.15;">
+          ${portfolioUpdatesSvgHtml}
         </div>` : ''}
     </div>
     ${confFooter()}
