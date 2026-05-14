@@ -11,6 +11,7 @@ const socialUpdate = {
         list: [
           { title: 'LinkedIn', value: 'linkedin' },
           { title: 'Twitter/X', value: 'twitter' },
+          { title: 'Video (YouTube etc.)', value: 'video' },
           { title: 'Other', value: 'other' },
         ],
       },

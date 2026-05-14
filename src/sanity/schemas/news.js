@@ -22,7 +22,7 @@ const news = {
       title: 'Publication',
       type: 'reference',
       to: [{type: 'publication'}],
-      validation: Rule => Rule.required()
+      description: 'Optional for video links (YouTube, etc.)'
     },
     {
       name: 'headlineEdited',

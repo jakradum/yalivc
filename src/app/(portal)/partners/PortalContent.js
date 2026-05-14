@@ -1362,7 +1362,7 @@ function PortalContentInner({
                       >
                         <div className={styles.mediaCoverageCardContent}>
                           <span className={styles.mediaCoveragePublication}>
-                            {item.platform === 'linkedin' ? 'LinkedIn' : item.platform === 'twitter' ? 'Twitter/X' : 'Social'}
+                            {item.platform === 'linkedin' ? 'LinkedIn' : item.platform === 'twitter' ? 'Twitter/X' : item.platform === 'video' ? 'Video' : 'Social'}
                           </span>
                           <h3 className={styles.mediaCoverageHeadline}>
                             {item.excerpt?.length > 100 ? item.excerpt.substring(0, 100) + '...' : item.excerpt}

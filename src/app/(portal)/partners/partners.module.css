@@ -179,10 +179,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #1a1a1a;
-  background: #ebde84;
+  color: #ebde84;
+  background: transparent;
+  border: 1px solid #ebde84;
+  border-radius: 0;
   padding: 3px 8px;
-  border-radius: 3px;
   white-space: nowrap;
 }
 
