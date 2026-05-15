@@ -621,6 +621,16 @@ export function generatePdfHtml({
   fundFinancialsSvgHtml = '',
   pipelineSvgHtml = '',
 }) {
+  // Sort companies by initial investment date ascending — matches portal table order
+  const sortedCompanies = [...portfolioCompanies].sort((a, b) => {
+    const dateA = getInitialInvestmentDate(a) || '';
+    const dateB = getInitialInvestmentDate(b) || '';
+    if (!dateA && !dateB) return 0;
+    if (!dateA) return 1;
+    if (!dateB) return -1;
+    return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+  });
+
   const quarterLabel = `${quarter} ${fiscalYear}`;
   const logoUrl = fundSettings?.logoLight || '';
   let pageNum = 0;
@@ -751,7 +761,7 @@ export function generatePdfHtml({
         <tbody>
           <tr><td>First close date</td><td>${fmtDate(fundSettings?.firstCloseDate)}</td></tr>
           <tr><td>Final close date</td><td>${fmtDate(fundSettings?.finalCloseDate)}</td></tr>
-          <tr><td>Combined fund size</td><td>${fundSettings?.fundSizeAtClose ? fmt(fundSettings.fundSizeAtClose) : '—'}</td></tr>
+          <tr><td>Combined fund size</td><td>${fundSettings?.targetFundSizeINR != null ? fmt(fundSettings.targetFundSizeINR) : (fundSettings?.fundSizeAtClose ? fmt(fundSettings.fundSizeAtClose) : '—')}</td></tr>
           <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
           <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
           <tr><td>Fair Market Value of Portfolio Investments (including realised value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
@@ -773,7 +783,7 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   const portInvPageNum = nextPageNum(); // 6
 
-  const portInvRows = portfolioCompanies.map((c, idx) => {
+  const portInvRows = sortedCompanies.map((c, idx) => {
     const entityName = c.entityName || c.name;
     const totalInv = getTotalInvestment(c);
     const ownership = c.quarterData?.currentOwnershipPercent ?? getLatestOwnership(c);
@@ -838,7 +848,7 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   // PAGES 8+ — PER-COMPANY PAGES (3 pages each)
   // ════════════════════════════════════════════════════════════
-  const companyPagesHtml = portfolioCompanies.map(company => {
+  const companyPagesHtml = sortedCompanies.map(company => {
     const qd = company.quarterData;
     const allRounds = company.investmentRounds || [];
     const totalInv = getTotalInvestment(company);
