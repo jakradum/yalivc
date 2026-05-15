@@ -702,6 +702,12 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
 
+              // Helper to get footnote marker for financials table fields
+              const getFinancialsFootnoteMarker = (fieldName) => {
+                const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+                return footnote ? <sup>{footnote.marker}</sup> : null;
+              };
+
               // Format FY label: FY26 -> 2025-26
               const formatFYLabel = (quarter, fy) => {
                 if (!fy) return `${quarter}`;
@@ -734,13 +740,13 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         <tr>
                           <td>Revenue</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.revenueConfidential ? '**' : (q.revenueINR != null ? q.revenueINR.toFixed(2) : '-')}</td>
+                            <td key={idx}>{q.revenueConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-revenue')}</> : (q.revenueINR != null ? q.revenueINR.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>PAT</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.patConfidential ? '**' : formatPAT(q.patINR)}</td>
+                            <td key={idx}>{q.patConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-pat')}</> : formatPAT(q.patINR)}</td>
                           ))}
                         </tr>
                       </tbody>
