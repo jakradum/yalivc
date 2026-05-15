@@ -62,7 +62,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
       {isClient && (
         <p className={styles.articleLink}>
           <a href={article.url} target="_blank" rel="noopener noreferrer">
-            {article.isVideo ? 'Watch' : 'Read more'}
+            {article.isVideo && article.videoSource === 'youtube' ? 'Watch on YouTube →' : article.isVideo ? 'Watch →' : 'Read more →'}
           </a>
         </p>
       )}

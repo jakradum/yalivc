@@ -37,6 +37,20 @@ const news = {
       initialValue: false
     },
     {
+      name: 'videoSource',
+      title: 'Video Source',
+      type: 'string',
+      hidden: ({ document }) => !document?.isVideo,
+      options: {
+        list: [
+          { title: 'YouTube', value: 'youtube' },
+          { title: 'Other', value: 'other' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'youtube',
+    },
+    {
       name: 'featured',
       title: 'Featured on Homepage?',
       type: 'boolean',

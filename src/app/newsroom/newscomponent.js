@@ -85,7 +85,13 @@ export default function NewsComponent({ news = [] }) {
       <a href={article.url} target="_blank" rel="noopener noreferrer">
         <p className={styles.articleTitle}>{article.title}</p>
       </a>
-      <p className={styles.articleMeta}>{article.publicationName || 'Unknown publication'}</p>
+      <p className={styles.articleMeta}>
+        {article.isVideo && article.videoSource === 'youtube' ? (
+          <span className={styles.youtubeBadge}>▶ YouTube</span>
+        ) : (
+          article.publicationName || 'Unknown publication'
+        )}
+      </p>
     </article>
   );
 

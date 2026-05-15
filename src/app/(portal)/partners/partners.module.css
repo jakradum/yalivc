@@ -3444,6 +3444,18 @@
   transition: color 0.2s ease;
 }
 
+.youtubeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  color: #cc0000;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .mediaCoverageHeadline {
   font-family: var(--font-inter);
   font-size: 0.9375rem;

@@ -66,6 +66,7 @@ export async function getNews() {
       date,
       headlineEdited,
       isVideo,
+      videoSource,
       "publicationName": publication->name
     }`
   );
@@ -242,7 +243,8 @@ export async function getContentByCompany(companySlug) {
       headlineEdited,
       url,
       "publicationName": publication->name,
-      isVideo
+      isVideo,
+      videoSource
     }`,
     { companySlug }
   );
@@ -288,7 +290,8 @@ export async function getContentByCategory(categorySlug) {
       headlineEdited,
       url,
       "publicationName": publication->name,
-      isVideo
+      isVideo,
+      videoSource
     }`,
     { categorySlug }
   );
@@ -335,6 +338,7 @@ export async function getNewsByCategory(categorySlug) {
       date,
       headlineEdited,
       isVideo,
+      videoSource,
       "publicationName": publication->name
     }[0...5]`,
     { categorySlug }
@@ -349,6 +353,7 @@ export async function getNewsByCompany(companySlug) {
       date,
       headlineEdited,
       isVideo,
+      videoSource,
       "publicationName": publication->name
     }[0...5]`,
     { companySlug }
@@ -1346,6 +1351,7 @@ export async function getNewsForQuarter(quarter, fiscalYear) {
       date,
       url,
       isVideo,
+      videoSource,
       "publicationName": publication->name
     }`,
     { startDate, endDate }
@@ -1478,6 +1484,7 @@ export async function getNewsByDateRange(startDate, endDate) {
       date,
       url,
       isVideo,
+      videoSource,
       "publicationName": publication->name
     }`,
     { startDate, endDate }
