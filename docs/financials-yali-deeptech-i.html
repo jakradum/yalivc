@@ -37,19 +37,24 @@ body {
 }
 .print-btn:hover { background: #6a0b2a; }
 
+/* Page shell */
 .page {
   background: white;
   width: 794px;
   min-height: 1123px;
   margin: 0 auto 32px;
-  padding: 48px 52px 56px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
 .page-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 36px;
+  padding: 28px 52px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 .entity-name {
   font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
@@ -59,7 +64,13 @@ body {
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 400;
   color: #363636; letter-spacing: 0.02em;
 }
-.logo { width: 56px; height: auto; }
+.logo { width: 52px; height: auto; }
+
+/* Content area */
+.page-content {
+  padding: 28px 52px 24px;
+  flex: 1;
+}
 
 /* Currency label */
 .currency-label {
@@ -120,10 +131,39 @@ body {
   border-top: 1px dashed #c0c0c0;
 }
 
+/* Footer */
+.page-footer {
+  padding: 12px 52px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.page-footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: #830d35;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.page-footer-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #aaa;
+}
+
 @media print {
   body { background: white; padding: 0; }
   .print-bar { display: none; }
-  .page { margin: 0; box-shadow: none; width: 100%; min-height: 0; }
+  .page {
+    margin: 0;
+    width: 100%;
+    height: 297mm;
+    page-break-after: always;
+    break-after: page;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
 }
 
 </style>
@@ -144,42 +184,48 @@ body {
     <img class="logo" src="../public/yali-logo.png" alt="Yali Capital" />
   </div>
 
-  <div class="currency-label">(Amount in USD)</div>
+  <div class="page-content">
+    <div class="currency-label">(Amount in USD)</div>
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th>Equity and Liabilities</th>
+          <th>As at 31-Mar-2026</th>
+          <th>As at 31-Dec-2025</th>
+          <th>As at 31-Mar-2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-label"><td colspan="4">Investor Funds</td></tr>
+        <tr><td>Investor Funds</td><td>57,84,000</td><td>57,84,000</td><td>36,37,500</td></tr>
+        <tr><td>Distribution</td><td>(14,243)</td><td>(8,043)</td><td>(8,043)</td></tr>
+        <tr><td>Accumulated Surplus</td><td>22,14,386</td><td>26,39,174</td><td>(3,59,877)</td></tr>
+        <tr class="subtotal"><td>Capital Account Balance</td><td>79,84,143</td><td>84,15,131</td><td>32,69,580</td></tr>
+        <tr class="section-label"><td colspan="4">Current Liabilities</td></tr>
+        <tr><td>Sundry Creditors</td><td>1,36,412</td><td>74,737</td><td>1,34,050</td></tr>
+        <tr><td>Other Current Liabilities</td><td>21,499</td><td>27,660</td><td>29,287</td></tr>
+        <tr class="total-row"><td>Total</td><td>81,42,054</td><td>85,17,528</td><td>34,32,917</td></tr>
 
-  <table class="fin-table">
-    <thead>
-      <tr>
-        <th>Equity and Liabilities</th>
-        <th>As at 31-Mar-2026</th>
-        <th>As at 31-Dec-2025</th>
-        <th>As at 31-Mar-2025</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="section-label"><td colspan="4">Investor Funds</td></tr>
-      <tr><td>Investor Funds</td><td>57,84,000</td><td>57,84,000</td><td>36,37,500</td></tr>
-      <tr><td>Distribution</td><td>(14,243)</td><td>(8,043)</td><td>(8,043)</td></tr>
-      <tr><td>Accumulated Surplus</td><td>22,14,386</td><td>26,39,174</td><td>(3,59,877)</td></tr>
-      <tr class="subtotal"><td>Capital Account Balance</td><td>79,84,143</td><td>84,15,131</td><td>32,69,580</td></tr>
-      <tr class="section-label"><td colspan="4">Current Liabilities</td></tr>
-      <tr><td>Sundry Creditors</td><td>1,36,412</td><td>74,737</td><td>1,34,050</td></tr>
-      <tr><td>Other Current Liabilities</td><td>21,499</td><td>27,660</td><td>29,287</td></tr>
-      <tr class="total-row"><td>Total</td><td>81,42,054</td><td>85,17,528</td><td>34,32,917</td></tr>
+        <tr class="section-divider"><td colspan="4"></td></tr>
 
-      <tr class="section-divider"><td colspan="4"></td></tr>
+        <tr>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;text-align:left;">Assets</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2026</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Dec-2025</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2025</th>
+        </tr>
+        <tr><td>Investment in Master Fund at FMV — Yali Deeptech Fund I</td><td>79,15,532</td><td>82,75,925</td><td>26,32,385</td></tr>
+        <tr><td>Cash and Cash Equivalents</td><td>2,05,978</td><td>2,16,730</td><td>8,00,532</td></tr>
+        <tr><td>Other Current Asset</td><td>20,544</td><td>24,873</td><td>—</td></tr>
+        <tr class="total-row"><td>Total</td><td>81,42,054</td><td>85,17,528</td><td>34,32,917</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-      <tr>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;text-align:left;">Assets</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2026</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Dec-2025</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2025</th>
-      </tr>
-      <tr><td>Investment in Master Fund at FMV — Yali Deeptech Fund I</td><td>79,15,532</td><td>82,75,925</td><td>26,32,385</td></tr>
-      <tr><td>Cash and Cash Equivalents</td><td>2,05,978</td><td>2,16,730</td><td>8,00,532</td></tr>
-      <tr><td>Other Current Asset</td><td>20,544</td><td>24,873</td><td>—</td></tr>
-      <tr class="total-row"><td>Total</td><td>81,42,054</td><td>85,17,528</td><td>34,32,917</td></tr>
-    </tbody>
-  </table>
+  <div class="page-footer">
+    <span class="page-footer-left">Yali Deeptech I — Financial Statements FY 2025–26</span>
+    <span class="page-footer-num">1 / 2</span>
+  </div>
 </div>
 
 <!-- PAGE 2: Revenue Statement -->
@@ -192,36 +238,42 @@ body {
     <img class="logo" src="../public/yali-logo.png" alt="Yali Capital" />
   </div>
 
-  <div class="currency-label">(Amount in USD)</div>
+  <div class="page-content">
+    <div class="currency-label">(Amount in USD)</div>
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th>Particulars</th>
+          <th>For the Quarter<br>(Jan to Mar 2026)</th>
+          <th>YTD<br>(Apr to Mar 2026)</th>
+          <th>Since Inception</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-label"><td colspan="4">Other Income</td></tr>
+        <tr><td style="padding-left:20px;">Other Income</td><td>(1,868)</td><td>15,128</td><td>35,268</td></tr>
+        <tr class="subtotal"><td>Total Income</td><td>(1,868)</td><td>15,128</td><td>35,268</td></tr>
 
-  <table class="fin-table">
-    <thead>
-      <tr>
-        <th>Particulars</th>
-        <th>For the Quarter<br>(Jan to Mar 2026)</th>
-        <th>YTD<br>(Apr to Mar 2026)</th>
-        <th>Since Inception</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="section-label"><td colspan="4">Other Income</td></tr>
-      <tr><td style="padding-left:20px;">Other Income</td><td>(1,868)</td><td>15,128</td><td>35,268</td></tr>
-      <tr class="subtotal"><td>Total Income</td><td>(1,868)</td><td>15,128</td><td>35,268</td></tr>
+        <tr class="section-label"><td colspan="4">Expenses</td></tr>
+        <tr><td style="padding-left:20px;">Operating Expenses</td><td>9,204</td><td>32,576</td><td>54,423</td></tr>
+        <tr><td style="padding-left:20px;">Set up Expenses</td><td>2,740</td><td>17,422</td><td>1,18,172</td></tr>
+        <tr><td style="padding-left:20px;">Management Fee</td><td>50,583</td><td>1,25,320</td><td>1,63,235</td></tr>
+        <tr class="subtotal"><td>Total Expenses</td><td>62,527</td><td>1,75,318</td><td>3,35,829</td></tr>
 
-      <tr class="section-label"><td colspan="4">Expenses</td></tr>
-      <tr><td style="padding-left:20px;">Operating Expenses</td><td>9,204</td><td>32,576</td><td>54,423</td></tr>
-      <tr><td style="padding-left:20px;">Set up Expenses</td><td>2,740</td><td>17,422</td><td>1,18,172</td></tr>
-      <tr><td style="padding-left:20px;">Management Fee</td><td>50,583</td><td>1,25,320</td><td>1,63,235</td></tr>
-      <tr class="subtotal"><td>Total Expenses</td><td>62,527</td><td>1,75,318</td><td>3,35,829</td></tr>
+        <tr><td colspan="4" style="padding:8px 0;"></td></tr>
+        <tr><td>Unrealized Gain/(Loss) on Investment</td><td>(3,60,394)</td><td>27,14,313</td><td>25,14,947</td></tr>
+        <tr><td colspan="4" style="padding:4px 0;"></td></tr>
+        <tr class="total-row"><td>Surplus/(Deficit) for the Period</td><td>(4,24,788)</td><td>25,54,124</td><td>22,14,386</td></tr>
+      </tbody>
+    </table>
 
-      <tr><td colspan="4" style="padding:8px 0;"></td></tr>
-      <tr><td>Unrealized Gain/(Loss) on Investment</td><td>(3,60,394)</td><td>27,14,313</td><td>25,14,947</td></tr>
-      <tr><td colspan="4" style="padding:4px 0;"></td></tr>
-      <tr class="total-row"><td>Surplus/(Deficit) for the Period</td><td>(4,24,788)</td><td>25,54,124</td><td>22,14,386</td></tr>
-    </tbody>
-  </table>
+    <p class="fin-note">Note — The numbers provided above for Q4 and YTD of FY 2025–26 are unaudited.</p>
+  </div>
 
-  <p class="fin-note">Note — The numbers provided above for Q4 and YTD of FY 2025–26 are unaudited.</p>
+  <div class="page-footer">
+    <span class="page-footer-left">Yali Deeptech I — Financial Statements FY 2025–26</span>
+    <span class="page-footer-num">2 / 2</span>
+  </div>
 </div>
 
 </body>
