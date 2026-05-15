@@ -1140,9 +1140,20 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Media Coverage</h1>
               </div>
-              {report?.mediaNotes && (
+              {report?.mediaNotes && report.mediaNotes.length > 0 && (
                 <div className={styles.mediaCoverageEditorNote}>
-                  <p>{report.mediaNotes}</p>
+                  <PortableText
+                    value={report.mediaNotes}
+                    components={{
+                      marks: {
+                        link: ({ value, children }) => (
+                          <a href={value?.href} target="_blank" rel="noopener noreferrer" className={styles.mediaCoverageEditorNoteLink}>
+                            {children}
+                          </a>
+                        ),
+                      },
+                    }}
+                  />
                 </div>
               )}
 

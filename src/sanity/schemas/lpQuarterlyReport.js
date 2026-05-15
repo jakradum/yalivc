@@ -217,10 +217,33 @@ export default {
     {
       name: 'mediaNotes',
       title: 'Media Coverage Note',
-      type: 'text',
-      rows: 5,
+      type: 'array',
+      of: [{
+        type: 'block',
+        styles: [{ title: 'Normal', value: 'normal' }],
+        lists: [],
+        marks: {
+          decorators: [
+            { title: 'Strong', value: 'strong' },
+            { title: 'Emphasis', value: 'em' },
+          ],
+          annotations: [
+            {
+              name: 'link',
+              type: 'object',
+              title: 'Link',
+              fields: [{
+                name: 'href',
+                type: 'url',
+                title: 'URL',
+                validation: Rule => Rule.uri({ scheme: ['http', 'https', 'mailto'] }),
+              }],
+            },
+          ],
+        },
+      }],
       group: 'media',
-      description: 'Optional note shown at the top of the Media Coverage section in the portal. News articles and social updates for the quarter are pulled in automatically below this.',
+      description: 'Optional note shown at the top of the Media Coverage section in the portal. News articles and social updates are pulled in automatically below this.',
     },
 
     // ===== OUTPUT =====
