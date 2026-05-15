@@ -13,6 +13,11 @@ const truncateText = (text, maxLength) => {
   return text.substring(0, maxLength) + '...';
 };
 
+const normalizeUrl = (url) => {
+  if (!url) return '#';
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+};
+
 // Consistent date formatting across server + client
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -61,7 +66,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
       <p className={styles.articleMeta}>{article.displayPublication}</p>
       {isClient && (
         <p className={styles.articleLink}>
-          <a href={article.url} target="_blank" rel="noopener noreferrer">
+          <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
             {article.isVideo && article.videoSource === 'youtube' ? 'Watch on YouTube →' : article.isVideo ? 'Watch →' : 'Read more →'}
           </a>
         </p>
@@ -76,7 +81,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
   );
 
   const renderRightStackArticle = (article, index) => (
-    <a key={index} href={article.url} target="_blank" rel="noopener noreferrer">
+    <a key={index} href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
       <article className={styles.article}>
         <h3>{article.formattedDate}</h3>
         <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
