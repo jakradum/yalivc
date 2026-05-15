@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
-import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate } from '@/lib/quarterly-utils';
+import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate, getEarliestInvestmentDate } from '@/lib/quarterly-utils';
 import { verifySession } from '@/lib/session';
 import CompanyDetailClient from './CompanyDetailClient';
 
@@ -103,8 +103,8 @@ export default async function CompanyPage({ params, searchParams }) {
   const allCompanySlugs = companiesInScope
     .filter(item => item.slug)
     .sort((a, b) => {
-      const dateA = (a.investmentRounds?.find(r => r.isInitialRound) || a.investmentRounds?.[0])?.investmentDate || '';
-      const dateB = (b.investmentRounds?.find(r => r.isInitialRound) || b.investmentRounds?.[0])?.investmentDate || '';
+      const dateA = getEarliestInvestmentDate(a) || '';
+      const dateB = getEarliestInvestmentDate(b) || '';
       if (!dateA && !dateB) return 0;
       if (!dateA) return 1;
       if (!dateB) return -1;
