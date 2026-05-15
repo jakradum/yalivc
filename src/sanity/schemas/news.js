@@ -6,7 +6,7 @@ const news = {
     {
       name: 'url',
       title: 'Article URL',
-      type: 'url',
+      type: 'string',
       validation: Rule => Rule.required().uri({
         scheme: ['http', 'https']
       })
