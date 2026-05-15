@@ -8,6 +8,7 @@ export default {
     { name: 'coverNote', title: 'Cover Note' },
     { name: 'commentary', title: 'Commentary Sections' },
     { name: 'pipeline', title: 'Pipeline' },
+    { name: 'media', title: 'Media Coverage' },
     { name: 'output', title: 'Output' },
     { name: 'snapshot', title: 'Data Snapshot' },
   ],
@@ -210,6 +211,16 @@ export default {
       of: [{ type: 'block' }],
       group: 'pipeline',
       description: 'Narrative commentary about the pipeline'
+    },
+
+    // ===== MEDIA COVERAGE =====
+    {
+      name: 'mediaNotes',
+      title: 'Media Coverage Note',
+      type: 'text',
+      rows: 5,
+      group: 'media',
+      description: 'Optional note shown at the top of the Media Coverage section in the portal. News articles and social updates for the quarter are pulled in automatically below this.',
     },
 
     // ===== OUTPUT =====
