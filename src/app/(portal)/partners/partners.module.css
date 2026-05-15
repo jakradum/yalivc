@@ -3466,6 +3466,21 @@
   transition: color 0.2s ease;
 }
 
+.mediaCoverageNote {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.5;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+.mediaCoverageNoteAuthor {
+  font-style: normal;
+  font-weight: 600;
+  color: #363636;
+}
+
 .mediaCoverageArrow {
   font-family: var(--font-jetbrains-mono);
   font-size: 1.25rem;

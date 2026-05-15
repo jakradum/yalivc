@@ -53,6 +53,20 @@ const news = {
       initialValue: 'youtube',
     },
     {
+      name: 'note',
+      title: 'Editor Note',
+      type: 'text',
+      rows: 4,
+      description: 'Optional note about this article — shown in the LP portal under the headline.',
+    },
+    {
+      name: 'noteAuthor',
+      title: 'Note Author (Optional)',
+      type: 'reference',
+      to: [{ type: 'teamMember' }],
+      description: 'Optionally attribute this note to a team member.',
+    },
+    {
       name: 'featured',
       title: 'Featured on Homepage?',
       type: 'boolean',

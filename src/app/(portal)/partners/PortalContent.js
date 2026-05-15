@@ -1168,6 +1168,14 @@ function PortalContentInner({
                             )}
                           </span>
                           <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
+                          {item.note && (
+                            <p className={styles.mediaCoverageNote}>
+                              {item.note}
+                              {item.noteAuthorName && (
+                                <span className={styles.mediaCoverageNoteAuthor}> — {item.noteAuthorName}</span>
+                              )}
+                            </p>
+                          )}
                           {item.date && (
                             <span className={styles.mediaCoverageDate}>
                               {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}

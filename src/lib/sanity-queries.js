@@ -1362,7 +1362,9 @@ export async function getNewsForQuarter(quarter, fiscalYear) {
       url,
       isVideo,
       videoSource,
-      "publicationName": publication->name
+      "publicationName": publication->name,
+      note,
+      "noteAuthorName": noteAuthor->name
     }`,
     { startDate, endDate }
   );
@@ -1495,7 +1497,9 @@ export async function getNewsByDateRange(startDate, endDate) {
       url,
       isVideo,
       videoSource,
-      "publicationName": publication->name
+      "publicationName": publication->name,
+      note,
+      "noteAuthorName": noteAuthor->name
     }`,
     { startDate, endDate }
   );
