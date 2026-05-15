@@ -8,7 +8,8 @@ export default {
     { name: 'coverNote', title: 'Cover Note' },
     { name: 'commentary', title: 'Commentary Sections' },
     { name: 'pipeline', title: 'Pipeline' },
-    { name: 'output', title: 'Output' }
+    { name: 'output', title: 'Output' },
+    { name: 'snapshot', title: 'Data Snapshot' },
   ],
 
   fields: [
@@ -332,6 +333,23 @@ export default {
       type: 'number',
       group: 'output',
       description: 'Lower numbers appear first in the list'
+    },
+    {
+      name: 'snapshotTimestamp',
+      title: 'Snapshot Generated At',
+      type: 'datetime',
+      group: 'snapshot',
+      readOnly: true,
+      description: 'When the data snapshot was last generated. PDF generation uses snapshotted data when this is set.'
+    },
+    {
+      name: 'snapshotData',
+      title: 'Snapshot Data (JSON)',
+      type: 'text',
+      group: 'snapshot',
+      readOnly: true,
+      description: 'Auto-generated JSON snapshot of portfolio data at time of snapshotting. Do not edit manually.',
+      rows: 3,
     }
   ],
 

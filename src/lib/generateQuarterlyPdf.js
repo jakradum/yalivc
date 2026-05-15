@@ -850,18 +850,10 @@ export function generatePdfHtml({
     const moicConf = qd?.moicConfidential;
     const roundMoics = qd?.roundMoics || [];
 
-    // Unique co-investors across all rounds, sorted by displayOrder then alphabetically.
-    // Iterate oldest-first so later rounds overwrite — preserving displayOrder from most recent entry.
-    const coInvestorMap = new Map();
-    allRounds.forEach(r => (r.coInvestors || []).forEach(ci => {
-      if (ci?.name) {
-        const existing = coInvestorMap.get(ci.name);
-        if (!existing || (ci.displayOrder != null && existing.displayOrder == null)) {
-          coInvestorMap.set(ci.name, ci);
-        }
-      }
-    }));
-    const coInvestors = [...coInvestorMap.values()]
+    // Co-investors from the latest investment round only
+    const latestRound = allRounds[allRounds.length - 1];
+    const coInvestors = (latestRound?.coInvestors || [])
+      .filter(ci => ci?.name)
       .sort((a, b) => {
         const aOrder = a.displayOrder ?? Infinity;
         const bOrder = b.displayOrder ?? Infinity;

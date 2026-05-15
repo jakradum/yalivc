@@ -160,30 +160,18 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
     return allRounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
   };
 
-  // Get all co-investors across all rounds (deduplicated, sorted by displayOrder then alphabetically)
+  // Co-investors from the latest investment round only
   const getAllCoInvestors = () => {
-    const investorMap = new Map();
-    // Iterate oldest-first so later rounds overwrite earlier ones.
-    // This ensures displayOrder from the most recently entered round wins.
-    allRounds.forEach(r => {
-      if (r.coInvestors) {
-        r.coInvestors.forEach(inv => {
-          if (inv?.name) {
-            const existing = investorMap.get(inv.name);
-            // Overwrite if: no existing entry, OR new entry has displayOrder and existing doesn't
-            if (!existing || (inv.displayOrder != null && existing.displayOrder == null)) {
-              investorMap.set(inv.name, inv);
-            }
-          }
-        });
-      }
-    });
-    return Array.from(investorMap.values()).sort((a, b) => {
-      const aOrder = a.displayOrder ?? Infinity;
-      const bOrder = b.displayOrder ?? Infinity;
-      if (aOrder !== bOrder) return aOrder - bOrder;
-      return a.name.localeCompare(b.name);
-    });
+    const latestRound = sortedRoundsOldestFirst[sortedRoundsOldestFirst.length - 1];
+    if (!latestRound?.coInvestors) return [];
+    return [...latestRound.coInvestors]
+      .filter(inv => inv?.name)
+      .sort((a, b) => {
+        const aOrder = a.displayOrder ?? Infinity;
+        const bOrder = b.displayOrder ?? Infinity;
+        if (aOrder !== bOrder) return aOrder - bOrder;
+        return a.name.localeCompare(b.name);
+      });
   };
 
   // Get date of first investment
