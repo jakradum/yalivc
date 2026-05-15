@@ -561,12 +561,6 @@ function PortalContentInner({
                 </div>
               </div>
 
-              {/* Date */}
-              {calculatedAsOfDate && (
-                <div className={styles.letterDate}>
-                  {calculatedAsOfDate}
-                </div>
-              )}
 
               {/* Greeting */}
               {report?.coverNoteGreeting && (
