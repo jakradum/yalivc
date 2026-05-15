@@ -128,6 +128,9 @@ function PortalContentInner({
   const headerRef = useRef(null);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileNoticeDismissed, setMobileNoticeDismissed] = useState(() => {
+    try { return !!sessionStorage.getItem('mobile-notice-dismissed'); } catch { return false; }
+  });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showCollapsePopup, setShowCollapsePopup] = useState(false);
   const [activeSection, setActiveSection] = useState(initialSection);
@@ -374,6 +377,22 @@ function PortalContentInner({
     <div className={styles.portalContainer}>
       {/* First-time user tour */}
       <PortalTour />
+
+      {/* Mobile notice modal */}
+      {isMobile && !mobileNoticeDismissed && (
+        <div className={styles.mobileNoticeOverlay}>
+          <div className={styles.mobileNoticeModal}>
+            <p className={styles.mobileNoticeText}>This report is best viewed on wider screens.</p>
+            <button
+              className={styles.mobileNoticeBtn}
+              onClick={() => {
+                try { sessionStorage.setItem('mobile-notice-dismissed', '1'); } catch {}
+                setMobileNoticeDismissed(true);
+              }}
+            >Ok</button>
+          </div>
+        </div>
+      )}
 
       {/* Header */}
       <header
