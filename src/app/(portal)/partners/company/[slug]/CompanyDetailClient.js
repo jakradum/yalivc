@@ -627,42 +627,42 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Pre-money valuation{getRoundsFootnoteMarker('rounds-premoney')}</td>
+                          <td>Pre-money valuation</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.preMoneyValuation ? formatCurrency(round.preMoneyValuation) : '-'}</td>
+                            <td key={idx}>{round.preMoneyValuation ? <>{formatCurrency(round.preMoneyValuation)}{getRoundsFootnoteMarker('rounds-premoney')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Total round size{getRoundsFootnoteMarker('rounds-size')}</td>
+                          <td>Total round size</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.totalRoundSize ? formatCurrency(round.totalRoundSize) : '-'}</td>
+                            <td key={idx}>{round.totalRoundSize ? <>{formatCurrency(round.totalRoundSize)}{getRoundsFootnoteMarker('rounds-size')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Post-money valuation{getRoundsFootnoteMarker('rounds-postmoney')}</td>
+                          <td>Post-money valuation</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.postMoneyValuation ? formatCurrency(round.postMoneyValuation) : '-'}</td>
+                            <td key={idx}>{round.postMoneyValuation ? <>{formatCurrency(round.postMoneyValuation)}{getRoundsFootnoteMarker('rounds-postmoney')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali&apos;s investment{getRoundsFootnoteMarker('rounds-yali-investment')}</td>
+                          <td>Yali&apos;s investment</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.yaliInvestment ? formatCurrency(round.yaliInvestment) : '-'}</td>
+                            <td key={idx}>{round.yaliInvestment ? <>{formatCurrency(round.yaliInvestment)}{getRoundsFootnoteMarker('rounds-yali-investment')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali&apos;s ownership %{latestQuarter?.currentOwnershipConfidential && getRoundsFootnoteMarker('rounds-ownership')}</td>
+                          <td>Yali&apos;s ownership %</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? '**' : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
+                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? <><strong>**</strong>{getRoundsFootnoteMarker('rounds-ownership')}</> : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (
                           <tr>
-                            <td>MOIC for round{latestQuarter?.moicConfidential && getRoundsFootnoteMarker('rounds-moic')}</td>
+                            <td>MOIC for round</td>
                             {displayRounds.map((round, idx) => {
                               const roundMoic = latestQuarter.roundMoics.find(rm => rm.roundName === round.roundName);
                               return (
-                                <td key={idx}>{latestQuarter?.moicConfidential ? '**' : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
+                                <td key={idx}>{latestQuarter?.moicConfidential ? <><strong>**</strong>{getRoundsFootnoteMarker('rounds-moic')}</> : (roundMoic?.moic != null ? `${roundMoic.moic.toFixed(2)}x` : '-')}</td>
                               );
                             })}
                           </tr>
