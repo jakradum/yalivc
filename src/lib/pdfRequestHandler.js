@@ -104,10 +104,10 @@ export async function handlePdfGet(slug) {
   }
 
   // ── Fetch data ───────────────────────────────────────────────
-  const [fundSettings, report, investments, teamMembers] = await Promise.all([
+  // investments only needed when no snapshot exists
+  const [fundSettings, report, teamMembers] = await Promise.all([
     getLPFundSettings(),
     getLPQuarterlyReportBySlugAdmin(slug),
-    getLPInvestmentsForPdf(),
     getTeamMembers(),
   ]);
 
@@ -117,38 +117,64 @@ export async function handlePdfGet(slug) {
 
   const { quarter, fiscalYear } = report;
 
+  // ── Snapshot or live compute ─────────────────────────────────
+  // When a snapshot exists, use it — this ensures the PDF matches exactly what
+  // LPs saw on the portal at the time the snapshot was taken, regardless of
+  // subsequent Sanity edits.
+  let fundMetrics, portfolioCompanies, quarterStartDate, quarterEndDate;
+
+  if (report.snapshotData) {
+    const snapshot = JSON.parse(report.snapshotData);
+    fundMetrics = snapshot.fundMetrics;
+    portfolioCompanies = snapshot.portfolioCompanies;
+    // Derive quarter dates for social updates range (not in snapshot)
+    const dates = buildReportData({ quarter, fiscalYear, fundSettings, investments: [], news: [], socialUpdates: [] });
+    quarterStartDate = dates.quarterStartDate;
+    quarterEndDate = dates.quarterEndDate;
+  } else {
+    // No snapshot — compute live from current Sanity data
+    const investments = await getLPInvestmentsForPdf();
+    const imageFetches = [];
+    for (const company of investments) {
+      if (company.logo) {
+        imageFetches.push(fetchAsDataUri(company.logo).then(uri => { if (uri) company.logo = uri; }));
+      }
+    }
+    await Promise.all(imageFetches);
+
+    const reportData = buildReportData({
+      quarter,
+      fiscalYear,
+      fundSettings,
+      investments,
+      news: [],
+      socialUpdates: [],
+    });
+    fundMetrics = reportData.fundMetrics;
+    portfolioCompanies = reportData.portfolioCompanies;
+    quarterStartDate = reportData.quarterStartDate;
+    quarterEndDate = reportData.quarterEndDate;
+  }
+
   // Auto-pull news items for this quarter; fall back to manually-linked items
   const quarterNews = await getNewsForQuarter(quarter, fiscalYear);
   if (quarterNews && quarterNews.length > 0) {
     report.mediaFromNews = quarterNews;
   }
 
-  // Pre-fetch all images as base64 so Puppeteer doesn't need to make network requests
+  // Pre-fetch fund logo and snapshot company logos as base64
   const imageFetches = [];
   if (fundSettings?.logoLight) {
     imageFetches.push(
       fetchAsDataUri(fundSettings.logoLight).then(uri => { if (uri) fundSettings.logoLight = uri; })
     );
   }
-  for (const company of investments) {
-    if (company.logo) {
-      imageFetches.push(
-        fetchAsDataUri(company.logo).then(uri => { if (uri) company.logo = uri; })
-      );
+  for (const company of portfolioCompanies) {
+    if (company.logo && !company.logo.startsWith('data:')) {
+      imageFetches.push(fetchAsDataUri(company.logo).then(uri => { if (uri) company.logo = uri; }));
     }
   }
   await Promise.all(imageFetches);
-
-  const reportData = buildReportData({
-    quarter,
-    fiscalYear,
-    fundSettings,
-    investments,
-    news: [],
-    socialUpdates: [],
-  });
-
-  const { fundMetrics, portfolioCompanies, quarterStartDate, quarterEndDate } = reportData;
 
   // Fetch social updates for the quarter, then pre-fetch their images
   let quarterSocialUpdates = [];

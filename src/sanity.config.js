@@ -5,6 +5,7 @@ import { schemaTypes } from './sanity/schemaTypes';
 import { SendBetaTestAction } from './sanity/actions/sendBetaTestAction';
 import { SendFullListAction } from './sanity/actions/sendFullListAction';
 import { GeneratePdfAction } from './sanity/actions/generatePdfAction';
+import { SnapshotReportAction } from './sanity/actions/snapshotReportAction';
 
 export default defineConfig({
   name: 'default',
@@ -154,7 +155,7 @@ export default defineConfig({
         return [...prev, SendBetaTestAction, SendFullListAction];
       }
       if (schemaType === 'lpQuarterlyReport') {
-        return [...prev, GeneratePdfAction];
+        return [...prev, SnapshotReportAction, GeneratePdfAction];
       }
       return prev;
     },

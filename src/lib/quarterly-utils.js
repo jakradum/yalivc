@@ -404,7 +404,8 @@ export function buildReportData({
   // 5. Process each company with quarter-specific data
   const processedCompanies = portfolioCompanies.map(company => {
     // Get this company's quarterly data for the report period
-    const quarterData = getCompanyQuarterData(company, quarter, fiscalYear);
+    const quarterData = getCompanyQuarterData(company, quarter, fiscalYear) ||
+      getMostRecentPastQuarterData(company, quarter, fiscalYear);
 
     // Filter investment rounds to only show those made by quarter end
     // Also respects showEarlyInReport flag for rounds in the next quarter

@@ -1325,10 +1325,20 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
         "publicationName": publication->name
       },
       mediaNotes,
-      portfolioSummaryFootnotes
+      portfolioSummaryFootnotes,
+      snapshotData,
+      snapshotTimestamp
     }`,
     { slug }
   );
+}
+
+export async function updateLPReportSnapshot(docId, snapshotData, snapshotTimestamp) {
+  const { writeClient } = await import('@/lib/sanity');
+  return writeClient
+    .patch(docId)
+    .set({ snapshotData, snapshotTimestamp })
+    .commit();
 }
 
 // Fetch all news items that fall within a quarter's date range
