@@ -7,8 +7,10 @@ const news = {
       name: 'url',
       title: 'Article URL',
       type: 'string',
-      validation: Rule => Rule.required().uri({
-        scheme: ['http', 'https']
+      validation: Rule => Rule.required().custom(val => {
+        if (!val) return true;
+        const url = /^https?:\/\//i.test(val) ? val : `https://${val}`;
+        try { new URL(url); return true; } catch { return 'Please enter a valid URL'; }
       })
     },
     {
