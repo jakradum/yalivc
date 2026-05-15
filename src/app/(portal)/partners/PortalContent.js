@@ -131,7 +131,6 @@ function PortalContentInner({
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showCollapsePopup, setShowCollapsePopup] = useState(false);
   const [activeSection, setActiveSection] = useState(initialSection);
-  const [fundSummaryView, setFundSummaryView] = useState('chart');
   const [fyDropdownOpen, setFyDropdownOpen] = useState(false);
   const [hoveredSegment, setHoveredSegment] = useState(null);
   const [headerHidden, setHeaderHidden] = useState(false);
@@ -665,278 +664,88 @@ function PortalContentInner({
                   </p>
                 )}
 
-                {/* View Toggle */}
-                <div className={styles.viewToggle}>
-                  <button
-                    className={`${styles.viewToggleBtn} ${fundSummaryView === 'chart' ? styles.viewToggleBtnActive : ''}`}
-                    onClick={() => setFundSummaryView('chart')}
-                  >
-                    View as Chart
-                  </button>
-                  <button
-                    className={`${styles.viewToggleBtn} ${fundSummaryView === 'table' ? styles.viewToggleBtnActive : ''}`}
-                    onClick={() => setFundSummaryView('table')}
-                  >
-                    View as Table
-                  </button>
-                </div>
-
-                {fundSummaryView === 'chart' ? (
-                  <div className={styles.chartContainer}>
-                    {/* Dates Row */}
-                    <div className={styles.chartDatesRow}>
-                      {calculatedAsOfDate && (
-                        <div className={styles.chartDateItem}>
-                          <span className={styles.chartDateLabel}>As of</span>
-                          <span className={styles.chartDateValue}>{calculatedAsOfDate}</span>
-                        </div>
-                      )}
-                      {fundSettings?.firstCloseDate && (
-                        <div className={styles.chartDateItem}>
-                          <span className={styles.chartDateLabel}>First close date</span>
-                          <span className={styles.chartDateValue}>
-                            {new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
-                          </span>
-                        </div>
-                      )}
-                      {fundSettings?.finalCloseDate && (
-                        <div className={styles.chartDateItem}>
-                          <span className={styles.chartDateLabel}>Final close date</span>
-                          <span className={styles.chartDateValue}>
-                            {new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Pie Chart */}
-                    <div className={styles.pieChartContainer}>
-                      {(() => {
-                        const fundSize = fundSettings?.fundSizeAtClose ?? fundMetrics?.fundSizeAtClose;
-                        const amountDrawn = fundMetrics?.amountDrawnDown;
-                        const totalInvested = fundMetrics?.totalInvestedInPortfolio;
-
-                        // Don't render chart if no data
-                        if (!fundSize || !amountDrawn || !totalInvested) {
-                          return (
-                            <p className={styles.noContentMessage}>
-                              Fund metrics will appear here once data is added in Sanity CMS.
-                            </p>
-                          );
-                        }
-
-                        // Calculate segments
-                        const undrawnCapital = fundSize - amountDrawn;
-                        const uninvestedDrawn = amountDrawn - totalInvested;
-                        const investedCapital = totalInvested;
-
-                        const total = fundSize;
-                        // Pie chart colors - use secondary/tertiary colors only (no burgundy)
-                        // Secondary: #d75d86 (pink), #66bdd4 (teal), #ebde84 (gold)
-                        // Tertiary: #c28d55 (copper/bronze)
-                        const segments = [
-                          { label: 'Undrawn Capital', value: undrawnCapital, color: '#c28d55', percent: (undrawnCapital / total) * 100 },
-                          { label: 'Uninvested (Drawn)', value: uninvestedDrawn, color: '#66bdd4', percent: (uninvestedDrawn / total) * 100 },
-                          { label: 'Invested in Portfolio', value: investedCapital, color: '#ebde84', percent: (investedCapital / total) * 100 },
-                        ];
-
-                        // SVG Pie Chart calculations
-                        const size = 240;
-                        const center = size / 2;
-                        const radius = 100;
-                        let cumulativePercent = 0;
-
-                        const getCoordinatesForPercent = (percent) => {
-                          const x = Math.cos(2 * Math.PI * percent);
-                          const y = Math.sin(2 * Math.PI * percent);
-                          return [x, y];
-                        };
-
-                        return (
-                          <div className={styles.pieChartWrapper}>
-                            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className={styles.pieChart}>
-                              {segments.map((segment, idx) => {
-                                if (segment.value <= 0) return null;
-                                const startPercent = cumulativePercent;
-                                cumulativePercent += segment.percent / 100;
-                                const endPercent = cumulativePercent;
-
-                                const [startX, startY] = getCoordinatesForPercent(startPercent);
-                                const [endX, endY] = getCoordinatesForPercent(endPercent);
-
-                                const largeArcFlag = segment.percent > 50 ? 1 : 0;
-
-                                const pathData = [
-                                  `M ${center + startX * radius} ${center + startY * radius}`,
-                                  `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${center + endX * radius} ${center + endY * radius}`,
-                                  `L ${center} ${center}`,
-                                ].join(' ');
-
-                                return (
-                                  <path
-                                    key={idx}
-                                    d={pathData}
-                                    fill={segment.color}
-                                    className={styles.pieSegment}
-                                    onMouseEnter={() => setHoveredSegment(idx)}
-                                    onMouseLeave={() => setHoveredSegment(null)}
-                                  />
-                                );
-                              })}
-                            </svg>
-
-                            {/* Hover Label (desktop) */}
-                            {hoveredSegment !== null && !isMobile && (
-                              <div className={styles.pieTooltip}>
-                                <span className={styles.pieTooltipLabel}>{segments[hoveredSegment].label}</span>
-                                <span className={styles.pieTooltipValue}>₹{segments[hoveredSegment].value.toFixed(2)} Cr</span>
-                                <span className={styles.pieTooltipPercent}>{segments[hoveredSegment].percent.toFixed(1)}%</span>
-                              </div>
-                            )}
-
-                            {/* Legend (always visible, prominent on mobile) */}
-                            <div className={styles.pieLegend}>
-                              {segments.map((segment, idx) => (
-                                <div
-                                  key={idx}
-                                  className={`${styles.pieLegendItem} ${hoveredSegment === idx ? styles.pieLegendItemActive : ''}`}
-                                  onMouseEnter={() => setHoveredSegment(idx)}
-                                  onMouseLeave={() => setHoveredSegment(null)}
-                                >
-                                  <span className={styles.pieLegendColor} style={{ backgroundColor: segment.color }}></span>
-                                  <span className={styles.pieLegendLabel}>{segment.label}</span>
-                                  <span className={styles.pieLegendValue}>₹{segment.value.toFixed(2)} Cr ({segment.percent.toFixed(1)}%)</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      })()}
-                    </div>
-
-                    {/* KPI Cards */}
-                    <div className={styles.kpiRow}>
-                      <div className={styles.kpiCard}>
-                        <span className={styles.kpiLabel}>No. of portfolio companies</span>
-                        <span className={styles.kpiValue}>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</span>
-                      </div>
-                      {fundMetrics?.amountReturned != null && (
-                        <div className={styles.kpiCard}>
-                          <span className={styles.kpiLabel}>Amount returned</span>
-                          <span className={styles.kpiValue}>{`₹${fundMetrics.amountReturned.toFixed(2)} Cr`}</span>
-                        </div>
-                      )}
-                      {fundMetrics?.moic != null && (
-                        <div className={styles.kpiCard}>
-                          <span className={styles.kpiLabel}>MOIC</span>
-                          <span className={styles.kpiValue}>{`${fundMetrics.moic.toFixed(2)}x`}</span>
-                        </div>
-                      )}
-                      {fundMetrics?.tvpi != null && (
-                        <div className={styles.kpiCard}>
-                          <span className={styles.kpiLabel}>TVPI</span>
-                          <span className={styles.kpiValue}>{`${fundMetrics.tvpi.toFixed(2)}x`}</span>
-                        </div>
-                      )}
-                      {fundMetrics?.dpi != null && (
-                        <div className={styles.kpiCard}>
-                          <span className={styles.kpiLabel}>DPI</span>
-                          <span className={styles.kpiValue}>{`${fundMetrics.dpi.toFixed(4)}x`}</span>
-                        </div>
-                      )}
-                      {fundMetrics?.rvpi != null && (
-                        <div className={styles.kpiCard}>
-                          <span className={styles.kpiLabel}>RVPI</span>
-                          <span className={styles.kpiValue}>{`${fundMetrics.rvpi.toFixed(2)}x`}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  /* Table View */
-                  <table className={styles.fundTable}>
-                    <thead className={styles.fundTableHeader}>
+                <table className={styles.fundTable}>
+                  <thead className={styles.fundTableHeader}>
+                    <tr>
+                      <th>As of {calculatedAsOfDate || '-'}</th>
+                      <th>Amount in ₹ crores</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>First close date</td>
+                      <td>
+                        {fundSettings?.firstCloseDate
+                          ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Final close date</td>
+                      <td>
+                        {fundSettings?.finalCloseDate
+                          ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Combined fund size</td>
+                      <td>{fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '-'}</td>
+                    </tr>
+                    {fundMetrics?.amountDrawnDown != null && (
                       <tr>
-                        <th>As of {calculatedAsOfDate || '-'}</th>
-                        <th>Amount in ₹ crores</th>
+                        <td>Amount drawn down as per bank</td>
+                        <td>{fundMetrics.amountDrawnDown.toFixed(2)}</td>
                       </tr>
-                    </thead>
-                    <tbody>
+                    )}
+                    {fundMetrics?.totalInvestedInPortfolio != null && (
                       <tr>
-                        <td>First close date</td>
-                        <td>
-                          {fundSettings?.firstCloseDate
-                            ? new Date(fundSettings.firstCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                            : "-"}
-                        </td>
+                        <td>Total invested in portfolio</td>
+                        <td>{fundMetrics.totalInvestedInPortfolio.toFixed(2)}</td>
                       </tr>
+                    )}
+                    {fundMetrics?.fmvOfPortfolio != null && (
                       <tr>
-                        <td>Final close date</td>
-                        <td>
-                          {fundSettings?.finalCloseDate
-                            ? new Date(fundSettings.finalCloseDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                            : "-"}
-                        </td>
+                        <td>Fair Market Value of Portfolio Investments (including realised value)</td>
+                        <td>{fundMetrics.fmvOfPortfolio.toFixed(2)}</td>
                       </tr>
+                    )}
+                    <tr>
+                      <td>Number of portfolio companies</td>
+                      <td>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</td>
+                    </tr>
+                    {fundMetrics?.amountReturned != null && (
                       <tr>
-                        <td>Combined fund size</td>
-                        <td>{fundSettings?.targetFundSizeINR != null ? fundSettings.targetFundSizeINR.toFixed(2) : '-'}</td>
+                        <td>Amount returned (including passive income returned)</td>
+                        <td>{fundMetrics.amountReturned.toFixed(2)}</td>
                       </tr>
-                      {fundMetrics?.amountDrawnDown != null && (
-                        <tr>
-                          <td>Amount drawn down as per bank</td>
-                          <td>{fundMetrics.amountDrawnDown.toFixed(2)}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.totalInvestedInPortfolio != null && (
-                        <tr>
-                          <td>Total invested in portfolio</td>
-                          <td>{fundMetrics.totalInvestedInPortfolio.toFixed(2)}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.fmvOfPortfolio != null && (
-                        <tr>
-                          <td>Fair Market Value of Portfolio Investments (including realised value)</td>
-                          <td>{fundMetrics.fmvOfPortfolio.toFixed(2)}</td>
-                        </tr>
-                      )}
+                    )}
+                    {fundMetrics?.moic != null && (
                       <tr>
-                        <td>Number of portfolio companies</td>
-                        <td>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</td>
+                        <td>MOIC</td>
+                        <td>{`${fundMetrics.moic.toFixed(2)}x`}</td>
                       </tr>
-                      {fundMetrics?.amountReturned != null && (
-                        <tr>
-                          <td>Amount returned (including passive income returned)</td>
-                          <td>{fundMetrics.amountReturned.toFixed(2)}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.moic != null && (
-                        <tr>
-                          <td>MOIC</td>
-                          <td>{`${fundMetrics.moic.toFixed(2)}x`}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.tvpi != null && (
-                        <tr>
-                          <td>TVPI</td>
-                          <td>{`${fundMetrics.tvpi.toFixed(2)}x`}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.dpi != null && (
-                        <tr>
-                          <td>DPI</td>
-                          <td>{`${fundMetrics.dpi.toFixed(4)}x`}</td>
-                        </tr>
-                      )}
-                      {fundMetrics?.rvpi != null && (
-                        <tr>
-                          <td>RVPI</td>
-                          <td>{`${fundMetrics.rvpi.toFixed(2)}x`}</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
+                    )}
+                    {fundMetrics?.tvpi != null && (
+                      <tr>
+                        <td>TVPI</td>
+                        <td>{`${fundMetrics.tvpi.toFixed(2)}x`}</td>
+                      </tr>
+                    )}
+                    {fundMetrics?.dpi != null && (
+                      <tr>
+                        <td>DPI</td>
+                        <td>{`${fundMetrics.dpi.toFixed(4)}x`}</td>
+                      </tr>
+                    )}
+                    {fundMetrics?.rvpi != null && (
+                      <tr>
+                        <td>RVPI</td>
+                        <td>{`${fundMetrics.rvpi.toFixed(2)}x`}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </section>
           )}
@@ -1110,7 +919,7 @@ function PortalContentInner({
                             >
                               <span className={styles.investmentPieLegendColor} style={{ backgroundColor: colors[idx % colors.length] }}></span>
                               <span className={styles.investmentPieLegendName}>{segment.name}</span>
-                              <span className={styles.investmentPieLegendValue}>₹{segment.value.toFixed(2)} Cr</span>
+                              <span className={styles.investmentPieLegendValue}>₹{Math.round(segment.value)} Cr</span>
                             </div>
                           ))}
                         </div>
