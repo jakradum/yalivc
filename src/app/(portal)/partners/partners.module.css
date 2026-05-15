@@ -3374,6 +3374,19 @@
 }
 
 /* ===== MEDIA COVERAGE ===== */
+.mediaCoverageEditorNote {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  color: #363636;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
+}
+
+.mediaCoverageEditorNote p {
+  margin: 0;
+}
+
 .mediaSectionTitle {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.6875rem;
@@ -3464,21 +3477,6 @@
   font-size: 0.6875rem;
   color: #999;
   transition: color 0.2s ease;
-}
-
-.mediaCoverageNote {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8125rem;
-  color: #555;
-  line-height: 1.5;
-  margin: 4px 0 0;
-  font-style: italic;
-}
-
-.mediaCoverageNoteAuthor {
-  font-style: normal;
-  font-weight: 600;
-  color: #363636;
 }
 
 .mediaCoverageArrow {

@@ -1140,9 +1140,9 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Media Coverage</h1>
               </div>
-              {report?.mediaNotes && report.mediaNotes.length > 0 && (
-                <div className={styles.coverNoteContent} style={{ marginBottom: '1.5rem' }}>
-                  <PortableText value={report.mediaNotes} />
+              {report?.mediaNotes && (
+                <div className={styles.mediaCoverageEditorNote}>
+                  <p>{report.mediaNotes}</p>
                 </div>
               )}
 
@@ -1168,14 +1168,6 @@ function PortalContentInner({
                             )}
                           </span>
                           <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
-                          {item.note && (
-                            <p className={styles.mediaCoverageNote}>
-                              {item.note}
-                              {item.noteAuthorName && (
-                                <span className={styles.mediaCoverageNoteAuthor}> — {item.noteAuthorName}</span>
-                              )}
-                            </p>
-                          )}
                           {item.date && (
                             <span className={styles.mediaCoverageDate}>
                               {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
