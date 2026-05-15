@@ -37,19 +37,24 @@ body {
 }
 .print-btn:hover { background: #6a0b2a; }
 
+/* Page shell */
 .page {
   background: white;
   width: 794px;
   min-height: 1123px;
   margin: 0 auto 32px;
-  padding: 48px 52px 56px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
 .page-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 36px;
+  padding: 28px 52px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 .entity-name {
   font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
@@ -59,7 +64,13 @@ body {
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 400;
   color: #363636; letter-spacing: 0.02em;
 }
-.logo { width: 56px; height: auto; }
+.logo { width: 52px; height: auto; }
+
+/* Content area */
+.page-content {
+  padding: 28px 52px 24px;
+  flex: 1;
+}
 
 /* Currency label */
 .currency-label {
@@ -122,10 +133,10 @@ body {
   padding: 6px 8px; text-align: right; vertical-align: middle;
 }
 .sched-table th:first-child, .sched-table td:first-child {
-  text-align: left; width: 30%;
+  text-align: left; width: 32%;
 }
 .sched-table th:nth-child(2), .sched-table td:nth-child(2) {
-  width: 12%; font-size: 10px;
+  width: 11%; font-size: 10px;
 }
 .sched-table thead th {
   font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
@@ -141,14 +152,10 @@ body {
 .sched-table .sched-total td:first-child { text-align: left; }
 .sched-table .sched-row:nth-child(even) td { background: #fafafa; }
 
-/* Schedule label */
+/* Schedule heading */
 .sched-heading {
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
-  color: #363636; margin-bottom: 4px; margin-top: 32px; letter-spacing: 0.04em;
-}
-.sched-subheading {
-  font-family: 'Inter', sans-serif; font-size: 10px; color: #666;
-  font-style: italic; margin-bottom: 10px;
+  color: #363636; margin-bottom: 12px; letter-spacing: 0.04em;
 }
 
 /* Note */
@@ -158,10 +165,39 @@ body {
   border-top: 1px dashed #c0c0c0;
 }
 
+/* Footer */
+.page-footer {
+  padding: 12px 52px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.page-footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: #830d35;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.page-footer-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #aaa;
+}
+
 @media print {
   body { background: white; padding: 0; }
   .print-bar { display: none; }
-  .page { margin: 0; box-shadow: none; width: 100%; min-height: 0; }
+  .page {
+    margin: 0;
+    width: 100%;
+    height: 297mm;
+    page-break-after: always;
+    break-after: page;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
 }
 
 </style>
@@ -182,44 +218,50 @@ body {
     <img class="logo" src="../public/yali-logo.png" alt="Yali Capital" />
   </div>
 
-  <div class="currency-label">(Amount in INR)</div>
+  <div class="page-content">
+    <div class="currency-label">(Amount in INR)</div>
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th>Equity and Liabilities</th>
+          <th>As at 31-Mar-2026</th>
+          <th>As at 31-Dec-2025</th>
+          <th>As at 31-Mar-2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-label"><td colspan="4">Investor Funds</td></tr>
+        <tr><td>LP Capital</td><td>2,12,61,62,727</td><td>2,12,61,62,727</td><td>1,44,06,69,891</td></tr>
+        <tr><td>Sponsor Capital</td><td>1,25,00,000</td><td>1,25,00,000</td><td>1,25,00,000</td></tr>
+        <tr><td>Distribution</td><td>(1,16,62,308)</td><td>(1,09,85,986)</td><td>(8,49,664)</td></tr>
+        <tr><td>Accumulated Surplus/(Deficit)</td><td>1,21,00,34,923</td><td>1,25,24,94,180</td><td>(9,80,03,344)</td></tr>
+        <tr class="subtotal"><td>Capital Account Balance</td><td>3,33,70,35,343</td><td>3,38,01,70,921</td><td>1,35,43,16,883</td></tr>
+        <tr class="section-label"><td colspan="4">Current Liabilities</td></tr>
+        <tr><td>Trade Payables</td><td>4,85,05,042</td><td>3,82,77,211</td><td>2,62,47,227</td></tr>
+        <tr><td>Other Current Liabilities</td><td>61,65,262</td><td>48,97,862</td><td>1,03,02,111</td></tr>
+        <tr class="total-row"><td>Total</td><td>3,39,17,05,647</td><td>3,42,33,45,994</td><td>1,39,08,66,221</td></tr>
 
-  <table class="fin-table">
-    <thead>
-      <tr>
-        <th>Equity and Liabilities</th>
-        <th>As at 31-Mar-2026</th>
-        <th>As at 31-Dec-2025</th>
-        <th>As at 31-Mar-2025</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="section-label"><td colspan="4">Investor Funds</td></tr>
-      <tr><td>LP Capital</td><td>2,12,61,62,727</td><td>2,12,61,62,727</td><td>1,44,06,69,891</td></tr>
-      <tr><td>Sponsor Capital</td><td>1,25,00,000</td><td>1,25,00,000</td><td>1,25,00,000</td></tr>
-      <tr><td>Distribution</td><td>(1,16,62,308)</td><td>(1,09,85,986)</td><td>(8,49,664)</td></tr>
-      <tr><td>Accumulated Surplus/(Deficit)</td><td>1,21,00,34,923</td><td>1,25,24,94,180</td><td>(9,80,03,344)</td></tr>
-      <tr class="subtotal"><td>Capital Account Balance</td><td>3,33,70,35,343</td><td>3,38,01,70,921</td><td>1,35,43,16,883</td></tr>
-      <tr class="section-label"><td colspan="4">Current Liabilities</td></tr>
-      <tr><td>Trade Payables</td><td>4,85,05,042</td><td>3,82,77,211</td><td>2,62,47,227</td></tr>
-      <tr><td>Other Current Liabilities</td><td>61,65,262</td><td>48,97,862</td><td>1,03,02,111</td></tr>
-      <tr class="total-row"><td>Total</td><td>3,39,17,05,647</td><td>3,42,33,45,994</td><td>1,39,08,66,221</td></tr>
+        <tr class="section-divider"><td colspan="4"></td></tr>
 
-      <tr class="section-divider"><td colspan="4"></td></tr>
+        <tr>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;text-align:left;">Assets</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2026</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Dec-2025</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2025</th>
+        </tr>
+        <tr><td>Portfolio Investments at FMV (Schedule I)</td><td>3,36,88,59,268</td><td>3,29,38,01,782</td><td>1,04,23,33,197</td></tr>
+        <tr><td>Short Term Investments</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Cash and Cash Equivalents</td><td>2,25,93,830</td><td>12,91,02,938</td><td>34,84,81,103</td></tr>
+        <tr><td>Other Current Asset</td><td>2,52,549</td><td>4,41,274</td><td>51,920</td></tr>
+        <tr class="total-row"><td>Total</td><td>3,39,17,05,647</td><td>3,42,33,45,994</td><td>1,39,08,66,220</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-      <tr>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;text-align:left;">Assets</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2026</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Dec-2025</th>
-        <th style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;border-top:1px solid #363636;border-bottom:2px solid #830d35;padding:9px 10px;">As at 31-Mar-2025</th>
-      </tr>
-      <tr><td>Portfolio Investments at FMV (Schedule I)</td><td>3,36,88,59,268</td><td>3,29,38,01,782</td><td>1,04,23,33,197</td></tr>
-      <tr><td>Short Term Investments</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>Cash and Cash Equivalents</td><td>2,25,93,830</td><td>12,91,02,938</td><td>34,84,81,103</td></tr>
-      <tr><td>Other Current Asset</td><td>2,52,549</td><td>4,41,274</td><td>51,920</td></tr>
-      <tr class="total-row"><td>Total</td><td>3,39,17,05,647</td><td>3,42,33,45,994</td><td>1,39,08,66,220</td></tr>
-    </tbody>
-  </table>
+  <div class="page-footer">
+    <span class="page-footer-left">Yali Deeptech Fund I — Financial Statements FY 2025–26</span>
+    <span class="page-footer-num">1 / 3</span>
+  </div>
 </div>
 
 <!-- PAGE 2: Revenue Statement -->
@@ -232,36 +274,42 @@ body {
     <img class="logo" src="../public/yali-logo.png" alt="Yali Capital" />
   </div>
 
-  <div class="currency-label">(Amount in INR)</div>
+  <div class="page-content">
+    <div class="currency-label">(Amount in INR)</div>
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th>Particulars</th>
+          <th>For the Quarter<br>(Jan to Mar 2026)</th>
+          <th>YTD<br>(Apr to Mar 2026)</th>
+          <th>Since Inception</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-label"><td colspan="4">Other Income</td></tr>
+        <tr><td style="padding-left:20px;">Income from Temporary Investments</td><td>3,85,585</td><td>82,41,115</td><td>1,92,27,101</td></tr>
+        <tr class="subtotal"><td>Total Income</td><td>3,85,585</td><td>82,41,115</td><td>1,92,27,101</td></tr>
 
-  <table class="fin-table">
-    <thead>
-      <tr>
-        <th>Particulars</th>
-        <th>For the Quarter<br>(Jan to Mar 2026)</th>
-        <th>YTD<br>(Apr to Mar 2026)</th>
-        <th>Since Inception</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="section-label"><td colspan="4">Other Income</td></tr>
-      <tr><td style="padding-left:20px;">Income from Temporary Investments</td><td>3,85,585</td><td>82,41,115</td><td>1,92,27,101</td></tr>
-      <tr class="subtotal"><td>Total Income</td><td>3,85,585</td><td>82,41,115</td><td>1,92,27,101</td></tr>
+        <tr class="section-label"><td colspan="4">Expenses</td></tr>
+        <tr><td style="padding-left:20px;">Operating Expenses</td><td>19,03,745</td><td>53,29,009</td><td>82,08,680</td></tr>
+        <tr><td style="padding-left:20px;">Set up Expenses</td><td>4,30,308</td><td>37,98,847</td><td>2,25,58,226</td></tr>
+        <tr><td style="padding-left:20px;">Management Fee</td><td>4,05,10,789</td><td>18,58,06,250</td><td>28,18,57,096</td></tr>
+        <tr class="subtotal"><td>Total Expenses</td><td>4,28,44,842</td><td>19,49,34,106</td><td>31,26,24,002</td></tr>
 
-      <tr class="section-label"><td colspan="4">Expenses</td></tr>
-      <tr><td style="padding-left:20px;">Operating Expenses</td><td>19,03,745</td><td>53,29,009</td><td>82,08,680</td></tr>
-      <tr><td style="padding-left:20px;">Set up Expenses</td><td>4,30,308</td><td>37,98,847</td><td>2,25,58,226</td></tr>
-      <tr><td style="padding-left:20px;">Management Fee</td><td>4,05,10,789</td><td>18,58,06,250</td><td>28,18,57,096</td></tr>
-      <tr class="subtotal"><td>Total Expenses</td><td>4,28,44,842</td><td>19,49,34,106</td><td>31,26,24,002</td></tr>
+        <tr><td colspan="4" style="padding:8px 0;"></td></tr>
+        <tr><td>Unrealized Gain/(Loss) on Investment</td><td>—</td><td>1,49,47,31,258</td><td>1,50,34,31,825</td></tr>
+        <tr><td colspan="4" style="padding:4px 0;"></td></tr>
+        <tr class="total-row"><td>Surplus/(Deficit) for the Period</td><td>(4,24,59,257)</td><td>1,30,80,38,267</td><td>1,21,00,34,923</td></tr>
+      </tbody>
+    </table>
 
-      <tr><td colspan="4" style="padding:8px 0;"></td></tr>
-      <tr><td>Unrealized Gain/(Loss) on Investment</td><td>—</td><td>1,49,47,31,258</td><td>1,50,34,31,825</td></tr>
-      <tr><td colspan="4" style="padding:4px 0;"></td></tr>
-      <tr class="total-row"><td>Surplus/(Deficit) for the Period</td><td>(4,24,59,257)</td><td>1,30,80,38,267</td><td>1,21,00,34,923</td></tr>
-    </tbody>
-  </table>
+    <p class="fin-note">Note — The numbers provided above for Q4 and YTD of FY 2025–26 are unaudited.</p>
+  </div>
 
-  <p class="fin-note">Note — The numbers provided above for Q4 and YTD of FY 2025–26 are unaudited.</p>
+  <div class="page-footer">
+    <span class="page-footer-left">Yali Deeptech Fund I — Financial Statements FY 2025–26</span>
+    <span class="page-footer-num">2 / 3</span>
+  </div>
 </div>
 
 <!-- PAGE 3: Investment Schedule -->
@@ -274,88 +322,93 @@ body {
     <img class="logo" src="../public/yali-logo.png" alt="Yali Capital" />
   </div>
 
-  <div class="currency-label">(Amount in INR)</div>
+  <div class="page-content">
+    <div class="currency-label">(Amount in INR)</div>
+    <div class="sched-heading">Schedule I — Portfolio Investments at FMV</div>
+    <table class="sched-table">
+      <thead>
+        <tr>
+          <th>Name of the Company</th>
+          <th>Date of<br>Initial<br>Investment</th>
+          <th>Total Cost<br>of Investment</th>
+          <th>FMV</th>
+          <th>Gain / (Loss)</th>
+          <th>MoIC at<br>Reporting<br>Currency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="sched-row">
+          <td>4Basecare Precision Health Private Limited</td>
+          <td>21-Aug-24</td>
+          <td>35,38,44,339</td>
+          <td>1,04,46,98,543</td>
+          <td>69,08,54,204</td>
+          <td>2.95x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>Perceptyne Technologies Private Limited</td>
+          <td>09-Oct-24</td>
+          <td>11,79,81,461</td>
+          <td>11,79,81,461</td>
+          <td>—</td>
+          <td>1.00x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>C2I Semiconductors Private Limited</td>
+          <td>25-Oct-24</td>
+          <td>33,55,60,757</td>
+          <td>1,14,73,88,005</td>
+          <td>81,18,27,248</td>
+          <td>3.42x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>Tonbo Imaging India Private Limited</td>
+          <td>21-Mar-25</td>
+          <td>60,00,00,000</td>
+          <td>60,00,00,000</td>
+          <td>—</td>
+          <td>1.00x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>Try and Buy Fashion Design Private Limited</td>
+          <td>30-Jun-25</td>
+          <td>35,19,09,954</td>
+          <td>35,19,09,954</td>
+          <td>—</td>
+          <td>1.00x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>LatentForce Intelligence Private Limited</td>
+          <td>12-Nov-25</td>
+          <td>7,61,26,132</td>
+          <td>7,68,76,505</td>
+          <td>7,50,373</td>
+          <td>1.01x</td>
+        </tr>
+        <tr class="sched-row">
+          <td>Deeplase Technologies Private Limited</td>
+          <td>28-Jan-26</td>
+          <td>3,00,04,800</td>
+          <td>3,00,04,800</td>
+          <td>—</td>
+          <td>1.00x</td>
+        </tr>
+        <tr class="sched-total">
+          <td>Total</td>
+          <td></td>
+          <td>1,86,54,27,443</td>
+          <td>3,36,88,59,268</td>
+          <td>1,50,34,31,825</td>
+          <td>1.81x</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <div class="sched-heading">Schedule I — Portfolio Investments at FMV</div>
-
-  <table class="sched-table">
-    <thead>
-      <tr>
-        <th>Name of the Company</th>
-        <th>Date of<br>Initial<br>Investment</th>
-        <th>Total Cost<br>of Investment</th>
-        <th>FMV</th>
-        <th>Gain / (Loss)</th>
-        <th>MoIC at<br>Reporting<br>Currency</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="sched-row">
-        <td>4Basecare Precision Health Private Limited</td>
-        <td>21-Aug-24</td>
-        <td>35,38,44,339</td>
-        <td>1,04,46,98,543</td>
-        <td>69,08,54,204</td>
-        <td>2.95x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>Perceptyne Technologies Private Limited</td>
-        <td>09-Oct-24</td>
-        <td>11,79,81,461</td>
-        <td>11,79,81,461</td>
-        <td>—</td>
-        <td>1.00x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>C2I Semiconductors Private Limited</td>
-        <td>25-Oct-24</td>
-        <td>33,55,60,757</td>
-        <td>1,14,73,88,005</td>
-        <td>81,18,27,248</td>
-        <td>3.42x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>Tonbo Imaging India Private Limited</td>
-        <td>21-Mar-25</td>
-        <td>60,00,00,000</td>
-        <td>60,00,00,000</td>
-        <td>—</td>
-        <td>1.00x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>Try and Buy Fashion Design Private Limited</td>
-        <td>30-Jun-25</td>
-        <td>35,19,09,954</td>
-        <td>35,19,09,954</td>
-        <td>—</td>
-        <td>1.00x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>LatentForce Intelligence Private Limited</td>
-        <td>12-Nov-25</td>
-        <td>7,61,26,132</td>
-        <td>7,68,76,505</td>
-        <td>7,50,373</td>
-        <td>1.01x</td>
-      </tr>
-      <tr class="sched-row">
-        <td>Deeplase Technologies Private Limited</td>
-        <td>28-Jan-26</td>
-        <td>3,00,04,800</td>
-        <td>3,00,04,800</td>
-        <td>—</td>
-        <td>1.00x</td>
-      </tr>
-      <tr class="sched-total">
-        <td>Total</td>
-        <td></td>
-        <td>1,86,54,27,443</td>
-        <td>3,36,88,59,268</td>
-        <td>1,50,34,31,825</td>
-        <td>1.81x</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="page-footer">
+    <span class="page-footer-left">Yali Deeptech Fund I — Financial Statements FY 2025–26</span>
+    <span class="page-footer-num">3 / 3</span>
+  </div>
 </div>
 
 </body>

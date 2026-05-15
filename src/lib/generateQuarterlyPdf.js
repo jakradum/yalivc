@@ -836,7 +836,7 @@ export function generatePdfHtml({
           <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmt(fundMetrics.amountReturned) : '—'}</td></tr>
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
           <tr><td>TVPI</td><td>${fundMetrics.tvpi != null ? fmt(fundMetrics.tvpi) + 'x' : '—'}</td></tr>
-          <tr><td>DPI</td><td>${fundMetrics.dpi != null ? fmt(fundMetrics.dpi, 4) + 'x' : '—'}</td></tr>
+          <tr><td>DPI</td><td>${fundMetrics.dpi != null ? fmt(fundMetrics.dpi) + 'x' : '—'}</td></tr>
           ${fundMetrics.rvpi != null ? `<tr><td>RVPI</td><td>${fmt(fundMetrics.rvpi)}x</td></tr>` : ''}
         </tbody>
       </table>
