@@ -1187,37 +1187,105 @@ function PortalContentInner({
               )}
 
               {/* Social Updates - auto-fetched by quarter date range */}
-              {quarterSocialUpdates && quarterSocialUpdates.length > 0 && (
-                <>
-                  <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
-                  <div className={styles.mediaCoverageGrid}>
-                    {quarterSocialUpdates.map((item) => (
-                      <a
-                        key={item._id}
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.mediaCoverageCard}
-                      >
-                        <div className={styles.mediaCoverageCardContent}>
-                          <span className={styles.mediaCoveragePublication}>
-                            {item.platform === 'linkedin' ? 'LinkedIn' : item.platform === 'twitter' ? 'Twitter/X' : item.platform === 'video' ? 'Video' : 'Social'}
+              {quarterSocialUpdates && quarterSocialUpdates.length > 0 && (() => {
+                const linkedInUpdates = quarterSocialUpdates.filter(i => i.platform === 'linkedin');
+                const videoUpdates = quarterSocialUpdates.filter(i => i.platform === 'video');
+                const otherUpdates = quarterSocialUpdates.filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
+                const hasAnySocial = linkedInUpdates.length > 0 || videoUpdates.length > 0 || otherUpdates.length > 0;
+                if (!hasAnySocial) return null;
+                return (
+                  <>
+                    <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
+
+                    {/* LinkedIn — condensed to a single follow prompt */}
+                    {linkedInUpdates.length > 0 && (() => {
+                      const liUrl = linkedInUpdates[0]?.url;
+                      return (
+                        <a
+                          href={liUrl ? ((/^https?:\/\//i.test(liUrl) ? liUrl : `https://${liUrl}`).replace(/\/[^/]*$/, '') || liUrl) : 'https://www.linkedin.com/company/yali-capital'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.linkedInBannerCard}
+                        >
+                          <span className={styles.linkedInBannerIcon}>in</span>
+                          <span className={styles.linkedInBannerText}>
+                            We were active on LinkedIn this quarter — follow us for portfolio updates, team news, and more.
                           </span>
-                          <h3 className={styles.mediaCoverageHeadline}>
-                            {item.excerpt?.length > 100 ? item.excerpt.substring(0, 100) + '...' : item.excerpt}
-                          </h3>
-                          {item.date && (
-                            <span className={styles.mediaCoverageDate}>
-                              {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </span>
-                          )}
-                        </div>
-                        <span className={styles.mediaCoverageArrow}>→</span>
-                      </a>
-                    ))}
-                  </div>
-                </>
-              )}
+                          <span className={styles.mediaCoverageArrow}>→</span>
+                        </a>
+                      );
+                    })()}
+
+                    {/* YouTube / video updates */}
+                    {videoUpdates.length > 0 && (
+                      <div className={styles.mediaCoverageGrid} style={{ marginTop: linkedInUpdates.length > 0 ? '1rem' : 0 }}>
+                        {videoUpdates.map((item) => {
+                          const href = item.url ? (/^https?:\/\//i.test(item.url) ? item.url : `https://${item.url}`) : '#';
+                          return (
+                            <a
+                              key={item._id}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.videoCard}
+                            >
+                              {item.imageUrl ? (
+                                <div className={styles.videoThumbWrap}>
+                                  <img src={item.imageUrl} alt={item.excerpt || 'Video'} className={styles.videoThumb} />
+                                  <span className={styles.videoPlayOverlay}>▶</span>
+                                </div>
+                              ) : (
+                                <div className={styles.videoThumbPlaceholder}>
+                                  <span className={styles.videoPlayOverlay}>▶</span>
+                                </div>
+                              )}
+                              <div className={styles.videoCardBody}>
+                                <span className={styles.mediaCoveragePublication}>Video</span>
+                                <p className={styles.videoCardExcerpt}>{item.excerpt?.length > 120 ? item.excerpt.substring(0, 120) + '…' : item.excerpt}</p>
+                                {item.date && (
+                                  <span className={styles.mediaCoverageDate}>
+                                    {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  </span>
+                                )}
+                              </div>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Other social updates (Twitter/X etc.) */}
+                    {otherUpdates.length > 0 && (
+                      <div className={styles.mediaCoverageGrid} style={{ marginTop: '1rem' }}>
+                        {otherUpdates.map((item) => (
+                          <a
+                            key={item._id}
+                            href={item.url ? (/^https?:\/\//i.test(item.url) ? item.url : `https://${item.url}`) : '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.mediaCoverageCard}
+                          >
+                            <div className={styles.mediaCoverageCardContent}>
+                              <span className={styles.mediaCoveragePublication}>
+                                {item.platform === 'twitter' ? 'Twitter/X' : 'Social'}
+                              </span>
+                              <h3 className={styles.mediaCoverageHeadline}>
+                                {item.excerpt?.length > 100 ? item.excerpt.substring(0, 100) + '...' : item.excerpt}
+                              </h3>
+                              {item.date && (
+                                <span className={styles.mediaCoverageDate}>
+                                  {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              )}
+                            </div>
+                            <span className={styles.mediaCoverageArrow}>→</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
 
               {/* Show placeholder if no news or social updates */}
               {(!quarterNews || quarterNews.length === 0) && (!quarterSocialUpdates || quarterSocialUpdates.length === 0) && (
@@ -1273,16 +1341,6 @@ function PortalContentInner({
                   <p>Contact information will be displayed here once data is added in Sanity CMS.</p>
                 </div>
               )}
-              {/* Take a tour link */}
-              <div className={styles.tourReplaySection}>
-                <button
-                  type="button"
-                  className={styles.tourReplayLink}
-                  onClick={replayPortalTour}
-                >
-                  Take a tour of the portal
-                </button>
-              </div>
             </section>
           )}
 
