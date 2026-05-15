@@ -553,6 +553,68 @@ a { cursor: pointer; }
   letter-spacing: 0.12em; text-transform: uppercase;
   color: #363636; margin: 28px 0 14px;
 }
+/* LinkedIn banner */
+.linkedin-banner {
+  display: flex; align-items: center; gap: 14px;
+  border: 1px solid #c0bfbf; padding: 14px 20px;
+  margin-bottom: 16px; text-decoration: none; color: inherit;
+}
+.linkedin-banner-icon {
+  width: 32px; height: 32px; border-radius: 4px;
+  background: #0a66c2; color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+  flex-shrink: 0;
+}
+.linkedin-banner-text {
+  font-family: 'Inter', sans-serif; font-size: 12px; color: #363636; line-height: 1.4;
+}
+.linkedin-banner-text strong {
+  font-weight: 700;
+}
+/* Video card */
+.video-card {
+  display: flex; gap: 0;
+  border: 1px solid #c0bfbf;
+  margin-bottom: 16px;
+  overflow: hidden;
+  text-decoration: none; color: inherit;
+}
+.video-thumb-wrap {
+  width: 160px; flex-shrink: 0; position: relative; background: #1a1a1a;
+  display: flex; align-items: center; justify-content: center; min-height: 90px;
+}
+.video-thumb {
+  width: 160px; height: 90px; object-fit: cover; display: block;
+}
+.video-thumb-placeholder {
+  width: 160px; height: 90px;
+  background: #2a2a2a; display: flex; align-items: center; justify-content: center;
+}
+.video-play-overlay {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #363636; padding-left: 3px;
+}
+.video-card-content {
+  padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 6px;
+}
+.video-card-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: #830d35; text-transform: uppercase; letter-spacing: 0.14em;
+}
+.video-card-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; color: #363636; line-height: 1.55;
+}
+.video-card-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #888; margin-top: auto;
+}
+/* Generic social card */
 .social-card {
   display: flex; gap: 0;
   border: 1px solid #c0bfbf;
@@ -1175,31 +1237,94 @@ export function generatePdfHtml({
     return 'Social';
   }
 
-  const socialCardsHtml = (quarterSocialUpdates || []).length > 0
-    ? `<div class="social-updates-heading">Social Updates</div>` +
-      quarterSocialUpdates.map(item => {
-        const excerpt = item.excerpt
-          ? (item.excerpt.length > 120 ? item.excerpt.substring(0, 120) + '…' : item.excerpt)
-          : '';
-        const imageEl = item.imageUrl
-          ? `<img class="social-card-image" src="${esc(item.imageUrl)}" alt="">`
-          : `<div class="social-card-image-placeholder">${esc(platformLabel(item.platform))}</div>`;
-        const cardInner = `
-          <div class="social-card">
-            ${imageEl}
-            <div class="social-card-content">
-              <div class="social-card-platform">${esc(platformLabel(item.platform))}</div>
-              ${excerpt ? `<div class="social-card-text">${esc(excerpt)}</div>` : ''}
-              <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
-            </div>
-          </div>`;
-        return item.url
-          ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`
-          : cardInner;
-      }).join('')
+  function renderMediaNotesBlocks(blocks) {
+    if (!blocks || !Array.isArray(blocks)) return '';
+    return blocks.map(block => {
+      if (block._type !== 'block') return '';
+      const html = (block.children || []).map(span => {
+        if (span._type !== 'span') return '';
+        let text = esc(span.text || '');
+        const marks = span.marks || [];
+        const linkMark = marks.find(m => block.markDefs && block.markDefs.some(d => d._key === m && d._type === 'link'));
+        if (linkMark) {
+          const def = block.markDefs.find(d => d._key === linkMark);
+          text = `<a href="${esc(def.href)}" style="color:#830d35;text-decoration:underline;">${text}</a>`;
+        } else {
+          if (marks.includes('strong')) text = `<strong>${text}</strong>`;
+          if (marks.includes('em')) text = `<em>${text}</em>`;
+        }
+        return text;
+      }).join('');
+      return `<p style="margin-bottom:6px;">${html}</p>`;
+    }).join('');
+  }
+
+  const linkedInUpdates = (quarterSocialUpdates || []).filter(i => i.platform === 'linkedin');
+  const videoUpdates = (quarterSocialUpdates || []).filter(i => i.platform === 'video');
+  const otherUpdates = (quarterSocialUpdates || []).filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
+
+  const linkedInBannerHtml = linkedInUpdates.length > 0
+    ? (() => {
+        const linkedInUrl = linkedInUpdates[0]?.url || 'https://linkedin.com/company/yalicapital';
+        return `<a href="${esc(linkedInUrl)}" class="linkedin-banner">
+          <div class="linkedin-banner-icon">in</div>
+          <div class="linkedin-banner-text"><strong>We're active on LinkedIn.</strong> Follow us for fund updates, portfolio news, and deeptech insights.</div>
+        </a>`;
+      })()
     : '';
 
-  const hasMedia = mediaItems.length > 0 || (quarterSocialUpdates || []).length > 0;
+  const videoCardsHtml = videoUpdates.map(item => {
+    const excerpt = item.excerpt
+      ? (item.excerpt.length > 120 ? item.excerpt.substring(0, 120) + '…' : item.excerpt)
+      : '';
+    const thumbEl = item.imageUrl
+      ? `<img class="video-thumb" src="${esc(item.imageUrl)}" alt="">`
+      : `<div class="video-thumb-placeholder"></div>`;
+    const card = `
+      <div class="video-card">
+        <div class="video-thumb-wrap">
+          ${thumbEl}
+          <div class="video-play-overlay">▶</div>
+        </div>
+        <div class="video-card-content">
+          <div class="video-card-platform">Video</div>
+          ${excerpt ? `<div class="video-card-text">${esc(excerpt)}</div>` : ''}
+          <div class="video-card-date">${esc(fmtShortDate(item.date))}</div>
+        </div>
+      </div>`;
+    return item.url
+      ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${card}</a>`
+      : card;
+  }).join('');
+
+  const otherCardsHtml = otherUpdates.map(item => {
+    const excerpt = item.excerpt
+      ? (item.excerpt.length > 120 ? item.excerpt.substring(0, 120) + '…' : item.excerpt)
+      : '';
+    const imageEl = item.imageUrl
+      ? `<img class="social-card-image" src="${esc(item.imageUrl)}" alt="">`
+      : `<div class="social-card-image-placeholder">${esc(platformLabel(item.platform))}</div>`;
+    const cardInner = `
+      <div class="social-card">
+        ${imageEl}
+        <div class="social-card-content">
+          <div class="social-card-platform">${esc(platformLabel(item.platform))}</div>
+          ${excerpt ? `<div class="social-card-text">${esc(excerpt)}</div>` : ''}
+          <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
+        </div>
+      </div>`;
+    return item.url
+      ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`
+      : cardInner;
+  }).join('');
+
+  const hasSocialUpdates = (quarterSocialUpdates || []).length > 0;
+  const socialCardsHtml = hasSocialUpdates
+    ? `<div class="social-updates-heading">Social Updates</div>` +
+      linkedInBannerHtml + videoCardsHtml + otherCardsHtml
+    : '';
+
+  const hasMedia = mediaItems.length > 0 || hasSocialUpdates;
 
   // Use <table> + <thead> so the page header repeats automatically if social cards overflow to a second page
   const mediaHtml = `
@@ -1211,7 +1336,7 @@ export function generatePdfHtml({
         <div class="media-arrow">↗</div>
       </div>
       <div class="media-subhead">Key highlights and press coverage</div>
-      ${report.mediaNotes ? `<div class="body-text" style="margin: 12px 0 4px;"><p>${esc(report.mediaNotes)}</p></div>` : ''}
+      ${report.mediaNotes && Array.isArray(report.mediaNotes) && report.mediaNotes.length > 0 ? `<div class="body-text" style="margin: 12px 0 4px;">${renderMediaNotesBlocks(report.mediaNotes)}</div>` : ''}
       <div class="section-divider-light"></div>
       ${mediaCardsHtml ? `<div class="media-cards">${mediaCardsHtml}</div>` : ''}
       ${socialCardsHtml}
