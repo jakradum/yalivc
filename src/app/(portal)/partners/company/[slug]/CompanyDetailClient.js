@@ -627,25 +627,25 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Pre-money valuation</td>
+                          <td>Pre-money valuation{getRoundsFootnoteMarker('rounds-premoney')}</td>
                           {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.preMoneyValuation ? formatCurrency(round.preMoneyValuation) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Total round size</td>
+                          <td>Total round size{getRoundsFootnoteMarker('rounds-size')}</td>
                           {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.totalRoundSize ? formatCurrency(round.totalRoundSize) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Post-money valuation</td>
+                          <td>Post-money valuation{getRoundsFootnoteMarker('rounds-postmoney')}</td>
                           {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.postMoneyValuation ? formatCurrency(round.postMoneyValuation) : '-'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td>Yali&apos;s investment</td>
+                          <td>Yali&apos;s investment{getRoundsFootnoteMarker('rounds-yali-investment')}</td>
                           {displayRounds.map((round, idx) => (
                             <td key={idx}>{round.yaliInvestment ? formatCurrency(round.yaliInvestment) : '-'}</td>
                           ))}
