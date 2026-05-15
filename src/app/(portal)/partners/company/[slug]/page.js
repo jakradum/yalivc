@@ -98,9 +98,18 @@ export default async function CompanyPage({ params, searchParams }) {
     redirect(redirectUrl);
   }
 
-  // Build ordered list of company slugs for next/prev navigation (filtered by quarter)
+  // Build ordered list of company slugs for next/prev navigation.
+  // Sort by initial investment date ascending — matches the portfolio investments table order.
   const allCompanySlugs = companiesInScope
     .filter(item => item.slug)
+    .sort((a, b) => {
+      const dateA = (a.investmentRounds?.find(r => r.isInitialRound) || a.investmentRounds?.[0])?.investmentDate || '';
+      const dateB = (b.investmentRounds?.find(r => r.isInitialRound) || b.investmentRounds?.[0])?.investmentDate || '';
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+      return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+    })
     .map(item => ({ slug: item.slug, name: item.name }));
 
   // Filter investment rounds to only those on or before this quarter's end date
