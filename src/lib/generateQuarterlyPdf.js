@@ -157,10 +157,15 @@ function getTotalInvestment(company) {
   return (company?.investmentRounds || []).reduce((s, r) => s + (r.yaliInvestment || 0), 0);
 }
 
+const SUPPLEMENTARY_ROUND_TYPES = new Set(['bridge', 'ccd-conversion', 'follow-on']);
+
 function getLatestRoundLabel(company) {
   const rounds = (company?.investmentRounds || []).filter(r => r.roundName);
   if (!rounds.length) return '—';
-  const latest = rounds[rounds.length - 1];
+  // Prefer the last primary round (not a bridge/follow-on/conversion);
+  // fall back to the actual last round if all are supplementary.
+  const primary = rounds.filter(r => !SUPPLEMENTARY_ROUND_TYPES.has(r.roundName));
+  const latest = primary.length ? primary[primary.length - 1] : rounds[rounds.length - 1];
   return latest?.roundLabel || roundNameToLabel(latest?.roundName) || '—';
 }
 

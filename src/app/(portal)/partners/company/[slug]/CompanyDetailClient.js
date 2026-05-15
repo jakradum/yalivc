@@ -148,10 +148,13 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   };
 
   // Get latest round by date
+  const SUPPLEMENTARY_ROUND_TYPES = new Set(['bridge', 'ccd-conversion', 'follow-on']);
+
   const getLatestRound = () => {
-    if (sortedRoundsNewestFirst.length > 0) {
-      return sortedRoundsNewestFirst[0];
-    }
+    // Prefer the last primary round; fall back to actual last if all are supplementary.
+    const primary = sortedRoundsOldestFirst.filter(r => !SUPPLEMENTARY_ROUND_TYPES.has(r.roundName));
+    if (primary.length > 0) return primary[primary.length - 1];
+    if (sortedRoundsNewestFirst.length > 0) return sortedRoundsNewestFirst[0];
     return getInitialRound();
   };
 
