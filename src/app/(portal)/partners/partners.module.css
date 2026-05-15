@@ -1739,6 +1739,15 @@
   min-width: 700px;
 }
 
+.portfolioTable sup {
+  color: #830D35;
+  font-weight: 600;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 0.15rem;
+}
+
 .portfolioTable th {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.6875rem;
@@ -2693,6 +2702,15 @@
   margin-bottom: 2rem;
 }
 
+.investmentDetailsTable sup {
+  color: #830D35;
+  font-weight: 600;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 0.15rem;
+}
+
 .investmentDetailsTable tr {
   border-bottom: 1px solid #363636;
 }
@@ -2792,8 +2810,10 @@
 .footnoteMarker {
   color: #830D35;
   font-weight: 600;
-  font-size: 0.75em;
-  margin-left: 0.125rem;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 0.15rem;
 }
 
 .customFootnotes {
@@ -2815,6 +2835,15 @@
   background: white;
   border: 1px solid #830D35;
   table-layout: fixed;
+}
+
+.roundsTable sup {
+  color: #830D35;
+  font-weight: 600;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 0.15rem;
 }
 
 .roundsTable thead th {
