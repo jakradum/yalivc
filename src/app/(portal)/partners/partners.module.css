@@ -3387,6 +3387,11 @@
   margin: 0;
 }
 
+.mediaCoverageEditorNoteLink {
+  color: #830d35;
+  text-decoration: underline;
+}
+
 .mediaSectionTitle {
   font-family: var(--font-jetbrains-mono);
   font-size: 0.6875rem;
