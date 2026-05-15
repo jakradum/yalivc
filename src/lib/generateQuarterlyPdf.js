@@ -158,7 +158,7 @@ function getTotalInvestment(company) {
 }
 
 function getLatestRoundLabel(company) {
-  const rounds = company?.investmentRounds || [];
+  const rounds = (company?.investmentRounds || []).filter(r => r.roundName);
   if (!rounds.length) return '—';
   const latest = rounds[rounds.length - 1];
   return latest?.roundLabel || roundNameToLabel(latest?.roundName) || '—';
@@ -850,7 +850,10 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   const companyPagesHtml = sortedCompanies.map(company => {
     const qd = company.quarterData;
-    const allRounds = company.investmentRounds || [];
+    // Only include rounds with a roundName — matches portal's sortedRoundsOldestFirst filter.
+    // Rounds with only a roundLabel (e.g. bridge rounds entered without a structured name) are
+    // excluded from latest-round display, the rounds table, and co-investor lookups.
+    const allRounds = (company.investmentRounds || []).filter(r => r.roundName);
     const totalInv = getTotalInvestment(company);
     const ownership = qd?.currentOwnershipPercent ?? getLatestOwnership(company);
     const ownershipConf = qd?.currentOwnershipConfidential;
