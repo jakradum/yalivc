@@ -3914,3 +3914,48 @@
     width: 100%;
   }
 }
+
+/* ===== MOBILE NOTICE MODAL ===== */
+.mobileNoticeOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(54, 54, 54, 0.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.mobileNoticeModal {
+  background: #efefef;
+  border: 1px solid #363636;
+  padding: 28px 24px 24px;
+  max-width: 320px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mobileNoticeText {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #363636;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mobileNoticeBtn {
+  align-self: flex-end;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: #830d35;
+  color: #efefef;
+  border: 1px solid #830d35;
+  padding: 8px 20px;
+  cursor: pointer;
+}
