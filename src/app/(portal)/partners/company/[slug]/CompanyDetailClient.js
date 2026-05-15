@@ -680,7 +680,6 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                           ))}
                       </div>
                     )}
-                    <p className={styles.roundsDisclaimer}>Round details may be updated as transactions are finalised. For point-in-time figures, refer to the quarterly PDF report in the Download Centre.</p>
                   </div>
                 </div>
               );
