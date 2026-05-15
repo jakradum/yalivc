@@ -3,6 +3,11 @@ import React, { useState, useMemo } from 'react';
 import styles from './newscomponent.module.css';
 import fallbackData from '../data/news.json';
 
+const normalizeUrl = (url) => {
+  if (!url) return '#';
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+};
+
 const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -82,7 +87,7 @@ export default function NewsComponent({ news = [] }) {
   const renderArticle = (article, index) => (
     <article key={index} className={styles.article}>
       <p className={styles.articleDate}>{article.formattedDate}</p>
-      <a href={article.url} target="_blank" rel="noopener noreferrer">
+      <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
         <p className={styles.articleTitle}>{article.title}</p>
       </a>
       <p className={styles.articleMeta}>

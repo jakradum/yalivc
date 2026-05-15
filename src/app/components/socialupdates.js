@@ -9,6 +9,11 @@ const truncateText = (text, maxLength) => {
   return text.substring(0, maxLength) + '...';
 };
 
+const normalizeUrl = (url) => {
+  if (!url) return '#';
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+};
+
 const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -33,7 +38,7 @@ export default function SocialUpdates({ updates = [] }) {
 
         {/* Featured post */}
         <a
-          href={featured.url || '#'}
+          href={normalizeUrl(featured.url)}
           target="_blank"
           rel="noopener noreferrer"
           className={`${styles.featured} ${!hasSecondary ? styles.featuredOnly : ''}`}
@@ -65,7 +70,7 @@ export default function SocialUpdates({ updates = [] }) {
             {secondary.map((post, i) => (
               <a
                 key={post._id || i}
-                href={post.url || '#'}
+                href={normalizeUrl(post.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.secondaryRow} ${i === secondary.length - 1 ? styles.secondaryRowLast : ''}`}
