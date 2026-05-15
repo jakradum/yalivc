@@ -748,7 +748,7 @@ function PortalContentInner({
                     {fundMetrics?.dpi != null && (
                       <tr>
                         <td>DPI</td>
-                        <td>{`${fundMetrics.dpi.toFixed(4)}x`}</td>
+                        <td>{`${fundMetrics.dpi.toFixed(2)}x`}</td>
                       </tr>
                     )}
                     {fundMetrics?.rvpi != null && (
