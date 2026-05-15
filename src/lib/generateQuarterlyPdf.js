@@ -1153,8 +1153,8 @@ export function generatePdfHtml({
         <div class="media-card${idx % 2 === 1 ? ' right' : ''}">
           <div class="media-card-date">${esc(fmtShortDate(item.date))}</div>
           <div class="media-card-title">${esc(item.headlineEdited || '')}</div>
-          ${item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
-          ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">${item.isVideo ? 'Watch ↗' : 'Read more'}</a></div>` : ''}
+          ${item.isVideo && item.videoSource === 'youtube' ? `<div class="media-card-source" style="color:#cc0000;">▶ YouTube</div>` : item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
+          ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">${item.isVideo && item.videoSource === 'youtube' ? 'Watch on YouTube ↗' : item.isVideo ? 'Watch ↗' : 'Read more'}</a></div>` : ''}
         </div>`).join('')
     : '';
 

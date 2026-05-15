@@ -1332,7 +1332,13 @@ function PortalContentInner({
                         className={styles.mediaCoverageCard}
                       >
                         <div className={styles.mediaCoverageCardContent}>
-                          <span className={styles.mediaCoveragePublication}>{item.publicationName || 'News'}</span>
+                          <span className={styles.mediaCoveragePublication}>
+                            {item.isVideo && item.videoSource === 'youtube' ? (
+                              <span className={styles.youtubeBadge}>▶ YouTube</span>
+                            ) : (
+                              item.publicationName || 'News'
+                            )}
+                          </span>
                           <h3 className={styles.mediaCoverageHeadline}>{item.headlineEdited}</h3>
                           {item.date && (
                             <span className={styles.mediaCoverageDate}>
