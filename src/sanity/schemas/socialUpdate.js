@@ -21,9 +21,11 @@ const socialUpdate = {
     {
       name: 'url',
       title: 'Post URL',
-      type: 'url',
+      type: 'string',
       description: 'Link to the original post',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().uri({
+        scheme: ['http', 'https']
+      }),
     },
     {
       name: 'image',
