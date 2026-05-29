@@ -36,6 +36,8 @@ import trackRecord from './trackRecord'
 import investorRelations from './investorRelations'
 // Access Control
 import domainPrivilege from './domainPrivilege'
+// Deck Assets
+import deckAsset from './deckAsset'
 
 export const schemaTypes = [
   // Existing schemas
@@ -79,4 +81,6 @@ export const schemaTypes = [
   investorRelations,
   // Access Control
   domainPrivilege,
+  // Deck Assets
+  deckAsset,
 ]
