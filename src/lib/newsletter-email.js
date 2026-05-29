@@ -186,8 +186,10 @@ export function buildEmail(newsletter, unsubscribeUrl) {
   const shareBody = encodeURIComponent(`Thought you'd find this interesting: ${pageUrl}`);
 
   const authorName = author?.name || null;
-  const authorImageUrl = author?.image?.asset?.url
-    ? `${author.image.asset.url}?w=112&h=112&fit=crop&auto=format`
+  const authorSlug = author?.slug || null;
+  const authorProfileUrl = authorSlug ? `https://yali.vc/about-yali/${authorSlug}` : null;
+  const authorImageUrl = author?.photo?.asset?.url
+    ? `${author.photo.asset.url}?w=112&h=112&fit=crop&auto=format`
     : null;
 
   const sectionsHtml = sections.map(renderSection).join('');
@@ -252,6 +254,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
               <h1 style="font-family:'Courier New',Courier,monospace;font-size:39px;font-weight:700;color:#ebde84;margin:0 0 14px 0;line-height:1.2;">${title || ''}</h1>
               ${shortDescription ? `<p style="font-family:Arial,sans-serif;font-size:16px;color:#f5edbe;line-height:1.6;margin:0 0 20px 0;">${shortDescription}</p>` : ''}
               ${authorName ? `
+              ${authorProfileUrl ? `<a href="${authorProfileUrl}" style="text-decoration:none;display:block;" target="_blank">` : ''}
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;">
@@ -263,7 +266,8 @@ export function buildEmail(newsletter, unsubscribeUrl) {
                     <img src="${authorImageUrl}" width="56" height="56" alt="${authorName}" style="display:block;width:56px;height:56px;object-fit:cover;border:0;" />
                   </td>` : ''}
                 </tr>
-              </table>` : ''}
+              </table>
+              ${authorProfileUrl ? `</a>` : ''}` : ''}
             </td>
           </tr>
 
@@ -326,7 +330,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
 export const NEWSLETTER_QUERY = `*[_type == "newsletter" && _id in [$id, "drafts." + $id]][0]{
   title, edition, shortDescription, publishedDate, status,
   slug, podcastUrl,
-  author->{ name, image { asset->{ url } } },
+  author->{ name, "slug": slug.current, photo { asset->{ url } } },
   sections[]{
     _type,
     sectionTitle, title,
