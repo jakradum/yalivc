@@ -69,18 +69,11 @@ export default function Disclosures() {
         {/* Complaint policy */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Complaint Handling Policy</h2>
-          <p className={styles.body}>
-            Our complaint handling and grievance redressal policy is available as a{' '}
-            <a
-              href="/complaint-handling-policy.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-            >
-              downloadable PDF
-            </a>
-            .
-          </p>
+          <a href="/investor-relations/" className={styles.ctaBox}>
+            <span className={styles.ctaLabel}>INVESTOR RELATIONS</span>
+            <span className={styles.ctaText}>Visit our Investor Relations page</span>
+            <span className={styles.ctaArrow}>→</span>
+          </a>
         </section>
 
       </div>
