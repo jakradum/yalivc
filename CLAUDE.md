@@ -1,5 +1,7 @@
 # yali-site — Agent Context
 
+> **This file is written for AI coding agents, not humans.** It documents non-obvious conventions, gotchas, and architectural decisions that cannot be derived by reading the code. Do not rewrite it in a human-friendly style.
+
 ## Stack
 - Next.js 16.2.2, App Router, Turbopack, `trailingSlash: true` in `next.config.js`
 - Sanity CMS: projectId `nt0wmty3`, dataset `production`, apiVersion `2024-01-01`
@@ -93,12 +95,31 @@ Shared HMAC verifier. Returns `email` string if valid, `null` if invalid/tampere
 
 ---
 
+## Disclosures Page (`/disclosures`)
+
+- Static page, no Sanity, no auth — `src/app/disclosures/page.js` + `disclosures.module.css`
+- Content: SEBI registration details, investor grievances contact, complaint handling policy PDF link
+- The registration details block is a flex-based list (`.detailList` / `.detailRow`), not an HTML `<table>`
+- PDF linked at `/complaint-handling-policy.pdf` — served from `public/`; the source HTML is `docs/complaint-handling-policy.html`
+- **CSS gotcha:** `.content` has `width: 100%` + horizontal padding. It must have `box-sizing: border-box` or the padding adds to the width and overflows on mobile. This has already been fixed — don't remove it.
+- Mobile breakpoint: 640px. Below this, `.detailRow` switches to `flex-direction: column` so label and value stack vertically.
+
+---
+
 ## Sanity
 
 - Read client: `useCdn: false` for all authenticated/dynamic pages
 - Write client: requires `process.env.SANITY_WRITE_TOKEN` — only used in auth routes (OTP write-back, invite code redemption)
 - `getAllBlogPosts()` returns `{ posts: [...], total: n }` — **not a plain array**. Always destructure: `const { posts = [] } = await getAllBlogPosts()`
-- Key schema types: `portalUser`, `domainPrivilege`, `investorRelations`, `fundContent`, `lpFundSettings`, `quarterlyReport`, `blogPost`, `teamMember`, `company`, `deckAsset`
+- Key schema types: `portalUser`, `domainPrivilege`, `investorRelations`, `fundContent`, `lpFundSettings`, `quarterlyReport`, `lpQuarterlyReport`, `blogPost`, `teamMember`, `company`, `news`, `deckAsset`
+
+**Non-obvious schema fields:**
+- `portalUser.isGiftCityLP` (boolean) — Gift City LP flag; controls whether `giftCityFundFinancialsPdf` is shown in the quarterly PDF
+- `lpFundSettings.rvpi` — RVPI metric; fund metrics section only renders in the portal/PDF when values are actually populated (don't assume it's always present)
+- `lpQuarterlyReport.giftCityFundFinancialsPdf` — separate financials PDF for Gift City LPs; rendered only when `portalUser.isGiftCityLP` is true
+- `lpQuarterlyReport.mediaNotes` — portable text array (not a string); each item has optional `link.href`. Use `renderMediaNotesBlocks()` in `generateQuarterlyPdf.js`
+- `company` co-investors: each round's `coInvestors` array item has optional `displayOrder` (integer) for controlling render order
+- `news.isVideo` (boolean) + `news.videoSource` (string URL) — for video news items; `videoSource` accepts YouTube URLs. Always check `isVideo` before treating as article link
 
 ---
 
@@ -183,6 +204,8 @@ Used to generate designed PDF documents: open HTML file in Chrome → Print → 
 | `docs/podcast-subroto-bagchi.html` | Podcast questions document (12 questions, 7 themes, 4 pages) |
 | `docs/fund2-deck.html` | Fund II investor pitch deck (960×540px, Chrome → Print → Save as PDF) |
 | `docs/fund1-deck.html` | Fund I investor pitch deck (same format) |
+| `docs/sri-fund-portfolio.html` | Yali Capital × SRI Fund portfolio overview (A4) |
+| `docs/linkedin-carousel-may-2026.html` | LinkedIn team roundup carousel — May 2026 (1080×1080px, 5 slides) |
 
 Rules for all docs files:
 - Fonts referenced via `../public/fonts/` (relative path, works with `file://`)
@@ -190,6 +213,7 @@ Rules for all docs files:
 - **Always include `print-color-adjust: exact` on the `*` selector** — without it, background colours are stripped on print
 - `@page { size: A4; margin: 0; }` in print CSS
 - Screen view: pages rendered as white cards on `#d0d0d0` background with a "Print / Save as PDF" button
+- **No em dashes (`—`) in any visible text** — use `:`, `,`, or `;` instead. The only permitted use is as a data placeholder value (e.g. FMV not yet available).
 
 **Letterhead pattern** (`letterhead-template.html`):
 - Background: `#faf8f5` (warm off-white)
@@ -209,7 +233,7 @@ Rules for all docs files:
 **Fund II deck** (`docs/fund2-deck.html`):
 - Slide canvas: 960×540px (landscape). `@page { size: 960px 540px; margin: 0; }` — NOT A4
 - Slide order: Cover, Contents, Team (divider + 4 slides), Thesis (divider + 3 slides), Process (divider + 2 placeholder slides), Fund I (divider + multiple slides including LP logos + CXO map), Fund II (Sankey + slides), Media & Recognition, Thank You
-- Hub-and-spoke (investment areas slide): sector boxes are `fill:#efefef stroke:#c0bcb8`, icons embedded as nested `<svg>` with `viewBox` cropped from original 2700×4800 Figma export space, icon fill `#b0aca8`; hub is crimson 80×80 with white logo; spokes use solid diagonals and dotted horizontals in `#c0bcb8`
+- Hub-and-spoke (investment areas slide): sector boxes are `fill:#efefef stroke:#363636 stroke-width:1`, icons embedded as nested `<svg>` with `viewBox` cropped from original 2700×4800 Figma export space, icon fill `#363636`, sized 38×38 centred in 100×100 box (offset box_x+31, box_y+31); hub is crimson 80×80 with white `favicon.svg` logomark (52×52, not the full logo); spokes use solid diagonals and dotted horizontals in `#c0bcb8`
 - Icons were supplied as 3 SVG files (2 icons per file, 2700×4800 canvas). Mapping: Smart Mfg=File2(1) bottom, Fabless Semi=File3 bottom (chip+pins), Life Sci=File1(2) top, Robotics=File2(1) top, AI=File1(2) bottom, Aerospace=File3 top
 - SVG `<pattern>` elements render pixellated in Chrome PDF — always replace with explicit JS-rendered `<line>` elements (see existing plus-grid renderers in the script section)
 - Plus-grid renderers: `hex-team-sep`, `hex-thesis`, `plusgrid-fi-div`, `plusgrid-process-sep` — all use same loop pattern, fill `#ebde84`, opacity 0.55
@@ -232,7 +256,6 @@ Rules for all docs files:
 
 **Quarterly PDF notes:**
 - `tagged: true` must be set in `page.pdf()` options — required for clickable link annotations in the output PDF
-- `mediaNotes` field is Portable Text (block array), not a plain string — use `renderMediaNotesBlocks()` in `generateQuarterlyPdf.js`
 - LinkedIn social updates render as a single banner; video updates render as thumbnail cards with play overlay
 
 ---
