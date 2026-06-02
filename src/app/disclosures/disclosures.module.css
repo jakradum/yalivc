@@ -124,6 +124,45 @@
   letter-spacing: 0.03em;
 }
 
+/* ── CTA box ──────────────────────────────────────────────────── */
+
+.ctaBox {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #363636;
+  padding: 20px 24px;
+  text-decoration: none;
+  background: #fff;
+  transition: background 0.15s ease;
+}
+
+.ctaBox:hover {
+  background: #efefef;
+}
+
+.ctaLabel {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #830d35;
+  white-space: nowrap;
+}
+
+.ctaText {
+  font-size: 14px;
+  color: #363636;
+  flex: 1;
+}
+
+.ctaArrow {
+  font-size: 18px;
+  color: #363636;
+  line-height: 1;
+}
+
 /* ── Mobile ───────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
