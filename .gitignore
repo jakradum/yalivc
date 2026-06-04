@@ -37,3 +37,6 @@ next-env.d.ts
 
 # local docs (pitch decks, letters, generated PDFs — not for public repo)
 /docs
+
+# agent context — local only, contains internal details
+CLAUDE.md
