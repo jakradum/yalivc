@@ -2,6 +2,19 @@
 
 > **This file is written for AI coding agents, not humans.** It documents non-obvious conventions, gotchas, and architectural decisions that cannot be derived by reading the code. Do not rewrite it in a human-friendly style.
 
+## Subdirectory context files
+
+Additional CLAUDE.md files are loaded automatically when you touch files in those directories:
+
+| Directory | File | When loaded |
+|---|---|---|
+| `src/app/(portal)/` | LP portal auth, quarterly logic, PDF generation | Touching any portal page or component |
+| `src/app/(dataroom)/` | Dataroom auth, categories, domainPrivilege | Touching any dataroom page or component |
+| `src/sanity/` | Schema field tables, two-registry rule, CDN URL format | Touching schemas, queries, Studio config |
+| `docs/` | Docs generator rules, per-file details, deck-specific notes | Touching any HTML doc in docs/ |
+
+---
+
 ## Stack
 - Next.js 16.2.2, App Router, Turbopack, `trailingSlash: true` in `next.config.js`
 - Sanity CMS: projectId `nt0wmty3`, dataset `production`, apiVersion `2024-01-01`
@@ -69,36 +82,15 @@
 
 ## Auth Systems
 
-Both systems share the same session format and secret.
+Both portal and dataroom share the same session format and secret.
 
 **Session cookie format:** `email:timestamp:hmac-sha256-hex`
-**Secret:** `process.env.PORTAL_AUTH_SECRET` (used for both portal and dataroom)
+**Secret:** `process.env.PORTAL_AUTH_SECRET`
+**Verifier:** `src/lib/session.js` — returns `email` string if valid, `null` if invalid/tampered/missing
 
-### Portal (`portal-session` cookie)
-- OTP flow via `/api/portal-auth/route.js`
-- Page-level verification: `src/lib/session.js` (Node.js `crypto`, server components only)
-- Standard page pattern:
-  ```js
-  const cookieValue = cookieStore.get('portal-session')?.value;
-  const userEmail = cookieValue ? verifySession(cookieValue) : null;
-  if (cookieValue && userEmail === null) redirect('/partners/sign-in');
-  ```
+- Portal uses `portal-session` cookie; dataroom uses `dataroom-session` cookie
 - `redirect` must be imported from `next/navigation`, NOT `next/headers`
-- Trusted domains (bypass portalUser lookup): `@yali.vc`, `@florintree.com`
-- Access condition: `portalUser` Sanity doc with `lpPortalAccess == true` OR `(!defined(lpPortalAccess) && isActive == true)`
-- Kill switch: `noAccess: true` on `portalUser` blocks access even for trusted domains
-
-### Dataroom (`dataroom-session` cookie)
-- OTP flow via `/api/dataroom-auth/route.js`
-- Same `session.js` verifier
-- Trusted domains: `@yali.vc`, `@florintree.com`
-- Non-trusted access: `portalUser.investorDataRoomAccess == true` OR active `domainPrivilege` Sanity doc
-- `domainPrivilege` modes: `requireCode: true` (shared invite code) or `requireCode: false` (open for domain)
-- Kill switch: `noAccess: true` blocks even trusted domains and domain privilege users
-- Portfolio `/dataroom/portfolio` category requires a `portalUser` record — domain privilege alone is not enough
-
-### `src/lib/session.js`
-Shared HMAC verifier. Returns `email` string if valid, `null` if invalid/tampered/missing.
+- For full auth implementation details, see the subdirectory CLAUDE.md files
 
 ---
 
@@ -127,102 +119,14 @@ Shared HMAC verifier. Returns `email` string if valid, `null` if invalid/tampere
 
 ---
 
-## LP Portal
-
-- Indian fiscal year quarters: Q1=Apr–Jun, Q2=Jul–Sep, Q3=Oct–Dec, Q4=Jan–Mar
-- Fiscal year label: "FY26" = April 2025 – March 2026
-- Company detail pages show investment rounds filtered to the **current quarter only** — use `filterInvestmentRounds(rounds, quarterEndDate, nextQuarterEndDate)` from `quarterly-utils.js`
-- FMV/metrics fallback: only use past quarters, never future — use `getMostRecentPastQuarterData()` not `latestQuarter` or `quarterlyUpdates[0]`
-- Internal reports (`visibility: 'internal'`) are restricted to `@yali.vc` only
-- PDF generation route: `/partners/api/generate-pdf/[slug]` — **local-only, never called in production**. `maxDuration` is set to 60 to satisfy Hobby plan build validation but the route is never hit on Vercel.
-- The public `/api/generate-pdf/[slug]` route exists for dataroom use; same local-only rule applies
-
----
-
-## Data Room
-
-- Full auth gate on both `/dataroom` (landing) and `/dataroom/[category]`
-- Categories: `fund-i`, `fund-ii`, `team`, `track-record`, recommendations
-- Documents managed via `fundContent` Sanity document
-- Latest LP report shown under Fund I section (fetched via `getLatestLPReportForDataRoom`)
-
----
-
 ## Disclosures Page (`/disclosures`)
 
 - Static page, no Sanity, no auth — `src/app/disclosures/page.js` + `disclosures.module.css`
 - Content: SEBI registration details, investor grievances contact, complaint handling policy PDF link
 - The registration details block is a flex-based list (`.detailList` / `.detailRow`), not an HTML `<table>`
-- PDF linked at `/complaint-handling-policy.pdf` — served from `public/`; the source HTML is `docs/complaint-handling-policy.html`
-- **CSS gotcha:** `.content` has `width: 100%` + horizontal padding. It must have `box-sizing: border-box` or the padding adds to the width and overflows on mobile. This has already been fixed — don't remove it.
-- Mobile breakpoint: 640px. Below this, `.detailRow` switches to `flex-direction: column` so label and value stack vertically.
-
----
-
-## Sanity
-
-- Read client: `useCdn: false` for all authenticated/dynamic pages
-- Write client: requires `process.env.SANITY_WRITE_TOKEN` — only used in auth routes (OTP write-back, invite code redemption)
-- `getAllBlogPosts()` returns `{ posts: [...], total: n }` — **not a plain array**. Always destructure: `const { posts = [] } = await getAllBlogPosts()`
-- Key schema types: `portalUser`, `domainPrivilege`, `investorRelations`, `fundContent`, `lpFundSettings`, `quarterlyReport`, `lpQuarterlyReport`, `blogPost`, `teamMember`, `company`, `news`, `investor`
-- **Two schema registries exist:** `src/sanity/schemas/index.js` (used by the Next.js app) and `src/sanity/schemaTypes.js` (used by the Sanity Studio config). Both must be kept in sync when adding/removing schema types.
-
-### `portalUser` schema fields
-| Field | Type | Notes |
-|---|---|---|
-| `email` | string | Required. Primary identifier. |
-| `name` | string | LP name or organisation |
-| `lpPortalAccess` | boolean | Grants LP portal access. Default true. |
-| `investorDataRoomAccess` | boolean | Grants data room access. Independent of portal. Default false. |
-| `noAccess` | boolean | Kill switch. Overrides all other access flags. Default false. |
-| `isGiftCityLP` | boolean | Shows GIFT City-specific fund financials PDF in quarterly report. Default false. |
-| `source` | string | `portal` or `dataroom` — how the user was onboarded. |
-| `inviteActions` | custom UI | InviteButtons component — send portal/dataroom invites from Studio. Read-only. |
-| `inviteCode` | string | Hidden. Managed by invite API. |
-| `inviteCodeExpiry` | string | Hidden. Managed by invite API. |
-
-### `investor` schema fields
-| Field | Type | Notes |
-|---|---|---|
-| `name` | string | Required. Display name (e.g., "Sequoia Capital") |
-| `slug` | slug | Auto-generated from name |
-| `type` | string | vc / angel / family-office / corporate / government / other |
-| `website` | url | Optional |
-| `logo` | image | Upload via Studio. Used in co-investor display and deck slides. |
-
-LP investor logos: upload via Studio → Investors → set category to LP. When pulling logos for deck slides, query `investor` docs by name and construct Sanity CDN URL from the `logo.asset._ref`.
-
-**Sanity CDN URL format:** `https://cdn.sanity.io/images/nt0wmty3/production/{hash}-{width}x{height}.{ext}`
-where the asset `_ref` is `image-{hash}-{width}x{height}-{ext}`.
-
-### `company` schema — key fields
-| Field | Type | Notes |
-|---|---|---|
-| `name` | string | Display name (main website) |
-| `entityName` | string | Legal name for LP reports; falls back to `name` if blank |
-| `slug` | slug | Required |
-| `oneLiner` | string | Required |
-| `showOnMainWebsite` | boolean | Toggle off to hide from public site while keeping in LP reports |
-| `enableCompanyPage` | boolean | Controls whether company card is clickable |
-| `isFeatured` | boolean | Pins as featured card on homepage. Only one at a time. |
-| `isRevenueMaking` | boolean | Controls whether revenue/PAT fields are editable in quarterly updates |
-| `investmentRounds` | array | All rounds (see below) |
-| `quarterlyUpdates` | array | Per-quarter FMV, revenue, PAT, metrics, narrative |
-| `investmentStatus` | string | active / exited / written-off |
-| `founders` | array | name, photo, role, quote, LinkedIn |
-
-**`investmentRounds` per-round fields:** `isInitialRound`, `isYaliLead`, `showEarlyInReport`, `roundName`, `roundLabel`, `investmentDate`, `preMoneyValuation`, `totalRoundSize`, `postMoneyValuation`, `yaliInvestment`, `yaliOwnership`, `coInvestors` (array of `investor` refs, optionally with `displayOrder`)
-
-**`quarterlyUpdates` per-quarter fields:** `quarter`, `fiscalYear`, `currentFMV`, `currentOwnershipPercent`, `amountReturned`, `multipleOfInvestment`, `revenueINR`, `patINR`, `teamSize`, `keyMetrics` (custom label/value pairs), `tableFootnotes`, `updateNotes` (portable text)
-
-**Non-obvious schema fields:**
-- `portalUser.isGiftCityLP` (boolean) — controls whether `giftCityFundFinancialsPdf` is shown in the quarterly PDF
-- `lpFundSettings.rvpi` — RVPI metric; fund metrics section only renders in the portal/PDF when values are actually populated (don't assume it's always present)
-- `lpQuarterlyReport.giftCityFundFinancialsPdf` — separate financials PDF for Gift City LPs; rendered only when `portalUser.isGiftCityLP` is true
-- `lpQuarterlyReport.mediaNotes` — portable text array (not a string); each item has optional `link.href`. Use `renderMediaNotesBlocks()` in `generateQuarterlyPdf.js`
-- `company` co-investors: each round's `coInvestors` array item has optional `displayOrder` (integer) for controlling render order
-- `news.isVideo` (boolean) + `news.videoSource` (string URL) — for video news items; `videoSource` accepts YouTube URLs. Always check `isVideo` before treating as article link
-- `investor.logo` (image) — logo for co-investor display and deck slides; upload via Studio → Investors
+- PDF linked at `/complaint-handling-policy.pdf` — served from `public/`; source HTML is `docs/complaint-handling-policy.html`
+- **CSS gotcha:** `.content` has `width: 100%` + horizontal padding. It must have `box-sizing: border-box` or padding adds to width and overflows on mobile. Already fixed — don't remove it.
+- Mobile breakpoint: 640px. Below this, `.detailRow` switches to `flex-direction: column`.
 
 ---
 
@@ -261,8 +165,6 @@ Section labels: JetBrains Mono, 10px, `font-weight: 700`, `letter-spacing: 0.18e
 
 ## Vercel Hobby Plan Constraints
 
-All code must work within these hard limits:
-
 | Constraint | Limit |
 |---|---|
 | `maxDuration` (serverless functions) | **60s maximum** — will fail build if exceeded |
@@ -296,87 +198,9 @@ git checkout staging
 
 ---
 
-## Local-Only: /docs Document Generator
-
-`docs/` folder at repo root — **not served by Next.js, not part of the build, not tracked in git**.
-
-Used to generate designed PDF documents: open HTML file in Chrome → Print → Save as PDF.
-
-| File | Document |
-|---|---|
-| `docs/complaint-handling-policy.html` | Complaint Handling & Grievance Redressal Policy |
-| `docs/trend-of-annual-disposal-of-complaints.html` | Trend of Annual Disposal of Complaints |
-| `docs/financials-yali-deeptech-i.html` | Yali Deeptech I — Financial Statements FY25–26 (USD, 2 pages) |
-| `docs/financials-yali-deeptech-fund-i.html` | Yali Deeptech Fund I — Financial Statements FY25–26 (INR, 3 pages) |
-| `docs/virtual-backgrounds.html` | Teams virtual backgrounds (1920×1080, 11 designs) |
-| `docs/letterhead-template.html` | Yali Partners LLP letterhead — blank template for future letters |
-| `docs/employment-confirmation-pranav.html` | Employment confirmation letter for Pranav Karnad (INSEAD GEMBA, Aug 2026–Jan 2028) |
-| `docs/podcast-subroto-bagchi.html` | Podcast questions document (12 questions, 7 themes, 4 pages) |
-| `docs/fund2-deck.html` | Fund II investor pitch deck (960×540px, Chrome → Print → Save as PDF) |
-| `docs/fund1-deck.html` | Fund I investor pitch deck (same format) |
-| `docs/sri-fund-portfolio.html` | Yali Capital × SRI Fund portfolio overview (A4) |
-| `docs/linkedin-carousel-may-2026.html` | LinkedIn team roundup carousel — May 2026 (1080×1080px, 5 slides) |
-
-Rules for all docs files:
-- Fonts referenced via `../public/fonts/` (relative path, works with `file://`)
-- Logo: `../public/yali-logo.png`
-- **Always include `print-color-adjust: exact` on the `*` selector** — without it, background colours are stripped on print
-- `@page { size: A4; margin: 0; }` in print CSS
-- Screen view: pages rendered as white cards on `#d0d0d0` background with a "Print / Save as PDF" button
-- **No em dashes (`—`) in any visible text** — use `:`, `,`, or `;` instead. The only permitted use is as a data placeholder value (e.g. FMV not yet available).
-- **All borders: `1px solid #363636`, no border-radius** on any box, card, or container.
-
-**Letterhead pattern** (`letterhead-template.html`):
-- Background: `#faf8f5` (warm off-white)
-- Logo top-left at 96px, date metadata top-right in JetBrains Mono bold
-- Thin warm divider (`1px solid #c8c0b4`) below header and above footer
-- Flexbox page layout: header + `<hr>` + `.page-content { flex:1 }` + `<hr>` + footer
-- Footer: `yali.vc` left, registered address right
-- Signatory block has 80px space above for physical signature
-- "Yali Partners LLP" appears only in the signatory block, not the header
-- For new letters: duplicate `letterhead-template.html`, fill in date/subject/body/signatory
-
-**Virtual backgrounds pattern** (`virtual-backgrounds.html`):
-- Each background is 1920×1080 inside a `.bg-wrap` (960×540) using `transform: scale(0.5); transform-origin: top left`
-- To export: Chrome DevTools → select `.bg` element → right-click → "Capture node screenshot" → saves at 1920×1080 (3840×2160 on Retina)
-- Logo uses `filter: brightness(20)` for white-on-dark variants; `outline: 1.5px dashed rgba(255,255,255,0.32); outline-offset: 14px` for dotted outline effect
-
-**Fund II deck** (`docs/fund2-deck.html`):
-- Slide canvas: 960×540px (landscape). `@page { size: 960px 540px; margin: 0; }` — NOT A4
-- Slide order: Cover, Contents, Team (divider + 4 slides), Thesis (divider + 3 slides), Process (divider + 2 slides), Fund I (divider + multiple slides including LP logos + CXO map), Fund II (slides), Media & Recognition, Thank You
-- Hub-and-spoke (investment areas slide): sector boxes are `fill:#efefef stroke:#363636 stroke-width:1`, icons are Lucide stroke icons at `stroke-width:1` (not 1.5), `stroke:#363636`, sized 38×38 centred in 100×100 box at `(box_x+31, box_y+31)`; hub is crimson 80×80 with white `favicon.svg` logomark at 52×52 centred `(414,189)` — use `filter: brightness(0) invert(1)` to make it white; spokes use solid diagonals and dotted horizontals in `#c0bcb8`
-- Icons were supplied as 3 SVG files (2 icons per file, 2700×4800 canvas). Mapping: Smart Mfg=File2(1) bottom, Fabless Semi=File3 bottom (chip+pins), Life Sci=File1(2) top, Robotics=File2(1) top, AI=File1(2) bottom, Aerospace=File3 top
-- SVG `<pattern>` elements render pixellated in Chrome PDF — always replace with explicit JS-rendered `<line>` elements (see existing plus-grid renderers in the script section)
-- Plus-grid renderers: `hex-team-sep`, `hex-thesis`, `plusgrid-fi-div`, `plusgrid-process-sep` — all use same loop pattern, fill `#ebde84`, opacity 0.55
-- World map (CXO slide): D3 v7 + TopoJSON, Natural Earth projection scale 155, target countries India/USA/Taiwan/Korea/Singapore highlighted dark, others `#d4d0cc`. Country labels show name only (no subtitle).
-- LP logos slide: 5 investor logos pulled from Sanity `investor` docs by name. Current logos: Infosys, SRI, SIDBI, Tata AIG, Qualcomm. Images served via Sanity CDN with `?w=280&fit=max&auto=format`.
-- Cover slide has an auto-generated "last updated" date (`#cover-date`) rendered via JS at load time in `"D Mon YYYY"` format (e.g. "4 Jun 2026"). Do not hardcode a date here.
-- Image assets (logos, team photos): use `investor.logo` from the `investor` Sanity schema. Upload via Studio → Investors.
-
-**LinkedIn carousel template** (`docs/linkedin-carousel-may-2026.html`):
-- This is the canonical template for all future monthly LinkedIn team roundup carousels
-- Page size: `@page { size: 1080px 1080px; margin: 0; }` — square LinkedIn format, not A4
-- Slide structure: 5 slides — (1) collage cover, (2-4) update slides, (5) closing
-- Cover slide: blurred photo collage as background (`filter: blur(6px) brightness(0.35)`), "Roundup [Month] '[YY]" title overlaid in JetBrains Mono
-- Update slides alternate dark (#363636) and light (#efefef) backgrounds
-- All fonts are JetBrains Mono — no Inter in this template
-- Logo: `../public/yali-logo.png` displayed as image only (logo already contains "Yali Capital" text) — do not add a text span alongside it
-- Image colour correction via CSS: `filter: brightness(1.08) contrast(1.12) saturate(0.55)` on photo imgs only (not logos)
-- To create a new monthly carousel: duplicate this file, rename to `linkedin-carousel-[month]-[year].html`, replace images and copy, update the cover title
-- Images go in `docs/` alongside the HTML; filenames with spaces must be URL-encoded in src attributes (`%20`)
-- `object-position` controls image crop/pan; `transform: scale(N)` on the img element zooms within the container (container has `overflow: hidden`)
-
-**Quarterly PDF notes:**
-- `tagged: true` must be set in `page.pdf()` options — required for clickable link annotations in the output PDF
-- LinkedIn social updates render as a single banner; video updates render as thumbnail cards with play overlay
-
----
-
 ## Newsletter System
 
 The newsletter system is fully built and live in production. It uses Sanity as the CMS and Resend for delivery. Studio is embedded in the Next.js app at `/console` (not `/studio`). All send actions call relative API URLs, so they hit the production Vercel deployment — no local server needed to trigger sends.
-
----
 
 ### Sanity document types
 
@@ -394,15 +218,11 @@ The newsletter system is fully built and live in production. It uses Sanity as t
 - `unsubscribed` (boolean) — if `true`, excluded from all sends
 - `source` — `homepage-footer` or `import`
 
----
-
 ### Known document IDs (production)
 
 | Edition | Title | `_id` | Status |
 |---|---|---|---|
 | 1 | What I learned talking to two people solving cancer with data | `x58ALaHvdl3kThgcWahexf` | published |
-
----
 
 ### Known beta subscribers (as of May 2026)
 
@@ -410,94 +230,52 @@ Beta subscribers receive test sends before the full list. Currently 2:
 - `pranav@yali.vc` — `beta: true`
 - `kram@yali.vc` — `beta: true`
 
-`pranavkarnad@gmail.com` is on the full list but `beta: false` — it does NOT receive beta sends. To add it to beta, update the `newsletterSubscriber` doc in Sanity Studio.
+`pranavkarnad@gmail.com` is on the full list but `beta: false` — it does NOT receive beta sends.
 
 Full list has ~47 subscribers total. The Yali team are all on it (`beta: false`): `kram@yali.vc`, `sunil@yali.vc`, `gani@yali.vc`, `karthik@yali.vc`, `sandipan@yali.vc`, `jakradum@gmail.com`.
 
----
-
 ### Send paths
 
-**Beta test send:**
-- API route: `POST /api/send-newsletter-beta/`
-- Body: `{ "newsletterId": "<_id>" }`
+**Beta test send:** `POST /api/send-newsletter-beta/` with `{ "newsletterId": "<_id>" }`
 - Subscriber filter: `beta == true && unsubscribed != true`
-- Reads newsletter with `perspective: 'previewDrafts'` — works on draft docs, no need to publish first
-- Triggered from Sanity Studio via the "Send Beta Test" action button on a `newsletter` doc
+- Reads with `perspective: 'previewDrafts'` — works on draft docs
 
-**Full list send:**
-- API route: `POST /api/send-newsletter/`
-- Body: `{ "newsletterId": "<_id>" }`
-- Subscriber filter: `unsubscribed != true` (includes `null`) — this catches everyone not explicitly unsubscribed
-- Also reads with `previewDrafts`
-- Triggered from Studio via "Send to Full List" action button — double-click required (first click shows a caution confirmation)
+**Full list send:** `POST /api/send-newsletter/` with `{ "newsletterId": "<_id>" }`
+- Subscriber filter: `unsubscribed != true` (includes `null`)
+- Triggered from Studio via "Send to Full List" — double-click required (first click shows confirmation)
 
-Both routes batch-send in groups of 100 via `resend.batch.send()`. `RESEND_API_KEY` env var must be set (it is, on Vercel).
+Both routes batch-send in groups of 100 via `resend.batch.send()`.
 
----
+### Email template (`src/lib/newsletter-email.js`)
 
-### Triggering a send without Studio UI
-
-To trigger programmatically (e.g. via curl from local or a script):
-
-```bash
-# Beta test — replace ID with the newsletter _id
-curl -X POST https://yali.vc/api/send-newsletter-beta/ \
-  -H "Content-Type: application/json" \
-  -d '{"newsletterId":"x58ALaHvdl3kThgcWahexf"}'
-
-# Full list
-curl -X POST https://yali.vc/api/send-newsletter/ \
-  -H "Content-Type: application/json" \
-  -d '{"newsletterId":"x58ALaHvdl3kThgcWahexf"}'
-```
-
-Both routes return `{ success: true, sent: N, recipients: [...] }` on success, or `{ error: "..." }` on failure.
-
----
-
-### Email template
-
-Built in `src/lib/newsletter-email.js` — inline HTML, email-client safe. Key characteristics:
 - `from`: `Yali Capital Newsletter <newsletter@yali.vc>`
 - `subject`: `Yali Capital Newsletter #N — {title}`
-- Crimson (`#830d35`) header block with title in gold (`#ebde84`) and short description
-- Each `section` in the doc is rendered by `renderSection()` — section type determines layout
-- Unsubscribe link is base64-encoded email token: `https://yali.vc/unsubscribe?token=<base64(email)>`
-- List-Unsubscribe header set for one-click unsubscribe compliance
-- Subscribe URL constant: `https://yali.vc/newsletter/`
-- Web view link: `https://yali.vc/newsletter/{slug.current}`
+- Crimson header block with title in gold and short description
+- Unsubscribe link: `https://yali.vc/unsubscribe?token=<base64(email)>`
+- List-Unsubscribe header set for one-click compliance
 
----
-
-### Section types and their rendered output
+### Section types
 
 | `_type` | Email output | Key fields |
 |---|---|---|
-| `openingNote` | Body text + author byline (no bold label) | `body` (portable text), `author` (ref) |
+| `openingNote` | Body text + author byline (no bold label) | `body`, `author` (ref) |
 | `essay` | Bold label from `title`, body, optional author byline | `title`, `body`, `author` (optional ref) |
 | `portfolioSpotlight` | Label: "PORTFOLIO · {company.name}", body | `company` (ref), `body`, `sectionTitle` (override) |
 | `guestColumn` | Label, guest name + title/company meta, body | `guestName`, `guestTitle`, `guestCompany`, `body` |
-| `radar` | Label + list of items: technology name + contributor + one-liner | `items[]` with `technology`, `oneLiner`, `contributor` (ref) |
+| `radar` | Label + list: technology name + contributor + one-liner | `items[]` with `technology`, `oneLiner`, `contributor` (ref) |
 | `reading` | Label + list of links with blurbs | `items[]` with `title`, `url`, `blurb` |
 | `freeform` | Bold label from `title`, body | `title`, `body` |
 
-All section labels render as uppercase crimson Courier New 18px. Portable text supports: `h2`, `h3`, `blockquote`, `normal` (p), `bullet`/`number` lists, `strong`, `em`, `code`, external links (via `markDef` with `href`).
+All section labels render as uppercase crimson Courier New 18px. Portable text supports: `h2`, `h3`, `blockquote`, `normal` (p), `bullet`/`number` lists, `strong`, `em`, `code`, external links.
 
----
-
-### Creating a new newsletter edition (agent instructions)
+### Creating a new newsletter edition
 
 1. In Sanity Studio at `yali.vc/console`, create a new `newsletter` document
 2. Required: `title`, `slug`, `edition` (next integer after latest), `publishedDate`, `shortDescription`, at least one `section`
 3. Set `status` to `draft` — beta sends work on drafts
-4. Note the document `_id` after saving (visible in Studio URL or via GROQ query)
+4. Note the `_id` after saving (visible in Studio URL or via GROQ query)
 5. Use "Send Beta Test" to validate rendering before touching the full list
 6. Change `status` to `published`, then use "Send to Full List"
-
-To query all newsletters: `*[_type == "newsletter"] | order(edition desc) { _id, title, edition, status, "slug": slug.current }`
-
-To query subscribers: `*[_type == "newsletterSubscriber"] { email, beta, unsubscribed }`
 
 ---
 
@@ -514,3 +292,4 @@ To query subscribers: `*[_type == "newsletterSubscriber"] { email, beta, unsubsc
 - Add `generateStaticParams` to pages that require runtime auth checks
 - Push to only one branch — always push to both `staging` and `main`
 - Try to commit anything in `docs/` — it's gitignored and local-only
+- Edit `src/proxy.js` without explicit instruction — changes affect all three domains simultaneously
