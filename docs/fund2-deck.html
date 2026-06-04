@@ -652,7 +652,7 @@ body {
 
     <a class="s2-section" href="#s-media" style="text-decoration:none;color:inherit;display:flex;align-items:baseline;gap:20px;padding:13px 0;">
       <span class="s2-sec-num">A</span>
-      <span class="s2-sec-name">Appendix — Sector Deep Dives</span>
+      <span class="s2-sec-name">Appendix: Sector Deep Dives</span>
       <span class="s2-sec-slides">A1 – A6</span>
     </a>
 
@@ -939,7 +939,7 @@ body {
      ══════════════════════════════════════════ -->
 <div class="slide bg-light s4-areas">
 
-  <div class="s4-label">Our investment areas — Fund II thesis</div>
+  <div class="s4-label">Our investment areas · Fund II thesis</div>
 
   <div class="s4-diagram">
     <svg viewBox="0 0 880 450" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
@@ -959,37 +959,65 @@ body {
 
       <!-- ── CENTRE HUB ── -->
       <rect x="400" y="175" width="80" height="80" fill="#830d35"/>
-      <image href="../public/yali-logo.png" x="406" y="181" width="68" height="68"
+      <image href="../public/favicon.svg" x="414" y="189" width="52" height="52"
              style="filter: brightness(0) invert(1);"/>
 
-      <!-- ── SECTOR BOXES ── -->
-      <!-- fill:#efefef matches slide bg; border is light-medium gray -->
+      <!-- ── SECTOR BOXES — inline SVG icons (Lucide stroke, 38×38 centred in 100×100) ── -->
 
-      <!-- Smart Manufacturing (top-left) -->
+      <!-- Smart Manufacturing (top-left) — gear/settings -->
       <rect x="120" y="14" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="151" y="45" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
       <text x="170" y="129" text-anchor="middle" font-size="13" fill="#830d35">Smart</text>
       <text x="170" y="144" text-anchor="middle" font-size="13" fill="#830d35">Manufacturing</text>
 
-      <!-- Fabless Semiconductor (top-right) -->
+      <!-- Fabless Semiconductor (top-right) — cpu/chip -->
       <rect x="660" y="14" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="691" y="45" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <rect x="9" y="9" width="6" height="6"/>
+        <path d="M15 2v2M15 20v2M9 2v2M9 20v2M2 15h2M20 15h2M2 9h2M20 9h2"/>
+      </svg>
       <text x="710" y="129" text-anchor="middle" font-size="13" fill="#830d35">Fabless</text>
       <text x="710" y="144" text-anchor="middle" font-size="13" fill="#830d35">Semiconductor</text>
 
-      <!-- Life Sciences (left) -->
+      <!-- Life Sciences (left) — activity/pulse -->
       <rect x="4" y="165" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="35" y="196" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
       <text x="54" y="280" text-anchor="middle" font-size="13" fill="#830d35">Life Sciences</text>
 
-      <!-- Robotics (right) -->
+      <!-- Robotics (right) — bot/robot -->
       <rect x="776" y="165" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="807" y="196" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 8V4H8"/>
+        <rect x="4" y="8" width="16" height="12" rx="2"/>
+        <path d="M2 14h2M20 14h2"/>
+        <circle cx="9" cy="13" r="1" fill="#363636"/>
+        <circle cx="15" cy="13" r="1" fill="#363636"/>
+      </svg>
       <text x="826" y="280" text-anchor="middle" font-size="13" fill="#830d35">Robotics</text>
 
-      <!-- Artificial Intelligence (bottom-left) -->
+      <!-- Artificial Intelligence (bottom-left) — brain -->
       <rect x="120" y="316" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="151" y="347" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.44-4.66z"/>
+        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.44-4.66z"/>
+      </svg>
       <text x="170" y="431" text-anchor="middle" font-size="13" fill="#830d35">Artificial</text>
       <text x="170" y="446" text-anchor="middle" font-size="13" fill="#830d35">Intelligence</text>
 
-      <!-- Aerospace & Surveillance (bottom-right) -->
+      <!-- Aerospace & Surveillance (bottom-right) — rocket -->
       <rect x="660" y="316" width="100" height="100" fill="#efefef" stroke="#c0bcb8" stroke-width="1"/>
+      <svg x="691" y="347" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#363636" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+      </svg>
       <text x="710" y="431" text-anchor="middle" font-size="13" fill="#830d35">Aerospace &amp;</text>
       <text x="710" y="446" text-anchor="middle" font-size="13" fill="#830d35">Surveillance</text>
 
@@ -1013,7 +1041,7 @@ body {
      ══════════════════════════════════════════ -->
 <div class="slide bg-light s-thesis-cards">
 
-  <div class="s-tc-label">Our Thesis · Fund II — Part 1 of 2</div>
+  <div class="s-tc-label">Our Thesis · Fund II, Part 1 of 2</div>
 
   <div class="s-tc-grid">
 
@@ -1023,7 +1051,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">Digital Health Infrastructure</div>
-        <div class="s-tc-body">India building a foundational health data layer through ABDM — interoperable records, longitudinal patient data, and a true national health data stack.</div>
+        <div class="s-tc-body">India building a foundational health data layer through ABDM: interoperable records, longitudinal patient data, and a true national health data stack.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
@@ -1043,7 +1071,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">Quick Commerce as Catalyst</div>
-        <div class="s-tc-body">India's 10-minute delivery boom has created a uniquely intense domestic proving ground for AMR systems — giving Indian startups real-world deployment data that most global competitors lack.</div>
+        <div class="s-tc-body">India's 10-minute delivery boom has created a uniquely intense domestic proving ground for AMR systems, giving Indian startups real-world deployment data that most global competitors lack.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
@@ -1053,7 +1081,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">03</div>
         <div class="s-tc-title">Platform, Not Just Product</div>
-        <div class="s-tc-body">The most durable value in Indian robotics will be built at the software and middleware layer — AI training pipelines, robot OS, and simulation tools.</div>
+        <div class="s-tc-body">The most durable value in Indian robotics will be built at the software and middleware layer: AI training pipelines, robot OS, and simulation tools.</div>
       </div>
     </div>
 
@@ -1063,7 +1091,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">The "Series A" Breakout</div>
-        <div class="s-tc-body">For the first time, multiple startups — C2i, Vervesemi, Mindgrove — have crossed the $8M–$15M threshold. VCs are now backing the high-CAPEX tape-out phase.</div>
+        <div class="s-tc-body">For the first time, multiple startups (C2i, Vervesemi, Mindgrove) have crossed the $8M–$15M threshold. VCs are now backing the high-CAPEX tape-out phase.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
@@ -1073,7 +1101,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">03</div>
         <div class="s-tc-title">Efficiency over Raw Power</div>
-        <div class="s-tc-body">The power bottleneck has become AI infrastructure's #1 constraint — driving a new wave of Indian chip designs optimised for performance-per-watt over raw throughput.</div>
+        <div class="s-tc-body">The power bottleneck has become AI infrastructure's #1 constraint, driving a new wave of Indian chip designs optimised for performance-per-watt over raw throughput.</div>
       </div>
     </div>
 
@@ -1087,7 +1115,7 @@ body {
      ══════════════════════════════════════════ -->
 <div class="slide bg-light s-thesis-cards">
 
-  <div class="s-tc-label">Our Thesis · Fund II — Part 2 of 2</div>
+  <div class="s-tc-label">Our Thesis · Fund II, Part 2 of 2</div>
 
   <div class="s-tc-grid">
 
@@ -1097,7 +1125,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">Applied AI, Not Frontier Labs</div>
-        <div class="s-tc-body">India's strongest position is enterprise deployment and workflow software. 1,700+ GCCs create natural demand — Uniphore, Emergent and Gupshup show India builds AI products, not just services.</div>
+        <div class="s-tc-body">India's strongest position is enterprise deployment and workflow software. 1,700+ GCCs create natural demand; Uniphore, Emergent and Gupshup show India builds AI products, not just services.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
@@ -1117,7 +1145,7 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">PLI Has Created Real Industrial Pull</div>
-        <div class="s-tc-body">$26B in realised investments, $191B in production output. Electronics manufacturing up 146% in four years — creating genuine demand for smart factory infrastructure.</div>
+        <div class="s-tc-body">$26B in realised investments, $191B in production output. Electronics manufacturing up 146% in four years, creating genuine demand for smart factory infrastructure.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
@@ -1137,12 +1165,12 @@ body {
       <div class="s-tc-conviction">
         <div class="s-tc-num">01</div>
         <div class="s-tc-title">iDEX as First Customer</div>
-        <div class="s-tc-body">Non-dilutive grants up to ₹25 crore and direct procurement pathways — functioning as patient risk capital bridging the Valley of Death for deep-tech hardware. 600+ startups funded since 2018.</div>
+        <div class="s-tc-body">Non-dilutive grants up to ₹25 crore and direct procurement pathways, functioning as patient risk capital bridging the Valley of Death for deep-tech hardware. 600+ startups funded since 2018.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">02</div>
         <div class="s-tc-title">The ISR-to-DEW Stack</div>
-        <div class="s-tc-body">Tonbo (sensing / ISR) and DeepLase (directed energy / photonics) together span the full kill chain — from detecting the threat to neutralising it.</div>
+        <div class="s-tc-body">Tonbo (sensing / ISR) and DeepLase (directed energy / photonics) together span the full kill chain: from detecting the threat to neutralising it.</div>
       </div>
       <div class="s-tc-conviction">
         <div class="s-tc-num">03</div>
@@ -1172,28 +1200,237 @@ body {
 
 
 <!-- ══════════════════════════════════════════
-     SLIDE — PROCESS DIAGRAM 1 OF 2
+     SLIDE — PROCESS: INBOUND DEALFLOW
      ══════════════════════════════════════════ -->
-<div class="slide bg-light" style="display:flex;flex-direction:column;padding:28px 36px 24px;">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin-bottom:18px;flex-shrink:0;">Our Process · 1 of 2</div>
-  <div style="flex:1;border:1px dashed #b0a8a0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#aaa;letter-spacing:0.08em;">DIAGRAM TO APPEAR HERE</div>
-    <div style="width:32px;height:1px;background:#d0cbc6;"></div>
-    <div style="font-family:'Inter',sans-serif;font-size:9px;color:#ccc;">Process diagram — part 1</div>
+<div class="slide bg-light" style="display:flex;flex-direction:column;padding:22px 36px 16px;position:relative;">
+
+  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin-bottom:14px;flex-shrink:0;">Our Process · Inbound Dealflow</div>
+
+  <div style="flex:1;display:flex;gap:0;min-height:0;">
+
+    <!-- Left: flow diagram -->
+    <div style="width:340px;flex-shrink:0;display:flex;flex-direction:column;padding-right:28px;border-right:1px solid #e0dbd6;position:relative;">
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#aaa;letter-spacing:0.06em;margin-bottom:8px;">Pitches arrive via email</div>
+
+      <!-- Pitch Inbox box -->
+      <div style="border:1.5px solid #830d35;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#363636;background:white;width:fit-content;">Pitch Inbox</div>
+
+      <!-- Arrow + AI label -->
+      <div style="display:flex;align-items:flex-start;gap:8px;margin:6px 0 6px 18px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:10px;background:#363636;"></div>
+          <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid #363636;"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#830d35;padding-top:2px;">AI Parses &amp; Classifies</div>
+      </div>
+
+      <!-- Categorized grid (mini table representing classified pitches) -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,18px);gap:3px;width:130px;margin-left:2px;">
+        <div style="background:#e8e4e0;"></div><div style="background:#e8e4e0;"></div><div style="background:#e8e4e0;"></div>
+        <div style="background:#e8e4e0;"></div><div style="background:#e8e4e0;"></div><div style="background:#e8e4e0;"></div>
+      </div>
+      <div style="font-family:'Inter',sans-serif;font-size:8.5px;color:#888;margin:5px 0 6px;line-height:1.4;">Pitches categorised by sector<br>and AI-generated summaries</div>
+
+      <!-- Arrow down -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin:0 0 6px 18px;gap:0;">
+        <div style="width:1px;height:14px;background:#363636;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid #363636;"></div>
+      </div>
+
+      <!-- Investments team vets box -->
+      <div id="vets-box" style="border:1.5px solid #830d35;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#363636;background:white;width:100%;">Investments team vets</div>
+
+      <!-- Body text filling remaining left column space -->
+      <div style="margin-top:16px;font-family:'Inter',sans-serif;font-size:11px;color:#555;line-height:1.6;">Our AI-powered inbox processing removes manual triage, letting the investments team spend time meeting founders and making decisions rather than sorting email. All vetting decisions are tracked in Airtable; the Kanban board gives the full team real-time visibility into every deal in the pipeline.</div>
+
+    </div>
+
+    <!-- Right: Kanban stages -->
+    <div style="flex:1;padding-left:28px;display:flex;flex-direction:column;">
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#363636;margin-bottom:10px;">Airtable Kanban: Deal Stages</div>
+
+      <!-- Stage rows -->
+      <div style="display:flex;flex-direction:column;gap:0;flex:1;">
+
+        <!-- helper: color bar | stage | description -->
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#2563eb;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Intro</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">First contact from founder or referral</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#3b82f6;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Initial Meeting</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Introductory call or in-person meeting</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#60a5fa;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Follow-on Meeting</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Deeper technical dive; reference checks begin</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#f97316;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Internal Evaluation</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Formal partnership review; IC discussion imminent</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#22c55e;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Portfolio</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Investment made; active Yali portfolio company</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#eab308;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Watch</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Interesting; tracking before re-engaging later</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;border-bottom:1px solid #ece8e4;">
+          <div style="width:3px;background:#9ca3af;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Park</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">On hold; too early or conditions not right yet</div>
+        </div>
+
+        <div style="display:flex;align-items:stretch;padding:6px 0;">
+          <div style="width:3px;background:#ef4444;flex-shrink:0;margin-right:12px;border-radius:1px;"></div>
+          <div style="width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#363636;">Pass</div>
+          <div style="flex:1;font-family:'Inter',sans-serif;font-size:9.5px;color:#666;">Not a fit for fund thesis or risk profile</div>
+        </div>
+
+      </div>
+    </div>
   </div>
+
+  <!-- Arrow overlay: "Investments team vets" → "Intro" row -->
+  <svg style="position:absolute;top:0;left:0;pointer-events:none;overflow:visible;" width="960" height="540">
+    <!-- Dashed curved path from vets box right edge to Intro row -->
+    <path d="M 350,248 C 390,248 390,82 404,82"
+          fill="none" stroke="#830d35" stroke-width="1" stroke-dasharray="4,3"/>
+    <!-- Label — anchored right so it stays left of the curved path -->
+    <text x="352" y="175" font-family="JetBrains Mono, monospace" font-size="7.5" font-weight="700"
+          letter-spacing="1.2" fill="#830d35" text-anchor="end">ENTERS KANBAN AT</text>
+  </svg>
+
 </div><!-- /process 1 -->
 
 
 <!-- ══════════════════════════════════════════
-     SLIDE — PROCESS DIAGRAM 2 OF 2
+     SLIDE — PROCESS: PORTFOLIO SUPPORT
      ══════════════════════════════════════════ -->
-<div class="slide bg-light" style="display:flex;flex-direction:column;padding:28px 36px 24px;">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin-bottom:18px;flex-shrink:0;">Our Process · 2 of 2</div>
-  <div style="flex:1;border:1px dashed #b0a8a0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#aaa;letter-spacing:0.08em;">DIAGRAM TO APPEAR HERE</div>
-    <div style="width:32px;height:1px;background:#d0cbc6;"></div>
-    <div style="font-family:'Inter',sans-serif;font-size:9px;color:#ccc;">Process diagram — part 2</div>
+<div class="slide bg-light" style="display:flex;flex-direction:column;padding:22px 40px 18px;">
+
+  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin-bottom:16px;flex-shrink:0;">Our Process · Portfolio Support</div>
+
+  <!-- Column headers -->
+  <div style="display:grid;grid-template-columns:160px 1fr 260px;gap:0;border-bottom:1px solid #d8d4cf;padding-bottom:8px;margin-bottom:0;flex-shrink:0;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#aaa;">Frequency</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#aaa;">Portfolio Stage</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#aaa;">12-Week Cadence View</div>
   </div>
+
+  <!-- Rows -->
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:space-around;">
+
+    <!-- Weekly -->
+    <div style="display:grid;grid-template-columns:160px 1fr 260px;gap:0;align-items:center;padding:18px 0;border-bottom:1px solid #ede9e5;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#830d35;">Weekly</div>
+      <div style="font-family:'Inter',sans-serif;font-size:9.5px;color:#555;line-height:1.5;padding-right:20px;">Very early stage portfolio startups: high-touch guidance through initial product and market development</div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <!-- 12 filled dots -->
+        <svg width="260" height="14" viewBox="0 0 260 14">
+          <circle cx="7"   cy="7" r="5" fill="#830d35"/>
+          <circle cx="29"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="51"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="73"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="95"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="117" cy="7" r="5" fill="#830d35"/>
+          <circle cx="139" cy="7" r="5" fill="#830d35"/>
+          <circle cx="161" cy="7" r="5" fill="#830d35"/>
+          <circle cx="183" cy="7" r="5" fill="#830d35"/>
+          <circle cx="205" cy="7" r="5" fill="#830d35"/>
+          <circle cx="227" cy="7" r="5" fill="#830d35"/>
+          <circle cx="249" cy="7" r="5" fill="#830d35"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Fortnightly -->
+    <div style="display:grid;grid-template-columns:160px 1fr 260px;gap:0;align-items:center;padding:18px 0;border-bottom:1px solid #ede9e5;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#363636;">Fortnightly</div>
+      <div style="font-family:'Inter',sans-serif;font-size:9.5px;color:#555;line-height:1.5;padding-right:20px;">Early stage portfolio companies: regular check-ins on growth metrics, hiring, and key milestones</div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <svg width="260" height="14" viewBox="0 0 260 14">
+          <circle cx="7"   cy="7" r="5" fill="#830d35"/>
+          <circle cx="29"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="51"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="73"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="95"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="117" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="139" cy="7" r="5" fill="#830d35"/>
+          <circle cx="161" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="183" cy="7" r="5" fill="#830d35"/>
+          <circle cx="205" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="227" cy="7" r="5" fill="#830d35"/>
+          <circle cx="249" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Monthly -->
+    <div style="display:grid;grid-template-columns:160px 1fr 260px;gap:0;align-items:center;padding:18px 0;border-bottom:1px solid #ede9e5;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#363636;">Monthly</div>
+      <div style="font-family:'Inter',sans-serif;font-size:9.5px;color:#555;line-height:1.5;padding-right:20px;">Companies where we have done follow-on rounds: strategic reviews, investor introductions, next round planning</div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <svg width="260" height="14" viewBox="0 0 260 14">
+          <circle cx="7"   cy="7" r="5" fill="#830d35"/>
+          <circle cx="29"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="51"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="73"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="95"  cy="7" r="5" fill="#830d35"/>
+          <circle cx="117" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="139" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="161" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="183" cy="7" r="5" fill="#830d35"/>
+          <circle cx="205" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="227" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="249" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Quarterly -->
+    <div style="display:grid;grid-template-columns:160px 1fr 260px;gap:0;align-items:center;padding:18px 0;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#363636;">Quarterly</div>
+      <div style="font-family:'Inter',sans-serif;font-size:9.5px;color:#555;line-height:1.5;padding-right:20px;">Board meeting for all portfolio companies: governance, financials, KPIs, and strategic direction</div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <svg width="260" height="14" viewBox="0 0 260 14">
+          <circle cx="7"   cy="7" r="5" fill="#830d35"/>
+          <circle cx="29"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="51"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="73"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="95"  cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="117" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="139" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="161" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="183" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="205" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="227" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+          <circle cx="249" cy="7" r="5" fill="none" stroke="#d0cbc6" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footnote -->
+  <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:#aaa;letter-spacing:0.04em;border-top:1px solid #e8e4e0;padding-top:7px;flex-shrink:0;">Each dot represents one week. All portfolio companies participate in the quarterly board meeting regardless of stage.</div>
+
 </div><!-- /process 2 -->
 
 
@@ -1509,7 +1746,7 @@ body {
           <div class="fi-card-sector">Robotics</div>
         </div>
       </div>
-      <div class="fi-card-desc">Dextrous task automation via full-stack robotics &amp; AI — PR-9D &amp; dual-arm PR-34D humanoid platforms</div>
+      <div class="fi-card-desc">Dextrous task automation via full-stack robotics &amp; AI; PR-9D &amp; dual-arm PR-34D humanoid platforms</div>
       <hr class="fi-card-hr" />
       <div class="fi-card-metrics">
         <div><div class="fi-metric-label">Invested</div><div class="fi-metric-value">11.8 Cr</div></div>
@@ -1677,6 +1914,24 @@ body {
 
   <!-- Country label overlays — positioned by JS -->
   <div id="cxo-labels" style="position:absolute;top:0;left:0;width:960px;height:540px;pointer-events:none;"></div>
+
+  <!-- LP Network text box — centred lower -->
+  <div style="position:absolute;left:50%;bottom:68px;transform:translateX(-50%);
+              border:1px solid #c0bcb8;background:rgba(238,236,235,0.92);
+              padding:16px 36px 18px;text-align:center;z-index:3;min-width:340px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;
+                letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin-bottom:10px;">
+      Our LP Network
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#363636;
+                margin-bottom:6px;">
+      Our LPs feature CXOs from
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#830d35;
+                font-weight:700;line-height:1.55;">
+      India · Singapore · Taiwan<br>South Korea · United States
+    </div>
+  </div>
 
 </div><!-- /cxo map -->
 
