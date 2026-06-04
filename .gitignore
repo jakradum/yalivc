@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local docs (pitch decks, letters, generated PDFs — not for public repo)
+/docs
