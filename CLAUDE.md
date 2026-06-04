@@ -350,6 +350,7 @@ Rules for all docs files:
 - Plus-grid renderers: `hex-team-sep`, `hex-thesis`, `plusgrid-fi-div`, `plusgrid-process-sep` — all use same loop pattern, fill `#ebde84`, opacity 0.55
 - World map (CXO slide): D3 v7 + TopoJSON, Natural Earth projection scale 155, target countries India/USA/Taiwan/Korea/Singapore highlighted dark, others `#d4d0cc`. Country labels show name only (no subtitle).
 - LP logos slide: 5 investor logos pulled from Sanity `investor` docs by name. Current logos: Infosys, SRI, SIDBI, Tata AIG, Qualcomm. Images served via Sanity CDN with `?w=280&fit=max&auto=format`.
+- Cover slide has an auto-generated "last updated" date (`#cover-date`) rendered via JS at load time in `"D Mon YYYY"` format (e.g. "4 Jun 2026"). Do not hardcode a date here.
 - Image assets (logos, team photos): use `investor.logo` from the `investor` Sanity schema. Upload via Studio → Investors.
 
 **LinkedIn carousel template** (`docs/linkedin-carousel-may-2026.html`):
