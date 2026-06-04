@@ -5,6 +5,7 @@
 ## Stack
 - Next.js 16.2.2, App Router, Turbopack, `trailingSlash: true` in `next.config.js`
 - Sanity CMS: projectId `nt0wmty3`, dataset `production`, apiVersion `2024-01-01`
+- Sanity Studio embedded at `/console` (not `/studio`) — accessible at `yali.vc/console`
 - Deployed on **Vercel Hobby plan** (free tier — see constraints below)
 - Node.js crypto for auth, Resend for email, Puppeteer for PDF generation (HTML-to-PDF)
 
@@ -23,6 +24,46 @@
 - `proxy.js` handles subdomain rewrites AND HMAC session verification (Web Crypto API, Edge Runtime)
 - On localhost: all routes accessible at `localhost:3000/partners/...` and `localhost:3000/dataroom/...`
 - **All redirects must use relative paths.** Never hardcode `https://partners.yali.vc/` etc.
+
+---
+
+## Page Structure
+
+### Main site (`yali.vc`)
+| Route | File |
+|---|---|
+| `/` | `src/app/page.js` |
+| `/about-yali` | `src/app/about-yali/page.js` |
+| `/about-yali/[slug]` | `src/app/about-yali/[slug]/page.js` |
+| `/investments` | `src/app/investments/page.js` |
+| `/investments/[slug]` | `src/app/investments/[slug]/page.js` |
+| `/investments/[slug]/[companySlug]` | `src/app/investments/[slug]/[companySlug]/page.js` |
+| `/blog` | `src/app/blog/page.js` |
+| `/blog/[slug]` | `src/app/blog/[slug]/page.js` |
+| `/newsroom` | `src/app/newsroom/page.js` |
+| `/newsroom/press-downloads` | `src/app/newsroom/press-downloads/page.js` |
+| `/newsletter` | `src/app/newsletter/page.js` |
+| `/newsletter/[slug]` | `src/app/newsletter/[slug]/page.js` |
+| `/investor-relations` | `src/app/investor-relations/page.js` |
+| `/contact` | `src/app/contact/page.js` |
+| `/disclosures` | `src/app/disclosures/page.js` |
+| `/unsubscribe` | `src/app/unsubscribe/page.js` |
+| `/console/[[...tool]]` | `src/app/console/[[...tool]]/page.js` (Sanity Studio) |
+
+### LP Portal (`partners.yali.vc`)
+| Route | File |
+|---|---|
+| `/partners` | `src/app/(portal)/partners/page.js` |
+| `/partners/sign-in` | `src/app/(portal)/partners/sign-in/page.js` |
+| `/partners/company/[slug]` | `src/app/(portal)/partners/company/[slug]/page.js` |
+| `/partners/reports/[slug]` | `src/app/(portal)/partners/reports/[slug]/page.js` |
+
+### Data Room (`dataroom.yali.vc`)
+| Route | File |
+|---|---|
+| `/dataroom` | `src/app/(dataroom)/dataroom/page.js` |
+| `/dataroom/sign-in` | `src/app/(dataroom)/dataroom/sign-in/page.js` |
+| `/dataroom/[category]` | `src/app/(dataroom)/dataroom/[category]/page.js` |
 
 ---
 
@@ -74,6 +115,18 @@ Shared HMAC verifier. Returns `email` string if valid, `null` if invalid/tampere
 
 ---
 
+## Environment Variables
+
+| Variable | Used by | Purpose |
+|---|---|---|
+| `PORTAL_AUTH_SECRET` | `session.js`, `proxy.js`, auth routes | HMAC secret for session cookies (both portal and dataroom) |
+| `SANITY_WRITE_TOKEN` | Auth routes only | Write back OTP codes, invite code redemptions |
+| `RESEND_API_KEY` | `/api/send-newsletter*` | Email delivery via Resend |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity client | Project ID (also hardcoded: `nt0wmty3`) |
+| `NEXT_PUBLIC_SANITY_DATASET` | Sanity client | Dataset (also hardcoded: `production`) |
+
+---
+
 ## LP Portal
 
 - Indian fiscal year quarters: Q1=Apr–Jun, Q2=Jul–Sep, Q3=Oct–Dec, Q4=Jan–Mar
@@ -112,9 +165,58 @@ Shared HMAC verifier. Returns `email` string if valid, `null` if invalid/tampere
 - Write client: requires `process.env.SANITY_WRITE_TOKEN` — only used in auth routes (OTP write-back, invite code redemption)
 - `getAllBlogPosts()` returns `{ posts: [...], total: n }` — **not a plain array**. Always destructure: `const { posts = [] } = await getAllBlogPosts()`
 - Key schema types: `portalUser`, `domainPrivilege`, `investorRelations`, `fundContent`, `lpFundSettings`, `quarterlyReport`, `lpQuarterlyReport`, `blogPost`, `teamMember`, `company`, `news`, `investor`
+- **Two schema registries exist:** `src/sanity/schemas/index.js` (used by the Next.js app) and `src/sanity/schemaTypes.js` (used by the Sanity Studio config). Both must be kept in sync when adding/removing schema types.
+
+### `portalUser` schema fields
+| Field | Type | Notes |
+|---|---|---|
+| `email` | string | Required. Primary identifier. |
+| `name` | string | LP name or organisation |
+| `lpPortalAccess` | boolean | Grants LP portal access. Default true. |
+| `investorDataRoomAccess` | boolean | Grants data room access. Independent of portal. Default false. |
+| `noAccess` | boolean | Kill switch. Overrides all other access flags. Default false. |
+| `isGiftCityLP` | boolean | Shows GIFT City-specific fund financials PDF in quarterly report. Default false. |
+| `source` | string | `portal` or `dataroom` — how the user was onboarded. |
+| `inviteActions` | custom UI | InviteButtons component — send portal/dataroom invites from Studio. Read-only. |
+| `inviteCode` | string | Hidden. Managed by invite API. |
+| `inviteCodeExpiry` | string | Hidden. Managed by invite API. |
+
+### `investor` schema fields
+| Field | Type | Notes |
+|---|---|---|
+| `name` | string | Required. Display name (e.g., "Sequoia Capital") |
+| `slug` | slug | Auto-generated from name |
+| `type` | string | vc / angel / family-office / corporate / government / other |
+| `website` | url | Optional |
+| `logo` | image | Upload via Studio. Used in co-investor display and deck slides. |
+
+LP investor logos: upload via Studio → Investors → set category to LP. When pulling logos for deck slides, query `investor` docs by name and construct Sanity CDN URL from the `logo.asset._ref`.
+
+**Sanity CDN URL format:** `https://cdn.sanity.io/images/nt0wmty3/production/{hash}-{width}x{height}.{ext}`
+where the asset `_ref` is `image-{hash}-{width}x{height}-{ext}`.
+
+### `company` schema — key fields
+| Field | Type | Notes |
+|---|---|---|
+| `name` | string | Display name (main website) |
+| `entityName` | string | Legal name for LP reports; falls back to `name` if blank |
+| `slug` | slug | Required |
+| `oneLiner` | string | Required |
+| `showOnMainWebsite` | boolean | Toggle off to hide from public site while keeping in LP reports |
+| `enableCompanyPage` | boolean | Controls whether company card is clickable |
+| `isFeatured` | boolean | Pins as featured card on homepage. Only one at a time. |
+| `isRevenueMaking` | boolean | Controls whether revenue/PAT fields are editable in quarterly updates |
+| `investmentRounds` | array | All rounds (see below) |
+| `quarterlyUpdates` | array | Per-quarter FMV, revenue, PAT, metrics, narrative |
+| `investmentStatus` | string | active / exited / written-off |
+| `founders` | array | name, photo, role, quote, LinkedIn |
+
+**`investmentRounds` per-round fields:** `isInitialRound`, `isYaliLead`, `showEarlyInReport`, `roundName`, `roundLabel`, `investmentDate`, `preMoneyValuation`, `totalRoundSize`, `postMoneyValuation`, `yaliInvestment`, `yaliOwnership`, `coInvestors` (array of `investor` refs, optionally with `displayOrder`)
+
+**`quarterlyUpdates` per-quarter fields:** `quarter`, `fiscalYear`, `currentFMV`, `currentOwnershipPercent`, `amountReturned`, `multipleOfInvestment`, `revenueINR`, `patINR`, `teamSize`, `keyMetrics` (custom label/value pairs), `tableFootnotes`, `updateNotes` (portable text)
 
 **Non-obvious schema fields:**
-- `portalUser.isGiftCityLP` (boolean) — Gift City LP flag; controls whether `giftCityFundFinancialsPdf` is shown in the quarterly PDF
+- `portalUser.isGiftCityLP` (boolean) — controls whether `giftCityFundFinancialsPdf` is shown in the quarterly PDF
 - `lpFundSettings.rvpi` — RVPI metric; fund metrics section only renders in the portal/PDF when values are actually populated (don't assume it's always present)
 - `lpQuarterlyReport.giftCityFundFinancialsPdf` — separate financials PDF for Gift City LPs; rendered only when `portalUser.isGiftCityLP` is true
 - `lpQuarterlyReport.mediaNotes` — portable text array (not a string); each item has optional `link.href`. Use `renderMediaNotesBlocks()` in `generateQuarterlyPdf.js`
@@ -148,6 +250,12 @@ margin: 0;
 ```
 
 Section labels: JetBrains Mono, 10px, `font-weight: 700`, `letter-spacing: 0.18em`, uppercase, color `#830d35`.
+
+### Style rules (apply everywhere — site, docs, emails)
+- **No em dashes (`—`) in any user-facing text.** Use `:`, `,`, or `;` instead. The only permitted use is as a data placeholder value (e.g. FMV not yet available shown as `—`).
+- **All boxes/cards/containers: `border: 1px solid #363636`, no `border-radius`.** This includes cards, tiles, logo boxes, input boxes, and any visible container element.
+- **All separator lines: `border-top: 1px solid #363636`** (or `border-bottom`). Do not use lighter grays (#d8d4cf, #e0e0e0, #ece8e4, etc.) for separators.
+- Exception: elements on crimson backgrounds may use gold (`rgba(235,222,132,0.45)`) borders. SVG spoke/connector lines in diagrams may remain `#c0bcb8`. Video tiles may use their dark border.
 
 ---
 
@@ -184,12 +292,13 @@ git checkout staging
 - Working branch: `staging`
 - Main branch: `main` (receives merges from staging)
 - GitHub remote: `jakradum/yalivc`
+- **`docs/` is in `.gitignore`** — all pitch decks, letters, and generated documents are local-only and will never appear in git. Do not try to commit them.
 
 ---
 
 ## Local-Only: /docs Document Generator
 
-`docs/` folder at repo root — **not served by Next.js, not part of the build**.
+`docs/` folder at repo root — **not served by Next.js, not part of the build, not tracked in git**.
 
 Used to generate designed PDF documents: open HTML file in Chrome → Print → Save as PDF.
 
@@ -215,6 +324,7 @@ Rules for all docs files:
 - `@page { size: A4; margin: 0; }` in print CSS
 - Screen view: pages rendered as white cards on `#d0d0d0` background with a "Print / Save as PDF" button
 - **No em dashes (`—`) in any visible text** — use `:`, `,`, or `;` instead. The only permitted use is as a data placeholder value (e.g. FMV not yet available).
+- **All borders: `1px solid #363636`, no border-radius** on any box, card, or container.
 
 **Letterhead pattern** (`letterhead-template.html`):
 - Background: `#faf8f5` (warm off-white)
@@ -233,13 +343,14 @@ Rules for all docs files:
 
 **Fund II deck** (`docs/fund2-deck.html`):
 - Slide canvas: 960×540px (landscape). `@page { size: 960px 540px; margin: 0; }` — NOT A4
-- Slide order: Cover, Contents, Team (divider + 4 slides), Thesis (divider + 3 slides), Process (divider + 2 placeholder slides), Fund I (divider + multiple slides including LP logos + CXO map), Fund II (Sankey + slides), Media & Recognition, Thank You
-- Hub-and-spoke (investment areas slide): sector boxes are `fill:#efefef stroke:#c0bcb8 stroke-width:1`, icons are Lucide stroke icons at `stroke-width:1` (not 1.5), `stroke:#363636`, sized 38×38 centred in 100×100 box at `(box_x+31, box_y+31)`; hub is crimson 80×80 with white `favicon.svg` logomark at 52×52 centred `(414,189)` — use `filter: brightness(0) invert(1)` to make it white; spokes use solid diagonals and dotted horizontals in `#c0bcb8`
+- Slide order: Cover, Contents, Team (divider + 4 slides), Thesis (divider + 3 slides), Process (divider + 2 slides), Fund I (divider + multiple slides including LP logos + CXO map), Fund II (slides), Media & Recognition, Thank You
+- Hub-and-spoke (investment areas slide): sector boxes are `fill:#efefef stroke:#363636 stroke-width:1`, icons are Lucide stroke icons at `stroke-width:1` (not 1.5), `stroke:#363636`, sized 38×38 centred in 100×100 box at `(box_x+31, box_y+31)`; hub is crimson 80×80 with white `favicon.svg` logomark at 52×52 centred `(414,189)` — use `filter: brightness(0) invert(1)` to make it white; spokes use solid diagonals and dotted horizontals in `#c0bcb8`
 - Icons were supplied as 3 SVG files (2 icons per file, 2700×4800 canvas). Mapping: Smart Mfg=File2(1) bottom, Fabless Semi=File3 bottom (chip+pins), Life Sci=File1(2) top, Robotics=File2(1) top, AI=File1(2) bottom, Aerospace=File3 top
 - SVG `<pattern>` elements render pixellated in Chrome PDF — always replace with explicit JS-rendered `<line>` elements (see existing plus-grid renderers in the script section)
 - Plus-grid renderers: `hex-team-sep`, `hex-thesis`, `plusgrid-fi-div`, `plusgrid-process-sep` — all use same loop pattern, fill `#ebde84`, opacity 0.55
-- World map (CXO slide): D3 v7 + TopoJSON, Natural Earth projection scale 155, target countries India/USA/Taiwan/Korea/Singapore highlighted dark, others `#d4d0cc`
-- LP investor logos are stored on the `investor` Sanity document (`investor.logo` image field). Upload via Studio → Investors. When pulling logos for deck slides, query `investor` docs by name and use the `logo` image URL.
+- World map (CXO slide): D3 v7 + TopoJSON, Natural Earth projection scale 155, target countries India/USA/Taiwan/Korea/Singapore highlighted dark, others `#d4d0cc`. Country labels show name only (no subtitle).
+- LP logos slide: 5 investor logos pulled from Sanity `investor` docs by name. Current logos: Infosys, SRI, SIDBI, Tata AIG, Qualcomm. Images served via Sanity CDN with `?w=280&fit=max&auto=format`.
+- Image assets (logos, team photos): use `investor.logo` from the `investor` Sanity schema. Upload via Studio → Investors.
 
 **LinkedIn carousel template** (`docs/linkedin-carousel-may-2026.html`):
 - This is the canonical template for all future monthly LinkedIn team roundup carousels
@@ -391,7 +502,9 @@ To query subscribers: `*[_type == "newsletterSubscriber"] { email, beta, unsubsc
 
 ## Never Do
 
-- Use em dashes (`—`) anywhere in text content — use `:` or `;` instead
+- Use em dashes (`—`) anywhere in user-facing text content — use `:` or `;` instead
+- Add `border-radius` to any box, card, tile, or container
+- Use non-`#363636` colors for box borders or separator lines (except on crimson backgrounds)
 - Import `redirect` from `next/headers` — it's in `next/navigation`
 - Hardcode absolute subdomain URLs in redirects — use relative paths
 - Set `maxDuration > 60` on any API route
@@ -399,3 +512,4 @@ To query subscribers: `*[_type == "newsletterSubscriber"] { email, beta, unsubsc
 - Use `inv.latestQuarter` or `quarterlyUpdates[0]` as FMV fallback — these can be future quarters
 - Add `generateStaticParams` to pages that require runtime auth checks
 - Push to only one branch — always push to both `staging` and `main`
+- Try to commit anything in `docs/` — it's gitignored and local-only
