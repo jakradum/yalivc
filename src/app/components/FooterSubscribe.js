@@ -64,6 +64,7 @@ export default function FooterSubscribe() {
               placeholder="Subscribe to our newsletter"
               className={styles.input}
               disabled={status === 'loading'}
+              autoComplete="email"
             />
             <button
               type="submit"

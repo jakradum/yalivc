@@ -81,10 +81,11 @@ export default async function RootLayout({ children }) {
           children
         ) : (
           <>
+            <a href="#main-content" className="skip-link">Skip to main content</a>
             <Navbar />
             <div className="page-wrapper">
               <ProviderWrapper>
-                <main><Breadcrumb />{children}</main>
+                <main id="main-content"><Breadcrumb />{children}</main>
               </ProviderWrapper>
               <Footer />
             </div>
