@@ -157,3 +157,22 @@ footer {
 .main-content {
   padding-top: 60px;
 }
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: #830d35;
+  color: #fff;
+  padding: 8px 16px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}

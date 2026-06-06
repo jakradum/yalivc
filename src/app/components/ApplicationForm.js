@@ -79,6 +79,7 @@ export default function ApplicationForm() {
               required
               disabled={status === 'submitting'}
               placeholder="Your full name"
+              autoComplete="name"
             />
           </div>
 
@@ -93,6 +94,7 @@ export default function ApplicationForm() {
               required
               disabled={status === 'submitting'}
               placeholder="your.email@company.com"
+              autoComplete="email"
             />
           </div>
 
@@ -107,6 +109,7 @@ export default function ApplicationForm() {
               required
               disabled={status === 'submitting'}
               placeholder="Your company name"
+              autoComplete="organization"
             />
           </div>
 

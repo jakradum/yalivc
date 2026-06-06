@@ -40,6 +40,7 @@ export default function SubscribeBar() {
             className={styles.subscribeInput}
             required
             disabled={status === 'loading'}
+            autoComplete="email"
           />
           <button
             type="submit"

@@ -156,6 +156,7 @@ export default function DataroomSignInPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 onBlur={handleEmailBlur}
                 required
+                autoComplete="email"
               />
             </div>
             <div className={styles.fieldGroup}>
