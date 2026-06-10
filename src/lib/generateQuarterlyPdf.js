@@ -6,7 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { isQuarterBefore } from '@/lib/quarterly-utils';
+import { isQuarterBefore, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
 
 function loadFontBase64(filename) {
   try {
@@ -924,7 +924,7 @@ export function generatePdfHtml({
     const totalInv = getTotalInvestment(company);
     const ownership = qd?.currentOwnershipPercent ?? getLatestOwnership(company);
     const ownershipConf = qd?.currentOwnershipConfidential;
-    const fmv = qd?.currentFMV;
+    const fmv = qd?.currentFMV ?? getMostRecentPastQuarterWithValue(company, quarter, fiscalYear, 'currentFMV')?.currentFMV;
     const fmvConf = qd?.currentFMVConfidential;
     const moic = qd?.multipleOfInvestment;
     const moicConf = qd?.moicConfidential;
