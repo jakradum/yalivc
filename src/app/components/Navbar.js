@@ -82,7 +82,7 @@ const Navbar = () => {
 
   const renderMobileMenu = () => (
     <ul className={styles.mobileMenuList}>
-      {navigationItems.menuItems.map((item, index) => (
+      {navigationItems.menuItems.filter(item => !item.hideOnMobile).map((item, index) => (
         <li key={index}>
           <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
             <span>{item.name.toUpperCase()}</span>
@@ -140,8 +140,8 @@ const Navbar = () => {
               {renderMobileMenu()}
               <div className={styles.mobileMenuBottom}>
                 <p className={styles.verticalText}>Yali.VC</p>
-                <PinkLogo className={`${styles.pinkLogo} global-pinklogo`} />
               </div>
+              <PinkLogo className={`${styles.pinkLogo} global-pinklogo`} />
             </div>
           )}
         </>

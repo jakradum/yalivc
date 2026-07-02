@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import styles from './contact.module.css';
 import ApplicationForm from '../components/ApplicationForm';
 import { isFeatureEnabled } from '@/config/features';
@@ -36,15 +37,20 @@ export default function ContactClient() {
               <p className={styles.rowDesc}>
                 Looking to pitch? Write to us. Our AI analyst scans your pitch and routes it to the right team member.
               </p>
-              <a href="mailto:pitch@yali.vc" className={styles.rowEmail}>
-                pitch@yali.vc ↗
-              </a>
+              <div className={styles.rowActions}>
+                <a href="mailto:pitch@yali.vc" className={styles.rowEmail}>
+                  pitch@yali.vc ↗
+                </a>
+                <Link href="/pitch" className={styles.rowPitchLink}>
+                  What we look for ↗
+                </Link>
+              </div>
             </div>
 
             <div className={`${styles.contactRow} ${styles.contactRowBorder}`}>
               <div className={styles.rowLabel}>PRESS &amp; GENERAL</div>
               <p className={styles.rowDesc}>
-                Media inquiries, press releases, interview requests, investor relations, and all other correspondence.
+                Media inquiries, press releases, interview requests, and all other correspondence.
               </p>
               <a href="mailto:press@yali.vc" className={styles.rowEmail}>
                 press@yali.vc ↗

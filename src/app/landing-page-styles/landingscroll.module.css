@@ -149,8 +149,35 @@
   align-self: flex-end;
 }
 
+.pitchLink {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: inline-block;
+  padding: 0.5rem 0.875rem;
+  font-size: 11px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  color: #830d35;
+  background: #efefef;
+  border: 1px solid #363636;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  box-shadow: 2px 2px 0 #363636;
+  transition: box-shadow 0.12s, transform 0.12s;
+}
+
+.pitchLink:hover {
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
 /* Mobile styles */
 @media (max-width: 800px) {
+  .pitchLink {
+    display: none;
+  }
+
   .heroSection {
     flex-direction: column;
   }
