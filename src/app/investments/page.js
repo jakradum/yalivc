@@ -190,6 +190,7 @@ export default async function Investments() {
             <Link
               key={company._id}
               href={href}
+              aria-label={`View ${company.name}`}
               className={`${invStyles.portfolioCell} ${invStyles.portfolioCellLink}`}
             >
               {cellContent}

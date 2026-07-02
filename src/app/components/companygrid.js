@@ -136,7 +136,7 @@ const CompanyTable = ({ companies, companyCount }) => {
       <>
         <div className={styles.sidebar}>
           <p className={styles.sidebarText}>{updatedText}</p>
-          <Button href="/investments" color="black">
+          <Button href="/investments" color="black" aria-label="View all portfolio companies">
             {buttonText}
           </Button>
         </div>
@@ -313,7 +313,7 @@ const CompanyTable = ({ companies, companyCount }) => {
           </article>
         </Link>
       </section>
-      <Button href="/investments" color="black">
+      <Button href="/investments" color="black" aria-label="View all portfolio companies">
         {buttonText}
       </Button>
     </div>
