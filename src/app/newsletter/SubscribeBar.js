@@ -37,6 +37,7 @@ export default function SubscribeBar() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="your@email.com"
+            aria-label="Email address"
             className={styles.subscribeInput}
             required
             disabled={status === 'loading'}
