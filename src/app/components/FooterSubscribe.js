@@ -62,6 +62,7 @@ export default function FooterSubscribe() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Subscribe to our newsletter"
+              aria-label="Email address"
               className={styles.input}
               disabled={status === 'loading'}
               autoComplete="email"

@@ -67,8 +67,10 @@ export default function PressMailingList() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                aria-label="Email address"
                 className={styles.input}
                 disabled={status === 'loading'}
+                autoComplete="email"
               />
               <button
                 type="submit"
