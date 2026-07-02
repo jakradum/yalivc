@@ -341,7 +341,7 @@ export default async function CompanyPage({ params }) {
           </div>
           {allContent.length > 3 && (
             <div className={companyStyles.pressSeeMore}>
-              <Button href="/newsroom" color="#830D35">
+              <Button href="/newsroom" color="#830D35" aria-label="See all press coverage in Newsroom">
                 See more
               </Button>
             </div>

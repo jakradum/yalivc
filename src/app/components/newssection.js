@@ -66,7 +66,8 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
       <p className={styles.articleMeta}>{article.displayPublication}</p>
       {isClient && (
         <p className={styles.articleLink}>
-          <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
+          <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer"
+            aria-label={article.isVideo ? `Watch: ${article.title}` : `Read: ${article.title}`}>
             {article.isVideo && article.videoSource === 'youtube' ? 'Watch on YouTube →' : article.isVideo ? 'Watch →' : 'Read more →'}
           </a>
         </p>

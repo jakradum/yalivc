@@ -65,6 +65,7 @@ export default function TeamDetails({teamMembers}) {
         const wrapperProps = member.enableTeamPage
           ? {
               href: `/about-yali/${member.slug?.current || member.slug}`,
+              'aria-label': `View ${member.name}'s full profile`,
               style: { textDecoration: 'none', color: 'inherit', cursor: 'pointer' },
               onMouseMove: (e) => handleMouseMove(e, true),
               onMouseLeave: handleMouseLeave
