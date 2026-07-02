@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import Link from 'next/link';
 import { getCompanies, getNews, getTeamMembers, getCategories, getSocialUpdates, getFAQs } from '@/lib/sanity-queries';
 import { getSiteStats } from '@/lib/site-stats';
 import landingStyles from './landing-page-styles/landingscroll.module.css';
@@ -106,6 +107,9 @@ const team = sanityTeam;
               <h1>Helping India's deep tech soar. Because, our growth story is still being written.</h1>
               <ViewfinderIcon />
             </div>
+            <Link href="/pitch" className={landingStyles.pitchLink}>
+              Founders: pitch to us ↗
+            </Link>
           </div>
         </aside>
         <aside className={landingStyles.graphicWrapper}>

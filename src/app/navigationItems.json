@@ -17,6 +17,11 @@
         "path": "/newsroom"
       },
       {
+        "name": "For Founders",
+        "path": "/pitch",
+        "hideOnMobile": true
+      },
+      {
         "name": "Contact",
         "path": "/contact"
       }

@@ -270,6 +270,7 @@
   .navbar.expanded .mobileMenu {
     display: block;
     background-color: #830D35;
+    overflow: hidden;
   }
 
   .verticalText {
@@ -277,7 +278,7 @@
     writing-mode: vertical-rl;
     font-family: var(--font-jetbrains-mono), monospace !important;
     color: #EFEFEF;
-    opacity: 0.6;
+    opacity: 1;
     position: absolute;
     bottom: 1rem;
     margin-left: 1rem;
@@ -288,11 +289,20 @@
 
   .pinkLogo {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: -8%;
+    bottom: -4%;
     width: auto;
-    height: 30%;
-    z-index: -1;
+    height: 54%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .pinkLogo g {
+    opacity: 0.2;
+  }
+
+  .pinkLogo path {
+    fill: #ffb8d4;
   }
 
   .mobileMenuList {

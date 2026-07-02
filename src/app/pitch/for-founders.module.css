@@ -1,0 +1,546 @@
+.page {
+  min-height: 60vh;
+}
+
+/* ── Hero ── */
+.hero {
+  padding: 3.5rem 3rem 3rem;
+  border-bottom: 1px solid #363636;
+}
+
+.heroLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #363636;
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+}
+
+.heroBody {
+  font-size: 1.0625rem;
+  color: #363636;
+  line-height: 1.85;
+  max-width: 640px;
+  margin: 0;
+}
+
+/* ── Section chrome ── */
+.section {
+  padding: 2.25rem 3rem;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin: 0 0 1.25rem;
+}
+
+.sectionIntro {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.75;
+  max-width: 600px;
+  margin: 0 0 1.5rem;
+}
+
+.divider {
+  border-top: 1px solid #363636;
+  margin: 0;
+}
+
+/* ── Sector grid ── */
+.sectorGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #363636;
+  border: 1px solid #363636;
+  margin-bottom: 1.75rem;
+}
+
+.sectorCard {
+  background: #efefef;
+  padding: 1.125rem 1.375rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.sectorCard:hover {
+  background: white;
+}
+
+.sectorCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.sectorName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #363636;
+}
+
+.sectorToggle {
+  font-size: 1.125rem;
+  color: #830d35;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+
+.sectorToggleOpen {
+  transform: rotate(45deg);
+}
+
+.sectorBody {
+  font-size: 0.875rem;
+  color: #555;
+  line-height: 1.72;
+  margin: 0.5rem 0 0;
+}
+
+.sectorExpanded {
+  margin-top: 0.875rem;
+}
+
+.portfolioLabel {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 0.625rem;
+}
+
+.companyList {
+  display: flex;
+  flex-direction: column;
+}
+
+.companyEntry {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 0.5px solid #d0d0d0;
+  text-decoration: none;
+}
+
+.companyEntry:last-child {
+  border-bottom: none;
+}
+
+.companyLogo {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #363636;
+  flex-shrink: 0;
+  object-fit: contain;
+  background: white;
+  padding: 4px;
+}
+
+.companyLogoPlaceholder {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #363636;
+  flex-shrink: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  color: #363636;
+}
+
+.companyName {
+  margin: 0 0 0.2rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #363636;
+}
+
+.companyWhy {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.65;
+}
+
+.expandedBodyText {
+  font-size: 0.875rem;
+  color: #363636;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── Checklist ── */
+.checklist {
+  border: 1px solid #363636;
+  margin-bottom: 0;
+}
+
+.checklistHeader {
+  padding: 0.875rem 1.375rem 0.75rem;
+  border-bottom: 1px solid #363636;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.checklistTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #363636;
+}
+
+.checklistHint {
+  font-size: 0.8125rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.checklistItem {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 0.875rem 1.375rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.checklistItem:last-child {
+  border-bottom: none;
+}
+
+.checklistItem:hover {
+  background: white;
+}
+
+.checklistItemChecked {
+  background: white;
+}
+
+.checkbox {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #363636;
+  flex-shrink: 0;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.checkboxChecked {
+  border-color: #830d35;
+  background: #830d35;
+}
+
+.checkmark {
+  color: #efefef;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.checklistText {
+  font-size: 0.9375rem;
+  color: #555;
+  line-height: 1.65;
+  transition: color 0.15s;
+}
+
+.checklistTextChecked {
+  color: #363636;
+}
+
+/* ── Score CTA ── */
+.scoreCta {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease;
+}
+
+.scoreCtaVisible {
+  max-height: 120px;
+}
+
+.scoreCtaInner {
+  background: #830d35;
+  padding: 1.375rem 1.375rem 1.375rem 1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  border: 1px solid #830d35;
+  border-top: none;
+}
+
+.scoreCtaHeading {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ebde84;
+}
+
+.scoreCtaBody {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(235, 222, 132, 0.72);
+  line-height: 1.5;
+}
+
+.scoreCtaButton {
+  background: #ebde84;
+  color: #830d35;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: opacity 0.15s;
+}
+
+.scoreCtaButton:hover {
+  opacity: 0.9;
+}
+
+/* ── Process diagram ── */
+.phaseRow {
+  display: flex;
+}
+
+.phaseWrap {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+}
+
+.phaseBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.phaseHeader {
+  background: #363636;
+  padding: 0.625rem 0.875rem;
+  transition: background 0.15s;
+}
+
+.phaseHeaderHovered {
+  background: #830d35;
+}
+
+.phaseNum {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #ebde84;
+  margin-bottom: 0.25rem;
+  transition: color 0.15s;
+}
+
+.phaseNumHovered {
+  color: #ebde84;
+}
+
+.phaseLabel {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #efefef;
+}
+
+.phaseBody {
+  flex: 1;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid #363636;
+  border-top: none;
+  background: #efefef;
+  transition: background 0.15s;
+}
+
+.phaseBodyHovered {
+  background: white;
+}
+
+.phaseBodyText {
+  font-size: 0.875rem;
+  color: #363636;
+  line-height: 1.65;
+}
+
+.phaseEmail {
+  color: #830d35;
+  text-decoration: none;
+}
+
+.phaseEmail:hover {
+  text-decoration: underline;
+}
+
+.phaseArrow {
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding-top: 18px;
+  color: #d0d0d0;
+  font-size: 1rem;
+}
+
+/* ── Main CTA band ── */
+.mainCta {
+  padding: 1.5rem 3rem;
+  background: #830d35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.mainCtaText {
+  font-size: 1rem;
+  color: #ebde84;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mainCtaButton {
+  background: #ebde84;
+  color: #830d35;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.mainCtaButton:hover {
+  opacity: 0.9;
+}
+
+/* ── Best practices ── */
+.bestGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #363636;
+  border: 1px solid #363636;
+}
+
+.bestCard {
+  background: #efefef;
+  padding: 1.125rem 1.375rem;
+}
+
+.bestCardHeader {
+  display: flex;
+  gap: 0.625rem;
+  align-items: baseline;
+  margin-bottom: 0.375rem;
+}
+
+.bestNum {
+  font-size: 9px;
+  font-weight: 700;
+  color: #830d35;
+}
+
+.bestHeading {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #363636;
+}
+
+.bestBody {
+  font-size: 0.875rem;
+  color: #555;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .hero {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+
+  .heroTitle {
+    font-size: 2.25rem;
+  }
+
+  .section {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .sectorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .phaseRow {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .phaseArrow {
+    display: none;
+  }
+
+  .phaseWrap {
+    flex-direction: column;
+  }
+
+  .checklistHint {
+    display: none;
+  }
+
+  .mainCta {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .bestGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreCtaInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
