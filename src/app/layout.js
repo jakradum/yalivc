@@ -74,7 +74,6 @@ export default async function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="6eCPyIGmj8Lj1meaCoGOIg" async></script>
       </head>
       <body className={inter.className}>
         {(isPortalRoute || isDataroomRoute) ? (

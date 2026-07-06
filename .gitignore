@@ -40,3 +40,6 @@ next-env.d.ts
 
 # agent context — local only, contains internal details
 CLAUDE.md
+
+# sketchboard — local brainstorming pages, never deployed
+/src/app/sketch
