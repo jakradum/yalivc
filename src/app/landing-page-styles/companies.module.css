@@ -330,7 +330,7 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(54, 54, 54, 0.35);
+  color: #767676;
 }
 
 .featuredDesc {
@@ -449,7 +449,7 @@
   font-size: 13px;
   font-weight: 600;
   font-style: italic;
-  color: rgba(54, 54, 54, 0.35);
+  color: #767676;
 }
 
 .pitchDesc {
