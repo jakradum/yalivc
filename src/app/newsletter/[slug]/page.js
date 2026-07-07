@@ -69,7 +69,7 @@ const portableComponents = {
       <figure className={styles.ptImage}>
         <Image
           src={urlFor(value).width(640).url()}
-          alt={value.alt || ''}
+          alt={value.alt || value.caption || ''}
           width={640}
           height={400}
           className={styles.ptImageEl}

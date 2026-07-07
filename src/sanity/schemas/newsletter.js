@@ -75,7 +75,8 @@ export default {
           name: 'alt',
           title: 'Alt Text',
           type: 'string',
-          description: 'Important for SEO and accessibility'
+          description: 'Describe the image for screen readers (required for accessibility)',
+          validation: Rule => Rule.warning('Please add alt text — required for WCAG compliance')
         }
       ]
     },

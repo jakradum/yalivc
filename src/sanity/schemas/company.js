@@ -758,6 +758,8 @@ export default {
                   name: 'alt',
                   type: 'string',
                   title: 'Alt text',
+                  description: 'Describe the image for screen readers (required for accessibility)',
+                  validation: Rule => Rule.warning('Please add alt text — required for WCAG compliance')
                 },
                 {
                   name: 'caption',

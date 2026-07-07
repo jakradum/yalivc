@@ -47,7 +47,7 @@ export default function SocialUpdates({ updates = [] }) {
             <div className={styles.featuredImageWrap}>
               <Image
                 src={featured.image}
-                alt=""
+                alt="LinkedIn post preview"
                 fill
                 className={styles.featuredImage}
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -79,7 +79,7 @@ export default function SocialUpdates({ updates = [] }) {
                   <div className={styles.thumbWrap}>
                     <Image
                       src={post.image}
-                      alt=""
+                      alt="LinkedIn post preview"
                       fill
                       className={styles.thumbImage}
                       sizes="64px"
