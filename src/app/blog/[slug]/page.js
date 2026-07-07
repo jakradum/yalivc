@@ -62,7 +62,7 @@ const bodyComponents = {
       <figure className={companyStyles.storyImage}>
         <Image
           src={urlFor(value).width(800).url()}
-          alt={value.alt || ''}
+          alt={value.alt || value.caption || ''}
           width={800}
           height={600}
           style={{ width: '100%', height: 'auto' }}
