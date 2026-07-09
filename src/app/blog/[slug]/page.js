@@ -232,10 +232,10 @@ export default async function BlogPost({ params }) {
               href={post.author.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${post.author.name} on LinkedIn`}
+              className={teamLPstyles.socialButton}
               style={{ marginLeft: 'auto' }}
-            >
-              <button className={teamLPstyles.socialButton}>in</button>
-            </a>
+            >in</a>
           </div>
         )}
       </article>

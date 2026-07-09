@@ -150,6 +150,7 @@ export const TeamsLPComponent = ({ teamMembers = [] }) => {
                   href={modal.linkedIn}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="LinkedIn profile"
                   className={styles.tsMagLinkedIn}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -162,7 +163,7 @@ export const TeamsLPComponent = ({ teamMembers = [] }) => {
                   className={styles.tsMagViewProfile}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  View profile →
+                  View profile
                 </a>
               )}
             </div>

@@ -126,6 +126,7 @@ export default async function TeamMemberPage({ params }) {
               href={member.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
               className={teamStyles.heroLinkedIn}
             >
               LinkedIn ↗
@@ -223,7 +224,7 @@ export default async function TeamMemberPage({ params }) {
               >
                 <div className={teamStyles.otherCardInfo}>
                   <span className={teamStyles.otherCardName}>{formatCardName(other.name)}</span>
-                  <span className={teamStyles.otherCardViewBtn}>View</span>
+                  <span className={teamStyles.otherCardViewBtn}>View profile</span>
                 </div>
                 {other.photo && (
                   <div className={teamStyles.otherCardPhotoWrap}>

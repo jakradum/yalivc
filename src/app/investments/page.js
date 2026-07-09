@@ -180,7 +180,7 @@ export default async function Investments() {
                   <p className={invStyles.portfolioOneLiner}>{company.oneLiner}</p>
                 )}
                 {href && (
-                  <span className={invStyles.portfolioViewMore}>View more ↗</span>
+                  <span className={invStyles.portfolioViewMore}>View ↗</span>
                 )}
               </div>
             </>
