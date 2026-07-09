@@ -170,6 +170,8 @@ export default async function CompanyPage({ params }) {
               className={companyStyles.mobileVisitLink}
               target="_blank"
               rel="noopener noreferrer"
+              aria-hidden="true"
+              tabIndex={-1}
             >
               Visit website ↗
             </a>
@@ -232,8 +234,8 @@ export default async function CompanyPage({ params }) {
                   <p className={companyStyles.foundersGridRole}>{founder.role}</p>
                   {founder.linkedIn && (
                     <div className={companyStyles.founderLinkWrapper}>
-                      <Button href={founder.linkedIn} color="#830D35" target="_blank">
-                        LinkedIn
+                      <Button href={founder.linkedIn} color="#830D35" target="_blank" aria-label="LinkedIn profile">
+                        LinkedIn ↗
                       </Button>
                     </div>
                   )}
@@ -341,8 +343,8 @@ export default async function CompanyPage({ params }) {
           </div>
           {allContent.length > 3 && (
             <div className={companyStyles.pressSeeMore}>
-              <Button href="/newsroom" color="#830D35" aria-label="See all press coverage in Newsroom">
-                See more
+              <Button href="/newsroom" color="#830D35" aria-label="View all press coverage in Newsroom">
+                View all coverage
               </Button>
             </div>
           )}

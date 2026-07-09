@@ -165,7 +165,7 @@ const CompanyTable = ({ companies, companyCount }) => {
               <p className={styles.featuredDesc}>{featuredCompany.oneLiner}</p>
             </div>
               {featuredHref && (
-                <Link href={featuredHref} className={styles.featuredViewLink}>View ↗</Link>
+                <Link href={featuredHref} className={styles.featuredViewLink} aria-label={`View ${featuredCompany.name}`}>View ↗</Link>
               )}
             </div>
           )}

@@ -5,7 +5,7 @@ import Button from './button';
 import fallbackData from '../data/news.json';
 
 
-const buttonText = 'view all coverage';
+const buttonText = 'View all coverage';
 
 const truncateText = (text, maxLength) => {
   if (!text) return '';

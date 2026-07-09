@@ -90,7 +90,7 @@ export default function SocialUpdates({ updates = [] }) {
                   <p className={styles.secondarySnippet}>{truncateText(post.excerpt, 110)}</p>
                   <div className={styles.secondaryFooter}>
                     <span className={styles.secondaryDate}>{formatDate(post.date)}</span>
-                    <span className={styles.secondaryLink}>View ↗</span>
+                    <span className={styles.secondaryLink}>View post ↗</span>
                   </div>
                 </div>
               </a>
