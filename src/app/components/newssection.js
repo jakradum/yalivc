@@ -61,7 +61,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
 
   const renderLeftGridArticle = (article, index) => (
     <article key={index} className={styles.article}>
-      <h3>{article.formattedDate}</h3>
+      <p className={styles.articleDate}>{article.formattedDate}</p>
       <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
       <p className={styles.articleMeta}>{article.displayPublication}</p>
       {isClient && (
@@ -84,7 +84,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
   const renderRightStackArticle = (article, index) => (
     <a key={index} href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
       <article className={styles.article}>
-        <h3>{article.formattedDate}</h3>
+        <p className={styles.articleDate}>{article.formattedDate}</p>
         <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
       </article>
     </a>

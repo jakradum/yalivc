@@ -483,7 +483,7 @@
 .mobileCardHint {
   font-size: 10px;
   letter-spacing: 0.08em;
-  opacity: 0.5;
+  color: #595959;
   margin-top: auto;
 }
 
@@ -628,12 +628,12 @@ a.mobileCompanyCard {
     }
 
     .mobileCompanyCard > p {
-        margin-top: auto; /* Push to the bottom */
-        padding-top: 3rem; /* Space from content above */
+        margin-top: auto;
+        padding-top: 3rem;
         text-align: center;
         margin-bottom: 0;
         font-size: .8rem;
-        color: #888;
+        color: #595959;
     }
     .cardHeader {
         display: flex;
