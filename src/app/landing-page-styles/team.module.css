@@ -593,14 +593,13 @@
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #363636;
+  color: #595959;
   background: none;
   border: none;
   border-right: 1px solid #363636;
   padding: 11px 20px;
   cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 .tsFilterBtn:hover {
   opacity: 0.85;

@@ -31,10 +31,11 @@
     border-right: 1px solid black;
 }
 
-.article > h3 {
+.articleDate {
     font-size: 1rem;
     font-weight: 400;
     color: #565656;
+    margin: 0;
 }
 
 .articleTitle {
@@ -146,8 +147,8 @@ text-decoration: none;
       justify-content: center;
     }
 
-    .article > h3 {
-      font-size: 1rem; 
+    .articleDate {
+      font-size: 1rem;
     }
 
     .articleTitle {

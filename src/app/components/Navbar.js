@@ -127,11 +127,16 @@ const Navbar = () => {
         <>
           <div className={isMenuOpen ? styles.mobileNavContentOpen : styles.mobileNavContent}>
             <div className={styles.mobileLogo}>
-              <Link href="/" onClick={() => setMenuOpen(false)}>
+              <Link href="/" onClick={() => setMenuOpen(false)} aria-label="Yali Capital home">
                 {isMenuOpen ? <Logo /> : <Lightlogo />}
               </Link>
             </div>
-            <button className={styles.menuToggle} onClick={toggleMenu}>
+            <button
+              className={styles.menuToggle}
+              onClick={toggleMenu}
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
+            >
               {isMenuOpen ? <CloseIcon/> : <Openicon/>}
             </button>
           </div>
@@ -148,7 +153,7 @@ const Navbar = () => {
       ) : (
         <>
           <div className={styles.logoContainer}>
-            <Link href="/">
+            <Link href="/" aria-label="Yali Capital home">
               <Logo />
             </Link>
           </div>
