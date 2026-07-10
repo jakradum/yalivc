@@ -76,6 +76,7 @@ export default function ContactClient() {
         <div className={styles.mapContainer}>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.094536859481!2d77.71412677542135!3d12.965802187349034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1312799583c3%3A0x25472ff5dce8fbcf!2sYALI%20CAPITAL!5e0!3m2!1sen!2sin!4v1755756637918!5m2!1sen!2sin"
+            title="Yali Capital office location map"
             width="100%"
             height="100%"
             style={{ border: 0 }}
