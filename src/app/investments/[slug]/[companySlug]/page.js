@@ -324,6 +324,7 @@ export default async function CompanyPage({ params }) {
                       href: item.url,
                       target: item.isExternal ? '_blank' : undefined,
                       rel: item.isExternal ? 'noopener noreferrer' : undefined,
+                      'aria-label': item.title,
                     } : {})}
                   >
                     <div className={companyStyles.pressIndex}>

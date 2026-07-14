@@ -67,7 +67,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
       {isClient && (
         <p className={styles.articleLink}>
           <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer"
-            aria-label={article.isVideo ? `Watch: ${article.title}` : `Read: ${article.title}`}>
+            aria-label={article.title}>
             {article.isVideo && article.videoSource === 'youtube' ? 'Watch on YouTube →' : article.isVideo ? 'Watch →' : 'Read more →'}
           </a>
         </p>
@@ -82,7 +82,7 @@ const articles = formatArticles(news.length > 0 ? news : fallbackData.data.artic
   );
 
   const renderRightStackArticle = (article, index) => (
-    <a key={index} href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
+    <a key={index} href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer" aria-label={article.title}>
       <article className={styles.article}>
         <p className={styles.articleDate}>{article.formattedDate}</p>
         <p className={styles.articleTitle}>{truncateText(article.title, 50)}</p>
