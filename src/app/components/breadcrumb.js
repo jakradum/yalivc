@@ -15,7 +15,7 @@ const Breadcrumb = () => {
   const formatSegmentTitle = (segment) => {
     // Handle special cases
     if (segment === 'about-yali') {
-      return 'About Yali';
+      return 'About Us';
     }
 
     // Default: capitalize each word

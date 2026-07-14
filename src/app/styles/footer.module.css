@@ -146,6 +146,7 @@
     display: flex;
     align-items: center;
     letter-spacing: 0.02rem;
+    text-transform: uppercase;
 }
 
 .linkBox > a svg {

@@ -28,7 +28,7 @@ export default function Footer() {
               {navigationItems.map((item, index) => (
                 <div key={index} className={styles.linkBox}>
                   <Link href={item.path}>
-                    {item.name.toUpperCase()} <ArrowLinkOpen />
+                    {item.name} <ArrowLinkOpen />
                   </Link>
                 </div>
               ))}

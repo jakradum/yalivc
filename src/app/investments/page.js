@@ -206,7 +206,7 @@ export default async function Investments() {
       {/* CTA BAND */}
       <div className={invStyles.ctaBand}>
         <h2 className={invStyles.ctaHeadline}>Building something in deep tech?</h2>
-        <Button href="/contact" color="#efefef">Get in touch</Button>
+        <Button href="/contact" color="#efefef" aria-label="Contact">Get in touch</Button>
       </div>
     </section>
   );

@@ -343,6 +343,7 @@
     display: block;
     font-size: 1.2rem;
     font-family: var(--font-jetbrains-mono), monospace !important;
+    text-transform: uppercase;
   }
 
   .mobileMenuList li:not(:last-child) a {

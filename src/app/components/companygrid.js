@@ -205,7 +205,7 @@ const CompanyTable = ({ companies, companyCount }) => {
                 </div>
               );
             })}
-            <Link href="/contact" className={`${styles.gridCell} ${styles.pitchCell}`}>
+            <Link href="/contact" aria-label="Contact" className={`${styles.gridCell} ${styles.pitchCell}`}>
               <div className={styles.cellIdentity}>
                 <div className={styles.cellLogo} />
                 <div>
@@ -301,6 +301,7 @@ const CompanyTable = ({ companies, companyCount }) => {
         })}
         <Link
           href="/contact"
+          aria-label="Contact"
           className={`${styles.mobileCompanyCard} ${styles.mobilePitchCard} ${pitchIndex === currentCard ? styles.activeCard : ''}`}
           style={pitchCardStyle}
         >
