@@ -107,7 +107,7 @@ const team = sanityTeam;
               <h1>Helping India's deep tech soar. Because, our growth story is still being written.</h1>
               <ViewfinderIcon />
             </div>
-            <Link href="/pitch" className={landingStyles.pitchLink}>
+            <Link href="/pitch" className={landingStyles.pitchLink} aria-label="For Founders">
               Founders: pitch to us ↗
             </Link>
           </div>
