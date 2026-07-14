@@ -208,7 +208,7 @@ export default async function BlogPost({ params }) {
         </div>
 
         {post.contentType === 'press-release' && (
-          <p style={{ fontSize: '0.75rem', color: '#999', marginTop: '2rem', marginBottom: 0 }}>
+          <p style={{ fontSize: '0.75rem', color: '#767676', marginTop: '2rem', marginBottom: 0 }}>
             Have questions about this press release?{' '}
             <a href="mailto:press@yali.vc" style={{ color: '#830D35' }}>Write to press@yali.vc</a>
           </p>
