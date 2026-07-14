@@ -61,7 +61,7 @@
 .fundScheme {
   font-family: var(--font-inter), sans-serif;
   font-size: 11px;
-  color: #888;
+  color: #595959;
   margin: 0 0 18px 0;
 }
 
@@ -86,7 +86,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #888;
+  color: #595959;
   padding-top: 2px;
 }
 
@@ -232,7 +232,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #888;
+  color: #595959;
   white-space: nowrap;
   flex-shrink: 0;
 }
