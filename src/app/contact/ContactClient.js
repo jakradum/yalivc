@@ -41,7 +41,7 @@ export default function ContactClient() {
                 <a href="mailto:pitch@yali.vc" className={styles.rowEmail}>
                   pitch@yali.vc ↗
                 </a>
-                <Link href="/pitch" className={styles.rowPitchLink}>
+                <Link href="/pitch" className={styles.rowPitchLink} aria-label="For Founders">
                   What we look for ↗
                 </Link>
               </div>

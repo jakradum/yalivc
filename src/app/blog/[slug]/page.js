@@ -242,7 +242,7 @@ export default async function BlogPost({ params }) {
 
       {/* Back link */}
       <div style={{ padding: '1rem 2rem', fontSize: '0.875rem' }}>
-        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }}>
+        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }} aria-label="Blog">
           ← Back to Blog
         </Link>
       </div>
