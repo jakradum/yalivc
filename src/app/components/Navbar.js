@@ -85,7 +85,7 @@ const Navbar = () => {
       {navigationItems.menuItems.filter(item => !item.hideOnMobile).map((item, index) => (
         <li key={index}>
           <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
-            <span>{item.name.toUpperCase()}</span>
+            <span>{item.name}</span>
           </Link>
         </li>
       ))}
@@ -100,7 +100,7 @@ const Navbar = () => {
             href={item.path}
             className={isActive(item.path) ? styles.active : ''}
           >
-            {item.name.toUpperCase()}
+            {item.name}
           </Link>
           {item.subItems && (
             <ul className={styles.dropdownMenu}>
