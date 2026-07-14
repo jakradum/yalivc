@@ -928,7 +928,7 @@
   font-family: var(--font-jetbrains-mono);
   font-size: 48px;
   font-weight: 700;
-  color: rgba(54, 54, 54, 0.1);
+  color: rgba(54, 54, 54, 0.6);
   line-height: 1;
   display: flex;
   align-items: center;

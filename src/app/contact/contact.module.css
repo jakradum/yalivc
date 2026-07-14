@@ -25,7 +25,7 @@
 .heroTag {
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.75);
   font-family: var(--font-jetbrains-mono), monospace !important;
   margin-bottom: 12px;
 }
@@ -40,7 +40,7 @@
 
 .heroSubhead {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.75);
   font-family: var(--font-inter), sans-serif;
   max-width: 400px;
   line-height: 1.7;
