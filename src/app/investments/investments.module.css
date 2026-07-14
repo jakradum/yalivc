@@ -61,7 +61,7 @@
 .heroSubhead {
   font-family: var(--font-inter);
   font-size: 16px;
-  color: rgba(54, 54, 54, 0.6);
+  color: #595959;
   line-height: 1.2;
   max-width: 480px;
   margin: 0;
@@ -251,7 +251,7 @@
 .thesisContentBody {
   font-family: var(--font-inter);
   font-size: 13px;
-  color: rgba(54, 54, 54, 0.6);
+  color: #595959;
   line-height: 1.65;
   margin: 0;
 }
@@ -331,7 +331,7 @@
 .portfolioOneLiner {
   font-family: var(--font-inter);
   font-size: 11px;
-  color: rgba(54, 54, 54, 0.6);
+  color: #595959;
   line-height: 1.5;
   margin: 4px 0 0 0;
 }

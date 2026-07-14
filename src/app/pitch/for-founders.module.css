@@ -400,7 +400,8 @@
 
 .phaseEmail {
   color: #830d35;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .phaseEmail:hover {
