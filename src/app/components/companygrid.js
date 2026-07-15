@@ -307,7 +307,7 @@ const CompanyTable = ({ companies, companyCount }) => {
         >
           <article className={styles.keyDetails}>
             <div className={styles.mobilePitchLogoBox} />
-            <h4 className={styles.companyTitle} style={{ fontStyle: 'italic', color: 'rgba(54,54,54,0.45)' }}>YourStartup</h4>
+            <h4 className={styles.companyTitle} style={{ fontStyle: 'italic', color: '#595959' }}>YourStartup</h4>
             <p className={styles.companyCategory} style={{ color: 'rgba(54,54,54,0.3)' }}>&nbsp;</p>
             <p className={styles.mobilePitchDesc}>See yourself being a part of our portfolio? We&rsquo;re looking for the next big idea too.</p>
             <p className={styles.mobileCardHint}>Tap to pitch · Swipe for next</p>

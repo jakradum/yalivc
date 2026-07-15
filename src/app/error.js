@@ -17,7 +17,7 @@ export default function Error({ reset }) {
       >
         Try again
       </button>
-      <Link href="/" className={styles.link} style={{ marginTop: '1rem' }}>
+      <Link href="/" className={styles.link} style={{ marginTop: '1rem' }} aria-label="Home">
         Go back to yali.vc
       </Link>
     </div>
