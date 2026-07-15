@@ -23,7 +23,7 @@ export default function NotFound() {
       <p className={styles.sub}>
         The page you&rsquo;re looking for may have crossed the event horizon.
       </p>
-      <Link href="/" className={styles.link}>
+      <Link href="/" className={styles.link} aria-label="Home">
         Go back to yali.vc
       </Link>
     </div>
