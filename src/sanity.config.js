@@ -137,6 +137,11 @@ export default defineConfig({
                   .documentId('investorRelations')
                   .views([S.view.form()])
               ),
+            S.divider(),
+            // Contact form submissions
+            S.listItem()
+              .title('Contact Submissions')
+              .child(S.documentTypeList('contactSubmission').title('Contact Submissions')),
           ]),
     }),
     visionTool(),

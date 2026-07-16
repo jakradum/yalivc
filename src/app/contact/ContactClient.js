@@ -1,9 +1,144 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import styles from './contact.module.css';
 import ApplicationForm from '../components/ApplicationForm';
 import { isFeatureEnabled } from '@/config/features';
+
+function ContactForm() {
+  const [fields, setFields] = useState({ name: '', email: '', inquiry: '', message: '', _hp: '' });
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const set = (key) => (e) => setFields((f) => ({ ...f, [key]: e.target.value }));
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/contact-form/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || 'Something went wrong.');
+        setStatus('error');
+      } else {
+        setStatus('success');
+      }
+    } catch {
+      setErrorMsg('Network error. Please try again.');
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className={styles.formSuccess}>
+        <div className={styles.formSuccessIcon}>✓</div>
+        <p className={styles.formSuccessText}>Message received. We&rsquo;ll be in touch.</p>
+      </div>
+    );
+  }
+
+  const isPitch = fields.inquiry === 'pitch';
+
+  return (
+    <form className={styles.contactForm} onSubmit={handleSubmit} noValidate>
+      {/* Honeypot — hidden from real users */}
+      <input
+        type="text"
+        name="_hp"
+        value={fields._hp}
+        onChange={set('_hp')}
+        tabIndex={-1}
+        aria-hidden="true"
+        style={{ display: 'none' }}
+      />
+
+      <div className={styles.formRow}>
+        <label className={styles.formLabel} htmlFor="cf-inquiry">Inquiry type</label>
+        <select
+          id="cf-inquiry"
+          className={styles.formSelect}
+          value={fields.inquiry}
+          onChange={set('inquiry')}
+          required
+        >
+          <option value="" disabled>Select...</option>
+          <option value="press">Press / media inquiry</option>
+          <option value="partnership">Partnership</option>
+          <option value="pitch">Pitch</option>
+        </select>
+      </div>
+
+      {isPitch ? (
+        <div className={styles.pitchRedirect}>
+          <p className={styles.pitchRedirectNote}>
+            For investment pitches, write to us directly. Our AI analyst scans your pitch and routes it to the right team member.
+          </p>
+          <a href="mailto:pitch@yali.vc" className={styles.pitchRedirectEmail}>
+            pitch@yali.vc ↗
+          </a>
+        </div>
+      ) : (
+        <>
+          <div className={styles.formRow}>
+            <label className={styles.formLabel} htmlFor="cf-name">Name</label>
+            <input
+              id="cf-name"
+              type="text"
+              className={styles.formInput}
+              value={fields.name}
+              onChange={set('name')}
+              required
+              autoComplete="name"
+            />
+          </div>
+
+          <div className={styles.formRow}>
+            <label className={styles.formLabel} htmlFor="cf-email">Email</label>
+            <input
+              id="cf-email"
+              type="email"
+              className={styles.formInput}
+              value={fields.email}
+              onChange={set('email')}
+              required
+              autoComplete="email"
+            />
+          </div>
+
+          <div className={styles.formRow}>
+            <label className={styles.formLabel} htmlFor="cf-message">Message</label>
+            <textarea
+              id="cf-message"
+              className={styles.formTextarea}
+              value={fields.message}
+              onChange={set('message')}
+              required
+              rows={4}
+            />
+          </div>
+
+          {status === 'error' && (
+            <p className={styles.formError}>{errorMsg}</p>
+          )}
+
+          {fields.inquiry && (
+            <button type="submit" className={styles.formSubmit} disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending...' : 'Send message'}
+            </button>
+          )}
+        </>
+      )}
+    </form>
+  );
+}
 
 export default function ContactClient() {
   const showApplicationForm = isFeatureEnabled('applicationForm');
@@ -50,11 +185,9 @@ export default function ContactClient() {
             <div className={`${styles.contactRow} ${styles.contactRowBorder}`}>
               <div className={styles.rowLabel}>PRESS &amp; GENERAL</div>
               <p className={styles.rowDesc}>
-                Media inquiries, press releases, interview requests, and all other correspondence.
+                Press, media, and partnership enquiries.
               </p>
-              <a href="mailto:press@yali.vc" className={styles.rowEmail}>
-                press@yali.vc ↗
-              </a>
+              <ContactForm />
             </div>
 
           </div>

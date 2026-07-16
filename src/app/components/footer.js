@@ -10,7 +10,7 @@ export default function Footer() {
 
   const BottomStripContent = () => (
     <>
-      <Link href="mailto:press@yali.vc">Press inquiries</Link>
+      <Link href="/contact">Press inquiries</Link>
       <Link href="https://www.linkedin.com/company/yali-capital/" target='_blank'>Follow us on LinkedIn</Link>
       <Link href="/investor-relations">Investor Relations</Link>
       <Link href="/newsroom/press-downloads">Media kit</Link>
