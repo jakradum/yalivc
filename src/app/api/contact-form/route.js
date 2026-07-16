@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import { writeClient } from '@/lib/sanity';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const INQUIRY_LABELS = {
   press: 'Press / media inquiry',
@@ -44,25 +41,6 @@ export async function POST(request) {
       submittedAt,
       status: 'new',
     });
-
-    // Email notification
-    if (process.env.RESEND_API_KEY) {
-      await resend.emails.send({
-        from: 'Yali Capital Contact Form <noreply@yali.vc>',
-        to: 'press@yali.vc',
-        replyTo: email.trim(),
-        subject: `[${INQUIRY_LABELS[inquiry]}] from ${name.trim()}`,
-        html: `
-          <p><strong>Name:</strong> ${name.trim()}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email.trim()}">${email.trim()}</a></p>
-          <p><strong>Inquiry type:</strong> ${INQUIRY_LABELS[inquiry]}</p>
-          <hr />
-          <p style="white-space:pre-wrap">${message.trim()}</p>
-          <hr />
-          <p style="color:#888;font-size:12px">Saved to Sanity Studio → Contact Submissions</p>
-        `,
-      });
-    }
 
     return NextResponse.json({ success: true });
   } catch (err) {

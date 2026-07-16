@@ -36,20 +36,11 @@ function ContactForm() {
     }
   }
 
-  if (status === 'success') {
-    return (
-      <div className={styles.formSuccess}>
-        <div className={styles.formSuccessIcon}>✓</div>
-        <p className={styles.formSuccessText}>Message received. We&rsquo;ll be in touch.</p>
-      </div>
-    );
-  }
-
+  const submitted = status === 'success';
   const isPitch = fields.inquiry === 'pitch';
 
   return (
     <form className={styles.contactForm} onSubmit={handleSubmit} noValidate>
-      {/* Honeypot — hidden from real users */}
       <input
         type="text"
         name="_hp"
@@ -64,10 +55,11 @@ function ContactForm() {
         <label className={styles.formLabel} htmlFor="cf-inquiry">Inquiry type</label>
         <select
           id="cf-inquiry"
-          className={styles.formSelect}
+          className={`${styles.formSelect}${submitted ? ` ${styles.fieldSubmitted}` : ''}`}
           value={fields.inquiry}
           onChange={set('inquiry')}
           required
+          disabled={submitted}
         >
           <option value="" disabled>Select...</option>
           <option value="press">Press / media inquiry</option>
@@ -92,11 +84,12 @@ function ContactForm() {
             <input
               id="cf-name"
               type="text"
-              className={styles.formInput}
+              className={`${styles.formInput}${submitted ? ` ${styles.fieldSubmitted}` : ''}`}
               value={fields.name}
               onChange={set('name')}
               required
               autoComplete="name"
+              readOnly={submitted}
             />
           </div>
 
@@ -105,11 +98,12 @@ function ContactForm() {
             <input
               id="cf-email"
               type="email"
-              className={styles.formInput}
+              className={`${styles.formInput}${submitted ? ` ${styles.fieldSubmitted}` : ''}`}
               value={fields.email}
               onChange={set('email')}
               required
               autoComplete="email"
+              readOnly={submitted}
             />
           </div>
 
@@ -117,19 +111,24 @@ function ContactForm() {
             <label className={styles.formLabel} htmlFor="cf-message">Message</label>
             <textarea
               id="cf-message"
-              className={styles.formTextarea}
+              className={`${styles.formTextarea}${submitted ? ` ${styles.fieldSubmitted}` : ''}`}
               value={fields.message}
               onChange={set('message')}
               required
               rows={4}
+              readOnly={submitted}
             />
           </div>
+
+          {submitted && (
+            <p className={styles.formSuccessText}>&#10003;&nbsp; Message received. We&rsquo;ll be in touch.</p>
+          )}
 
           {status === 'error' && (
             <p className={styles.formError}>{errorMsg}</p>
           )}
 
-          {fields.inquiry && (
+          {!submitted && fields.inquiry && (
             <button type="submit" className={styles.formSubmit} disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending...' : 'Send message'}
             </button>
