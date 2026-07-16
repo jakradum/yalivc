@@ -245,6 +245,12 @@
   line-height: 1.6;
 }
 
+.fieldSubmitted {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* ── Form section (feature flag) ────────────────────────────────────────────── */
 
 .formSection {
