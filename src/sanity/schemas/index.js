@@ -36,6 +36,8 @@ import trackRecord from './trackRecord'
 import investorRelations from './investorRelations'
 // Access Control
 import domainPrivilege from './domainPrivilege'
+// Contact form submissions
+import contactSubmission from './contactSubmission'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -78,4 +80,6 @@ export const schemaTypes = [
   investorRelations,
   // Access Control
   domainPrivilege,
+  // Contact form
+  contactSubmission,
 ]

@@ -36,6 +36,8 @@ import trackRecord from './schemas/trackRecord'
 import investorRelations from './schemas/investorRelations'
 // Access Control
 import domainPrivilege from './schemas/domainPrivilege'
+// Contact form submissions
+import contactSubmission from './schemas/contactSubmission'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -72,4 +74,6 @@ export const schemaTypes = [
   investorRelations,
   // Access Control
   domainPrivilege,
+  // Contact form
+  contactSubmission,
 ]
