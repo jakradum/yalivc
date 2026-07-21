@@ -60,7 +60,20 @@ export const YALI_HEAD_INJECT = `
   .head > div   { display: none !important; }
 
   /* ── Wrap ────────────────────────────────────────────────────────────── */
-  .wrap { background: #efefef; padding: 1.5rem; }
+  .wrap {
+    background: #efefef;
+    padding: 1.5rem;
+    min-height: calc(100vh - 52px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  /* Leave form card — constrain width so it doesn't stretch full-page */
+  .card { width: 100%; max-width: 560px; }
+  /* Dashboard main wrap — full-width, top-aligned content */
+  #app.wrap { align-items: stretch !important; justify-content: flex-start !important; }
 
   /* ── Section title ───────────────────────────────────────────────────── */
   .title {
@@ -250,9 +263,11 @@ export const YALI_HEAD_INJECT = `
 </style>`;
 
 export const YALI_NAV_HTML = `<nav class="yali-nav">
-  <span class="yn-label">Yali Capital</span>
+  <a href="/team/" style="display:flex;align-items:center;height:100%;text-decoration:none;flex-shrink:0;">
+    <img src="/favicon.svg" style="height:22px;width:auto;filter:brightness(0) invert(1);display:block;" alt="Yali">
+  </a>
   <span class="yn-sep"></span>
-  <a href="/team/" class="yn-title">Team Portal</a>
+  <span class="yn-title">Team</span>
 </nav>`;
 
 // Skeleton injected into the leave form — previews stats, tabs, and form fields.
