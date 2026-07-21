@@ -6,6 +6,10 @@ const sans = 'var(--font-inter, "Inter", Arial, sans-serif)';
 export default function TeamPage() {
   return (
     <div style={{ fontFamily: sans, minHeight: '100vh', background: '#efefef', color: '#363636' }}>
+      <style>{`
+        .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+      `}</style>
 
       {/* Nav bar — matches injected nav in leave/admin pages */}
       <div style={{
@@ -34,7 +38,7 @@ export default function TeamPage() {
         boxSizing: 'border-box',
       }}>
         <div style={{ width: '100%', maxWidth: 640 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div className="team-grid">
 
             {/* Leave / WFH card */}
             <a href="/team/leave" style={{ textDecoration: 'none', display: 'block' }}>

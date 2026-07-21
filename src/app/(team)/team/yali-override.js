@@ -204,6 +204,37 @@ export const YALI_HEAD_INJECT = `
 
   /* Auth error */
   .err { border: 1px solid #e0a0a0 !important; font-size: 13px !important; }
+
+  /* ── Skeleton shimmer ────────────────────────────────────────────────── */
+  @keyframes yali-shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+  }
+  .sk-shine {
+    background: linear-gradient(90deg, #e2e2e2 25%, #ececec 50%, #e2e2e2 75%);
+    background-size: 1200px 100%;
+    animation: yali-shimmer 1.4s infinite linear;
+  }
+  .sk-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .sk-stat  { background: #fff; border: 1px solid #363636; border-left: 3px solid #d4bec6; padding: 12px; }
+  .sk-lbl   { height: 9px; width: 55%; margin-bottom: 8px; }
+  .sk-val   { height: 22px; width: 38%; }
+  .sk-seg   { display: flex; border: 1px solid #363636; margin-bottom: 12px; overflow: hidden; }
+  .sk-tab   { height: 38px; flex: 1; border-right: 1px solid #363636; }
+  .sk-tab:last-child { border-right: none; }
+  .sk-form  { border: 1px solid #363636; border-top: 3px solid #d4bec6; padding: 20px; }
+  .sk-field-lbl { height: 9px; width: 42%; margin-bottom: 8px; }
+  .sk-field-inp { height: 36px; width: 100%; margin-bottom: 16px; border: 1px solid #d8d8d8; }
+  .sk-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sk-hint  { height: 9px; width: 80%; margin: 12px 0 16px; }
+  .sk-btn   { height: 40px; width: 100%; background: linear-gradient(90deg, #ccc0c4 25%, #d8d0d4 50%, #ccc0c4 75%) !important;
+              background-size: 1200px 100% !important; animation: yali-shimmer 1.4s infinite linear !important; }
+  /* apply shine class to all sk- elements except sk-btn (handled above) and containers */
+  .sk-lbl, .sk-val, .sk-tab, .sk-field-lbl, .sk-field-inp, .sk-hint {
+    background: linear-gradient(90deg, #e2e2e2 25%, #ececec 50%, #e2e2e2 75%);
+    background-size: 1200px 100%;
+    animation: yali-shimmer 1.4s infinite linear;
+  }
 </style>`;
 
 export const YALI_NAV_HTML = `<nav class="yali-nav">
@@ -211,3 +242,42 @@ export const YALI_NAV_HTML = `<nav class="yali-nav">
   <span class="yn-sep"></span>
   <a href="/team/" class="yn-title">Team Portal</a>
 </nav>`;
+
+// Skeleton injected into the leave form — previews stats, tabs, and form fields.
+// Inserted after #emp select via JS; hidden by MutationObserver when #panel shows.
+export const LEAVE_SKELETON_SCRIPT = `<script>
+(function() {
+  var skel = document.createElement('div');
+  skel.id = 'yali-skel';
+  skel.style.marginTop = '16px';
+  skel.innerHTML = [
+    '<div class="sk-stats">',
+      '<div class="sk-stat"><div class="sk-lbl"></div><div class="sk-val"></div></div>',
+      '<div class="sk-stat"><div class="sk-lbl"></div><div class="sk-val"></div></div>',
+    '</div>',
+    '<div class="sk-seg">',
+      '<div class="sk-tab"></div><div class="sk-tab"></div><div class="sk-tab"></div>',
+    '</div>',
+    '<div class="sk-form">',
+      '<div class="sk-field-lbl"></div>',
+      '<div class="sk-field-inp"></div>',
+      '<div class="sk-row">',
+        '<div><div class="sk-field-lbl"></div><div class="sk-field-inp"></div></div>',
+        '<div><div class="sk-field-lbl"></div><div class="sk-field-inp"></div></div>',
+      '</div>',
+      '<div class="sk-hint"></div>',
+      '<div class="sk-btn"></div>',
+    '</div>'
+  ].join('');
+
+  var emp = document.getElementById('emp');
+  if (emp) emp.parentNode.insertBefore(skel, emp.nextSibling);
+
+  var panel = document.getElementById('panel');
+  if (panel) {
+    new MutationObserver(function() {
+      skel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }).observe(panel, { attributes: true, attributeFilter: ['style'] });
+  }
+})();
+<\/script>`;
