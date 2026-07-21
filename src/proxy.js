@@ -168,29 +168,14 @@ export default async function middleware(request) {
     hostname.startsWith('team-'); // Vercel preview domains
 
   if (isTeamSubdomain) {
+    // Strip /team prefix if present (redirect to clean URL)
     if (url.pathname.startsWith('/team')) {
       const cleanPath = url.pathname.replace(/^\/team/, '') || '/';
       url.pathname = cleanPath;
       return NextResponse.redirect(url);
     }
 
-    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
-
-    if (url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
-      const signInUrl = new URL('/sign-in', request.url);
-      return NextResponse.redirect(signInUrl);
-    }
-
-    if (!isSignInPage) {
-      const sessionCookie = request.cookies.get(TEAM_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
-
-      if (!isValid) {
-        const signInUrl = new URL('/sign-in', request.url);
-        return NextResponse.redirect(signInUrl);
-      }
-    }
-
+    // No portal-level auth — dashboard app handles its own auth (Microsoft OAuth)
     const rewritePath = `/team${url.pathname === '/' ? '' : url.pathname}`;
     url.pathname = rewritePath;
 
@@ -199,25 +184,10 @@ export default async function middleware(request) {
     return response;
   }
 
-  // For main site, block access to /team routes (but allow in local dev)
+  // Block /team on main site (except local dev)
   if (url.pathname.startsWith('/team') && !isLocalDev) {
     url.pathname = '/';
     return NextResponse.redirect(url);
-  }
-
-  // Protect /team routes in local dev
-  if (url.pathname.startsWith('/team') && isLocalDev) {
-    const isSignInPage = url.pathname.startsWith('/team/sign-in');
-
-    if (!isSignInPage) {
-      const sessionCookie = request.cookies.get(TEAM_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
-
-      if (!isValid) {
-        const signInUrl = new URL('/team/sign-in', request.url);
-        return NextResponse.redirect(signInUrl);
-      }
-    }
   }
 
   // ── Dataroom subdomain ─────────────────────────────────────────────────────
