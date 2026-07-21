@@ -289,6 +289,10 @@
   align-items: center;
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-bottom: 1px solid #363636;
 }
 
@@ -1165,6 +1169,10 @@
   align-items: baseline;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-bottom: 1px solid #363636;
 }
 
@@ -1956,6 +1964,14 @@
   .coverNoteSection,
   .contentSection {
     padding: 1.5rem;
+  }
+
+  .sectionHeader,
+  .coverNoteHeader {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .coverNoteTitle,
