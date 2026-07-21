@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 const PORTAL_COOKIE_NAME = 'portal-session';
 const DATAROOM_COOKIE_NAME = 'dataroom-session';
+const TEAM_COOKIE_NAME = 'team-session';
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 
 // Constant-time string comparison to prevent timing attacks
@@ -156,6 +157,64 @@ export default async function middleware(request) {
 
       if (!isValid) {
         const signInUrl = new URL('/partners/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
+  }
+
+  // ── Team subdomain ────────────────────────────────────────────────────────
+  const isTeamSubdomain =
+    hostname.startsWith('team.') ||
+    hostname.startsWith('team-'); // Vercel preview domains
+
+  if (isTeamSubdomain) {
+    if (url.pathname.startsWith('/team')) {
+      const cleanPath = url.pathname.replace(/^\/team/, '') || '/';
+      url.pathname = cleanPath;
+      return NextResponse.redirect(url);
+    }
+
+    const isSignInPage = url.pathname === '/sign-in' || url.pathname.startsWith('/sign-in');
+
+    if (url.pathname === '/sign-up' || url.pathname.startsWith('/sign-up')) {
+      const signInUrl = new URL('/sign-in', request.url);
+      return NextResponse.redirect(signInUrl);
+    }
+
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(TEAM_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/sign-in', request.url);
+        return NextResponse.redirect(signInUrl);
+      }
+    }
+
+    const rewritePath = `/team${url.pathname === '/' ? '' : url.pathname}`;
+    url.pathname = rewritePath;
+
+    const response = NextResponse.rewrite(url);
+    response.headers.set('x-pathname', rewritePath);
+    return response;
+  }
+
+  // For main site, block access to /team routes (but allow in local dev)
+  if (url.pathname.startsWith('/team') && !isLocalDev) {
+    url.pathname = '/';
+    return NextResponse.redirect(url);
+  }
+
+  // Protect /team routes in local dev
+  if (url.pathname.startsWith('/team') && isLocalDev) {
+    const isSignInPage = url.pathname.startsWith('/team/sign-in');
+
+    if (!isSignInPage) {
+      const sessionCookie = request.cookies.get(TEAM_COOKIE_NAME)?.value;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
+
+      if (!isValid) {
+        const signInUrl = new URL('/team/sign-in', request.url);
         return NextResponse.redirect(signInUrl);
       }
     }
