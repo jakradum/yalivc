@@ -76,7 +76,7 @@ export default async function RootLayout({ children }) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className}${(isPortalRoute || isDataroomRoute || isTeamRoute) ? ' subdomain-body' : ''}`}>
         {(isPortalRoute || isDataroomRoute || isTeamRoute) ? (
           children
         ) : (

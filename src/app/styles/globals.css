@@ -85,6 +85,10 @@ body {
   background-color: #efefef;
 }
 
+body.subdomain-body {
+  padding: 0;
+}
+
 .page-wrapper {
   flex: 1;
   min-height: 100vh;
@@ -98,6 +102,9 @@ body {
 @media screen and (min-width: 950px) {
   body {
     padding-top: 3.5rem;
+  }
+  body.subdomain-body {
+    padding-top: 0;
   }
 }
 
