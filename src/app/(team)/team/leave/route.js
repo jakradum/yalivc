@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { YALI_HEAD_INJECT, YALI_NAV_HTML, LEAVE_SKELETON_SCRIPT } from '../yali-override.js';
+import { YALI_HEAD_INJECT, YALI_NAV_HTML, LEAVE_SKELETON_SCRIPT } from '../yali-override.js'; // v2
 
 export function GET() {
   let html = readFileSync(join(process.cwd(), 'public/team-apps/request-form.html'), 'utf-8');

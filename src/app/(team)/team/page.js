@@ -20,7 +20,9 @@ export default function TeamPage() {
         boxSizing: 'border-box',
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/favicon.svg" alt="Yali" style={{ height: 22, width: 'auto', filter: 'brightness(0) invert(1)', flexShrink: 0 }} />
+        <a href="/team/" style={{ display: 'flex', alignItems: 'center', height: '100%', textDecoration: 'none', flexShrink: 0 }}>
+          <img src="/favicon.svg" alt="Yali" style={{ height: 22, width: 'auto', filter: 'brightness(0) invert(1)', display: 'block' }} />
+        </a>
         <span style={{ width: 1, height: 16, background: 'rgba(239,239,239,0.25)', flexShrink: 0 }} />
         <span style={{ fontFamily: mono, fontSize: 13, fontWeight: 400, color: '#efefef' }}>
           Team
