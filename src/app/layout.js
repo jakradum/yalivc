@@ -69,6 +69,7 @@ export default async function RootLayout({ children }) {
   const pathname = headersList.get('x-pathname') || '';
   const isPortalRoute = pathname.startsWith('/partners');
   const isDataroomRoute = pathname.startsWith('/dataroom');
+  const isTeamRoute = pathname.startsWith('/team');
 
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
@@ -76,7 +77,7 @@ export default async function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={inter.className}>
-        {(isPortalRoute || isDataroomRoute) ? (
+        {(isPortalRoute || isDataroomRoute || isTeamRoute) ? (
           children
         ) : (
           <>
