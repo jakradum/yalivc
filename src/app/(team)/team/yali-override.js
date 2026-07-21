@@ -39,7 +39,7 @@ export const YALI_HEAD_INJECT = `
   /* ── Base ────────────────────────────────────────────────────────────── */
   /* Override the *{font-family:Overpass} with higher-specificity selector */
   body, body * { font-family: 'Inter', Arial, sans-serif; }
-  body { background: #efefef !important; color: #363636 !important; }
+  body { background: linear-gradient(135deg, #f8f7f5 0%, #e4dfd8 50%, #d8d2cb 100%) fixed !important; color: #363636 !important; }
 
   /* Remove all border-radius everywhere except pills (handled below) */
   body *, body *::before, body *::after { border-radius: 0 !important; }
@@ -61,7 +61,7 @@ export const YALI_HEAD_INJECT = `
 
   /* ── Wrap ────────────────────────────────────────────────────────────── */
   .wrap {
-    background: #efefef;
+    background: transparent;
     padding: 1.5rem;
     min-height: calc(100vh - 52px);
     display: flex;
@@ -305,6 +305,188 @@ export const LEAVE_SKELETON_SCRIPT = `<script>
     new MutationObserver(function() {
       skel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }).observe(panel, { attributes: true, attributeFilter: ['style'] });
+  }
+})();
+<\/script>`;
+
+// Redesigned PDF export — injected into admin dashboard, overrides the original generatePDF.
+// Matches Yali quarterly report style: warm #eeeceb background, JetBrains Mono headers,
+// crimson section labels with rule, white-card KPI strip, minimal table headers.
+export const YALI_ADMIN_PDF_SCRIPT = `<script>
+(function() {
+  var CRIMSON = [131, 13, 53];
+  var TEXT    = [54, 54, 54];
+  var GRAY    = [136, 136, 136];
+  var BG      = [238, 236, 235];
+  var BG2     = [229, 226, 223];
+  var ML = 36, MR = 36;
+
+  // Reuse fmtDate from dashboard scope if available, else define locally
+  var _fmt = typeof fmtDate !== 'undefined' ? fmtDate : function(s) {
+    if (!s) return '-';
+    var d = new Date(s);
+    var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + m[d.getMonth()] + " '" + String(d.getFullYear()).slice(2);
+  };
+
+  function newGeneratePDF() {
+    var jsPDF = (window.jspdf || {}).jsPDF;
+    if (!jsPDF) { alert('PDF library still loading, please try again.'); return; }
+
+    var d  = new jsPDF({ unit: 'pt', format: 'a4' });
+    var PW = d.internal.pageSize.getWidth();
+    var PH = d.internal.pageSize.getHeight();
+
+    var now = new Date();
+    var mo  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var stamp = now.getDate() + ' ' + mo[now.getMonth()] + ' ' + now.getFullYear()
+              + '  ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+    function drawBg() {
+      d.setFillColor.apply(d, BG); d.rect(0, 0, PW, PH, 'F');
+    }
+
+    function drawPageHeader() {
+      d.setFont('helvetica','bold'); d.setFontSize(8);
+      d.setTextColor.apply(d, CRIMSON);
+      d.text('YALI CAPITAL', ML, 26);
+
+      var bw = d.getStringUnitWidth('YALI CAPITAL') * 8 / d.internal.scaleFactor + 10;
+      d.setDrawColor.apply(d, CRIMSON); d.setLineWidth(0.75);
+      d.line(ML + bw, 21, PW - ML - 96, 21);
+
+      d.setFont('helvetica','normal'); d.setFontSize(7);
+      d.setTextColor.apply(d, GRAY);
+      d.text('LEAVE & WFH REPORT', PW - ML, 18, { align:'right' });
+      d.text(stamp, PW - ML, 28, { align:'right' });
+
+      d.setDrawColor(210,207,205); d.setLineWidth(0.4);
+      d.line(ML, 36, PW - MR, 36);
+    }
+
+    function sectionHeader(label, y) {
+      d.setFont('helvetica','bold'); d.setFontSize(7.5);
+      d.setTextColor.apply(d, CRIMSON);
+      d.text(label.toUpperCase(), ML, y);
+      d.setDrawColor.apply(d, CRIMSON); d.setLineWidth(0.5);
+      d.line(ML, y + 3, PW - MR, y + 3);
+      return y + 14;
+    }
+
+    function tableOpts(head, body, startY) {
+      return {
+        head:[head], body:body, startY:startY,
+        theme:'plain',
+        styles:{ font:'helvetica', fontSize:8.5,
+          cellPadding:{ top:5, right:8, bottom:5, left:8 },
+          textColor:TEXT, fillColor:false, lineWidth:0 },
+        headStyles:{ fontStyle:'bold', fontSize:7.5,
+          textColor:CRIMSON, fillColor:BG, lineWidth:0 },
+        alternateRowStyles:{ fillColor:BG2 },
+        margin:{ left:ML, right:MR, top:48 },
+        didDrawCell: function(data) {
+          if (data.section === 'head' && data.column.index === 0) {
+            d.setDrawColor.apply(d, CRIMSON); d.setLineWidth(0.75);
+            d.line(ML, data.cell.y, PW - MR, data.cell.y);
+            d.line(ML, data.cell.y + data.cell.height, PW - MR, data.cell.y + data.cell.height);
+          } else if (data.section === 'body' && data.column.index === 0) {
+            d.setDrawColor(210,207,205); d.setLineWidth(0.25);
+            d.line(ML, data.cell.y + data.cell.height, PW - MR, data.cell.y + data.cell.height);
+          }
+        },
+        didDrawPage: function(data) {
+          if (data.pageNumber > 1) { drawBg(); drawPageHeader(); }
+        },
+      };
+    }
+
+    // Page 1
+    drawBg(); drawPageHeader();
+
+    // KPI strip
+    var totPaid = employees.reduce(function(s,e){ return s+(+e.paidTaken||0); }, 0);
+    var totSick = employees.reduce(function(s,e){ return s+(+e.medicalTaken||0); }, 0);
+    var pending = requests.filter(function(r){ return r.status==='pending'; }).length;
+    var offWfh  = wfh.filter(function(w){ return w.offPattern; }).length;
+    var kpis = [
+      { l:'TEAM MEMBERS',        v:String(employees.length) },
+      { l:'PAID LEAVE TAKEN',    v:String(totPaid)          },
+      { l:'SICK / CASUAL TAKEN', v:String(totSick)          },
+      { l:'PENDING APPROVALS',   v:String(pending)          },
+    ];
+    var y = 48;
+    var kW = (PW - ML - MR - 12) / 4;
+    kpis.forEach(function(k, i) {
+      var x = ML + i * (kW + 4);
+      d.setFillColor(255,255,255); d.rect(x, y, kW, 42, 'F');
+      d.setFillColor.apply(d, CRIMSON); d.rect(x, y, 2.5, 42, 'F');
+      d.setFont('helvetica','bold'); d.setFontSize(6.5);
+      d.setTextColor.apply(d, CRIMSON); d.text(k.l, x+8, y+12);
+      d.setFont('helvetica','bold'); d.setFontSize(18);
+      d.setTextColor.apply(d, TEXT); d.text(k.v, x+8, y+32);
+    });
+    y += 56;
+
+    // Leave balances
+    y = sectionHeader('Leave balances', y);
+    var balBody = employees.slice().sort(function(a,b){ return String(a.name).localeCompare(String(b.name)); }).map(function(e) {
+      var pe=+e.paidEntitlement||0, pt=+e.paidTaken||0, me=+e.medicalEntitlement||0, mt=+e.medicalTaken||0;
+      return [e.name, e.department||'', String(pt), String(pe-pt), String(mt), String(me-mt)];
+    });
+    d.autoTable(tableOpts(['Employee','Department','Paid taken','Paid remaining','Sick taken','Sick remaining'],
+      balBody.length ? balBody : [['-','-','-','-','-','-']], y));
+
+    // Leave requests
+    y = d.lastAutoTable.finalY + 16;
+    y = sectionHeader('Leave requests', y);
+    var ord = { 'pending':0, 'auto-approved':1, 'approved':1, 'rejected':2 };
+    var reqBody = requests.slice().sort(function(a,b){ return ((ord[a.status]||9)-(ord[b.status]||9)); }).map(function(r) {
+      return [r.name, r.type==='medical'?'Sick / Casual':'Paid',
+              _fmt(r.from)+' to '+_fmt(r.to), String(r.days), r.reason||'', r.status||''];
+    });
+    d.autoTable(tableOpts(['Employee','Type','Dates','Days','Reason','Status'],
+      reqBody.length ? reqBody : [['-','-','-','-','-','-']], y));
+
+    // WFH log
+    y = d.lastAutoTable.finalY + 16;
+    y = sectionHeader('WFH log', y);
+    var wfhBody = wfh.slice().sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).map(function(w) {
+      return [w.name, w.department||'', _fmt(w.date), w.weekday||'', w.offPattern?'Off-pattern':'Normal'];
+    });
+    d.autoTable(tableOpts(['Employee','Department','Date','Day','Pattern'],
+      wfhBody.length ? wfhBody : [['-','-','-','-','-']], y));
+
+    // Weekend log
+    y = d.lastAutoTable.finalY + 16;
+    y = sectionHeader('Weekend days off', y);
+    var wkBody = weekend.slice().sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).map(function(w) {
+      return [w.name, w.department||'', _fmt(w.date), w.weekday||'', w.weekKey||''];
+    });
+    d.autoTable(tableOpts(['Employee','Department','Date','Day','Week'],
+      wkBody.length ? wkBody : [['-','-','-','-','-']], y));
+
+    // Footers on all pages
+    var np = d.internal.getNumberOfPages();
+    for (var i = 1; i <= np; i++) {
+      d.setPage(i);
+      d.setFont('helvetica','normal'); d.setFontSize(7);
+      d.setTextColor.apply(d, GRAY);
+      d.text('YALI CAPITAL — CONFIDENTIAL   |   Page ' + i + ' of ' + np,
+             PW / 2, PH - 16, { align:'center' });
+    }
+
+    var fn = 'yali-leave-report-' + now.getFullYear()
+           + String(now.getMonth()+1).padStart(2,'0')
+           + String(now.getDate()).padStart(2,'0') + '.pdf';
+    d.save(fn);
+  }
+
+  // Swap out the button's event listener
+  var btn = document.getElementById('download-pdf');
+  if (btn) {
+    var nb = btn.cloneNode(true);
+    btn.parentNode.replaceChild(nb, btn);
+    nb.addEventListener('click', newGeneratePDF);
   }
 })();
 <\/script>`;

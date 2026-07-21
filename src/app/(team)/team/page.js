@@ -5,7 +5,7 @@ const sans = 'var(--font-inter, "Inter", Arial, sans-serif)';
 
 export default function TeamPage() {
   return (
-    <div style={{ fontFamily: sans, minHeight: '100vh', background: '#efefef', color: '#363636' }}>
+    <div style={{ fontFamily: sans, minHeight: '100vh', background: 'linear-gradient(135deg, #f8f7f5 0%, #e4dfd8 50%, #d8d2cb 100%)', color: '#363636' }}>
       <style>{`
         .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
