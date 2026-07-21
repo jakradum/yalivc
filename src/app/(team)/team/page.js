@@ -19,12 +19,11 @@ export default function TeamPage() {
         borderBottom: '1px solid #363636',
         boxSizing: 'border-box',
       }}>
-        <span style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(235,222,132,0.85)', flexShrink: 0 }}>
-          Yali Capital
-        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/favicon.svg" alt="Yali" style={{ height: 22, width: 'auto', filter: 'brightness(0) invert(1)', flexShrink: 0 }} />
         <span style={{ width: 1, height: 16, background: 'rgba(239,239,239,0.25)', flexShrink: 0 }} />
         <span style={{ fontFamily: mono, fontSize: 13, fontWeight: 400, color: '#efefef' }}>
-          Team Portal
+          Team
         </span>
       </div>
 
@@ -45,7 +44,7 @@ export default function TeamPage() {
               <div style={{
                 border: '1px solid #363636',
                 borderTop: '3px solid #830d35',
-                background: '#ffffff',
+                background: 'rgba(255,255,255,0.88)',
                 padding: '28px 24px',
                 height: '100%',
                 boxSizing: 'border-box',
@@ -67,7 +66,7 @@ export default function TeamPage() {
               <div style={{
                 border: '1px solid #363636',
                 borderTop: '3px solid #830d35',
-                background: '#ffffff',
+                background: 'rgba(255,255,255,0.88)',
                 padding: '28px 24px',
                 height: '100%',
                 boxSizing: 'border-box',
