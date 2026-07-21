@@ -3,14 +3,16 @@ export const metadata = { title: 'Yali Team Portal' };
 export default function TeamPage() {
   return (
     <div style={{ fontFamily: 'var(--font-inter, sans-serif)', minHeight: '100vh', background: '#efefef', color: '#363636' }}>
-      {/* Header */}
-      <div style={{ background: '#830d35', padding: '24px 40px 28px' }}>
-        <div style={{ fontFamily: 'var(--font-jetbrains-mono, monospace)', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(235,222,132,0.8)', marginBottom: 14 }}>
+
+      {/* Nav bar */}
+      <div style={{ background: '#830d35', height: 52, display: 'flex', alignItems: 'center', padding: '0 28px', gap: 14, borderBottom: '1px solid rgba(0,0,0,0.15)' }}>
+        <span style={{ fontFamily: 'var(--font-jetbrains-mono, monospace)', fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(235,222,132,0.8)', flexShrink: 0 }}>
           Yali Capital
-        </div>
-        <h1 style={{ fontFamily: 'var(--font-jetbrains-mono, monospace)', fontSize: 26, fontWeight: 400, color: '#efefef', margin: 0, lineHeight: 1.2 }}>
+        </span>
+        <span style={{ width: 1, height: 16, background: 'rgba(239,239,239,0.2)', flexShrink: 0 }} />
+        <span style={{ fontFamily: 'var(--font-jetbrains-mono, monospace)', fontSize: 13, fontWeight: 400, color: '#efefef' }}>
           Team Portal
-        </h1>
+        </span>
       </div>
 
       {/* Full-width divider */}
@@ -21,7 +23,7 @@ export default function TeamPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
 
           {/* Leave / WFH card */}
-          <a href="/team-apps/request-form.html" style={{ textDecoration: 'none', display: 'block' }}>
+          <a href="/team/leave" style={{ textDecoration: 'none', display: 'block' }}>
             <div style={{
               border: '1px solid #363636',
               background: '#ffffff',
@@ -43,7 +45,7 @@ export default function TeamPage() {
           </a>
 
           {/* Admin dashboard card */}
-          <a href="/team-apps/dashboard.html" style={{ textDecoration: 'none', display: 'block' }}>
+          <a href="/team/admin" style={{ textDecoration: 'none', display: 'block' }}>
             <div style={{
               border: '1px solid #363636',
               background: '#ffffff',
