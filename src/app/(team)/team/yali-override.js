@@ -44,8 +44,20 @@ export const YALI_HEAD_INJECT = `
   /* Remove all border-radius everywhere except pills (handled below) */
   body *, body *::before, body *::after { border-radius: 0 !important; }
 
-  /* ── Hide original header (yali-nav replaces it) ─────────────────────── */
-  .head { display: none !important; }
+  /* ── Hide original header branding; keep action buttons ─────────────── */
+  /* .head contains logo + title div + Download PDF btn + Sign out btn.
+     Hide only the branding elements; surface the buttons in a toolbar row. */
+  .head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    padding: 12px 0 8px !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  .head img.logo { display: none !important; }
+  .head > div   { display: none !important; }
 
   /* ── Wrap ────────────────────────────────────────────────────────────── */
   .wrap { background: #efefef; padding: 1.5rem; }
