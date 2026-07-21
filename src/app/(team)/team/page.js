@@ -27,8 +27,11 @@ export default function TeamPage() {
       {/* Centred content */}
       <div style={{
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
-        padding: '60px 24px',
+        minHeight: 'calc(100vh - 52px)',
+        padding: '40px 24px',
+        boxSizing: 'border-box',
       }}>
         <div style={{ width: '100%', maxWidth: 640 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
