@@ -39,7 +39,7 @@
   flex: 1;
   padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
-  border: 1px solid #ccc;
+  border: 1px solid #363636;
   border-radius: 0;
   outline: none;
   transition: border-color 0.2s ease;
@@ -102,7 +102,7 @@
 .mediaKitLink {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #363636;
   display: flex;
   align-items: center;
   justify-content: center;

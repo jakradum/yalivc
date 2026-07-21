@@ -1,4 +1,4 @@
-// Shared CSS override injected into both team HTML apps.
+// Shared CSS + script overrides injected into the team HTML apps (leave form, admin dashboard).
 // Applied after the original <style> block so cascade wins without !important on most rules.
 // Where the original uses a * selector we need !important or higher specificity.
 
@@ -39,7 +39,7 @@ export const YALI_HEAD_INJECT = `
   /* ── Base ────────────────────────────────────────────────────────────── */
   /* Override the *{font-family:Overpass} with higher-specificity selector */
   body, body * { font-family: 'Inter', Arial, sans-serif; }
-  body { background: linear-gradient(135deg, #f8f7f5 0%, #e4dfd8 50%, #d8d2cb 100%) fixed !important; color: #363636 !important; }
+  body { background: linear-gradient(135deg,#f8f7f5 0%,#e4dfd8 50%,#d8d2cb 100%) fixed !important; color: #363636 !important; }
 
   /* Remove all border-radius everywhere except pills (handled below) */
   body *, body *::before, body *::after { border-radius: 0 !important; }
