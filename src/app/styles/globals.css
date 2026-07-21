@@ -126,18 +126,21 @@ nav, .nav-item {
   letter-spacing: 0.01rem;
 }
 
-/* Force Inter specifically on body text elements that might inherit Arial */
-p, span, div:not([class*="header"]):not([class*="title"]) {
+/* Force Inter on main-site body text — scoped to main site only so subdomain portals
+   can set their own fonts via inline styles or CSS modules without !important fights. */
+body:not(.subdomain-body) p,
+body:not(.subdomain-body) span,
+body:not(.subdomain-body) div:not([class*="header"]):not([class*="title"]) {
   font-family: var(--font-inter) !important;
 }
 
-/* Buttons and form elements */
-button, input, textarea{
+body:not(.subdomain-body) button,
+body:not(.subdomain-body) input,
+body:not(.subdomain-body) textarea {
   font-family: var(--font-inter) !important;
 }
 
-/* Links */
-a {
+body:not(.subdomain-body) a {
   font-family: var(--font-inter) !important;
 }
 
