@@ -250,7 +250,9 @@ ${submissionList}`,
 
   let classifications = [];
   try {
-    classifications = JSON.parse(haikuRes.content[0].text);
+    // Strip markdown code fences the model sometimes wraps around JSON output
+    const raw = haikuRes.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    classifications = JSON.parse(raw);
   } catch {
     // Haiku response unparseable — send everything to digest unclassified
     classifications = submissions.map((s) => ({
