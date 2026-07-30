@@ -975,6 +975,13 @@ export function generatePdfHtml({
       return past?.tableFootnotes || null;
     }
 
+    // Returns superscript HTML for a footnote marker tied to a specific table field.
+    function fnMarker(tableType, fieldName) {
+      const fns = effectiveFootnotes(tableType);
+      const fn = fns?.find(f => f.tableType === tableType && f.fieldName === fieldName && f.marker);
+      return fn ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(fn.marker)}</sup>` : '';
+    }
+
     const snapshotFootnotes = renderTableFootnotes(effectiveFootnotes('snapshot'), 'snapshot');
     const defaultMoicFootnote = roundMoics.length > 0 && !snapshotFootnotes
       ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
@@ -1030,13 +1037,13 @@ export function generatePdfHtml({
       roundMoics.forEach(rm => { roundMoicsMap[rm.roundName] = rm.moic; });
 
       const rdFields = [
-        ['Pre-money valuation', r => r.preMoneyValuation != null ? fmtCr(r.preMoneyValuation) : '—'],
-        ['Total round size', r => r.totalRoundSize != null ? fmtCr(r.totalRoundSize) : '—'],
-        ['Post-money valuation', r => r.postMoneyValuation != null ? fmtCr(r.postMoneyValuation) : '—'],
-        ["Yali's investment", r => r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'],
-        ["Yali's ownership in %", r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
+        ['Pre-money valuation', 'rounds-premoney', r => r.preMoneyValuation != null ? fmtCr(r.preMoneyValuation) : '—'],
+        ['Total round size', 'rounds-size', r => r.totalRoundSize != null ? fmtCr(r.totalRoundSize) : '—'],
+        ['Post-money valuation', 'rounds-postmoney', r => r.postMoneyValuation != null ? fmtCr(r.postMoneyValuation) : '—'],
+        ["Yali's investment", 'rounds-yali-investment', r => r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'],
+        ["Yali's ownership in %", 'rounds-ownership', r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
         ...(Object.keys(roundMoicsMap).length > 0
-          ? [['MOIC', r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
+          ? [['MOIC', null, r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
           : []),
       ];
 
@@ -1047,8 +1054,8 @@ export function generatePdfHtml({
           <div class="section-heading" style="font-size:16px;">Investment round details</div>
         </td></tr>
         ${flexTr(['Stage', ...allRounds.map(r => esc(r.roundLabel || roundNameToLabel(r.roundName)))], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
-        ${rdFields.map(([label, getValue], i) =>
-          flexTr([esc(label), ...allRounds.map(r => esc(String(getValue(r))))], {
+        ${rdFields.map(([label, fieldName, getValue], i) =>
+          flexTr([esc(label) + (fieldName ? fnMarker('rounds', fieldName) : ''), ...allRounds.map(r => esc(String(getValue(r))))], {
             bottomBorder: i === rdFields.length - 1 ? 'thick' : 'thin',
           })
         ).join('')}
@@ -1062,17 +1069,21 @@ export function generatePdfHtml({
       const financialsFootnotes = renderTableFootnotes(effectiveFootnotes('financials'), 'financials');
 
       const finDataRows = [];
+      const finDataFieldNames = [];
       if (hasRevPat) {
         finDataRows.push(['Revenue', ...financialsUpdates.map(u =>
           u.revenueConfidential ? '**' : (u.revenueINR != null ? fmt(u.revenueINR) : '—'))]);
+        finDataFieldNames.push('financials-revenue');
         finDataRows.push(['PAT', ...financialsUpdates.map(u => {
           if (u.patConfidential) return '**';
           if (u.patINR == null) return '—';
           return u.patINR < 0 ? `(${fmt(Math.abs(u.patINR))})` : fmt(u.patINR);
         })]);
+        finDataFieldNames.push('financials-pat');
       }
       kmItems.forEach(km => {
         finDataRows.push([esc(km.label || ''), esc(km.value || ''), ...financialsUpdates.slice(1).map(() => '—')]);
+        finDataFieldNames.push('financials-metric');
       });
 
       finTrRows = `
@@ -1080,9 +1091,11 @@ export function generatePdfHtml({
           <div class="section-heading" style="font-size:16px;">Financials / Key matrix</div>
         </td></tr>
         ${flexTr(['Particulars', ...qLabels], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
-        ${finDataRows.map((cells, i) =>
-          flexTr(cells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' })
-        ).join('')}
+        ${finDataRows.map((cells, i) => {
+          const fieldName = finDataFieldNames[i];
+          const markedCells = [cells[0] + (fieldName ? fnMarker('financials', fieldName) : ''), ...cells.slice(1)];
+          return flexTr(markedCells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' });
+        }).join('')}
         <tr><td style="padding: 4px 40px 0;">
           <div class="footnote">All figures in ₹ Cr</div>
           ${financialsFootnotes}
@@ -1114,16 +1127,16 @@ export function generatePdfHtml({
         </div>
         <table class="report-table">
           <tbody>
-            <tr><td style="width:55%;">Latest funding round</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
+            <tr><td style="width:55%;">Latest funding round${fnMarker('snapshot', 'snapshot-latest-round')}</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
             ${allRounds.length > 0 ? `
               <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
               ${roundsRows}` : ''}
-            <tr><td>Total investment</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
-            <tr><td>Ownership (FD)</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
-            <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
+            <tr><td>Total investment${fnMarker('snapshot', 'snapshot-total-investment')}</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
+            <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
+            <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
             ${roundMoicRows}
-            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
-            ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
+            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}${fnMarker('snapshot', 'snapshot-moic')}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
+            ${coInvestors.length > 0 ? `<tr><td>Key co-investors${fnMarker('snapshot', 'snapshot-coinvestors')}</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
           </tbody>
         </table>
         ${snapshotFootnotes || defaultMoicFootnote}
