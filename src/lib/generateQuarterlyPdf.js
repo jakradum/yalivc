@@ -74,15 +74,13 @@ function fmtMonthYear(dateStr) {
   const d = new Date(dateStr);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  return `${months[d.getMonth()]} ${d.getFullYear()}`;
+  const yr = String(d.getFullYear()).slice(2);
+  return `${months[d.getMonth()]} '${yr}`;
 }
 
-// e.g. Q3 + FY26 → "Q3 2025-26"
+// e.g. Q3 + FY26 → "Q3 FY26"
 function quarterFYLabel(quarter, fiscalYear) {
-  const fyNum = parseInt((fiscalYear || 'FY26').replace('FY', ''), 10);
-  const endYear = fyNum < 50 ? 2000 + fyNum : 1900 + fyNum;
-  const startYear = endYear - 1;
-  return `${quarter} ${startYear}-${String(endYear).slice(2)}`;
+  return `${quarter} ${fiscalYear || 'FY26'}`;
 }
 
 function roundNameToLabel(roundName) {
@@ -803,8 +801,6 @@ export function generatePdfHtml({
         <div style="margin-top: 32px;">
           <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
           <div class="confidentiality-box" style="margin-top: 12px;">
-            <p>Dear Limited Partner,</p>
-            <br>
             <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
           </div>
         </div>
@@ -827,18 +823,18 @@ export function generatePdfHtml({
         <thead>
           <tr>
             <th style="width: 65%;">As of ${esc(asOf)}</th>
-            <th>Amount in ₹ crores</th>
+            <th>Amount</th>
           </tr>
         </thead>
         <tbody>
           <tr><td>First close date</td><td>${fmtDate(fundSettings?.firstCloseDate)}</td></tr>
           <tr><td>Final close date</td><td>${fmtDate(fundSettings?.finalCloseDate)}</td></tr>
-          <tr><td>Combined fund size</td><td>${fundSettings?.targetFundSizeINR != null ? fmt(fundSettings.targetFundSizeINR) : (fundSettings?.fundSizeAtClose ? fmt(fundSettings.fundSizeAtClose) : '—')}</td></tr>
-          <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
-          <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
-          <tr><td>Fair Market Value of Portfolio Investments (including realised value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
+          <tr><td>Combined fund size</td><td>${fundSettings?.targetFundSizeINR != null ? fmtCr(fundSettings.targetFundSizeINR) : (fundSettings?.fundSizeAtClose ? fmtCr(fundSettings.fundSizeAtClose) : '—')}</td></tr>
+          <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmtCr(fundMetrics.amountDrawnDown) : '—'}</td></tr>
+          <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmtCr(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
+          <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmtCr(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
           <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}</td></tr>
-          <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmt(fundMetrics.amountReturned) : '—'}</td></tr>
+          <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmtCr(fundMetrics.amountReturned) : '—'}</td></tr>
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
           <tr><td>TVPI</td><td>${fundMetrics.tvpi != null ? fmt(fundMetrics.tvpi) + 'x' : '—'}</td></tr>
           <tr><td>DPI</td><td>${fundMetrics.dpi != null ? fmt(fundMetrics.dpi) + 'x' : '—'}</td></tr>
@@ -856,17 +852,17 @@ export function generatePdfHtml({
   const portInvPageNum = nextPageNum(); // 6
 
   const portInvRows = sortedCompanies.map((c, idx) => {
-    const entityName = c.entityName || c.name;
+    const displayName = c.name || c.entityName;
     const totalInv = getTotalInvestment(c);
     const ownership = c.quarterData?.currentOwnershipPercent ?? getLatestOwnership(c);
     const ownershipConf = c.quarterData?.currentOwnershipConfidential;
     return `
       <tr>
         <td>${idx + 1}</td>
-        <td>${esc(entityName)}</td>
+        <td>${esc(displayName)}</td>
         <td>${esc(c.sector || '—')}</td>
         <td>${fmtDate(getInitialInvestmentDate(c))}</td>
-        <td>${totalInv ? fmt(totalInv) : '—'}</td>
+        <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
         <td>${ownershipConf ? '**' : fmtPct(ownership)}</td>
       </tr>`;
   }).join('');
@@ -885,7 +881,7 @@ export function generatePdfHtml({
             <th style="width:30%;">Company</th>
             <th style="width:20%;">Sector</th>
             <th style="width:15%;">Initial Investment Date</th>
-            <th style="width:13%;">Amount in ₹ (Crores)</th>
+            <th style="width:13%;">Yali investment</th>
             <th style="width:14%;">Fully Diluted Ownership (%)</th>
           </tr>
         </thead>
@@ -953,7 +949,7 @@ export function generatePdfHtml({
     const roundsRows = allRounds.map(r => {
       const label = r.roundLabel || roundNameToLabel(r.roundName);
       const dateStr = r.investmentDate ? fmtMonthYear(r.investmentDate) : '';
-      return `<tr><td>• ${esc(label)}${dateStr ? ` (${esc(dateStr)})` : ''}</td><td>${r.yaliInvestment != null ? fmt(r.yaliInvestment) : '—'}</td></tr>`;
+      return `<tr><td>• ${esc(label)}${dateStr ? ` (${esc(dateStr)})` : ''}</td><td>${r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'}</td></tr>`;
     }).join('');
 
     const roundMoicRows = roundMoics.map(rm => {
@@ -1023,10 +1019,10 @@ export function generatePdfHtml({
       roundMoics.forEach(rm => { roundMoicsMap[rm.roundName] = rm.moic; });
 
       const rdFields = [
-        ['Pre-money valuation', r => r.preMoneyValuation != null ? fmt(r.preMoneyValuation) : '—'],
-        ['Total round size', r => r.totalRoundSize != null ? fmt(r.totalRoundSize) : '—'],
-        ['Post-money valuation', r => r.postMoneyValuation != null ? fmt(r.postMoneyValuation) : '—'],
-        ["Yali's investment", r => r.yaliInvestment != null ? fmt(r.yaliInvestment) : '—'],
+        ['Pre-money valuation', r => r.preMoneyValuation != null ? fmtCr(r.preMoneyValuation) : '—'],
+        ['Total round size', r => r.totalRoundSize != null ? fmtCr(r.totalRoundSize) : '—'],
+        ['Post-money valuation', r => r.postMoneyValuation != null ? fmtCr(r.postMoneyValuation) : '—'],
+        ["Yali's investment", r => r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'],
         ["Yali's ownership in %", r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
         ...(Object.keys(roundMoicsMap).length > 0
           ? [['MOIC', r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
@@ -1045,10 +1041,7 @@ export function generatePdfHtml({
             bottomBorder: i === rdFields.length - 1 ? 'thick' : 'thin',
           })
         ).join('')}
-        <tr><td style="padding: 4px 40px 0;">
-          <div class="footnote">All figures except percentages are in ₹ crore</div>
-          ${roundsFootnotes}
-        </td></tr>`;
+        ${roundsFootnotes ? `<tr><td style="padding: 4px 40px 0;">${roundsFootnotes}</td></tr>` : ''}`;
     }
 
     let finTrRows = '';
@@ -1060,11 +1053,11 @@ export function generatePdfHtml({
       const finDataRows = [];
       if (hasRevPat) {
         finDataRows.push(['Revenue', ...financialsUpdates.map(u =>
-          u.revenueConfidential ? '**' : (u.revenueINR != null ? fmt(u.revenueINR) : '—'))]);
+          u.revenueConfidential ? '**' : (u.revenueINR != null ? fmtCr(u.revenueINR) : '—'))]);
         finDataRows.push(['PAT', ...financialsUpdates.map(u => {
           if (u.patConfidential) return '**';
           if (u.patINR == null) return '—';
-          return u.patINR < 0 ? `(${fmt(Math.abs(u.patINR))})` : fmt(u.patINR);
+          return u.patINR < 0 ? `(${fmtCr(Math.abs(u.patINR))})` : fmtCr(u.patINR);
         })]);
       }
       kmItems.forEach(km => {
@@ -1079,10 +1072,7 @@ export function generatePdfHtml({
         ${finDataRows.map((cells, i) =>
           flexTr(cells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' })
         ).join('')}
-        <tr><td style="padding: 4px 40px 0;">
-          <div class="footnote">All figures except percentages are in ₹ crore</div>
-          ${financialsFootnotes}
-        </td></tr>`;
+        ${financialsFootnotes ? `<tr><td style="padding: 4px 40px 0;">${financialsFootnotes}</td></tr>` : ''}`;
     }
 
     // Structure: one large first <tr> holds all narrative content so Chrome
@@ -1114,9 +1104,9 @@ export function generatePdfHtml({
             ${allRounds.length > 0 ? `
               <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
               ${roundsRows}` : ''}
-            <tr><td>Total investment</td><td>${totalInv ? fmt(totalInv) : '—'}</td></tr>
+            <tr><td>Total investment</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
             <tr><td>Ownership (FD)</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
-            <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmt(fmv) : '—')}</td></tr>
+            <tr><td>Current FMV</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
             ${roundMoicRows}
             <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
             ${coInvestors.length > 0 ? `<tr><td>Key co-investors</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
