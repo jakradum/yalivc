@@ -484,7 +484,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         {round.roundLabel || formatRound(round.roundName)}
                         {round.investmentDate && (
                           <span className={styles.roundDate}>
-                            {' '}({new Date(round.investmentDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })})
+                            {' '}({(() => { const d = new Date(round.investmentDate); return `${d.toLocaleString('en-IN', { month: 'short' })} '${String(d.getFullYear()).slice(2)}`; })()})
                           </span>
                         )}
                       </span>
@@ -629,25 +629,25 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         <tr>
                           <td>Pre-money valuation</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.preMoneyValuation ? <>{formatCurrency(round.preMoneyValuation)}{getRoundsFootnoteMarker('rounds-premoney')}</> : '-'}</td>
+                            <td key={idx}>{round.preMoneyValuation ? <>&#8377;{formatCurrency(round.preMoneyValuation)} Cr{getRoundsFootnoteMarker('rounds-premoney')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>Total round size</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.totalRoundSize ? <>{formatCurrency(round.totalRoundSize)}{getRoundsFootnoteMarker('rounds-size')}</> : '-'}</td>
+                            <td key={idx}>{round.totalRoundSize ? <>&#8377;{formatCurrency(round.totalRoundSize)} Cr{getRoundsFootnoteMarker('rounds-size')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>Post-money valuation</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.postMoneyValuation ? <>{formatCurrency(round.postMoneyValuation)}{getRoundsFootnoteMarker('rounds-postmoney')}</> : '-'}</td>
+                            <td key={idx}>{round.postMoneyValuation ? <>&#8377;{formatCurrency(round.postMoneyValuation)} Cr{getRoundsFootnoteMarker('rounds-postmoney')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>Yali&apos;s investment</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{round.yaliInvestment ? <>{formatCurrency(round.yaliInvestment)}{getRoundsFootnoteMarker('rounds-yali-investment')}</> : '-'}</td>
+                            <td key={idx}>{round.yaliInvestment ? <>&#8377;{formatCurrency(round.yaliInvestment)} Cr{getRoundsFootnoteMarker('rounds-yali-investment')}</> : '-'}</td>
                           ))}
                         </tr>
                         <tr>
@@ -670,20 +670,17 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </tbody>
                     </table>
                   </div>
-                  <div className={styles.tableFootnoteContainer}>
-                    <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
-                    {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
-                      <div className={styles.customFootnotes}>
-                        {latestQuarter.tableFootnotes
-                          .filter(fn => fn.fieldName?.startsWith('rounds-'))
-                          .map((fn, idx) => (
-                            <p key={idx} className={styles.tableFootnote}>
-                              <sup>{fn.marker}</sup> {fn.text}
-                            </p>
-                          ))}
-                      </div>
-                    )}
-                  </div>
+                  {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
+                    <div className={styles.tableFootnoteContainer}>
+                      {latestQuarter.tableFootnotes
+                        .filter(fn => fn.fieldName?.startsWith('rounds-'))
+                        .map((fn, idx) => (
+                          <p key={idx} className={styles.tableFootnote}>
+                            <sup>{fn.marker}</sup> {fn.text}
+                          </p>
+                        ))}
+                    </div>
+                  )}
                 </div>
               );
             })()}
@@ -708,13 +705,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 return footnote ? <sup>{footnote.marker}</sup> : null;
               };
 
-              // Format FY label: FY26 -> 2025-26
-              const formatFYLabel = (quarter, fy) => {
-                if (!fy) return `${quarter}`;
-                const yearNum = parseInt(fy.replace('FY', ''), 10);
-                const fullYear = yearNum < 50 ? 2000 + yearNum : 1900 + yearNum;
-                return `${quarter} ${fullYear - 1}-${String(fullYear).slice(2)}`;
-              };
+              const formatFYLabel = (quarter, fy) => `${quarter} ${fy || ''}`;
 
               // Format PAT: negative in parentheses
               const formatPAT = (value) => {
@@ -740,32 +731,29 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         <tr>
                           <td>Revenue</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.revenueConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-revenue')}</> : (q.revenueINR != null ? q.revenueINR.toFixed(2) : '-')}</td>
+                            <td key={idx}>{q.revenueConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-revenue')}</> : (q.revenueINR != null ? <>&#8377;{q.revenueINR.toFixed(2)} Cr</> : '-')}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>PAT</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.patConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-pat')}</> : formatPAT(q.patINR)}</td>
+                            <td key={idx}>{q.patConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-pat')}</> : (q.patINR != null ? (q.patINR < 0 ? <>(&#8377;{Math.abs(q.patINR).toFixed(2)} Cr)</> : <>&#8377;{q.patINR.toFixed(2)} Cr</>) : '-')}</td>
                           ))}
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <div className={styles.tableFootnoteContainer}>
-                    <p className={styles.tableFootnote}>All figures except percentages are in ₹ crore</p>
-                    {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
-                      <div className={styles.customFootnotes}>
-                        {latestQuarter.tableFootnotes
-                          .filter(fn => fn.fieldName?.startsWith('financials-'))
-                          .map((fn, idx) => (
-                            <p key={idx} className={styles.tableFootnote}>
-                              <sup>{fn.marker}</sup> {fn.text}
-                            </p>
-                          ))}
-                      </div>
-                    )}
-                  </div>
+                  {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
+                    <div className={styles.tableFootnoteContainer}>
+                      {latestQuarter.tableFootnotes
+                        .filter(fn => fn.fieldName?.startsWith('financials-'))
+                        .map((fn, idx) => (
+                          <p key={idx} className={styles.tableFootnote}>
+                            <sup>{fn.marker}</sup> {fn.text}
+                          </p>
+                        ))}
+                    </div>
+                  )}
                 </div>
               );
             })()}
