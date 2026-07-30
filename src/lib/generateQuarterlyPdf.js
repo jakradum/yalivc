@@ -852,7 +852,7 @@ export function generatePdfHtml({
   const portInvPageNum = nextPageNum(); // 6
 
   const portInvRows = sortedCompanies.map((c, idx) => {
-    const displayName = c.name || c.entityName;
+    const displayName = c.entityName || c.name;
     const totalInv = getTotalInvestment(c);
     const ownership = c.quarterData?.currentOwnershipPercent ?? getLatestOwnership(c);
     const ownershipConf = c.quarterData?.currentOwnershipConfidential;
@@ -1064,11 +1064,11 @@ export function generatePdfHtml({
       const finDataRows = [];
       if (hasRevPat) {
         finDataRows.push(['Revenue', ...financialsUpdates.map(u =>
-          u.revenueConfidential ? '**' : (u.revenueINR != null ? fmtCr(u.revenueINR) : '—'))]);
+          u.revenueConfidential ? '**' : (u.revenueINR != null ? fmt(u.revenueINR) : '—'))]);
         finDataRows.push(['PAT', ...financialsUpdates.map(u => {
           if (u.patConfidential) return '**';
           if (u.patINR == null) return '—';
-          return u.patINR < 0 ? `(${fmtCr(Math.abs(u.patINR))})` : fmtCr(u.patINR);
+          return u.patINR < 0 ? `(${fmt(Math.abs(u.patINR))})` : fmt(u.patINR);
         })]);
       }
       kmItems.forEach(km => {
@@ -1083,7 +1083,10 @@ export function generatePdfHtml({
         ${finDataRows.map((cells, i) =>
           flexTr(cells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' })
         ).join('')}
-        ${financialsFootnotes ? `<tr><td style="padding: 4px 40px 0;">${financialsFootnotes}</td></tr>` : ''}`;
+        <tr><td style="padding: 4px 40px 0;">
+          <div class="footnote">All figures in ₹ Cr</div>
+          ${financialsFootnotes}
+        </td></tr>`;
     }
 
     // Structure: one large first <tr> holds all narrative content so Chrome

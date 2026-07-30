@@ -740,29 +740,28 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         <tr>
                           <td>Revenue</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.revenueConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-revenue')}</> : (q.revenueINR != null ? <>&#8377;{q.revenueINR.toFixed(2)} Cr</> : '-')}</td>
+                            <td key={idx}>{q.revenueConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-revenue')}</> : (q.revenueINR != null ? q.revenueINR.toFixed(2) : '-')}</td>
                           ))}
                         </tr>
                         <tr>
                           <td>PAT</td>
                           {quartersWithFinancials.map((q, idx) => (
-                            <td key={idx}>{q.patConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-pat')}</> : (q.patINR != null ? (q.patINR < 0 ? <>(&#8377;{Math.abs(q.patINR).toFixed(2)} Cr)</> : <>&#8377;{q.patINR.toFixed(2)} Cr</>) : '-')}</td>
+                            <td key={idx}>{q.patConfidential ? <><strong>**</strong>{getFinancialsFootnoteMarker('financials-pat')}</> : (q.patINR != null ? (q.patINR < 0 ? `(${Math.abs(q.patINR).toFixed(2)})` : q.patINR.toFixed(2)) : '-')}</td>
                           ))}
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  {effectiveFootnotesList('financials').filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
-                    <div className={styles.tableFootnoteContainer}>
-                      {effectiveFootnotesList('financials')
-                        .filter(fn => fn.fieldName?.startsWith('financials-'))
-                        .map((fn, idx) => (
-                          <p key={idx} className={styles.tableFootnote}>
-                            <sup>{fn.marker}</sup> {fn.text}
-                          </p>
-                        ))}
-                    </div>
-                  )}
+                  <div className={styles.tableFootnoteContainer}>
+                    <p className={styles.tableFootnote}>All figures in ₹ Cr</p>
+                    {effectiveFootnotesList('financials')
+                      .filter(fn => fn.fieldName?.startsWith('financials-'))
+                      .map((fn, idx) => (
+                        <p key={idx} className={styles.tableFootnote}>
+                          <sup>{fn.marker}</sup> {fn.text}
+                        </p>
+                      ))}
+                  </div>
                 </div>
               );
             })()}
