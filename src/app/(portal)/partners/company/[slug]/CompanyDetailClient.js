@@ -283,9 +283,20 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   // Cumulative MOIC: Only show if explicitly entered in Sanity (no auto-calculation)
   const cumulativeMoic = latestQuarter?.multipleOfInvestment ?? null;
 
+  // Find effective footnotes for a tableType — current quarter first, fall back to most recent
+  // past quarter with matching footnotes so entries added once persist across quarters.
+  const effectiveFootnotesList = (tableType) => {
+    const hasFn = (fns) => fns?.some(f => (!tableType || f.tableType === tableType) && f.text);
+    if (hasFn(latestQuarter?.tableFootnotes)) return latestQuarter.tableFootnotes;
+    const past = allPastQuarters.find(q => hasFn(q.tableFootnotes));
+    return past?.tableFootnotes || [];
+  };
+
   // Helper to get footnote marker for a specific field
   const getFieldMarker = (fieldName) => {
-    const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+    const tableType = fieldName?.split('-')[0];
+    const footnotes = effectiveFootnotesList(tableType);
+    const footnote = footnotes?.find(fn => fn.fieldName === fieldName);
     return footnote?.marker ? <sup className={styles.footnoteMarker}>{footnote.marker}</sup> : null;
   };
 
@@ -551,9 +562,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               </tbody>
             </table>
             {/* Snapshot table footnotes - derive table from fieldName prefix */}
-            {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('snapshot-')).length > 0 && (
+            {effectiveFootnotesList('snapshot').filter(fn => fn.fieldName?.startsWith('snapshot-')).length > 0 && (
               <div className={styles.tableFootnoteContainer}>
-                {latestQuarter.tableFootnotes
+                {effectiveFootnotesList('snapshot')
                   .filter(fn => fn.fieldName?.startsWith('snapshot-'))
                   .map((fn, idx) => (
                     <p key={idx} className={styles.tableFootnote}>
@@ -605,9 +616,8 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               // Only show section if there's round data
               if (displayRounds.length === 0) return null;
 
-              // Helper to get footnote marker for rounds table fields
               const getRoundsFootnoteMarker = (fieldName) => {
-                const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+                const footnote = effectiveFootnotesList('rounds')?.find(fn => fn.fieldName === fieldName);
                 return footnote ? <sup>{footnote.marker}</sup> : null;
               };
 
@@ -670,9 +680,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </tbody>
                     </table>
                   </div>
-                  {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
+                  {effectiveFootnotesList('rounds').filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
                     <div className={styles.tableFootnoteContainer}>
-                      {latestQuarter.tableFootnotes
+                      {effectiveFootnotesList('rounds')
                         .filter(fn => fn.fieldName?.startsWith('rounds-'))
                         .map((fn, idx) => (
                           <p key={idx} className={styles.tableFootnote}>
@@ -699,9 +709,8 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
 
-              // Helper to get footnote marker for financials table fields
               const getFinancialsFootnoteMarker = (fieldName) => {
-                const footnote = latestQuarter?.tableFootnotes?.find(fn => fn.fieldName === fieldName);
+                const footnote = effectiveFootnotesList('financials')?.find(fn => fn.fieldName === fieldName);
                 return footnote ? <sup>{footnote.marker}</sup> : null;
               };
 
@@ -743,9 +752,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </tbody>
                     </table>
                   </div>
-                  {latestQuarter?.tableFootnotes?.filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
+                  {effectiveFootnotesList('financials').filter(fn => fn.fieldName?.startsWith('financials-')).length > 0 && (
                     <div className={styles.tableFootnoteContainer}>
-                      {latestQuarter.tableFootnotes
+                      {effectiveFootnotesList('financials')
                         .filter(fn => fn.fieldName?.startsWith('financials-'))
                         .map((fn, idx) => (
                           <p key={idx} className={styles.tableFootnote}>

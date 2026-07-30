@@ -957,17 +957,28 @@ export function generatePdfHtml({
       return `<tr><td>MOIC ${esc(label)} ★</td><td>${rm.moic != null ? fmt(rm.moic) + 'x' : '—'}</td></tr>`;
     }).join('');
 
-    const snapshotFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'snapshot');
-    const defaultMoicFootnote = roundMoics.length > 0 && !snapshotFootnotes
-      ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
-      : '';
-
     // ── Sort all quarterly updates most recent first ──
     const allUpdates = [...(company.quarterlyUpdates || [])].sort((a, b) => {
       const key = u => parseInt((u.fiscalYear || '').replace('FY', '') || '0', 10) * 10
         + parseInt((u.quarter || 'Q0').replace('Q', ''), 10);
       return key(b) - key(a);
     });
+
+    // Footnotes fall back to the most recent past quarter that has matching footnotes,
+    // so a footnote entered once persists until explicitly overridden in a later quarter.
+    function effectiveFootnotes(tableType) {
+      const hasFn = (fns) => fns?.some(f => (!tableType || f.tableType === tableType) && f.text);
+      if (hasFn(qd?.tableFootnotes)) return qd.tableFootnotes;
+      const past = allUpdates.find(u =>
+        isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear) && hasFn(u.tableFootnotes)
+      );
+      return past?.tableFootnotes || null;
+    }
+
+    const snapshotFootnotes = renderTableFootnotes(effectiveFootnotes('snapshot'), 'snapshot');
+    const defaultMoicFootnote = roundMoics.length > 0 && !snapshotFootnotes
+      ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
+      : '';
 
     const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
 
@@ -1029,7 +1040,7 @@ export function generatePdfHtml({
           : []),
       ];
 
-      const roundsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'rounds');
+      const roundsFootnotes = renderTableFootnotes(effectiveFootnotes('rounds'), 'rounds');
 
       rdTrRows = `
         <tr><td style="padding: 0 40px 4px;">
@@ -1048,7 +1059,7 @@ export function generatePdfHtml({
     if (hasRevPat || hasKeyMetrics) {
       const kmItems = currentQUpdate?.keyMetrics || qd?.keyMetrics || [];
       const qLabels = financialsUpdates.map(u => esc(quarterFYLabel(u.quarter, u.fiscalYear)));
-      const financialsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'financials');
+      const financialsFootnotes = renderTableFootnotes(effectiveFootnotes('financials'), 'financials');
 
       const finDataRows = [];
       if (hasRevPat) {
