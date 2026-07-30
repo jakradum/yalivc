@@ -316,8 +316,10 @@ a { cursor: pointer; }
 
 /* ── Tables ── */
 .report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-/* Only prevent table splits inside the flowing company A+B section */
-.company-ab-table .report-table { page-break-inside: avoid; break-inside: avoid; }
+/* Allow all content inside company rows to break naturally across pages */
+.company-ab-table tbody tr { page-break-inside: auto; break-inside: auto; }
+.company-ab-table tbody td { page-break-inside: auto; break-inside: auto; }
+.company-ab-table .report-table { page-break-inside: auto; break-inside: auto; }
 .report-table th {
   font-weight: 700;
   font-size: 11px;
@@ -359,6 +361,15 @@ a { cursor: pointer; }
 /* ── Footnotes ── */
 .footnote { font-size: 9px; color: #888; margin-top: 8px; line-height: 1.6; }
 .footnote-italic { font-family: 'Inter', sans-serif; font-size: 9px; font-style: italic; color: #888; margin-top: 6px; line-height: 1.6; }
+
+/* ── Div-based table rows — replaces <table> for round details and financials ──
+   Divs break mid-flow; <table> elements are treated as atomic by Chrome PDF.   */
+.rd-table { width: 100%; }
+.rd-row { display: flex; width: 100%; border-bottom: 1px solid #d4d0cc; }
+.rd-row:first-child { border-top: 2px solid #830d35; border-bottom: 2px solid #830d35; }
+.rd-row:last-child { border-bottom: 2px solid #830d35; }
+.rd-cell { padding: 10px 12px; font-size: 12px; color: #363636; min-width: 0; word-break: break-word; }
+.rd-row:first-child .rd-cell { font-weight: 700; font-size: 11px; color: #830d35; }
 
 /*=================================================================
   PAGE 1 — COVER
@@ -761,7 +772,6 @@ export function generatePdfHtml({
   // PAGES 3-4 — COVER NOTE
   // ════════════════════════════════════════════════════════════
   const cn1PageNum = nextPageNum(); // 3
-  const cn2PageNum = nextPageNum(); // 4
 
   const introHtml = renderPortableText(report.coverNoteIntro);
   const activityHtml = renderPortableText(report.investmentActivityNotes);
@@ -769,43 +779,38 @@ export function generatePdfHtml({
   const ecosystemHtml = renderPortableText(report.ecosystemNotes);
   const closingHtml = renderPortableText(report.closingNotes);
 
-  const coverNoteP1Html = `
-  <div class="page" id="section-cover-note" style="max-height: 1123px; overflow: hidden;">
-    ${headerHtml()}
-    <div class="page-body">
-      <div class="cover-note-heading">COVER NOTE</div>
-      <div class="body-text">
-        ${report.coverNoteGreeting ? `<p>${esc(report.coverNoteGreeting)}</p>` : ''}
-        ${introHtml}
-        ${activityHtml ? `<div class="section-heading">Investment Activity</div>${activityHtml}` : ''}
-        ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
-      </div>
-    </div>
-    ${pgNum(cn1PageNum)}
-  </div>`;
-
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
-  const coverNoteP2Html = `
-  <div class="page" data-section-end="true" style="max-height: 1123px; overflow: hidden;">
-    ${headerHtml()}
-    <div class="page-body">
-      <div class="body-text">
-        ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
-        ${closingHtml}
-        ${signatory?.name ? `<p style="margin-top: 16px;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
-      </div>
-      <div style="margin-top: 32px;">
-        <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
-        <div class="confidentiality-box" style="margin-top: 12px;">
-          <p>Dear Limited Partner,</p>
-          <br>
-          <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
+  // Single <tr> — all cover note content flows in one cell so Ecosystem &
+  // Tailwinds cannot be pushed to a new page by a row boundary.
+  const coverNoteHtml = `
+  <table class="company-ab-table" id="section-cover-note" data-section-end="true">
+    <thead>
+      <tr><td>${headerHtml()}</td></tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding: 28px 40px 80px; vertical-align: top;">
+        <div class="cover-note-heading">COVER NOTE</div>
+        <div class="body-text">
+          ${report.coverNoteGreeting ? `<p>${esc(report.coverNoteGreeting)}</p>` : ''}
+          ${introHtml}
+          ${activityHtml ? `<div class="section-heading">Investment Activity</div>${activityHtml}` : ''}
+          ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
+          ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
+          ${closingHtml}
+          ${signatory?.name ? `<p style="margin-top: 16px;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
         </div>
-      </div>
-    </div>
-    ${pgNum(cn2PageNum)}
-  </div>`;
+        <div style="margin-top: 32px;">
+          <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
+          <div class="confidentiality-box" style="margin-top: 12px;">
+            <p>Dear Limited Partner,</p>
+            <br>
+            <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
+          </div>
+        </div>
+      </td></tr>
+    </tbody>
+  </table>`;
 
   // ════════════════════════════════════════════════════════════
   // PAGE 5 — FUND SUMMARY
@@ -942,7 +947,8 @@ export function generatePdfHtml({
       })
       .map(ci => ci.name);
 
-    nextPageNum(); // A+B merged section (page badge not shown; JS corrects C page numbers post-render)
+    nextPageNum(); // company section start
+    nextPageNum(); // kept for TOC page-counter accuracy (was page C)
 
     const roundsRows = allRounds.map(r => {
       const label = r.roundLabel || roundNameToLabel(r.roundName);
@@ -960,7 +966,7 @@ export function generatePdfHtml({
       ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
       : '';
 
-    // ── Sort all quarterly updates most recent first (needed by both A+B and C) ──
+    // ── Sort all quarterly updates most recent first ──
     const allUpdates = [...(company.quarterlyUpdates || [])].sort((a, b) => {
       const key = u => parseInt((u.fiscalYear || '').replace('FY', '') || '0', 10) * 10
         + parseInt((u.quarter || 'Q0').replace('Q', ''), 10);
@@ -983,24 +989,117 @@ export function generatePdfHtml({
          <div class="body-text">${renderPortableText(currentQUpdate.updateNotes)}</div>`
       : '';
 
-    const prevQHtml = prevQUpdates
-      .map(u => `
-        <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
-        <div class="body-text" style="color: #888;">${renderPortableText(u.updateNotes)}</div>`)
-      .join('');
-
     const aboutText = company.aboutCompany || company.detail || '';
 
-    // ── MERGED PAGE A+B: Snapshot table + About + Quarter Updates ───────────────
-    // Uses <table> + <thead> so the page header repeats automatically on every printed page
-    // when content overflows to a second A4 sheet.
-    const abSectionHtml = `
+    // ── Build <tr> rows for investment round details ──
+    // Each detail row is its own <tr> so Chrome breaks between rows at the page
+    // boundary naturally — no "block fits on next page, move it" optimization.
+    const financialsUpdates = allUpdates.slice(0, 5);
+    const hasRevPat = financialsUpdates.some(u => u.revenueINR != null || u.patINR != null);
+    const hasKeyMetrics = (currentQUpdate?.keyMetrics || qd?.keyMetrics || []).length > 0;
+
+    // Helper: one <tr> containing a flex row, with optional top/bottom borders on the <td>
+    function flexTr(cells, { topBorder = false, bottomBorder = 'thin', isHeader = false, extraTopPadding = 0 } = {}) {
+      const CR = '#830d35', DIV = '#d4d0cc';
+      const tdStyle = [
+        'padding: 0 40px;',
+        topBorder ? `border-top: 2px solid ${CR};` : '',
+        bottomBorder === 'thick' ? `border-bottom: 2px solid ${CR};` : '',
+        bottomBorder === 'thin' ? `border-bottom: 1px solid ${DIV};` : '',
+        extraTopPadding ? `padding-top: ${extraTopPadding}px;` : '',
+      ].join('');
+      const textStyle = isHeader
+        ? `font-weight:700;font-size:11px;color:${CR};`
+        : 'font-size:12px;color:#363636;';
+      const divCells = cells.map((c, i) =>
+        `<div style="${i === 0 ? 'width:34%;' : 'flex:1;'}padding:10px 12px;${textStyle}">${c}</div>`
+      ).join('');
+      return `<tr><td style="${tdStyle}"><div style="display:flex;">${divCells}</div></td></tr>`;
+    }
+
+    let rdTrRows = '';
+    if (allRounds.length > 0) {
+      const roundMoicsMap = {};
+      roundMoics.forEach(rm => { roundMoicsMap[rm.roundName] = rm.moic; });
+
+      const rdFields = [
+        ['Pre-money valuation', r => r.preMoneyValuation != null ? fmt(r.preMoneyValuation) : '—'],
+        ['Total round size', r => r.totalRoundSize != null ? fmt(r.totalRoundSize) : '—'],
+        ['Post-money valuation', r => r.postMoneyValuation != null ? fmt(r.postMoneyValuation) : '—'],
+        ["Yali's investment", r => r.yaliInvestment != null ? fmt(r.yaliInvestment) : '—'],
+        ["Yali's ownership in %", r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
+        ...(Object.keys(roundMoicsMap).length > 0
+          ? [['MOIC', r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
+          : []),
+      ];
+
+      const roundsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'rounds');
+
+      rdTrRows = `
+        <tr><td style="padding: 0 40px 4px;">
+          <div class="section-heading" style="font-size:16px;">Investment round details</div>
+        </td></tr>
+        ${flexTr(['Stage', ...allRounds.map(r => esc(r.roundLabel || roundNameToLabel(r.roundName)))], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
+        ${rdFields.map(([label, getValue], i) =>
+          flexTr([esc(label), ...allRounds.map(r => esc(String(getValue(r))))], {
+            bottomBorder: i === rdFields.length - 1 ? 'thick' : 'thin',
+          })
+        ).join('')}
+        <tr><td style="padding: 4px 40px 0;">
+          <div class="footnote">All figures except percentages are in ₹ crore</div>
+          ${roundsFootnotes}
+        </td></tr>`;
+    }
+
+    let finTrRows = '';
+    if (hasRevPat || hasKeyMetrics) {
+      const kmItems = currentQUpdate?.keyMetrics || qd?.keyMetrics || [];
+      const qLabels = financialsUpdates.map(u => esc(quarterFYLabel(u.quarter, u.fiscalYear)));
+      const financialsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'financials');
+
+      const finDataRows = [];
+      if (hasRevPat) {
+        finDataRows.push(['Revenue', ...financialsUpdates.map(u =>
+          u.revenueConfidential ? '**' : (u.revenueINR != null ? fmt(u.revenueINR) : '—'))]);
+        finDataRows.push(['PAT', ...financialsUpdates.map(u => {
+          if (u.patConfidential) return '**';
+          if (u.patINR == null) return '—';
+          return u.patINR < 0 ? `(${fmt(Math.abs(u.patINR))})` : fmt(u.patINR);
+        })]);
+      }
+      kmItems.forEach(km => {
+        finDataRows.push([esc(km.label || ''), esc(km.value || ''), ...financialsUpdates.slice(1).map(() => '—')]);
+      });
+
+      finTrRows = `
+        <tr><td style="padding: 16px 40px 8px;">
+          <div class="section-heading" style="font-size:16px;">Financials / Key matrix</div>
+        </td></tr>
+        ${flexTr(['Particulars', ...qLabels], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
+        ${finDataRows.map((cells, i) =>
+          flexTr(cells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' })
+        ).join('')}
+        <tr><td style="padding: 4px 40px 0;">
+          <div class="footnote">All figures except percentages are in ₹ crore</div>
+          ${financialsFootnotes}
+        </td></tr>`;
+    }
+
+    // Structure: one large first <tr> holds all narrative content so Chrome
+    // can break within it freely at the page boundary (break-inside: auto).
+    // Round detail and financial DATA rows are each their own <tr> — Chrome
+    // breaks between them without optimization gaps.
+    const prevQNarrativeHtml = prevQUpdates.map(u => `
+      <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
+      <div class="body-text" style="color:#888;">${renderPortableText(u.updateNotes)}</div>`).join('');
+
+    return `
   <table class="company-ab-table" data-section-end="true">
     <thead>
       <tr><td>${headerHtml()}</td></tr>
     </thead>
     <tbody>
-      <tr><td class="page-body" style="padding-bottom: 100px;">
+      <tr><td style="padding: 28px 40px 0; vertical-align: top;">
         <div class="company-heading-wrap">
           <div class="company-logo-box">
             ${company.logo
@@ -1025,137 +1124,29 @@ export function generatePdfHtml({
         </table>
         ${snapshotFootnotes || defaultMoicFootnote}
         ${aboutText ? `
-          <div class="body-text" style="margin-top: 28px;">
+          <div class="body-text" style="margin-top: 24px;">
             <div class="subsection-heading">About the company</div>
             <p>${esc(aboutText)}</p>
           </div>` : ''}
-        <div style="margin-top: 24px;">
-          <div class="prev-quarters-label" style="color: #830d35; font-size: 18px; font-weight: 700; margin-bottom: 12px;">Quarter updates</div>
+        <div style="margin-top: 20px;">
+          <div class="prev-quarters-label" style="color:#830d35;font-size:18px;font-weight:700;margin-bottom:10px;">Quarter updates</div>
           ${currentQHtml}
         </div>
-        ${prevQHtml ? `
-          <div class="prev-quarters-heading">
+        ${prevQUpdates.length > 0 ? `
+          <div class="prev-quarters-heading" style="margin-top: 16px;">
             <div class="prev-quarters-label">Previous quarters</div>
             <div class="prev-quarters-line"></div>
           </div>
-          ${prevQHtml}` : ''}
+          ${prevQNarrativeHtml}` : ''}
+        ${(rdTrRows || finTrRows) ? `
+          <div class="section-divider" style="margin-top: 20px; margin-bottom: 14px;"></div>
+        ` : ''}
       </td></tr>
+      ${rdTrRows}
+      ${finTrRows}
+      <tr><td style="height:80px;"></td></tr>
     </tbody>
   </table>`;
-
-    // ── PAGE C: Round Details + Financials ───────────────────
-    const pageCNum = nextPageNum(); // C gets the displayed page number
-
-    // Transposed investment rounds table
-    let roundDetailsHtml = '';
-    if (allRounds.length > 0) {
-      const colWidth = Math.max(26, Math.floor((100 - 34) / allRounds.length));
-      const labelColWidth = 100 - colWidth * allRounds.length;
-
-      const roundMoicsMap = {};
-      roundMoics.forEach(rm => { roundMoicsMap[rm.roundName] = rm.moic; });
-
-      const stageRow = `<tr>
-        <td style="width:${labelColWidth}%;">Stage</td>
-        ${allRounds.map(r => `<td>${esc(r.roundLabel || roundNameToLabel(r.roundName))}</td>`).join('')}
-      </tr>`;
-
-      const fields = [
-        ['Pre-money valuation', r => r.preMoneyValuation != null ? fmt(r.preMoneyValuation) : '—'],
-        ['Total round size', r => r.totalRoundSize != null ? fmt(r.totalRoundSize) : '—'],
-        ['Post-money valuation', r => r.postMoneyValuation != null ? fmt(r.postMoneyValuation) : '—'],
-        ["Yali's investment", r => r.yaliInvestment != null ? fmt(r.yaliInvestment) : '—'],
-        ["Yali's ownership in %", r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
-        ...(Object.keys(roundMoicsMap).length > 0
-          ? [['MOIC', r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
-          : []),
-      ];
-
-      const dataRows = fields.map(([label, getValue]) =>
-        `<tr>
-          <td>${esc(label)}</td>
-          ${allRounds.map(r => `<td>${esc(String(getValue(r)))}</td>`).join('')}
-        </tr>`).join('');
-
-      const roundsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'rounds');
-
-      roundDetailsHtml = `
-        <div class="section-heading" style="font-size: 16px; margin-bottom: 8px;">Investment round details</div>
-        <table class="report-table">
-          <tbody>
-            ${stageRow}
-            ${dataRows}
-          </tbody>
-        </table>
-        <div class="footnote">All figures except percentages are in ₹ crore</div>
-        ${roundsFootnotes}`;
-    }
-
-    // Financials table (up to 5 most recent quarters)
-    const financialsUpdates = allUpdates.slice(0, 5);
-    const hasRevPat = financialsUpdates.some(u => u.revenueINR != null || u.patINR != null);
-    const hasKeyMetrics = (currentQUpdate?.keyMetrics || qd?.keyMetrics || []).length > 0;
-
-    let financialsHtml = '';
-    if (hasRevPat || hasKeyMetrics) {
-      const qHeaders = financialsUpdates.map(u =>
-        `<th>${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</th>`).join('');
-
-      const revCells = financialsUpdates.map(u => {
-        if (u.revenueConfidential) return '<td>**</td>';
-        return `<td>${u.revenueINR != null ? fmt(u.revenueINR) : '—'}</td>`;
-      }).join('');
-
-      const patCells = financialsUpdates.map(u => {
-        if (u.patConfidential) return '<td>**</td>';
-        if (u.patINR == null) return '<td>—</td>';
-        return `<td>${u.patINR < 0 ? `(${fmt(Math.abs(u.patINR))})` : fmt(u.patINR)}</td>`;
-      }).join('');
-
-      const kmItems = currentQUpdate?.keyMetrics || qd?.keyMetrics || [];
-      const keyMetricRows = kmItems.map(km =>
-        `<tr>
-          <td>${esc(km.label || '')}</td>
-          <td>${esc(km.value || '')}</td>
-          ${financialsUpdates.slice(1).map(() => '<td>—</td>').join('')}
-        </tr>`).join('');
-
-      const financialsFootnotes = renderTableFootnotes(qd?.tableFootnotes, 'financials');
-
-      financialsHtml = `
-        <div style="margin-top: 24px;">
-          <div class="section-heading" style="font-size: 16px; margin-bottom: 8px;">Financials / Key matrix</div>
-          <table class="report-table">
-            <thead>
-              <tr>
-                <th style="width: 34%;">Particulars</th>
-                ${qHeaders}
-              </tr>
-            </thead>
-            <tbody>
-              ${hasRevPat ? `
-                <tr><td>Revenue</td>${revCells}</tr>
-                <tr><td>PAT</td>${patCells}</tr>` : ''}
-              ${keyMetricRows}
-            </tbody>
-          </table>
-          <div class="footnote">All figures except percentages are in ₹ crore</div>
-          ${financialsFootnotes}
-        </div>`;
-    }
-
-    const pageCHtml = `
-  <div class="page" data-section-end="true">
-    ${headerHtml()}
-    <div class="page-body">
-      ${roundDetailsHtml || '<p style="color: #888; font-size: 12px;">No investment round details available.</p>'}
-      ${financialsHtml}
-    </div>
-    ${confFooter()}
-    ${pgNum(pageCNum)}
-  </div>`;
-
-    return abSectionHtml + pageCHtml;
   }).join('');
 
   // ════════════════════════════════════════════════════════════
@@ -1380,20 +1371,22 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   // TABLE OF CONTENTS — built last so all page numbers are known
   // ════════════════════════════════════════════════════════════
+  // Page numbers here are initial estimates; pdfRequestHandler's page.evaluate()
+  // measures actual rendered heights and overwrites each [data-toc-page] span.
   const tocHtml = `
   <div class="page">
     <div class="toc-wrap">
       <div class="toc-title">TABLE OF<br>CONTENTS</div>
       <table class="toc-table">
-        <tr class="toc-row"><td><a href="#section-cover-note">Cover note</a></td><td><a href="#section-cover-note">${cn1PageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-fund-summary">Fund summary</a></td><td><a href="#section-fund-summary">${fundSumPageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv">${portInvPageNum}</a></td></tr>
-        <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv">${portInvPageNum}</a></td></tr>
-        <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates">${portSepPageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-fund-fin">Fund financials</a></td><td><a href="#section-fund-fin">${fundFinPageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-pipeline">Pipeline summary</a></td><td><a href="#section-pipeline">${pipelinePageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-media">Media coverage</a></td><td><a href="#section-media">${mediaPageNum}</a></td></tr>
-        <tr class="toc-row"><td><a href="#section-contact">Contact information</a></td><td><a href="#section-contact">${contactPageNum}</a></td></tr>
+        <tr class="toc-row"><td><a href="#section-cover-note">Cover note</a></td><td><a href="#section-cover-note"><span data-toc-page="section-cover-note">${cn1PageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-summary">Fund summary</a></td><td><a href="#section-fund-summary"><span data-toc-page="section-fund-summary">${fundSumPageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-portfolio-inv">Portfolio investments</a></td><td><a href="#section-portfolio-inv"><span data-toc-page="section-portfolio-inv">${portInvPageNum}</span></a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-inv">• Portfolio investment summary</a></td><td><a href="#section-portfolio-inv"><span data-toc-page="section-portfolio-inv">${portInvPageNum}</span></a></td></tr>
+        <tr class="toc-subrow"><td><a href="#section-portfolio-updates">• Portfolio company updates</a></td><td><a href="#section-portfolio-updates"><span data-toc-page="section-portfolio-updates">${portSepPageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-fund-fin">Fund financials</a></td><td><a href="#section-fund-fin"><span data-toc-page="section-fund-fin">${fundFinPageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-pipeline">Pipeline summary</a></td><td><a href="#section-pipeline"><span data-toc-page="section-pipeline">${pipelinePageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-media">Media coverage</a></td><td><a href="#section-media"><span data-toc-page="section-media">${mediaPageNum}</span></a></td></tr>
+        <tr class="toc-row"><td><a href="#section-contact">Contact information</a></td><td><a href="#section-contact"><span data-toc-page="section-contact">${contactPageNum}</span></a></td></tr>
       </table>
     </div>
     ${pgNum(tocPageNum)}
@@ -1448,8 +1441,7 @@ export function generatePdfHtml({
 <body>
 ${coverHtml}
 ${tocHtml}
-${coverNoteP1Html}
-${coverNoteP2Html}
+${coverNoteHtml}
 ${fundSumHtml}
 ${portInvHtml}
 ${portSepHtml}
