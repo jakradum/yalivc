@@ -270,9 +270,9 @@ export async function handlePdfGet(slug, { returnHtml = false } = {}) {
         if (target) span.textContent = pageOf(target);
       });
 
-      // Page number badges on fixed .page divs and flowing tables
+      // Page number badges on .page divs
       document.querySelectorAll('.page-number').forEach(badge => {
-        const el = badge.closest('.page, .company-ab-table, .media-page-table');
+        const el = badge.closest('.page');
         if (!el) return;
         const span = badge.querySelector('span:not(.pn-tl):not(.pn-br)');
         if (span) span.textContent = `Page ${pageOf(el)}`;
@@ -282,10 +282,7 @@ export async function handlePdfGet(slug, { returnHtml = false } = {}) {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      displayHeaderFooter: true,
-      headerTemplate: '<span></span>',
-      footerTemplate: '<div style="width:100%;text-align:center;font-size:9px;color:#888888;letter-spacing:0.18em;font-family:Courier,monospace;padding-bottom:6px;">CONFIDENTIAL</div>',
-      margin: { top: '0', right: '0', bottom: '36px', left: '0' },
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
       tagged: true,
     });
 
