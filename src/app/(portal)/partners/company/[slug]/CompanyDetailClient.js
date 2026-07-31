@@ -286,17 +286,13 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
   // Find effective footnotes for a tableType — current quarter first, fall back to most recent
   // past quarter with matching footnotes so entries added once persist across quarters.
-  const effectiveFootnotesList = (tableType) => {
-    const hasFn = (fns) => fns?.some(f => (!tableType || f.tableType === tableType) && f.text);
-    if (hasFn(latestQuarter?.tableFootnotes)) return latestQuarter.tableFootnotes;
-    const past = allPastQuarters.find(q => hasFn(q.tableFootnotes));
-    return past?.tableFootnotes || [];
+  const effectiveFootnotesList = () => {
+    return latestQuarter?.tableFootnotes || [];
   };
 
   // Helper to get footnote marker for a specific field
   const getFieldMarker = (fieldName) => {
-    const tableType = fieldName?.split('-')[0];
-    const footnotes = effectiveFootnotesList(tableType);
+    const footnotes = effectiveFootnotesList();
     const footnote = footnotes?.find(fn => fn.fieldName === fieldName);
     return footnote?.marker ? <sup className={styles.footnoteMarker}>{footnote.marker}</sup> : null;
   };
@@ -540,9 +536,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               </tbody>
             </table>
             {/* Snapshot table footnotes - derive table from fieldName prefix */}
-            {effectiveFootnotesList('snapshot').filter(fn => fn.fieldName?.startsWith('snapshot-')).length > 0 && (
+            {effectiveFootnotesList().filter(fn => fn.fieldName?.startsWith('snapshot-')).length > 0 && (
               <div className={styles.tableFootnoteContainer}>
-                {effectiveFootnotesList('snapshot')
+                {effectiveFootnotesList()
                   .filter(fn => fn.fieldName?.startsWith('snapshot-'))
                   .map((fn, idx) => (
                     <p key={idx} className={styles.tableFootnote}>
@@ -595,7 +591,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               if (displayRounds.length === 0) return null;
 
               const getRoundsFootnoteMarker = (fieldName) => {
-                const footnote = effectiveFootnotesList('rounds')?.find(fn => fn.fieldName === fieldName);
+                const footnote = effectiveFootnotesList()?.find(fn => fn.fieldName === fieldName);
                 return footnote ? <sup>{footnote.marker}</sup> : null;
               };
 
@@ -658,9 +654,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       </tbody>
                     </table>
                   </div>
-                  {effectiveFootnotesList('rounds').filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
+                  {effectiveFootnotesList().filter(fn => fn.fieldName?.startsWith('rounds-')).length > 0 && (
                     <div className={styles.tableFootnoteContainer}>
-                      {effectiveFootnotesList('rounds')
+                      {effectiveFootnotesList()
                         .filter(fn => fn.fieldName?.startsWith('rounds-'))
                         .map((fn, idx) => (
                           <p key={idx} className={styles.tableFootnote}>
@@ -688,7 +684,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               if (!company.isRevenueMaking || quartersWithFinancials.length === 0) return null;
 
               const getFinancialsFootnoteMarker = (fieldName) => {
-                const footnote = effectiveFootnotesList('financials')?.find(fn => fn.fieldName === fieldName);
+                const footnote = effectiveFootnotesList()?.find(fn => fn.fieldName === fieldName);
                 return footnote ? <sup>{footnote.marker}</sup> : null;
               };
 
@@ -732,7 +728,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                   </div>
                   <div className={styles.tableFootnoteContainer}>
                     <p className={styles.tableFootnote}>All figures in ₹ Cr</p>
-                    {effectiveFootnotesList('financials')
+                    {effectiveFootnotesList()
                       .filter(fn => fn.fieldName?.startsWith('financials-'))
                       .map((fn, idx) => (
                         <p key={idx} className={styles.tableFootnote}>

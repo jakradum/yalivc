@@ -185,6 +185,12 @@ function getInitialInvestmentDate(company) {
 const CSS = `
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+  background: #eeeceb;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
 body {
   font-family: 'JetBrains Mono', monospace;
   color: #363636;
@@ -254,16 +260,19 @@ body {
 .page-number .pn-tl { align-self: flex-start; }
 .page-number .pn-br { align-self: flex-end; }
 
-/* ── Confidential footer ── */
+/* ── Confidential footer — fixed so it repeats on every printed page ── */
 .footer-confidential {
-  position: absolute;
-  bottom: 28px; left: 0; right: 0;
+  position: fixed;
+  bottom: 24px; left: 0; right: 0;
   text-align: center;
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #888;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  pointer-events: none;
 }
 
 /* ── Company A+B flowing section — table layout so <thead> repeats on every printed page ── */
@@ -796,14 +805,15 @@ export function generatePdfHtml({
           ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
           ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
           ${closingHtml}
-          ${signatory?.name ? `<p style="margin-top: 16px;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
-        </div>
-        <div style="margin-top: 32px;">
-          <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
-          <div class="confidentiality-box" style="margin-top: 12px;">
-            <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
+          <div style="break-inside: avoid; page-break-inside: avoid;">
+            ${signatory?.name ? `<p style="margin-top: 16px;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
+            <div style="margin-top: 32px;">
+              <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
+              <div class="confidentiality-box" style="margin-top: 12px;">
+                <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
+              </div>
+            </div>
           </div>
-        </div>
       </td></tr>
     </tbody>
   </table>`;
@@ -842,7 +852,6 @@ export function generatePdfHtml({
         </tbody>
       </table>
     </div>
-    ${confFooter()}
     ${pgNum(fundSumPageNum)}
   </div>`;
 
@@ -889,7 +898,6 @@ export function generatePdfHtml({
       </table>
       ${portInvFootnotes ? `<div style="margin-top: 16px;">${portInvFootnotes}</div>` : ''}
     </div>
-    ${confFooter()}
     ${pgNum(portInvPageNum)}
   </div>`;
 
@@ -909,7 +917,6 @@ export function generatePdfHtml({
           ${portfolioUpdatesSvgHtml}
         </div>` : ''}
     </div>
-    ${confFooter()}
     ${pgNum(portSepPageNum)}
   </div>`;
 
@@ -954,7 +961,7 @@ export function generatePdfHtml({
 
     const roundMoicRows = roundMoics.map(rm => {
       const label = roundNameToLabel(rm.roundName);
-      return `<tr><td>MOIC ${esc(label)} ★</td><td>${rm.moic != null ? fmt(rm.moic) + 'x' : '—'}</td></tr>`;
+      return `<tr><td>MOIC ${esc(label)}${moicMarkerHtml}</td><td>${rm.moic != null ? fmt(rm.moic) + 'x' : '—'}</td></tr>`;
     }).join('');
 
     // ── Sort all quarterly updates most recent first ──
@@ -966,24 +973,25 @@ export function generatePdfHtml({
 
     // Footnotes fall back to the most recent past quarter that has matching footnotes,
     // so a footnote entered once persists until explicitly overridden in a later quarter.
-    function effectiveFootnotes(tableType) {
-      const hasFn = (fns) => fns?.some(f => (!tableType || f.tableType === tableType) && f.text);
-      if (hasFn(qd?.tableFootnotes)) return qd.tableFootnotes;
-      const past = allUpdates.find(u =>
-        isQuarterBefore(u.quarter, u.fiscalYear, quarter, fiscalYear) && hasFn(u.tableFootnotes)
-      );
-      return past?.tableFootnotes || null;
+    function effectiveFootnotes() {
+      return qd?.tableFootnotes || null;
     }
 
     // Returns superscript HTML for a footnote marker tied to a specific table field.
     function fnMarker(tableType, fieldName) {
-      const fns = effectiveFootnotes(tableType);
+      const fns = effectiveFootnotes();
       const fn = fns?.find(f => f.tableType === tableType && f.fieldName === fieldName && f.marker);
       return fn ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(fn.marker)}</sup>` : '';
     }
 
-    const snapshotFootnotes = renderTableFootnotes(effectiveFootnotes('snapshot'), 'snapshot');
-    const defaultMoicFootnote = roundMoics.length > 0 && !snapshotFootnotes
+    const snapshotFootnotes = renderTableFootnotes(effectiveFootnotes(), 'snapshot');
+
+    // MOIC marker: use custom snapshot-moic footnote marker if present, otherwise ★
+    const customMoicFn = (qd?.tableFootnotes || []).find(f => f.tableType === 'snapshot' && f.fieldName === 'snapshot-moic' && f.marker);
+    const moicMarkerHtml = customMoicFn
+      ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(customMoicFn.marker)}</sup>`
+      : ' ★';
+    const defaultMoicFootnote = roundMoics.length > 0 && !customMoicFn
       ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
       : '';
 
@@ -1047,7 +1055,7 @@ export function generatePdfHtml({
           : []),
       ];
 
-      const roundsFootnotes = renderTableFootnotes(effectiveFootnotes('rounds'), 'rounds');
+      const roundsFootnotes = renderTableFootnotes(effectiveFootnotes(), 'rounds');
 
       rdTrRows = `
         <tr><td style="padding: 0 40px 4px;">
@@ -1066,7 +1074,7 @@ export function generatePdfHtml({
     if (hasRevPat || hasKeyMetrics) {
       const kmItems = currentQUpdate?.keyMetrics || qd?.keyMetrics || [];
       const qLabels = financialsUpdates.map(u => esc(quarterFYLabel(u.quarter, u.fiscalYear)));
-      const financialsFootnotes = renderTableFootnotes(effectiveFootnotes('financials'), 'financials');
+      const financialsFootnotes = renderTableFootnotes(effectiveFootnotes(), 'financials');
 
       const finDataRows = [];
       const finDataFieldNames = [];
@@ -1135,7 +1143,7 @@ export function generatePdfHtml({
             <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
             <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
             ${roundMoicRows}
-            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? ' ★' : ''}${fnMarker('snapshot', 'snapshot-moic')}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
+            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? moicMarkerHtml : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
             ${coInvestors.length > 0 ? `<tr><td>Key co-investors${fnMarker('snapshot', 'snapshot-coinvestors')}</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
           </tbody>
         </table>
@@ -1184,7 +1192,6 @@ export function generatePdfHtml({
           ${fundFinancialsSvgHtml}
         </div>` : ''}
     </div>
-    ${confFooter()}
     ${pgNum(fundFinPageNum)}
   </div>`;
 
@@ -1208,7 +1215,6 @@ export function generatePdfHtml({
           ${pipelineSvgHtml}
         </div>` : ''}
     </div>
-    ${confFooter()}
     ${pgNum(pipelinePageNum)}
   </div>`;
 
@@ -1468,6 +1474,7 @@ ${pipelineHtml}
 ${mediaHtml}
 ${contactHtml}
 ${svgInjectionScript}
+<div class="footer-confidential">Confidential</div>
 </body>
 </html>`;
 }
