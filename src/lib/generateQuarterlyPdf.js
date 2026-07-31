@@ -204,7 +204,7 @@ body {
 
 .page {
   width: 794px;
-  min-height: 1123px;
+  height: 1123px;
   position: relative;
   background: #eeeceb;
   overflow: hidden;
@@ -212,6 +212,20 @@ body {
   break-after: page;
 }
 .page:last-child { page-break-after: avoid; break-after: avoid; }
+.page::after {
+  content: 'CONFIDENTIAL';
+  position: absolute;
+  bottom: 12px; left: 0; right: 0;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  pointer-events: none;
+}
 
 /* ── Shared header ── */
 .page-header {
@@ -246,7 +260,7 @@ body {
 /* ── Page number — viewfinder icon ── */
 .page-number {
   position: absolute;
-  right: 28px; bottom: 20px;
+  right: 28px; bottom: 44px;
   height: 34px;
   display: flex;
   align-items: stretch;
@@ -261,62 +275,8 @@ body {
 .page-number .pn-tl { align-self: flex-start; }
 .page-number .pn-br { align-self: flex-end; }
 
-/* ── Confidential footer — fixed so it repeats on every printed page ── */
-.footer-confidential {
-  position: fixed;
-  bottom: 24px; left: 0; right: 0;
-  text-align: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #888;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-  pointer-events: none;
-}
-
-/* ── Company A+B flowing section — table layout so <thead> repeats on every printed page ── */
-.company-ab-table {
-  width: 794px;
-  border-collapse: collapse;
-  background: #eeeceb;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-  page-break-after: always;
-  break-after: page;
-}
-.company-ab-table thead tr td {
-  background: #eeeceb;
-  padding: 0;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-.company-ab-table tbody tr td {
-  background: #eeeceb;
-  vertical-align: top;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-/* ── Media page — same table pattern so header repeats if social cards overflow ── */
-.media-page-table {
-  width: 794px;
-  border-collapse: collapse;
-  background: #eeeceb;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-  page-break-after: always;
-  break-after: page;
-}
-.media-page-table thead tr td,
-.media-page-table tbody tr td {
-  background: #eeeceb;
-  padding: 0;
-  vertical-align: top;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
+/* ── Variable sections: hidden until JS assembles them into explicit pages ── */
+.pdf-var-section { display: none; width: 794px; }
 
 /* ── TOC anchor links ── */
 .toc-row a, .toc-subrow a { color: inherit; text-decoration: none; }
@@ -324,10 +284,6 @@ a { cursor: pointer; }
 
 /* ── Tables ── */
 .report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-/* Allow all content inside company rows to break naturally across pages */
-.company-ab-table tbody tr { page-break-inside: auto; break-inside: auto; }
-.company-ab-table tbody td { page-break-inside: auto; break-inside: auto; }
-.company-ab-table .report-table { page-break-inside: auto; break-inside: auto; }
 .report-table th {
   font-weight: 700;
   font-size: 11px;
@@ -382,8 +338,7 @@ a { cursor: pointer; }
 /*=================================================================
   PAGE 1 — COVER
 =================================================================*/
-/* Cover page: fixed A4 height to prevent overflow onto page 2 */
-.cover-page { height: 1123px; min-height: unset; overflow: hidden; background: #830d35; display: flex; flex-direction: column; }
+.cover-page { background: #830d35; display: flex; flex-direction: column; }
 .cover-header { background: #efefef; height: 110px; flex-shrink: 0; padding: 0 36px; display: flex; align-items: center; gap: 20px; }
 .cover-logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .cover-logo-wordmark {
@@ -789,35 +744,33 @@ export function generatePdfHtml({
 
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
-  // Single <tr> — all cover note content flows in one cell so Ecosystem &
-  // Tailwinds cannot be pushed to a new page by a row boundary.
   const coverNoteHtml = `
-  <table class="company-ab-table" id="section-cover-note" data-section-end="true">
-    <thead>
-      <tr><td>${headerHtml()}</td></tr>
-    </thead>
-    <tbody>
-      <tr><td style="padding: 28px 40px 80px; vertical-align: top;">
-        <div class="cover-note-heading">COVER NOTE</div>
-        <div class="body-text">
-          ${report.coverNoteGreeting ? `<p>${esc(report.coverNoteGreeting)}</p>` : ''}
-          ${introHtml}
-          ${activityHtml ? `<div class="section-heading">Investment Activity</div>${activityHtml}` : ''}
-          ${portfolioHighlightsHtml ? `<div class="section-heading">Portfolio Highlights</div>${portfolioHighlightsHtml}` : ''}
-          ${ecosystemHtml ? `<div class="section-heading">Ecosystem &amp; Tailwinds</div>${ecosystemHtml}` : ''}
-          ${closingHtml}
-          <div style="break-inside: avoid; page-break-inside: avoid;">
-            ${signatory?.name ? `<p style="margin-top: 16px;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
-            <div style="margin-top: 32px;">
-              <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
-              <div class="confidentiality-box" style="margin-top: 12px;">
-                <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
-              </div>
-            </div>
-          </div>
-      </td></tr>
-    </tbody>
-  </table>`;
+<div class="pdf-var-section" id="section-cover-note">
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div class="cover-note-heading">COVER NOTE</div>
+  </div>
+  ${report.coverNoteGreeting ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text"><p>${esc(report.coverNoteGreeting)}</p></div></div>` : ''}
+  ${introHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${introHtml}</div></div>` : ''}
+  ${activityHtml ? `
+  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Investment Activity</div></div>
+  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${activityHtml}</div></div>` : ''}
+  ${portfolioHighlightsHtml ? `
+  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Portfolio Highlights</div></div>
+  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${portfolioHighlightsHtml}</div></div>` : ''}
+  ${ecosystemHtml ? `
+  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Ecosystem &amp; Tailwinds</div></div>
+  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${ecosystemHtml}</div></div>` : ''}
+  ${closingHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${closingHtml}</div></div>` : ''}
+  <div class="pdf-block" style="padding: 0 40px;">
+    ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:12px; line-height:1.7;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
+    <div style="margin-top: 32px;">
+      <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
+      <div class="confidentiality-box" style="margin-top: 12px;">
+        <p>This report is for your eyes only, and is not meant to be shared, printed or reproduced in any manner, as the data you are about to read is strictly confidential. We appreciate your discretion in this matter.</p>
+      </div>
+    </div>
+  </div>
+</div>`;
 
   // ════════════════════════════════════════════════════════════
   // PAGE 5 — FUND SUMMARY
@@ -1040,7 +993,7 @@ export function generatePdfHtml({
       return `<tr><td style="${tdStyle}"><div style="display:flex;">${divCells}</div></td></tr>`;
     }
 
-    let rdTrRows = '';
+    let rdBlocks = '';
     if (allRounds.length > 0) {
       const roundMoicsMap = {};
       roundMoics.forEach(rm => { roundMoicsMap[rm.roundName] = rm.moic; });
@@ -1058,20 +1011,24 @@ export function generatePdfHtml({
 
       const roundsFootnotes = renderTableFootnotes(effectiveFootnotes(), 'rounds');
 
-      rdTrRows = `
-        <tr><td style="padding: 0 40px 4px;">
-          <div class="section-heading" style="font-size:16px;">Investment round details</div>
-        </td></tr>
-        ${flexTr(['Stage', ...allRounds.map(r => esc(r.roundLabel || roundNameToLabel(r.roundName)))], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
-        ${rdFields.map(([label, fieldName, getValue], i) =>
-          flexTr([esc(label) + (fieldName ? fnMarker('rounds', fieldName) : ''), ...allRounds.map(r => esc(String(getValue(r))))], {
-            bottomBorder: i === rdFields.length - 1 ? 'thick' : 'thin',
-          })
-        ).join('')}
-        ${roundsFootnotes ? `<tr><td style="padding: 4px 40px 0;">${roundsFootnotes}</td></tr>` : ''}`;
+      rdBlocks = `<div class="pdf-block" style="padding: 0 40px 12px;">
+        <div class="section-heading" style="font-size:16px;margin-bottom:8px;">Investment round details</div>
+        <div class="rd-table">
+          <div class="rd-row">
+            <div class="rd-cell" style="width:34%;">Stage</div>
+            ${allRounds.map(r => `<div class="rd-cell" style="flex:1;">${esc(r.roundLabel || roundNameToLabel(r.roundName))}</div>`).join('')}
+          </div>
+          ${rdFields.map(([label, fieldName, getValue]) => `
+          <div class="rd-row">
+            <div class="rd-cell" style="width:34%;">${esc(label)}${fieldName ? fnMarker('rounds', fieldName) : ''}</div>
+            ${allRounds.map(r => `<div class="rd-cell" style="flex:1;">${esc(String(getValue(r)))}</div>`).join('')}
+          </div>`).join('')}
+        </div>
+        ${roundsFootnotes ? `<div class="footnote" style="padding:4px 0 0;">${roundsFootnotes}</div>` : ''}
+      </div>`;
     }
 
-    let finTrRows = '';
+    let finBlocks = '';
     if (hasRevPat || hasKeyMetrics) {
       const kmItems = currentQUpdate?.keyMetrics || qd?.keyMetrics || [];
       const qLabels = financialsUpdates.map(u => esc(quarterFYLabel(u.quarter, u.fiscalYear)));
@@ -1095,84 +1052,89 @@ export function generatePdfHtml({
         finDataFieldNames.push('financials-metric');
       });
 
-      finTrRows = `
-        <tr><td style="padding: 16px 40px 8px;">
-          <div class="section-heading" style="font-size:16px;">Financials / Key matrix</div>
-        </td></tr>
-        ${flexTr(['Particulars', ...qLabels], { topBorder: true, bottomBorder: 'thick', isHeader: true })}
-        ${finDataRows.map((cells, i) => {
-          const fieldName = finDataFieldNames[i];
-          const markedCells = [cells[0] + (fieldName ? fnMarker('financials', fieldName) : ''), ...cells.slice(1)];
-          return flexTr(markedCells, { bottomBorder: i === finDataRows.length - 1 ? 'thick' : 'thin' });
-        }).join('')}
-        <tr><td style="padding: 4px 40px 0;">
-          <div class="footnote">All figures in ₹ Cr</div>
-          ${financialsFootnotes}
-        </td></tr>`;
+      finBlocks = `<div class="pdf-block" style="padding: 12px 40px 20px;">
+        <div class="section-heading" style="font-size:16px;margin-bottom:8px;">Financials / Key matrix</div>
+        <div class="rd-table">
+          <div class="rd-row">
+            <div class="rd-cell" style="width:34%;">Particulars</div>
+            ${qLabels.map(l => `<div class="rd-cell" style="flex:1;">${l}</div>`).join('')}
+          </div>
+          ${finDataRows.map((cells, i) => {
+            const fieldName = finDataFieldNames[i];
+            const [label, ...rest] = cells;
+            return `<div class="rd-row">
+              <div class="rd-cell" style="width:34%;">${label}${fieldName ? fnMarker('financials', fieldName) : ''}</div>
+              ${rest.map(v => `<div class="rd-cell" style="flex:1;">${v}</div>`).join('')}
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="footnote" style="padding:4px 0 0;">All figures in ₹ Cr${financialsFootnotes ? '<br>' + financialsFootnotes : ''}</div>
+      </div>`;
     }
 
-    // Structure: one large first <tr> holds all narrative content so Chrome
-    // can break within it freely at the page boundary (break-inside: auto).
-    // Round detail and financial DATA rows are each their own <tr> — Chrome
-    // breaks between them without optimization gaps.
-    const prevQNarrativeHtml = prevQUpdates.map(u => `
-      <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
-      <div class="body-text" style="color:#888;">${renderPortableText(u.updateNotes)}</div>`).join('');
-
     return `
-  <table class="company-ab-table" data-section-end="true">
-    <thead>
-      <tr><td>${headerHtml()}</td></tr>
-    </thead>
-    <tbody>
-      <tr><td style="padding: 28px 40px 0; vertical-align: top;">
-        <div class="company-heading-wrap">
-          <div class="company-logo-box">
-            ${company.logo
-              ? `<img src="${esc(company.logo)}" alt="${esc(company.name)}">`
-              : `<div class="company-logo-placeholder">${esc((company.name || '?')[0].toUpperCase())}</div>`}
-          </div>
-          <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
-        </div>
-        <table class="report-table">
-          <tbody>
-            <tr><td style="width:55%;">Latest funding round${fnMarker('snapshot', 'snapshot-latest-round')}</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
-            ${allRounds.length > 0 ? `
-              <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
-              ${roundsRows}` : ''}
-            <tr><td>Total investment${fnMarker('snapshot', 'snapshot-total-investment')}</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
-            <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
-            <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
-            ${roundMoicRows}
-            <tr><td>MOIC Cumulative${roundMoics.length > 0 ? moicMarkerHtml : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
-            ${coInvestors.length > 0 ? `<tr><td>Key co-investors${fnMarker('snapshot', 'snapshot-coinvestors')}</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
-          </tbody>
-        </table>
-        ${snapshotFootnotes || defaultMoicFootnote}
-        ${aboutText ? `
-          <div class="body-text" style="margin-top: 24px;">
-            <div class="subsection-heading">About the company</div>
-            <p>${esc(aboutText)}</p>
-          </div>` : ''}
-        <div style="margin-top: 20px;">
-          <div class="prev-quarters-label" style="color:#830d35;font-size:18px;font-weight:700;margin-bottom:10px;">Quarter updates</div>
-          ${currentQHtml}
-        </div>
-        ${prevQUpdates.length > 0 ? `
-          <div class="prev-quarters-heading" style="margin-top: 16px;">
-            <div class="prev-quarters-label">Previous quarters</div>
-            <div class="prev-quarters-line"></div>
-          </div>
-          ${prevQNarrativeHtml}` : ''}
-        ${(rdTrRows || finTrRows) ? `
-          <div class="section-divider" style="margin-top: 20px; margin-bottom: 14px;"></div>
-        ` : ''}
-      </td></tr>
-      ${rdTrRows}
-      ${finTrRows}
-      <tr><td style="height:80px;"></td></tr>
-    </tbody>
-  </table>`;
+<div class="pdf-var-section">
+  <div class="pdf-block" style="padding: 0 40px 0;">
+    <div class="company-heading-wrap">
+      <div class="company-logo-box">
+        ${company.logo
+          ? `<img src="${esc(company.logo)}" alt="${esc(company.name)}">`
+          : `<div class="company-logo-placeholder">${esc((company.name || '?')[0].toUpperCase())}</div>`}
+      </div>
+      <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
+    </div>
+    <table class="report-table">
+      <tbody>
+        <tr><td style="width:55%;">Latest funding round${fnMarker('snapshot', 'snapshot-latest-round')}</td><td>${esc(getLatestRoundLabel(company))}</td></tr>
+        ${allRounds.length > 0 ? `
+          <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
+          ${roundsRows}` : ''}
+        <tr><td>Total investment${fnMarker('snapshot', 'snapshot-total-investment')}</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
+        <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
+        <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
+        ${roundMoicRows}
+        <tr><td>MOIC Cumulative${roundMoics.length > 0 ? moicMarkerHtml : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
+        ${coInvestors.length > 0 ? `<tr><td>Key co-investors${fnMarker('snapshot', 'snapshot-coinvestors')}</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
+      </tbody>
+    </table>
+    ${snapshotFootnotes || defaultMoicFootnote}
+  </div>
+
+  ${aboutText ? `
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div class="body-text" style="margin-top: 20px;">
+      <div class="subsection-heading">About the company</div>
+      <p>${esc(aboutText)}</p>
+    </div>
+  </div>` : ''}
+
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div style="margin-top: 20px;">
+      <div class="prev-quarters-label" style="color:#830d35;font-size:18px;font-weight:700;margin-bottom:10px;">Quarter updates</div>
+      ${currentQHtml}
+    </div>
+  </div>
+
+  ${prevQUpdates.length > 0 ? `
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div class="prev-quarters-heading" style="margin-top: 16px;">
+      <div class="prev-quarters-label">Previous quarters</div>
+      <div class="prev-quarters-line"></div>
+    </div>
+  </div>
+  ${prevQUpdates.map(u => `
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div class="quarter-label">${esc(quarterFYLabel(u.quarter, u.fiscalYear))}</div>
+    <div class="body-text" style="color:#888;">${renderPortableText(u.updateNotes)}</div>
+  </div>`).join('')}` : ''}
+
+  ${(rdBlocks || finBlocks) ? `
+  <div class="pdf-block" style="padding: 0 40px;">
+    <div class="section-divider" style="margin-top: 20px; margin-bottom: 0;"></div>
+  </div>
+  ${rdBlocks}
+  ${finBlocks}` : ''}
+</div>`;
   }).join('');
 
   // ════════════════════════════════════════════════════════════
@@ -1341,23 +1303,21 @@ export function generatePdfHtml({
 
   const hasMedia = mediaItems.length > 0 || hasSocialUpdates;
 
-  // Use <table> + <thead> so the page header repeats automatically if social cards overflow to a second page
   const mediaHtml = `
-  <table class="media-page-table" id="section-media">
-    <thead><tr><td>${headerHtml()}</td></tr></thead>
-    <tbody><tr><td style="padding: 28px 40px 80px;">
-      <div class="media-heading-wrap">
-        <div class="media-heading">IN THE MEDIA</div>
-        <div class="media-arrow">↗</div>
-      </div>
-      <div class="media-subhead">Key highlights and press coverage</div>
-      ${report.mediaNotes && Array.isArray(report.mediaNotes) && report.mediaNotes.length > 0 ? `<div class="body-text" style="margin: 12px 0 4px;">${renderMediaNotesBlocks(report.mediaNotes)}</div>` : ''}
-      <div class="section-divider-light"></div>
-      ${mediaCardsHtml ? `<div class="media-cards">${mediaCardsHtml}</div>` : ''}
-      ${socialCardsHtml}
-      ${!hasMedia ? '<p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p>' : ''}
-    </td></tr></tbody>
-  </table>`;
+<div class="pdf-var-section" id="section-media">
+  <div class="pdf-block" style="padding: 0 40px 0;">
+    <div class="media-heading-wrap">
+      <div class="media-heading">IN THE MEDIA</div>
+      <div class="media-arrow">↗</div>
+    </div>
+    <div class="media-subhead">Key highlights and press coverage</div>
+    ${report.mediaNotes && Array.isArray(report.mediaNotes) && report.mediaNotes.length > 0 ? `<div class="body-text" style="margin: 12px 0 4px;">${renderMediaNotesBlocks(report.mediaNotes)}</div>` : ''}
+    <div class="section-divider-light"></div>
+  </div>
+  ${mediaCardsHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="media-cards">${mediaCardsHtml}</div></div>` : ''}
+  ${hasSocialUpdates ? `<div class="pdf-block" style="padding: 0 40px;">${socialCardsHtml}</div>` : ''}
+  ${!hasMedia ? `<div class="pdf-block" style="padding: 0 40px;"><p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p></div>` : ''}
+</div>`;
 
   // ════════════════════════════════════════════════════════════
   // CONTACT INFORMATION (last page)
@@ -1417,42 +1377,6 @@ export function generatePdfHtml({
   </div>`;
 
   // ════════════════════════════════════════════════════════════
-  // SVG injection: fill sections with >50% empty space
-  // ════════════════════════════════════════════════════════════
-  const svgPool = [coverSvgHtml, portfolioUpdatesSvgHtml, fundFinancialsSvgHtml, pipelineSvgHtml].filter(Boolean);
-  const svgPoolJson = JSON.stringify(svgPool).replace(/<\/script>/gi, '<\\/script>');
-
-  const svgInjectionScript = svgPool.length > 0 ? `
-<script>
-(function() {
-  var svgs = ${svgPoolJson};
-  var PAGE_H = 1123;
-  var pages = document.querySelectorAll('.page[data-section-end]');
-  for (var i = 0; i < pages.length; i++) {
-    var page = pages[i];
-    var header = page.querySelector('.page-header');
-    var body = page.querySelector('.page-body');
-    if (!body) continue;
-    var headerH = header ? header.offsetHeight : 88;
-    var bodyH = body.scrollHeight;
-    var used = headerH + bodyH;
-    if (used >= PAGE_H * 0.5) continue;
-    var idx = Math.floor(Math.random() * svgs.length);
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'position:absolute;bottom:80px;right:0;left:0;display:flex;justify-content:center;pointer-events:none;';
-    wrap.innerHTML = svgs[idx];
-    var svgEl = wrap.querySelector('svg');
-    if (svgEl) {
-      svgEl.style.cssText = 'width:336px;height:auto;opacity:0.18;display:block;';
-      svgEl.removeAttribute('width');
-      svgEl.removeAttribute('height');
-    }
-    page.appendChild(wrap);
-  }
-})();
-</script>` : '';
-
-  // ════════════════════════════════════════════════════════════
   // ASSEMBLE
   // ════════════════════════════════════════════════════════════
   return `<!DOCTYPE html>
@@ -1461,16 +1385,9 @@ export function generatePdfHtml({
   <meta charset="UTF-8">
   <title>${esc(reportTitle)}</title>
   <style>${buildFontFaceCSS()}\n${CSS}</style>
-  <style>
-    @media print {
-      .footer-confidential { display: none; }
-      .page { min-height: 1087px; }
-      .cover-page { height: 1087px; }
-      .page-number { bottom: 56px; }
-    }
-  </style>
 </head>
 <body>
+<div id="tpl-page-header" style="display:none;">${headerHtml()}</div>
 ${coverHtml}
 ${tocHtml}
 ${coverNoteHtml}
@@ -1482,8 +1399,57 @@ ${fundFinHtml}
 ${pipelineHtml}
 ${mediaHtml}
 ${contactHtml}
-${svgInjectionScript}
-<div class="footer-confidential">Confidential</div>
+<script>
+(function paginatePdf() {
+  var A4_H = 1123, A4_W = 794, PAD_V = 28, PAGE_NUM_ZONE = 78;
+  var tplEl = document.getElementById('tpl-page-header');
+  var HEADER_HTML = tplEl.innerHTML;
+  var testHdr = document.createElement('div');
+  testHdr.style.cssText = 'position:absolute;left:-99999px;top:0;width:794px;display:block;';
+  testHdr.innerHTML = HEADER_HTML;
+  document.body.appendChild(testHdr);
+  var HEADER_H = Math.ceil(testHdr.getBoundingClientRect().height);
+  document.body.removeChild(testHdr);
+  var AVAIL_H = A4_H - HEADER_H - PAD_V * 2 - PAGE_NUM_ZONE;
+  var vfPath = 'd="M24 4C24 1.79086 25.7909 0 28 0V24V28H24H0C0 25.7909 1.79086 24 4 24L24 24V4Z"';
+  var VF_TL = '<svg class="pn-tl" width="18" height="18" viewBox="0 0 28 28" fill="none" style="transform:rotate(180deg)"><path fill-rule="evenodd" clip-rule="evenodd" ' + vfPath + ' fill="#363636"/></svg>';
+  var VF_BR = '<svg class="pn-br" width="18" height="18" viewBox="0 0 28 28" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" ' + vfPath + ' fill="#363636"/></svg>';
+  function makePage(id) {
+    var pg = document.createElement('div');
+    pg.className = 'page';
+    if (id) pg.id = id;
+    pg.innerHTML = HEADER_HTML +
+      '<div class="pdf-content-area" style="padding:' + PAD_V + 'px 0 ' + PAD_V + 'px;"></div>' +
+      '<div class="page-number">' + VF_TL + '<span></span>' + VF_BR + '</div>';
+    return { el: pg, content: pg.querySelector('.pdf-content-area'), used: 0 };
+  }
+  var sections = document.querySelectorAll('.pdf-var-section');
+  sections.forEach(function(section) {
+    var sectionId = section.id;
+    var parent = section.parentNode;
+    section.style.cssText = 'position:absolute;left:-99999px;top:0;width:' + A4_W + 'px;display:block;visibility:hidden;';
+    var blocks = Array.from(section.querySelectorAll(':scope > .pdf-block'));
+    var heights = blocks.map(function(b) { return b.getBoundingClientRect().height + 4; });
+    section.style.cssText = 'display:none;';
+    var first = makePage(sectionId || null);
+    parent.insertBefore(first.el, section);
+    var cur = first;
+    for (var i = 0; i < blocks.length; i++) {
+      var h = heights[i];
+      var nextH = (blocks[i].dataset.keepWithNext === 'true' && i + 1 < blocks.length) ? heights[i + 1] : 0;
+      var need = h + nextH;
+      if (cur.used > 0 && cur.used + need > AVAIL_H) {
+        var np = makePage(null);
+        parent.insertBefore(np.el, section);
+        cur = np;
+      }
+      cur.content.appendChild(blocks[i].cloneNode(true));
+      cur.used += h;
+    }
+    parent.removeChild(section);
+  });
+})();
+</script>
 </body>
 </html>`;
 }
