@@ -557,7 +557,7 @@ a { cursor: pointer; }
 .media-arrow { font-size: 52px; color: #363636; font-weight: 300; line-height: 1; }
 .media-subhead { font-size: 13px; color: #555; margin-bottom: 16px; }
 .media-cards { display: flex; flex-direction: column; gap: 20px; }
-.media-card { border: 1px solid #c0bfbf; padding: 16px 20px; width: 55%; }
+.media-card { border: 1px solid #363636; padding: 16px 20px; width: 55%; }
 .media-card.right { margin-left: auto; }
 .media-card-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #555; margin-bottom: 8px; }
 .media-card-title { font-size: 14px; font-weight: 400; color: #363636; line-height: 1.4; margin-bottom: 8px; }
