@@ -86,7 +86,7 @@ async function verifyPortalSession(cookieValue) {
   }
 }
 
-export async function handlePdfGet(slug) {
+export async function handlePdfGet(slug, { returnHtml = false } = {}) {
   // ── Auth ────────────────────────────────────────────────────
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('portal-session')?.value;
@@ -222,6 +222,14 @@ export async function handlePdfGet(slug) {
     fundFinancialsSvgHtml,
     pipelineSvgHtml,
   });
+
+  // ── HTML-only mode (browser preview, no Puppeteer) ───────────
+  if (returnHtml) {
+    return new NextResponse(htmlContent, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' },
+    });
+  }
 
   // ── Launch Puppeteer ─────────────────────────────────────────
   let browser;

@@ -7,5 +7,6 @@ export const maxDuration = 60;
 
 export async function GET(request, { params }) {
   const { slug } = await params;
-  return handlePdfGet(slug);
+  const returnHtml = new URL(request.url).searchParams.get('html') === '1';
+  return handlePdfGet(slug, { returnHtml });
 }
