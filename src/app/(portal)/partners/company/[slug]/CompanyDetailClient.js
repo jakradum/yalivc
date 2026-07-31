@@ -10,6 +10,7 @@ import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
 import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
+import PortalSidebar from '../../PortalSidebar';
 
 import Footer from '../../../../components/footer';
 
@@ -301,18 +302,6 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   };
 
   // Menu items matching the main portal
-  const menuItems = [
-    { id: 'cover-note', label: 'Cover note' },
-    { id: 'fund-summary', label: 'Fund summary' },
-    { id: 'portfolio-investment-summary', label: 'Portfolio investment summary' },
-    { id: 'portfolio-company-updates', label: 'Portfolio company updates' },
-    { id: 'fund-financials', label: 'Fund financials' },
-    { id: 'pipeline-summary', label: 'Pipeline summary' },
-    { id: 'media-coverage', label: 'Media coverage' },
-    { id: 'contact-information', label: 'Contact Information' },
-    { id: 'download-centre', label: 'Download Center' },
-  ];
-
   // Handle menu click - navigate to main portal with section (preserve report context)
   const handleMenuClick = (id) => {
     const reportParam = reportSlug ? `&report=${reportSlug}` : '';
@@ -407,25 +396,14 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
       {/* Main Layout with Sidebar */}
       <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''} ${(!isLatestReport && !olderReportBannerDismissed) ? styles.portalLayoutWithBanner : ''}`}>
         {/* Fixed Sidebar */}
-        <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
-          <nav className={styles.sidebarNav}>
-            <ul className={styles.menuList}>
-              {menuItems.map((item) => (
-                <li key={item.id} className={styles.menuListItem}>
-                  <button
-                    onClick={() => handleMenuClick(item.id)}
-                    className={styles.menuItem}
-                  >
-                    {item.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <a href="/api/portal-logout" className={styles.sidebarLogout}>
-              Sign out
-            </a>
-          </nav>
-        </aside>
+        <PortalSidebar
+          activeSection="portfolio-company-updates"
+          onMenuClick={handleMenuClick}
+          reportSlug={reportSlug}
+          companies={allCompanySlugs}
+          currentCompanySlug={company.slug}
+          sidebarOpen={sidebarOpen}
+        />
 
         {/* Mobile sidebar overlay - closes sidebar on outside click */}
         {isMobile && sidebarOpen && (

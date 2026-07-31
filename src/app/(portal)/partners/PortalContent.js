@@ -10,6 +10,7 @@ import { Openicon } from '../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../components/icons/small-icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
+import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
 
@@ -315,19 +316,6 @@ function PortalContentInner({
     }
   }, [showCollapsePopup]);
 
-  // Menu items matching the image structure
-  const menuItems = [
-    { id: 'cover-note', label: 'Cover note' },
-    { id: 'fund-summary', label: 'Fund summary' },
-    { id: 'portfolio-investment-summary', label: 'Portfolio investment summary' },
-    { id: 'portfolio-company-updates', label: 'Portfolio company updates' },
-    { id: 'fund-financials', label: 'Fund financials' },
-    { id: 'pipeline-summary', label: 'Pipeline summary' },
-    { id: 'media-coverage', label: 'Media coverage' },
-    { id: 'contact-information', label: 'Contact Information' },
-    { id: 'download-centre', label: 'Download Center' },
-  ];
-
   // Handle menu click - update state and URL without triggering navigation
   const handleMenuClick = (id) => {
     setActiveSection(id);
@@ -347,7 +335,7 @@ function PortalContentInner({
   // Get flat list of all sections for prev/next navigation
   const getAllSections = () => {
     const sections = [];
-    menuItems.forEach(item => {
+    MENU_ITEMS.forEach(item => {
       if (item.children) {
         item.children.forEach(child => sections.push(child.id));
       } else {
@@ -490,45 +478,13 @@ function PortalContentInner({
       {/* Main Layout with Sidebar */}
       <div className={`${styles.portalLayout} ${!sidebarOpen ? styles.sidebarCollapsed : ''} ${(!isLatestReport && !olderReportBannerDismissed) ? styles.portalLayoutWithBanner : ''}`}>
         {/* Fixed Sidebar */}
-        <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
-          <nav className={styles.sidebarNav}>
-            <ul className={styles.menuList}>
-              {menuItems.map((item) => (
-                <li key={item.id} className={styles.menuListItem}>
-                  {item.children ? (
-                    // Parent item with children
-                    <>
-                      <span className={styles.menuParent}>{item.label}</span>
-                      <ul className={styles.menuSubList}>
-                        {item.children.map((child) => (
-                          <li key={child.id}>
-                            <button
-                              onClick={() => handleMenuClick(child.id)}
-                              className={`${styles.menuItem} ${styles.menuSubItem} ${activeSection === child.id ? styles.menuItemActive : ''}`}
-                            >
-                              {child.label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    // Regular menu item
-                    <button
-                      onClick={() => handleMenuClick(item.id)}
-                      className={`${styles.menuItem} ${activeSection === item.id ? styles.menuItemActive : ''}`}
-                    >
-                      {item.label}
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <a href="/api/portal-logout" className={styles.sidebarLogout}>
-              Sign out
-            </a>
-          </nav>
-        </aside>
+        <PortalSidebar
+          activeSection={activeSection}
+          onMenuClick={handleMenuClick}
+          reportSlug={reportSlug}
+          companies={sortedInvestments.map(c => ({ slug: c.slug, name: c.entityName || c.name }))}
+          sidebarOpen={sidebarOpen}
+        />
 
         {/* Mobile sidebar overlay - closes sidebar on outside click */}
         {isMobile && sidebarOpen && (
