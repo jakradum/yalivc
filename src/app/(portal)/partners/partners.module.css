@@ -803,6 +803,60 @@
   padding-left: 2.5rem !important;
 }
 
+.menuItemExpandable {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menuChevron {
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1;
+  color: #888;
+  transition: transform 0.2s ease;
+  display: inline-block;
+  transform: rotate(0deg);
+  flex-shrink: 0;
+}
+
+.menuChevronOpen {
+  transform: rotate(90deg);
+}
+
+.companySubList {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+  opacity: 0;
+}
+
+.companySubListOpen {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.menuCompanyLink {
+  display: block;
+  padding: 0.4rem 1.5rem 0.4rem 2.5rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.7rem;
+  color: #888;
+  text-decoration: none;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.menuCompanyLink:hover {
+  color: #363636;
+}
+
+.menuCompanyLinkActive {
+  color: #830d35;
+}
+
 /* Sidebar toggle button */
 .sidebarToggle {
   background: none;
