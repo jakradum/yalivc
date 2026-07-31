@@ -142,6 +142,19 @@ export default defineConfig({
             S.listItem()
               .title('Contact Submissions')
               .child(S.documentTypeList('contactSubmission').title('Contact Submissions')),
+            S.divider(),
+            // Finance
+            S.listItem()
+              .title('Finance')
+              .child(
+                S.list()
+                  .title('Finance')
+                  .items([
+                    S.listItem()
+                      .title('Letterhead Documents')
+                      .child(S.documentTypeList('letterheadDocument').title('Letterhead Documents')),
+                  ])
+              ),
           ]),
     }),
     visionTool(),
