@@ -310,7 +310,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
     { id: 'pipeline-summary', label: 'Pipeline summary' },
     { id: 'media-coverage', label: 'Media coverage' },
     { id: 'contact-information', label: 'Contact Information' },
-    { id: 'download-centre', label: 'Download Centre' },
+    { id: 'download-centre', label: 'Download Center' },
   ];
 
   // Handle menu click - navigate to main portal with section (preserve report context)
