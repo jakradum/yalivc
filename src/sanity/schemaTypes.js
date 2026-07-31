@@ -38,6 +38,8 @@ import investorRelations from './schemas/investorRelations'
 import domainPrivilege from './schemas/domainPrivilege'
 // Contact form submissions
 import contactSubmission from './schemas/contactSubmission'
+// Letterhead documents
+import letterheadDocument from './schemas/letterheadDocument'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -76,4 +78,6 @@ export const schemaTypes = [
   domainPrivilege,
   // Contact form
   contactSubmission,
+  // Letterhead
+  letterheadDocument,
 ]

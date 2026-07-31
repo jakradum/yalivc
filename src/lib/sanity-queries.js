@@ -1691,3 +1691,34 @@ export async function getDataRoomAllFundSettings() {
     }`
   );
 }
+
+export async function getLetterBySlug(slug) {
+  return client.fetch(
+    `*[_type == "letterheadDocument" && slug.current == $slug][0] {
+      subject,
+      slug,
+      date,
+      reference,
+      salutation,
+      body,
+      closing,
+      signatory-> {
+        name,
+        role
+      }
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllLetters() {
+  return client.fetch(
+    `*[_type == "letterheadDocument"] | order(date desc) {
+      subject,
+      slug,
+      date,
+      reference,
+      signatory-> { name }
+    }`
+  );
+}

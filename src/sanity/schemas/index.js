@@ -38,6 +38,8 @@ import investorRelations from './investorRelations'
 import domainPrivilege from './domainPrivilege'
 // Contact form submissions
 import contactSubmission from './contactSubmission'
+// Letterhead documents
+import letterheadDocument from './letterheadDocument'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -82,4 +84,6 @@ export const schemaTypes = [
   domainPrivilege,
   // Contact form
   contactSubmission,
+  // Letterhead
+  letterheadDocument,
 ]
