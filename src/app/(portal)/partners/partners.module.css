@@ -1013,6 +1013,16 @@
   justify-content: space-between;
   margin-top: 3rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.sectionNavigation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   border-top: 1px solid #363636;
 }
 
@@ -2363,6 +2373,16 @@
 .investmentPieSection {
   margin-top: 2rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.investmentPieSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   border-top: 1px solid #363636;
 }
 
@@ -2479,6 +2499,16 @@
 .companyTilesSection {
   margin-top: 2.5rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.companyTilesSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   border-top: 1px solid #363636;
 }
 
@@ -2777,6 +2807,16 @@
 .companyAboutSection {
   margin-bottom: 2rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.companyAboutSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   border-top: 1px solid #363636;
 }
 
@@ -2800,6 +2840,16 @@
 .roundMetricsSection {
   margin-bottom: 2rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.roundMetricsSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   border-top: 1px solid #363636;
 }
 
