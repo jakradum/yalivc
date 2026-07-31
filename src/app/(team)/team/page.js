@@ -85,6 +85,28 @@ export default function TeamPage() {
               </div>
             </a>
 
+            {/* Letters card */}
+            <a href="/team/letters/" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                border: '1px solid #363636',
+                borderTop: '3px solid #830d35',
+                background: 'rgba(255,255,255,0.88)',
+                padding: '28px 24px',
+                height: '100%',
+                boxSizing: 'border-box',
+              }}>
+                <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 14 }}>
+                  Finance
+                </div>
+                <div style={{ fontFamily: mono, fontSize: 18, fontWeight: 400, color: '#363636', marginBottom: 12, lineHeight: 1.3 }}>
+                  Letters
+                </div>
+                <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
+                  Generate and print official correspondence on Yali letterhead. Create a new letter in Sanity, then open it here to save as PDF.
+                </p>
+              </div>
+            </a>
+
           </div>
         </div>
       </div>
