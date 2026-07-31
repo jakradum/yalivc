@@ -938,6 +938,15 @@ export function generatePdfHtml({
     const moicConf = qd?.moicConfidential;
     const roundMoics = qd?.roundMoics || [];
 
+    // MOIC marker: use custom snapshot-moic footnote marker if present, otherwise ★
+    const customMoicFn = (qd?.tableFootnotes || []).find(f => f.tableType === 'snapshot' && f.fieldName === 'snapshot-moic' && f.marker);
+    const moicMarkerHtml = customMoicFn
+      ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(customMoicFn.marker)}</sup>`
+      : ' ★';
+    const defaultMoicFootnote = roundMoics.length > 0 && !customMoicFn
+      ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
+      : '';
+
     // Co-investors from the latest investment round only
     const latestRound = allRounds[allRounds.length - 1];
     const coInvestors = (latestRound?.coInvestors || [])
@@ -985,15 +994,6 @@ export function generatePdfHtml({
     }
 
     const snapshotFootnotes = renderTableFootnotes(effectiveFootnotes(), 'snapshot');
-
-    // MOIC marker: use custom snapshot-moic footnote marker if present, otherwise ★
-    const customMoicFn = (qd?.tableFootnotes || []).find(f => f.tableType === 'snapshot' && f.fieldName === 'snapshot-moic' && f.marker);
-    const moicMarkerHtml = customMoicFn
-      ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(customMoicFn.marker)}</sup>`
-      : ' ★';
-    const defaultMoicFootnote = roundMoics.length > 0 && !customMoicFn
-      ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
-      : '';
 
     const currentQUpdate = allUpdates.find(u => u.quarter === quarter && u.fiscalYear === fiscalYear);
 
