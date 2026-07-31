@@ -325,7 +325,7 @@ function PortalContentInner({
     { id: 'pipeline-summary', label: 'Pipeline summary' },
     { id: 'media-coverage', label: 'Media coverage' },
     { id: 'contact-information', label: 'Contact Information' },
-    { id: 'download-centre', label: 'Download Centre' },
+    { id: 'download-centre', label: 'Download Center' },
   ];
 
   // Handle menu click - update state and URL without triggering navigation
@@ -1347,7 +1347,7 @@ function PortalContentInner({
           {activeSection === 'download-centre' && (
             <section className={styles.contentSection}>
               <div className={styles.sectionHeader}>
-                <h1 className={styles.sectionPageTitle}>Download Centre</h1>
+                <h1 className={styles.sectionPageTitle}>Download Center</h1>
               </div>
               {allReports && allReports.filter(r => r.pdfUrl && r.quarter && r.fiscalYear).length > 0 ? (
                 <div className={styles.downloadTableWrapper}>
