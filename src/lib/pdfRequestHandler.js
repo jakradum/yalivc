@@ -282,7 +282,10 @@ export async function handlePdfGet(slug, { returnHtml = false } = {}) {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      displayHeaderFooter: true,
+      headerTemplate: '<span></span>',
+      footerTemplate: '<div style="width:100%;text-align:center;font-size:9px;color:#888888;letter-spacing:0.18em;font-family:Courier,monospace;padding-bottom:6px;">CONFIDENTIAL</div>',
+      margin: { top: '0', right: '0', bottom: '36px', left: '0' },
       tagged: true,
     });
 
