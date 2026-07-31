@@ -2951,6 +2951,15 @@
 .quarterlyUpdatesSection {
   margin-top: 2rem;
   padding-top: 2rem;
+  position: relative;
+}
+
+.quarterlyUpdatesSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -3rem;
+  right: -3rem;
   border-top: 1px solid #363636;
 }
 
