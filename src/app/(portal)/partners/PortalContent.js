@@ -870,11 +870,18 @@ function PortalContentInner({
                     if (chartData.length === 0) return null;
 
                     const total = chartData.reduce((sum, d) => sum + d.value, 0);
-                    // Pie chart colors - secondary/tertiary palette (no burgundy primary)
-                    // Secondary: #d75d86 (pink), #66bdd4 (teal), #ebde84 (gold)
-                    // Tertiary: #c28d55 (copper/bronze)
-                    // Additional: #9f7ae4 (purple), #0d835b (green), #f5a623 (amber), #50e3c2 (mint), #B11248 (crimson)
-                    const colors = ['#d75d86', '#66bdd4', '#ebde84', '#c28d55', '#9f7ae4', '#0d835b', '#f5a623', '#50e3c2', '#B11248'];
+                    // Crimson-to-blush gradient matching the fund2 deck sector pie chart.
+                    // Sectors sorted largest→smallest map to darkest→lightest shade.
+                    const SECTOR_COLORS = {
+                      'Aerospace & Surveillance': '#830d35',
+                      'Artificial Intelligence':  '#bb3e68',
+                      'Life Sciences':            '#d65d85',
+                      'Fabless Semiconductor':    '#db90a9',
+                      'Robotics':                 '#f4c0d4',
+                      'Smart Manufacturing':      '#e8a8be',
+                    };
+                    const FALLBACK_COLORS = ['#830d35','#bb3e68','#d65d85','#db90a9','#f4c0d4','#e8a8be'];
+                    const getColor = (name, idx) => SECTOR_COLORS[name] ?? FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
 
                     // SVG Pie Chart calculations
                     const size = 220;
@@ -912,7 +919,7 @@ function PortalContentInner({
                               <path
                                 key={idx}
                                 d={pathData}
-                                fill={colors[idx % colors.length]}
+                                fill={getColor(segment.name, idx)}
                                 className={styles.investmentPieSegment}
                                 onMouseEnter={() => setHoveredSegment(idx)}
                                 onMouseLeave={() => setHoveredSegment(null)}
@@ -930,7 +937,7 @@ function PortalContentInner({
                               onMouseEnter={() => setHoveredSegment(idx)}
                               onMouseLeave={() => setHoveredSegment(null)}
                             >
-                              <span className={styles.investmentPieLegendColor} style={{ backgroundColor: colors[idx % colors.length] }}></span>
+                              <span className={styles.investmentPieLegendColor} style={{ backgroundColor: getColor(segment.name, idx) }}></span>
                               <span className={styles.investmentPieLegendName}>{segment.name}</span>
                               <span className={styles.investmentPieLegendValue}>₹{Math.round(segment.value)} Cr</span>
                             </div>
