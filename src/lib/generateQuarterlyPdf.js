@@ -201,6 +201,7 @@ body {
 
 @page { size: A4; margin: 0; }
 
+
 .page {
   width: 794px;
   min-height: 1123px;
@@ -469,7 +470,7 @@ a { cursor: pointer; }
   border-left: 3px solid #830d35;
   padding-left: 10px;
 }
-.confidentiality-box { border: 1px solid #c0bfbf; padding: 16px 20px; margin-top: 8px; }
+.confidentiality-box { border: 1px solid #363636; padding: 16px 20px; margin-top: 8px; }
 .confidentiality-box p { font-family: 'Inter', sans-serif; font-size: 11px; color: #555; line-height: 1.6; }
 
 /*=================================================================
@@ -574,11 +575,11 @@ a { cursor: pointer; }
 /* LinkedIn banner */
 .linkedin-banner {
   display: flex; align-items: center; gap: 14px;
-  border: 1px solid #c0bfbf; padding: 14px 20px;
+  border: 1px solid #363636; padding: 14px 20px;
   margin-bottom: 16px; text-decoration: none; color: inherit;
 }
 .linkedin-banner-icon {
-  width: 32px; height: 32px; border-radius: 4px;
+  width: 32px; height: 32px;
   background: #0a66c2; color: white;
   display: flex; align-items: center; justify-content: center;
   font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
@@ -593,7 +594,7 @@ a { cursor: pointer; }
 /* Video card */
 .video-card {
   display: flex; gap: 0;
-  border: 1px solid #c0bfbf;
+  border: 1px solid #363636;
   margin-bottom: 16px;
   overflow: hidden;
   text-decoration: none; color: inherit;
@@ -635,7 +636,7 @@ a { cursor: pointer; }
 /* Generic social card */
 .social-card {
   display: flex; gap: 0;
-  border: 1px solid #c0bfbf;
+  border: 1px solid #363636;
   margin-bottom: 16px;
   overflow: hidden;
 }
@@ -679,7 +680,7 @@ a { cursor: pointer; }
   padding: 64px 56px 48px;
 }
 .contact-boxes { padding: 0 56px; display: flex; flex-direction: column; gap: 20px; }
-.contact-box { border: 1px solid rgba(239,239,239,0.4); padding: 20px 24px; width: 70%; }
+.contact-box { border: 1px solid rgba(235,222,132,0.45); padding: 20px 24px; width: 70%; }
 .contact-box-text {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px; font-weight: 600;
@@ -1460,6 +1461,14 @@ export function generatePdfHtml({
   <meta charset="UTF-8">
   <title>${esc(reportTitle)}</title>
   <style>${buildFontFaceCSS()}\n${CSS}</style>
+  <style>
+    @media print {
+      .footer-confidential { display: none; }
+      .page { min-height: 1087px; }
+      .cover-page { height: 1087px; }
+      .page-number { bottom: 56px; }
+    }
+  </style>
 </head>
 <body>
 ${coverHtml}
