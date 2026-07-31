@@ -1,3 +1,5 @@
+import { SlugWithUrlPreview } from '../components/SlugWithUrlPreview';
+
 const letterheadDocument = {
   name: 'letterheadDocument',
   title: 'Letterhead Documents',
@@ -16,6 +18,7 @@ const letterheadDocument = {
       type: 'slug',
       options: { source: 'subject', maxLength: 96 },
       validation: Rule => Rule.required(),
+      components: { input: SlugWithUrlPreview },
     },
     {
       name: 'date',
