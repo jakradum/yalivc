@@ -1385,6 +1385,13 @@ export function generatePdfHtml({
   <meta charset="UTF-8">
   <title>${esc(reportTitle)}</title>
   <style>${buildFontFaceCSS()}\n${CSS}</style>
+  <style>
+    @media screen {
+      html { background: #c8c8c8; }
+      body { background: transparent; width: auto; padding: 40px 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+      .page { box-shadow: 0 4px 24px rgba(0,0,0,0.22); }
+    }
+  </style>
 </head>
 <body>
 <div id="tpl-page-header" style="display:none;">${headerHtml()}</div>
@@ -1419,7 +1426,7 @@ ${contactHtml}
     pg.className = 'page';
     if (id) pg.id = id;
     pg.innerHTML = HEADER_HTML +
-      '<div class="pdf-content-area" style="padding:' + PAD_V + 'px 0 ' + PAD_V + 'px;"></div>' +
+      '<div class="pdf-content-area" style="padding:' + PAD_V + 'px 0 ' + PAD_V + 'px; max-height:' + AVAIL_H + 'px; overflow:hidden;"></div>' +
       '<div class="page-number">' + VF_TL + '<span></span>' + VF_BR + '</div>';
     return { el: pg, content: pg.querySelector('.pdf-content-area'), used: 0 };
   }
@@ -1447,6 +1454,12 @@ ${contactHtml}
       cur.used += h;
     }
     parent.removeChild(section);
+  });
+  // Fill page number spans for HTML preview (page.evaluate() overwrites in Puppeteer)
+  var allPages = Array.from(document.querySelectorAll('.page'));
+  allPages.forEach(function(pg, idx) {
+    var span = pg.querySelector('.page-number span:not(.pn-tl):not(.pn-br)');
+    if (span && !span.textContent) span.textContent = 'Page ' + (idx + 1);
   });
 })();
 </script>
