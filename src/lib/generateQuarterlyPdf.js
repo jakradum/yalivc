@@ -66,7 +66,7 @@ function fmtDate(dateStr) {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const yr = String(d.getFullYear()).slice(2);
-  return `${d.getDate()} ${months[d.getMonth()]} '${yr}`;
+  return `${d.getDate()} ${months[d.getMonth()]} ${yr}`;
 }
 
 function fmtMonthYear(dateStr) {
@@ -487,6 +487,13 @@ a { cursor: pointer; }
   font-weight: 700; font-size: 18px; color: #830d35;
 }
 
+/* KPI block */
+.kpi-block { border: 1px solid #363636; padding: 12px 16px; margin-bottom: 16px; }
+.kpi-row { display: flex; gap: 32px; align-items: flex-start; }
+.kpi-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+.kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #830d35; }
+.kpi-value.neutral { color: #363636; }
+
 /* Quarter updates */
 .prev-quarters-heading {
   display: flex; align-items: center; gap: 16px;
@@ -765,7 +772,9 @@ export function generatePdfHtml({
   ${ecosystemHtml ? `
   <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Ecosystem &amp; Tailwinds</div></div>
   <div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text">${ecosystemHtml}</div></div>` : ''}
-  ${closingHtml ? `<div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="body-text">${closingHtml}</div></div>` : ''}
+  ${closingHtml ? `
+  <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Closing Note</div></div>
+  <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="body-text">${closingHtml}</div></div>` : ''}
   <div class="pdf-block cn-block" style="padding: 0 40px;">
     ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.65;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
     <div style="margin-top: 32px;">
@@ -782,28 +791,33 @@ export function generatePdfHtml({
   // ════════════════════════════════════════════════════════════
   const fundSumPageNum = nextPageNum(); // 5
 
+  const fundSizeVal = fundSettings?.targetFundSizeINR ?? fundSettings?.fundSizeAtClose;
+  const fundSizeSubtitle = fundSizeVal != null
+    ? `Combined fund size: ₹${Number.isInteger(fundSizeVal) ? fundSizeVal : fmt(fundSizeVal, 0)} crore`
+    : `As of ${esc(asOf)}`;
+
   const fundSumHtml = `
   <div class="page" id="section-fund-summary" data-section-end="true">
     ${headerHtml()}
     <div class="page-body">
       <div class="fund-summary-heading">Fund Summary</div>
-      <div class="fund-summary-sub">As of ${esc(asOf)}</div>
+      <div class="fund-summary-sub">${esc(fundSizeSubtitle)}</div>
       <table class="report-table">
         <thead>
           <tr>
             <th style="width: 65%;">As of ${esc(asOf)}</th>
-            <th>Amount</th>
+            <th>Amount in ₹ crores</th>
           </tr>
         </thead>
         <tbody>
           <tr><td>First close date</td><td>${fmtDate(fundSettings?.firstCloseDate)}</td></tr>
           <tr><td>Final close date</td><td>${fmtDate(fundSettings?.finalCloseDate)}</td></tr>
-          <tr><td>Combined fund size</td><td>${fundSettings?.targetFundSizeINR != null ? fmtCr(fundSettings.targetFundSizeINR) : (fundSettings?.fundSizeAtClose ? fmtCr(fundSettings.fundSizeAtClose) : '—')}</td></tr>
-          <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmtCr(fundMetrics.amountDrawnDown) : '—'}</td></tr>
-          <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmtCr(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
-          <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmtCr(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
+          <tr><td>Combined fund size</td><td>${fundSizeVal != null ? fmt(fundSizeVal) : '—'}</td></tr>
+          <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
+          <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
+          <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
           <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}</td></tr>
-          <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmtCr(fundMetrics.amountReturned) : '—'}</td></tr>
+          <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmt(fundMetrics.amountReturned) : '—'}</td></tr>
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
           <tr><td>TVPI</td><td>${fundMetrics.tvpi != null ? fmt(fundMetrics.tvpi) + 'x' : '—'}</td></tr>
           <tr><td>DPI</td><td>${fundMetrics.dpi != null ? fmt(fundMetrics.dpi) + 'x' : '—'}</td></tr>
@@ -831,7 +845,7 @@ export function generatePdfHtml({
         <td>${esc(c.sector || '—')}</td>
         <td>${fmtDate(getInitialInvestmentDate(c))}</td>
         <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
-        <td>${ownershipConf ? '**' : fmtPct(ownership)}</td>
+        <td>${ownershipConf ? '**' : (ownership != null ? fmt(ownership, 2) : '—')}</td>
       </tr>`;
   }).join('');
 
@@ -975,8 +989,14 @@ export function generatePdfHtml({
     // ── Build <tr> rows for investment round details ──
     // Each detail row is its own <tr> so Chrome breaks between rows at the page
     // boundary naturally — no "block fits on next page, move it" optimization.
-    const financialsUpdates = allUpdates.slice(0, 5);
-    const hasRevPat = financialsUpdates.some(u => u.revenueINR != null || u.patINR != null);
+    // Exclude the current quarter from financials if both revenue and PAT are confidential
+    // (quiet-period companies like Tonbo don't show the current quarter column at all)
+    const currentQFinConf = currentQUpdate?.revenueConfidential && currentQUpdate?.patConfidential;
+    const financialsUpdatesRaw = allUpdates.slice(0, 5);
+    const financialsUpdates = currentQFinConf
+      ? financialsUpdatesRaw.filter(u => !(u.quarter === quarter && u.fiscalYear === fiscalYear))
+      : financialsUpdatesRaw;
+    const hasRevPat = financialsUpdates.some(u => u.revenueINR != null || u.patINR != null || u.revenueConfidential || u.patConfidential);
     const hasKeyMetrics = (currentQUpdate?.keyMetrics || qd?.keyMetrics || []).length > 0;
 
     // Helper: one <tr> containing a flex row, with optional top/bottom borders on the <td>
@@ -1073,7 +1093,7 @@ export function generatePdfHtml({
             </div>`;
           }).join('')}
         </div>
-        <div class="footnote" style="padding:4px 0 0;">All figures in ₹ Cr${financialsFootnotes ? '<br>' + financialsFootnotes : ''}</div>
+        <div class="footnote" style="padding:4px 0 0;">All figures in ₹ Cr${financialsFootnotes ? '<br>' + financialsFootnotes : ''}${financialsUpdates.some(u => u.revenueConfidential || u.patConfidential) ? '<br>** Revenue and PAT are kept confidential during the quiet period.' : ''}</div>
       </div>`;
     }
 
@@ -1116,6 +1136,32 @@ export function generatePdfHtml({
   <div class="pdf-block" style="padding: 0 40px;">
     <div style="margin-top: 20px;">
       <div class="prev-quarters-label" style="color:#830d35;font-size:18px;font-weight:700;margin-bottom:10px;">Quarter updates</div>
+      ${(() => {
+        const kpiRevConf = currentQUpdate?.revenueConfidential;
+        const kpiRev = currentQUpdate?.revenueINR;
+        const kpiPat = currentQUpdate?.patINR;
+        const kpiTeam = currentQUpdate?.teamSize;
+        const kpiTeamConf = currentQUpdate?.teamSizeConfidential;
+        const kpiMoic = moicConf ? null : moic;
+        const showFinancials = !kpiRevConf;
+        const isPreRevenue = !company.isRevenueMaking;
+
+        const kpiItems = [];
+        if (kpiMoic != null) kpiItems.push(`<div class="kpi-item"><div class="kpi-label">Multiple</div><div class="kpi-value">${fmt(kpiMoic)}x</div></div>`);
+        if (showFinancials) {
+          if (isPreRevenue) {
+            kpiItems.push(`<div class="kpi-item"><div class="kpi-label">Financials</div><div class="kpi-value neutral" style="font-size:11px;">This company is pre-revenue</div></div>`);
+          } else if (kpiRev != null) {
+            kpiItems.push(`<div class="kpi-item"><div class="kpi-label">Revenue</div><div class="kpi-value">${fmtCr(kpiRev)}</div></div>`);
+            if (kpiPat != null) kpiItems.push(`<div class="kpi-item"><div class="kpi-label">PAT</div><div class="kpi-value">${kpiPat < 0 ? `₹-${fmt(Math.abs(kpiPat))} Cr` : fmtCr(kpiPat)}</div></div>`);
+          }
+        }
+        if (!kpiTeamConf && kpiTeam != null) kpiItems.push(`<div class="kpi-item"><div class="kpi-label">Team Size</div><div class="kpi-value neutral">${kpiTeam}</div></div>`);
+
+        return kpiItems.length > 0
+          ? `<div class="kpi-block"><div class="kpi-row">${kpiItems.join('')}</div></div>`
+          : '';
+      })()}
       ${currentQHtml}
     </div>
   </div>
