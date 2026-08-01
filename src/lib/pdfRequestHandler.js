@@ -86,7 +86,7 @@ async function verifyPortalSession(cookieValue) {
   }
 }
 
-export async function handlePdfGet(slug, { returnHtml = false } = {}) {
+export async function handlePdfGet(slug, { returnHtml = false, debugMode = false } = {}) {
   // ── Auth ────────────────────────────────────────────────────
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('portal-session')?.value;
@@ -221,6 +221,7 @@ export async function handlePdfGet(slug, { returnHtml = false } = {}) {
     portfolioUpdatesSvgHtml,
     fundFinancialsSvgHtml,
     pipelineSvgHtml,
+    debugMode,
   });
 
   // ── HTML-only mode (browser preview, no Puppeteer) ───────────
