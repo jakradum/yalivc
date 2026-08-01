@@ -1160,24 +1160,29 @@ function PortalContentInner({
                   <>
                     <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
 
-                    {/* LinkedIn — condensed to a single follow prompt */}
-                    {linkedInUpdates.length > 0 && (() => {
-                      const liUrl = linkedInUpdates[0]?.url;
-                      return (
-                        <a
-                          href={liUrl ? ((/^https?:\/\//i.test(liUrl) ? liUrl : `https://${liUrl}`).replace(/\/[^/]*$/, '') || liUrl) : 'https://www.linkedin.com/company/yali-capital'}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.linkedInBannerCard}
-                        >
-                          <span className={styles.linkedInBannerIcon}>in</span>
-                          <span className={styles.linkedInBannerText}>
-                            We were active on LinkedIn this quarter — follow us for portfolio updates, team news, and more.
-                          </span>
-                          <span className={styles.mediaCoverageArrow}>→</span>
-                        </a>
-                      );
-                    })()}
+                    {/* LinkedIn — individual cards per update */}
+                    {linkedInUpdates.length > 0 && (
+                      <div className={styles.mediaCoverageGrid}>
+                        {linkedInUpdates.map((item) => {
+                          const href = item.url ? (/^https?:\/\//i.test(item.url) ? item.url : `https://${item.url}`) : 'https://www.linkedin.com/company/yali-capital';
+                          const excerpt = item.excerpt ? (item.excerpt.length > 140 ? item.excerpt.substring(0, 140) + '…' : item.excerpt) : '';
+                          return (
+                            <a key={item._id} href={href} target="_blank" rel="noopener noreferrer" className={styles.mediaCoverageCard}>
+                              <div className={styles.mediaCoverageCardContent}>
+                                <span className={styles.mediaCoveragePublication}>LinkedIn</span>
+                                <p className={styles.mediaCoverageHeadline}>{excerpt}</p>
+                                {item.date && (
+                                  <span className={styles.mediaCoverageDate}>
+                                    {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  </span>
+                                )}
+                              </div>
+                              <span className={styles.mediaCoverageArrow}>→</span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
 
                     {/* YouTube / video updates */}
                     {videoUpdates.length > 0 && (

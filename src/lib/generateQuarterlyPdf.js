@@ -277,6 +277,10 @@ body {
 
 /* ── Variable sections: hidden until JS assembles them into explicit pages ── */
 .pdf-var-section { display: none; width: 794px; }
+/* overflow:hidden creates a BFC, preventing child margin-bottom from collapsing
+   out of the block div — ensures getBoundingClientRect() measures the full
+   height including child margins, matching what renders in the content-area */
+.pdf-block { overflow: hidden; }
 
 /* ── TOC anchor links ── */
 .toc-row a, .toc-subrow a { color: inherit; text-decoration: none; }
@@ -757,8 +761,8 @@ export function generatePdfHtml({
   const signatory = report.signatory || { name: 'Ganapathy Subramaniam', role: 'Founding Managing Partner' };
 
   const coverNoteHtml = `
-<div class="pdf-var-section" id="section-cover-note">
-  <div class="pdf-block cn-block" style="padding: 0 40px;">
+<div class="pdf-var-section">
+  <div class="pdf-block cn-block" id="section-cover-note" style="padding: 0 40px;">
     <div class="cover-note-heading">COVER NOTE</div>
   </div>
   ${report.coverNoteGreeting ? `<div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text"><p>${esc(report.coverNoteGreeting)}</p></div></div>` : ''}
@@ -1291,15 +1295,22 @@ export function generatePdfHtml({
   const videoUpdates = (quarterSocialUpdates || []).filter(i => i.platform === 'video');
   const otherUpdates = (quarterSocialUpdates || []).filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
 
-  const linkedInBannerHtml = linkedInUpdates.length > 0
-    ? (() => {
-        const linkedInUrl = linkedInUpdates[0]?.url || 'https://linkedin.com/company/yalicapital';
-        return `<a href="${esc(linkedInUrl)}" class="linkedin-banner">
-          <div class="linkedin-banner-icon">in</div>
-          <div class="linkedin-banner-text"><strong>We're active on LinkedIn.</strong> Follow us for fund updates, portfolio news, and deeptech insights.</div>
-        </a>`;
-      })()
-    : '';
+  const linkedInBannerHtml = linkedInUpdates.map(item => {
+    const href = item.url || 'https://linkedin.com/company/yalicapital';
+    const excerpt = item.excerpt
+      ? (item.excerpt.length > 140 ? item.excerpt.substring(0, 140) + '…' : item.excerpt)
+      : '';
+    const cardInner = `
+      <div class="social-card">
+        <div class="social-card-image-placeholder" style="background:#0a66c2;color:white;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;">in</div>
+        <div class="social-card-content">
+          <div class="social-card-platform">LinkedIn</div>
+          ${excerpt ? `<div class="social-card-text">${esc(excerpt)}</div>` : ''}
+          <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
+        </div>
+      </div>`;
+    return `<a href="${esc(href)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`;
+  }).join('');
 
   const videoCardsHtml = videoUpdates.map(item => {
     const excerpt = item.excerpt
@@ -1355,8 +1366,8 @@ export function generatePdfHtml({
   const hasMedia = mediaItems.length > 0 || hasSocialUpdates;
 
   const mediaHtml = `
-<div class="pdf-var-section" id="section-media">
-  <div class="pdf-block" style="padding: 0 40px 0;">
+<div class="pdf-var-section">
+  <div class="pdf-block" id="section-media" style="padding: 0 40px 0;">
     <div class="media-heading-wrap">
       <div class="media-heading">IN THE MEDIA</div>
       <div class="media-arrow">↗</div>
@@ -1458,7 +1469,7 @@ ${debugMode ? '' : pipelineHtml}
 ${debugMode ? '' : mediaHtml}
 ${debugMode ? '' : contactHtml}
 <script>
-(function paginatePdf() {
+document.fonts.ready.then(function paginatePdf() {
   var A4_H = 1123, A4_W = 794, PAD_V = 28, PAGE_NUM_ZONE = 78;
   var tplEl = document.getElementById('tpl-page-header');
   var HEADER_HTML = tplEl.innerHTML;
@@ -1512,7 +1523,8 @@ ${debugMode ? '' : contactHtml}
     var span = pg.querySelector('.page-number span:not(.pn-tl):not(.pn-br)');
     if (span && !span.textContent) span.textContent = 'Page ' + (idx + 1);
   });
-})();
+  document.body.setAttribute('data-pdf-ready', '1');
+});
 </script>
 </body>
 </html>`;

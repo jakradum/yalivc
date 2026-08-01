@@ -257,6 +257,8 @@ export async function handlePdfGet(slug, { returnHtml = false, debugMode = false
 
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    // Wait for fonts to load and the IIFE to finish packing blocks into pages
+    await page.waitForFunction(() => document.body.getAttribute('data-pdf-ready') === '1', { timeout: 10000 });
 
     // Measure exact Y positions from the rendered DOM.
     // The HTML body is fixed at 794px, so viewport layout == PDF layout.
