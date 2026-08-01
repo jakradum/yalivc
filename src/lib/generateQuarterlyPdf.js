@@ -320,6 +320,10 @@ a { cursor: pointer; }
 .body-text ul, .body-text ol { padding-left: 18px; margin-bottom: 10px; }
 .body-text li { margin-bottom: 5px; }
 .section-heading { font-size: 13px; font-weight: 700; color: #830d35; margin-bottom: 6px; margin-top: 12px; }
+/* ── Cover note uses slightly larger body text ── */
+.cn-block .body-text { font-size: 14px; line-height: 1.65; }
+.cn-block .body-text p { margin-bottom: 11px; }
+.cn-block .section-heading { font-size: 15px; }
 .subsection-heading { font-size: 12px; font-weight: 700; color: #363636; margin-bottom: 6px; }
 
 /* ── Footnotes ── */
@@ -661,6 +665,7 @@ export function generatePdfHtml({
   portfolioUpdatesSvgHtml = '',
   fundFinancialsSvgHtml = '',
   pipelineSvgHtml = '',
+  debugMode = false,
 }) {
   // Sort companies by initial investment date ascending — matches portal table order
   const sortedCompanies = [...portfolioCompanies].sort((a, b) => {
@@ -746,23 +751,23 @@ export function generatePdfHtml({
 
   const coverNoteHtml = `
 <div class="pdf-var-section" id="section-cover-note">
-  <div class="pdf-block" style="padding: 0 40px;">
+  <div class="pdf-block cn-block" style="padding: 0 40px;">
     <div class="cover-note-heading">COVER NOTE</div>
   </div>
-  ${report.coverNoteGreeting ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text"><p>${esc(report.coverNoteGreeting)}</p></div></div>` : ''}
-  ${introHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${introHtml}</div></div>` : ''}
+  ${report.coverNoteGreeting ? `<div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text"><p>${esc(report.coverNoteGreeting)}</p></div></div>` : ''}
+  ${introHtml ? `<div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text">${introHtml}</div></div>` : ''}
   ${activityHtml ? `
-  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Investment Activity</div></div>
-  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${activityHtml}</div></div>` : ''}
+  <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Investment Activity</div></div>
+  <div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text">${activityHtml}</div></div>` : ''}
   ${portfolioHighlightsHtml ? `
-  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Portfolio Highlights</div></div>
-  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${portfolioHighlightsHtml}</div></div>` : ''}
+  <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Portfolio Highlights</div></div>
+  <div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text">${portfolioHighlightsHtml}</div></div>` : ''}
   ${ecosystemHtml ? `
-  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Ecosystem &amp; Tailwinds</div></div>
-  <div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${ecosystemHtml}</div></div>` : ''}
-  ${closingHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="body-text">${closingHtml}</div></div>` : ''}
-  <div class="pdf-block" style="padding: 0 40px;">
-    ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:12px; line-height:1.7;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
+  <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Ecosystem &amp; Tailwinds</div></div>
+  <div class="pdf-block cn-block" style="padding: 0 40px;"><div class="body-text">${ecosystemHtml}</div></div>` : ''}
+  ${closingHtml ? `<div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="body-text">${closingHtml}</div></div>` : ''}
+  <div class="pdf-block cn-block" style="padding: 0 40px;">
+    ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.65;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
     <div style="margin-top: 32px;">
       <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
       <div class="confidentiality-box" style="margin-top: 12px;">
@@ -1398,14 +1403,14 @@ export function generatePdfHtml({
 ${coverHtml}
 ${tocHtml}
 ${coverNoteHtml}
-${fundSumHtml}
-${portInvHtml}
-${portSepHtml}
-${companyPagesHtml}
-${fundFinHtml}
-${pipelineHtml}
-${mediaHtml}
-${contactHtml}
+${debugMode ? '' : fundSumHtml}
+${debugMode ? '' : portInvHtml}
+${debugMode ? '' : portSepHtml}
+${debugMode ? '' : companyPagesHtml}
+${debugMode ? '' : fundFinHtml}
+${debugMode ? '' : pipelineHtml}
+${debugMode ? '' : mediaHtml}
+${debugMode ? '' : contactHtml}
 <script>
 (function paginatePdf() {
   var A4_H = 1123, A4_W = 794, PAD_V = 28, PAGE_NUM_ZONE = 78;
