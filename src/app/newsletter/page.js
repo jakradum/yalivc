@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAllNewsletters } from '@/lib/sanity-queries';
 import SubscribeBar from './SubscribeBar';
@@ -26,6 +27,8 @@ function formatDate(dateString) {
 }
 
 export default async function NewsletterArchive() {
+  if (process.env.NODE_ENV === 'production') notFound();
+
   const newsletters = await getAllNewsletters();
 
   return (
