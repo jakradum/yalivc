@@ -80,6 +80,8 @@ const bodyComponents = {
 };
 
 export default async function BlogPost({ params }) {
+  if (process.env.NODE_ENV === 'production') notFound();
+
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 
