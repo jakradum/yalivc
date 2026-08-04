@@ -542,24 +542,27 @@ a { cursor: pointer; }
   letter-spacing: 0.12em; text-transform: uppercase;
   color: #363636; margin: 28px 0 14px;
 }
-/* LinkedIn banner */
-.linkedin-banner {
-  display: flex; align-items: center; gap: 14px;
-  border: 1px solid #363636; padding: 14px 20px;
-  margin-bottom: 16px; text-decoration: none; color: inherit;
+/* LinkedIn social updates — crimson section bg, efefef cards */
+.linkedin-section {
+  background: #830d35; border: none;
+  padding: 14px; display: flex; flex-direction: column; gap: 10px;
 }
-.linkedin-banner-icon {
-  width: 32px; height: 32px;
-  background: #0a66c2; color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
-  flex-shrink: 0;
+.linkedin-card {
+  background: #efefef; border: none;
+  padding: 14px 16px;
+  text-decoration: none; color: #363636; display: block;
 }
-.linkedin-banner-text {
-  font-family: 'Inter', sans-serif; font-size: 12px; color: #363636; line-height: 1.4;
+.linkedin-card-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: #830d35; margin-bottom: 6px;
 }
-.linkedin-banner-text strong {
-  font-weight: 700;
+.linkedin-card-text {
+  font-family: 'Inter', sans-serif; font-size: 11px; color: #363636; line-height: 1.55;
+}
+.linkedin-card-date {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: #888; margin-top: 6px;
 }
 /* Video card */
 .video-card {
@@ -1295,22 +1298,20 @@ export function generatePdfHtml({
   const videoUpdates = (quarterSocialUpdates || []).filter(i => i.platform === 'video');
   const otherUpdates = (quarterSocialUpdates || []).filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
 
-  const linkedInBannerHtml = linkedInUpdates.map(item => {
+  const linkedInCards = linkedInUpdates.map(item => {
     const href = item.url || 'https://linkedin.com/company/yalicapital';
     const excerpt = item.excerpt
       ? (item.excerpt.length > 140 ? item.excerpt.substring(0, 140) + '…' : item.excerpt)
       : '';
-    const cardInner = `
-      <div class="social-card">
-        <div class="social-card-image-placeholder" style="background:#0a66c2;color:white;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;">in</div>
-        <div class="social-card-content">
-          <div class="social-card-platform">LinkedIn</div>
-          ${excerpt ? `<div class="social-card-text">${esc(excerpt)}</div>` : ''}
-          <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
-        </div>
-      </div>`;
-    return `<a href="${esc(href)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`;
+    return `<a href="${esc(href)}" class="linkedin-card">
+      <div class="linkedin-card-label">LinkedIn</div>
+      ${excerpt ? `<div class="linkedin-card-text">${esc(excerpt)}</div>` : ''}
+      <div class="linkedin-card-date">${esc(fmtShortDate(item.date))}</div>
+    </a>`;
   }).join('');
+  const linkedInBannerHtml = linkedInUpdates.length > 0
+    ? `<div class="linkedin-section">${linkedInCards}</div>`
+    : '';
 
   const videoCardsHtml = videoUpdates.map(item => {
     const excerpt = item.excerpt
@@ -1517,11 +1518,16 @@ document.fonts.ready.then(function paginatePdf() {
     }
     parent.removeChild(section);
   });
-  // Fill page number spans for HTML preview (page.evaluate() overwrites in Puppeteer)
+  // Fill page number badges for HTML preview (page.evaluate() overwrites in Puppeteer)
   var allPages = Array.from(document.querySelectorAll('.page'));
   allPages.forEach(function(pg, idx) {
     var span = pg.querySelector('.page-number span:not(.pn-tl):not(.pn-br)');
     if (span && !span.textContent) span.textContent = 'Page ' + (idx + 1);
+  });
+  // Fill TOC page numbers from actual layout — same math Puppeteer uses
+  document.querySelectorAll('[data-toc-page]').forEach(function(span) {
+    var target = document.getElementById(span.getAttribute('data-toc-page'));
+    if (target) span.textContent = Math.floor(target.getBoundingClientRect().top / A4_H) + 1;
   });
   document.body.setAttribute('data-pdf-ready', '1');
 });

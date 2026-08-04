@@ -1160,24 +1160,21 @@ function PortalContentInner({
                   <>
                     <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
 
-                    {/* LinkedIn — individual cards per update */}
+                    {/* LinkedIn — crimson section bg, efefef cards */}
                     {linkedInUpdates.length > 0 && (
-                      <div className={styles.mediaCoverageGrid}>
+                      <div className={styles.linkedInSection}>
                         {linkedInUpdates.map((item) => {
                           const href = item.url ? (/^https?:\/\//i.test(item.url) ? item.url : `https://${item.url}`) : 'https://www.linkedin.com/company/yali-capital';
                           const excerpt = item.excerpt ? (item.excerpt.length > 140 ? item.excerpt.substring(0, 140) + '…' : item.excerpt) : '';
                           return (
-                            <a key={item._id} href={href} target="_blank" rel="noopener noreferrer" className={styles.mediaCoverageCard}>
-                              <div className={styles.mediaCoverageCardContent}>
-                                <span className={styles.mediaCoveragePublication}>LinkedIn</span>
-                                <p className={styles.mediaCoverageHeadline}>{excerpt}</p>
-                                {item.date && (
-                                  <span className={styles.mediaCoverageDate}>
-                                    {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                  </span>
-                                )}
-                              </div>
-                              <span className={styles.mediaCoverageArrow}>→</span>
+                            <a key={item._id} href={href} target="_blank" rel="noopener noreferrer" className={styles.linkedInCard}>
+                              <div className={styles.linkedInCardLabel}>LinkedIn</div>
+                              <p className={styles.linkedInCardText}>{excerpt}</p>
+                              {item.date && (
+                                <span className={styles.linkedInCardDate}>
+                                  {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              )}
                             </a>
                           );
                         })}
