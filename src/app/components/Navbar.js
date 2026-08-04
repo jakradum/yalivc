@@ -84,9 +84,26 @@ const Navbar = () => {
     <ul className={styles.mobileMenuList}>
       {navigationItems.menuItems.filter(item => !item.hideOnMobile).map((item, index) => (
         <li key={index}>
-          <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
-            <span>{item.name}</span>
-          </Link>
+          {item.subItems ? (
+            <>
+              <span className={styles.mobileMenuLink} style={{ opacity: 0.5, cursor: 'default' }}>
+                <span>{item.name}</span>
+              </span>
+              <ul style={{ listStyle: 'none', padding: '0 0 0 1rem', margin: 0 }}>
+                {item.subItems.map((sub, si) => (
+                  <li key={si}>
+                    <Link href={sub.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+                      <span>{sub.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+              <span>{item.name}</span>
+            </Link>
+          )}
         </li>
       ))}
     </ul>

@@ -6,9 +6,9 @@ import styles from './page.module.css';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'Newsletter — Yali Capital',
+  title: 'Tattva | The Yali Newsletter',
   description:
-    'Notes from the Yali Capital podcast. Deep tech, genomics, semiconductors, and the founders building India\'s next wave.',
+    'Insights, ideas, and updates from deep within the world of deep tech. Published by Yali Capital.',
   alternates: {
     canonical: 'https://yali.vc/newsletter/',
   },
@@ -35,9 +35,9 @@ export default async function NewsletterArchive() {
         {/* Masthead */}
         <div className={styles.masthead}>
           <p className={styles.mastheadLabel}>NEWSLETTER</p>
-          <h1 className={styles.mastheadHeading}>From the Yali podcast</h1>
+          <h1 className={styles.mastheadHeading}>Tattva | The Yali Newsletter</h1>
           <p className={styles.mastheadSubtext}>
-            Occasional notes from conversations with deep tech founders. Written by the Yali team.
+            Insights, ideas, and updates from deep within the world of deep tech.
           </p>
         </div>
 
@@ -56,14 +56,15 @@ export default async function NewsletterArchive() {
                 key={nl._id}
                 href={`/newsletter/${nl.slug.current}`}
                 className={styles.editionRow}
+                aria-label={nl.title}
               >
                 <span className={styles.editionDate}>{formatDate(nl.publishedDate)}</span>
-                <span className={styles.editionMeta}>
-                  <span className={styles.editionTitle}>{nl.title}</span>
+                <div className={styles.editionMeta}>
+                  <h3 className={styles.editionTitle}>{nl.title}</h3>
                   {nl.shortDescription && (
-                    <span className={styles.editionDesc}>{nl.shortDescription}</span>
+                    <p className={styles.editionDesc}>{nl.shortDescription}</p>
                   )}
-                </span>
+                </div>
                 <span className={styles.editionRead}>Read ↗</span>
               </Link>
             ))

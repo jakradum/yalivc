@@ -3625,44 +3625,51 @@
   text-transform: uppercase;
 }
 
-/* LinkedIn condensed banner */
-.linkedInBannerCard {
+/* LinkedIn social updates — crimson section bg, efefef cards */
+.linkedInSection {
+  background: #830d35;
+  padding: 1.25rem;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid #363636;
-  background: white;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.linkedInCard {
+  display: block;
+  padding: 1.25rem;
+  background: #efefef;
+  border: none;
   text-decoration: none;
   color: #363636;
-  transition: background 0.15s ease;
-  margin-bottom: 0;
+  transition: opacity 0.15s ease;
 }
 
-.linkedInBannerCard:hover {
-  background: #f5f5f5;
+.linkedInCard:hover {
+  opacity: 0.88;
 }
 
-.linkedInBannerIcon {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  background: #0a66c2;
-  color: white;
+.linkedInCardLabel {
   font-family: var(--font-jetbrains-mono);
-  font-size: 0.875rem;
+  font-size: 0.625rem;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #830d35;
+  margin-bottom: 0.5rem;
 }
 
-.linkedInBannerText {
-  flex: 1;
+.linkedInCardText {
   font-family: var(--font-inter);
   font-size: 0.875rem;
   color: #363636;
-  line-height: 1.4;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.linkedInCardDate {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.625rem;
+  color: #888;
 }
 
 /* YouTube / video card */

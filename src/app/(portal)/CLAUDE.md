@@ -104,9 +104,11 @@ Variable-content sections (cover note, company pages, media, contact) use a **tw
 
 ### Page numbering
 
-**HTML preview (browser):** At the end of the IIFE, a pass over all `.page` elements fills empty `<span>` elements inside `.page-number` with `'Page N'` using sequential index. These are approximate.
+**HTML preview (browser):** At the end of the IIFE, two passes run:
+1. Page number badges — fills empty `<span>` elements inside `.page-number` with `'Page N'` using sequential index.
+2. TOC spans — fills `[data-toc-page]` spans using `Math.floor(target.getBoundingClientRect().top / A4_H) + 1` — same formula as Puppeteer, measured against the now-final DOM. Both HTML preview and PDF show correct TOC numbers.
 
-**PDF (Puppeteer):** After `page.setContent()`, `page.evaluate()` overwrites all `.page-number span` elements using `Math.floor(el.getBoundingClientRect().top / 1123) + 1`, which gives the exact page number from the rendered layout. Also fills `[data-toc-page]` spans for the TOC.
+**PDF (Puppeteer):** After `page.setContent()`, `page.evaluate()` overwrites all `.page-number span` elements and `[data-toc-page]` spans a second time using the same `getBoundingClientRect().top / 1123` formula. This is redundant with what the IIFE already did but harmless — Puppeteer reruns it to guarantee accuracy against the final Chromium layout.
 
 Page-number zone: `.page-number { position: absolute; right: 28px; bottom: 44px; height: 34px }`. CONFIDENTIAL: `.page::after { position: absolute; bottom: 12px }`. `PAGE_NUM_ZONE = 78` accounts for both.
 

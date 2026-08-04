@@ -13,8 +13,11 @@
         "path": "/investments"
       },
       {
-        "name": "Newsroom",
-        "path": "/newsroom"
+        "name": "Media",
+        "path": "/newsroom",
+        "subItems": [
+          { "name": "Tattva Newsletter", "path": "/newsletter" }
+        ]
       },
       {
         "name": "For Founders",
