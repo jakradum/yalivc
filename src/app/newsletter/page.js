@@ -37,7 +37,7 @@ export default async function NewsletterArchive() {
 
         {/* Masthead */}
         <div className={styles.masthead}>
-          <p className={styles.mastheadLabel}>NEWSLETTER</p>
+          <p className={styles.mastheadLabel}>Newsletter</p>
           <h1 className={styles.mastheadHeading}>Tattva | The Yali Newsletter</h1>
           <p className={styles.mastheadSubtext}>
             Insights, ideas, and updates from deep within the world of deep tech.
@@ -47,8 +47,8 @@ export default async function NewsletterArchive() {
         {/* Subscribe bar */}
         <SubscribeBar />
 
-        {/* Edition list */}
-        <div className={styles.editionList}>
+        {/* Edition grid */}
+        <div className={styles.editionGrid}>
           {!newsletters || newsletters.length === 0 ? (
             <div className={styles.emptyRow}>
               <span className={styles.emptyText}>First edition coming soon</span>
@@ -58,17 +58,36 @@ export default async function NewsletterArchive() {
               <Link
                 key={nl._id}
                 href={`/newsletter/${nl.slug.current}`}
-                className={styles.editionRow}
+                className={styles.editionCard}
                 aria-label={nl.title}
               >
-                <span className={styles.editionDate}>{formatDate(nl.publishedDate)}</span>
-                <div className={styles.editionMeta}>
-                  <h3 className={styles.editionTitle}>{nl.title}</h3>
-                  {nl.shortDescription && (
-                    <p className={styles.editionDesc}>{nl.shortDescription}</p>
+                {/* Text half */}
+                <div className={styles.cardText}>
+                  <div className={styles.cardMeta}>
+                    Edition {String(nl.edition).padStart(2, '0')} · {formatDate(nl.publishedDate)}
+                  </div>
+                  <h3 className={styles.cardTitle}>{nl.title}</h3>
+                  {nl.tileBlurb && (
+                    <p className={styles.cardBlurb}>{nl.tileBlurb}</p>
                   )}
+                  <span className={styles.cardRead}>Read ↗</span>
                 </div>
-                <span className={styles.editionRead}>Read ↗</span>
+
+                {/* Image half */}
+                <div className={styles.cardImage}>
+                  {nl.coverImage?.asset?.url ? (
+                    <img
+                      src={nl.coverImage.asset.url}
+                      alt={nl.coverImage.alt || nl.title}
+                      className={styles.cardImg}
+                    />
+                  ) : (
+                    <div className={styles.cardImgPlaceholder} />
+                  )}
+                  <div className={styles.cardEditionGhost}>
+                    {String(nl.edition).padStart(2, '0')}
+                  </div>
+                </div>
               </Link>
             ))
           )}
