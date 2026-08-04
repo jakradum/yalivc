@@ -4,16 +4,12 @@ import { PortableText } from '@portabletext/react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import companyStyles from '../../investments/[slug]/[companySlug]/company.module.css';
-import teamLPstyles from '../../landing-page-styles/team.module.css';
-import ShareButtons from './ShareButtons';
 import JsonLd from '../../components/JsonLd';
-
-const CONTENT_TYPE_LABELS = {
-  'blog': 'Blog Post',
-  'press-release': 'Press Release',
-  'resource': 'Resource',
-};
+import { XIcon } from '@/app/components/icons/small-icons/x-icon';
+import { LinkedInIcon } from '@/app/components/icons/small-icons/linkedin-icon';
+import { WhatsAppIcon } from '@/app/components/icons/small-icons/whatsapp-icon';
+import { EmailIcon } from '@/app/components/icons/small-icons/email-icon';
+import styles from './page.module.css';
 
 export const revalidate = 60;
 
@@ -25,229 +21,165 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
-
-  if (!post) {
-    return { title: 'Post Not Found | Yali Capital' };
-  }
-
+  if (!post) return { title: 'Post Not Found | Yali Capital' };
   return {
     title: post.metaTitle || `${post.title} | Yali Capital`,
-    description:
-      post.metaDescription ||
-      (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
-    alternates: {
-      canonical: `https://yali.vc/blog/${slug}/`,
-    },
+    description: post.metaDescription || (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
+    alternates: { canonical: `https://yali.vc/blog/${slug}/` },
     openGraph: {
       title: post.metaTitle || `${post.title} | Yali Capital`,
       description: post.metaDescription || (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
       url: `https://yali.vc/blog/${slug}/`,
       type: 'article',
       ...(post.publishedAt && { publishedTime: post.publishedAt }),
-      ...(post.ogImage?.asset?.url && {
-        images: [{ url: post.ogImage.asset.url, alt: post.title }],
-      }),
-    },
-    twitter: {
-      title: post.metaTitle || `${post.title} | Yali Capital`,
-      description: post.metaDescription || (post.blurb ? `${post.blurb.substring(0, 155)}...` : undefined),
-      ...(post.ogImage?.asset?.url && { images: [post.ogImage.asset.url] }),
+      ...(post.ogImage?.asset?.url && { images: [{ url: post.ogImage.asset.url, alt: post.title }] }),
     },
   };
 }
 
-const bodyComponents = {
+function formatDate(str) {
+  if (!str) return '';
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(str));
+}
+
+function readingTime(body = []) {
+  let words = 0;
+  for (const block of body) {
+    if (block._type === 'block' && Array.isArray(block.children)) {
+      words += block.children.map(c => c.text || '').join(' ').trim().split(/\s+/).filter(Boolean).length;
+    }
+  }
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+const portableComponents = {
   types: {
     image: ({ value }) => (
-      <figure className={companyStyles.storyImage}>
+      <figure className={styles.ptImage}>
         <Image
-          src={urlFor(value).width(800).url()}
+          src={urlFor(value).width(640).url()}
           alt={value.alt || value.caption || ''}
-          width={800}
-          height={600}
-          style={{ width: '100%', height: 'auto' }}
+          width={640}
+          height={400}
+          className={styles.ptImageEl}
         />
-        {value.caption && <figcaption>{value.caption}</figcaption>}
+        {value.caption && <figcaption className={styles.ptCaption}>{value.caption}</figcaption>}
       </figure>
     ),
     pullQuote: ({ value }) => (
-      <blockquote className={companyStyles.pullQuote}>
+      <blockquote className={styles.ptPullQuote}>
         <p>{value.text}</p>
-        {value.attribution && <cite>— {value.attribution}</cite>}
+        {value.attribution && <cite className={styles.ptCite}>— {value.attribution}</cite>}
       </blockquote>
     ),
+  },
+  block: {
+    normal: ({ children }) => <p className={styles.ptBody}>{children}</p>,
+    h2: ({ children }) => <h2 className={styles.ptH2}>{children}</h2>,
+    h3: ({ children }) => <h3 className={styles.ptH3}>{children}</h3>,
+    blockquote: ({ children }) => <blockquote className={styles.ptBlockQuote}><p>{children}</p></blockquote>,
+  },
+  marks: {
+    link: ({ children, value }) => (
+      <a href={value.href} target={value.blank ? '_blank' : undefined} rel={value.blank ? 'noopener noreferrer' : undefined} className={styles.ptLink}>
+        {children}
+      </a>
+    ),
+    code: ({ children }) => <code className={styles.ptCode}>{children}</code>,
   },
 };
 
 export default async function BlogPost({ params }) {
-  if (process.env.NODE_ENV === 'production') notFound();
-
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
+  if (!post) notFound();
 
-  if (!post) {
-    notFound();
-  }
+  const mins = readingTime(post.body || []);
+  const pageUrl = `https://yali.vc/blog/${slug}/`;
+  const encodedUrl = encodeURIComponent(pageUrl);
+  const encodedTitle = encodeURIComponent(post.title);
 
-  const displayCategories = post.contentType === 'press-release'
-    ? (post.companies || []).map((c) => c.category).filter(Boolean)
-    : (post.categories || []);
-
-  const publishedDate = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : null;
+  const typeLabel = post.contentType === 'press-release' ? 'Press Release'
+    : post.contentType === 'resource' ? 'Resource'
+    : 'Blog';
 
   return (
-    <section>
+    <>
       <JsonLd data={{
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: post.title,
         description: post.metaDescription || post.blurb,
-        url: `https://yali.vc/blog/${slug}/`,
+        url: pageUrl,
         ...(post.publishedAt && { datePublished: post.publishedAt }),
         ...(post.ogImage?.asset?.url && { image: post.ogImage.asset.url }),
-        author: {
-          '@type': 'Organization',
-          name: 'Yali Capital',
-          url: 'https://yali.vc',
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'Yali Capital',
-          url: 'https://yali.vc',
-          logo: { '@type': 'ImageObject', url: 'https://yali.vc/yali-logo.png' },
-        },
+        author: { '@type': 'Organization', name: 'Yali Capital', url: 'https://yali.vc' },
+        publisher: { '@type': 'Organization', name: 'Yali Capital', url: 'https://yali.vc', logo: { '@type': 'ImageObject', url: 'https://yali.vc/yali-logo.png' } },
       }} />
-      <article className={companyStyles.blogArticle} style={{ marginTop: '1rem', maxWidth: '75%' }}>
-        <header className={companyStyles.articleHeader}>
-          {(post.contentType || displayCategories.length > 0) && (
-            <div className={companyStyles.articleTagsRow}>
-              {post.contentType && (
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    color: '#fff',
-                    backgroundColor: '#830D35',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    padding: '0.2rem 0.6rem',
-                  }}
-                >
-                  {CONTENT_TYPE_LABELS[post.contentType] ?? post.contentType}
-                </span>
-              )}
-              {displayCategories.length > 0 && (
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {displayCategories.map((cat) => (
-                    <span
-                      key={cat._id}
-                      style={{
-                        fontSize: '0.65rem',
-                        fontWeight: '600',
-                        color: '#830D35',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {cat.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
 
-          <h1 className={companyStyles.articleTitle}>{post.title}</h1>
+      <div className={styles.page}>
+        <div className={styles.column}>
 
-          <div className={companyStyles.articleMeta} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            {post.author && (
-              <div className={companyStyles.authorInfo}>
+          {/* Title block */}
+          <div className={styles.titleBlock}>
+            <p className={styles.editionLabel}>
+              {typeLabel} · {formatDate(post.publishedAt)} · {mins} min read
+            </p>
+            <h1 className={styles.title}>{post.title}</h1>
+            {post.author?.name && (
+              <div className={styles.authorRow}>
                 {post.author.photo && (
-                  <Image
-                    src={post.author.photo}
-                    alt={post.author.name}
-                    width={32}
-                    height={32}
-                    className={companyStyles.authorPhoto}
-                  />
+                  <img src={post.author.photo} alt={post.author.name} className={styles.authorPhoto} />
                 )}
-                <div>
-                  <p className={companyStyles.authorName}>{post.author.name}</p>
+                <div className={styles.authorMeta}>
+                  <span className={styles.authorName}>{post.author.name}</span>
+                  {post.author.role && <span className={styles.authorRole}>{post.author.role}</span>}
                 </div>
               </div>
             )}
-            {publishedDate && (
-              <p className={companyStyles.articleDate}>{publishedDate}</p>
-            )}
           </div>
-          <ShareButtons url={`https://yali.vc/blog/${slug}/`} title={post.title} />
-        </header>
 
-        <div className={companyStyles.articleBody} style={{ overflow: 'hidden' }}>
+          {/* Featured image */}
           {post.featuredImage?.asset?.url && (
-            <figure className={companyStyles.featuredImageFigure}>
-              <Image
+            <figure className={styles.coverFigure}>
+              <img
                 src={post.featuredImage.asset.url}
                 alt={post.featuredImage.alt || post.title}
-                width={600}
-                height={400}
-                style={{ width: '100%', height: 'auto', display: 'block' }}
+                className={styles.coverImg}
               />
-              {post.featuredImage.alt && (
-                <figcaption style={{ fontSize: '0.8rem', color: '#888', padding: '0.5rem', borderTop: '1px solid #e0e0e0' }}>
-                  {post.featuredImage.alt}
-                </figcaption>
-              )}
             </figure>
           )}
-          {post.body && <PortableText value={post.body} components={bodyComponents} />}
-        </div>
 
-        {post.contentType === 'press-release' && (
-          <p style={{ fontSize: '0.75rem', color: '#767676', marginTop: '2rem', marginBottom: 0 }}>
-            Have questions about this press release?{' '}
-            <a href="/contact" style={{ color: '#830D35' }}>Contact us</a>
-          </p>
-        )}
-
-        {post.author?.linkedIn && (
-          <div className={companyStyles.authorCard}>
-            {post.author.photo && (
-              <Image
-                src={post.author.photo}
-                alt={post.author.name}
-                width={48}
-                height={48}
-                className={companyStyles.authorPhoto}
-              />
-            )}
-            <div>
-              <p className={companyStyles.authorName}>{post.author.name}</p>
-            </div>
-            <a
-              href={post.author.linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${post.author.name} on LinkedIn`}
-              className={teamLPstyles.socialButton}
-              style={{ marginLeft: 'auto' }}
-            >in</a>
+          {/* Body */}
+          <div className={styles.body}>
+            {post.body && <PortableText value={post.body} components={portableComponents} />}
           </div>
-        )}
-      </article>
 
-      {/* Back link */}
-      <div style={{ padding: '1rem 2rem', fontSize: '0.875rem' }}>
-        <Link href="/blog" style={{ color: '#830D35', textDecoration: 'none' }} aria-label="Blog">
-          ← Back to Blog
-        </Link>
+          {post.contentType === 'press-release' && (
+            <p className={styles.pressNote}>
+              Questions about this press release? <a href="/contact" className={styles.ptLink}>Contact us</a>
+            </p>
+          )}
+
+          {/* Share */}
+          <div className={styles.spreadBlock}>
+            <p className={styles.spreadLabel}>Share</p>
+            <div className={styles.shareIcons}>
+              <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on X"><XIcon size={20} color="#830d35" /></a>
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on LinkedIn"><LinkedInIcon size={20} color="#830d35" /></a>
+              <a href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on WhatsApp"><WhatsAppIcon size={20} color="#830d35" /></a>
+              <a href={`mailto:?subject=${encodedTitle}&body=${encodedUrl}`} className={styles.shareIcon} aria-label="Share via Email"><EmailIcon size={20} color="#830d35" /></a>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <footer className={styles.footerStrip}>
+            <span className={styles.footerLeft}>Yali Capital · Deep Tech Fund</span>
+            <Link href="/blog" className={styles.footerRight}>All posts ↗</Link>
+          </footer>
+
+        </div>
       </div>
-    </section>
+    </>
   );
 }

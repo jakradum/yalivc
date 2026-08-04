@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import newsStyles from '../newsroom/newscomponent.module.css';
 import HeaderFlex from '../components/icons/headerflex';
 import { getAllBlogPosts } from '@/lib/sanity-queries';
@@ -22,8 +21,6 @@ export const metadata = {
 };
 
 export default async function BlogListing() {
-  if (process.env.NODE_ENV === 'production') notFound();
-
   const { posts = [] } = await getAllBlogPosts({ limit: 50 });
 
   return (
