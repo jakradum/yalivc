@@ -532,6 +532,7 @@ export async function getAllNewsletters() {
       edition,
       publishedDate,
       shortDescription,
+      tileBlurb,
       coverImage {
         asset->{url},
         alt

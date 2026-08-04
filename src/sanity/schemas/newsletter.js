@@ -65,6 +65,14 @@ export default {
       validation: Rule => Rule.required().min(100).max(250)
     },
     {
+      name: 'tileBlurb',
+      title: 'Tile Blurb',
+      type: 'text',
+      rows: 2,
+      description: 'Short punchy line shown on the archive tile (60-100 chars). Different from the meta description.',
+      validation: Rule => Rule.max(140)
+    },
+    {
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
