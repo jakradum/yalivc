@@ -1,5 +1,10 @@
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      { source: '/blog', destination: '/newsroom', permanent: false },
+    ];
+  },
   serverExternalPackages: ['puppeteer-core', '@sparticuz/chromium-min', 'puppeteer'],
   images: {
     remotePatterns: [
