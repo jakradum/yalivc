@@ -14,10 +14,7 @@
       },
       {
         "name": "Media",
-        "path": "/newsroom",
-        "subItems": [
-          { "name": "Tattva Newsletter", "path": "/newsletter" }
-        ]
+        "path": "/newsroom"
       },
       {
         "name": "For Founders",
