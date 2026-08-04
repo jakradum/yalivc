@@ -26,9 +26,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${newsletter.title} — Yali Capital`,
     description: newsletter.shortDescription,
-    alternates: {
-      canonical: `https://yali.vc/newsletter/${slug}/`,
-    },
+    alternates: { canonical: `https://yali.vc/newsletter/${slug}/` },
   };
 }
 
@@ -45,20 +43,29 @@ function getYoutubeId(url) {
   return match ? match[1] : null;
 }
 
-function getFirstName(fullName) {
-  if (!fullName) return null;
-  return fullName.split(' ')[0];
+function readingTime(sections = []) {
+  let words = 0;
+  for (const section of sections) {
+    for (const body of [section.body, section.items].filter(Boolean)) {
+      for (const block of body) {
+        if (block._type === 'block' && Array.isArray(block.children)) {
+          words += block.children.map(c => c.text || '').join(' ').trim().split(/\s+/).filter(Boolean).length;
+        } else if (typeof block.oneLiner === 'string') {
+          words += block.oneLiner.trim().split(/\s+/).filter(Boolean).length;
+        } else if (typeof block.blurb === 'string') {
+          words += block.blurb.trim().split(/\s+/).filter(Boolean).length;
+        }
+      }
+    }
+  }
+  return Math.max(1, Math.ceil(words / 200));
 }
 
 function formatDate(dateString) {
   if (!dateString) return '';
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return '';
-  return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(date);
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
 }
 
 /* ── PortableText component map ── */
@@ -74,9 +81,7 @@ const portableComponents = {
           height={400}
           className={styles.ptImageEl}
         />
-        {value.caption && (
-          <figcaption className={styles.ptCaption}>{value.caption}</figcaption>
-        )}
+        {value.caption && <figcaption className={styles.ptCaption}>{value.caption}</figcaption>}
       </figure>
     ),
     pullQuote: ({ value }) => (
@@ -96,20 +101,11 @@ const portableComponents = {
     normal: ({ children }) => <p className={styles.ptBody}>{children}</p>,
     h2: ({ children }) => <h2 className={styles.ptH2}>{children}</h2>,
     h3: ({ children }) => <h3 className={styles.ptH3}>{children}</h3>,
-    blockquote: ({ children }) => (
-      <blockquote className={styles.ptBlockQuote}>
-        <p>{children}</p>
-      </blockquote>
-    ),
+    blockquote: ({ children }) => <blockquote className={styles.ptBlockQuote}><p>{children}</p></blockquote>,
   },
   marks: {
     link: ({ children, value }) => (
-      <a
-        href={value.href}
-        target={value.blank ? '_blank' : undefined}
-        rel={value.blank ? 'noopener noreferrer' : undefined}
-        className={styles.ptLink}
-      >
+      <a href={value.href} target={value.blank ? '_blank' : undefined} rel={value.blank ? 'noopener noreferrer' : undefined} className={styles.ptLink}>
         {children}
       </a>
     ),
@@ -126,12 +122,8 @@ function SectionLabel({ text }) {
 function OpeningNote({ section }) {
   return (
     <div className={styles.section}>
-      {section.body && (
-        <PortableText value={section.body} components={portableComponents} />
-      )}
-      {section.author && (
-        <p className={styles.authorAttribution}>— {section.author.name}</p>
-      )}
+      {section.body && <PortableText value={section.body} components={portableComponents} />}
+      {section.author && <p className={styles.authorAttribution}>— {section.author.name}</p>}
     </div>
   );
 }
@@ -140,26 +132,18 @@ function Essay({ section }) {
   return (
     <div className={styles.section}>
       {section.title && <SectionLabel text={section.title} />}
-      {section.body && (
-        <PortableText value={section.body} components={portableComponents} />
-      )}
-      {section.author && (
-        <p className={styles.authorAttribution}>— {section.author.name}</p>
-      )}
+      {section.body && <PortableText value={section.body} components={portableComponents} />}
+      {section.author && <p className={styles.authorAttribution}>— {section.author.name}</p>}
     </div>
   );
 }
 
 function PortfolioSpotlight({ section }) {
-  const label = section.company
-    ? `PORTFOLIO · ${section.company.name}`
-    : (section.sectionTitle || 'PORTFOLIO SPOTLIGHT');
+  const label = section.company ? `PORTFOLIO · ${section.company.name}` : (section.sectionTitle || 'PORTFOLIO SPOTLIGHT');
   return (
     <div className={styles.section}>
       <SectionLabel text={label} />
-      {section.body && (
-        <PortableText value={section.body} components={portableComponents} />
-      )}
+      {section.body && <PortableText value={section.body} components={portableComponents} />}
     </div>
   );
 }
@@ -172,15 +156,11 @@ function GuestColumn({ section }) {
         <div className={styles.guestMeta}>
           <span className={styles.guestName}>{section.guestName}</span>
           {(section.guestTitle || section.guestCompany) && (
-            <span className={styles.guestRole}>
-              {[section.guestTitle, section.guestCompany].filter(Boolean).join(' · ')}
-            </span>
+            <span className={styles.guestRole}>{[section.guestTitle, section.guestCompany].filter(Boolean).join(' · ')}</span>
           )}
         </div>
       )}
-      {section.body && (
-        <PortableText value={section.body} components={portableComponents} />
-      )}
+      {section.body && <PortableText value={section.body} components={portableComponents} />}
     </div>
   );
 }
@@ -189,9 +169,7 @@ function Freeform({ section }) {
   return (
     <div className={styles.section}>
       {section.title && <SectionLabel text={section.title} />}
-      {section.body && (
-        <PortableText value={section.body} components={portableComponents} />
-      )}
+      {section.body && <PortableText value={section.body} components={portableComponents} />}
     </div>
   );
 }
@@ -206,9 +184,7 @@ function Radar({ section }) {
           <div key={i} className={styles.radarRow}>
             <span className={styles.radarTech}>{item.technology}</span>
             <span className={styles.radarOneLiner}>{item.oneLiner}</span>
-            {item.contributor && (
-              <span className={styles.radarContributor}>{item.contributor.name}</span>
-            )}
+            {item.contributor && <span className={styles.radarContributor}>{item.contributor.name}</span>}
           </div>
         ))}
       </div>
@@ -224,14 +200,7 @@ function Reading({ section }) {
       <div className={styles.readingList}>
         {items.map((item, i) => (
           <div key={i} className={styles.readingRow}>
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.readingTitle}
-            >
-              {item.title} ↗
-            </a>
+            <a href={item.url} target="_blank" rel="noopener noreferrer" className={styles.readingTitle}>{item.title} ↗</a>
             {item.blurb && <p className={styles.readingBlurb}>{item.blurb}</p>}
           </div>
         ))}
@@ -242,22 +211,14 @@ function Reading({ section }) {
 
 function renderSection(section) {
   switch (section._type) {
-    case 'openingNote':
-      return <OpeningNote key={section._key} section={section} />;
-    case 'essay':
-      return <Essay key={section._key} section={section} />;
-    case 'portfolioSpotlight':
-      return <PortfolioSpotlight key={section._key} section={section} />;
-    case 'guestColumn':
-      return <GuestColumn key={section._key} section={section} />;
-    case 'freeform':
-      return <Freeform key={section._key} section={section} />;
-    case 'radar':
-      return <Radar key={section._key} section={section} />;
-    case 'reading':
-      return <Reading key={section._key} section={section} />;
-    default:
-      return null;
+    case 'openingNote':      return <OpeningNote key={section._key} section={section} />;
+    case 'essay':            return <Essay key={section._key} section={section} />;
+    case 'portfolioSpotlight': return <PortfolioSpotlight key={section._key} section={section} />;
+    case 'guestColumn':      return <GuestColumn key={section._key} section={section} />;
+    case 'freeform':         return <Freeform key={section._key} section={section} />;
+    case 'radar':            return <Radar key={section._key} section={section} />;
+    case 'reading':          return <Reading key={section._key} section={section} />;
+    default:                 return null;
   }
 }
 
@@ -266,8 +227,12 @@ function renderSection(section) {
 export default async function NewsletterEdition({ params }) {
   const { slug } = await params;
   const newsletter = await getNewsletterBySlug(slug);
-
   if (!newsletter) notFound();
+
+  const sections = newsletter.sections || [];
+  const openingNoteIdx = sections.findIndex(s => s._type === 'openingNote');
+  const mins = readingTime(sections);
+  const coverImageUrl = newsletter.coverImage?.asset?.url;
 
   const pageUrl = `https://yali.vc/newsletter/${slug}/`;
   const encodedUrl = encodeURIComponent(pageUrl);
@@ -277,37 +242,59 @@ export default async function NewsletterEdition({ params }) {
 
   return (
     <div className={styles.page}>
-
-      {/* Breadcrumb */}
       <div className={styles.column}>
-        <nav className={styles.breadcrumb}>
-          <Link href="/newsletter" className={styles.breadcrumbLink}>Newsletter</Link>
-          <span className={styles.breadcrumbSep}>/</span>
-          <span className={styles.breadcrumbCurrent}>Issue {newsletter.edition}</span>
-        </nav>
-      </div>
 
-      {/* Full-width masthead */}
-      <header className={styles.masthead}>
-        <div className={styles.mastheadInner}>
-          <p className={styles.mastheadDate}>{formatDate(newsletter.publishedDate)}</p>
-          <h1 className={styles.mastheadTitle}>{newsletter.title}</h1>
+        {/* Title block */}
+        <div className={styles.titleBlock}>
+          <p className={styles.editionLabel}>
+            Tattva · Edition {String(newsletter.edition).padStart(2, '0')} · {formatDate(newsletter.publishedDate)} · {mins} min read
+          </p>
+          <h1 className={styles.title}>{newsletter.title}</h1>
           {newsletter.author?.name && (
-            <p className={styles.mastheadByline}>
-              By {getFirstName(newsletter.author.name)} · Yali Capital Podcast
-            </p>
+            <div className={styles.authorRow}>
+              {newsletter.author.photo && (
+                <img
+                  src={newsletter.author.photo}
+                  alt={newsletter.author.name}
+                  className={styles.authorPhoto}
+                />
+              )}
+              <div className={styles.authorMeta}>
+                <span className={styles.authorName}>{newsletter.author.name}</span>
+                {newsletter.author.role && (
+                  <span className={styles.authorRole}>{newsletter.author.role}</span>
+                )}
+              </div>
+            </div>
           )}
         </div>
-      </header>
 
-      <div className={styles.column}>
-
-        {/* Sections */}
+        {/* Sections — cover image splits the opening note after paragraph 1 */}
         <div className={styles.sections}>
-          {(newsletter.sections || []).map(renderSection)}
+          {sections.map((section, i) => {
+            if (i === openingNoteIdx && coverImageUrl && section.body?.length > 0) {
+              const [firstBlock, ...restBlocks] = section.body;
+              return (
+                <div key={section._key} className={styles.section}>
+                  <PortableText value={[firstBlock]} components={portableComponents} />
+                  <figure className={styles.coverFigure}>
+                    <img
+                      src={coverImageUrl}
+                      alt={newsletter.coverImage?.alt || newsletter.title}
+                      className={styles.coverImg}
+                    />
+                  </figure>
+                  {restBlocks.length > 0 && (
+                    <PortableText value={restBlocks} components={portableComponents} />
+                  )}
+                </div>
+              );
+            }
+            return renderSection(section);
+          })}
         </div>
 
-        {/* Episode player / CTA */}
+        {/* Episode player */}
         {newsletter.podcastUrl && (() => {
           const platform = getPlatform(newsletter.podcastUrl);
           if (platform === 'youtube') {
@@ -324,23 +311,14 @@ export default async function NewsletterEdition({ params }) {
                     className={styles.youtubeFrame}
                   />
                 </div>
-                <p className={styles.youtubeCaption}>
-                  YALI CAPITAL PODCAST · EP.{newsletter.edition}
-                </p>
+                <p className={styles.youtubeCaption}>YALI CAPITAL PODCAST · EP.{newsletter.edition}</p>
               </div>
             );
           }
           return (
-            <a
-              href={newsletter.podcastUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.episodeCta}
-            >
+            <a href={newsletter.podcastUrl} target="_blank" rel="noopener noreferrer" className={styles.episodeCta}>
               <div className={styles.episodeCtaLeft}>
-                <span className={styles.episodeCtaLabel}>
-                  YALI CAPITAL PODCAST · EP.{newsletter.edition}
-                </span>
+                <span className={styles.episodeCtaLabel}>YALI CAPITAL PODCAST · EP.{newsletter.edition}</span>
                 <span className={styles.episodeCtaTitle}>{newsletter.title}</span>
               </div>
               <span className={styles.episodeCtaLink}>
@@ -355,18 +333,10 @@ export default async function NewsletterEdition({ params }) {
         <div className={styles.spreadBlock}>
           <p className={styles.spreadLabel}>Share this article</p>
           <div className={styles.shareIcons}>
-            <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on X">
-              <XIcon size={20} color="#830d35" />
-            </a>
-            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on LinkedIn">
-              <LinkedInIcon size={20} color="#830d35" />
-            </a>
-            <a href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on WhatsApp">
-              <WhatsAppIcon size={20} color="#830d35" />
-            </a>
-            <a href={`mailto:?subject=${shareSubject}&body=${shareBody}`} className={styles.shareIcon} aria-label="Share via Email">
-              <EmailIcon size={20} color="#830d35" />
-            </a>
+            <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on X"><XIcon size={20} color="#830d35" /></a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on LinkedIn"><LinkedInIcon size={20} color="#830d35" /></a>
+            <a href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`} target="_blank" rel="noopener noreferrer" className={styles.shareIcon} aria-label="Share on WhatsApp"><WhatsAppIcon size={20} color="#830d35" /></a>
+            <a href={`mailto:?subject=${shareSubject}&body=${shareBody}`} className={styles.shareIcon} aria-label="Share via Email"><EmailIcon size={20} color="#830d35" /></a>
           </div>
         </div>
 
@@ -377,7 +347,6 @@ export default async function NewsletterEdition({ params }) {
         </footer>
 
       </div>
-
     </div>
   );
 }
