@@ -69,20 +69,20 @@ function blocksToHtml(blocks = []) {
     if (block.listItem) {
       if (listType && listType !== block.listItem) flushList();
       listType = block.listItem;
-      listBuffer.push(`<li style="margin-bottom:6px;font-family:Arial,sans-serif;font-size:15px;color:#363636;line-height:1.75;">${content}</li>`);
+      listBuffer.push(`<li class="eb" style="margin-bottom:6px;font-family:Arial,sans-serif;font-size:14px;color:#363636;line-height:1.75;">${content}</li>`);
       continue;
     }
 
     flushList();
 
     if (style === 'h2') {
-      rows.push(`<h2 style="font-family:'Courier New',Courier,monospace;font-size:21px;font-weight:700;margin:24px 0 10px;color:#363636;line-height:1.3;">${content}</h2>`);
+      rows.push(`<h2 class="el" style="font-family:'Courier New',Courier,monospace;font-size:17px;font-weight:700;margin:24px 0 10px;color:#363636;line-height:1.3;">${content}</h2>`);
     } else if (style === 'h3') {
-      rows.push(`<h3 style="font-family:'Courier New',Courier,monospace;font-size:17px;font-weight:700;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
+      rows.push(`<h3 class="el" style="font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:700;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
     } else if (style === 'blockquote') {
-      rows.push(`<blockquote style="margin:16px 0;padding:0 0 0 16px;border-left:2px solid #830d35;"><p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#666;font-style:italic;line-height:1.65;">${content}</p></blockquote>`);
+      rows.push(`<p class="eb" style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:14px;line-height:1.75;color:#363636;">${content}</p>`);
     } else {
-      rows.push(`<p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#363636;">${content}</p>`);
+      rows.push(`<p class="eb" style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:14px;line-height:1.75;color:#363636;">${content}</p>`);
     }
   }
 
@@ -93,20 +93,18 @@ function blocksToHtml(blocks = []) {
 // ─── Section renderers ────────────────────────────────────────────────────────
 
 function sectionLabel(text) {
-  return `<p style="font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#830d35;margin:0 0 14px 0;line-height:1.2;">${text}</p>`;
+  return `<p class="el" style="font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#830d35;margin:0 0 14px 0;line-height:1.2;">${text}</p>`;
 }
 
 function renderSection(section) {
   const type = section._type;
   const wrapper = (label, content) =>
-    `<div style="padding:28px 0 0 0;">${sectionLabel(label)}${content}</div>`;
+    `<div style="padding:28px 0 0 0;border-top:1px solid #ebebeb;">${sectionLabel(label)}${content}</div>`;
 
   if (type === 'openingNote') {
     const body = blocksToHtml(section.body);
-    const attr = section.author?.name
-      ? `<p style="font-family:Arial,sans-serif;font-size:14px;color:#830d35;margin:12px 0 0 0;">— ${section.author.name}</p>`
-      : '';
-    return `<div style="padding:28px 0 0 0;">${body}${attr}</div>`;
+    // Author attribution dropped — byline avatar in header already identifies the writer
+    return `<div style="padding:28px 0 0 0;">${body}</div>`;
   }
 
   if (type === 'essay') {
@@ -173,7 +171,7 @@ function getYoutubeId(url) {
 }
 
 export function buildEmail(newsletter, unsubscribeUrl) {
-  const { title, edition, shortDescription, sections = [], publishedDate, podcastUrl, author, slug } = newsletter;
+  const { title, edition, shortDescription, sections = [], publishedDate, podcastUrl, author, slug, coverImageUrl } = newsletter;
 
   const dateStr = publishedDate
     ? new Date(publishedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -189,7 +187,14 @@ export function buildEmail(newsletter, unsubscribeUrl) {
   const authorSlug = author?.slug || null;
   const authorProfileUrl = authorSlug ? `https://yali.vc/about-yali/${authorSlug}` : null;
   const authorImageUrl = author?.photo?.asset?.url
-    ? `${author.photo.asset.url}?w=112&h=112&fit=crop&auto=format`
+    ? `${author.photo.asset.url}?w=72&h=72&fit=crop&auto=format`
+    : null;
+  const authorInitials = authorName
+    ? authorName.split(' ').map(w => w[0]).slice(0, 2).join('')
+    : 'Y';
+
+  const heroImageUrl = coverImageUrl
+    ? `${coverImageUrl}?w=1200&h=680&fit=crop&auto=format`
     : null;
 
   const sectionsHtml = sections.map(renderSection).join('');
@@ -199,28 +204,24 @@ export function buildEmail(newsletter, unsubscribeUrl) {
     const videoId = getYoutubeId(podcastUrl);
     if (videoId) {
       episodeHtml = `
-        <div style="padding:28px 0 0 0;">
-          <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">YALI CAPITAL PODCAST &middot; EP.${edition || '?'}</p>
-          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="display:block;text-decoration:none;">
-            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch ${title || 'episode'} on YouTube" width="552" style="display:block;width:100%;height:auto;border:0;" />
-          </a>
-          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;display:inline-block;margin-top:8px;">Watch on YouTube ↗</a>
-        </div>`;
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #ebebeb;">
+          <tr><td style="padding:24px 24px 0;">
+            <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">Yali Capital Podcast &middot; Ep.${edition || '?'}</p>
+            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="display:block;text-decoration:none;">
+              <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch on YouTube" width="552" style="display:block;width:100%;height:auto;border:0;" />
+            </a>
+            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#830d35;text-decoration:none;display:inline-block;margin-top:8px;">Watch on YouTube ↗</a>
+          </td></tr>
+        </table>`;
     } else {
       episodeHtml = `
-        <div style="padding:28px 0 0 0;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-              <td>
-                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">YALI CAPITAL PODCAST &middot; EP.${edition || '?'}</p>
-                <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0;">${title || ''}</p>
-              </td>
-              <td align="right" style="vertical-align:middle;padding-left:12px;white-space:nowrap;">
-                <a href="${podcastUrl}" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;" target="_blank">Listen ↗</a>
-              </td>
-            </tr>
-          </table>
-        </div>`;
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #ebebeb;">
+          <tr><td style="padding:24px 24px 0;">
+            <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 4px 0;">Yali Capital Podcast &middot; Ep.${edition || '?'}</p>
+            <p style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#363636;margin:0 0 4px 0;">${title || ''}</p>
+            <a href="${podcastUrl}" style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#830d35;text-decoration:none;" target="_blank">Listen ↗</a>
+          </td></tr>
+        </table>`;
     }
   }
 
@@ -232,95 +233,119 @@ export function buildEmail(newsletter, unsubscribeUrl) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>${title || ''}</title>
   <meta name="format-detection" content="telephone=no" />
+  <style type="text/css">
+    @media only screen and (max-width:600px){
+      .em{width:100%!important;max-width:100%!important}
+      .ep{padding-left:16px!important;padding-right:16px!important}
+      .et{font-size:18px!important}
+      .eb{font-size:15px!important}
+      .el{font-size:12px!important}
+    }
+  </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f0f0;">
-    <tr>
-      <td align="center" style="padding:24px 16px;">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;">
+<body style="margin:0;padding:0;background-color:#e8e8e8;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#e8e8e8;">
+  <tr>
+    <td align="center" style="padding:24px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
 
-          <tr>
-            <td style="padding:12px 16px;border-bottom:1px solid #e0e0e0;background:#f7f7f7;text-align:center;">
-              <span style="font-size:11px;font-family:Arial,sans-serif;color:#555;">
-                Someone sent this to you?
-                <a href="${SUBSCRIBE_URL}" style="color:#830d35;font-family:'Courier New',monospace;text-decoration:none;font-size:11px;" target="_blank">Subscribe here ↗</a>
-              </span>
-            </td>
-          </tr>
+        <!-- Brand stripe -->
+        <tr>
+          <td style="background-color:#363636;padding:0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color:#830d35;padding:10px 14px;white-space:nowrap;vertical-align:middle;">
+                  <span style="font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ffffff;">Yali Capital</span>
+                </td>
+                <td style="padding:0 16px;vertical-align:middle;" align="right">
+                  ${dateStr ? `<span style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-right:12px;">${dateStr}</span>` : ''}
+                  <span style="font-family:'Courier New',Courier,monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#ebde84;border:1px solid rgba(235,222,132,0.25);padding:2px 8px;">Issue #${edition || '?'}</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-          <tr>
-            <td style="background-color:#830d35;padding:28px 24px 24px 24px;">
-              ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#efefef;text-transform:uppercase;margin:0 0 12px 0;">${dateStr}</p>` : ''}
-              <h1 style="font-family:'Courier New',Courier,monospace;font-size:39px;font-weight:700;color:#ebde84;margin:0 0 14px 0;line-height:1.2;">${title || ''}</h1>
-              ${shortDescription ? `<p style="font-family:Arial,sans-serif;font-size:16px;color:#f5edbe;line-height:1.6;margin:0 0 20px 0;">${shortDescription}</p>` : ''}
-              ${authorName ? `
-              ${authorProfileUrl ? `<a href="${authorProfileUrl}" style="text-decoration:none;display:block;" target="_blank">` : ''}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="vertical-align:middle;">
-                    <p style="font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#efefef;margin:0 0 2px 0;">${authorName}</p>
-                    ${dateStr ? `<p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:rgba(239,239,239,0.65);margin:0;">${dateStr}</p>` : ''}
-                  </td>
-                  ${authorImageUrl ? `
-                  <td align="right" style="vertical-align:middle;padding-left:12px;">
-                    <img src="${authorImageUrl}" width="56" height="56" alt="${authorName}" style="display:block;width:56px;height:56px;object-fit:cover;border:0;" />
-                  </td>` : ''}
-                </tr>
-              </table>
-              ${authorProfileUrl ? `</a>` : ''}` : ''}
-            </td>
-          </tr>
+        <!-- Hero image -->
+        ${heroImageUrl ? `
+        <tr>
+          <td style="padding:0;line-height:0;background-color:#1a1a1a;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,0.06) 39px,rgba(255,255,255,0.06) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,0.06) 39px,rgba(255,255,255,0.06) 40px);">
+            <img src="${heroImageUrl}" width="600" alt="${title || ''}" style="display:block;width:100%;height:auto;border:0;mix-blend-mode:luminosity;opacity:0.82;" />
+          </td>
+        </tr>` : ''}
 
-          <tr>
-            <td style="padding:0 24px 0 24px;">
-              ${sectionsHtml}
-              ${episodeHtml}
-              <div style="padding:28px 0 0 0;">
-                <p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0;">
-                  Liked this edition?
-                  <a href="mailto:?subject=${shareSubject}&body=${shareBody}" style="color:#830d35;text-decoration:none;">Forward this email.</a>
-                </p>
-              </div>
-              <div style="padding:16px 0 0 0;">
-                <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:600;letter-spacing:0.14em;color:#830d35;text-transform:uppercase;margin:0 0 10px 0;">Share this article</p>
-                <p style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;margin:0;">
-                  <a href="https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">X&nbsp;/&nbsp;Twitter</a>
-                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                  <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">LinkedIn</a>
-                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                  <a href="https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}" style="color:#830d35;text-decoration:none;" target="_blank">WhatsApp</a>
-                  &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                  <a href="mailto:?subject=${shareSubject}&body=${shareBody}" style="color:#830d35;text-decoration:none;">Email</a>
-                </p>
-              </div>
-              <div style="padding:24px 0 0 0;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-                    <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;color:#830d35;text-transform:uppercase;">YALI CAPITAL &middot; DEEP TECH FUND</td>
-                    <td align="right"><a href="https://yali.vc/newsletter/" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:#830d35;text-decoration:none;">All editions ↗</a></td>
-                  </tr>
-                </table>
-              </div>
-              <div style="padding:20px 0 28px 0;text-align:center;">
-                <a href="${pageUrl}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#830d35;text-decoration:none;border:1px solid #830d35;padding:11px 28px;display:inline-block;">View on web</a>
-              </div>
-            </td>
-          </tr>
+        <!-- Title + author block -->
+        <tr>
+          <td class="ep" style="background-color:#ffffff;padding:28px 24px 20px;border-bottom:1px solid #ebebeb;">
+            <p style="font-family:'Courier New',Courier,monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#830d35;margin:0 0 12px 0;">Newsletter &middot; Deep Tech</p>
+            <h1 class="et" style="font-family:'Courier New',Courier,monospace;font-size:21px;font-weight:700;color:#363636;line-height:1.2;margin:0 0 20px 0;">${title || ''}</h1>
+            ${authorName ? `
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="vertical-align:middle;padding-right:12px;">
+                  ${authorImageUrl
+                    ? `<img src="${authorImageUrl}" width="36" height="36" alt="${authorName}" style="display:block;width:36px;height:36px;border-radius:50%;border:0;" />`
+                    : `<div style="width:36px;height:36px;border-radius:50%;background-color:#830d35;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:700;color:#ffffff;text-align:center;line-height:36px;">${authorInitials}</div>`
+                  }
+                </td>
+                <td style="vertical-align:middle;">
+                  ${authorProfileUrl
+                    ? `<a href="${authorProfileUrl}" style="text-decoration:none;" target="_blank">`
+                    : ''}
+                  <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#363636;margin:0;">${authorName}</p>
+                  ${authorProfileUrl ? `</a>` : ''}
+                </td>
+              </tr>
+            </table>` : ''}
+          </td>
+        </tr>
 
-          <tr>
-            <td style="background-color:#f0f0f0;padding:14px 24px;">
-              <p style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.06em;color:#888;margin:0 0 4px 0;text-align:center;">&copy; Yali Capital 2026 &nbsp;|&nbsp; Bangalore, India</p>
-              <p style="font-family:Arial,sans-serif;font-size:11px;color:#aaa;margin:0;text-align:center;">
-                You received this because you subscribed at yali.vc.
-                &nbsp;<a href="${unsubscribeUrl}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
-              </p>
-            </td>
-          </tr>
+        <!-- Short description lede -->
+        ${shortDescription ? `
+        <tr>
+          <td class="ep" style="background-color:#fafafa;padding:20px 24px;border-bottom:1px solid #ebebeb;">
+            <p class="eb" style="font-family:Arial,sans-serif;font-size:14px;color:#666666;line-height:1.65;margin:0;">${shortDescription}</p>
+          </td>
+        </tr>` : ''}
 
-        </table>
-      </td>
-    </tr>
-  </table>
+        <!-- Email intro -->
+        <tr>
+          <td class="ep" style="background-color:#ffffff;padding:24px 24px 0;border-bottom:1px solid #ebebeb;">
+            <p class="eb" style="font-family:Arial,sans-serif;font-size:14px;line-height:1.8;color:#363636;margin:0;">If you're wondering why you're reading this, it's because you subscribed on yali.vc. Share this newsletter with someone who might enjoy it. This is the first edition of 'Tattva' from Yali Capital, our newsletter on science, tech, and their intersection with the world of venture capital.</p>
+          </td>
+        </tr>
+
+        <!-- Sections -->
+        <tr>
+          <td class="ep" style="background-color:#ffffff;padding:0 24px;">
+            ${sectionsHtml}
+            ${episodeHtml}
+          </td>
+        </tr>
+
+        <!-- Outro + view on web -->
+        <tr>
+          <td class="ep" style="background-color:#ffffff;padding:28px 24px;border-top:1px solid #ebebeb;">
+            <p class="eb" style="font-family:Arial,sans-serif;font-size:13px;color:#555555;line-height:1.7;margin:0 0 20px 0;">That is it for Edition #${edition || '?'}. If you found this useful, forward it to someone working at the frontier.</p>
+            <a href="${pageUrl}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#830d35;text-decoration:none;border:1px solid #830d35;padding:10px 24px;display:inline-block;">View on web</a>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td class="ep" style="background-color:#363636;padding:14px 24px;">
+            <p style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.06em;color:rgba(255,255,255,0.25);margin:0 0 4px 0;text-align:center;">&copy; Yali Capital 2026 &nbsp;|&nbsp; Bangalore, India</p>
+            <p style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.2);margin:0;text-align:center;">
+              You received this because you subscribed at yali.vc.
+              &nbsp;<a href="${unsubscribeUrl}" style="color:#830d35;text-decoration:none;">Unsubscribe</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
 </body>
 </html>`;
 }
@@ -330,6 +355,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
 export const NEWSLETTER_QUERY = `*[_type == "newsletter" && _id in [$id, "drafts." + $id]][0]{
   title, edition, shortDescription, publishedDate, status,
   slug, podcastUrl,
+  "coverImageUrl": coverImage.asset->url,
   author->{ name, "slug": slug.current, photo { asset->{ url } } },
   sections[]{
     _type,
