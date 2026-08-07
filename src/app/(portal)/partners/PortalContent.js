@@ -629,7 +629,7 @@ function PortalContentInner({
                 <h1 className={styles.fundSummaryTitle}>Fund Summary</h1>
                 {fundSettings?.targetFundSizeINR != null && (
                   <p className={styles.fundSummarySubtitle}>
-                    Combined fund size: ₹{fundSettings.targetFundSizeINR} crore
+                    Combined size of both funds at final close: ₹{fundSettings.targetFundSizeINR} crore
                   </p>
                 )}
 
@@ -663,7 +663,7 @@ function PortalContentInner({
                     </tr>
                     {fundMetrics?.amountDrawnDown != null && (
                       <tr>
-                        <td>Amount drawn down as per bank</td>
+                        <td>Amount drawn down</td>
                         <td>{fundMetrics.amountDrawnDown.toFixed(2)}</td>
                       </tr>
                     )}
@@ -764,7 +764,7 @@ function PortalContentInner({
                             {(() => {
                               const initDate = getInitialInvestmentDate(investment);
                               return initDate
-                                ? new Date(initDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
+                                ? new Date(initDate).toLocaleDateString('en-IN', { month: 'short', year: '2-digit' })
                                 : '-';
                             })()}
                           </td>
