@@ -3,6 +3,11 @@
 
 export const SUBSCRIBE_URL = 'https://yali.vc/newsletter/';
 
+// Serif reading font for body copy — Georgia is preinstalled on every OS
+// (unlike a webfont, which Gmail strips), so it renders everywhere without
+// the risk of silently falling back to the default sans-serif.
+const BODY_FONT = `Georgia,Cambria,'Times New Roman',Times,serif`;
+
 export function getUnsubscribeUrl(email) {
   const token = Buffer.from(email).toString('base64');
   return `https://yali.vc/unsubscribe?token=${token}`;
@@ -69,7 +74,7 @@ function blocksToHtml(blocks = []) {
     if (block.listItem) {
       if (listType && listType !== block.listItem) flushList();
       listType = block.listItem;
-      listBuffer.push(`<li class="eb" style="margin-bottom:6px;font-family:Arial,sans-serif;font-size:14px;color:#363636;line-height:1.75;">${content}</li>`);
+      listBuffer.push(`<li class="eb" style="margin-bottom:8px;font-family:${BODY_FONT};font-size:16px;color:#363636;line-height:1.6;">${content}</li>`);
       continue;
     }
 
@@ -80,9 +85,9 @@ function blocksToHtml(blocks = []) {
     } else if (style === 'h3') {
       rows.push(`<h3 class="el" style="font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:700;margin:20px 0 8px;color:#363636;line-height:1.3;">${content}</h3>`);
     } else if (style === 'blockquote') {
-      rows.push(`<p class="eb" style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:14px;line-height:1.75;color:#363636;">${content}</p>`);
+      rows.push(`<p class="eb" style="margin:0 0 18px;font-family:${BODY_FONT};font-size:16px;line-height:1.6;color:#363636;">${content}</p>`);
     } else {
-      rows.push(`<p class="eb" style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:14px;line-height:1.75;color:#363636;">${content}</p>`);
+      rows.push(`<p class="eb" style="margin:0 0 18px;font-family:${BODY_FONT};font-size:16px;line-height:1.6;color:#363636;">${content}</p>`);
     }
   }
 
@@ -110,7 +115,7 @@ function renderSection(section) {
   if (type === 'essay') {
     const body = blocksToHtml(section.body);
     const attr = section.author?.name
-      ? `<p style="font-family:Arial,sans-serif;font-size:14px;color:#830d35;margin:12px 0 0 0;">— ${section.author.name}</p>`
+      ? `<p style="font-family:${BODY_FONT};font-size:15px;color:#830d35;margin:12px 0 0 0;">${section.author.name}</p>`
       : '';
     return wrapper(section.title || 'Essay', body + attr);
   }
@@ -125,7 +130,7 @@ function renderSection(section) {
   if (type === 'guestColumn') {
     const byline = [section.guestTitle, section.guestCompany].filter(Boolean).join(' · ');
     const meta = section.guestName
-      ? `<p style="font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:500;color:#363636;margin:0 0 2px 0;">${section.guestName}</p>${byline ? `<p style="font-family:Arial,sans-serif;font-size:13px;color:#830d35;margin:0 0 12px 0;">${byline}</p>` : ''}`
+      ? `<p style="font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:500;color:#363636;margin:0 0 2px 0;">${section.guestName}</p>${byline ? `<p style="font-family:${BODY_FONT};font-size:13px;color:#830d35;margin:0 0 12px 0;">${byline}</p>` : ''}`
       : '';
     return wrapper(section.sectionTitle || 'GUEST', meta + blocksToHtml(section.body));
   }
@@ -138,7 +143,7 @@ function renderSection(section) {
            ${item.contributor?.name ? `<td align="right" style="font-family:Arial,sans-serif;font-size:12px;color:#830d35;">${item.contributor.name}</td>` : ''}
          </tr>
          <tr>
-           <td colspan="2" style="font-family:Arial,sans-serif;font-size:12px;color:#666;line-height:1.55;padding-top:2px;">${item.oneLiner || ''}</td>
+           <td colspan="2" style="font-family:${BODY_FONT};font-size:14px;color:#555;line-height:1.5;padding-top:3px;">${item.oneLiner || ''}</td>
          </tr>
        </table>`
     ).join('');
@@ -149,7 +154,7 @@ function renderSection(section) {
     const items = (section.items || []).map((item) =>
       `<div style="margin-bottom:14px;">
          <a href="${item.url || '#'}" style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#830d35;text-decoration:none;display:block;margin-bottom:4px;" target="_blank">${item.title || ''} ↗</a>
-         ${item.blurb ? `<p style="font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.55;margin:0;">${item.blurb}</p>` : ''}
+         ${item.blurb ? `<p style="font-family:${BODY_FONT};font-size:14px;color:#666;line-height:1.5;margin:0;">${item.blurb}</p>` : ''}
        </div>`
     ).join('');
     return wrapper(section.sectionTitle || 'READING LIST', items);
@@ -243,7 +248,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background-color:#e8e8e8;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background-color:#e8e8e8;font-family:${BODY_FONT};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#e8e8e8;">
   <tr>
     <td align="center" style="padding:24px 16px;">
@@ -304,14 +309,14 @@ export function buildEmail(newsletter, unsubscribeUrl) {
         ${shortDescription ? `
         <tr>
           <td class="ep" style="background-color:#fafafa;padding:20px 24px;border-bottom:1px solid #ebebeb;">
-            <p class="eb" style="font-family:Arial,sans-serif;font-size:14px;color:#666666;line-height:1.65;margin:0;">${shortDescription}</p>
+            <p class="eb" style="font-family:${BODY_FONT};font-size:17px;color:#555555;line-height:1.55;margin:0;">${shortDescription}</p>
           </td>
         </tr>` : ''}
 
         <!-- Email intro -->
         <tr>
           <td class="ep" style="background-color:#ffffff;padding:24px 24px 0;border-bottom:1px solid #ebebeb;">
-            <p class="eb" style="font-family:Arial,sans-serif;font-size:14px;line-height:1.8;color:#363636;margin:0;">If you're wondering why you're reading this, it's because you subscribed on yali.vc. Share this newsletter with someone who might enjoy it. This is the first edition of 'Tattva' from Yali Capital, our newsletter on science, tech, and their intersection with the world of venture capital.</p>
+            <p class="eb" style="font-family:${BODY_FONT};font-size:16px;line-height:1.6;color:#363636;margin:0;">If you're wondering why you're reading this, it's because you subscribed on yali.vc. Share this newsletter with someone who might enjoy it. This is the first edition of 'Tattva' from Yali Capital, our newsletter on science, tech, and their intersection with the world of venture capital.</p>
           </td>
         </tr>
 
@@ -326,7 +331,7 @@ export function buildEmail(newsletter, unsubscribeUrl) {
         <!-- Outro + view on web -->
         <tr>
           <td class="ep" style="background-color:#ffffff;padding:28px 24px;border-top:1px solid #ebebeb;">
-            <p class="eb" style="font-family:Arial,sans-serif;font-size:13px;color:#555555;line-height:1.7;margin:0 0 20px 0;">That is it for Edition #${edition || '?'}. If you found this useful, forward it to someone working at the frontier.</p>
+            <p class="eb" style="font-family:${BODY_FONT};font-size:15px;color:#555555;line-height:1.6;margin:0 0 20px 0;">That is it for Edition #${edition || '?'}. If you found this useful, forward it to someone working at the frontier.</p>
             <a href="${pageUrl}" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#830d35;text-decoration:none;border:1px solid #830d35;padding:10px 24px;display:inline-block;">View on web</a>
           </td>
         </tr>
