@@ -78,6 +78,18 @@ function fmtMonthYear(dateStr) {
   return `${months[d.getMonth()]} '${yr}`;
 }
 
+// Month + year, no apostrophe (e.g. "Aug 24") — used for investment dates where the
+// exact day is misleading (rounds often close in tranches). Do not use for round
+// labels — those use fmtMonthYear() above.
+function fmtDateMonthYear(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const yr = String(d.getFullYear()).slice(2);
+  return `${months[d.getMonth()]} ${yr}`;
+}
+
 // e.g. Q3 + FY26 → "Q3 FY26"
 function quarterFYLabel(quarter, fiscalYear) {
   return `${quarter} ${fiscalYear || 'FY26'}`;
@@ -800,7 +812,7 @@ export function generatePdfHtml({
 
   const fundSizeVal = fundSettings?.targetFundSizeINR ?? fundSettings?.fundSizeAtClose;
   const fundSizeSubtitle = fundSizeVal != null
-    ? `Combined fund size: ₹${Number.isInteger(fundSizeVal) ? fundSizeVal : fmt(fundSizeVal, 0)} crore`
+    ? `Combined size of both funds at final close: ₹${Number.isInteger(fundSizeVal) ? fundSizeVal : fmt(fundSizeVal, 0)} crore`
     : `As of ${esc(asOf)}`;
 
   const fundSumHtml = `
@@ -820,7 +832,7 @@ export function generatePdfHtml({
           <tr><td>First close date</td><td>${fmtDate(fundSettings?.firstCloseDate)}</td></tr>
           <tr><td>Final close date</td><td>${fmtDate(fundSettings?.finalCloseDate)}</td></tr>
           <tr><td>Combined fund size</td><td>${fundSizeVal != null ? fmt(fundSizeVal) : '—'}</td></tr>
-          <tr><td>Amount drawn down as per bank</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
+          <tr><td>Amount drawn down</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
           <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
           <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
           <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}</td></tr>
@@ -850,7 +862,7 @@ export function generatePdfHtml({
         <td>${idx + 1}</td>
         <td>${esc(displayName)}</td>
         <td>${esc(c.sector || '—')}</td>
-        <td>${fmtDate(getInitialInvestmentDate(c))}</td>
+        <td>${fmtDateMonthYear(getInitialInvestmentDate(c))}</td>
         <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
         <td>${ownershipConf ? '**' : (ownership != null ? fmt(ownership, 2) : '—')}</td>
       </tr>`;
