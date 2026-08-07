@@ -8,10 +8,11 @@ import CompanyDetailClient from './CompanyDetailClient';
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
 
-// Check if user is internal (has @yali.vc email)
+// Check if user is internal (has @yali.vc or @florintree.com email)
 function isInternalUser(email) {
   if (!email) return false;
-  return email.toLowerCase().endsWith('@yali.vc');
+  const lower = email.toLowerCase();
+  return lower.endsWith('@yali.vc') || lower.endsWith('@florintree.com');
 }
 
 // Generate metadata
