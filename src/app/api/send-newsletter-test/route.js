@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request) {
   try {
-    const { newsletterId, email } = await request.json();
+    const { newsletterId, email, from } = await request.json();
 
     if (!newsletterId || !email) {
       return NextResponse.json({ error: 'newsletterId and email required' }, { status: 400 });
@@ -23,10 +23,10 @@ export async function POST(request) {
 
     const unsubscribeUrl = getUnsubscribeUrl(email);
     const html = buildEmail(newsletter, unsubscribeUrl);
-    const subject = `[TEST v${Date.now().toString().slice(-4)}] Tattva #${newsletter.edition || '?'}: ${newsletter.title}`;
+    const subject = `[Test - for feedback] Tattva #${newsletter.edition || '?'}: ${newsletter.title}`;
 
     const { error } = await resend.emails.send({
-      from: 'Yali Capital Newsletter <newsletter@yali.vc>',
+      from: from || 'Yali Capital Newsletter <newsletter@yali.vc>',
       to: [email],
       subject,
       html,
