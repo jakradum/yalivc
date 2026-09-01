@@ -230,14 +230,31 @@ Message: ${s.message || '(none)'}`
     messages: [
       {
         role: 'user',
-        content: `You are classifying contact form submissions for Yali Capital, a deep tech venture capital firm based in Bangalore, India. The firm invests in AI, robotics, semiconductors, life sciences, aerospace, and manufacturing.
+        content: `You are classifying contact form submissions for Yali Capital, a SEBI-registered deep tech venture capital firm based in Bangalore, India. The firm invests in AI, robotics, semiconductors, life sciences, aerospace, and manufacturing. Auto-responses to a subset of these submissions go out unreviewed, so err toward under-scoring. A credible name and email is the minimum bar to clear, not a reason to score well — most spam and low-value mail comes from perfectly coherent senders.
 
 For each submission, return:
-- sender_score (0.0-1.0): Is the name and email credible? gmail/yahoo/icloud are acceptable — journalists and founders often use personal email. Only penalise clearly fake addresses, disposable domains, or incoherent name/email combos.
-- message_score (0.0-1.0): Does the message contain a specific, actionable request? Does it mention a real publication, company, or topic relevant to deep tech or Yali? Penalise single words, gibberish, or completely generic filler.
-- combined_score: (0.35 * sender_score) + (0.65 * message_score)
-- bucket: exactly one of "press-established" (press inquiry with detectable publication or outlet context), "press-general" (press inquiry, legit but vague), "partnership" (partnership inquiry, legit), "borderline" (combined 0.40-0.69), "spam" (combined below 0.40)
-- reasoning: one sentence.
+
+- sender_score (0.0-1.0): Is the name and email credible? gmail/yahoo/icloud are fine — journalists and founders often use personal email. Only penalise clearly fake addresses, disposable domains, or incoherent name/email combos. This score alone must never justify a high combined_score.
+
+- message_score (0.0-1.0): Start every message at 0.2 and only raise it if it clears ALL of the following:
+  (a) it names Yali Capital, a specific Yali fund, or a specific Yali portfolio company, not just generic deep-tech buzzwords ("AI", "robotics", "deep tech" alone do not count as specific)
+  (b) it makes a single, concrete, one-off request that only a human at Yali can resolve
+  (c) it does not read as outreach sent to many recipients (no "Dear Investor" / "Dear Sir/Madam" salutations, no generic pitch-deck-and-calendly-link structure, no productized pricing language like "$X/call")
+  If it fails any of those three, cap message_score at 0.5.
+
+  Additional hard caps, applied after the above:
+  - Any message asking about fund mechanics, AIF/fund category details, becoming an LP, becoming a distributor, minimum investment, or "how do I invest" — cap at 0.4. These are compliance-sensitive and must always go to a human, no matter how clear or polite the ask is.
+  - Any message where an external company or founder is soliciting investment, partnership, or funding FROM Yali (i.e. they want money or backing, not offering it) — cap at 0.5. These always need human judgment on fit; never auto-acknowledge as if it were routine.
+  - Single-line or content-free asks ("Business Proposal", "Interested to invest", a name with no message) — cap at 0.3.
+  - If two or more submissions in this batch share the same sender name, company, or near-identical pitch structure across different email addresses, treat it as mass/scripted outreach and cap ALL of them at 0.3, regardless of how polished any individual message reads.
+
+- combined_score: (0.25 * sender_score) + (0.75 * message_score)
+
+- bucket: exactly one of "press-established" (press inquiry with a detectable, named publication or outlet), "press-general" (press inquiry, legit but vague), "partnership" (a genuine, specific, non-solicitation partnership fit — rare), "borderline" (combined 0.40-0.69), "spam" (combined below 0.40)
+
+- reasoning: one sentence, and explicitly name which cap (if any) applied.
+
+Only combined_score >= 0.85 should ever be treated as safe to auto-respond to. Most legitimate-sounding submissions should still land below that; when genuinely uncertain, score lower rather than higher.
 
 Return ONLY a valid JSON array, no prose, no markdown:
 [{"_id":"...","sender_score":0.0,"message_score":0.0,"combined_score":0.0,"bucket":"spam","reasoning":"..."}]
@@ -286,7 +303,12 @@ ${submissionList}`,
 
     let autoResponded = false;
 
-    if (cls.combined_score >= 0.7 && TEMPLATES[cls.bucket]) {
+    // Partnership inquiries almost always need a human read (fund solicitations,
+    // LP onboarding, and investment-seeking pitches are compliance-sensitive or
+    // simply need judgment on fit) — hold them to a higher bar than press.
+    const autoRespondThreshold = cls.bucket === 'partnership' ? 0.92 : 0.85;
+
+    if (cls.combined_score >= autoRespondThreshold && TEMPLATES[cls.bucket]) {
       const tpl = TEMPLATES[cls.bucket];
       try {
         await resend.emails.send({
