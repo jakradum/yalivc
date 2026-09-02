@@ -36,6 +36,12 @@ export default async function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/brand/`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
       url: `${baseUrl}/investor-relations/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
