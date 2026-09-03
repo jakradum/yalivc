@@ -674,6 +674,8 @@ a.mobileCompanyCard {
         align-items: center;
         gap: 0.6rem;
         margin-bottom: 0.5rem;
+        /* ExitedTag uses tone="inherit" here, so drive its colour from the row */
+        color: #363636;
     }
 
     .companyInfo {
@@ -775,6 +777,10 @@ a.mobileCompanyCard {
     }
 
     .mobileCompanyCardFeatured .companyTitle {
+        color: #efefef;
+    }
+
+    .mobileCompanyCardFeatured .companyTitleRow {
         color: #efefef;
     }
 
