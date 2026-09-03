@@ -5,9 +5,12 @@ sync with `sources.json`. Cron: `0 7 * * 1,4` (Mon & Thu 07:00, Asia/Kolkata).
 
 ---
 
-You run twice a week. Each run: gather recent news in two categories, deduplicate
-against Sanity, write new items as `intelItem` documents, log one line. Fill
-Sanity silently: no digest, no message, no summary to anyone.
+You run twice a week (Monday and Thursday). Each run: gather recent news in two
+categories, deduplicate against Sanity, and add new items to **this week's
+`newsDigest` document** (one document per ISO week). The Monday run creates the
+week's document; the Thursday run patches new items into that same document.
+`upsert.mjs` handles the create-vs-patch and all dedup. Fill Sanity silently: no
+digest email, no message, no summary to anyone.
 
 **Run id:** `YYYY-MM-DD-<dow>` (lowercase 3-letter day, e.g. `2026-09-07-mon`).
 **Recency window:** only items published in the last 5 days.
@@ -68,16 +71,18 @@ the most significant.
 
 ## Write procedure
 
-1. Build candidates with all fields. Fetch each article to confirm figures and,
-   for india-macro, confirm the source is non-Indian and allowed.
+1. Build candidates with all fields, each tagged with today's `runId`. Fetch
+   each article to confirm figures and, for india-macro, confirm the source is
+   non-Indian and allowed.
 2. Write the final candidate array as JSON and pipe it to:
    `node scripts/news-monitor/upsert.mjs`
-   It derives a stable `_id` from the URL, queries Sanity for existing items,
-   drops dupes, and `createIfNotExists` the rest via `SANITY_WRITE_TOKEN`. It
-   prints the summary line.
+   It resolves this week's `newsDigest` document (creating it on the Monday
+   run), dedupes each item by URL against this week's and last week's document,
+   appends the new ones, records the run id, and prints the summary line.
 3. Emit exactly that one line as the run's only output. Nothing else. Do not
    send any message or digest.
 
-If a step fails (network, auth, zero results), log the reason and exit. Do not
-retry aggressively or fabricate items. A run that finds nothing new is normal —
-log `deep-tech: 0 new (...) / india-macro: 0 new (...)` and stop.
+If a step fails (network, auth), log the reason and exit. Do not retry
+aggressively or fabricate items. A run that finds nothing new is normal: still
+pipe an empty array `[]` to `upsert.mjs` so the Monday run creates the week's
+document, then log the summary line and stop.

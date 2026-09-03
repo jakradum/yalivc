@@ -41,7 +41,7 @@ import contactSubmission from './schemas/contactSubmission'
 // Letterhead documents
 import letterheadDocument from './schemas/letterheadDocument'
 // News monitor (auto-captured, internal)
-import intelItem from './schemas/intelItem'
+import newsDigest from './schemas/newsDigest'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -83,5 +83,5 @@ export const schemaTypes = [
   // Letterhead
   letterheadDocument,
   // News monitor
-  intelItem,
+  newsDigest,
 ]

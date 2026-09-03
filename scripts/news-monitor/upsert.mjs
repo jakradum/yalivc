@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 /**
- * News monitor — write captured items to Sanity as `intelItem` documents.
+ * News monitor — write captured items into the current week's `newsDigest`.
+ *
+ * One document per ISO week (`_id = newsDigest.<YYYY-MM-DD of Monday>`).
+ * The Monday run creates the week's document; the Thursday run patches new
+ * items into that same document. Idempotent: re-runs add nothing new.
  *
  * Usage:
  *   node scripts/news-monitor/upsert.mjs < items.json
@@ -16,13 +20,13 @@
  *     "angle": string,               (india-macro only)
  *     "summary": string[],           (required, 3-6 bullets)
  *     "publishedDate": "YYYY-MM-DD", (required)
- *     "runId": string,               (optional)
+ *     "runId": string,               (optional; e.g. 2026-09-08-mon)
  *     "notable": boolean             (optional, default false)
  *   }
  * `capturedAt` is set here.
  *
- * Dedup: `_id` is derived from a sha1 of the normalised URL, so re-runs are
- * idempotent (`createIfNotExists`). Prints a summary line the routine can log.
+ * Dedup: within the current week's doc AND the previous week's doc, by
+ * normalised URL (so a story on the Mon/Thu boundary is not double-counted).
  *
  * Env: SANITY_WRITE_TOKEN (falls back to SANITY_API_TOKEN). Reads .env.local
  * for local runs; in the scheduled routine the var is in the environment.
@@ -39,6 +43,8 @@ config({ path: resolve(__dirname, '../../.env.local') });
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const CATEGORIES = new Set(['deep-tech', 'india-macro']);
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const token = process.env.SANITY_WRITE_TOKEN || process.env.SANITY_API_TOKEN;
 if (!token && !DRY_RUN) {
@@ -54,13 +60,32 @@ const client = createClient({
   useCdn: false,
 });
 
+/** YYYY-MM-DD of the Monday of the ISO week containing `date`, in Asia/Kolkata. */
+function istMonday(date = new Date()) {
+  const ist = new Date(date.getTime() + IST_OFFSET_MS);
+  const dow = ist.getUTCDay(); // 0 Sun .. 6 Sat
+  const sinceMonday = (dow + 6) % 7;
+  const mon = new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate() - sinceMonday));
+  return mon.toISOString().slice(0, 10);
+}
+
+function prevMonday(mondayStr) {
+  const d = new Date(`${mondayStr}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 7);
+  return d.toISOString().slice(0, 10);
+}
+
+function weekLabel(mondayStr) {
+  const d = new Date(`${mondayStr}T00:00:00Z`);
+  return `Week of ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
 function normaliseUrl(raw) {
   let u = String(raw || '').trim();
   if (!/^https?:\/\//i.test(u)) u = `https://${u}`;
   try {
     const parsed = new URL(u);
     parsed.hash = '';
-    // strip common tracking params
     for (const k of [...parsed.searchParams.keys()]) {
       if (/^utm_|^fbclid$|^gclid$|^mc_/i.test(k)) parsed.searchParams.delete(k);
     }
@@ -72,8 +97,8 @@ function normaliseUrl(raw) {
   }
 }
 
-function idFor(url) {
-  return 'intel.' + createHash('sha1').update(normaliseUrl(url)).digest('hex').slice(0, 24);
+function keyFor(url) {
+  return createHash('sha1').update(normaliseUrl(url)).digest('hex').slice(0, 16);
 }
 
 function readStdin() {
@@ -102,29 +127,28 @@ function validate(item, i) {
   return errs;
 }
 
-function toDoc(item) {
-  const capturedAt = new Date().toISOString();
-  const doc = {
-    _id: idFor(item.url),
-    _type: 'intelItem',
+function toEntry(item) {
+  const entry = {
+    _type: 'intelEntry',
+    _key: keyFor(item.url),
     headline: String(item.headline).trim(),
     url: normaliseUrl(item.url),
     source: String(item.source).trim(),
     category: item.category,
     summary: item.summary.map((s) => String(s).trim()).filter(Boolean),
     publishedDate: item.publishedDate,
-    capturedAt,
+    capturedAt: new Date().toISOString(),
     notable: Boolean(item.notable),
   };
-  if (item.runId) doc.runId = String(item.runId).trim();
-  if (item.category === 'deep-tech' && item.thesis) doc.thesis = String(item.thesis).trim();
-  if (item.category === 'india-macro' && item.angle) doc.angle = String(item.angle).trim();
-  return doc;
+  if (item.runId) entry.runId = String(item.runId).trim();
+  if (item.category === 'deep-tech' && item.thesis) entry.thesis = String(item.thesis).trim();
+  if (item.category === 'india-macro' && item.angle) entry.angle = String(item.angle).trim();
+  return entry;
 }
 
-function tallyByCategory(list, keyFn) {
+function tally(list) {
   const out = { 'deep-tech': 0, 'india-macro': 0 };
-  for (const x of list) out[keyFn(x)] = (out[keyFn(x)] || 0) + 1;
+  for (const x of list) out[x.category] = (out[x.category] || 0) + 1;
   return out;
 }
 
@@ -142,6 +166,11 @@ async function main() {
     process.exit(1);
   }
 
+  const monday = istMonday();
+  const docId = `newsDigest.${monday}`;
+  const prevId = `newsDigest.${prevMonday(monday)}`;
+  const runId = items.find((it) => it && it.runId)?.runId || `${monday}-run`;
+
   const valid = [];
   const problems = [];
   items.forEach((it, i) => {
@@ -151,35 +180,60 @@ async function main() {
   });
   problems.forEach((p) => console.warn('SKIP', p));
 
-  // de-dupe within the batch by _id
-  const byId = new Map();
-  for (const it of valid) byId.set(idFor(it.url), it);
-  const docs = [...byId.values()].map(toDoc);
+  // de-dupe within the incoming batch by key
+  const byKey = new Map();
+  for (const it of valid) byKey.set(keyFor(it.url), it);
+  let entries = [...byKey.values()].map(toEntry);
 
-  const checked = tallyByCategory(docs, (d) => d.category);
-
-  // which already exist?
-  const ids = docs.map((d) => d._id);
-  let existing = new Set();
-  if (ids.length && !DRY_RUN) {
-    const rows = await client.fetch('*[_type=="intelItem" && _id in $ids]{_id}', { ids });
-    existing = new Set(rows.map((r) => r._id));
+  // de-dupe against this week's doc + last week's doc
+  let existingKeys = new Set();
+  let weekCategories = [];
+  if (!DRY_RUN) {
+    const rows = await client.fetch(
+      '*[_id in $ids]{_id, "keys": items[]._key, "cats": items[].category}',
+      { ids: [docId, prevId] }
+    );
+    for (const r of rows) {
+      for (const k of r.keys || []) existingKeys.add(k);
+      if (r._id === docId) weekCategories = r.cats || [];
+    }
   }
-  const fresh = docs.filter((d) => !existing.has(d._id));
-  const created = tallyByCategory(fresh, (d) => d.category);
+  const fresh = entries.filter((e) => !existingKeys.has(e._key));
+
+  const added = tally(fresh);
+  const before = { 'deep-tech': 0, 'india-macro': 0 };
+  for (const c of weekCategories) before[c] = (before[c] || 0) + 1;
 
   if (DRY_RUN) {
-    console.log(JSON.stringify({ dryRun: true, checked, wouldCreate: created, fresh }, null, 2));
-  } else if (fresh.length) {
-    let tx = client.transaction();
-    for (const d of fresh) tx = tx.createIfNotExists(d);
-    await tx.commit({ visibility: 'async' });
+    console.log(
+      JSON.stringify(
+        { dryRun: true, weekOf: monday, docId, wouldAdd: added, fresh },
+        null,
+        2
+      )
+    );
+  } else {
+    await client.createIfNotExists({
+      _id: docId,
+      _type: 'newsDigest',
+      weekOf: monday,
+      title: weekLabel(monday),
+      runs: [],
+      items: [],
+    });
+    let patch = client
+      .patch(docId)
+      .setIfMissing({ items: [], runs: [], title: weekLabel(monday) });
+    if (fresh.length) patch = patch.append('items', fresh);
+    // record the run id once
+    const doc = await client.getDocument(docId);
+    if (!(doc?.runs || []).includes(runId)) patch = patch.append('runs', [runId]);
+    await patch.commit({ visibility: 'async' });
   }
 
-  const runId = docs.find((d) => d.runId)?.runId || new Date().toISOString().slice(0, 10);
   console.log(
-    `${runId} deep-tech: ${created['deep-tech']} new (${checked['deep-tech']} checked) / ` +
-      `india-macro: ${created['india-macro']} new (${checked['india-macro']} checked)` +
+    `${monday} ${runId}: +${added['deep-tech']} deep-tech / +${added['india-macro']} india-macro ` +
+      `(week total ${before['deep-tech'] + added['deep-tech']} / ${before['india-macro'] + added['india-macro']})` +
       (problems.length ? ` / skipped: ${problems.length}` : '')
   );
 }

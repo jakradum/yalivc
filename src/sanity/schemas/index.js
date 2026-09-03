@@ -41,7 +41,7 @@ import contactSubmission from './contactSubmission'
 // Letterhead documents
 import letterheadDocument from './letterheadDocument'
 // News monitor (auto-captured, internal)
-import intelItem from './intelItem'
+import newsDigest from './newsDigest'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -89,5 +89,5 @@ export const schemaTypes = [
   // Letterhead
   letterheadDocument,
   // News monitor
-  intelItem,
+  newsDigest,
 ]
