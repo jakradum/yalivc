@@ -84,7 +84,8 @@ const CompanyTable = ({ companies, companyCount }) => {
     // ? { data: data.data['companies-csv (1)'] }
     // : localCompaniesData;
 
-  const numberOfCompanies = companyCount ?? companiesData.data.length;
+  const exitedCount = rawCompanies.filter(c => c.investmentStatus === 'exited').length;
+  const numberOfCompanies = companyCount ?? (companiesData.data.length - exitedCount);
   const currentDate = new Date();
   const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
   const numberToWords = (num) => {
@@ -100,7 +101,13 @@ const CompanyTable = ({ companies, companyCount }) => {
   };
 
   const getUpdatedText = () => {
-    return `Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India. As of ${monthYear}, our investments include ${numberToWords(numberOfCompanies)} ${numberOfCompanies === 1 ? 'company' : 'companies'}.`;
+    const activeWord = numberToWords(numberOfCompanies);
+    const activeNoun = numberOfCompanies === 1 ? 'company' : 'companies';
+    const tail =
+      exitedCount > 0
+        ? `our investments include ${activeWord} active ${activeNoun}, and ${numberToWords(exitedCount)} exited.`
+        : `our investments include ${activeWord} ${activeNoun}.`;
+    return `Our team's prior investments span a range of startups in the deep tech domain, some of which have made it to public markets in India. As of ${monthYear}, ${tail}`;
   };
 
   const updatedText = getUpdatedText();
