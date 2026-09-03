@@ -282,7 +282,7 @@ const CompanyTable = ({ companies, companyCount }) => {
               </div>
               <div className={styles.companyTitleRow}>
                 <h4 className={styles.companyTitle}>{company.name}</h4>
-                <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" />
+                <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" tone="inherit" />
               </div>
               <p className={styles.companyCategory}>{company.category?.name}</p>
 
