@@ -1,0 +1,112 @@
+{
+  "recencyDays": 5,
+  "caps": { "deep-tech": 20, "india-macro": 15 },
+  "deepTech": {
+    "theses": [
+      "Life Sciences",
+      "Robotics",
+      "Fabless Semiconductor",
+      "AI",
+      "Smart Manufacturing",
+      "Aerospace & Surveillance"
+    ],
+    "sources": [
+      { "name": "IEEE Spectrum", "rss": "https://spectrum.ieee.org/rss/fulltext" },
+      { "name": "Semiconductor Engineering", "rss": "https://semiengineering.com/feed/" },
+      { "name": "EE Times", "rss": "https://www.eetimes.com/feed/" },
+      { "name": "The Register (hardware)", "rss": "https://www.theregister.com/headlines.atom" },
+      { "name": "Ars Technica", "rss": "https://feeds.arstechnica.com/arstechnica/index" },
+      { "name": "MIT Technology Review", "rss": "https://www.technologyreview.com/feed/" },
+      { "name": "Nature news", "rss": "https://www.nature.com/nature.rss" },
+      { "name": "Science news", "rss": "https://www.science.org/rss/news_current.xml" },
+      { "name": "TechCrunch", "rss": "https://techcrunch.com/feed/" },
+      { "name": "SpaceNews", "rss": "https://spacenews.com/feed/" },
+      { "name": "DARPA news", "rss": "https://www.darpa.mil/rss/news" },
+      { "name": "ESA news", "rss": "https://www.esa.int/rssfeed/Our_Activities" },
+      { "name": "The Next Platform", "rss": "https://www.nextplatform.com/feed/" },
+      { "name": "Interesting Engineering", "rss": "https://interestingengineering.com/rss" }
+    ],
+    "prefer": [
+      "funding rounds",
+      "tape-outs",
+      "fab / capacity announcements",
+      "product and technical milestones",
+      "M&A",
+      "policy affecting these sectors",
+      "research with clear commercial line-of-sight"
+    ],
+    "skip": ["consumer-gadget reviews", "rumor / leak posts", "pure opinion"]
+  },
+  "indiaMacro": {
+    "allowedSources": [
+      "Reuters",
+      "Bloomberg",
+      "Financial Times",
+      "The Economist",
+      "Wall Street Journal",
+      "Nikkei Asia",
+      "The New York Times",
+      "IMF",
+      "World Bank",
+      "OECD",
+      "BIS",
+      "WTO",
+      "Fitch Ratings",
+      "Moody's",
+      "S&P Global"
+    ],
+    "blocklist": [
+      "Economic Times",
+      "ET",
+      "Mint",
+      "LiveMint",
+      "Business Standard",
+      "Times of India",
+      "The Hindu",
+      "Hindustan Times",
+      "Financial Express",
+      "Moneycontrol",
+      "NDTV",
+      "NDTV Profit",
+      "BQ Prime",
+      "Indian Express",
+      "CNBC-TV18",
+      "Business Today",
+      "Outlook",
+      "News18",
+      "Firstpost",
+      "ThePrint",
+      "Scroll",
+      "The Wire",
+      "Zee Business",
+      "Deccan Herald",
+      "Deccan Chronicle",
+      "Rediff"
+    ],
+    "relevanceTopics": [
+      "RBI / monetary policy / rates",
+      "rupee / FX / reserves",
+      "GDP / growth prints",
+      "inflation (CPI / WPI / food)",
+      "fiscal / budget / deficit / borrowing",
+      "trade balance / exports / imports",
+      "tariffs and trade agreements (US-India, EU-India, UK-India)",
+      "FDI / FII / portfolio flows",
+      "sovereign credit ratings",
+      "crude-oil import exposure",
+      "China+1 supply-chain relocation to India",
+      "semiconductor / PLI / industrial policy",
+      "manufacturing competitiveness",
+      "monsoon impact on the economy",
+      "banking-system health",
+      "capital-markets structure"
+    ],
+    "excludeTopics": [
+      "single-company earnings with no macro read-through",
+      "daily Sensex / Nifty market wraps",
+      "domestic politics with no economic mechanism",
+      "sport",
+      "lifestyle"
+    ]
+  }
+}

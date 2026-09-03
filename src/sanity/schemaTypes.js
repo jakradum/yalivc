@@ -40,6 +40,8 @@ import domainPrivilege from './schemas/domainPrivilege'
 import contactSubmission from './schemas/contactSubmission'
 // Letterhead documents
 import letterheadDocument from './schemas/letterheadDocument'
+// News monitor (auto-captured, internal)
+import intelItem from './schemas/intelItem'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -80,4 +82,6 @@ export const schemaTypes = [
   contactSubmission,
   // Letterhead
   letterheadDocument,
+  // News monitor
+  intelItem,
 ]
