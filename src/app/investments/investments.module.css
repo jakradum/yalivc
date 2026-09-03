@@ -316,6 +316,9 @@
   color: var(--cell-name-color);
   margin-bottom: 4px;
   transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .portfolioSector {

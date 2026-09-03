@@ -688,6 +688,15 @@
   padding-right: 16px;
 }
 
+.heroNameRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 0 0 20px 0;
+  color: #363636;
+}
+
 .heroName {
   font-size: clamp(36px, calc(28.73px + 1.939vw), 52px);
   font-family: var(--font-jetbrains-mono);
@@ -695,7 +704,7 @@
   line-height: 0.95;
   letter-spacing: -0.02em;
   color: #363636;
-  margin: 0 0 20px 0;
+  margin: 0;
 }
 
 .heroOneLiner {
@@ -1047,6 +1056,13 @@
     background: transparent;
     padding-right: 0;
     margin: 0 0 8px 0;
+  }
+
+  .heroNameRow {
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 0;
+    color: #efefef;
   }
 
   .heroName {

@@ -6,6 +6,7 @@ import { getSiteStats } from '@/lib/site-stats';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../components/button';
+import ExitedTag from '../components/exited-tag';
 import HeaderFlex from '../components/icons/headerflex';
 import { ViewfinderIcon } from '../components/icons/small-icons/viewfinder-icon';
 import separatorStyles from '../landing-page-styles/separator.module.css';
@@ -174,7 +175,10 @@ export default async function Investments() {
                 />
               )}
               <div>
-                <div className={invStyles.portfolioName}>{company.name}</div>
+                <div className={invStyles.portfolioName}>
+                  {company.name}
+                  <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" />
+                </div>
                 <div className={invStyles.portfolioSector}>{company.category?.name}</div>
                 {company.oneLiner && (
                   <p className={invStyles.portfolioOneLiner}>{company.oneLiner}</p>

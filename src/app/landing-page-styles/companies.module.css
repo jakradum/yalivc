@@ -307,6 +307,9 @@
   font-weight: 700;
   color: #363636;
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .featuredSector {
@@ -410,6 +413,9 @@
   font-weight: 700;
   color: #363636;
   margin-bottom: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .cellSector {
@@ -664,9 +670,9 @@ a.mobileCompanyCard {
 
     .companyTitleRow {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.6rem;
         margin-bottom: 0.5rem;
     }
 

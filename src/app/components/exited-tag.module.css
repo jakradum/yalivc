@@ -1,0 +1,38 @@
+/* ExitedTag — shown next to a company name when investmentStatus == "exited".
+   V2 treatment: dark outline chip, transparent fill, no border-radius. */
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  color: #363636;
+  background: transparent;
+  border: 1px solid #363636;
+  vertical-align: middle;
+}
+
+.sm {
+  font-size: 8px;
+  padding: 2px 5px;
+}
+
+.md {
+  font-size: 9px;
+  padding: 3px 7px;
+}
+
+.lg {
+  font-size: 11px;
+  padding: 4px 9px;
+}
+
+/* tone="inherit" — follow the surrounding text colour instead of fixed ink.
+   Used on the company-page hero, which is dark on mobile and light on desktop. */
+.inherit {
+  color: inherit;
+  border-color: currentColor;
+}
