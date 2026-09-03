@@ -107,6 +107,15 @@ const TEMPLATES = {
       <p style="margin:0;color:#595959">Regards,<br>Yali Capital</p>`
     ),
   },
+  'pitch': {
+    subject: 'Re: Your pitch to Yali Capital',
+    html: (name) => emailShell(
+      'Send pitches to pitch@yali.vc',
+      `<p style="margin:0 0 16px">Hi ${name},</p>
+      <p style="margin:0 0 16px">Thanks for thinking of Yali Capital. We review inbound pitches at <a href="mailto:pitch@yali.vc" style="color:#830d35">pitch@yali.vc</a>, so please send your deck and a short note there and the investment team will take a look.</p>
+      <p style="margin:0;color:#595959">Regards,<br>Yali Capital</p>`
+    ),
+  },
 };
 
 // ─── Sanity helpers ──────────────────────────────────────────────────────────
@@ -138,9 +147,11 @@ async function patchSubmissions(patches) {
 // ─── Digest HTML builder ─────────────────────────────────────────────────────
 
 function buildDigestHtml(results, dateRange) {
-  const legit = results.filter((r) => r.combined_score >= 0.7);
-  const borderline = results.filter((r) => r.combined_score >= 0.4 && r.combined_score < 0.7);
-  const noise = results.filter((r) => r.combined_score < 0.4);
+  const pitches = results.filter((r) => r.bucket === 'pitch');
+  const scored = results.filter((r) => r.bucket !== 'pitch');
+  const legit = scored.filter((r) => r.combined_score >= 0.7);
+  const borderline = scored.filter((r) => r.combined_score >= 0.4 && r.combined_score < 0.7);
+  const noise = scored.filter((r) => r.combined_score < 0.4);
 
   const fmtDate = (iso) =>
     iso ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
@@ -186,6 +197,7 @@ function buildDigestHtml(results, dateRange) {
       </div>
 
       ${section('Worth your attention', legit, '#2e7d32', true)}
+      ${section('Pitches — auto-redirected to pitch@yali.vc', pitches, '#830d35', true)}
       ${section('Borderline — review', borderline, '#795548', false)}
       ${section('Filtered as noise', noise, '#616161', false)}
 
@@ -210,7 +222,9 @@ export async function GET(request) {
     return Response.json({ message: 'No unprocessed submissions.' });
   }
 
-  // ── Classify with Haiku ──────────────────────────────────────────────────
+  // ── Classify with Sonnet ─────────────────────────────────────────────────
+  // Sonnet 5 (low effort) for this decisioning: auto-responses go out
+  // unreviewed, so the extra judgment over Haiku is worth the cost here.
 
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -224,9 +238,10 @@ Message: ${s.message || '(none)'}`
     )
     .join('\n\n');
 
-  const haikuRes = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 2048,
+  const classifyRes = await anthropic.messages.create({
+    model: 'claude-sonnet-5',
+    max_tokens: 4096,
+    output_config: { effort: 'low' },
     messages: [
       {
         role: 'user',
@@ -244,17 +259,17 @@ For each submission, return:
 
   Additional hard caps, applied after the above:
   - Any message asking about fund mechanics, AIF/fund category details, becoming an LP, becoming a distributor, minimum investment, or "how do I invest" — cap at 0.4. These are compliance-sensitive and must always go to a human, no matter how clear or polite the ask is.
-  - Any message where an external company or founder is soliciting investment, partnership, or funding FROM Yali (i.e. they want money or backing, not offering it) — cap at 0.5. These always need human judgment on fit; never auto-acknowledge as if it were routine.
+  - Any message where an external company or founder is soliciting investment, partnership capital, or funding FROM Yali (i.e. they want money or backing, not offering it) — cap at 0.5 AND set bucket to "pitch". This covers "we are raising", "sharing our deck", "seeking funding", "would love to have Yali on our cap table", pre-revenue/round-size/tranche language, and requests for an intro meeting to present. The "pitch" bucket takes precedence over "partnership", "borderline" and "spam" whenever the core intent is an inbound fundraise, regardless of how polished or how thin the message is. Only withhold "pitch" and use "spam" if the sender itself is clearly fake or the message is pure boilerplate with no real company behind it.
   - Single-line or content-free asks ("Business Proposal", "Interested to invest", a name with no message) — cap at 0.3.
   - If two or more submissions in this batch share the same sender name, company, or near-identical pitch structure across different email addresses, treat it as mass/scripted outreach and cap ALL of them at 0.3, regardless of how polished any individual message reads.
 
 - combined_score: (0.25 * sender_score) + (0.75 * message_score)
 
-- bucket: exactly one of "press-established" (press inquiry with a detectable, named publication or outlet), "press-general" (press inquiry, legit but vague), "partnership" (a genuine, specific, non-solicitation partnership fit — rare), "borderline" (combined 0.40-0.69), "spam" (combined below 0.40)
+- bucket: exactly one of "press-established" (press inquiry with a detectable, named publication or outlet), "press-general" (press inquiry, legit but vague), "partnership" (a genuine, specific, non-solicitation partnership fit — rare), "pitch" (an external founder or company soliciting investment or funding FROM Yali — an inbound fundraise, deck share, or request to present; see the cap rule above), "borderline" (combined 0.40-0.69), "spam" (combined below 0.40)
 
 - reasoning: one sentence, and explicitly name which cap (if any) applied.
 
-Only combined_score >= 0.85 should ever be treated as safe to auto-respond to. Most legitimate-sounding submissions should still land below that; when genuinely uncertain, score lower rather than higher.
+Only combined_score >= 0.85 should ever be treated as safe to auto-respond to. Most legitimate-sounding submissions should still land below that; when genuinely uncertain, score lower rather than higher. Exception: messages in the "pitch" bucket receive a fixed, non-committal auto-reply pointing them to pitch@yali.vc; that reply does not depend on combined_score, so still score a pitch normally for the digest and just get the bucket right.
 
 Return ONLY a valid JSON array, no prose, no markdown:
 [{"_id":"...","sender_score":0.0,"message_score":0.0,"combined_score":0.0,"bucket":"spam","reasoning":"..."}]
@@ -267,18 +282,20 @@ ${submissionList}`,
 
   let classifications = [];
   try {
+    // Sonnet may emit thinking blocks first — take the text block, not content[0].
+    const textBlock = classifyRes.content.find((b) => b.type === 'text');
     // Strip markdown code fences the model sometimes wraps around JSON output
-    const raw = haikuRes.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    const raw = (textBlock?.text ?? '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
     classifications = JSON.parse(raw);
   } catch {
-    // Haiku response unparseable — send everything to digest unclassified
+    // Classifier response unparseable — send everything to digest unclassified
     classifications = submissions.map((s) => ({
       _id: s._id,
       sender_score: 0.5,
       message_score: 0.5,
       combined_score: 0.5,
       bucket: 'borderline',
-      reasoning: 'Classification unavailable — Haiku response could not be parsed.',
+      reasoning: 'Classification unavailable — classifier response could not be parsed.',
     }));
   }
 
@@ -303,13 +320,23 @@ ${submissionList}`,
 
     let autoResponded = false;
 
-    // Partnership inquiries almost always need a human read (fund solicitations,
-    // LP onboarding, and investment-seeking pitches are compliance-sensitive or
-    // simply need judgment on fit) — hold them to a higher bar than press.
-    const autoRespondThreshold = cls.bucket === 'partnership' ? 0.92 : 0.85;
+    // Decide which template (if any) to send.
+    let tplKey = null;
+    if (cls.bucket === 'pitch') {
+      // Pitches get a fixed redirect to pitch@yali.vc. The reply commits to
+      // nothing, so it does not need a high combined_score — just a sender
+      // credible enough to be worth replying to.
+      if ((cls.sender_score ?? 0) >= 0.5) tplKey = 'pitch';
+    } else {
+      // Partnership inquiries almost always need a human read (fund
+      // solicitations, LP onboarding are compliance-sensitive or simply need
+      // judgment on fit) — hold them to a higher bar than press.
+      const autoRespondThreshold = cls.bucket === 'partnership' ? 0.92 : 0.85;
+      if (cls.combined_score >= autoRespondThreshold) tplKey = cls.bucket;
+    }
 
-    if (cls.combined_score >= autoRespondThreshold && TEMPLATES[cls.bucket]) {
-      const tpl = TEMPLATES[cls.bucket];
+    if (tplKey && TEMPLATES[tplKey]) {
+      const tpl = TEMPLATES[tplKey];
       try {
         await resend.emails.send({
           from: 'Yali Capital <contact-noreply@yali.vc>',

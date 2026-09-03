@@ -14,6 +14,7 @@ const BUCKET_OPTIONS = [
   { title: 'Press (established outlet)', value: 'press-established' },
   { title: 'Press (general)', value: 'press-general' },
   { title: 'Partnership', value: 'partnership' },
+  { title: 'Pitch (redirected to pitch@yali.vc)', value: 'pitch' },
   { title: 'Borderline', value: 'borderline' },
   { title: 'Spam', value: 'spam' },
 ];
@@ -69,21 +70,21 @@ const contactSubmission = {
     },
     {
       name: 'haikuScore',
-      title: 'Legitimacy score (Haiku)',
+      title: 'Legitimacy score (classifier)',
       type: 'number',
       readOnly: true,
       description: 'Combined score 0-1. ≥0.70 legit, 0.40-0.69 borderline, <0.40 spam',
     },
     {
       name: 'haikuBucket',
-      title: 'Classification (Haiku)',
+      title: 'Classification (classifier)',
       type: 'string',
       readOnly: true,
       options: { list: BUCKET_OPTIONS },
     },
     {
       name: 'haikuReasoning',
-      title: 'Haiku reasoning',
+      title: 'Classifier reasoning',
       type: 'text',
       readOnly: true,
     },
@@ -107,7 +108,7 @@ const contactSubmission = {
     prepare({ inquiryType, name, email, submittedAt, status, haikuScore, haikuBucket }) {
       const date = submittedAt ? new Date(submittedAt).toLocaleDateString('en-IN') : '';
       const statusIcon = status === 'new' ? '🔵' : status === 'read' ? '⚪' : status === 'processed' ? '🤖' : '✅';
-      const bucketIcon = haikuBucket === 'spam' ? '🚫' : haikuBucket === 'borderline' ? '🟡' : haikuScore >= 0.7 ? '🟢' : '';
+      const bucketIcon = haikuBucket === 'spam' ? '🚫' : haikuBucket === 'pitch' ? '🎯' : haikuBucket === 'borderline' ? '🟡' : haikuScore >= 0.7 ? '🟢' : '';
       const scoreStr = haikuScore != null ? ` · ${(haikuScore * 100).toFixed(0)}%` : '';
       const label = INQUIRY_OPTIONS.find((o) => o.value === inquiryType)?.title ?? inquiryType ?? 'Unknown type';
       return {
