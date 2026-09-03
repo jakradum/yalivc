@@ -15,6 +15,7 @@ export async function getCompanies() {
       link,
       enableCompanyPage,
       isFeatured,
+      investmentStatus,
       "logo": logo.asset->url,
       order
     }`
@@ -34,6 +35,7 @@ export async function getCompanyBySlug(slug) {
       oneLiner,
       detail,
       link,
+      investmentStatus,
       "logo": logo.asset->url,
       founders[]{
         name,

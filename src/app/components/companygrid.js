@@ -19,6 +19,7 @@ import { AdvancedManufacturingVector } from './icons/background svgs/category sv
 import { GenerativeAIVector } from './icons/background svgs/category svgs/generative AI vector';
 import { urlFor } from '@/sanity/client';
 import { darkVectorBank } from './icons/background svgs/category svgs/dark-vector-bank';
+import ExitedTag from './exited-tag';
 
 export const vectorUsageMap = {
   // New 6 categories
@@ -156,7 +157,10 @@ const CompanyTable = ({ companies, companyCount }) => {
                   </div>
                 )}
                 <div>
-                  <div className={styles.featuredName}>{featuredCompany.name}</div>
+                  <div className={styles.featuredName}>
+                    {featuredCompany.name}
+                    <ExitedTag exited={featuredCompany.investmentStatus === 'exited'} size="md" />
+                  </div>
                   <div className={styles.featuredSector}>{featuredCompany.category?.name}</div>
                 </div>
               </div>
@@ -187,7 +191,10 @@ const CompanyTable = ({ companies, companyCount }) => {
                       </div>
                     )}
                     <div>
-                      <div className={styles.cellName}>{company.name}</div>
+                      <div className={styles.cellName}>
+                        {company.name}
+                        <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" />
+                      </div>
                       <div className={styles.cellSector}>{company.category?.name}</div>
                     </div>
                   </div>
@@ -266,7 +273,10 @@ const CompanyTable = ({ companies, companyCount }) => {
                   <h3>/{companiesData.data.length}</h3>
                 </span>
               </div>
-              <h4 className={styles.companyTitle}>{company.name}</h4>
+              <div className={styles.companyTitleRow}>
+                <h4 className={styles.companyTitle}>{company.name}</h4>
+                <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" />
+              </div>
               <p className={styles.companyCategory}>{company.category?.name}</p>
 
               <div className={styles.mobileVector}>

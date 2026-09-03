@@ -12,15 +12,23 @@ import { client } from '@/sanity/client';
  * - categoryCount: unique categories represented by those companies
  */
 export async function getSiteStats() {
-  const [categoryNames, fundSettings] = await Promise.all([
-    client.fetch(`*[_type == "company" && showOnMainWebsite == true][].category->name`),
+  const [companies, fundSettings] = await Promise.all([
+    client.fetch(
+      `*[_type == "company" && showOnMainWebsite == true]{ "category": category->name, investmentStatus }`
+    ),
     client.fetch(`*[_type == "lpFundSettings"][0]{ collectiveExperience, location }`),
   ]);
 
-  const unique = new Set((categoryNames || []).filter(Boolean));
+  const list = companies || [];
+  // "As of {date} our investments include N companies" must count only
+  // companies Yali still holds — exclude exited (and written-off).
+  const activeCount = list.filter(
+    (c) => c.investmentStatus !== 'exited' && c.investmentStatus !== 'written-off'
+  ).length;
+  const unique = new Set(list.map((c) => c.category).filter(Boolean));
 
   return {
-    companyCount: categoryNames?.length ?? 0,
+    companyCount: activeCount,
     categoryCount: unique.size,
     collectiveExperience: fundSettings?.collectiveExperience ?? 60,
     location: fundSettings?.location ?? 'Bangalore',

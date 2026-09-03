@@ -3,6 +3,7 @@ import { urlFor } from '@/sanity/client';
 import { PortableText } from '@portabletext/react';
 import companyStyles from './company.module.css';
 import Button from '../../../components/button';
+import ExitedTag from '../../../components/exited-tag';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { DefenceVector } from '../../../components/icons/background svgs/category svgs/defence vector';
@@ -128,7 +129,10 @@ export default async function CompanyPage({ params }) {
           </div>
           <div className={companyStyles.heroContent}>
             <p className={companyStyles.heroSector}>{company.category?.name}</p>
-            <h1 className={companyStyles.heroName}>{company.name}</h1>
+            <div className={companyStyles.heroNameRow}>
+              <h1 className={companyStyles.heroName}>{company.name}</h1>
+              <ExitedTag exited={company.investmentStatus === 'exited'} size="lg" tone="inherit" />
+            </div>
             {company.oneLiner && (
               <p className={companyStyles.heroOneLiner}>{company.oneLiner}</p>
             )}
