@@ -644,6 +644,12 @@
 /* ── THUMBNAIL CARD ── */
 .tsThumbCard {
   cursor: pointer;
+  /* Border must sit inside the 1fr grid track. Without this the 1px
+     border-right on each column makes every 6-up row ~5px wider than the
+     container, and .tsThumbList's overflow-y:auto (which forces overflow-x
+     to compute as auto) then shows a stray horizontal scrollbar. */
+  box-sizing: border-box;
+  min-width: 0;
   border-top: none;
   border-left: none;
   border-right: 1px solid #363636;
