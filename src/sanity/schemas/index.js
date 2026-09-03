@@ -40,6 +40,8 @@ import domainPrivilege from './domainPrivilege'
 import contactSubmission from './contactSubmission'
 // Letterhead documents
 import letterheadDocument from './letterheadDocument'
+// News monitor (auto-captured, internal)
+import intelItem from './intelItem'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -86,4 +88,6 @@ export const schemaTypes = [
   contactSubmission,
   // Letterhead
   letterheadDocument,
+  // News monitor
+  intelItem,
 ]

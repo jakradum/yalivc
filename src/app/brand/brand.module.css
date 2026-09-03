@@ -1,0 +1,231 @@
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 64px;
+}
+
+/* ── Header band ──────────────────────────────────────────────── */
+
+.heroBand {
+  background: #830d35;
+  padding: 48px 40px 40px;
+}
+
+.tag {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--font-jetbrains-mono), monospace;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 700;
+  color: #efefef;
+  margin: 0 0 10px;
+  line-height: 1.15;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 620px;
+}
+
+/* ── Content area ─────────────────────────────────────────────── */
+
+.content {
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 56px 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #830d35;
+  font-family: var(--font-jetbrains-mono), monospace;
+  margin: 0;
+}
+
+.body {
+  font-size: 15px;
+  color: #363636;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Art boxes ────────────────────────────────────────────────── */
+
+.artBox {
+  border: 1px solid #363636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.artLight {
+  background: #efefef;
+}
+
+.artDark {
+  background: #363636;
+}
+
+.mark,
+.markMono {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  display: block;
+}
+
+.markMono :global(path) {
+  fill: #830d35;
+}
+
+/* ── The creature — art + prose ───────────────────────────────── */
+
+.creatureGrid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── Anatomy — art + legend ──────────────────────────────────── */
+
+.anatomyGrid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  color: #363636;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid #363636;
+  display: block;
+}
+
+/* ── Family of forms list ────────────────────────────────────── */
+
+.formList {
+  border: 1px solid #363636;
+  margin-top: 4px;
+}
+
+.formRow {
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1px solid #363636;
+  padding: 11px 16px;
+  gap: 16px;
+}
+
+.formRow:last-child {
+  border-bottom: none;
+}
+
+.formName {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #830d35;
+  flex: 0 0 130px;
+}
+
+.formDesc {
+  font-size: 13px;
+  color: #363636;
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ── Sources ─────────────────────────────────────────────────── */
+
+.sourceNote {
+  font-size: 12px;
+  color: #6b6b6b;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .heroBand {
+    padding: 36px 20px 28px;
+  }
+
+  .content {
+    padding: 40px 20px 0;
+    gap: 40px;
+  }
+
+  .creatureGrid,
+  .anatomyGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .mark,
+  .markMono {
+    max-width: 180px;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 4px;
+    padding: 11px 14px;
+  }
+
+  .formName {
+    flex: none;
+  }
+}
