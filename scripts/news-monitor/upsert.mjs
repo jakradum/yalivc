@@ -6,6 +6,9 @@
  * The Monday run creates the week's document; the Thursday run patches new
  * items into that same document. Idempotent: re-runs add nothing new.
  *
+ * Dependency-free: talks to the Sanity HTTP API with `fetch` (Node 18+).
+ * No npm install needed at run time.
+ *
  * Usage:
  *   node scripts/news-monitor/upsert.mjs < items.json
  *   cat items.json | node scripts/news-monitor/upsert.mjs --dry-run
@@ -28,37 +31,70 @@
  * Dedup: within the current week's doc AND the previous week's doc, by
  * normalised URL (so a story on the Mon/Thu boundary is not double-counted).
  *
- * Env: SANITY_WRITE_TOKEN (falls back to SANITY_API_TOKEN). Reads .env.local
- * for local runs; in the scheduled routine the var is in the environment.
+ * Env: SANITY_WRITE_TOKEN (falls back to SANITY_API_TOKEN). For local runs the
+ * script also reads these from .env.local at the repo root. In the scheduled
+ * routine the variable must be present in the environment.
  */
 
-import { createClient } from '@sanity/client';
-import { config } from 'dotenv';
+import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../../.env.local') });
+const REPO_ROOT = resolve(__dirname, '../..');
+
+// Minimal .env.local loader (no dotenv dependency).
+try {
+  const txt = readFileSync(resolve(REPO_ROOT, '.env.local'), 'utf8');
+  for (const line of txt.split('\n')) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+    if (!m) continue;
+    const key = m[1];
+    if (process.env[key] !== undefined) continue;
+    let v = m[2].trim();
+    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+      v = v.slice(1, -1);
+    }
+    process.env[key] = v;
+  }
+} catch {
+  /* no .env.local — rely on real env */
+}
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const CATEGORIES = new Set(['deep-tech', 'india-macro']);
 const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const token = process.env.SANITY_WRITE_TOKEN || process.env.SANITY_API_TOKEN;
-if (!token && !DRY_RUN) {
-  console.error('ERROR: SANITY_WRITE_TOKEN is not set.');
+const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3';
+const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+const API = `https://${PROJECT_ID}.api.sanity.io/v2024-01-01`;
+const TOKEN = process.env.SANITY_WRITE_TOKEN || process.env.SANITY_API_TOKEN;
+
+if (!TOKEN && !DRY_RUN) {
+  console.error('ERROR: SANITY_WRITE_TOKEN is not set (checked env and .env.local).');
   process.exit(1);
 }
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  token,
-  useCdn: false,
-});
+async function sanityQuery(groq, params = {}) {
+  const u = new URL(`${API}/data/query/${DATASET}`);
+  u.searchParams.set('query', groq);
+  for (const [k, v] of Object.entries(params)) u.searchParams.set(`$${k}`, JSON.stringify(v));
+  const r = await fetch(u, { headers: { Authorization: `Bearer ${TOKEN}` } });
+  if (!r.ok) throw new Error(`Sanity query ${r.status}: ${await r.text()}`);
+  return (await r.json()).result;
+}
+
+async function sanityMutate(mutations) {
+  const r = await fetch(`${API}/data/mutate/${DATASET}?returnIds=true&visibility=async`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mutations }),
+  });
+  if (!r.ok) throw new Error(`Sanity mutate ${r.status}: ${await r.text()}`);
+  return r.json();
+}
 
 /** YYYY-MM-DD of the Monday of the ISO week containing `date`, in Asia/Kolkata. */
 function istMonday(date = new Date()) {
@@ -183,57 +219,68 @@ async function main() {
   // de-dupe within the incoming batch by key
   const byKey = new Map();
   for (const it of valid) byKey.set(keyFor(it.url), it);
-  let entries = [...byKey.values()].map(toEntry);
+  const entries = [...byKey.values()].map(toEntry);
+  const added = tally(entries);
+
+  if (DRY_RUN) {
+    console.log(JSON.stringify({ dryRun: true, weekOf: monday, docId, wouldAdd: added, entries }, null, 2));
+    console.log(
+      `${monday} ${runId}: +${added['deep-tech']} deep-tech / +${added['india-macro']} india-macro (dry run)`
+    );
+    return;
+  }
 
   // de-dupe against this week's doc + last week's doc
-  let existingKeys = new Set();
-  let weekCategories = [];
-  if (!DRY_RUN) {
-    const rows = await client.fetch(
-      '*[_id in $ids]{_id, "keys": items[]._key, "cats": items[].category}',
-      { ids: [docId, prevId] }
-    );
-    for (const r of rows) {
-      for (const k of r.keys || []) existingKeys.add(k);
-      if (r._id === docId) weekCategories = r.cats || [];
+  const rows = await sanityQuery(
+    '*[_id in $ids]{_id, "keys": items[]._key, "cats": items[].category, runs}',
+    { ids: [docId, prevId] }
+  );
+  const existingKeys = new Set();
+  let weekCats = [];
+  let existingRuns = [];
+  for (const r of rows) {
+    for (const k of r.keys || []) existingKeys.add(k);
+    if (r._id === docId) {
+      weekCats = r.cats || [];
+      existingRuns = r.runs || [];
     }
   }
   const fresh = entries.filter((e) => !existingKeys.has(e._key));
-
-  const added = tally(fresh);
+  const freshAdded = tally(fresh);
   const before = { 'deep-tech': 0, 'india-macro': 0 };
-  for (const c of weekCategories) before[c] = (before[c] || 0) + 1;
+  for (const c of weekCats) before[c] = (before[c] || 0) + 1;
 
-  if (DRY_RUN) {
-    console.log(
-      JSON.stringify(
-        { dryRun: true, weekOf: monday, docId, wouldAdd: added, fresh },
-        null,
-        2
-      )
-    );
-  } else {
-    await client.createIfNotExists({
-      _id: docId,
-      _type: 'newsDigest',
-      weekOf: monday,
-      title: weekLabel(monday),
-      runs: [],
-      items: [],
-    });
-    let patch = client
-      .patch(docId)
-      .setIfMissing({ items: [], runs: [], title: weekLabel(monday) });
-    if (fresh.length) patch = patch.append('items', fresh);
-    // record the run id once
-    const doc = await client.getDocument(docId);
-    if (!(doc?.runs || []).includes(runId)) patch = patch.append('runs', [runId]);
-    await patch.commit({ visibility: 'async' });
+  const mutations = [
+    {
+      createIfNotExists: {
+        _id: docId,
+        _type: 'newsDigest',
+        weekOf: monday,
+        title: weekLabel(monday),
+        runs: [],
+        items: [],
+      },
+    },
+  ];
+
+  const patch = { id: docId, setIfMissing: { items: [], runs: [] } };
+  if (fresh.length) {
+    if (weekCats.length === 0) {
+      patch.set = { items: fresh };
+    } else {
+      patch.insert = { after: 'items[-1]', items: fresh };
+    }
   }
+  patch.set = patch.set || {};
+  patch.set.runs = existingRuns.includes(runId) ? existingRuns : [...existingRuns, runId];
+  patch.set.title = weekLabel(monday);
+  mutations.push({ patch });
+
+  await sanityMutate(mutations);
 
   console.log(
-    `${monday} ${runId}: +${added['deep-tech']} deep-tech / +${added['india-macro']} india-macro ` +
-      `(week total ${before['deep-tech'] + added['deep-tech']} / ${before['india-macro'] + added['india-macro']})` +
+    `${monday} ${runId}: +${freshAdded['deep-tech']} deep-tech / +${freshAdded['india-macro']} india-macro ` +
+      `(week total ${before['deep-tech'] + freshAdded['deep-tech']} / ${before['india-macro'] + freshAdded['india-macro']})` +
       (problems.length ? ` / skipped: ${problems.length}` : '')
   );
 }
