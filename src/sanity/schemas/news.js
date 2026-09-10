@@ -27,6 +27,13 @@ const news = {
       description: 'Optional for video links (YouTube, etc.)'
     },
     {
+      name: 'relatedCompanies',
+      title: 'Related Portfolio Companies',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'company'}]}],
+      description: 'Optional — portfolio companies this article is about. Drives the "In the press" section on each company page.'
+    },
+    {
       name: 'headlineEdited',
       title: 'Headline',
       type: 'string',
