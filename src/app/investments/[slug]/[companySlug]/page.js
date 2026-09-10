@@ -117,7 +117,7 @@ export default async function CompanyPage({ params }) {
   const HeroVector = categoryVectorMap[categoryName] || GenericVector;
 
   const roundName = formatRoundName(company.latestRound);
-  const investedDate = formatInvestedDate(company.latestRound);
+  const investedDate = formatInvestedDate(company.firstRound || company.latestRound);
 
   return (
     <section className={companyStyles.pageOuter}>

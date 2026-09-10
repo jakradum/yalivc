@@ -54,6 +54,11 @@ export async function getCompanyBySlug(slug) {
         roundLabel,
         investmentDate
       },
+      "firstRound": investmentRounds | order(investmentDate asc)[0]{
+        roundName,
+        roundLabel,
+        investmentDate
+      },
       achievements[] | order(date desc)
     }`,
     { slug }
