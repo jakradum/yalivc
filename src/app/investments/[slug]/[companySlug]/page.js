@@ -239,7 +239,7 @@ export default async function CompanyPage({ params }) {
                   {founder.linkedIn && (
                     <div className={companyStyles.founderLinkWrapper}>
                       <Button href={founder.linkedIn} color="#830D35" target="_blank" aria-label="LinkedIn profile">
-                        LinkedIn ↗
+                        LinkedIn
                       </Button>
                     </div>
                   )}
