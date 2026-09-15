@@ -73,6 +73,14 @@ export default {
       group: 'basic',
     },
     {
+      name: 'logomarkTypeface',
+      title: 'Logomark + Typeface',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Optional — the full lockup (mark + wordmark) for companies whose "Logo" field above holds just the mark.',
+      group: 'basic',
+    },
+    {
       name: 'link',
       title: 'Website URL',
       type: 'url',
