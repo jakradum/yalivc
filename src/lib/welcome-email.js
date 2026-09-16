@@ -54,16 +54,9 @@ export function buildWelcomeEmail(unsubscribeUrl) {
 
         <!-- Body -->
         <tr>
-          <td class="ep" style="background-color:#ffffff;padding:24px 24px 8px;">
+          <td class="ep" style="background-color:#ffffff;padding:24px 24px 32px;">
             <p class="eb" style="font-family:${BODY_FONT};font-size:16px;line-height:1.6;color:#363636;margin:0 0 18px;">Thanks for signing up. You'll now get <strong>Tattva</strong>, Yali Capital's newsletter on deep tech, science, and where they meet venture capital &mdash; essays, portfolio spotlights, and the occasional podcast episode, sent straight to your inbox.</p>
             <p class="eb" style="font-family:${BODY_FONT};font-size:16px;line-height:1.6;color:#363636;margin:0 0 18px;">No fixed schedule, no spam &mdash; just the pieces worth your time.</p>
-          </td>
-        </tr>
-
-        <!-- CTA -->
-        <tr>
-          <td class="ep" style="background-color:#ffffff;padding:8px 24px 32px;">
-            <a href="https://yali.vc/newsletter/" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#830d35;text-decoration:none;border:1px solid #830d35;padding:10px 24px;display:inline-block;">Read past editions</a>
           </td>
         </tr>
 
