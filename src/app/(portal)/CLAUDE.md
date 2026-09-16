@@ -121,11 +121,13 @@ Page-number zone: `.page-number { position: absolute; right: 28px; bottom: 44px;
 When in doubt about how something should appear in the PDF, check the web portal first. The PDF must match the portal display exactly for all data. Style differences (fonts, spacing, layout) are acceptable; data differences are not.
 
 **Date formatting**
-- `fmtDate()` — used for close dates and initial investment dates. Format: `15 Jul 24` (no apostrophe, no comma).
+- `fmtDate()` — used for fund close dates (first close, final close) only. Format: `15 Jul 24` (no apostrophe, no comma).
+- `fmtDateMonthYear()` — used for the "Initial Investment Date" column in the Portfolio Investments table. Format: `Aug 24` (month + 2-digit year, no apostrophe, no day). Investment rounds often close in tranches, so an exact day is misleading; the portal mirrors this with `{ month: 'short', year: '2-digit' }` on `getInitialInvestmentDate()`.
 - `fmtMonthYear()` — used inside round labels in the company snapshot header. Format: `Nov '25` (keeps apostrophe). Do NOT change this one.
 
 **Fund summary page**
-- Subtitle below "Fund Summary" heading: `Combined fund size: ₹N crore` (whole number, no decimals if integer). Not "As of [date]".
+- Subtitle below "Fund Summary" heading: `Combined size of both funds at final close: ₹N crore` (whole number, no decimals if integer). Not "As of [date]". Clarifies that "combined" refers to the domestic + Gift City offshore fund vehicles, per LP feedback.
+- Table row "Amount drawn down" (not "as per bank") — avoids implying which LPs have or haven't paid their capital call.
 - Table left-column header: `As of [month year]`. Right-column header: `Amount in ₹ crores`.
 - All monetary values in the table body are **bare numbers** (e.g. `893.00`, `216.08`) — no ₹ prefix, no Cr suffix. The column header carries the unit.
 - Non-monetary values (dates, counts, multiples) render normally.

@@ -37,6 +37,7 @@ export async function getCompanyBySlug(slug) {
       link,
       investmentStatus,
       "logo": logo.asset->url,
+      "logomarkTypeface": logomarkTypeface.asset->url,
       founders[]{
         name,
         role,
@@ -1029,6 +1030,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       aboutCompany,
       isRevenueMaking,
       "logo": logo.asset->url,
+      "logomarkTypeface": logomarkTypeface.asset->url,
       link,
       "sector": category->name,
       investmentDate,

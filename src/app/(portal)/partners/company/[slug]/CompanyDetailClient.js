@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { PortableText } from '@portabletext/react';
 import styles from '../../partners.module.css';
@@ -420,12 +419,11 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
             {/* Company Header */}
             <div className={styles.companyDetailHeader}>
-              {company.logo ? (
-                <Image
-                  src={company.logo}
+              {company.logomarkTypeface || company.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element -- variable aspect ratio (mark-only vs full lockup)
+                <img
+                  src={company.logomarkTypeface || company.logo}
                   alt={company.entityName || company.name}
-                  width={80}
-                  height={80}
                   className={styles.companyDetailLogo}
                 />
               ) : (

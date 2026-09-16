@@ -47,11 +47,11 @@ export default async function LetterPage({ params }) {
     .meta-val { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #363636; }
     .header-rule { margin: 0 56px; border: none; border-top: 1px solid #c8c0b4; flex-shrink: 0; }
     .letter-content { padding: 48px 56px 40px; flex: 1; }
-    .salutation { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 12px; color: #363636; margin-bottom: 8px; }
-    .letter-subject { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #830d35; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid #c8c0b4; }
-    .letter-body { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 12px; line-height: 1.9; color: #363636; }
-    .letter-body p { margin-bottom: 20px; }
-    .closing { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 12px; color: #363636; margin-top: 40px; margin-bottom: 80px; }
+    .salutation { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 11px; color: #363636; margin-bottom: 6px; }
+    .letter-subject { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #830d35; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #c8c0b4; }
+    .letter-body { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 10.5px; line-height: 1.5; color: #363636; }
+    .letter-body p { margin-bottom: 11px; }
+    .closing { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 10.5px; color: #363636; margin-top: 18px; margin-bottom: 30px; }
     .signatory-name { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 11.5px; font-weight: 700; color: #363636; letter-spacing: 0.02em; margin-bottom: 4px; }
     .signatory-role { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 11px; color: #666; margin-bottom: 1px; }
     .signatory-entity { font-family: var(--font-inter, 'Inter', sans-serif); font-size: 11px; color: #666; }
@@ -61,6 +61,7 @@ export default async function LetterPage({ params }) {
     .footer-right { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 8.5px; color: #888; letter-spacing: 0.06em; }
     @media print {
       body { background: white; padding: 0; }
+      .print-button-bar { display: none !important; }
       .letter-page { margin: 0; width: 100%; min-height: 297mm; }
     }
   `;
@@ -98,9 +99,9 @@ export default async function LetterPage({ params }) {
           <div className="closing">{letter.closing}</div>
           {letter.signatory && (
             <div>
-              <div className="signatory-name">{letter.signatory.name}</div>
-              <div className="signatory-role">{letter.signatory.role}</div>
-              <div className="signatory-entity">Yali Partners LLP</div>
+              <div className="signatory-name">{letter.signatory.name.replace(/\s+'[^']+'/, '')}</div>
+              <div className="signatory-role">Founding Managing Partner</div>
+              <div className="signatory-entity">Yali Capital</div>
             </div>
           )}
         </div>

@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
 import { writeClient } from '@/lib/sanity';
+import { getUnsubscribeUrl } from '@/lib/newsletter-email';
+import { buildWelcomeEmail } from '@/lib/welcome-email';
 
 export async function POST(request) {
   try {
@@ -36,6 +39,25 @@ export async function POST(request) {
       subscribedAt: new Date().toISOString(),
       source: 'homepage-footer',
     });
+
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const unsubscribeUrl = getUnsubscribeUrl(normalizedEmail);
+        await resend.emails.send({
+          from: 'Yali Capital Newsletter <newsletter@yali.vc>',
+          to: [normalizedEmail],
+          subject: "You're subscribed to Tattva",
+          html: buildWelcomeEmail(unsubscribeUrl),
+          headers: {
+            'List-Unsubscribe': `<${unsubscribeUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          },
+        });
+      } catch (emailError) {
+        console.error('Welcome email failed to send:', emailError);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

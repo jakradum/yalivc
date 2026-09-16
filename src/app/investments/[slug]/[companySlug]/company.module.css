@@ -753,8 +753,9 @@
 }
 
 .heroLogoContainer {
-  width: 110px;
   height: 110px;
+  width: auto;
+  max-width: 340px;
   background: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
@@ -763,8 +764,9 @@
 }
 
 .heroLogoImg {
-  width: 100%;
   height: 100%;
+  width: auto;
+  max-width: 100%;
   object-fit: contain;
 }
 
@@ -1023,8 +1025,9 @@
   }
 
   .heroLogoContainer {
-    width: 64px;
     height: 64px;
+    width: auto;
+    max-width: 200px;
     padding: 8px;
   }
 

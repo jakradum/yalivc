@@ -148,13 +148,12 @@ export default async function CompanyPage({ params }) {
           )}
         </div>
         <div className={companyStyles.heroRight}>
-          {company.logo && (
+          {(company.logomarkTypeface || company.logo) && (
             <div className={companyStyles.heroLogoContainer}>
-              <Image
-                src={company.logo}
-                alt={`${company.name} logo`}
-                width={86}
-                height={86}
+              {/* eslint-disable-next-line @next/next/no-img-element -- variable aspect ratio (mark-only vs full lockup) */}
+              <img
+                src={company.logomarkTypeface || company.logo}
+                alt={company.name}
                 className={companyStyles.heroLogoImg}
               />
             </div>
