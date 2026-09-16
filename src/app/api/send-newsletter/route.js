@@ -22,7 +22,7 @@ export async function POST(request) {
     }
 
     const subscribers = await writeClient.fetch(
-      `*[_type == "newsletterSubscriber" && unsubscribed != true]{email}`,
+      `*[_type == "newsletterSubscriber" && unsubscribed != true && source != "press-mailing-list"]{email}`,
       {},
       { perspective: 'previewDrafts' }
     );
