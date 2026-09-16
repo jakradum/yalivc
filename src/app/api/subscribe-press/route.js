@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { writeClient } from '@/lib/sanity';
 
 export async function POST(request) {
   try {
@@ -11,7 +12,6 @@ export async function POST(request) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -20,48 +20,22 @@ export async function POST(request) {
       );
     }
 
-    const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-    const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_TABLE_NAME || 'Press Mailing List';
+    const normalizedEmail = email.toLowerCase().trim();
 
-    if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-      console.error('Airtable credentials not configured');
+    if (!process.env.SANITY_API_TOKEN) {
+      console.error('SANITY_API_TOKEN not configured');
       return NextResponse.json(
         { error: 'Server configuration error' },
         { status: 500 }
       );
     }
 
-    const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          records: [
-            {
-              fields: {
-                Email: email,
-              },
-            },
-          ],
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Airtable error:', JSON.stringify(errorData, null, 2));
-      console.error('Base ID:', AIRTABLE_BASE_ID);
-      console.error('Table Name:', AIRTABLE_TABLE_NAME);
-      return NextResponse.json(
-        { error: 'Failed to subscribe: ' + (errorData.error?.message || 'Unknown error') },
-        { status: 500 }
-      );
-    }
+    await writeClient.create({
+      _type: 'newsletterSubscriber',
+      email: normalizedEmail,
+      subscribedAt: new Date().toISOString(),
+      source: 'press-mailing-list',
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
