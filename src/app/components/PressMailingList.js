@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './PressMailingList.module.css';
 import Button from './button';
+import { trackEvent } from '@/lib/analytics';
 
 export default function PressMailingList() {
   const [email, setEmail] = useState('');
@@ -43,9 +44,11 @@ export default function PressMailingList() {
       setStatus('success');
       setMessage('Thank you for subscribing to our press mailing list!');
       setEmail('');
+      trackEvent('press_signup_submit', { status: 'success' });
     } catch (error) {
       setStatus('error');
       setMessage(error.message || 'Something went wrong. Please try again.');
+      trackEvent('press_signup_submit', { status: 'error', error: error.message });
     }
   };
 
@@ -88,7 +91,7 @@ export default function PressMailingList() {
 
         <div className={styles.mediaKitLink}>
           <p>Covering us in your story?</p>
-          <Button href="/newsroom/press-downloads" color="black">Use our media kit</Button>
+          <Button href="/newsroom/press-downloads" color="black" onClick={() => trackEvent('media_kit_click', { location: 'press_mailing_list' })}>Use our media kit</Button>
         </div>
       </div>
     </div>

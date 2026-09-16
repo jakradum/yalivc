@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './for-founders.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 const SECTORS = [
   {
@@ -236,7 +237,7 @@ function ChecklistSection() {
             <h3 className={styles.scoreCtaHeading}>You look like a fit.</h3>
             <p className={styles.scoreCtaBody}>Send us your deck. Every pitch is reviewed by the team.</p>
           </div>
-          <a href="mailto:pitch@yali.vc" className={styles.scoreCtaButton}>
+          <a href="mailto:pitch@yali.vc" className={styles.scoreCtaButton} onClick={() => trackEvent('pitch_cta_click', { location: 'pitch_page_score' })}>
             pitch@yali.vc
           </a>
         </div>
@@ -265,7 +266,7 @@ function PhaseBox({ phase, num }) {
           {Array.isArray(phase.body) ? (
             <>
               {phase.body[0]}
-              <a href="mailto:pitch@yali.vc" className={styles.phaseEmail}>{phase.body[1]}</a>
+              <a href="mailto:pitch@yali.vc" className={styles.phaseEmail} onClick={() => trackEvent('pitch_cta_click', { location: 'pitch_page_phase' })}>{phase.body[1]}</a>
               {phase.body[2]}
             </>
           ) : phase.body}
@@ -339,7 +340,7 @@ export default function ForFoundersClient({ companiesBySector }) {
         <p className={styles.mainCtaText}>
           Ready to pitch? Send us a deck or a brief note about what you are building.
         </p>
-        <a href="mailto:pitch@yali.vc" className={styles.mainCtaButton}>
+        <a href="mailto:pitch@yali.vc" className={styles.mainCtaButton} onClick={() => trackEvent('pitch_cta_click', { location: 'pitch_page_main' })}>
           pitch@yali.vc
         </a>
       </div>

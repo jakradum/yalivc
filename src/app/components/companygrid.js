@@ -20,6 +20,7 @@ import { GenerativeAIVector } from './icons/background svgs/category svgs/genera
 import { urlFor } from '@/sanity/client';
 import { darkVectorBank } from './icons/background svgs/category svgs/dark-vector-bank';
 import ExitedTag from './exited-tag';
+import { trackEvent } from '@/lib/analytics';
 
 export const vectorUsageMap = {
   // New 6 categories
@@ -144,7 +145,7 @@ const CompanyTable = ({ companies, companyCount }) => {
       <>
         <div className={styles.sidebar}>
           <p className={styles.sidebarText}>{updatedText}</p>
-          <Button href="/investments" color="black" aria-label="View all portfolio companies">
+          <Button href="/investments" color="black" aria-label="View all portfolio companies" onClick={() => trackEvent('view_all_portfolio_click', { location: 'desktop' })}>
             {buttonText}
           </Button>
         </div>
@@ -176,7 +177,7 @@ const CompanyTable = ({ companies, companyCount }) => {
               <p className={styles.featuredDesc}>{featuredCompany.oneLiner}</p>
             </div>
               {featuredHref && (
-                <Link href={featuredHref} className={styles.featuredViewLink} aria-label={`View ${featuredCompany.name}`}>View ↗</Link>
+                <Link href={featuredHref} className={styles.featuredViewLink} aria-label={`View ${featuredCompany.name}`} onClick={() => trackEvent('portfolio_company_click', { company_name: featuredCompany.name, featured: true })}>View ↗</Link>
               )}
             </div>
           )}
@@ -210,7 +211,7 @@ const CompanyTable = ({ companies, companyCount }) => {
               );
 
               return href ? (
-                <Link key={index} href={href} className={`${styles.gridCell} ${styles.gridCellLink}`}>
+                <Link key={index} href={href} className={`${styles.gridCell} ${styles.gridCellLink}`} onClick={() => trackEvent('portfolio_company_click', { company_name: company.name })}>
                   {cellContent}
                 </Link>
               ) : (
@@ -219,7 +220,7 @@ const CompanyTable = ({ companies, companyCount }) => {
                 </div>
               );
             })}
-            <Link href="/contact" aria-label="Contact" className={`${styles.gridCell} ${styles.pitchCell}`}>
+            <Link href="/contact" aria-label="Contact" className={`${styles.gridCell} ${styles.pitchCell}`} onClick={() => trackEvent('pitch_cta_click', { location: 'homepage_grid_desktop' })}>
               <div className={styles.cellIdentity}>
                 <div className={styles.cellLogo} />
                 <div>
@@ -303,6 +304,7 @@ const CompanyTable = ({ companies, companyCount }) => {
               href={href}
               className={`${styles.mobileCompanyCard} ${index === currentCard ? styles.activeCard : ''} ${company.isFeatured ? styles.mobileCompanyCardFeatured : ''}`}
               style={cardStyle}
+              onClick={() => trackEvent('portfolio_company_click', { company_name: company.name })}
             >
               {cardInner}
             </Link>
@@ -321,6 +323,7 @@ const CompanyTable = ({ companies, companyCount }) => {
           aria-label="Contact"
           className={`${styles.mobileCompanyCard} ${styles.mobilePitchCard} ${pitchIndex === currentCard ? styles.activeCard : ''}`}
           style={pitchCardStyle}
+          onClick={() => trackEvent('pitch_cta_click', { location: 'homepage_grid_mobile' })}
         >
           <article className={styles.keyDetails}>
             <div className={styles.mobilePitchLogoBox} />
@@ -331,7 +334,7 @@ const CompanyTable = ({ companies, companyCount }) => {
           </article>
         </Link>
       </section>
-      <Button href="/investments" color="black" aria-label="View all portfolio companies">
+      <Button href="/investments" color="black" aria-label="View all portfolio companies" onClick={() => trackEvent('view_all_portfolio_click', { location: 'mobile' })}>
         {buttonText}
       </Button>
     </div>

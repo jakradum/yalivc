@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './sign-in.module.css';
 import { Lightlogo } from '../../../components/icons/lightlogo';
+import { trackEvent } from '@/lib/analytics';
 
 export default function SignInPage() {
   const [step, setStep] = useState('email'); // 'email' or 'code'
@@ -41,9 +42,11 @@ export default function SignInPage() {
       });
       const data = await res.json();
       if (res.ok) {
+        trackEvent('portal_login', { status: 'success', method: 'shared' });
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         window.location.href = isLocalDev ? '/partners' : '/';
       } else {
+        trackEvent('portal_login', { status: 'error', method: 'shared' });
         setError(data.error || 'Invalid code');
       }
     } catch {
@@ -95,9 +98,11 @@ export default function SignInPage() {
       const data = await res.json();
 
       if (res.ok) {
+        trackEvent('portal_login', { status: 'success', method: 'code' });
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         window.location.href = isLocalDev ? '/partners' : '/';
       } else {
+        trackEvent('portal_login', { status: 'error', method: 'code' });
         setError(data.error || 'Verification failed');
       }
     } catch {

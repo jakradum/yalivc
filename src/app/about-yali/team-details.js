@@ -7,6 +7,7 @@ import Image from 'next/image';
 import imageLoader from '../../../image-loader';
 import { Graphicfg } from '../components/icons/background svgs/graphicfg';
 import Button from '../components/button';
+import { trackEvent } from '@/lib/analytics';
 
 const BIO_CHAR_LIMIT = 900;
 
@@ -68,7 +69,8 @@ export default function TeamDetails({teamMembers}) {
               'aria-label': `View ${member.name}'s full profile`,
               style: { textDecoration: 'none', color: 'inherit', cursor: 'pointer' },
               onMouseMove: (e) => handleMouseMove(e, true),
-              onMouseLeave: handleMouseLeave
+              onMouseLeave: handleMouseLeave,
+              onClick: () => trackEvent('team_member_click', { name: member.name })
             }
           : { style: { cursor: 'default' } };
 
@@ -101,7 +103,7 @@ export default function TeamDetails({teamMembers}) {
             )}
             <div className={styles.viewmoreButton} onClick={(e) => e.stopPropagation()}>
               {member.linkedIn && (
-                <Button href={member.linkedIn} color="#000000" target="_blank">
+                <Button href={member.linkedIn} color="#000000" target="_blank" onClick={() => trackEvent('team_social_click', { name: member.name, platform: 'linkedin' })}>
                   view on linkedin
                 </Button>
               )}

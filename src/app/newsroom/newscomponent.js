@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import styles from './newscomponent.module.css';
 import fallbackData from '../data/news.json';
+import { trackEvent } from '@/lib/analytics';
 
 const normalizeUrl = (url) => {
   if (!url) return '#';
@@ -87,7 +88,7 @@ export default function NewsComponent({ news = [] }) {
   const renderArticle = (article, index) => (
     <article key={index} className={styles.article}>
       <p className={styles.articleDate}>{article.formattedDate}</p>
-      <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer">
+      <a href={normalizeUrl(article.url)} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('press_article_click', { title: article.title, publication: article.publicationName })}>
         <p className={styles.articleTitle}>{article.title}</p>
       </a>
       <p className={styles.articleMeta}>

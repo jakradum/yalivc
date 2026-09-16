@@ -2,9 +2,9 @@
 import styles from '../styles/button.module.css';
 import { ArrowLinkOpen } from './icons/small-icons/arrowLinkOpen';
 
-export default function Button({ href, children, color = '#000000', target, 'aria-label': ariaLabel }) {
+export default function Button({ href, children, color = '#000000', target, 'aria-label': ariaLabel, onClick }) {
   return (
-    <a href={href} className={styles.button} style={{ color: color }} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined} aria-label={ariaLabel}>
+    <a href={href} className={styles.button} style={{ color: color }} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined} aria-label={ariaLabel} onClick={onClick}>
       <span className={styles.text}>{children}</span>
       <ArrowLinkOpen/>
     </a>

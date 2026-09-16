@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styles from './ApplicationForm.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 export default function ApplicationForm() {
   const [formData, setFormData] = useState({
@@ -12,8 +13,13 @@ export default function ApplicationForm() {
   });
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('');
+  const hasStarted = useRef(false);
 
   const handleChange = (e) => {
+    if (!hasStarted.current) {
+      hasStarted.current = true;
+      trackEvent('pitch_form_start');
+    }
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -38,9 +44,11 @@ export default function ApplicationForm() {
 
       setStatus('success');
       setFormData({ name: '', email: '', company: '', pitch: '' });
+      trackEvent('pitch_form_submit', { status: 'success' });
     } catch (error) {
       setStatus('error');
       setErrorMessage(error.message);
+      trackEvent('pitch_form_submit', { status: 'error', error: error.message });
     }
   };
 

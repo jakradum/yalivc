@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './FooterSubscribe.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 export default function FooterSubscribe() {
   const [email, setEmail] = useState('');
@@ -43,9 +44,11 @@ export default function FooterSubscribe() {
       setStatus('success');
       setMessage('Subscribed!');
       setEmail('');
+      trackEvent('newsletter_signup_submit', { status: 'success' });
     } catch (error) {
       setStatus('error');
       setMessage(error.message || 'Something went wrong');
+      trackEvent('newsletter_signup_submit', { status: 'error', error: error.message });
     }
   };
 
