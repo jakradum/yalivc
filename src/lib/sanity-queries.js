@@ -68,7 +68,11 @@ export async function getCompanyBySlug(slug) {
 
 export async function getNews() {
   return client.fetch(
-    `*[_type == "news"] | order(date desc) {
+    `*[_type == "news" && (
+      !defined(relatedCompanies) ||
+      count(relatedCompanies) == 0 ||
+      count(relatedCompanies[@->showOnMainWebsite == true]) > 0
+    )] | order(date desc) {
       _id,
       url,
       date,
