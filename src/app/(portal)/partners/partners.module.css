@@ -2751,8 +2751,9 @@
 }
 
 .companyDetailLogo {
-  width: 80px;
   height: 80px;
+  width: auto;
+  max-width: 280px;
   object-fit: contain;
   background-color: white;
   border: 1px solid #363636;

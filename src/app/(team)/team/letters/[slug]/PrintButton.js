@@ -2,7 +2,7 @@
 
 export default function PrintButton() {
   return (
-    <div style={{ maxWidth: 794, margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+    <div className="print-button-bar" style={{ maxWidth: 794, margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
       <button
         onClick={() => window.print()}
         style={{
