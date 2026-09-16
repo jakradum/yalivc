@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './press-downloads.module.css';
 import Image from 'next/image';
+import { trackEvent } from '@/lib/analytics';
 
 function CopyIcon({ copied }) {
   if (copied) {
@@ -27,6 +28,7 @@ function CopyButton({ text, label }) {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      trackEvent('media_kit_copy', { item: label });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
@@ -52,6 +54,7 @@ function CopyImageButton() {
         new ClipboardItem({ [blob.type]: blob })
       ]);
       setCopied(true);
+      trackEvent('media_kit_copy', { item: 'logo' });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy image:', err);
@@ -59,6 +62,7 @@ function CopyImageButton() {
       try {
         await navigator.clipboard.writeText(window.location.origin + '/yali-logo.png');
         setCopied(true);
+        trackEvent('media_kit_copy', { item: 'logo_url_fallback' });
         setTimeout(() => setCopied(false), 2000);
       } catch (e) {
         console.error('Fallback failed:', e);

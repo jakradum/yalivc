@@ -5,6 +5,7 @@ import Link from 'next/link';
 import styles from './contact.module.css';
 import ApplicationForm from '../components/ApplicationForm';
 import { isFeatureEnabled } from '@/config/features';
+import { trackEvent } from '@/lib/analytics';
 
 function ContactForm() {
   const [fields, setFields] = useState({ name: '', email: '', inquiry: '', message: '', _hp: '' });
@@ -73,7 +74,7 @@ function ContactForm() {
           <p className={styles.pitchRedirectNote}>
             For investment pitches, write to us directly. Our AI analyst scans your pitch and routes it to the right team member.
           </p>
-          <a href="mailto:pitch@yali.vc" className={styles.pitchRedirectEmail}>
+          <a href="mailto:pitch@yali.vc" className={styles.pitchRedirectEmail} onClick={() => trackEvent('pitch_cta_click', { location: 'contact_redirect' })}>
             pitch@yali.vc ↗
           </a>
         </div>
@@ -172,10 +173,10 @@ export default function ContactClient() {
                 Looking to pitch? Write to us. Our AI analyst scans your pitch and routes it to the right team member.
               </p>
               <div className={styles.rowActions}>
-                <a href="mailto:pitch@yali.vc" className={styles.rowEmail}>
+                <a href="mailto:pitch@yali.vc" className={styles.rowEmail} onClick={() => trackEvent('pitch_cta_click', { location: 'contact_investment_row' })}>
                   pitch@yali.vc ↗
                 </a>
-                <Link href="/pitch" className={styles.rowPitchLink} aria-label="For Founders">
+                <Link href="/pitch" className={styles.rowPitchLink} aria-label="For Founders" onClick={() => trackEvent('nav_click', { item: 'What we look for', path: '/pitch', menu: 'contact_row' })}>
                   What we look for ↗
                 </Link>
               </div>

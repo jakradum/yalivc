@@ -9,6 +9,7 @@ import {CloseIcon} from './icons/small-icons/closeicon';
 import {PinkLogo} from './icons/pinklogo';
 import styles from '../styles/Navbar.module.css';
 import navigationItems from '../navigationItems.json';
+import { trackEvent } from '@/lib/analytics';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -92,7 +93,7 @@ const Navbar = () => {
               <ul style={{ listStyle: 'none', padding: '0 0 0 1rem', margin: 0 }}>
                 {item.subItems.map((sub, si) => (
                   <li key={si}>
-                    <Link href={sub.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+                    <Link href={sub.path} onClick={() => { setMenuOpen(false); trackEvent('nav_click', { item: sub.name, path: sub.path, menu: 'mobile' }); }} className={styles.mobileMenuLink}>
                       <span>{sub.name}</span>
                     </Link>
                   </li>
@@ -100,7 +101,7 @@ const Navbar = () => {
               </ul>
             </>
           ) : (
-            <Link href={item.path} onClick={() => setMenuOpen(false)} className={styles.mobileMenuLink}>
+            <Link href={item.path} onClick={() => { setMenuOpen(false); trackEvent('nav_click', { item: item.name, path: item.path, menu: 'mobile' }); }} className={styles.mobileMenuLink}>
               <span>{item.name}</span>
             </Link>
           )}
@@ -113,9 +114,10 @@ const Navbar = () => {
     <ul className={styles.menu}>
       {navigationItems.menuItems.map((item, index) => (
         <li key={index} className={item.subItems ? styles.dropdown : ''}>
-          <Link 
+          <Link
             href={item.path}
             className={isActive(item.path) ? styles.active : ''}
+            onClick={() => trackEvent('nav_click', { item: item.name, path: item.path, menu: 'desktop' })}
           >
             {item.name}
           </Link>
@@ -123,7 +125,7 @@ const Navbar = () => {
             <ul className={styles.dropdownMenu}>
               {item.subItems.map((subItem, subIndex) => (
                 <li key={`${index}-${subIndex}`}>
-                  <Link href={subItem.path}>{subItem.name}</Link>
+                  <Link href={subItem.path} onClick={() => trackEvent('nav_click', { item: subItem.name, path: subItem.path, menu: 'desktop_dropdown' })}>{subItem.name}</Link>
                 </li>
               ))}
             </ul>

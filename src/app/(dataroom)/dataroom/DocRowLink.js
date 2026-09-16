@@ -1,10 +1,12 @@
 'use client';
 
 import styles from './dataroom.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 export default function DocRowLink({ href, label, children }) {
   function handleClick(e) {
     if (!href) return;
+    trackEvent('dataroom_document_open', { label: label || 'Document' });
     if (window.innerWidth >= 768) {
       e.preventDefault();
       document.dispatchEvent(new CustomEvent('drOpenPdf', {

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 export default function SubscribeBar() {
   const [email, setEmail] = useState('');
@@ -18,8 +19,10 @@ export default function SubscribeBar() {
       });
       if (!res.ok) throw new Error();
       setStatus('success');
+      trackEvent('newsletter_signup_submit', { status: 'success', location: 'newsletter_archive' });
     } catch {
       setStatus('error');
+      trackEvent('newsletter_signup_submit', { status: 'error', location: 'newsletter_archive' });
     }
   };
 

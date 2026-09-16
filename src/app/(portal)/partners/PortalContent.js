@@ -13,6 +13,7 @@ import Footer from '../../components/footer';
 import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
+import { trackEvent } from '@/lib/analytics';
 
 // Quarter to ending month mapping (Indian fiscal year)
 const QUARTER_END_MONTHS = {
@@ -429,7 +430,7 @@ function PortalContentInner({
                     key={r.slug}
                     href={`/partners?report=${r.slug}&section=${activeSection}`}
                     className={`${styles.fyDropdownItem} ${r.slug === report?.slug ? styles.fyDropdownItemActive : ''}`}
-                    onClick={() => setFyDropdownOpen(false)}
+                    onClick={() => { setFyDropdownOpen(false); trackEvent('quarterly_report_open', { quarter: r.quarter, fiscal_year: r.fiscalYear }); }}
                   >
                     {r.quarter} {r.fiscalYear}
                   </a>

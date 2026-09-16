@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import styles from './newscomponent.module.css';
 import pressStyles from './PressReleasesSection.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -26,7 +29,7 @@ export default function PressReleasesSection({ releases = [] }) {
       {releases.map((release) => (
         <article key={release._id} className={styles.article}>
           <p className={styles.articleDate}>{formatDate(release.publishedAt)}</p>
-          <Link href={`/blog/${release.slug}/`}>
+          <Link href={`/blog/${release.slug}/`} onClick={() => trackEvent('press_release_click', { title: release.title })}>
             <p className={styles.articleTitle}>{release.title}</p>
           </Link>
           {release.blurb && (

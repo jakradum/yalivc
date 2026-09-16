@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './dataroom.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 export default function DrTableRow({ href, label, children }) {
   const isInternalPage = href?.startsWith('/');
@@ -8,6 +9,8 @@ export default function DrTableRow({ href, label, children }) {
   function handleClick(e) {
     if (e.target.closest('a')) return;
     if (!href) return;
+
+    trackEvent('dataroom_document_open', { label: label || 'Document' });
 
     if (!isInternalPage && window.innerWidth >= 768) {
       document.dispatchEvent(new CustomEvent('drOpenPdf', {

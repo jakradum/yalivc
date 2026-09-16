@@ -4,6 +4,7 @@ import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import styles from './page.module.css';
+import { trackEvent } from '@/lib/analytics';
 
 function UnsubscribeCard() {
   const searchParams = useSearchParams();
@@ -22,6 +23,7 @@ function UnsubscribeCard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
       });
+      trackEvent('newsletter_unsubscribe_click');
     } catch { /* swallow */ }
     setState('done');
   };
