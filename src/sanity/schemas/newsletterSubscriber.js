@@ -23,6 +23,7 @@ const newsletterSubscriber = {
       options: {
         list: [
           { title: 'Homepage Footer', value: 'homepage-footer' },
+          { title: 'Press Mailing List', value: 'press-mailing-list' },
           { title: 'Import', value: 'import' },
         ],
       },
