@@ -1,6 +1,6 @@
 // Ports .vert-label/.team-vert-label — rotated section label along a
 // slide's edge.
-export function VertLabel({ text, side = 'left' }) {
+export function VertLabel({ text, side = 'left', color = '#999' }) {
   return (
     <div
       style={{
@@ -14,7 +14,7 @@ export function VertLabel({ text, side = 'left' }) {
         fontWeight: 700,
         letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        color: '#999',
+        color,
         whiteSpace: 'nowrap',
       }}
     >

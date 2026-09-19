@@ -1,7 +1,69 @@
 {
-  "_source": "seeded from fund2-deck-v2.0.html cover slide literals (Phase 0 discovery), not live Sanity",
+  "_source": "seeded from fund2-deck-v2.0.html literals (Phase 0/3 discovery), not live Sanity. Facts here (team, fund terms, deployment split) will move to Sanity-backed props in Phase 5 without changing slide-type shapes.",
   "cover": {
     "title": "Yali Capital Fund II",
     "subtitle": "A deep tech fund"
-  }
+  },
+  "contents": {
+    "title": "Contents",
+    "sections": ["Team", "Thesis", "Process", "Fund I", "Fund II", "Media & Recognition"]
+  },
+  "teamOverview": {
+    "label": "The Yali Team",
+    "people": [
+      { "name": "Ganapathy Subramaniam", "experienceBadge": "35 yrs in deep tech & investing", "badgeTone": "crimson" },
+      { "name": "Mathew Cyriac", "experienceBadge": "30 years in finance & investing", "badgeTone": "white" },
+      { "name": "Lip-Bu Tan", "experienceBadge": "40+ years in deep tech & investing", "badgeTone": "crimson" },
+      { "name": "Karthik Madathil", "experienceBadge": "30 years in deep tech", "badgeTone": "white" },
+      { "name": "Sunil S. Patil", "experienceBadge": "25+ years in finance & operations", "badgeTone": "white" },
+      { "name": "Sandipan Mondal", "experienceBadge": "20+ years in tech & entrepreneurship", "badgeTone": "crimson" },
+      { "name": "Kaushik Ram", "experienceBadge": "PhD in computational biology", "badgeTone": "white" }
+    ]
+  },
+  "investmentsTeam": {
+    "label": "Investments Team",
+    "people": [
+      { "name": "Karthik", "employers": ["Atonarp", "Tenpoint Academy", "Cypress Semiconductor", "Texas Instruments"] },
+      { "name": "Sandipan", "employers": ["Plato Project", "Samsung Research", "Zapr Media Labs", "Nestle"] },
+      { "name": "Kaushik", "employers": [] }
+    ]
+  },
+  "fundIIKeyTerms": {
+    "heading": "Fund II · Key Terms",
+    "fundSizeLabel": "₹1,800 Crore (~$200M)",
+    "greenshoeLabel": "Greenshoe ₹300 Crore",
+    "fundTerm": "10 + 1 + 1",
+    "investmentPeriodYears": 4
+  },
+  "fundIIDeployment": {
+    "heading": "Fund II · Deployment Strategy",
+    "allocation": [
+      { "stage": "Seed", "percent": 10, "note": "Initial stage" },
+      { "stage": "Stage Agnostic", "percent": 90, "note": "All stages" }
+    ]
+  },
+  "fundIPortfolio": {
+    "heading": "Fund I Portfolio",
+    "companies": [
+      { "name": "4baseCare", "sector": "Life Sciences", "investmentStatus": "active" },
+      { "name": "Perceptyne", "sector": "Robotics", "investmentStatus": "active" },
+      { "name": "C2i Semiconductors", "sector": "Fabless Semiconductor", "investmentStatus": "exited" },
+      { "name": "Tonbo Imaging", "sector": "Aerospace & Surveillance", "investmentStatus": "active" },
+      { "name": "PointAI", "sector": "AI", "investmentStatus": "active" },
+      { "name": "LatentForce", "sector": "AI", "investmentStatus": "active" },
+      { "name": "DeepLase", "sector": "Aerospace & Surveillance", "investmentStatus": "active" }
+    ]
+  },
+  "media": {
+    "heading": "Media & Recognition",
+    "items": [
+      { "publication": "Mint", "headline": "Yali Capital raises $104 million in debut deep-tech fund" },
+      { "publication": "Economic Times", "headline": "Infosys Innovation Fund invests in Yali Capital to up deep-tech game plan" },
+      { "publication": "CNBC TV18", "headline": "Yali Capital Rolls Out ₹810 Cr Fund To Back Deeptech Startups" },
+      { "publication": "Inc42", "headline": "Yali Capital Invests $4 Mn In Chip Design Startup C2i Semiconductors" },
+      { "publication": "Businessworld", "headline": "Yali Capital & Lip-Bu Tan Co-invest In Fabless Chip Startup C2i Semiconductors" },
+      { "publication": "The Hindu", "headline": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology" }
+    ]
+  },
+  "closing": { "line": "" }
 }
