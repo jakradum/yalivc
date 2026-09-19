@@ -143,5 +143,5 @@
       { "publication": "The Hindu", "headline": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology" }
     ]
   },
-  "closing": { "line": "" }
+  "closing": { "contacts": ["gani@yali.vc", "sunil@yali.vc"], "website": "yali.vc" }
 }
