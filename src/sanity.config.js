@@ -103,6 +103,24 @@ export default defineConfig({
                   ])
               ),
             S.divider(),
+            // Fund II (separate from LP Portal — those documents are Fund I's LPs)
+            S.listItem()
+              .title('Fund II')
+              .child(
+                S.list()
+                  .title('Fund II')
+                  .items([
+                    S.listItem()
+                      .title('Fund II Settings')
+                      .child(
+                        S.document()
+                          .schemaType('fund2Settings')
+                          .documentId('fund2Settings')
+                          .views([S.view.form()])
+                      ),
+                  ])
+              ),
+            S.divider(),
             // Data Room
             S.listItem()
               .title('Data Room')
