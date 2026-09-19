@@ -1,18 +1,23 @@
 import 'server-only';
 import fundIIFixture from './fixtures/fund-ii.json';
+import { loadFundIIFromSanity } from './mapFromSanity';
 
 const FIXTURES = {
   'fund-ii': fundIIFixture,
 };
 
-// Phase 1: fixture-only. Phase 5 adds the real Sanity path (GROQ ->
-// validate -> mapper -> this same DeckData shape) behind
-// DECK_DATA_SOURCE=sanity — components never know which one ran.
+const SANITY_LOADERS = {
+  'fund-ii': loadFundIIFromSanity,
+};
+
+// dataSource: 'fixture' (default, offline/deterministic) or 'sanity'
+// (Phase 4 — real data, mapped to the exact same shape so components
+// never know which one ran).
 export async function loadDeckData(deckId, { dataSource = 'fixture' } = {}) {
-  if (dataSource !== 'fixture') {
-    throw new Error(
-      `loadDeckData: dataSource "${dataSource}" not implemented yet — Phase 1 is fixture-only by design (see DECK_MIGRATION_PLAN.md, Phase 5).`
-    );
+  if (dataSource === 'sanity') {
+    const loader = SANITY_LOADERS[deckId];
+    if (!loader) throw new Error(`loadDeckData: no Sanity loader for deckId "${deckId}"`);
+    return loader();
   }
   const data = FIXTURES[deckId];
   if (!data) {
