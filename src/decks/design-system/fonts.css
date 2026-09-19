@@ -1,0 +1,28 @@
+/* Self-hosted — same font files the legacy docs/*.html decks already use.
+   Self-hosting (not next/font) so the PDF export path has zero network
+   dependency, matching the LP report's approach. */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: block;
+}

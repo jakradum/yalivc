@@ -1,0 +1,17 @@
+/* Extracted from fund2-deck-v2.0.html + root CLAUDE.md Design System table.
+   Scoped under .deck-root so this never leaks into or is leaked into by
+   the main site's global CSS. */
+
+.deck-root {
+  --deck-color-crimson: #830d35;
+  --deck-color-ink: #363636;
+  --deck-color-gold: #ebde84;
+  --deck-color-light-bg: #efefef;
+  --deck-color-paper: #ffffff;
+  --deck-color-connector: #c0bcb8; /* spoke/connector lines — intentional exception to border rule */
+
+  --deck-font-mono: 'JetBrains Mono', monospace;
+  --deck-font-body: 'Inter', sans-serif;
+
+  --deck-border: 1px solid var(--deck-color-ink);
+}
