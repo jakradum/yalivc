@@ -23,6 +23,8 @@ import {
 
 // LP Portal Schemas
 import lpFundSettings from './schemas/lpFundSettings'
+// Fund II (separate from Fund I LP Portal — different LP audience)
+import fund2Settings from './schemas/fund2Settings'
 import lpPipelineDeal from './schemas/lpPipelineDeal'
 import lpQuarterlyReport from './schemas/lpQuarterlyReport'
 import portalUser from './schemas/portalUser'
@@ -69,6 +71,8 @@ export const schemaTypes = [
   lpQuarterlyReport,
   portalUser,
   lpPortalFeedback,
+  // Fund II
+  fund2Settings,
   // Data Room
   dataRoomDocument,
   dataroomFundContent,
