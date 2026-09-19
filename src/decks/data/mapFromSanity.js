@@ -25,13 +25,25 @@ export async function loadFundIIFromSanity() {
     fundIIFixture.investmentsTeam.people.map((p) => [p.name, p.employers])
   );
 
+  // Sanity names carry quoted nicknames ("Ganapathy 'Gani' Subramaniam")
+  // that don't match the fixture's plain names — strip them before
+  // matching, or the lookup silently misses and falls back to the much
+  // longer oneLiner sentence (a real overflow bug, found via the export
+  // overflow check).
+  const stripNickname = (name) => name.replace(/\s*'[^']*'\s*/g, ' ').replace(/\s+/g, ' ').trim();
+  const MAX_FALLBACK_BADGE_LEN = 46;
+
   const teamOverviewPeople = team.map((t) => {
-    const shortName = t.name.split(' ')[0]; // fixture keys are first-name-only, e.g. "Karthik"
-    const fallback = fixtureBadgeByName[t.name] || fixtureBadgeByName[shortName];
+    const normalized = stripNickname(t.name);
+    const fallback = fixtureBadgeByName[t.name] || fixtureBadgeByName[normalized];
+    const oneLinerFallback =
+      t.oneLiner && t.oneLiner.length > MAX_FALLBACK_BADGE_LEN
+        ? `${t.oneLiner.slice(0, MAX_FALLBACK_BADGE_LEN - 1).trimEnd()}…`
+        : t.oneLiner;
     return {
       name: t.name,
       photoUrl: t.photoUrl,
-      experienceBadge: fallback?.experienceBadge || t.oneLiner,
+      experienceBadge: fallback?.experienceBadge || oneLinerFallback,
       badgeTone: fallback?.badgeTone || 'white',
     };
   });
@@ -65,6 +77,17 @@ export async function loadFundIIFromSanity() {
     fundIPortfolio: portfolio?.length
       ? { heading: 'Fund I Portfolio', companies: portfolio }
       : fundIIFixture.fundIPortfolio,
+    thesis: settings?.focusSectors?.length
+      ? {
+          heading: 'Our Investment Areas · Fund II Thesis',
+          core: settings.focusSectors.map((s) => ({ label: s.name })),
+          adjacent: (settings.adjacentSectors || []).map((s) => ({ label: s.name })),
+        }
+      : fundIIFixture.thesis,
+    dealflow: fundIIFixture.dealflow, // no Sanity model for process copy — code-owned narrative
+    portfolioSupport: fundIIFixture.portfolioSupport,
+    cxoMap: fundIIFixture.cxoMap,
+    governance: fundIIFixture.governance,
     media: fundIIFixture.media, // no Sanity `news` wiring yet — out of scope for this pass
     closing: fundIIFixture.closing,
   };

@@ -28,6 +28,52 @@
       { "name": "Kaushik", "employers": [] }
     ]
   },
+  "thesis": {
+    "heading": "Our Investment Areas · Fund II Thesis",
+    "core": [
+      { "label": "Life Sciences" }, { "label": "Smart Manufacturing" }, { "label": "Fabless Semiconductor" },
+      { "label": "Artificial Intelligence" }, { "label": "Robotics" }, { "label": "Aerospace & Surveillance" }
+    ],
+    "adjacent": [
+      { "label": "Space Tech" }, { "label": "Quantum" }, { "label": "Energy" }, { "label": "Advanced Materials" }
+    ]
+  },
+  "dealflow": {
+    "heading": "Our Process · Inbound Dealflow",
+    "stages": [
+      { "name": "Inbox", "description": "pitch@yali.vc — pickup or ignore", "exit": "Ignore" },
+      { "name": "Initial Review", "description": "assess thesis fit", "exit": "Pass" },
+      { "name": "Team Vet", "description": "wider team discusses", "exit": "Watch" },
+      { "name": "Invite to Pitch", "description": "founder presents; sometimes to learn a sector", "exit": "Park" },
+      { "name": "Internal Meeting", "description": "further diligence", "exit": null },
+      { "name": "Portfolio", "description": "investment made", "exit": null }
+    ]
+  },
+  "portfolioSupport": {
+    "heading": "Our Process · Portfolio Support",
+    "cadences": [
+      { "frequency": "Weekly", "description": "With very early stage companies" },
+      { "frequency": "Fortnightly", "description": "With early stage companies" },
+      { "frequency": "Monthly", "description": "Companies with follow-on rounds" },
+      { "frequency": "Quarterly", "description": "Board meets with all portfolio companies" }
+    ],
+    "note": "Yali actively takes a board position in every portfolio company."
+  },
+  "cxoMap": {
+    "heading": "Tech CXO Network",
+    "countries": [
+      { "code": "IND", "flag": "🇮🇳", "name": "India" },
+      { "code": "USA", "flag": "🇺🇸", "name": "USA" },
+      { "code": "TWN", "flag": "🇹🇼", "name": "Taiwan" },
+      { "code": "KOR", "flag": "🇰🇷", "name": "South Korea" },
+      { "code": "SGP", "flag": "🇸🇬", "name": "Singapore" }
+    ],
+    "footnote": "Our LPs feature CXOs from India, USA, Taiwan, South Korea and Singapore."
+  },
+  "governance": {
+    "heading": "Proposed Structure · Fund II",
+    "note": "Regulatory boundary — GIFT City / IFSC · India Domestic"
+  },
   "fundIIKeyTerms": {
     "heading": "Fund II · Key Terms",
     "fundSizeLabel": "₹1,800 Crore (~$200M)",
