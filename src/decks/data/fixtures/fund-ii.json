@@ -1,12 +1,21 @@
 {
   "_source": "seeded from fund2-deck-v2.0.html literals (Phase 0/3 discovery), not live Sanity. Facts here (team, fund terms, deployment split) will move to Sanity-backed props in Phase 5 without changing slide-type shapes.",
   "cover": {
-    "title": "Yali Capital Fund II",
+    "title": "Yali Capital Fund",
+    "numeral": "II",
     "subtitle": "A deep tech fund"
   },
   "contents": {
     "title": "Contents",
-    "sections": ["Team", "Thesis", "Process", "Fund I", "Fund II", "Media & Recognition"]
+    "subtitle": "Yali Capital Fund II\nInvestor Presentation",
+    "sections": [
+      { "name": "The Yali Team" },
+      { "name": "Our Thesis" },
+      { "name": "Our Process" },
+      { "name": "Fund I Performance" },
+      { "name": "Fund II · Structure & Terms" },
+      { "name": "Media & Recognition" }
+    ]
   },
   "teamOverview": {
     "label": "The Yali Team",
