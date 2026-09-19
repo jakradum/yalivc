@@ -1,7 +1,8 @@
-// Ports .s3-div/.fi-div — crimson full-bleed section divider (heading +
-// sub). Pattern-bank background (p1-p7 JS-tiled SVG per docs/CLAUDE.md)
-// intentionally NOT included here yet — that's its own follow-up
-// component, since CSS background-image SVG patterns break in Chrome PDF.
+// Pixel-matched to legacy .s3-div/.fi-div (they're identical rules under
+// two names). Text is right-aligned, NOT centered — the Phase 3 draft
+// centered it. The side pattern-grid (.s3-div-grid, a third distinct
+// pattern bank from team-photo/separator ones) is deliberately not
+// ported yet — flagged, not silently dropped.
 export function SectionDivider({ heading, sub }) {
   return (
     <div
@@ -9,20 +10,19 @@ export function SectionDivider({ heading, sub }) {
         width: '100%',
         height: '100%',
         background: 'var(--deck-color-crimson)',
-        color: '#fff',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
       }}
     >
-      <div style={{ fontFamily: 'var(--deck-font-mono)', fontWeight: 700, fontSize: 32, textAlign: 'center', lineHeight: 1.1, whiteSpace: 'pre-line' }}>
-        {heading}
+      <div style={{ flex: 1, textAlign: 'right', padding: '0 0 0 80px' }}>
+        <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 62, fontWeight: 400, color: 'var(--deck-color-gold)', lineHeight: 1.15, whiteSpace: 'pre-line' }}>
+          {heading}
+        </div>
+        {sub ? (
+          <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 15, color: 'rgba(255,255,255,0.6)', marginTop: 16 }}>{sub}</div>
+        ) : null}
       </div>
-      {sub ? (
-        <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 13, opacity: 0.8 }}>{sub}</div>
-      ) : null}
+      <div style={{ width: 400, height: '100%', flexShrink: 0 }} />
     </div>
   );
 }
