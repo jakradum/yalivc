@@ -10,7 +10,9 @@ export const fundIIDeck = {
 
     { id: 'team-divider', type: 'section-divider', build: () => ({ heading: 'Team' }) },
     { id: 'team-overview', type: 'team-grid', build: (d) => d.teamOverview },
+    { id: 'gps-advisor', type: 'person-grid', build: (d) => d.gpsAdvisor },
     { id: 'investments-team', type: 'person-grid', build: (d) => d.investmentsTeam },
+    { id: 'operations-team', type: 'person-grid', build: (d) => d.operationsTeam },
 
     { id: 'thesis-divider', type: 'section-divider', build: () => ({ heading: 'Thesis' }) },
     { id: 'investment-areas', type: 'thesis-hub', build: (d) => d.thesis },
@@ -20,7 +22,7 @@ export const fundIIDeck = {
     { id: 'portfolio-support', type: 'portfolio-support', build: (d) => d.portfolioSupport },
 
     { id: 'fund-i-divider', type: 'section-divider', build: () => ({ heading: 'Fund\nI' }) },
-    { id: 'fund-i-portfolio', type: 'portfolio-grid', build: (d) => d.fundIPortfolio },
+    { id: 'fund-i-portfolio', type: 'portfolio-table', build: (d) => d.fundIPortfolio },
     { id: 'tech-cxo-map', type: 'cxo-map', build: (d) => d.cxoMap },
 
     { id: 'fund-ii-divider', type: 'section-divider', build: () => ({ heading: 'Fund\nII' }) },
@@ -29,6 +31,7 @@ export const fundIIDeck = {
     { id: 'fund-ii-deployment', type: 'deployment', build: (d) => d.fundIIDeployment },
 
     { id: 'media-recognition', type: 'media-grid', build: (d) => d.media },
+    { id: 'appendix-portfolio', type: 'portfolio-grid', build: (d) => d.appendixPortfolio },
     { id: 'closing', type: 'closing', build: (d) => d.closing },
   ],
 };

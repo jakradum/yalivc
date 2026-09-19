@@ -20,13 +20,26 @@
       { "name": "Kaushik Ram", "experienceBadge": "PhD in computational biology", "badgeTone": "white" }
     ]
   },
-  "investmentsTeam": {
-    "label": "Investments Team",
+  "gpsAdvisor": {
     "people": [
-      { "name": "Karthik", "employers": ["Atonarp", "Tenpoint Academy", "Cypress Semiconductor", "Texas Instruments"] },
-      { "name": "Sandipan", "employers": ["Plato Project", "Samsung Research", "Zapr Media Labs", "Nestle"] },
-      { "name": "Kaushik", "employers": [] }
+      { "name": "Gani", "employers": ["Celesta Capital", "Cirel Systems", "Cosmic Circuits", "Texas Instruments, India"], "patNum": 1 },
+      { "name": "Mathew", "employers": ["Florintree Advisors", "Blackstone India PE", "iGate", "Bank of America"], "patNum": 2 },
+      { "name": "Lip-Bu", "employers": ["Intel", "SambaNova Systems, Artera AI & Credo", "Cadence Design Systems", "Walden International"], "patNum": 3 }
     ]
+  },
+  "investmentsTeam": {
+    "people": [
+      { "name": "Karthik", "employers": ["Atonarp", "Tenpoint Academy", "Cypress Semiconductor", "Texas Instruments"], "patNum": 4 },
+      { "name": "Sandipan", "employers": ["Plato Project", "Samsung Research", "Zapr Media Labs", "Nestle"], "patNum": 5 },
+      { "name": "Kaushik", "employers": ["Scripps Research", "UC San Diego"], "patNum": 6 }
+    ]
+  },
+  "operationsTeam": {
+    "people": [
+      { "name": "Sunil", "employers": ["Micron", "Cirel Systems", "Cosmic Circuits", "LG Soft"], "patNum": 7 },
+      { "name": "Pranav", "employers": ["Volvo Group", "Epifi Technologies", "Dentsu Creative", "Ogilvy & Mather"], "patNum": 1 }
+    ],
+    "maxWidth": 660
   },
   "thesis": {
     "heading": "Our Investment Areas · Fund II Thesis",
@@ -89,7 +102,17 @@
     ]
   },
   "fundIPortfolio": {
-    "heading": "Fund I Portfolio",
+    "heading": "Fund I · Portfolio",
+    "asOf": "As of June 2026 · ₹ crores",
+    "rows": [
+      { "name": "4baseCare", "sector": "Life Sciences", "invested": "35.38 Cr", "moic": "2.95x", "fmv": "104.47 Cr", "firstInvestment": null },
+      { "name": "Perceptyne", "sector": "Robotics", "invested": "11.8 Cr", "moic": "1.00x", "fmv": "11.8 Cr", "firstInvestment": null },
+      { "name": "C2i Semiconductors", "sector": "Fabless Semiconductor", "invested": "33.57 Cr", "moic": "3.42x", "fmv": "114.74 Cr", "firstInvestment": null },
+      { "name": "Tonbo Imaging", "sector": "Aerospace & Surveillance", "invested": "60.0 Cr", "moic": "1.00x", "fmv": "60.0 Cr", "firstInvestment": null }
+    ]
+  },
+  "appendixPortfolio": {
+    "heading": "Appendix · Portfolio",
     "companies": [
       { "name": "4baseCare", "sector": "Life Sciences", "investmentStatus": "active" },
       { "name": "Perceptyne", "sector": "Robotics", "investmentStatus": "active" },

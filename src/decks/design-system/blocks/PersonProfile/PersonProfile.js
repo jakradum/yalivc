@@ -1,10 +1,13 @@
+import { PatternBackground } from './PatternBackground';
+
 // Pixel-matched to legacy .person-col/.person-photo/.name-tag/.person-name/
-// .person-bio (fund2-deck-v2.0.html). Pattern background (.pat-bg) not
-// ported — decorative, JS-tiled SVG, separate follow-up.
-export function PersonProfile({ name, photoUrl, employers = [] }) {
+// .person-bio (fund2-deck-v2.0.html), including the pattern-bank
+// background (.pat-bg) via the faithfully-ported PatternBackground.
+export function PersonProfile({ name, photoUrl, employers = [], patNum }) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <div style={{ width: '100%', height: 260, position: 'relative', overflow: 'hidden', background: 'var(--deck-color-crimson)', flexShrink: 0 }}>
+        <PatternBackground patNum={patNum} />
         {photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={photoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', position: 'relative', zIndex: 1 }} />

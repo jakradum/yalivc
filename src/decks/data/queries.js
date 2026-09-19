@@ -27,7 +27,9 @@ export async function fetchFundIPortfolio() {
     name,
     "sector": category->name,
     investmentStatus,
-    "logoUrl": logo.asset->url
+    "logoUrl": logo.asset->url,
+    "initialRound": investmentRounds[isInitialRound == true][0]{ investmentDate, yaliInvestment },
+    "latestUpdate": quarterlyUpdates[-1]{ currentFMV, multipleOfInvestment }
   }`);
 }
 

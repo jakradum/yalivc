@@ -1,13 +1,13 @@
 import { PersonProfile } from '@/decks/design-system/blocks/PersonProfile/PersonProfile';
-import { VertLabel } from '@/decks/design-system/blocks/VertLabel/VertLabel';
 
-// Ports .person-slide (Investments Team / Operations Team) — crimson bg,
-// a row of PersonProfile.
-export function PersonGridSlide({ label, people = [] }) {
+// Ports .person-slide (GPs & Advisor / Investments Team / Operations
+// Team) — crimson bg, a row of PersonProfile. No label on this slide
+// type in the legacy deck (that was a Phase 5 fabrication, removed) —
+// only the team-overview slide has a vert-label.
+export function PersonGridSlide({ people = [], maxWidth }) {
   return (
     <div
       style={{
-        position: 'relative',
         width: '100%',
         height: '100%',
         background: 'var(--deck-color-crimson)',
@@ -18,10 +18,11 @@ export function PersonGridSlide({ label, people = [] }) {
         padding: '24px 60px',
       }}
     >
-      {label ? <VertLabel text={label} color="rgba(255,255,255,0.6)" /> : null}
-      {people.map((p) => (
-        <PersonProfile key={p.name} {...p} />
-      ))}
+      <div style={{ display: 'flex', gap: 40, width: '100%', maxWidth: maxWidth || undefined, justifyContent: maxWidth ? 'flex-start' : 'center' }}>
+        {people.map((p) => (
+          <PersonProfile key={p.name} {...p} />
+        ))}
+      </div>
     </div>
   );
 }
