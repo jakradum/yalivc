@@ -1,30 +1,77 @@
-// Ports the Inbound Dealflow slide. Simplified from legacy's two-level
-// dark-stage-box + colored-exit-badge layout into a single readable row —
-// a genuinely bespoke slide (per the "don't componentize every div"
-// rule), not a reusable block. Real stage/exit copy from legacy, not
-// invented.
-const EXIT_COLORS = { Ignore: '#999', Pass: '#a33', Watch: '#c98a2c', Park: '#555' };
+// Rebuilt from the real legacy markup — the earlier draft had invented
+// stage names ("Invite to Pitch") that don't match legacy at all. Real
+// stages: AI Inbox, Team Vet, Initial Meeting, Internal Review, Pitch,
+// Follow-on Meeting, Portfolio. Exit badges are NOT semantically colored
+// in legacy (no red/green) — Ignore is gray, Pass is dark, Watch is gold,
+// Park is a muted blue. Simplified: real arrow connectors between boxes
+// (SVG line+triangle) kept; the dotted vertical connector lines above
+// each exit badge column are not ported (decorative, low value alone).
+const EXIT_STYLE = {
+  Ignore: { bg: '#d0d0d0', fg: 'var(--deck-color-ink)' },
+  Pass: { bg: 'var(--deck-color-ink)', fg: '#fff' },
+  Watch: { bg: 'var(--deck-color-gold)', fg: 'var(--deck-color-ink)' },
+  Park: { bg: '#5a8fa3', fg: '#fff' },
+};
+
+function Arrow() {
+  return (
+    <svg width={20} height={12} style={{ flexShrink: 0, alignSelf: 'center' }}>
+      <line x1={0} y1={6} x2={13} y2={6} stroke="#888" strokeWidth={1.2} />
+      <polygon points="13,3 19,6 13,9" fill="#888" />
+    </svg>
+  );
+}
 
 export function DealflowSlide({ heading, stages = [] }) {
   return (
-    <div style={{ padding: '24px 40px', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--deck-color-crimson)' }}>
+    <div style={{ padding: '22px 36px 20px', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--deck-color-crimson)', marginBottom: 14, flexShrink: 0 }}>
         {heading}
       </div>
-      <div style={{ display: 'flex', gap: 10 }}>
-        {stages.map((s) => (
-          <div key={s.name} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div style={{ background: '#2a2a2a', color: '#fff', padding: '10px 8px', fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, textAlign: 'center' }}>
-              {s.name}
-            </div>
-            <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 9, color: '#777', textAlign: 'center' }}>{s.description}</div>
-            {s.exit ? (
-              <div style={{ background: EXIT_COLORS[s.exit] || '#999', color: '#fff', fontFamily: 'var(--deck-font-mono)', fontSize: 9, fontWeight: 700, textAlign: 'center', padding: '4px 6px' }}>
-                {s.exit.toUpperCase()}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'stretch', flex: 2, minHeight: 0 }}>
+          {stages.map((s, i) => (
+            <div key={s.name} style={{ display: 'contents' }}>
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: s.isFinal ? 'var(--deck-color-crimson)' : '#efefef',
+                  border: s.isFinal ? 'none' : 'var(--deck-border)',
+                  padding: '8px 6px',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, color: s.isFinal ? 'var(--deck-color-gold)' : 'var(--deck-color-ink)', textAlign: 'center', lineHeight: 1.3, whiteSpace: 'pre-line' }}>
+                  {s.name}
+                </div>
+                <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 8, color: s.isFinal ? 'rgba(235,222,132,0.5)' : 'rgba(54,54,54,0.5)', marginTop: 6, textAlign: 'center', lineHeight: 1.4 }}>
+                  {s.description}
+                </div>
               </div>
-            ) : null}
-          </div>
-        ))}
+              {i < stages.length - 1 ? <Arrow /> : null}
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', flex: 3, minHeight: 0, marginTop: 20 }}>
+          {stages.map((s, i) => (
+            <div key={s.name} style={{ display: 'contents' }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {s.note ? (
+                  <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 9, color: '#aaa', lineHeight: 1.5 }}>{s.note}</div>
+                ) : null}
+                {(s.exits || []).map((exit) => (
+                  <div key={exit} style={{ background: EXIT_STYLE[exit]?.bg, padding: '7px 10px' }}>
+                    <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: EXIT_STYLE[exit]?.fg, letterSpacing: '0.06em' }}>{exit}</div>
+                  </div>
+                ))}
+              </div>
+              {i < stages.length - 1 ? <div style={{ width: 20, flexShrink: 0 }} /> : null}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

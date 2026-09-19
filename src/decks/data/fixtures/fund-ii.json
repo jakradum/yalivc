@@ -63,32 +63,33 @@
   "dealflow": {
     "heading": "Our Process · Inbound Dealflow",
     "stages": [
-      { "name": "Inbox", "description": "pitch@yali.vc — pickup or ignore", "exit": "Ignore" },
-      { "name": "Initial Review", "description": "assess thesis fit", "exit": "Pass" },
-      { "name": "Team Vet", "description": "wider team discusses", "exit": "Watch" },
-      { "name": "Invite to Pitch", "description": "founder presents; sometimes to learn a sector", "exit": "Park" },
-      { "name": "Internal Meeting", "description": "further diligence", "exit": null },
-      { "name": "Portfolio", "description": "investment made", "exit": null }
+      { "name": "AI\nInbox", "description": "pitch@yali.vc" },
+      { "name": "Team\nVet", "description": "pickup or ignore", "exits": ["Ignore"] },
+      { "name": "Initial\nMeeting", "description": "assess thesis fit", "exits": ["Pass"] },
+      { "name": "Internal\nReview", "description": "wider team discusses", "note": "invite to pitch; sometimes to learn a sector" },
+      { "name": "Pitch", "description": "founder presents", "exits": ["Watch", "Pass"] },
+      { "name": "Follow-on\nMeeting", "description": "further diligence", "exits": ["Watch", "Park", "Pass"] },
+      { "name": "Portfolio", "description": "investment made", "isFinal": true }
     ]
   },
   "portfolioSupport": {
     "heading": "Our Process · Portfolio Support",
     "cadences": [
-      { "frequency": "Weekly", "description": "With very early stage companies" },
-      { "frequency": "Fortnightly", "description": "With early stage companies" },
-      { "frequency": "Monthly", "description": "Companies with follow-on rounds" },
-      { "frequency": "Quarterly", "description": "Board meets with all portfolio companies" }
+      { "frequency": "Weekly", "description": "With very early stage companies", "interval": 1 },
+      { "frequency": "Fortnightly", "description": "With early stage companies", "interval": 2 },
+      { "frequency": "Monthly", "description": "Companies with follow-on rounds", "interval": 4 },
+      { "frequency": "Quarterly", "description": "Board meets with all portfolio companies", "interval": 12 }
     ],
     "note": "Yali actively takes a board position in every portfolio company."
   },
   "cxoMap": {
-    "heading": "Tech CXO Network",
+    "heading": "Our LP network · Top global CXOs",
     "countries": [
-      { "code": "IND", "flag": "🇮🇳", "name": "India" },
-      { "code": "USA", "flag": "🇺🇸", "name": "USA" },
-      { "code": "TWN", "flag": "🇹🇼", "name": "Taiwan" },
-      { "code": "KOR", "flag": "🇰🇷", "name": "South Korea" },
-      { "code": "SGP", "flag": "🇸🇬", "name": "Singapore" }
+      { "code": "IND", "flag": "🇮🇳", "name": "India", "region": "South Asia" },
+      { "code": "USA", "flag": "🇺🇸", "name": "USA", "region": "North America" },
+      { "code": "TWN", "flag": "🇹🇼", "name": "Taiwan", "region": "East Asia" },
+      { "code": "KOR", "flag": "🇰🇷", "name": "South Korea", "region": "East Asia" },
+      { "code": "SGP", "flag": "🇸🇬", "name": "Singapore", "region": "Southeast Asia" }
     ],
     "footnote": "Our LPs feature CXOs from India, USA, Taiwan, South Korea and Singapore."
   },
