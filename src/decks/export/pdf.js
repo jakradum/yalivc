@@ -1,5 +1,13 @@
 import 'server-only';
 import { SLIDE_W, SLIDE_H } from '../core/constants';
+import { runOverflowCheck } from './checks';
+
+export class ExportCheckError extends Error {
+  constructor(problems) {
+    super(`Deck export failed overflow check: ${problems.length} element(s) overflow their box`);
+    this.problems = problems;
+  }
+}
 
 // The ONLY file that imports Puppeteer, and only dynamically inside this
 // function — enforced by convention here (Phase 1); an ESLint
@@ -8,7 +16,7 @@ import { SLIDE_W, SLIDE_H } from '../core/constants';
 // Chromium setup copied exactly from src/lib/pdfRequestHandler.js (the
 // LP quarterly report's proven production pattern) rather than
 // reinvented — same pinned CHROMIUM_URL, same local/Vercel branch.
-export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture' }) {
+export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false }) {
   let browser;
   try {
     if (process.env.VERCEL) {
@@ -40,6 +48,11 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture' })
       timeout: 15000,
     });
 
+    const problems = await page.evaluate(runOverflowCheck);
+    if (problems.length && !allowOverflow) {
+      throw new ExportCheckError(problems);
+    }
+
     const pdfBuffer = await page.pdf({
       width: `${SLIDE_W}px`,
       height: `${SLIDE_H}px`,
@@ -48,7 +61,16 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture' })
       preferCSSPageSize: true,
     });
 
-    return pdfBuffer;
+    const manifest = {
+      deckId,
+      generatedAt: new Date().toISOString(),
+      dataSource,
+      slideCount: await page.$$eval('.deck-slide', (els) => els.length),
+      pageSize: { w: SLIDE_W, h: SLIDE_H },
+      overflowProblems: problems,
+    };
+
+    return { pdfBuffer, manifest };
   } finally {
     if (browser) await browser.close().catch(() => {});
   }

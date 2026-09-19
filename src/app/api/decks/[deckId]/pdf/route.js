@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { exportDeckPdf } from '@/decks/export/pdf';
+import { exportDeckPdf, ExportCheckError } from '@/decks/export/pdf';
 import { DECK_IDS } from '@/decks/core/constants';
 
 export const runtime = 'nodejs';
@@ -16,20 +16,25 @@ export async function POST(request, { params }) {
 
   const body = await request.json().catch(() => ({}));
   const dataSource = body?.dataSource === 'sanity' ? 'sanity' : 'fixture';
+  const allowOverflow = body?.allowOverflow === true;
 
   const baseUrl = process.env.DECK_PDF_BASE_URL || `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
   try {
-    const pdfBuffer = await exportDeckPdf({ deckId, baseUrl, dataSource });
+    const { pdfBuffer, manifest } = await exportDeckPdf({ deckId, baseUrl, dataSource, allowOverflow });
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${deckId}.pdf"`,
         'Cache-Control': 'no-store',
+        'X-Deck-Manifest': encodeURIComponent(JSON.stringify(manifest)),
       },
     });
   } catch (err) {
+    if (err instanceof ExportCheckError) {
+      return NextResponse.json({ error: err.message, problems: err.problems }, { status: 422 });
+    }
     console.error('[deck-pdf] export failed:', err);
     return new NextResponse('PDF generation failed', { status: 500 });
   }

@@ -3,8 +3,12 @@
 // the component. Values below match the legacy fund2-deck-v2.0.html
 // hub-and-spoke SVG (viewBox 0 0 880 490, hub at 440,245).
 export const DIAGRAM = {
-  viewBox: { w: 880, h: 490 },
-  center: { x: 440, y: 245 },
+  // viewBox height bumped from 490 to 560 — at 490, half-height (245) was
+  // LESS than labelRadius (265), so labels near the top/bottom of the
+  // circle were silently clipped by the SVG's own viewBox bounds, not by
+  // the slide. Real bug, found by actually screenshotting the render.
+  viewBox: { w: 880, h: 560 },
+  center: { x: 440, y: 280 },
   outerRadius: 235,
   hubRadius: 42,
   coreArc: { startAngle: -105, totalDeg: 210, labelRadius: 265, iconRadius: 220 },
