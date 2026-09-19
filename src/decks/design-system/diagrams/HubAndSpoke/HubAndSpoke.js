@@ -1,5 +1,26 @@
 import { polar, arcLayout } from './geometry';
 import { DIAGRAM } from './diagram.config';
+import { SECTOR_ICONS } from './icons';
+
+function SectorIcon({ label, x, y, color }) {
+  const inner = SECTOR_ICONS[label];
+  if (!inner) return null;
+  return (
+    <svg
+      x={x - 11}
+      y={y - 11}
+      width={22}
+      height={22}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={1.1}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      dangerouslySetInnerHTML={{ __html: inner }}
+    />
+  );
+}
 
 // Data-driven, config-driven port of the legacy .s4-diagram. Props:
 // { core: [{label}], adjacent: [{label}] } — sector NAMES come from
@@ -44,19 +65,27 @@ export function HubAndSpoke({ core = [], adjacent = [] }) {
       <image href="/favicon.svg" x={c.x - 26} y={c.y - 26} width={52} height={52} style={{ filter: 'brightness(0) invert(1)' }} />
 
       {core.map((sector, i) => {
-        const p = polar(c.x, c.y, coreArc.labelRadius, coreAngles[i]);
+        const iconP = polar(c.x, c.y, coreArc.iconRadius, coreAngles[i]);
+        const labelP = polar(c.x, c.y, coreArc.labelRadius, coreAngles[i]);
         return (
-          <text key={sector.label} x={p.x} y={p.y} textAnchor="middle" fontSize={10} fontWeight={700} fill={colors.core}>
-            {sector.label}
-          </text>
+          <g key={sector.label}>
+            <SectorIcon label={sector.label} x={iconP.x} y={iconP.y} color={colors.border} />
+            <text x={labelP.x} y={labelP.y} textAnchor="middle" fontSize={10} fontWeight={700} fill={colors.core}>
+              {sector.label}
+            </text>
+          </g>
         );
       })}
       {adjacent.map((sector, i) => {
-        const p = polar(c.x, c.y, adjacentArc.labelRadius, adjacentAngles[i]);
+        const iconP = polar(c.x, c.y, adjacentArc.iconRadius, adjacentAngles[i]);
+        const labelP = polar(c.x, c.y, adjacentArc.labelRadius, adjacentAngles[i]);
         return (
-          <text key={sector.label} x={p.x} y={p.y} textAnchor="middle" fontSize={9.5} fontWeight={700} fill={colors.adjacent}>
-            {sector.label}
-          </text>
+          <g key={sector.label}>
+            <SectorIcon label={sector.label} x={iconP.x} y={iconP.y} color={colors.adjacent} />
+            <text x={labelP.x} y={labelP.y} textAnchor="middle" fontSize={9.5} fontWeight={700} fill={colors.adjacent}>
+              {sector.label}
+            </text>
+          </g>
         );
       })}
     </svg>

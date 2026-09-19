@@ -25,19 +25,25 @@ export function PieChart({ allocation = [] }) {
   });
 
   return (
-    <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-      <svg viewBox="0 0 200 200" width={140} height={140}>
-        {arcs.map((a) => (
-          <path key={a.stage} d={toArcPath(100, 100, 90, a.start, a.end)} fill={a.color} />
-        ))}
-      </svg>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {arcs.map((a) => (
-          <div key={a.stage} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 10, height: 10, background: a.color, border: 'var(--deck-border)' }} />
-            <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 12, fontWeight: 700 }}>{a.stage}</span>
-            <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 12 }}>{a.percent}%</span>
-            {a.note ? <span style={{ fontFamily: 'var(--deck-font-body)', fontSize: 10, color: '#777' }}>{a.note}</span> : null}
+    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+      <div style={{ width: 460, flexShrink: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
+        <svg viewBox="0 0 200 200" width={220} height={220}>
+          {arcs.map((a) => (
+            <path key={a.stage} d={toArcPath(100, 100, 90, a.start, a.end)} fill={a.color} />
+          ))}
+        </svg>
+      </div>
+      {/* Pixel-matched to .fi-pie-legend/.fi-legend-item — a bordered
+          list with name/pct stacked flush right, not an inline row. */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingLeft: 32 }}>
+        {arcs.map((a, i) => (
+          <div key={a.stage} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 0', borderBottom: i < arcs.length - 1 ? '1px solid var(--deck-color-ink)' : 'none' }}>
+            <div style={{ width: 10, height: 10, flexShrink: 0, background: a.color }} />
+            <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--deck-color-ink)', flex: 1 }}>{a.stage}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--deck-color-crimson)' }}>{a.percent}%</span>
+              {a.note ? <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 9, color: '#888' }}>{a.note}</span> : null}
+            </div>
           </div>
         ))}
       </div>
