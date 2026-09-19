@@ -172,7 +172,7 @@ export async function getOtherTeamMembers(currentSlug, limit = 4) {
 
 export async function getCategories() {
   return client.fetch(
-    `*[_type == "category"] | order(order asc, name asc) {
+    `*[_type == "category" && activeSector != false] | order(order asc, name asc) {
       _id,
       name,
       description,
