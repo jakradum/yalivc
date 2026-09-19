@@ -3,6 +3,7 @@ import { SectionDividerSlide } from '../slide-types/section-divider/SectionDivid
 import { TeamGridSlide } from '../slide-types/team-grid/TeamGridSlide';
 import { PersonGridSlide } from '../slide-types/person-grid/PersonGridSlide';
 import { PortfolioGridSlide } from '../slide-types/portfolio-grid/PortfolioGridSlide';
+import { PortfolioTable } from '../design-system/blocks/PortfolioTable/PortfolioTable';
 import { KeyTermsSlide } from '../slide-types/key-terms/KeyTermsSlide';
 import { DeploymentSlide } from '../slide-types/deployment/DeploymentSlide';
 import { MediaGridSlide } from '../slide-types/media-grid/MediaGridSlide';
@@ -22,6 +23,7 @@ export const slideComponents = {
   'team-grid': TeamGridSlide,
   'person-grid': PersonGridSlide,
   'portfolio-grid': PortfolioGridSlide,
+  'portfolio-table': PortfolioTable,
   'key-terms': KeyTermsSlide,
   deployment: DeploymentSlide,
   'media-grid': MediaGridSlide,

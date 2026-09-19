@@ -48,20 +48,39 @@ export async function loadFundIIFromSanity() {
     };
   });
 
-  const investmentsTeamPeople = fundIIFixture.investmentsTeam.people.map((fixturePerson) => {
-    const match = team.find((t) => t.name.startsWith(fixturePerson.name));
-    return {
-      name: fixturePerson.name,
-      photoUrl: match?.photoUrl || null,
-      employers: (match?.employers?.length ? match.employers : fixtureEmployersByName[fixturePerson.name]) || [],
-    };
-  });
+  // Which real people appear in which person-slide, and with which
+  // pattern-bank number (data-pat in the legacy deck) — this selection
+  // and pattern assignment is deck-specific styling, not a Sanity fact,
+  // so it's code-owned. Name/photo/employers still come live from Sanity.
+  const buildPersonGroup = (entries) =>
+    entries.map(({ displayName, matchName, patNum }) => {
+      const match = team.find((t) => t.name.startsWith(matchName));
+      const employers = match?.employers?.length ? match.employers : fixtureEmployersByName[displayName] || [];
+      return { name: displayName, photoUrl: match?.photoUrl || null, employers, patNum };
+    });
+
+  const gpsAdvisorPeople = buildPersonGroup([
+    { displayName: 'Gani', matchName: 'Ganapathy', patNum: 1 },
+    { displayName: 'Mathew', matchName: 'Mathew', patNum: 2 },
+    { displayName: 'Lip-Bu', matchName: 'Lip-Bu', patNum: 3 },
+  ]);
+  const investmentsTeamPeople = buildPersonGroup([
+    { displayName: 'Karthik', matchName: 'Karthikeyan', patNum: 4 },
+    { displayName: 'Sandipan', matchName: 'Sandipan', patNum: 5 },
+    { displayName: 'Kaushik', matchName: 'Kaushik', patNum: 6 },
+  ]);
+  const operationsTeamPeople = buildPersonGroup([
+    { displayName: 'Sunil', matchName: 'Sunil', patNum: 7 },
+    { displayName: 'Pranav', matchName: 'Pranav', patNum: 1 },
+  ]);
 
   return {
     cover: fundIIFixture.cover,
     contents: fundIIFixture.contents,
     teamOverview: { label: fundIIFixture.teamOverview.label, people: teamOverviewPeople },
-    investmentsTeam: { label: fundIIFixture.investmentsTeam.label, people: investmentsTeamPeople },
+    gpsAdvisor: { people: gpsAdvisorPeople },
+    investmentsTeam: { people: investmentsTeamPeople },
+    operationsTeam: { people: operationsTeamPeople, maxWidth: 660 },
     fundIIKeyTerms: settings
       ? {
           heading: 'Fund II · Key Terms',
@@ -75,7 +94,24 @@ export async function loadFundIIFromSanity() {
       ? { heading: 'Fund II · Deployment Strategy', allocation: settings.deploymentStageAllocation }
       : fundIIFixture.fundIIDeployment,
     fundIPortfolio: portfolio?.length
-      ? { heading: 'Fund I Portfolio', companies: portfolio }
+      ? {
+          heading: 'Fund I · Portfolio',
+          asOf: `As of ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} · ₹ crores`,
+          rows: portfolio.map((c) => ({
+            name: c.name,
+            sector: c.sector,
+            logoUrl: c.logoUrl,
+            invested: c.initialRound?.yaliInvestment ? `${c.initialRound.yaliInvestment} Cr` : null,
+            moic: c.latestUpdate?.multipleOfInvestment ? `${c.latestUpdate.multipleOfInvestment.toFixed(2)}x` : null,
+            fmv: c.latestUpdate?.currentFMV ? `${c.latestUpdate.currentFMV} Cr` : null,
+            firstInvestment: c.initialRound?.investmentDate
+              ? new Date(c.initialRound.investmentDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+              : null,
+          })),
+        }
+      : fundIIFixture.fundIPortfolio,
+    appendixPortfolio: portfolio?.length
+      ? { heading: 'Appendix · Portfolio', companies: portfolio }
       : fundIIFixture.fundIPortfolio,
     thesis: settings?.focusSectors?.length
       ? {
