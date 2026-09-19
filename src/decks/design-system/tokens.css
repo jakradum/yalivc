@@ -2,6 +2,10 @@
    Scoped under .deck-root so this never leaks into or is leaked into by
    the main site's global CSS. */
 
+.deck-root, .deck-root *, .deck-root *::before, .deck-root *::after {
+  box-sizing: border-box;
+}
+
 .deck-root {
   --deck-color-crimson: #830d35;
   --deck-color-ink: #363636;
