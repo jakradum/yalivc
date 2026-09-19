@@ -18,34 +18,28 @@ export async function loadFundIIFromSanity() {
     fetchTeamMembers(),
   ]);
 
-  const fixtureBadgeByName = Object.fromEntries(
-    fundIIFixture.teamOverview.people.map((p) => [p.name, { experienceBadge: p.experienceBadge, badgeTone: p.badgeTone }])
-  );
   const fixtureEmployersByName = Object.fromEntries(
     fundIIFixture.investmentsTeam.people.map((p) => [p.name, p.employers])
   );
 
   // Sanity names carry quoted nicknames ("Ganapathy 'Gani' Subramaniam")
-  // that don't match the fixture's plain names — strip them before
-  // matching, or the lookup silently misses and falls back to the much
-  // longer oneLiner sentence (a real overflow bug, found via the export
-  // overflow check).
+  // that don't match plain first-name matching — strip them before
+  // comparing.
   const stripNickname = (name) => name.replace(/\s*'[^']*'\s*/g, ' ').replace(/\s+/g, ' ').trim();
-  const MAX_FALLBACK_BADGE_LEN = 46;
 
-  const teamOverviewPeople = team.map((t) => {
-    const normalized = stripNickname(t.name);
-    const fallback = fixtureBadgeByName[t.name] || fixtureBadgeByName[normalized];
-    const oneLinerFallback =
-      t.oneLiner && t.oneLiner.length > MAX_FALLBACK_BADGE_LEN
-        ? `${t.oneLiner.slice(0, MAX_FALLBACK_BADGE_LEN - 1).trimEnd()}…`
-        : t.oneLiner;
-    return {
-      name: t.name,
-      photoUrl: t.photoUrl,
-      experienceBadge: fallback?.experienceBadge || oneLinerFallback,
-      badgeTone: fallback?.badgeTone || 'white',
-    };
+  // Team Overview is a curated 8, in legacy's exact order and using
+  // legacy's exact display names — NOT every live teamMember. A prior
+  // version mapped over the full live list (11 people, including 3 who
+  // don't belong on this slide at all), which also broke the grid into
+  // unreadable columns. Found by Pranav comparing the actual render
+  // against the legacy screenshot directly. Badge text stays
+  // fixture-owned (it's deck-specific copy, matching the same
+  // "facts in Sanity, rhetoric in code" reasoning as the person-slides);
+  // only the photo is resolved live, by fuzzy first-name match.
+  const teamOverviewPeople = fundIIFixture.teamOverview.people.map((fixturePerson) => {
+    const firstName = fixturePerson.name.split(' ')[0];
+    const match = team.find((m) => stripNickname(m.name).startsWith(firstName) || m.name.startsWith(firstName));
+    return { ...fixturePerson, photoUrl: match?.photoUrl || null };
   });
 
   // Which real people appear in which person-slide, and with which
