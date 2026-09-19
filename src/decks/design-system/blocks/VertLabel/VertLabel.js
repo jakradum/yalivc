@@ -1,24 +1,23 @@
-// Ports .vert-label/.team-vert-label — rotated section label along a
-// slide's edge.
-export function VertLabel({ text, side = 'left', color = '#999' }) {
+// Pixel-matched to .team-vert-label/.team-vert-text — a normal 44px-wide
+// flex sibling (not absolutely positioned, which an earlier version had;
+// this is the only real usage of this pattern in the legacy deck).
+export function VertLabel({ text, color = 'var(--deck-color-ink)' }) {
   return (
-    <div
-      style={{
-        position: 'absolute',
-        [side]: 16,
-        top: '50%',
-        transform: `translateY(-50%) rotate(${side === 'left' ? '-90deg' : '90deg'})`,
-        transformOrigin: 'center',
-        fontFamily: 'var(--deck-font-mono)',
-        fontSize: 10,
-        fontWeight: 700,
-        letterSpacing: '0.12em',
-        textTransform: 'uppercase',
-        color,
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {text}
+    <div style={{ width: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <span
+        style={{
+          fontFamily: 'var(--deck-font-mono)',
+          fontSize: 9,
+          fontWeight: 700,
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color,
+          writingMode: 'vertical-rl',
+          transform: 'rotate(180deg)',
+        }}
+      >
+        {text}
+      </span>
     </div>
   );
 }
