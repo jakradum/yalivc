@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 import { requireDeckUser } from '@/decks/auth';
 import { ASSETS, TEMPLATES, assetStatus, deckLayouts } from '@/decks/builder/assets';
+import { FORMATS } from '@/creative/formats';
 import { ExportPdfButton } from './ExportPdfButton';
 import s from './home.module.css';
 import '@/decks/design-system/fonts.css';
@@ -61,6 +62,29 @@ export default async function BuilderHome() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="create-h">
+          <h2 id="create-h" className={s.h}>Create</h2>
+          <div className={s.grid}>
+            <article className={s.card}>
+              <div className={s.cardTop}>
+                <span className={s.kind}>Any creative asset</span>
+                <span className={`${s.badge} ${s.badgeDraft}`}>BETA</span>
+              </div>
+              <h3 className={s.cardTitle}>Creative studio</h3>
+              <p className={s.desc}>
+                Describe an asset and Claude composes it from brand-safe blocks — free-flowing layout, with guardrails on
+                colour, type, spacing, images, links, contrast and numbers. Nothing is saved yet: download the result.
+              </p>
+              <dl className={s.meta}>
+                <div><dt>Formats</dt><dd>{Object.values(FORMATS).map((f) => f.label).join(' · ')}</dd></div>
+              </dl>
+              <div className={s.actions}>
+                <a className={`${s.btn} ${s.btnPrimary}`} href={`${prefix}/builder/creative/`}>Open studio</a>
+              </div>
+            </article>
           </div>
         </section>
 

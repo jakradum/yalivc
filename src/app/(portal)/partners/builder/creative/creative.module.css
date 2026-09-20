@@ -1,0 +1,42 @@
+.app { display: grid; grid-template-columns: 340px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); height: 100vh; font-family: var(--deck-font-body); color: var(--deck-color-ink); background: #eceae2; }
+.bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; padding: 10px 16px; background: var(--deck-color-crimson); }
+.back { font-family: var(--deck-font-mono); font-size: 11px; color: rgba(255, 255, 255, 0.75); text-decoration: none; }
+.back:hover { color: #fff; text-decoration: underline; }
+.title { font-family: var(--deck-font-mono); font-size: 13px; letter-spacing: 0.06em; color: var(--deck-color-gold); }
+.beta { margin-left: auto; font-family: var(--deck-font-mono); font-size: 10px; color: rgba(255, 255, 255, 0.7); }
+.left { display: flex; flex-direction: column; min-height: 0; background: #fff; border-right: 1px solid #ccc; }
+.head { font-family: var(--deck-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--deck-color-crimson); padding: 12px 14px 6px; }
+.pad { padding: 0 14px 8px; display: flex; flex-direction: column; gap: 8px; }
+.select { font: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #bbb; background: #fff; }
+.examples { font-size: 12px; color: #777; }
+.link { background: none; border: 0; padding: 0; font: inherit; font-size: 12px; color: var(--deck-color-crimson); text-decoration: underline; cursor: pointer; text-align: left; }
+.thread { flex: 1; overflow-y: auto; padding: 4px 14px 12px; display: flex; flex-direction: column; gap: 10px; }
+.msg { font-size: 13px; line-height: 1.45; padding: 8px 10px; white-space: pre-wrap; }
+.me { background: #f1efe8; align-self: flex-end; max-width: 92%; }
+.claude { border-left: 3px solid var(--deck-color-crimson); }
+.err { color: #a11; border-left-color: #a11; }
+.hint { font-size: 12px; color: #777; line-height: 1.5; }
+.compose { border-top: 1px solid #ddd; padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+.compose textarea { width: 100%; box-sizing: border-box; resize: vertical; min-height: 72px; font: inherit; font-size: 13px; padding: 8px; border: 1px solid #bbb; }
+.send { align-self: flex-end; font-family: var(--deck-font-mono); font-size: 11px; padding: 6px 16px; background: var(--deck-color-crimson); color: #fff; border: 0; cursor: pointer; }
+.send:disabled { opacity: 0.5; cursor: default; }
+.send:focus-visible, .link:focus-visible, .tab:focus-visible, .dl:focus-visible, .select:focus-visible, textarea:focus-visible { outline: 2px solid var(--deck-color-crimson); outline-offset: 2px; }
+.center { min-width: 0; min-height: 0; overflow-y: auto; padding: 14px 20px 40px; display: flex; flex-direction: column; gap: 14px; }
+.empty { margin: auto; font-family: var(--deck-font-mono); font-size: 12px; color: #888; }
+.tabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tab { font-family: var(--deck-font-mono); font-size: 11px; padding: 6px 12px; background: transparent; border: 1px solid transparent; cursor: pointer; color: #666; }
+.tabOn { background: #fff; border-color: var(--deck-color-ink); color: var(--deck-color-ink); }
+.spacer { flex: 1; }
+.status { font-family: var(--deck-font-mono); font-size: 10px; padding: 3px 8px; border: 1px solid; }
+.statusOk { color: #1f6b3a; border-color: #1f6b3a; }
+.statusBad { color: #a11; border-color: #a11; }
+.dl { font-family: var(--deck-font-mono); font-size: 11px; padding: 5px 10px; background: #fff; border: 1px solid var(--deck-color-ink); cursor: pointer; }
+.pages { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; }
+.figure { margin: 0; }
+.frame { overflow: hidden; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.12); background: #fff; }
+.cap { font-family: var(--deck-font-mono); font-size: 10px; color: #888; margin-top: 6px; }
+.mail { width: 100%; max-width: 680px; height: 720px; border: 1px solid #ccc; background: #fff; }
+.json { background: #fff; border: 1px solid #ccc; padding: 14px; font-size: 11px; line-height: 1.5; overflow: auto; max-height: 75vh; margin: 0; }
+.issues { list-style: none; margin: 0; padding: 10px 12px; background: #fff; border: 1px solid #ccc; font-size: 12px; display: flex; flex-direction: column; gap: 4px; color: #555; }
+.issues code { font-family: var(--deck-font-mono); font-size: 11px; color: var(--deck-color-crimson); }
+.bad { color: #a11; }
