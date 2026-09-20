@@ -27,9 +27,17 @@ export async function fetchFundIPortfolio() {
     name,
     "sector": category->name,
     investmentStatus,
+    "slug": slug.current,
+    oneLiner,
     "logoUrl": logo.asset->url,
     "initialRound": investmentRounds[isInitialRound == true][0]{ investmentDate, yaliInvestment },
-    "latestUpdate": quarterlyUpdates[-1]{ currentFMV, multipleOfInvestment }
+    "rounds": investmentRounds[]{ investmentDate, yaliInvestment, yaliOwnership, roundName },
+    // Latest reported quarter that actually carries an FMV (and isn't
+    // flagged confidential). quarterlyUpdates is unordered and the newest
+    // quarter is often an empty placeholder, so [-1] returned no FMV.
+    "latestUpdate": quarterlyUpdates[defined(currentFMV) && currentFMVConfidential != true] | order(fiscalYear desc, quarter desc)[0]{
+      currentFMV, multipleOfInvestment, currentOwnershipPercent
+    }
   }`);
 }
 

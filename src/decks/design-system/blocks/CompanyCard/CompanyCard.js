@@ -5,12 +5,16 @@
 // exit occurs, surface exited company at the top...") and never actually
 // got a visual treatment. Keeping the badge (it's what closes the real
 // C2i drift bug) but it's new design, not a pixel-match to anything.
+// `compact` is the appendix variant (legacy .fi-card-apdx): auto height so a
+// row of cards sizes to its longest description, smaller type, and wrapping
+// metrics (six of them: Invested / FMV / MOIC / First Investment /
+// Ownership / Stage).
 const STATUS_LABEL = { active: null, exited: 'Exited', 'written-off': 'Written Off' };
 
-export function CompanyCard({ name, logoUrl, sector, description, metrics = [], investmentStatus = 'active' }) {
+export function CompanyCard({ name, logoUrl, sector, description, metrics = [], investmentStatus = 'active', compact = false }) {
   const badge = STATUS_LABEL[investmentStatus];
   return (
-    <div style={{ background: '#fff', border: 'var(--deck-border)', padding: '12px 14px', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative', height: 244 }}>
+    <div style={{ background: '#fff', border: 'var(--deck-border)', padding: '12px 14px', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative', height: compact ? undefined : 244 }}>
       {badge ? (
         <div
           style={{
@@ -30,7 +34,7 @@ export function CompanyCard({ name, logoUrl, sector, description, metrics = [], 
           {badge}
         </div>
       ) : null}
-      <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8, flexShrink: 0 }}>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: compact ? 6 : 8, flexShrink: 0 }}>
         <div style={{ width: 52, height: 52, border: 'var(--deck-border)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#fff', padding: 3 }}>
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -45,18 +49,18 @@ export function CompanyCard({ name, logoUrl, sector, description, metrics = [], 
         </div>
       </div>
       {description ? (
-        <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 10.5, color: '#555', lineHeight: 1.55, marginBottom: 2, flex: 1 }}>{description}</div>
+        <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: compact ? 9.5 : 10.5, color: '#555', lineHeight: 1.55, marginBottom: compact ? 0 : 2, flex: 1 }}>{description}</div>
       ) : (
         <div style={{ flex: 1 }} />
       )}
       {metrics.length ? (
         <>
-          <hr style={{ border: 'none', borderTop: 'var(--deck-border)', margin: '8px 0', flexShrink: 0 }} />
-          <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
+          <hr style={{ border: 'none', borderTop: 'var(--deck-border)', margin: compact ? '7px 0' : '8px 0', flexShrink: 0 }} />
+          <div style={{ display: 'flex', gap: compact ? 12 : 20, flexWrap: compact ? 'wrap' : undefined, flexShrink: 0 }}>
             {metrics.map((m) => (
               <div key={m.label}>
-                <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 8, color: '#aaa', marginBottom: 3 }}>{m.label}</div>
-                <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 12, fontWeight: 700, color: 'var(--deck-color-crimson)' }}>{m.value}</div>
+                <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: compact ? 7.5 : 8, color: '#aaa', marginBottom: 3 }}>{m.label}</div>
+                <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: compact ? 11 : 12, fontWeight: 700, color: 'var(--deck-color-crimson)' }}>{m.value}</div>
               </div>
             ))}
           </div>

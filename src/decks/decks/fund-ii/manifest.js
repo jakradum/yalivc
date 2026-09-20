@@ -31,7 +31,14 @@ export const fundIIDeck = {
     { id: 'fund-ii-deployment', type: 'deployment', build: (d) => d.fundIIDeployment },
 
     { id: 'media-recognition', type: 'media-grid', build: (d) => d.media },
-    { id: 'appendix-portfolio', type: 'portfolio-grid', build: (d) => d.appendixPortfolio },
+    // Legacy splits the appendix 4 + 3 companies across two slides. Page two
+    // returns null (and is skipped) when there are four or fewer companies.
+    { id: 'appendix-portfolio', type: 'portfolio-grid', build: (d) => ({ companies: d.appendixPortfolio.companies.slice(0, 4) }) },
+    {
+      id: 'appendix-portfolio-2',
+      type: 'portfolio-grid',
+      build: (d) => (d.appendixPortfolio.companies.length > 4 ? { companies: d.appendixPortfolio.companies.slice(4, 8) } : null),
+    },
     { id: 'closing', type: 'closing', build: (d) => d.closing },
   ],
 };

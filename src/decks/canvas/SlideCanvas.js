@@ -1,8 +1,10 @@
 import { SLIDE_W, SLIDE_H } from '../core/constants';
+import { SlideNumber } from '../design-system/blocks/SlideNumber/SlideNumber';
 
 // Plain, server-safe. No hooks, no client-only APIs — must render
 // identically in the client-boundary preview and in SSR print output.
-export function SlideCanvas({ id, index, children }) {
+// `numberMode`: 'skip' | 'light' | 'dark' (see core/slideNumbers.js).
+export function SlideCanvas({ id, index, numberMode = 'skip', children }) {
   return (
     <section
       className="deck-slide"
@@ -20,6 +22,7 @@ export function SlideCanvas({ id, index, children }) {
       }}
     >
       {children}
+      {numberMode !== 'skip' ? <SlideNumber number={index + 1} dark={numberMode === 'dark'} autoHide /> : null}
     </section>
   );
 }
