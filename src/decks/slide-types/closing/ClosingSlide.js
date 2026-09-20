@@ -15,7 +15,7 @@ export function ClosingSlide({ contacts = [], website }) {
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/yali-logo.png" alt="Yali Capital" style={{ filter: 'brightness(0) invert(1)', marginBottom: 32, height: 40 }} />
+      <img src="/yali-logo.png" alt="Yali Capital" style={{ filter: 'brightness(0) invert(1)', marginBottom: 32, width: 130 }} />
       <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 48, fontWeight: 400, color: '#fff', letterSpacing: '0.01em', marginBottom: 36 }}>
         Thank You
       </div>

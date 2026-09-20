@@ -4,8 +4,8 @@ import { SlideNumber } from '../design-system/blocks/SlideNumber/SlideNumber';
 // Plain, server-safe. No hooks, no client-only APIs — must render
 // identically in the client-boundary preview and in SSR print output.
 // `numberMode`: 'skip' | 'light' | 'dark' (see core/slideNumbers.js).
-export function SlideCanvas({ id, index, numberMode = 'skip', section, children }) {
-  const onCrimson = numberMode === 'dark';
+export function SlideCanvas({ id, index, numberMode = 'skip', section, crimsonGround = numberMode === 'dark', children }) {
+  const onCrimson = crimsonGround;
   return (
     <section
       className="deck-slide"
