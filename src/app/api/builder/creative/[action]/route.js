@@ -6,6 +6,7 @@ import { validateAsset } from '@/creative/validate';
 import { runCreativeAgent } from '@/creative/agent';
 import { getBrand } from '@/creative/brands';
 import { ASSET_KINDS, GROUNDS, cleanLibrary } from '@/creative/library';
+import { describeImage } from '@/creative/describe';
 import { writeClient } from '@/lib/sanity';
 
 export const runtime = 'nodejs';
@@ -39,7 +40,9 @@ async function upload(request, email) {
   const kind = sniff(buf);
   if (!kind) return NextResponse.json({ error: 'Use a PNG, JPEG or WebP image.' }, { status: 415 });
 
-  const meta = {
+  // Nothing has to be typed: unless the caller supplies them, the picture is looked at
+  // and its kind / alt text / "shows people" are filled in automatically (editable later).
+  const given = {
     kind: String(form.get('kind') || ''),
     alt: String(form.get('alt') || '').trim().slice(0, 160),
     description: String(form.get('description') || '').trim().slice(0, 300),
@@ -47,11 +50,17 @@ async function upload(request, email) {
     people: form.get('people') === 'true',
     ground: String(form.get('ground') || 'any'),
   };
-  if (!ASSET_KINDS.includes(meta.kind)) return NextResponse.json({ error: 'Say what this is: photo, logo or graphic.' }, { status: 400 });
-  if (!meta.alt) return NextResponse.json({ error: 'Alt text is required — describe the picture in a few words.' }, { status: 400 });
+  const seen = given.kind && given.alt ? null : await describeImage(buf, kind.type, file.name);
+  const meta = {
+    ...given,
+    kind: ASSET_KINDS.includes(given.kind) ? given.kind : seen?.kind || 'photo',
+    alt: given.alt || seen?.alt || 'Uploaded picture',
+    people: given.people || seen?.people === true,
+  };
+  // A logo or a diagram must never be cropped; a logo defaults to any background.
+  if (meta.kind !== 'photo') meta.noCrop = true;
   if (!GROUNDS.includes(meta.ground)) meta.ground = 'any';
 
-  const safeName = String(file.name || 'upload').replace(/[^\w.-]+/g, '-').slice(0, 60);
   const asset = await writeClient.assets.upload('image', buf, { filename: safeName, contentType: kind.type, source: { name: 'creative-studio', id: email } });
   const dims = asset.metadata?.dimensions;
   if (!dims) return NextResponse.json({ error: 'Could not read the image.' }, { status: 422 });
