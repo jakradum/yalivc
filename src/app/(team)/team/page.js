@@ -86,7 +86,7 @@ export default function TeamPage() {
             </a>
 
             {/* Letters card */}
-            <a href="/team/letters/" style={{ textDecoration: 'none', display: 'block' }}>
+            <a href="/team/asset-builder/" style={{ textDecoration: 'none', display: 'block' }}>
               <div style={{
                 border: '1px solid #363636',
                 borderTop: '3px solid #830d35',
@@ -96,13 +96,13 @@ export default function TeamPage() {
                 boxSizing: 'border-box',
               }}>
                 <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 14 }}>
-                  Finance
+                  Letters &amp; assets
                 </div>
                 <div style={{ fontFamily: mono, fontSize: 18, fontWeight: 400, color: '#363636', marginBottom: 12, lineHeight: 1.3 }}>
-                  Letters
+                  Asset builder
                 </div>
                 <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
-                  Generate and print official correspondence on Yali letterhead. Create a new letter in Sanity, then open it here to save as PDF. Yali Microsoft sign-in required.
+                  Official letters on Yali letterhead, plus decks and other creative assets. Yali Microsoft sign-in required; you'll see the parts you have access to.
                 </p>
               </div>
             </a>
@@ -110,14 +110,6 @@ export default function TeamPage() {
           </div>
         </div>
       </div>
-
-      {/* Quiet entry to the asset builder — Yali Microsoft sign-in, then the builder. */}
-      <a
-        href="/team/builder/"
-        style={{ position: 'fixed', right: 18, bottom: 12, fontFamily: mono, fontSize: 10, letterSpacing: '0.04em', color: 'rgba(54,54,54,0.32)', textDecoration: 'none' }}
-      >
-        asset builder
-      </a>
     </div>
   );
 }

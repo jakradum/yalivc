@@ -16,6 +16,12 @@ export function getTeamUser(cookieValue, area = 'builder') {
 }
 export const getDeckUser = (cookieValue) => getTeamUser(cookieValue, 'builder');
 
+// The areas behind the asset-builder hub that this person may open.
+export function teamAreas(cookieValue) {
+  const email = verifyTeamSession(cookieValue);
+  return { email, areas: email ? ['letters', 'builder'].filter((a) => canAccess(a, email)) : [] };
+}
+
 const isLocalHost = (host = '') => /^(localhost|127\.0\.0\.1)/.test(host);
 
 // Team pages are served at clean paths on team.yali.vc and under /team locally.

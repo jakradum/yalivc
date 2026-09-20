@@ -5,7 +5,7 @@ import { SignInClient } from './SignInClient';
 export const metadata = { title: 'Sign In — Yali Team', robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';
 
-const AREAS = { builder: 'the asset builder', letters: 'Letters' };
+const AREAS = { assets: 'the asset builder', builder: 'the asset builder', letters: 'Letters' };
 
 export default async function TeamSignInPage({ searchParams }) {
   const sp = await searchParams;
