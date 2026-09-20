@@ -61,6 +61,7 @@ async function upload(request, email) {
   if (meta.kind !== 'photo') meta.noCrop = true;
   if (!GROUNDS.includes(meta.ground)) meta.ground = 'any';
 
+  const safeName = String(file.name || 'upload').replace(/[^\w.-]+/g, '-').slice(0, 60);
   const asset = await writeClient.assets.upload('image', buf, { filename: safeName, contentType: kind.type, source: { name: 'creative-studio', id: email } });
   const dims = asset.metadata?.dimensions;
   if (!dims) return NextResponse.json({ error: 'Could not read the image.' }, { status: 422 });
