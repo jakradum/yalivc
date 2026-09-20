@@ -11,12 +11,13 @@ import { BLOCKS } from './blocks.js';
 const CHAR = { mono: 0.6, body: 0.5 }; // Inter averages ~0.5em on English text (calibrated against real renders)
 const RATIO_VALUE = { '1:1': 1, '4:5': 0.8, '16:9': 16 / 9, '3:2': 1.5, '3:4': 0.75 };
 
-export function makeEnv(brand, format) {
+export function makeEnv(brand, format, assets = {}) {
   const isEmail = format.kind === 'email';
   const scale = isEmail ? 1 : format.w / 1080;
   const mode = isEmail ? 'email' : 'canvas';
   return {
     brand,
+    assets,
     scale,
     space: (k) => (brand.space[k || 'none']?.[mode] ?? 0) * scale,
     role: (r) => {
@@ -59,7 +60,21 @@ const textHeight = (env, role, text, width) => {
 // Width a child asks for in a row: its max-content width (null = a container that
 // shares whatever is left). Text sizes to its content in a flex row, so a small
 // number beside a paragraph doesn't get half the row.
+// Fixed pixel height of a small picture (a logo or chip), or null for a full-width one.
+// Uploaded logos default to a small size so a company logo never fills the page.
+const IMG_H = { s: 48, m: 72, l: 112 };
+export function imageFixedHeight(env, b) {
+  const kind = b.src?.kind === 'upload' ? env.assets[b.src.id]?.kind : null;
+  const size = b.size || (kind === 'logo' ? 'm' : 'fill');
+  return size === 'fill' ? null : IMG_H[size] * env.scale;
+}
+
 function hugWidth(env, b) {
+  if (b.type === 'image') {
+    const h = imageFixedHeight(env, b);
+    const a = b.src?.kind === 'upload' ? env.assets[b.src.id] : null;
+    return h ? h * (a ? a.width / a.height : 1) : null;
+  }
   if (b.type === 'logo') return { s: 48, m: 72, l: 112, xl: 260 }[b.size || 'm'] * (b.variant === 'lockup' ? 2.1 : 1) * env.scale;
   if (b.type === 'button') return String(b.label || '').length * 0.6 * env.role('caption').size + 72 * env.scale;
   if (b.type === 'shape') return { s: 60, m: 100, l: 160 }[b.size || 'm'] * env.scale;
@@ -88,8 +103,11 @@ export function estimateHeight(b, width, env) {
       const inner = Math.max(width - 28 * env.scale - env.space('s'), 1);
       return items.reduce((h, it) => h + textHeight(env, role, it, inner), 0) + env.space('xs') * Math.max(items.length - 1, 0);
     }
-    case 'image':
+    case 'image': {
+      const fixed = imageFixedHeight(env, b);
+      if (fixed) return fixed;
       return width / (RATIO_VALUE[b.ratio || '3:2'] || 1.5);
+    }
     case 'logo':
       return { s: 48, m: 72, l: 112, xl: 260 }[b.size || 'm'] * env.scale;
     case 'tag': {

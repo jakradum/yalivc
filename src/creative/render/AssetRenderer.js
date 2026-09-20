@@ -145,6 +145,16 @@ function Block({ b, ctx, parentLayer }) {
     case 'image': {
       const up = b.src.kind === 'upload' ? ctx.assets[b.src.id] : null;
       const src = up ? renditionUrl(up, 2000) : b.src.kind === 'library' ? brand.images.library[b.src.key] : b.src.url;
+      const size = b.size || (up?.kind === 'logo' ? 'm' : 'fill');
+      if (size !== 'fill') {
+        // A small fixed-height picture (a logo or chip): never stretched, never cropped.
+        return wrap(
+          <div style={{ display: 'flex', justifyContent: ALIGN_ITEMS[b.align || 'start'] }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={b.decorative ? '' : b.alt || up?.alt || ''} style={{ display: 'block', height: ctx.px({ s: 48, m: 72, l: 112 }[size]), width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+          </div>
+        );
+      }
       return wrap(
         // eslint-disable-next-line @next/next/no-img-element
         <img

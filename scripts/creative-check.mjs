@@ -175,6 +175,29 @@ console.log('House rules (from the past assets)…');
   rejects('a fade outside a layer', fade, 'inside a layer');
 }
 
+console.log('Company logos and anchors…');
+{
+  const P = 'https://cdn.sanity.io/images/nt0wmty3/production/';
+  const logo = { url: `${P}logo-1920x1080.png`, width: 1920, height: 1080, kind: 'logo', alt: 'Acme logo', noCrop: true, ground: 'light' };
+  const d = clone(FIXTURES.news);
+  d.assets = { 'image-logo-1920x1080-png': logo };
+  // the company logo sits in the chip as a small fixed-height picture, not a full-width block
+  const chip = find(rootOf(d), 'n1-chip');
+  chip.children = [{ type: 'image', id: 'co', src: { kind: 'upload', id: 'image-logo-1920x1080-png' }, fit: 'contain', size: 's' }];
+  const r = validateAsset(d);
+  ok('an uploaded logo defaults to a small size and the page still fits', r.ok, r.errors.map((e) => e.msg).join(' | '));
+  const big = clone(d);
+  find(rootOf(big), 'co').size = 'fill';
+  rejects('the same logo forced full width overflows', big, 'tall');
+  // natural spellings of an anchor are accepted, not rejected
+  const doc = newAsset({ format: 'linkedin-square' });
+  const a = applyOp(doc, 'add_block', { parent: 'page-1-root', block: { type: 'layer', ratio: '1:1', children: [{ type: 'logo', variant: 'mark', tone: 'light', anchor: 'top-left', inset: 'm' }] } });
+  ok('"top-left" is understood as tl', a.doc.pages[0].root.children[0].children[0].anchor === 'tl');
+  const b2 = applyOp(a.doc, 'update_block', { id: a.doc.pages[0].root.children[0].children[0].id, props: { anchor: 'Bottom-Right' } });
+  ok('anchor aliases work in updates too', b2.doc.pages[0].root.children[0].children[0].anchor === 'br');
+  ok('the prompt tells the model about its fact tools', systemPrompt(doc).includes('lookup_company') && systemPrompt(doc).includes('attach_company_logo') && systemPrompt(doc).includes('LP-confidential') === false && systemPrompt(doc).includes('Confidentiality'));
+}
+
 console.log('Page height…');
 {
   const many = clone(FIXTURES.carousel);
