@@ -14,7 +14,6 @@ export const yali = {
     grey: '#6b6b6b', // body grey on light (AA; the old #888 is 3:1)
     silver: '#b8b8b8', // body grey on ink/black/crimson
     white: '#ffffff',
-    muted: '#888888',
     rose: '#bb3e68',
     blush: '#f4c0d4',
   },

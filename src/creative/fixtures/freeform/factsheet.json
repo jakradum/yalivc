@@ -118,7 +118,7 @@
             },
             {
               "type": "divider",
-              "color": "muted",
+              "color": "grey",
               "weight": "thin",
               "id": "divider-yvy87"
             },
@@ -194,7 +194,7 @@
             },
             {
               "type": "divider",
-              "color": "muted",
+              "color": "grey",
               "weight": "thin",
               "id": "divider-861o6"
             },

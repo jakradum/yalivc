@@ -251,7 +251,10 @@ export function validateAsset(doc) {
     if (!colorName || !bgName || !brand.colors[colorName] || !brand.colors[bgName]) return;
     const ratio = contrast(brand.colors[colorName], brand.colors[bgName]);
     const need = large ? 3 : 4.5;
-    if (ratio < need) err(`${path}.color`, `"${colorName}" on "${bgName}" has contrast ${ratio.toFixed(1)}:1 — needs ${need}:1. Pick a colour that reads on ${bgName}.`);
+    if (ratio < need) {
+      const passing = Object.keys(brand.colors).filter((c) => contrast(brand.colors[c], brand.colors[bgName]) >= need);
+      err(`${path}.color`, `"${colorName}" on "${bgName}" has contrast ${ratio.toFixed(1)}:1, needs ${need}:1. Colours that read on ${bgName}: ${passing.join(', ') || '(none)'}.`);
+    }
     if (overImage) warn(path, 'text over an image: add a scrim so it stays legible');
   }
 
