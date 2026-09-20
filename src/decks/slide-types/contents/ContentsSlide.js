@@ -1,3 +1,5 @@
+import { Honeycomb } from '@/decks/design-system/blocks/Honeycomb/Honeycomb';
+
 // Pixel-matched to legacy .s2-index — a crimson left panel (title + sub)
 // and a white right panel of numbered section rows. Rebuilt from
 // scratch; the Phase 3 draft was a plain centered list.
@@ -5,6 +7,7 @@ export function ContentsSlide({ title, subtitle, sections = [] }) {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'stretch' }}>
       <div style={{ width: 340, flexShrink: 0, background: 'var(--deck-color-crimson)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '52px 52px 52px 60px', position: 'relative', overflow: 'hidden' }}>
+        <Honeycomb width={340} height={540} opacity={0.45} style={{ pointerEvents: 'none' }} />
         <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 34, fontWeight: 400, color: 'var(--deck-color-gold)', lineHeight: 1.2, position: 'relative', zIndex: 1 }}>
           {title}
         </div>
