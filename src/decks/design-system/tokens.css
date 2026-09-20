@@ -10,7 +10,7 @@
   --deck-color-crimson: #830d35;
   --deck-color-ink: #363636;
   --deck-color-gold: #ebde84;
-  --deck-color-light-bg: #efefef;
+  --deck-color-light-bg: #eeeceb; /* legacy --light: the ground of every light slide */
   --deck-color-paper: #ffffff;
   --deck-color-connector: #c0bcb8; /* spoke/connector lines — intentional exception to border rule */
 

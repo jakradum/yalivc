@@ -18,12 +18,17 @@ export async function fetchFundIISettings() {
   }`);
 }
 
-// All `company` documents. No fund field exists on this schema (Phase 0/4
-// finding) — Fund II has no completed investments yet, so every document
-// here is a Fund I holding by construction, not by an explicit filter.
-// Revisit this query the day a `company` gets a real fund reference.
+// Every `company` document — deliberately NOT filtered on
+// `showOnMainWebsite`. That flag controls the public website only; this deck
+// is for LPs, who are entitled to see the whole portfolio, so there's no
+// secrecy reason to hide a company here. The deck's portfolio is then the
+// subset with at least one investment round (see mapFromSanity), which drops
+// pipeline names (e.g. companies not yet invested in) that have no numbers.
+// No fund field exists on this schema (Phase 0/4 finding) — Fund II has no
+// completed investments yet, so every invested company is a Fund I holding
+// by construction. Revisit the day a `company` gets a real fund reference.
 export async function fetchFundIPortfolio() {
-  return client.fetch(`*[_type == "company" && showOnMainWebsite == true] | order(order asc) {
+  return client.fetch(`*[_type == "company"] {
     name,
     "sector": category->name,
     investmentStatus,
@@ -39,6 +44,29 @@ export async function fetchFundIPortfolio() {
       currentFMV, multipleOfInvestment, currentOwnershipPercent
     }
   }`);
+}
+
+// Fund I aggregate stats: the latest quarterly report on lpFundSettings
+// (read-only — that document belongs to the LP report and is never written
+// from here). Quarters are unordered, so sort by fiscal year then quarter.
+export async function fetchFundIStats() {
+  return client.fetch(`*[_type == "lpFundSettings"][0]{
+    firstCloseDate,
+    finalCloseDate,
+    targetFundSizeINR,
+    fundSizeAtClose,
+    "latest": quarterlyPerformance | order(fiscalYear desc, quarter desc)[0]{
+      quarter, fiscalYear, amountDrawnDown, totalInvested, fairMarketValue,
+      amountReturned, moic, tvpi, dpi, rvpi
+    }
+  }`);
+}
+
+// LP logos on the "Our limited partners" slide. Which LPs to feature is a
+// curated, code-owned selection (by name); the logo itself lives in Sanity.
+export async function fetchInvestorLogos(names) {
+  const rows = await client.fetch(`*[_type == "investor" && name in $names]{ name, "logoUrl": logo.asset->url }`, { names });
+  return names.map((n) => rows.find((r) => r.name === n)).filter(Boolean);
 }
 
 // Individuals only (excludes the "Yali Team" group-type document).
