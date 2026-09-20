@@ -33,9 +33,30 @@ function download(name, text, type) {
   URL.revokeObjectURL(a.href);
 }
 
+async function downloadPictures(doc, as, page, setBusy, setErr) {
+  setBusy(`${as}${page ?? ''}`);
+  setErr('');
+  try {
+    const r = await fetch('/api/builder/creative/export/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ doc, as, page }) });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'Export failed.');
+    const name = /filename="([^"]+)"/.exec(r.headers.get('Content-Disposition') || '')?.[1] || `asset.${as}`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(await r.blob());
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (e) {
+    setErr(e.message);
+  } finally {
+    setBusy('');
+  }
+}
+
 export function CreativeClient() {
   const [format, setFormat] = useState('linkedin-square');
   const [doc, setDoc] = useState(null);
+  const [exporting, setExporting] = useState('');
+  const [exportErr, setExportErr] = useState('');
   const [prompt, setPrompt] = useState('');
   const [thread, setThread] = useState([]);
   const [busy, setBusy] = useState(false);
@@ -257,10 +278,12 @@ export function CreativeClient() {
               ))}
               <span className={s.spacer} />
               <span className={`${s.status} ${check?.ok ? s.statusOk : s.statusBad}`}>{check?.ok ? 'VALID' : `${check?.errors.length} ISSUE(S)`}{check?.warnings.length ? ` · ${check.warnings.length} note(s)` : ''}</span>
+              {check?.ok && hasContent && f.outputs.includes('pdf') && doc.pages.length > 1 ? <button className={s.dl} disabled={!!exporting} onClick={() => downloadPictures(withLib, 'pdf', undefined, setExporting, setExportErr)}>{exporting === 'pdf' ? 'Rendering…' : 'Download PDF'}</button> : null}
               <button className={s.dl} onClick={() => download(`${doc.id}.json`, JSON.stringify(withLib, null, 2), 'application/json')}>Download JSON</button>
               {isEmail && emailHtml ? <button className={s.dl} onClick={() => download(`${doc.id}.html`, emailHtml, 'text/html')}>Download HTML</button> : null}
             </div>
 
+            {exportErr ? <div className={s.emptyNote}>{exportErr}</div> : null}
             {view === 'preview' && !hasContent ? (
               <div className={s.emptyNote}>Nothing has been built yet. Read Claude's message on the left: it may need something from you (like a picture added to Images).</div>
             ) : null}
@@ -273,7 +296,10 @@ export function CreativeClient() {
                         <AssetPage doc={withLib} page={p} />
                       </div>
                     </div>
-                    <figcaption className={s.cap}>{i + 1} / {doc.pages.length} · {p.id}</figcaption>
+                    <figcaption className={s.cap}>
+                      {i + 1} / {doc.pages.length} · {p.id}
+                      {check?.ok && f.outputs.includes('png') ? <> · <button className={s.dl} disabled={!!exporting} onClick={() => downloadPictures(withLib, 'png', i, setExporting, setExportErr)}>{exporting === `png${i}` ? 'Rendering…' : 'Download PNG'}</button></> : null}
+                    </figcaption>
                   </figure>
                 ))}
               </div>
