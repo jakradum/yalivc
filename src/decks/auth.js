@@ -26,10 +26,14 @@ export async function teamPrefix() {
 // Pages: no valid session → the sign-in page (and back to `area` afterwards).
 export async function requireTeamUser(area = 'builder') {
   const store = await cookies();
-  const email = getTeamUser(store.get(TEAM_COOKIE)?.value, area);
+  const raw = store.get(TEAM_COOKIE)?.value;
+  const email = getTeamUser(raw, area);
   if (email) return email;
   const prefix = await teamPrefix();
-  redirect(`${prefix}/sign-in?next=${encodeURIComponent(`${prefix}/${area === 'letters' ? 'letters' : 'builder'}/`)}`);
+  const home = `${prefix}/${area === 'letters' ? 'letters' : 'builder'}/`;
+  // Signed in, but not on this area's list: say so instead of looping back to sign-in.
+  if (verifyTeamSession(raw)) redirect(`${prefix}/sign-in?denied=${area}`);
+  redirect(`${prefix}/sign-in?next=${encodeURIComponent(home)}`);
 }
 export const requireDeckUser = () => requireTeamUser('builder');
 
