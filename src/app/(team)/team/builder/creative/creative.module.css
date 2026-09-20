@@ -61,3 +61,6 @@
 .trace div { padding: 2px 0; word-break: break-word; }
 .trace b { font-family: var(--deck-font-mono); font-weight: 400; color: var(--deck-color-crimson); }
 .traceBad { color: #a11; }
+
+.notAdded { font-size: 11px; color: var(--deck-color-crimson); line-height: 1.4; }
+.emptyNote { font-size: 13px; color: #777; max-width: 60ch; padding: 24px 0; line-height: 1.6; }
