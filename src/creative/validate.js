@@ -270,7 +270,14 @@ export function validateAsset(doc) {
       const avail = format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * scale;
       const est = estimateHeight(root, format.w - safeX, env);
       if (est > avail * 1.02) {
-        err(path, `content is about ${Math.round(est)}px tall but only ${Math.round(avail)}px fits on the page — shorten the text, remove a block, use smaller type roles or spacing, or spread it over more pages`);
+        // Say WHERE the height goes, so one revision fixes it.
+        const parts = (root.children || [])
+          .map((c) => ({ id: c.id, h: Math.round(estimateHeight(c, format.w - safeX, env)) }))
+          .sort((a, b) => b.h - a.h)
+          .slice(0, 3)
+          .map((x) => `${x.id} ~${x.h}px`)
+          .join(', ');
+        err(path, `content is about ${Math.round(est)}px tall but only ${Math.round(avail)}px fits on the page (tallest: ${parts}) — cut about ${Math.round(est - avail)}px: shorten text, drop a block, use smaller roles or spacing, or spread it over more pages`);
       } else if (est > avail * 0.96) {
         warn(path, `content nearly fills the page (~${Math.round(est)} of ${Math.round(avail)}px)`);
       }
