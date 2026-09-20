@@ -12,11 +12,12 @@ export const SESSION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 // Only accounts on Yali's own Microsoft tenant can hold a session.
 export const YALI_DOMAIN = '@yali.vc';
 
-// Per-area allow-lists. `null` = any Yali account. To restrict an area, list
-// the lowercase emails allowed, e.g. LETTERS_ALLOWED = ['sunil@yali.vc'].
+// Per-area allow-lists (lowercase Yali Microsoft addresses). Anyone with a Yali
+// account can SIGN IN; each area then checks this list. `null` would mean any
+// Yali account. Change access by editing these two lists.
 export const ACCESS = {
-  builder: null,
-  letters: null,
+  builder: ['pranav@yali.vc', 'kram@yali.vc', 'gani@yali.vc'],
+  letters: ['pranav@yali.vc', 'manjunath@yali.vc'],
 };
 
 const secret = () => process.env.PORTAL_AUTH_SECRET;

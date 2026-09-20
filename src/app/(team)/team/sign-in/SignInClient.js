@@ -23,7 +23,7 @@ function safeNext(raw, prefix) {
   return ok ? raw : `${prefix}/builder/`;
 }
 
-export function SignInClient() {
+export function SignInClient({ deniedArea = null, deniedEmail = null }) {
   const [state, setState] = useState('idle'); // idle | working | error
   const [msg, setMsg] = useState('');
   const [detail, setDetail] = useState('');
@@ -77,13 +77,18 @@ export function SignInClient() {
         <div style={{ width: '100%', maxWidth: 420, border: '1px solid #363636', borderTop: '3px solid #830d35', background: 'rgba(255,255,255,0.92)', padding: '32px 28px', boxSizing: 'border-box' }}>
           <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 14 }}>Yali team</div>
           <h1 style={{ fontFamily: mono, fontSize: 20, fontWeight: 400, margin: '0 0 12px', lineHeight: 1.3 }}>Sign in</h1>
+          {deniedArea ? (
+            <p role="alert" style={{ fontSize: 13, color: '#a11', lineHeight: 1.6, margin: '0 0 20px' }}>
+              {deniedEmail} is signed in, but doesn’t have access to {deniedArea}. If you need it, ask Pranav — or sign in with a different account.
+            </p>
+          ) : null}
           <p style={{ fontSize: 13, color: '#595959', lineHeight: 1.7, margin: '0 0 24px' }}>Use your Yali Microsoft account to continue.</p>
           <button
             onClick={signIn}
             disabled={state === 'working'}
             style={{ width: '100%', fontFamily: mono, fontSize: 13, padding: '12px 16px', background: '#830d35', color: '#fff', border: 0, cursor: state === 'working' ? 'default' : 'pointer', opacity: state === 'working' ? 0.6 : 1 }}
           >
-            {state === 'working' ? 'Signing in…' : 'Sign in with Microsoft'}
+            {state === 'working' ? 'Signing in…' : deniedArea ? 'Use a different account' : 'Sign in with Microsoft'}
           </button>
           {state === 'error' ? (
             <div role="alert" style={{ marginTop: 16, fontSize: 13, color: '#a11', lineHeight: 1.5 }}>

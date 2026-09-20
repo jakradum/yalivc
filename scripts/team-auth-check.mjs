@@ -68,7 +68,11 @@ ok('tampered signature rejected', verifyTeamSession(s.slice(0, -2) + '00') === n
 ok('expired rejected', verifyTeamSession(signTeamSession('a@yali.vc', Date.now() - 8 * 24 * 3600 * 1000)) === null);
 ok('LP-portal style cookie (no "team:" domain) rejected', (() => { const e = 'lp@yali.vc', t = Date.now(); const sig = crypto.createHmac('sha256', process.env.PORTAL_AUTH_SECRET).update(`${e}:${t}`).digest('hex'); return verifyTeamSession(`${e}:${t}:${sig}`) === null; })());
 ok('garbage rejected', verifyTeamSession('nope') === null && verifyTeamSession('') === null);
-ok('only @yali.vc may access', canAccess('builder', 'a@yali.vc') && !canAccess('builder', 'a@gmail.com') && isYaliEmail('A@YALI.VC'));
+ok('non-Yali addresses never pass', !canAccess('builder', 'pranav@gmail.com') && !canAccess('letters', 'manjunath@evil.com') && isYaliEmail('A@YALI.VC'));
+ok('builder: pranav, kram, gani', ['pranav@yali.vc', 'kram@yali.vc', 'gani@yali.vc', 'GANI@yali.vc'].every((e) => canAccess('builder', e)));
+ok('builder: nobody else', ['sunil@yali.vc', 'manjunath@yali.vc', 'karthik@yali.vc', 'sandipan@yali.vc'].every((e) => !canAccess('builder', e)));
+ok('letters: pranav, manjunath', ['pranav@yali.vc', 'manjunath@yali.vc'].every((e) => canAccess('letters', e)));
+ok('letters: nobody else (incl. builder-only users)', ['gani@yali.vc', 'kram@yali.vc', 'sunil@yali.vc'].every((e) => !canAccess('letters', e)));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
