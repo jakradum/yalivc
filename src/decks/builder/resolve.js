@@ -1,6 +1,7 @@
 import 'server-only';
 import { getDefinition } from './catalog';
 import { readManifest } from './store';
+import { assignSections } from '../core/slideNumbers';
 
 // Effective slide list for rendering: [{ id, type, props }], all
 // serialisable so it can cross into the client DeckRenderer.
@@ -15,7 +16,7 @@ export async function resolveDeckSlides(deckId, data, manifest = 'published') {
     if (!def) continue; // a stale ref (slide removed from code) is skipped, not fatal
     const built = def.build(data);
     if (built === null) continue; // a slide whose data doesn't exist (e.g. appendix page 2 with ≤4 companies)
-    slides.push({ id: e.id, type: def.type, props: { ...built, ...e.props } });
+    slides.push({ id: e.id, type: def.type, sectionStart: def.section, props: { ...built, ...e.props } });
   }
-  return slides;
+  return assignSections(slides);
 }

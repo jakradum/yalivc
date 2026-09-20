@@ -3,7 +3,8 @@
   "cover": {
     "title": "Yali Capital Fund",
     "numeral": "II",
-    "subtitle": "A deep tech fund"
+    "subtitle": "A deep tech fund",
+    "version": "fund2-deck"
   },
   "contents": {
     "title": "Contents",
@@ -116,10 +117,62 @@
     "heading": "Fund I · Portfolio",
     "asOf": "As of June 2026 · ₹ crores",
     "rows": [
-      { "name": "4baseCare", "sector": "Life Sciences", "invested": "35.38 Cr", "moic": "2.95x", "fmv": "104.47 Cr", "firstInvestment": null },
-      { "name": "Perceptyne", "sector": "Robotics", "invested": "11.8 Cr", "moic": "1.00x", "fmv": "11.8 Cr", "firstInvestment": null },
-      { "name": "C2i Semiconductors", "sector": "Fabless Semiconductor", "invested": "33.57 Cr", "moic": "3.42x", "fmv": "114.74 Cr", "firstInvestment": null },
-      { "name": "Tonbo Imaging", "sector": "Aerospace & Surveillance", "invested": "60.0 Cr", "moic": "1.00x", "fmv": "60.0 Cr", "firstInvestment": null }
+      {
+        "name": "4baseCare",
+        "sector": "Life Sciences",
+        "invested": "35.38 Cr",
+        "moic": "2.95x",
+        "fmv": "104.47 Cr",
+        "firstInvestment": "Aug 2024"
+      },
+      {
+        "name": "Perceptyne",
+        "sector": "Robotics",
+        "invested": "11.8 Cr",
+        "moic": "1.00x",
+        "fmv": "11.8 Cr",
+        "firstInvestment": "Oct 2024"
+      },
+      {
+        "name": "C2i Semiconductors",
+        "sector": "Fabless Semiconductor",
+        "invested": "33.57 Cr",
+        "moic": "3.42x",
+        "fmv": "114.74 Cr",
+        "firstInvestment": "Oct 2024"
+      },
+      {
+        "name": "Tonbo Imaging",
+        "sector": "Aerospace & Surveillance",
+        "invested": "60.0 Cr",
+        "moic": "1.00x",
+        "fmv": "60.0 Cr",
+        "firstInvestment": "Mar 2025"
+      },
+      {
+        "name": "PointAI",
+        "sector": "Artificial Intelligence",
+        "invested": "35.19 Cr",
+        "moic": "1.00x",
+        "fmv": "35.19 Cr",
+        "firstInvestment": "Jun 2025"
+      },
+      {
+        "name": "LatentForce",
+        "sector": "Artificial Intelligence",
+        "invested": "7.61 Cr",
+        "moic": "1.01x",
+        "fmv": "7.69 Cr",
+        "firstInvestment": "Nov 2025"
+      },
+      {
+        "name": "DeepLase",
+        "sector": "Smart Manufacturing",
+        "invested": "3.00 Cr",
+        "moic": "1.00x",
+        "fmv": "3.00 Cr",
+        "firstInvestment": "Jan 2026"
+      }
     ]
   },
   "appendixPortfolio": {
@@ -370,5 +423,176 @@
       { "publication": "The Hindu", "headline": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology" }
     ]
   },
-  "closing": { "contacts": ["gani@yali.vc", "sunil@yali.vc"], "website": "yali.vc" }
+  "closing": { "contacts": ["gani@yali.vc", "sunil@yali.vc"], "website": "yali.vc" },
+  "fundIStats": {
+    "heading": "Fund I · As of June 2026",
+    "unit": "Amount in ₹ crores",
+    "rows": [
+      {
+        "label": "First close date",
+        "value": "15 Jul '24"
+      },
+      {
+        "label": "Final close date",
+        "value": "14 Jul '25"
+      },
+      {
+        "label": "Combined fund size",
+        "value": "893.00"
+      },
+      {
+        "label": "Amount drawn down",
+        "value": "216.08"
+      },
+      {
+        "label": "Total invested in portfolio",
+        "value": "186.54"
+      },
+      {
+        "label": "Fair Market Value of portfolio investments (incl. realised value)",
+        "value": "336.89"
+      },
+      {
+        "label": "Number of portfolio companies",
+        "value": "7"
+      },
+      {
+        "label": "Amount returned (incl. passive income)",
+        "value": "1.17"
+      },
+      {
+        "label": "MOIC",
+        "value": "1.81x"
+      },
+      {
+        "label": "TVPI",
+        "value": "1.54x"
+      },
+      {
+        "label": "RVPI",
+        "value": "1.53x"
+      },
+      {
+        "label": "DPI",
+        "value": "0.0100x"
+      }
+    ]
+  },
+  "fundISectors": {
+    "heading": "Portfolio Investments by Sector",
+    "slices": [
+      {
+        "label": "Aerospace & Surveillance",
+        "amount": "60.00",
+        "value": 60,
+        "percent": "32.16",
+        "color": "#830d35"
+      },
+      {
+        "label": "Artificial Intelligence",
+        "amount": "42.80",
+        "value": 42.8,
+        "percent": "22.94",
+        "color": "#bb3e68"
+      },
+      {
+        "label": "Life Sciences",
+        "amount": "35.38",
+        "value": 35.38,
+        "percent": "18.97",
+        "color": "#d65d85"
+      },
+      {
+        "label": "Fabless Semiconductor",
+        "amount": "33.57",
+        "value": 33.57,
+        "percent": "18.00",
+        "color": "#db90a9"
+      },
+      {
+        "label": "Robotics",
+        "amount": "11.80",
+        "value": 11.8,
+        "percent": "6.33",
+        "color": "#f4c0d4"
+      },
+      {
+        "label": "Smart Manufacturing",
+        "amount": "3.00",
+        "value": 3,
+        "percent": "1.61",
+        "color": "#fae3ec"
+      }
+    ]
+  },
+  "fundIDealflow": {
+    "title": "Fund I\nDealflow\nSummary",
+    "sub": "From inbound pitch\nto portfolio",
+    "stats": [
+      {
+        "value": "1,000+",
+        "label": "Companies inbound"
+      },
+      {
+        "value": "336",
+        "label": "Evaluated in CRM"
+      },
+      {
+        "value": "7",
+        "label": "Portfolio investments"
+      }
+    ]
+  },
+  "lpLogos": {
+    "heading": "Our limited partners",
+    "groupLabel": "Institutional",
+    "names": [
+      "Infosys",
+      "SRI",
+      "SIDBI",
+      "TATA AIG",
+      "Qualcomm"
+    ],
+    "logos": [
+      {
+        "name": "Infosys"
+      },
+      {
+        "name": "SRI"
+      },
+      {
+        "name": "SIDBI"
+      },
+      {
+        "name": "TATA AIG"
+      },
+      {
+        "name": "Qualcomm"
+      }
+    ],
+    "note": "Our LPs also include India's top family offices."
+  },
+  "fundINearTerm": {
+    "heading": "Fund I · Near-term Deployment",
+    "items": [
+      {
+        "label": "Smart Manufacturing · 2 companies",
+        "amount": 200,
+        "description": "Preparing to invest in 2 smart manufacturing companies in the current deployment cycle.",
+        "accent": "crimson"
+      },
+      {
+        "label": "Perceptyne · Follow-on",
+        "amount": 15,
+        "description": "Follow-on round in Perceptyne (Robotics), reinforcing conviction in our existing portfolio.",
+        "accent": "ink"
+      }
+    ],
+    "totalLabel": "Combined"
+  },
+  "fundIIStructureTitle": {
+    "eyebrow": "Fund II",
+    "title": "Fund\nStructure",
+    "note": "Key terms, deployment strategy and governance."
+  }
 }

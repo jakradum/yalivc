@@ -14,6 +14,13 @@ import { DealflowSlide } from '../slide-types/dealflow/DealflowSlide';
 import { PortfolioSupportSlide } from '../slide-types/portfolio-support/PortfolioSupportSlide';
 import { CXOMapSlide } from '../slide-types/cxo-map/CXOMapSlide';
 import { GovernanceSlide } from '../slide-types/governance/GovernanceSlide';
+import { FundStatsSlide } from '../slide-types/fund-stats/FundStatsSlide';
+import { DealflowSummarySlide } from '../slide-types/dealflow-summary/DealflowSummarySlide';
+import { SectorPieSlide } from '../slide-types/sector-pie/SectorPieSlide';
+import { LpLogosSlide } from '../slide-types/lp-logos/LpLogosSlide';
+import { NearTermSlide } from '../slide-types/near-term/NearTermSlide';
+import { TitleSlide } from '../slide-types/title/TitleSlide';
+import { LogomarkSlide } from '../slide-types/logomark/LogomarkSlide';
 import { fundIIDeck } from '../decks/fund-ii/manifest';
 
 // slideType -> component.
@@ -34,6 +41,13 @@ export const slideComponents = {
   'portfolio-support': PortfolioSupportSlide,
   'cxo-map': CXOMapSlide,
   governance: GovernanceSlide,
+  'fund-stats': FundStatsSlide,
+  'dealflow-summary': DealflowSummarySlide,
+  'sector-pie': SectorPieSlide,
+  'lp-logos': LpLogosSlide,
+  'near-term': NearTermSlide,
+  title: TitleSlide,
+  logomark: LogomarkSlide,
 };
 
 // deckId -> manifest.

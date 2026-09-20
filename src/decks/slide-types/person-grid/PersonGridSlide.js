@@ -12,13 +12,12 @@ export function PersonGridSlide({ people = [], maxWidth }) {
         height: '100%',
         background: 'var(--deck-color-crimson)',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 40,
-        padding: '24px 60px',
+        alignItems: 'flex-start',
+        padding: 28, // legacy .persons-row: top-aligned, 28px padding, 20px gap
+        boxSizing: 'border-box',
       }}
     >
-      <div style={{ display: 'flex', gap: 40, width: '100%', maxWidth: maxWidth || undefined, justifyContent: maxWidth ? 'flex-start' : 'center' }}>
+      <div style={{ display: 'flex', gap: 20, width: '100%', maxWidth: maxWidth || undefined, justifyContent: maxWidth ? 'flex-start' : 'center' }}>
         {people.map((p) => (
           <PersonProfile key={p.name} {...p} />
         ))}

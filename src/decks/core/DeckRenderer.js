@@ -2,7 +2,7 @@
 
 import { SlideCanvas } from '../canvas/SlideCanvas';
 import { slideComponents, decks } from './registry';
-import { slideNumberMode } from './slideNumbers';
+import { slideNumberMode, assignSections } from './slideNumbers';
 
 // Client-boundary render tree — same component tree used for preview
 // (inside PreviewShell) and print (inside PrintShell, still SSR'd first).
@@ -18,7 +18,9 @@ export function DeckRenderer({ deckId, data, slides: resolved }) {
   if (!deck) {
     return <div style={{ padding: 24, fontFamily: 'monospace' }}>Unknown deck: {deckId}</div>;
   }
-  const slides = resolved || deck.slides.map((s) => ({ id: s.id, type: s.type, props: s.build(data) })).filter((s) => s.props !== null);
+  const slides =
+    resolved ||
+    assignSections(deck.slides.map((s) => ({ id: s.id, type: s.type, sectionStart: s.section, props: s.build(data) })).filter((s) => s.props !== null));
 
   return (
     <>
@@ -34,7 +36,7 @@ export function DeckRenderer({ deckId, data, slides: resolved }) {
           );
         }
         return (
-          <SlideCanvas key={slide.id} id={slide.id} index={index} numberMode={slideNumberMode(slide.type)}>
+          <SlideCanvas key={slide.id} id={slide.id} index={index} numberMode={slideNumberMode(slide.type)} section={slide.section}>
             <Component {...slide.props} />
           </SlideCanvas>
         );

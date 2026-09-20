@@ -4,7 +4,7 @@
 // ported as Honeycomb.
 import { Honeycomb } from '@/decks/design-system/blocks/Honeycomb/Honeycomb';
 
-export function Cover({ title, numeral, subtitle, eyebrow, tag }) {
+export function Cover({ title, numeral, subtitle, eyebrow, tag, version, date }) {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', background: 'var(--deck-color-crimson)' }}>
       <div style={{ width: 110, flexShrink: 0, position: 'relative', overflow: 'hidden', background: 'var(--deck-color-crimson)' }}>
@@ -12,7 +12,7 @@ export function Cover({ title, numeral, subtitle, eyebrow, tag }) {
       </div>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/favicon.svg" alt="Yali Capital" style={{ width: 130, filter: 'brightness(0) invert(1)' }} />
+        <img src="/favicon.svg" alt="Yali Capital" style={{ width: 72, height: 72, filter: 'brightness(0) invert(1)' }} />
         {eyebrow ? (
           <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(235,222,132,0.65)' }}>
             {eyebrow}
@@ -40,6 +40,11 @@ export function Cover({ title, numeral, subtitle, eyebrow, tag }) {
             {tag}
           </div>
         ) : null}
+      </div>
+      {/* Legacy footer: deck version left, generated date right. */}
+      <div style={{ position: 'absolute', bottom: 22, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', padding: '0 28px', pointerEvents: 'none', fontFamily: 'var(--deck-font-mono)', fontSize: 7, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>
+        <div>{version}</div>
+        <div>{date}</div>
       </div>
     </div>
   );

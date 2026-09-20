@@ -7,6 +7,27 @@ export const SLIDE_NUMBER_MODE = {
   cover: 'skip',
   'section-divider': 'skip',
   closing: 'dark',
+  logomark: 'dark',
+  'person-grid': 'dark', // crimson ground
+  title: 'skip', // legacy s-fii-blank is in the SKIP list
 };
 
 export const slideNumberMode = (type) => SLIDE_NUMBER_MODE[type] || 'light';
+
+// Slides that never show the section breadcrumb (legacy `skipClasses` + the
+// dividers themselves, which are the section heads).
+const NO_BREADCRUMB = new Set(['cover', 'contents', 'closing', 'section-divider']);
+
+// Sets `.section` on each slide from the most recent slide that opened one
+// (`sectionStart`), skipping types that don't show a breadcrumb and the
+// section-opening slide itself.
+export function assignSections(slides) {
+  let current = null;
+  return slides.map((s) => {
+    if (s.sectionStart) {
+      current = s.sectionStart;
+      return s;
+    }
+    return NO_BREADCRUMB.has(s.type) || !current ? s : { ...s, section: current };
+  });
+}
