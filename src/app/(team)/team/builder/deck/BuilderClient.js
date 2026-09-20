@@ -38,12 +38,12 @@ export function BuilderClient({ deckId }) {
   const frame = useRef(null);
   const threadEnd = useRef(null);
 
-  // Locally the partners routes live under /partners; on the partners
+  // Locally the team routes live under /team; on the team
   // subdomain the proxy serves them at the root.
-  const prefix = typeof window !== 'undefined' && window.location.pathname.startsWith('/partners') ? '/partners' : '';
+  const prefix = typeof window !== 'undefined' && window.location.pathname.startsWith('/team') ? '/team' : '';
 
   useEffect(() => {
-    setPreviewSrc(`${prefix}/decks/${deckId}/?data=sanity&manifest=draft&r=${rev}`);
+    setPreviewSrc(`${prefix}/builder/decks/${deckId}/?data=sanity&manifest=draft&r=${rev}`);
   }, [prefix, deckId, rev]);
 
   const load = useCallback(async () => {
@@ -128,7 +128,7 @@ export function BuilderClient({ deckId }) {
 
   const exportPdf = (manifest) =>
     run('pdf', async () => {
-      const res = await fetch(`/api/decks/${deckId}/pdf/`, {
+      const res = await fetch(`/api/builder/decks/${deckId}/pdf/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ dataSource: 'sanity', manifest }),

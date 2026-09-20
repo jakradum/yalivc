@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getLetterBySlug } from '@/lib/sanity-queries';
 import PrintButton from './PrintButton';
+import { requireTeamUser } from '@/decks/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,8 @@ function renderBody(blocks) {
   });
 }
 
-export default async function LetterPage({ params }) {
+export default async function LetterPage({
+  await requireTeamUser('letters'); // Yali Microsoft sign-in (the proxy checks too) params }) {
   const { slug } = await params;
   const letter = await getLetterBySlug(slug);
   if (!letter) notFound();

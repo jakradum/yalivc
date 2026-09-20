@@ -6,7 +6,7 @@ import '@/decks/design-system/tokens.css';
 export const metadata = { robots: 'noindex, nofollow', title: 'Creative studio' };
 export const dynamic = 'force-dynamic';
 
-// Served at partners.yali.vc/builder/creative/ — linked from the builder home.
+// Served at team.yali.vc/builder/creative/ behind the Yali Microsoft sign-in.
 export default async function CreativePage() {
   await requireDeckUser();
   return <CreativeClient />;

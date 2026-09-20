@@ -12,7 +12,7 @@ export function ExportPdfButton({ deckId }) {
     setState('working');
     setMsg('');
     try {
-      const res = await fetch(`/api/decks/${deckId}/pdf/`, {
+      const res = await fetch(`/api/builder/decks/${deckId}/pdf/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ dataSource: 'sanity', manifest: 'published' }),

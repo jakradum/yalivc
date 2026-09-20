@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { exportDeckPdf, ExportCheckError } from '@/decks/export/pdf';
 import { DECK_IDS } from '@/decks/core/constants';
-import { getDeckUser, isPartnersHost, DECK_SESSION_COOKIE } from '@/decks/auth';
+import { getDeckUser, isBuilderHost, DECK_SESSION_COOKIE } from '@/decks/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -9,14 +9,14 @@ export const maxDuration = 60; // Hobby cap; default is 10s, too short for Chrom
 
 const notFound = () => new NextResponse('Not found', { status: 404 });
 
-// Explicit-request-only, and only ever answers on the partners host for a
+// Explicit-request-only, and only ever answers on the team host for a
 // signed-in INTERNAL user. /api/* bypasses the proxy, so nothing else
 // protects this route — every denial (wrong host, no session, LP session,
 // unknown deck) is the same bare 404, so it doesn't reveal it exists.
 export async function POST(request, { params }) {
   const host = request.headers.get('host') || '';
   const sessionCookie = request.cookies.get(DECK_SESSION_COOKIE)?.value;
-  if (!isPartnersHost(host) || !getDeckUser(sessionCookie)) return notFound();
+  if (!isBuilderHost(host) || !getDeckUser(sessionCookie)) return notFound();
 
   const { deckId } = await params;
   if (!DECK_IDS.includes(deckId)) return notFound();

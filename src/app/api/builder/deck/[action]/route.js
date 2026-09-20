@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { DECK_IDS } from '@/decks/core/constants';
-import { getDeckUser, isPartnersHost, DECK_SESSION_COOKIE } from '@/decks/auth';
+import { getDeckUser, isBuilderHost, DECK_SESSION_COOKIE } from '@/decks/auth';
 import { loadDeckData } from '@/decks/data/loadDeckData';
 import { catalogRefs, getDefinition } from '@/decks/builder/catalog';
 import { runTool } from '@/decks/builder/engine';
@@ -51,7 +51,7 @@ const logEntry = (by, prompt, summary, before) => ({
 export async function POST(request, { params }) {
   const host = request.headers.get('host') || '';
   const email = getDeckUser(request.cookies.get(DECK_SESSION_COOKIE)?.value);
-  if (!isPartnersHost(host) || !email) return notFound();
+  if (!isBuilderHost(host) || !email) return notFound();
 
   const { action } = await params;
   const body = await request.json().catch(() => ({}));

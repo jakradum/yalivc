@@ -28,3 +28,7 @@
 .err { font-size: 11px; color: #a11; }
 
 @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .main { padding: 20px 16px 48px; } }
+
+.signOut { font-family: var(--deck-font-mono); font-size: 11px; background: none; color: rgba(255, 255, 255, 0.75); border: 1px solid rgba(255, 255, 255, 0.35); padding: 4px 10px; cursor: pointer; }
+.signOut:hover { color: #fff; border-color: #fff; }
+.signOut:focus-visible { outline: 2px solid var(--deck-color-gold); outline-offset: 2px; }

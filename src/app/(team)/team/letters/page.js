@@ -1,4 +1,5 @@
 import { getAllLetters } from '@/lib/sanity-queries';
+import { requireTeamUser } from '@/decks/auth';
 
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Letters — Yali Team' };
@@ -13,6 +14,7 @@ function formatDate(dateStr) {
 }
 
 export default async function LettersIndexPage() {
+  await requireTeamUser('letters'); // Yali Microsoft sign-in (the proxy checks too)
   const letters = await getAllLetters();
 
   return (
