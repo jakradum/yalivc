@@ -7,7 +7,7 @@ import '@/decks/design-system/tokens.css';
 export const metadata = { robots: 'noindex, nofollow', title: 'Deck builder' };
 export const dynamic = 'force-dynamic';
 
-// Served at partners.yali.vc/deck-builder/ — linked from nowhere, same
+// Served at partners.yali.vc/builder/deck/ — linked from nowhere, same
 // internal-only guard as the deck itself.
 export default async function DeckBuilderPage() {
   await requireDeckUser();

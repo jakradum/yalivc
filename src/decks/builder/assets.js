@@ -14,7 +14,7 @@ export const TEMPLATES = {
     title: 'Investor deck',
     canvas: { w: 960, h: 540, label: '960 × 540 px slides' },
     exports: ['PDF'],
-    editorPath: '/deck-builder',
+    editorPath: '/builder/deck',
   },
 };
 

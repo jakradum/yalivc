@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import s from './builder.module.css';
 
 async function api(action, body) {
-  const res = await fetch(`/api/deck-builder/${action}/`, {
+  const res = await fetch(`/api/builder/deck/${action}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
