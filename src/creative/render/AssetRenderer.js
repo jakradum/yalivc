@@ -1,6 +1,7 @@
 import { FORMATS, formatScale } from '../formats.js';
 import { getBrand } from '../brands/index.js';
 import { readableOn } from '../contrast.js';
+import { renditionUrl } from '../library.js';
 import { SeparatorPattern } from '@/decks/design-system/blocks/SeparatorPattern/SeparatorPattern';
 
 // Renders a validated asset as React (preview + PNG/PDF export). It only ever
@@ -41,7 +42,8 @@ function makeCtx(doc) {
       textTransform: t.upper ? 'uppercase' : undefined,
     };
   };
-  return { brand, format, scale, mode, px, space, color, role };
+  const assets = doc.assets || {};
+  return { brand, format, scale, mode, px, space, color, role, assets };
 }
 
 function Highlighted({ text, ctx }) {
@@ -137,12 +139,13 @@ function Block({ b, ctx, parentLayer }) {
         </div>
       );
     case 'image': {
-      const src = b.src.kind === 'library' ? brand.images.library[b.src.key] : b.src.url;
+      const up = b.src.kind === 'upload' ? ctx.assets[b.src.id] : null;
+      const src = up ? renditionUrl(up, 2000) : b.src.kind === 'library' ? brand.images.library[b.src.key] : b.src.url;
       return wrap(
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
-          alt={b.decorative ? '' : b.alt}
+          alt={b.decorative ? '' : b.alt || up?.alt || ''}
           style={{ display: 'block', width: '100%', height: layerPos ? '100%' : undefined, aspectRatio: layerPos ? undefined : RATIO[b.ratio || '3:2'], objectFit: b.fit || 'cover', borderRadius: ctx.px(brand.radius[b.radius || 'none']), filter: b.tone === 'grayscale' ? 'grayscale(1) contrast(1.15)' : undefined }}
         />
       );

@@ -1,6 +1,7 @@
 import { FORMATS } from '../formats.js';
 import { getBrand } from '../brands/index.js';
 import { readableOn } from '../contrast.js';
+import { renditionUrl } from '../library.js';
 
 // Compiles an `email` asset to table-based, inline-styled HTML — the only
 // markup that renders consistently across Gmail/Outlook/Apple Mail. Same
@@ -88,9 +89,11 @@ export function compileEmail(doc, { baseUrl = '' } = {}) {
             row(esc(b.label), ` align="${ALIGN[b.align] || 'left'}" style="${roleCss('caption')};color:${col(b.color || 'crimson')};padding-top:4px;"`)
         );
       case 'image': {
-        const src = b.src.kind === 'library' ? baseUrl + brand.images.library[b.src.key] : b.src.url;
+        const up = b.src.kind === 'upload' ? (doc.assets || {})[b.src.id] : null;
+        const src = up ? renditionUrl(up, 1200) : b.src.kind === 'library' ? baseUrl + brand.images.library[b.src.key] : b.src.url;
+        const alt = b.decorative ? '' : b.alt || up?.alt || '';
         const h = Math.round(width * (RATIO[b.ratio || '3:2'] || 2 / 3));
-        return `<img src="${esc(src)}" alt="${b.decorative ? '' : esc(b.alt)}" width="${width}" height="${h}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${b.radius && brand.radius[b.radius] ? `border-radius:${brand.radius[b.radius]}px;` : ''}">`;
+        return `<img src="${esc(src)}" alt="${esc(alt)}" width="${width}" height="${h}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${b.radius && brand.radius[b.radius] ? `border-radius:${brand.radius[b.radius]}px;` : ''}">`;
       }
       case 'logo': {
         const h = { s: 28, m: 40, l: 64 }[b.size || 'm'];
