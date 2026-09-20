@@ -90,6 +90,7 @@ export const BLOCKS = {
       source: { ...str(120), required: true },
       color: { ...color('crimson') },
       align: ALIGN,
+      size: enumOf(['large', 'medium'], 'large'),
     },
   },
   image: {

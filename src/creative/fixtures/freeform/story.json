@@ -1,0 +1,129 @@
+{
+  "prompt": "A two-frame story. Frame 1: the line 'Six sectors. One thesis.' Frame 2: the six sectors (Life Sciences, Smart Manufacturing, Fabless Semiconductor, Artificial Intelligence, Robotics, Aerospace & Surveillance) and a button to yali.vc.",
+  "reply": "Made a two-frame story: frame 1 is a crimson cover with the headline \"Six sectors. One thesis.\" and the brand mark; frame 2 lists the six sectors on a light ground with a \"Visit yali.vc\" button.",
+  "doc": {
+    "schema": "creative/1",
+    "id": "asset-q9yg2",
+    "title": "Six Sectors, One Thesis — Story",
+    "format": "story",
+    "brand": "yali",
+    "assets": {},
+    "pages": [
+      {
+        "id": "page-1",
+        "background": "crimson",
+        "root": {
+          "type": "stack",
+          "direction": "column",
+          "justify": "between",
+          "align": "center",
+          "padding": "xl",
+          "gap": "xl",
+          "children": [
+            {
+              "type": "logo",
+              "variant": "mark",
+              "tone": "dark",
+              "size": "m",
+              "align": "center",
+              "id": "logo-imtv4"
+            },
+            {
+              "type": "stack",
+              "direction": "column",
+              "gap": "m",
+              "align": "center",
+              "children": [
+                {
+                  "type": "shape",
+                  "kind": "bar",
+                  "color": "gold",
+                  "size": "m",
+                  "id": "shape-bv0h6"
+                },
+                {
+                  "type": "text",
+                  "role": "display",
+                  "text": "==Six sectors.== One thesis.",
+                  "color": "white",
+                  "align": "center",
+                  "id": "text-fghp7"
+                }
+              ],
+              "id": "stack-pcur5"
+            },
+            {
+              "type": "spacer",
+              "size": "xl",
+              "id": "spacer-f6jm8"
+            }
+          ],
+          "id": "stack-wh863"
+        }
+      },
+      {
+        "id": "page-2",
+        "background": "light",
+        "root": {
+          "type": "stack",
+          "direction": "column",
+          "padding": "xl",
+          "gap": "l",
+          "align": "stretch",
+          "children": [
+            {
+              "type": "text",
+              "role": "eyebrow",
+              "text": "OUR FOCUS",
+              "color": "crimson",
+              "id": "text-hhtp7"
+            },
+            {
+              "type": "text",
+              "role": "title",
+              "text": "The six sectors",
+              "color": "ink",
+              "id": "text-gz548"
+            },
+            {
+              "type": "divider",
+              "color": "gold",
+              "weight": "medium",
+              "id": "divider-am2n9"
+            },
+            {
+              "type": "list",
+              "marker": "dash",
+              "role": "body",
+              "color": "ink",
+              "items": [
+                "Life Sciences",
+                "Smart Manufacturing",
+                "Fabless Semiconductor",
+                "Artificial Intelligence",
+                "Robotics",
+                "Aerospace & Surveillance"
+              ],
+              "id": "list-nlu50"
+            },
+            {
+              "type": "spacer",
+              "size": "l",
+              "id": "spacer-sfzu1"
+            },
+            {
+              "type": "button",
+              "label": "Visit yali.vc",
+              "href": "https://yali.vc",
+              "style": "solid",
+              "color": "crimson",
+              "align": "center",
+              "id": "button-e6rz2"
+            }
+          ],
+          "id": "stack-1rw76"
+        }
+      }
+    ]
+  }
+}

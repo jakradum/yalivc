@@ -31,6 +31,7 @@ export const yali = {
     caption: { font: 'body', size: 22, weight: 400, lh: 1.45, ls: 0, large: false, email: 13 },
     eyebrow: { font: 'mono', size: 20, weight: 700, lh: 1.2, ls: 0.18, upper: true, large: false, email: 11 },
     stat: { font: 'mono', size: 132, weight: 700, lh: 1, ls: 0, large: true, email: 44 },
+    figure: { font: 'mono', size: 72, weight: 700, lh: 1, ls: 0, large: true, email: 30 }, // the `medium` stat size
     quote: { font: 'mono', size: 48, weight: 400, lh: 1.3, ls: 0, large: true, email: 20 },
   },
 

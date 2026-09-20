@@ -3,6 +3,7 @@ import { getBrand } from './brands/index.js';
 import { BLOCKS, LAYER_CHILD_PROPS, TEXT_ROLES } from './blocks.js';
 import { contrast, luminance } from './contrast.js';
 import { libraryProblems, cropFraction } from './library.js';
+import { estimateHeight, makeEnv } from './measure.js';
 
 // validateAsset(doc) → { ok, errors: [{ path, msg }], warnings: [...] }
 //
@@ -201,7 +202,7 @@ export function validateAsset(doc) {
       contrastCheck(path, block.color, bg, brand.type[block.role]?.large, ctx.overImage);
       fit(`${path}.text`, longest(block.text || ''), block.role, ctx, 'the word');
     }
-    if (block.type === 'stat' && typeof block.value === 'string') fit(`${path}.value`, block.value, 'stat', ctx, 'the figure');
+    if (block.type === 'stat' && typeof block.value === 'string') fit(`${path}.value`, block.value, block.size === 'medium' ? 'figure' : 'stat', ctx, 'the figure');
     if (block.type === 'list' && Array.isArray(block.items)) block.items.forEach((it, i) => fit(`${path}.items[${i}]`, longest(it), block.role || 'body', ctx, 'the word'));
     if (block.type === 'stat') contrastCheck(path, block.color || 'crimson', bg, true, ctx.overImage);
     if (block.type === 'list') contrastCheck(path, block.color, bg, false, ctx.overImage);
@@ -263,6 +264,17 @@ export function validateAsset(doc) {
     const count = { n: 0 };
     const safeX = (format.safe || 0) * scale * 2;
     walk(root, `${path}.root`, { bg: page.background, depth: 1, count, inLayer: false, width: format.w - safeX, exact: true });
+    // Fixed canvas: the content must fit the page. (Email grows with content.)
+    if (format.h) {
+      const env = makeEnv(brand, format);
+      const avail = format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * scale;
+      const est = estimateHeight(root, format.w - safeX, env);
+      if (est > avail * 1.02) {
+        err(path, `content is about ${Math.round(est)}px tall but only ${Math.round(avail)}px fits on the page — shorten the text, remove a block, use smaller type roles or spacing, or spread it over more pages`);
+      } else if (est > avail * 0.96) {
+        warn(path, `content nearly fills the page (~${Math.round(est)} of ${Math.round(avail)}px)`);
+      }
+    }
     // an image + text in the same layer without a scrim → legibility warning
     const scan = (b, p) => {
       if (b.type === 'layer' && Array.isArray(b.children)) {
