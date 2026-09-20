@@ -40,3 +40,18 @@
 .issues { list-style: none; margin: 0; padding: 10px 12px; background: #fff; border: 1px solid #ccc; font-size: 12px; display: flex; flex-direction: column; gap: 4px; color: #555; }
 .issues code { font-family: var(--deck-font-mono); font-size: 11px; color: var(--deck-color-crimson); }
 .bad { color: #a11; }
+
+.asset { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.thumb { object-fit: cover; border: 1px solid #ccc; flex-shrink: 0; }
+.assetText { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.assetText b { font-family: var(--deck-font-mono); font-size: 9px; text-transform: uppercase; color: var(--deck-color-crimson); margin-right: 4px; }
+.x { background: none; border: 0; color: #999; cursor: pointer; font-size: 16px; }
+.x:hover { color: #a11; }
+.form { display: flex; flex-direction: column; gap: 8px; border: 1px solid #ddd; padding: 10px; background: #fbfaf7; }
+.fname { font-family: var(--deck-font-mono); font-size: 10px; color: #888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lab { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #666; }
+.input { font: inherit; font-size: 12px; padding: 6px 7px; border: 1px solid #bbb; background: #fff; }
+.check { font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.formActions { display: flex; gap: 12px; align-items: center; }
+.upErr { font-size: 12px; color: #a11; }
+.small { font-size: 11px; color: #999; line-height: 1.45; }

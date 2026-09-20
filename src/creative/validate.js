@@ -1,7 +1,8 @@
 import { FORMATS, formatScale } from './formats.js';
 import { getBrand } from './brands/index.js';
 import { BLOCKS, LAYER_CHILD_PROPS, TEXT_ROLES } from './blocks.js';
-import { contrast } from './contrast.js';
+import { contrast, luminance } from './contrast.js';
+import { libraryProblems, cropFraction } from './library.js';
 
 // validateAsset(doc) → { ok, errors: [{ path, msg }], warnings: [...] }
 //
@@ -42,6 +43,11 @@ export function validateAsset(doc) {
   if (doc.pages.length < format.minPages || doc.pages.length > format.maxPages) {
     err('pages', `${format.label} needs ${format.minPages}–${format.maxPages} page(s); has ${doc.pages.length}`);
   }
+
+  for (const msg of libraryProblems(doc.assets, brand.images.sanityPrefix)) err('assets', msg);
+  const library = doc.assets && typeof doc.assets === 'object' ? doc.assets : {};
+  const RATIO_VALUE = { '1:1': 1, '4:5': 0.8, '16:9': 16 / 9, '3:2': 1.5, '3:4': 0.75 };
+  const isDark = (colorName) => brand.colors[colorName] && luminance(brand.colors[colorName]) < 0.2;
 
   const colorNames = Object.keys(brand.colors);
   const spaceNames = Object.keys(brand.space);
@@ -97,9 +103,11 @@ export function validateAsset(doc) {
       case 'ref': {
         const ok =
           val &&
-          ((val.kind === 'sanity' && typeof val.url === 'string' && val.url.startsWith(brand.images.sanityPrefix)) ||
+          ((val.kind === 'upload' && typeof val.id === 'string' && library[val.id]) ||
+            (val.kind === 'sanity' && typeof val.url === 'string' && val.url.startsWith(brand.images.sanityPrefix)) ||
             (val.kind === 'library' && brand.images.library[val.key]));
-        if (!ok) err(at, `image must be {kind:"sanity", url starting ${brand.images.sanityPrefix}} or {kind:"library", key: ${Object.keys(brand.images.library).join('|')}}`);
+        if (!ok && val?.kind === 'upload') err(at, `no uploaded asset "${val.id}". Uploaded assets: ${Object.keys(library).join(', ') || '(none)'}`);
+        else if (!ok) err(at, `image must be {kind:"upload", id: <uploaded asset id>}, {kind:"library", key: ${Object.keys(brand.images.library).join('|')}}, or a Sanity asset URL under ${brand.images.sanityPrefix}`);
         break;
       }
       case 'url': {
@@ -173,7 +181,16 @@ export function validateAsset(doc) {
           cw = (cw - gap * (n - 1)) / n;
           exact = false; // unequal children are normal in a row; only warn
         }
-        block.children.forEach((c, i) => walk(c, `${path}.children[${i}]`, { ...ctx, bg, width: cw, exact, depth: ctx.depth + 1, inLayer: block.type === 'layer' }));
+        // Inside a layer the real background is whatever sits behind the text:
+        // a scrim of at least half opacity (its colour), a picture (unknown —
+        // legibility is then the scrim rule's job), else the layer/page colour.
+        let childBg = bg;
+        if (block.type === 'layer') {
+          const scrim = block.children.find((c) => c.type === 'shape' && c.kind === 'scrim' && brand.colors[c.color]);
+          if (scrim && (scrim.opacity ?? 0.5) >= 0.5) childBg = scrim.color;
+          else if (block.children.some((c) => c.type === 'image')) childBg = null;
+        }
+        block.children.forEach((c, i) => walk(c, `${path}.children[${i}]`, { ...ctx, bg: childBg, width: cw, exact, depth: ctx.depth + 1, inLayer: block.type === 'layer' }));
       }
     } else if (block.children !== undefined) {
       err(`${path}.children`, `${block.type} cannot have children`);
@@ -197,7 +214,25 @@ export function validateAsset(doc) {
     if (block.type === 'text' && /\d/.test(block.text || '') && PERFORMANCE.test(block.text || '')) {
       warn(path, 'text states a figure about returns or performance — confirm it is sourced before publishing');
     }
-    if (block.type === 'image' && !block.decorative && !(typeof block.alt === 'string' && block.alt.trim())) err(`${path}.alt`, 'alt text is required (or set decorative: true)');
+    if (block.type === 'image' && !block.decorative && block.src?.kind !== 'upload' && !(typeof block.alt === 'string' && block.alt.trim())) err(`${path}.alt`, 'alt text is required (or set decorative: true)');
+    if (block.type === 'image' && block.src?.kind === 'upload' && library[block.src.id]) {
+      const a = library[block.src.id];
+      const fitUsed = block.fit || 'cover';
+      // How an uploaded picture may be used — enforced, not just advised.
+      if (a.kind === 'logo') {
+        if (fitUsed !== 'contain') err(`${path}.fit`, `"${block.src.id}" is a logo: use fit "contain" (a logo is never cropped)`);
+        if (block.tone === 'grayscale') err(`${path}.tone`, 'a logo must not be recoloured (no grayscale)');
+        if (a.ground === 'light' && isDark(ctx.bg)) err(`${path}`, `this logo is marked for light grounds but sits on "${ctx.bg}"`);
+        if (a.ground === 'dark' && ctx.bg && !isDark(ctx.bg)) err(`${path}`, `this logo is marked for dark grounds but sits on "${ctx.bg}"`);
+      }
+      if (a.noCrop && fitUsed !== 'contain') err(`${path}.fit`, `"${block.src.id}" is marked do-not-crop: use fit "contain"`);
+      if (fitUsed === 'cover' && !ctx.inLayer) {
+        const crop = cropFraction(a.width, a.height, RATIO_VALUE[block.ratio || '3:2']);
+        if (crop > 0.6) err(`${path}.ratio`, `ratio ${block.ratio || '3:2'} would cut away ${Math.round(crop * 100)}% of this ${a.width}×${a.height} picture — choose a ratio close to ${(a.width / a.height).toFixed(2)}:1 or use fit "contain"`);
+        else if (crop > 0.35) warn(`${path}.ratio`, `ratio ${block.ratio || '3:2'} crops ${Math.round(crop * 100)}% of the picture`);
+      }
+      if (ctx.width && a.width < ctx.width * 0.75 && a.kind !== 'logo') warn(`${path}`, `low resolution: ${a.width}px wide, shown ~${Math.round(ctx.width)}px wide`);
+    }
     if (block.type === 'image' && isEmail && block.ratio === undefined) warn(path, 'email images should set a ratio');
     if (block.type === 'logo' && isEmail && (block.variant !== 'lockup' || block.tone === 'dark')) {
       err(path, 'email logos must be variant "lockup" on a light ground (SVG marks and white logos have no hosted PNG yet)');
@@ -234,7 +269,11 @@ export function validateAsset(doc) {
         const hasImg = b.children.some((c) => c.type === 'image');
         const hasScrim = b.children.some((c) => c.type === 'shape' && c.kind === 'scrim');
         const hasText = b.children.some((c) => c.type === 'text' || c.type === 'stat');
-        if (hasImg && hasText && !hasScrim) warn(p, 'text over an image without a scrim');
+        if (hasImg && hasText && !hasScrim) {
+          const uploadedPhoto = b.children.some((c) => c.type === 'image' && c.src?.kind === 'upload' && library[c.src.id]?.kind !== 'logo');
+          if (uploadedPhoto) err(p, 'text over an uploaded photo needs a scrim (a "shape" of kind scrim) so it stays legible');
+          else warn(p, 'text over an image without a scrim');
+        }
       }
       (b.children || []).forEach((c, j) => scan(c, `${p}.children[${j}]`));
     };

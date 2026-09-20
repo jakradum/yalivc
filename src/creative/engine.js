@@ -2,6 +2,7 @@ import { FORMATS } from './formats.js';
 import { getBrand } from './brands/index.js';
 import { BLOCKS, TEXT_ROLES, describeBlocks } from './blocks.js';
 import { validateAsset, formatErrors } from './validate.js';
+import { cropFraction } from './library.js';
 
 // The single place an asset is mutated. Every change (from the AI's tools or
 // a UI) is applied to a COPY, validated, and only kept if it doesn't
@@ -21,6 +22,7 @@ export function newAsset({ format, brand = 'yali', title = 'Untitled asset' }) {
     title,
     format,
     brand,
+    assets: {},
     pages: [blankPage('page-1', b?.colors ? 'white' : 'white')],
   };
 }
@@ -231,6 +233,30 @@ export function runTool(holder, name, input) {
   return `OK — ${message}${w}`;
 }
 
+// ── uploaded assets, as the AI sees them ───────────────────────────────────
+function assetSection(doc) {
+  const ids = Object.keys(doc.assets || {});
+  if (!ids.length) return 'UPLOADED ASSETS: none. Do not use photographs; you may use the brand logo and patterns.';
+  const rows = ids.map((id) => {
+    const a = doc.assets[id];
+    const rules = [
+      a.kind === 'logo' ? 'logo: fit "contain" only, never cropped or recoloured' : null,
+      a.noCrop ? 'do not crop (fit "contain")' : null,
+      a.kind === 'logo' && a.ground && a.ground !== 'any' ? `only on ${a.ground} grounds` : null,
+      a.people ? 'shows people: no claims about them beyond the alt text' : null,
+    ].filter(Boolean);
+    return `- id "${id}" — ${a.kind}, ${a.width}×${a.height} (natural ratio ${(a.width / a.height).toFixed(2)}:1)\n    alt: "${a.alt}"${a.description ? `\n    note: ${a.description}` : ''}${rules.length ? `\n    rules: ${rules.join('; ')}` : ''}`;
+  });
+  return `UPLOADED ASSETS — the only pictures you may use. Reference as { "type":"image", "src": { "kind":"upload", "id":"<id>" } }; its alt text is applied for you.
+${rows.join('\n')}
+HOW TO USE THEM
+- Use only what the request calls for; do not add a picture just to fill space, and never invent or alter one.
+- Photos: fit "cover", with a ratio close to the picture's natural ratio (a big mismatch crops away the subject and is rejected). Never place text directly on a photo without a scrim shape between them.
+- Logos: fit "contain", never grayscale, only on a ground the logo is marked for.
+- Respect each asset's rules and note. If none of the assets suits what was asked, say so instead of stretching one.
+- Say nothing about what a picture shows beyond its alt text and note — you cannot be sure what is in it.`;
+}
+
 // ── system prompt ──────────────────────────────────────────────────────────
 export function systemPrompt(doc) {
   const format = FORMATS[doc.format];
@@ -244,8 +270,10 @@ BRAND TOKENS (the only ones that exist)
 - colours: ${Object.entries(brand.colors).map(([k, v]) => `${k} ${v}`).join(', ')}
 - type roles: ${roles} — you choose a role, never a size or font.
 - spacing steps: ${Object.keys(brand.space).join(', ')}; radius: ${Object.keys(brand.radius).join(', ')}.
-- images: only Sanity asset URLs or library keys (${Object.keys(brand.images.library).join(', ')}); links: https to ${brand.linkHosts.join(', ')} only.
+- images: only the uploaded assets listed below, or the brand library (${Object.keys(brand.images.library).join(', ')}) — never a URL; links: https to ${brand.linkHosts.join(', ')} only.
 - brand voice: ${brand.voice.join(' ')}
+
+${assetSection(doc)}
 
 BLOCKS
 ${describeBlocks()}

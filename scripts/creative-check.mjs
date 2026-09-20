@@ -4,6 +4,7 @@ import { FIXTURES } from '../src/creative/fixtures/index.js';
 import { validateAsset } from '../src/creative/validate.js';
 import { applyOp, newAsset, systemPrompt } from '../src/creative/engine.js';
 import { compileEmail } from '../src/creative/email/compile.js';
+import { cleanLibrary } from '../src/creative/library.js';
 
 let pass = 0;
 let fail = 0;
@@ -84,6 +85,62 @@ console.log('Guardrails reject…');
   const ok2 = clone(FIXTURES.carousel);
   ok2.pages[2].root.children.push({ type: 'grid', id: 'gg', columns: 3, gap: 'm', children: [{ type: 'text', id: 't1', role: 'body', text: 'Smart Manufacturing', color: 'ink' }, { type: 'text', id: 't2', role: 'body', text: 'Fabless Semiconductor', color: 'ink' }] });
   ok('same words at body size fit', validateAsset(ok2).ok);
+}
+
+
+console.log('Uploaded assets…');
+{
+  const P = 'https://cdn.sanity.io/images/nt0wmty3/production/';
+  const lib = () => ({
+    'image-photo-1600x1067-jpg': { url: `${P}photo-1600x1067.jpg`, width: 1600, height: 1067, kind: 'photo', alt: 'The team at the tape-out' },
+    'image-tall-600x1800-jpg': { url: `${P}tall-600x1800.jpg`, width: 600, height: 1800, kind: 'photo', alt: 'A tall photo' },
+    'image-nocrop-1200x800-png': { url: `${P}nocrop-1200x800.png`, width: 1200, height: 800, kind: 'graphic', alt: 'A diagram', noCrop: true },
+    'image-logo-800x300-png': { url: `${P}logo-800x300.png`, width: 800, height: 300, kind: 'logo', alt: 'Partner logo', ground: 'light' },
+  });
+  const img = (id, extra = {}) => ({ type: 'image', id: `im-${Math.random().toString(36).slice(2, 6)}`, src: { kind: 'upload', id }, ...extra });
+  const withImg = (block, bg) => {
+    const d = clone(FIXTURES.carousel);
+    d.assets = lib();
+    if (bg) d.pages[2].background = bg;
+    d.pages[2].root.children.push(block);
+    return d;
+  };
+  ok('uploaded photo at a near-natural ratio is valid', validateAsset(withImg(img('image-photo-1600x1067-jpg', { ratio: '3:2' }))).ok);
+  ok('alt text comes from the asset (no alt needed)', validateAsset(withImg(img('image-photo-1600x1067-jpg'))).ok);
+  rejects('unknown uploaded asset id', withImg(img('image-nope')), 'no uploaded asset');
+  rejects('logo with fit cover', withImg(img('image-logo-800x300-png', { fit: 'cover' })), 'never cropped');
+  rejects('logo recoloured to grayscale', withImg(img('image-logo-800x300-png', { fit: 'contain', tone: 'grayscale' })), 'recoloured');
+  rejects('light-ground logo on crimson', withImg(img('image-logo-800x300-png', { fit: 'contain' }), 'crimson'), 'light grounds');
+  ok('light-ground logo on white is valid', validateAsset(withImg(img('image-logo-800x300-png', { fit: 'contain' }))).ok);
+  rejects('do-not-crop asset with cover', withImg(img('image-nocrop-1200x800-png', { fit: 'cover' })), 'do-not-crop');
+  rejects('ratio that cuts away most of the picture', withImg(img('image-tall-600x1800-jpg', { ratio: '16:9' })), 'cut away');
+  {
+    const d = withImg({ type: 'layer', id: 'lay', ratio: '1:1', children: [img('image-photo-1600x1067-jpg', { anchor: 'fill' }), { type: 'text', id: 'lt', anchor: 'bottom', role: 'heading', text: 'Hello', color: 'white' }] });
+    rejects('text over an uploaded photo without a scrim', d, 'scrim');
+    const d2 = withImg({ type: 'layer', id: 'lay', ratio: '1:1', children: [img('image-photo-1600x1067-jpg', { anchor: 'fill' }), { type: 'shape', id: 'sc', kind: 'scrim', color: 'ink', opacity: 0.7, anchor: 'fill' }, { type: 'text', id: 'lt', anchor: 'bottom', role: 'heading', text: 'Hello', color: 'white' }] });
+    const r = validateAsset(d2);
+    ok('…with a scrim it is valid', r.ok, r.errors.map((e) => e.msg).join('|'));
+  }
+  {
+    const d = withImg(img('image-photo-1600x1067-jpg'));
+    d.assets['image-photo-1600x1067-jpg'].url = 'https://evil.example/a.jpg';
+    rejects('asset URL outside Sanity', d, 'Sanity asset URL');
+    const d2 = withImg(img('image-photo-1600x1067-jpg'));
+    d2.assets['image-photo-1600x1067-jpg'].alt = '';
+    rejects('asset without alt text', d2, 'alt');
+  }
+  const cleaned = cleanLibrary({ ...lib(), bad: { url: 'https://evil.example/x.png', width: 1, height: 1, kind: 'photo', alt: 'x' }, 'image-extra-100x100-png': { ...lib()['image-photo-1600x1067-jpg'], onclick: 'x' } }, P);
+  ok('cleanLibrary keeps good entries, drops bad URLs', Object.keys(cleaned).length === 5 && !cleaned.bad);
+  ok('cleanLibrary strips unknown fields', !('onclick' in (cleaned['image-photo-1600x1067-jpg'] || {})));
+  const doc = newAsset({ format: 'linkedin-square' });
+  doc.assets = lib();
+  const prompt = systemPrompt(doc);
+  ok('prompt lists uploaded assets and how to use them', prompt.includes('UPLOADED ASSETS') && prompt.includes('HOW TO USE THEM') && prompt.includes('natural ratio'));
+  ok('prompt says none when empty', systemPrompt(newAsset({ format: 'email' })).includes('UPLOADED ASSETS: none'));
+  const emailDoc = clone(FIXTURES.emailer);
+  emailDoc.assets = lib();
+  emailDoc.pages[0].root.children.splice(2, 0, img('image-photo-1600x1067-jpg', { ratio: '3:2' }));
+  ok('email with an uploaded photo compiles with its alt', compileEmail(emailDoc).includes('alt="The team at the tape-out"'));
 }
 
 console.log('Engine…');

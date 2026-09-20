@@ -93,7 +93,7 @@ export const BLOCKS = {
     },
   },
   image: {
-    doc: 'A picture from an allowed source only (Sanity asset URL or a brand library key). Alt text is required unless decorative.',
+    doc: 'A picture from an allowed source only: an UPLOADED asset ({kind:"upload",id}, alt text comes with it) or a brand library key. Never a URL.',
     props: {
       src: { t: 'ref', required: true },
       alt: str(160),
@@ -149,7 +149,7 @@ export function describeBlocks() {
     if (p.t === 'str') return `${name}: text ≤${p.max}${p.required ? ' *' : ''}`;
     if (p.t === 'int') return `${name}: ${p.min}–${p.max}${p.required ? ' *' : ''}`;
     if (p.t === 'bool') return `${name}: true|false`;
-    if (p.t === 'ref') return `${name}: {kind:"sanity",url}|{kind:"library",key} *`;
+    if (p.t === 'ref') return `${name}: {kind:"upload",id}|{kind:"library",key} *`;
     if (p.t === 'url') return `${name}: https URL *`;
     if (p.t === 'strs') return `${name}: [text ≤${p.maxLen}] max ${p.maxItems} *`;
     return name;
