@@ -11,6 +11,11 @@ import { SeparatorPattern } from '@/decks/design-system/blocks/SeparatorPattern/
 
 const ALIGN_ITEMS = { start: 'flex-start', center: 'center', end: 'flex-end', stretch: 'stretch' };
 const JUSTIFY = { start: 'flex-start', center: 'center', end: 'flex-end', between: 'space-between' };
+const TONE = {
+  grayscale: 'grayscale(1) contrast(1.15)',
+  house: 'brightness(1.08) contrast(1.12) saturate(0.55)', // docs/CLAUDE.md photo correction
+  dim: 'blur(6px) brightness(0.35)', // cover backdrop
+};
 const RATIO = { '1:1': '1 / 1', '4:5': '4 / 5', '16:9': '16 / 9', '3:2': '3 / 2', '3:4': '3 / 4' };
 const ANCHOR = {
   fill: { inset: 0 },
@@ -145,12 +150,12 @@ function Block({ b, ctx, parentLayer }) {
         <img
           src={src}
           alt={b.decorative ? '' : b.alt || up?.alt || ''}
-          style={{ display: 'block', width: '100%', height: layerPos ? '100%' : undefined, aspectRatio: layerPos ? undefined : RATIO[b.ratio || '3:2'], objectFit: b.fit || 'cover', borderRadius: ctx.px(brand.radius[b.radius || 'none']), filter: b.tone === 'grayscale' ? 'grayscale(1) contrast(1.15)' : undefined }}
+          style={{ display: 'block', width: '100%', height: layerPos ? '100%' : undefined, aspectRatio: layerPos ? undefined : RATIO[b.ratio || '3:2'], objectFit: b.fit || 'cover', borderRadius: ctx.px(brand.radius[b.radius || 'none']), filter: TONE[b.tone], transform: b.tone === 'dim' ? 'scale(1.06)' : undefined }}
         />
       );
     }
     case 'logo': {
-      const h = { s: 48, m: 72, l: 112 }[b.size || 'm'];
+      const h = { s: 48, m: 72, l: 112, xl: 260 }[b.size || 'm'];
       const src = brand.images.library[b.variant === 'lockup' ? 'lockup' : 'mark'];
       return wrap(
         <div style={{ display: 'flex', justifyContent: ALIGN_ITEMS[b.align || 'start'] }}>
@@ -161,12 +166,23 @@ function Block({ b, ctx, parentLayer }) {
     }
     case 'shape': {
       if (b.kind === 'scrim') return <div style={{ position: 'absolute', inset: 0, background: ctx.color(b.color), opacity: b.opacity ?? 0.5 }} />;
+      if (b.kind === 'fade') return <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${ctx.color(b.color)} 0%, ${ctx.color(b.color)}cc 30%, transparent 75%)`, opacity: b.opacity ?? 1 }} />;
+      if (b.kind === 'band') return wrap(<div style={{ height: ctx.px(8), width: '100%', background: ctx.color(b.color), opacity: b.opacity ?? 1, flexShrink: 0 }} />);
       const len = { s: 60, m: 100, l: 160 }[b.size || 'm'];
       const style = b.kind === 'bar' ? { width: ctx.px(len), height: ctx.px(8) } : { width: ctx.px(len / 3), height: ctx.px(len / 3), borderRadius: '50%' };
       return wrap(<div style={{ ...style, background: ctx.color(b.color), opacity: b.opacity ?? 1 }} />);
     }
     case 'pattern':
       return <div style={{ position: 'absolute', inset: 0, opacity: b.opacity ?? 0.5, pointerEvents: 'none' }}><SeparatorPattern pattern={b.name} color={ctx.color(b.color || 'gold')} fill /></div>;
+    case 'tag': {
+      const filled = (b.style || 'filled') === 'filled';
+      const bg = ctx.color(b.color || 'crimson');
+      return wrap(
+        <div style={{ display: 'flex' }}>
+          <span style={{ ...ctx.role('micro'), display: 'inline-block', fontWeight: 700, padding: `${ctx.px(8)}px ${ctx.px(18)}px`, background: filled ? bg : 'transparent', color: filled ? readableOn(bg, '#ffffff', ctx.color('ink')) : bg, border: `${ctx.px(2)}px solid ${bg}` }}>{b.label}</span>
+        </div>
+      );
+    }
     case 'spacer':
       return wrap(<div style={{ height: ctx.space(b.size), flexShrink: 0 }} />);
     case 'divider':
@@ -206,7 +222,7 @@ function Block({ b, ctx, parentLayer }) {
 export function AssetPage({ doc, page, ctx = makeCtx(doc) }) {
   const { format } = ctx;
   const isEmail = format.kind === 'email';
-  const pad = {
+  const pad = page.bleed && !isEmail ? { padding: 0 } : {
     paddingTop: ctx.px(format.safeTop || format.safe),
     paddingBottom: ctx.px(format.safeBottom || format.safe),
     paddingLeft: ctx.px(format.safe),

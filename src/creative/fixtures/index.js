@@ -63,8 +63,8 @@ export const carousel = {
           t('stages-eyebrow', 'eyebrow', 'How Fund II deploys', 'crimson'),
           t('stages-title', 'heading', 'Stage agnostic, with a seed core', 'ink'),
           { type: 'grid', id: 'stages-grid', columns: 2, gap: 'l', children: [
-            { type: 'stat', id: 'stage-seed', value: '10%', label: 'Seed — initial stage', source: 'sanity:fund2Settings.deploymentStageAllocation', color: 'crimson' },
-            { type: 'stat', id: 'stage-agn', value: '90%', label: 'Stage agnostic — all stages', source: 'sanity:fund2Settings.deploymentStageAllocation', color: 'crimson' },
+            { type: 'stat', id: 'stage-seed', value: '10%', label: 'Seed: initial stage', source: 'sanity:fund2Settings.deploymentStageAllocation', color: 'crimson' },
+            { type: 'stat', id: 'stage-agn', value: '90%', label: 'Stage agnostic: all stages', source: 'sanity:fund2Settings.deploymentStageAllocation', color: 'crimson' },
           ] },
         ],
       },
@@ -118,9 +118,12 @@ export const emailer = {
 
 export const FIXTURES = { carousel, emailer };
 
-import { portrait, story, ogImage, slide, a4 } from './samples.js';
+import { portrait, story, ogImage, slide, a4, roundup, news, spotlight } from './samples.js';
 FIXTURES.portrait = portrait;
 FIXTURES.story = story;
 FIXTURES.ogImage = ogImage;
 FIXTURES.slide = slide;
 FIXTURES.a4 = a4;
+FIXTURES.roundup = roundup;
+FIXTURES.news = news;
+FIXTURES.spotlight = spotlight;

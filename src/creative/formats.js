@@ -4,8 +4,8 @@
 // (email). Type sizes in a brand are defined at a 1080px reference width and
 // scaled by `w / 1080`, so the same roles work on every canvas. `safe` (and
 // safeTop/safeBottom) are in the same reference px, scaled the same way.
-const ALL_BLOCKS = ['stack', 'grid', 'layer', 'text', 'image', 'shape', 'logo', 'spacer', 'divider', 'button', 'list', 'stat', 'pattern'];
-const EMAIL_BLOCKS = ['stack', 'grid', 'text', 'image', 'logo', 'spacer', 'divider', 'button', 'list', 'stat'];
+const ALL_BLOCKS = ['stack', 'grid', 'layer', 'text', 'image', 'shape', 'logo', 'spacer', 'divider', 'button', 'list', 'stat', 'pattern', 'tag'];
+const EMAIL_BLOCKS = ['stack', 'grid', 'text', 'image', 'logo', 'spacer', 'divider', 'button', 'list', 'stat', 'tag'];
 
 export const FORMATS = {
   'linkedin-square': { label: 'LinkedIn carousel · 1:1', kind: 'pages', w: 1080, h: 1080, safe: 72, minPages: 1, maxPages: 20, blocks: ALL_BLOCKS, outputs: ['png', 'pdf'] },

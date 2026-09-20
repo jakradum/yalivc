@@ -160,7 +160,7 @@
                     {
                       "type": "stat",
                       "value": "10%",
-                      "label": "Seed — Initial Stage",
+                      "label": "Seed: Initial Stage",
                       "source": "user",
                       "color": "crimson",
                       "size": "medium",
@@ -180,7 +180,7 @@
                     {
                       "type": "stat",
                       "value": "90%",
-                      "label": "Stage Agnostic — All Stages",
+                      "label": "Stage Agnostic: All Stages",
                       "source": "user",
                       "color": "crimson",
                       "size": "medium",

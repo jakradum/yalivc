@@ -87,7 +87,7 @@
               "role": "body",
               "color": "ink",
               "items": [
-                "AI inbox receives the pitch — pitch@yali.vc",
+                "AI inbox receives the pitch: pitch@yali.vc",
                 "Team vet",
                 "Initial meeting",
                 "Internal review",
@@ -136,7 +136,7 @@
                 {
                   "type": "text",
                   "role": "subhead",
-                  "text": "Every submission starts the same way — an AI-read inbox and a team that follows through.",
+                  "text": "Every submission starts the same way: an AI-read inbox and a team that follows through.",
                   "color": "white",
                   "align": "center",
                   "id": "text-8wq13"

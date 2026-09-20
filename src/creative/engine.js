@@ -4,6 +4,7 @@ import { BLOCKS, TEXT_ROLES, describeBlocks } from './blocks.js';
 import { validateAsset, formatErrors } from './validate.js';
 import { cropFraction } from './library.js';
 import { makeEnv } from './measure.js';
+import { HOUSE_STYLE } from './recipes.js';
 
 // The single place an asset is mutated. Every change (from the AI's tools or
 // a UI) is applied to a COPY, validated, and only kept if it doesn't
@@ -89,16 +90,18 @@ const OPS = {
     return `Title set to "${doc.title}".`;
   },
 
-  add_page(doc, { id, after, background = 'white' }) {
+  add_page(doc, { id, after, background = 'white', bleed }) {
     const pid = id || uid('page');
     const pos = after ? findPage(doc, after) + 1 : doc.pages.length;
     doc.pages.splice(pos, 0, blankPage(pid, background));
+    if (bleed) doc.pages[pos].bleed = true;
     return `Added page "${pid}" at position ${pos + 1}.`;
   },
 
-  update_page(doc, { id, background }) {
+  update_page(doc, { id, background, bleed }) {
     const p = doc.pages[findPage(doc, id)];
     if (background) p.background = background;
+    if (bleed !== undefined) p.bleed = bleed;
     return `Updated page "${id}".`;
   },
 
@@ -115,11 +118,12 @@ const OPS = {
   },
 
   // Replace a page's whole layout in one call — the efficient way to compose.
-  set_page(doc, { id, background, root }) {
+  set_page(doc, { id, background, bleed, root }) {
     const i = findPage(doc, id);
     const taken = allIds({ pages: doc.pages.filter((_, j) => j !== i) });
     const p = doc.pages[i];
     if (background) p.background = background;
+    if (bleed !== undefined) p.bleed = bleed;
     if (root) {
       const r = ensureIds(root, taken);
       if (!r.id) r.id = `${id}-root`;
@@ -205,7 +209,7 @@ export function outline(doc) {
     return `${'  '.repeat(d)}${b.type}#${b.id} ${bits}`.trimEnd();
   };
   const walk = (b, d) => [line(b, d), ...(b.children || []).flatMap((c) => walk(c, d + 1))];
-  return doc.pages.map((p) => `PAGE ${p.id} (background=${p.background})\n${walk(p.root, 1).join('\n')}`).join('\n\n');
+  return doc.pages.map((p) => `PAGE ${p.id} (background=${p.background}${p.bleed ? ', bleed' : ''})\n${walk(p.root, 1).join('\n')}`).join('\n\n');
 }
 
 // ── AI tool definitions ────────────────────────────────────────────────────
@@ -213,13 +217,13 @@ const blockArg = { type: 'object', description: 'A block: { type, id?, ...props,
 export const TOOLS = {
   get_asset: { description: 'Show the current asset outline (pages, block ids, props).', input_schema: { type: 'object', properties: {}, additionalProperties: false } },
   set_title: { description: 'Rename the asset.', input_schema: { type: 'object', properties: { title: { type: 'string' } }, required: ['title'], additionalProperties: false } },
-  add_page: { description: 'Add a page (card / section). Its root is "<pageId>-root".', input_schema: { type: 'object', properties: { id: { type: 'string' }, after: { type: 'string' }, background: { type: 'string', description: 'brand colour name' } }, additionalProperties: false } },
-  update_page: { description: 'Change a page background.', input_schema: { type: 'object', properties: { id: { type: 'string' }, background: { type: 'string' } }, required: ['id'], additionalProperties: false } },
+  add_page: { description: 'Add a page (card / section). Its root is "<pageId>-root".', input_schema: { type: 'object', properties: { id: { type: 'string' }, after: { type: 'string' }, background: { type: 'string', description: 'brand colour name' }, bleed: { type: 'boolean' } }, additionalProperties: false } },
+  update_page: { description: 'Change a page background, or turn edge-to-edge (bleed) on or off.', input_schema: { type: 'object', properties: { id: { type: 'string' }, background: { type: 'string' }, bleed: { type: 'boolean' } }, required: ['id'], additionalProperties: false } },
   move_page: { description: 'Move a page to a 1-based position.', input_schema: { type: 'object', properties: { id: { type: 'string' }, position: { type: 'integer' } }, required: ['id', 'position'], additionalProperties: false } },
   remove_page: { description: 'Delete a page.', input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'], additionalProperties: false } },
   set_page: {
     description: 'Replace a page\'s entire layout with a new block tree (and optionally its background). The fastest way to compose a page: send the whole tree in `root` (a stack containing everything).',
-    input_schema: { type: 'object', properties: { id: { type: 'string' }, background: { type: 'string' }, root: blockArg }, required: ['id', 'root'], additionalProperties: false },
+    input_schema: { type: 'object', properties: { id: { type: 'string' }, background: { type: 'string' }, bleed: { type: 'boolean' }, root: blockArg }, required: ['id', 'root'], additionalProperties: false },
   },
   add_block: { description: 'Add a block (with any children) into a container.', input_schema: { type: 'object', properties: { parent: { type: 'string' }, block: blockArg, index: { type: 'integer', description: '1-based; default end' } }, required: ['parent', 'block'], additionalProperties: false } },
   update_block: { description: 'Change props on a block (null removes a prop). Cannot change id/type/children.', input_schema: { type: 'object', properties: { id: { type: 'string' }, props: { type: 'object' } }, required: ['id', 'props'], additionalProperties: false } },
@@ -289,16 +293,18 @@ BRAND TOKENS (the only ones that exist)
 - colours: ${Object.entries(brand.colors).map(([k, v]) => `${k} ${v}`).join(', ')}
 - type roles: ${roles} — you choose a role, never a size or font.
 - spacing steps: ${Object.keys(brand.space).join(', ')}; radius: ${Object.keys(brand.radius).join(', ')}.
-- images: only the uploaded assets listed below, or the brand library (${Object.keys(brand.images.library).join(', ')}) — never a URL; links: https to ${brand.linkHosts.join(', ')} only.
+- images: only the uploaded assets listed below, or the brand library (${Object.keys(brand.images.library).join(', ')}) — never a URL. Library keys starting "sample-" are synthetic placeholder photos for mocking a layout; use them only if asked for a mock-up; links: https to ${brand.linkHosts.join(', ')} only.
 - brand voice: ${brand.voice.join(' ')}
 
 ${assetSection(doc)}
+
+${HOUSE_STYLE}
 
 BLOCKS
 ${describeBlocks()}
 
 RULES
-- Layout is nesting: stack (row/column), grid, layer. There are no coordinates.
+- Layout is nesting: stack (row/column), grid, layer. There are no coordinates. Set page bleed:true for edge-to-edge photo pages; on those, give text its own padding.
 - Text must have AA contrast on the background it sits on (white on crimson, ink on light/white; gold on crimson for accents). Use a scrim when text sits over an image.
 - Every number must have provenance (stat.source): "user" if the person gave it to you or "sanity:<doc>.<field>". NEVER invent figures, quotes, names, dates or claims. If you need a fact you weren't given, leave it out or ask.
 - Financial performance (returns, MOIC, IRR, AUM growth) is a regulated claim: only use it if the person gave it to you, mark it source "user", and SAY in your reply that it needs verifying against the LP report. Do not repeat a return or growth figure the person did not provide.

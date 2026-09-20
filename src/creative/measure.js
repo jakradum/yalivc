@@ -60,13 +60,14 @@ const textHeight = (env, role, text, width) => {
 // shares whatever is left). Text sizes to its content in a flex row, so a small
 // number beside a paragraph doesn't get half the row.
 function hugWidth(env, b) {
-  if (b.type === 'logo') return { s: 48, m: 72, l: 112 }[b.size || 'm'] * (b.variant === 'lockup' ? 2.1 : 1) * env.scale;
+  if (b.type === 'logo') return { s: 48, m: 72, l: 112, xl: 260 }[b.size || 'm'] * (b.variant === 'lockup' ? 2.1 : 1) * env.scale;
   if (b.type === 'button') return String(b.label || '').length * 0.6 * env.role('caption').size + 72 * env.scale;
   if (b.type === 'shape') return { s: 60, m: 100, l: 160 }[b.size || 'm'] * env.scale;
   const maxContent = (role, text) => {
     const r = env.role(role);
     return Math.max(...String(text).replace(/==/g, '').split('\n').map((l) => l.length)) * r.k * r.size;
   };
+  if (b.type === 'tag') return String(b.label || '').length * 0.6 * env.role('micro').size + 36 * env.scale;
   if (b.type === 'text') return maxContent(b.role, b.text || '');
   if (b.type === 'stat') return Math.max(maxContent(b.size === 'medium' ? 'figure' : 'stat', b.value || ''), maxContent('caption', b.label || ''));
   if (b.type === 'list') return Math.max(0, ...(b.items || []).map((it) => maxContent(b.role || 'body', it))) + 28 * env.scale + env.space('s');
@@ -90,9 +91,14 @@ export function estimateHeight(b, width, env) {
     case 'image':
       return width / (RATIO_VALUE[b.ratio || '3:2'] || 1.5);
     case 'logo':
-      return { s: 48, m: 72, l: 112 }[b.size || 'm'] * env.scale;
+      return { s: 48, m: 72, l: 112, xl: 260 }[b.size || 'm'] * env.scale;
+    case 'tag': {
+      const t = env.role('micro');
+      return t.size * t.lh + 16 * env.scale + 4 * env.scale;
+    }
     case 'shape':
-      if (b.kind === 'scrim') return 0;
+      if (b.kind === 'scrim' || b.kind === 'fade') return 0;
+      if (b.kind === 'band') return 8 * env.scale;
       return b.kind === 'bar' ? 8 * env.scale : ({ s: 60, m: 100, l: 160 }[b.size || 'm'] / 3) * env.scale;
     case 'spacer':
       return env.space(b.size);

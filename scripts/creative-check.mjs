@@ -143,6 +143,38 @@ console.log('Uploaded assets…');
   ok('email with an uploaded photo compiles with its alt', compileEmail(emailDoc).includes('alt="The team at the tape-out"'));
 }
 
+console.log('House rules (from the past assets)…');
+{
+  const d = clone(FIXTURES.carousel);
+  find(rootOf(d, 1), 'size-body').text = 'Term of ten years — with two extensions.';
+  rejects('em dash in visible text', d, 'em dash');
+  const e = clone(FIXTURES.emailer);
+  find(rootOf(e), 'mail-title').text = 'A deep tech fund — for India';
+  rejects('em dash in an email headline', e, 'em dash');
+  const ok3 = clone(FIXTURES.carousel);
+  find(rootOf(ok3, 1), 'size-body').text = 'Term of ten years: with two extensions.';
+  ok('a colon instead is fine', validateAsset(ok3).ok);
+  // rounded corners are not in the brand
+  const r = clone(FIXTURES.carousel);
+  rootOf(r, 1).radius = 's';
+  rejects('rounded corner not in the brand', r, 'radius');
+  // photo-led pages may run edge to edge; other pages keep the safe margin
+  const b = clone(FIXTURES.roundup);
+  ok('a bleed photo page is valid', validateAsset(b).ok);
+  const nb = clone(FIXTURES.roundup);
+  delete nb.pages[1].bleed;
+  rejects('the same photo page without bleed overflows its safe area', nb, 'tall');
+  ok('a non-boolean bleed is rejected', !validateAsset(Object.assign(clone(FIXTURES.roundup), { pages: [{ ...clone(FIXTURES.roundup).pages[0], bleed: 'yes' }] })).ok);
+  // logos: xl closing mark, tags, fades all exist
+  ok('house samples use tag, fade, band and the xl logomark', ['news', 'spotlight', 'roundup'].every((k) => validateAsset(FIXTURES[k]).ok));
+  const tag = clone(FIXTURES.carousel);
+  rootOf(tag, 2).children.push({ type: 'tag', id: 'tg', label: 'In-house IP', style: 'outline', color: 'crimson' });
+  ok('an outline tag is valid', validateAsset(tag).ok);
+  const fade = clone(FIXTURES.carousel);
+  rootOf(fade, 2).children.push({ type: 'shape', id: 'fd', kind: 'fade', color: 'black' });
+  rejects('a fade outside a layer', fade, 'inside a layer');
+}
+
 console.log('Page height…');
 {
   const many = clone(FIXTURES.carousel);
