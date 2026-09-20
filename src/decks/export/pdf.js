@@ -16,7 +16,7 @@ export class ExportCheckError extends Error {
 // Chromium setup copied exactly from src/lib/pdfRequestHandler.js (the
 // LP quarterly report's proven production pattern) rather than
 // reinvented — same pinned CHROMIUM_URL, same local/Vercel branch.
-export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false, sessionCookie }) {
+export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false, manifestSource = 'published', sessionCookie }) {
   let browser;
   try {
     if (process.env.VERCEL) {
@@ -53,7 +53,10 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', a
     // partners subdomain the proxy serves it at the clean /decks/... path.
     const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1)/.test(baseUrl);
     const routePrefix = isLocal ? '/partners' : '';
-    const url = `${baseUrl}${routePrefix}/decks/${deckId}/print${dataSource === 'sanity' ? '?data=sanity' : ''}`;
+    const qs = new URLSearchParams();
+    if (dataSource === 'sanity') qs.set('data', 'sanity');
+    if (manifestSource === 'draft') qs.set('manifest', 'draft');
+    const url = `${baseUrl}${routePrefix}/decks/${deckId}/print${qs.size ? `?${qs}` : ''}`;
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 20000 });
     await page.waitForFunction(() => document.body.getAttribute('data-deck-ready') === '1', {
       timeout: 15000,
