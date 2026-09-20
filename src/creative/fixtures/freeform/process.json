@@ -1,10 +1,10 @@
 {
   "prompt": "A 3-slide 16:9 mini-deck on how a pitch flows through Yali. Steps in order: AI inbox at pitch@yali.vc, team vet, initial meeting, internal review, pitch, follow-on meeting, then portfolio. Slide 1 cover, slide 2 the flow, slide 3 a closing slide pointing to yali.vc.",
-  "reply": "I built the 3-slide deck: a crimson cover with the headline \"How a pitch becomes a portfolio company,\" a light flow page listing all seven steps in order (AI inbox → team vet → initial meeting → internal review → pitch → follow-on meeting → portfolio) with brief descriptors, and a crimson closing slide with the pitch@yali.vc address and a button linking to yali.vc.",
+  "reply": "Built the 3-slide deck: a crimson cover with the headline, a light content slide listing the seven steps from AI inbox (pitch@yali.vc) through team vet, initial meeting, internal review, pitch, follow-on meeting to portfolio, and a crimson closing slide with a \"Visit yali.vc\" button.",
   "doc": {
     "schema": "creative/1",
-    "id": "asset-z3eg0",
-    "title": "Yali Capital — Pitch to Portfolio",
+    "id": "asset-ai8f0",
+    "title": "Pitch to portfolio — mini-deck",
     "format": "slide",
     "brand": "yali",
     "assets": {},
@@ -14,59 +14,18 @@
         "background": "crimson",
         "root": {
           "type": "stack",
+          "id": "page-1-root",
           "direction": "column",
-          "gap": "xl",
-          "justify": "between",
+          "gap": "m",
           "children": [
             {
               "type": "logo",
               "variant": "lockup",
               "tone": "dark",
-              "size": "m",
+              "size": "s",
               "align": "start",
-              "id": "logo-ok1f2"
+              "id": "logo-tchh5"
             },
-            {
-              "type": "stack",
-              "direction": "column",
-              "gap": "m",
-              "children": [
-                {
-                  "type": "text",
-                  "role": "eyebrow",
-                  "text": "HOW WE INVEST",
-                  "color": "gold",
-                  "id": "text-o7654"
-                },
-                {
-                  "type": "text",
-                  "role": "display",
-                  "text": "How a pitch becomes a portfolio company",
-                  "color": "white",
-                  "id": "text-elgw5"
-                },
-                {
-                  "type": "text",
-                  "role": "subhead",
-                  "text": "The path every deal takes at Yali Capital, from first contact to close.",
-                  "color": "light",
-                  "id": "text-c9bg6"
-                }
-              ],
-              "id": "stack-ox5x3"
-            }
-          ],
-          "id": "stack-ej8g1"
-        }
-      },
-      {
-        "id": "page-2",
-        "background": "light",
-        "root": {
-          "type": "stack",
-          "direction": "column",
-          "gap": "l",
-          "children": [
             {
               "type": "stack",
               "direction": "column",
@@ -75,221 +34,70 @@
                 {
                   "type": "text",
                   "role": "eyebrow",
-                  "text": "THE PROCESS",
-                  "color": "crimson",
-                  "id": "text-fgop2"
+                  "text": "YALI CAPITAL",
+                  "color": "gold",
+                  "id": "text-iafo7"
                 },
                 {
                   "type": "text",
-                  "role": "title",
-                  "text": "From inbox to portfolio",
-                  "color": "ink",
-                  "id": "text-o87a3"
+                  "role": "display",
+                  "text": "How a pitch flows through Yali",
+                  "color": "white",
+                  "id": "text-2ea88"
+                },
+                {
+                  "type": "text",
+                  "role": "subhead",
+                  "text": "From first inbox to portfolio company.",
+                  "color": "white",
+                  "id": "text-q48n9"
                 }
               ],
-              "id": "stack-zcl51"
+              "id": "stack-200e6"
+            }
+          ]
+        }
+      },
+      {
+        "id": "page-2",
+        "background": "light",
+        "root": {
+          "type": "stack",
+          "id": "page-2-root",
+          "direction": "column",
+          "gap": "s",
+          "children": [
+            {
+              "type": "text",
+              "role": "eyebrow",
+              "text": "THE PITCH FLOW",
+              "color": "crimson",
+              "id": "text-5w5v0"
             },
             {
-              "type": "stack",
-              "direction": "column",
-              "gap": "s",
-              "children": [
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "01",
-                      "color": "crimson",
-                      "id": "text-s2cx6"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "AI inbox — pitch received at pitch@yali.vc, triaged automatically.",
-                      "color": "ink",
-                      "id": "text-mcfn7"
-                    }
-                  ],
-                  "id": "stack-ccdh5"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-oqxs8"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "02",
-                      "color": "crimson",
-                      "id": "text-zhhg0"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Team vet — investment team reviews fit against thesis.",
-                      "color": "ink",
-                      "id": "text-qe6s1"
-                    }
-                  ],
-                  "id": "stack-4lj29"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-yo3l2"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "03",
-                      "color": "crimson",
-                      "id": "text-gawp4"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Initial meeting — first conversation with the founders.",
-                      "color": "ink",
-                      "id": "text-qnfd5"
-                    }
-                  ],
-                  "id": "stack-mr8q3"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-q5c46"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "04",
-                      "color": "crimson",
-                      "id": "text-nh9b8"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Internal review — deal team discusses and debates internally.",
-                      "color": "ink",
-                      "id": "text-2qcp9"
-                    }
-                  ],
-                  "id": "stack-3ynw7"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-wp890"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "05",
-                      "color": "crimson",
-                      "id": "text-iiq62"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Pitch — founders present to the full partnership.",
-                      "color": "ink",
-                      "id": "text-pj363"
-                    }
-                  ],
-                  "id": "stack-6zyc1"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-ewwu4"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "06",
-                      "color": "crimson",
-                      "id": "text-sosr6"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Follow-on meeting — deeper diligence and follow-up conversations.",
-                      "color": "ink",
-                      "id": "text-i3er7"
-                    }
-                  ],
-                  "id": "stack-5z7x5"
-                },
-                {
-                  "type": "divider",
-                  "color": "muted",
-                  "id": "divider-cwhq8"
-                },
-                {
-                  "type": "stack",
-                  "direction": "row",
-                  "gap": "m",
-                  "align": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "role": "heading",
-                      "text": "07",
-                      "color": "crimson",
-                      "id": "text-7aa60"
-                    },
-                    {
-                      "type": "text",
-                      "role": "body",
-                      "text": "Portfolio — investment closes and the company joins the portfolio.",
-                      "color": "ink",
-                      "id": "text-fpyi1"
-                    }
-                  ],
-                  "id": "stack-texz9"
-                }
+              "type": "text",
+              "role": "heading",
+              "text": "Seven steps, from inbox to portfolio",
+              "color": "ink",
+              "id": "text-ldpj1"
+            },
+            {
+              "type": "list",
+              "marker": "number",
+              "role": "body",
+              "color": "ink",
+              "items": [
+                "AI inbox receives the pitch — pitch@yali.vc",
+                "Team vet",
+                "Initial meeting",
+                "Internal review",
+                "Pitch",
+                "Follow-on meeting",
+                "Portfolio"
               ],
-              "id": "stack-8p8u4"
+              "id": "list-jne62"
             }
-          ],
-          "id": "stack-jbfw0"
+          ]
         }
       },
       {
@@ -297,59 +105,55 @@
         "background": "crimson",
         "root": {
           "type": "stack",
+          "id": "page-3-root",
           "direction": "column",
           "gap": "xl",
-          "justify": "between",
+          "justify": "center",
+          "align": "center",
           "children": [
             {
               "type": "logo",
               "variant": "mark",
               "tone": "dark",
-              "size": "m",
-              "align": "start",
-              "id": "logo-fu3c4"
+              "size": "l",
+              "align": "center",
+              "id": "logo-nnt50"
             },
             {
               "type": "stack",
               "direction": "column",
-              "gap": "m",
+              "gap": "s",
               "align": "center",
               "children": [
                 {
                   "type": "text",
-                  "role": "title",
+                  "role": "heading",
                   "text": "Send us your pitch",
                   "color": "white",
                   "align": "center",
-                  "id": "text-9oaz6"
+                  "id": "text-p0ey2"
                 },
                 {
                   "type": "text",
                   "role": "subhead",
-                  "text": "pitch@yali.vc",
-                  "color": "gold",
+                  "text": "Every submission starts the same way — an AI-read inbox and a team that follows through.",
+                  "color": "white",
                   "align": "center",
-                  "id": "text-rmio7"
-                },
-                {
-                  "type": "spacer",
-                  "size": "s",
-                  "id": "spacer-f4cs8"
-                },
-                {
-                  "type": "button",
-                  "label": "Visit yali.vc",
-                  "href": "https://yali.vc",
-                  "style": "solid",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "button-b0089"
+                  "id": "text-8wq13"
                 }
               ],
-              "id": "stack-137u5"
+              "id": "stack-c6wc1"
+            },
+            {
+              "type": "button",
+              "label": "Visit yali.vc",
+              "href": "https://www.yali.vc",
+              "style": "solid",
+              "color": "gold",
+              "align": "center",
+              "id": "button-ikzv4"
             }
-          ],
-          "id": "stack-2d7k3"
+          ]
         }
       }
     ]
