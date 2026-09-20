@@ -8,6 +8,7 @@ import { getBrand } from '@/creative/brands';
 import { ASSET_KINDS, GROUNDS, cleanLibrary } from '@/creative/library';
 import { describeImage } from '@/creative/describe';
 import { writeClient } from '@/lib/sanity';
+import { exportAsset } from '@/creative/export';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -75,6 +76,36 @@ async function upload(request, email) {
   return NextResponse.json({ id: asset._id, asset: clean[asset._id] });
 }
 
+// Download a validated asset as picture(s): one PNG for a page, or one PDF for the
+// whole carousel. The doc is re-cleaned and re-validated here, so only a valid,
+// brand-safe asset is ever rendered (and the browser only visits our own host).
+async function exportPictures(request, host) {
+  const body = await request.json().catch(() => ({}));
+  const as = body.as === 'pdf' ? 'pdf' : 'png';
+  let doc = body.doc;
+  if (!doc || !FORMATS[doc.format]) return NextResponse.json({ error: 'Nothing to export.' }, { status: 400 });
+  if (!FORMATS[doc.format].outputs.includes(as)) return NextResponse.json({ error: `This format is not exported as ${as.toUpperCase()}.` }, { status: 400 });
+  doc = { ...doc, assets: cleanLibrary(doc.assets, PREFIX) };
+  if (JSON.stringify(doc).length > MAX_DOC_BYTES) return NextResponse.json({ error: 'Asset is too large.' }, { status: 413 });
+  const v = validateAsset(doc);
+  if (!v.ok) return NextResponse.json({ error: `Fix the issues first: ${v.errors[0].path} ${v.errors[0].msg}` }, { status: 422 });
+  const pageIndex = Number.isInteger(body.page) ? body.page : 0;
+  if (as === 'png' && !doc.pages[pageIndex]) return NextResponse.json({ error: 'No such page.' }, { status: 400 });
+  try {
+    const baseUrl = `${request.nextUrl.protocol}//${host}`;
+    const out = await exportAsset({ doc, pageIndex, as, baseUrl, sessionCookie: request.cookies.get(DECK_SESSION_COOKIE).value });
+    const name = String(doc.id || 'asset').replace(/[^\w-]+/g, '-').slice(0, 60);
+    const suffix = as === 'png' && doc.pages.length > 1 ? `-${pageIndex + 1}` : '';
+    return new NextResponse(out.buffer, {
+      status: 200,
+      headers: { 'Content-Type': out.type, 'Content-Disposition': `attachment; filename="${name}${suffix}.${out.ext}"`, 'Cache-Control': 'no-store' },
+    });
+  } catch (err) {
+    console.error('[builder/creative export]', err);
+    return NextResponse.json({ error: 'Export failed. Try again.' }, { status: 500 });
+  }
+}
+
 // Stateless: the asset lives in the browser and comes back on every call, so
 // nothing is stored yet. Same gate as the deck routes — /api/* skips the
 // proxy, so host and internal session are re-checked here; denials are a bare 404.
@@ -92,6 +123,7 @@ export async function POST(request, { params }) {
       return NextResponse.json({ error: 'Upload failed.' }, { status: 500 });
     }
   }
+  if (action === 'export') return exportPictures(request, host);
   if (action !== 'generate') return notFound();
 
   const body = await request.json().catch(() => ({}));

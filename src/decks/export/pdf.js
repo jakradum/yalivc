@@ -1,6 +1,7 @@
 import 'server-only';
 import { SLIDE_W, SLIDE_H } from '../core/constants';
 import { runOverflowCheck } from './checks';
+import { launchBrowser } from './browser';
 
 export class ExportCheckError extends Error {
   constructor(problems) {
@@ -19,25 +20,7 @@ export class ExportCheckError extends Error {
 export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false, manifestSource = 'published', sessionCookie }) {
   let browser;
   try {
-    if (process.env.VERCEL) {
-      const chromium = (await import('@sparticuz/chromium-min')).default;
-      const puppeteer = (await import('puppeteer-core')).default;
-      const CHROMIUM_URL =
-        process.env.CHROMIUM_URL ||
-        'https://github.com/Sparticuz/chromium/releases/download/v143.0.0/chromium-v143.0.0-pack.x64.tar';
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(CHROMIUM_URL),
-        headless: true,
-      });
-    } else {
-      const puppeteer = (await import('puppeteer')).default;
-      browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
-    }
+    browser = await launchBrowser();
 
     const page = await browser.newPage();
     await page.setViewport({ width: SLIDE_W, height: SLIDE_H, deviceScaleFactor: 1 });
