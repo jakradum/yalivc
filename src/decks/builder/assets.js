@@ -20,8 +20,8 @@ export const ASSETS = [
     deckId: 'fund-ii',
     title: 'Yali Capital Fund II — investor deck',
     description: 'The Fund II investor presentation: team, thesis, process, Fund I performance, structure and terms, appendix.',
-    previewPath: '/decks/fund-ii/?data=sanity',
-    draftPreviewPath: '/decks/fund-ii/?data=sanity&manifest=draft',
+    previewPath: '/builder/decks/fund-ii/?data=sanity',
+    draftPreviewPath: '/builder/decks/fund-ii/?data=sanity&manifest=draft',
   },
 ];
 

@@ -42,21 +42,21 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', a
     const page = await browser.newPage();
     await page.setViewport({ width: SLIDE_W, height: SLIDE_H, deviceScaleFactor: 1 });
 
-    // The print page is behind the partners portal, so Chromium needs the
+    // The print page is behind the team Microsoft sign-in, so Chromium needs the
     // requesting user's session. Set it as a cookie scoped to baseUrl —
     // NOT a global Cookie header, which would also be sent to third
     // parties the page loads from (cdn.sanity.io images).
     if (!sessionCookie) throw new Error('exportDeckPdf: sessionCookie is required');
-    await page.setCookie({ name: 'portal-session', value: sessionCookie, url: baseUrl });
+    await page.setCookie({ name: 'team-session', value: sessionCookie, url: baseUrl });
 
-    // On localhost the route is reached directly at /partners/...; on the
-    // partners subdomain the proxy serves it at the clean /decks/... path.
+    // On localhost the route is reached directly at /team/builder/...; on the
+    // team subdomain the proxy serves it at the clean /builder/... path.
     const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1)/.test(baseUrl);
-    const routePrefix = isLocal ? '/partners' : '';
+    const routePrefix = isLocal ? '/team' : '';
     const qs = new URLSearchParams();
     if (dataSource === 'sanity') qs.set('data', 'sanity');
     if (manifestSource === 'draft') qs.set('manifest', 'draft');
-    const url = `${baseUrl}${routePrefix}/decks/${deckId}/print${qs.size ? `?${qs}` : ''}`;
+    const url = `${baseUrl}${routePrefix}/builder/decks/${deckId}/print${qs.size ? `?${qs}` : ''}`;
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 20000 });
     await page.waitForFunction(() => document.body.getAttribute('data-deck-ready') === '1', {
       timeout: 15000,

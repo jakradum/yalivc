@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDeckUser, isPartnersHost, DECK_SESSION_COOKIE } from '@/decks/auth';
+import { getDeckUser, isBuilderHost, DECK_SESSION_COOKIE } from '@/decks/auth';
 import { FORMATS } from '@/creative/formats';
 import { newAsset } from '@/creative/engine';
 import { validateAsset } from '@/creative/validate';
@@ -71,7 +71,7 @@ async function upload(request, email) {
 export async function POST(request, { params }) {
   const host = request.headers.get('host') || '';
   const email = getDeckUser(request.cookies.get(DECK_SESSION_COOKIE)?.value);
-  if (!isPartnersHost(host) || !email) return notFound();
+  if (!isBuilderHost(host) || !email) return notFound();
 
   const { action } = await params;
   if (action === 'upload') {

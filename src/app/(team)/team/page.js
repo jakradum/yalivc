@@ -102,7 +102,7 @@ export default function TeamPage() {
                   Letters
                 </div>
                 <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
-                  Generate and print official correspondence on Yali letterhead. Create a new letter in Sanity, then open it here to save as PDF.
+                  Generate and print official correspondence on Yali letterhead. Create a new letter in Sanity, then open it here to save as PDF. Yali Microsoft sign-in required.
                 </p>
               </div>
             </a>
@@ -110,6 +110,14 @@ export default function TeamPage() {
           </div>
         </div>
       </div>
+
+      {/* Quiet entry to the asset builder — Yali Microsoft sign-in, then the builder. */}
+      <a
+        href="/team/builder/"
+        style={{ position: 'fixed', right: 18, bottom: 12, fontFamily: mono, fontSize: 10, letterSpacing: '0.04em', color: 'rgba(54,54,54,0.32)', textDecoration: 'none' }}
+      >
+        asset builder
+      </a>
     </div>
   );
 }

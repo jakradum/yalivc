@@ -9,10 +9,8 @@ import { resolveDeckSlides } from '@/decks/builder/resolve';
 export const metadata = { robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';
 
-// Served at partners.yali.vc/decks/<deckId>/ — deliberately linked from
-// nowhere. The partners proxy forces a portal session; requireDeckUser()
-// additionally restricts it to internal users, because LPs hold the same
-// cookie.
+// Served at team.yali.vc/builder/decks/<deckId>/ behind the Yali Microsoft
+// sign-in (the proxy checks the session; requireDeckUser() checks again).
 export default async function DeckPreviewPage({ params, searchParams }) {
   await requireDeckUser();
   const { deckId } = await params;

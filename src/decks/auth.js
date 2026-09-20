@@ -1,56 +1,47 @@
 import 'server-only';
-import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
-import { verifySession } from '@/lib/session';
+import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { TEAM_COOKIE, canAccess, verifyTeamSession } from '@/lib/teamSession';
 
-// The deck lives behind the partners portal. The proxy already forces a
-// valid `portal-session` on every page route there, but that cookie is
-// also issued to Fund I LPs, and `/api/*` skips the proxy entirely — so
-// every deck route re-checks for itself, and additionally requires an
-// INTERNAL user. Same internal rule as src/lib/pdfRequestHandler.js
-// (duplicated deliberately: that file is the LP report and stays untouched).
-const COOKIE_NAME = 'portal-session';
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+// The asset builder and the Letters section live on the team subdomain behind
+// a Yali Microsoft sign-in (/team/sign-in → /api/team-auth). The proxy already
+// sends anyone without a valid team session to the sign-in page, but `/api/*`
+// skips the proxy — so every page and API route re-checks for itself.
+export const DECK_SESSION_COOKIE = TEAM_COOKIE;
 
-function isInternalEmail(email) {
-  return (
-    email.endsWith('@yali.vc') ||
-    email.endsWith('@florintree.com') ||
-    email === 'pranavkarnad@gmail.com'
-  );
+// → the signed-in user's email if they may use `area`, else null.
+export function getTeamUser(cookieValue, area = 'builder') {
+  const email = verifyTeamSession(cookieValue);
+  return email && canAccess(area, email) ? email : null;
+}
+export const getDeckUser = (cookieValue) => getTeamUser(cookieValue, 'builder');
+
+const isLocalHost = (host = '') => /^(localhost|127\.0\.0\.1)/.test(host);
+
+// Team pages are served at clean paths on team.yali.vc and under /team locally.
+export async function teamPrefix() {
+  return isLocalHost((await headers()).get('host') || '') ? '/team' : '';
 }
 
-// Returns the internal user's email, or null. verifySession() checks the
-// signature only, so the 30-day age limit is enforced here too.
-export function getDeckUser(cookieValue) {
-  const email = verifySession(cookieValue);
-  if (!email) return null;
-  const timestamp = parseInt(cookieValue.split(':').slice(-2, -1)[0], 10);
-  const age = Date.now() - timestamp;
-  if (Number.isNaN(age) || age < 0 || age > THIRTY_DAYS_MS) return null;
-  return isInternalEmail(email) ? email : null;
-}
-
-// Pages: anything short of an internal user gets a plain 404, so a
-// signed-in LP can't even tell the route exists.
-export async function requireDeckUser() {
+// Pages: no valid session → the sign-in page (and back to `area` afterwards).
+export async function requireTeamUser(area = 'builder') {
   const store = await cookies();
-  const email = getDeckUser(store.get(COOKIE_NAME)?.value);
-  if (!email) notFound();
-  return email;
+  const email = getTeamUser(store.get(TEAM_COOKIE)?.value, area);
+  if (email) return email;
+  const prefix = await teamPrefix();
+  redirect(`${prefix}/sign-in?next=${encodeURIComponent(`${prefix}/${area === 'letters' ? 'letters' : 'builder'}/`)}`);
 }
+export const requireDeckUser = () => requireTeamUser('builder');
 
-// API route: only ever served on the partners host (or localhost for dev).
-// Strict on purpose, not startsWith('partners.'): the exporter hands the
-// user's session cookie to whatever host it navigates to, so a spoofed
-// `partners.evil.com` must never pass.
+// API routes: only ever served on the team host (or localhost for dev).
+// Strict on purpose, not startsWith('team.'): the exporter hands the user's
+// session cookie to whatever host it navigates to, so a spoofed
+// `team.evil.com` must never pass.
 const ALLOWED_HOSTS = [
-  /^partners\.([a-z0-9-]+\.)*yali\.vc$/,
-  /^partners-[a-z0-9-]+\.vercel\.app$/, // Vercel preview deployments
+  /^team\.([a-z0-9-]+\.)*yali\.vc$/,
+  /^team-[a-z0-9-]+\.vercel\.app$/, // Vercel preview deployments
   /^(localhost|127\.0\.0\.1)(:\d+)?$/,
 ];
-export function isPartnersHost(host = '') {
+export function isBuilderHost(host = '') {
   return ALLOWED_HOSTS.some((re) => re.test(host.toLowerCase()));
 }
-
-export const DECK_SESSION_COOKIE = COOKIE_NAME;

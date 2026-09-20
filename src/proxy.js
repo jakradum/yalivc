@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 const PORTAL_COOKIE_NAME = 'portal-session';
 const DATAROOM_COOKIE_NAME = 'dataroom-session';
 const TEAM_COOKIE_NAME = 'team-session';
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 
 // Constant-time string comparison to prevent timing attacks
@@ -53,6 +54,32 @@ async function verifyHMAC(cookieValue, maxSessionAge = THIRTY_DAYS_MS) {
     return false;
   }
 }
+
+// team-session cookie: `email:timestamp:sig`, signed over `team:email:timestamp`
+// (domain-separated from the LP portal / data room cookies). Issued only by
+// /api/team-auth after a verified Yali Microsoft sign-in.
+async function verifyTeamCookie(cookieValue) {
+  if (!AUTH_SECRET || !cookieValue) return false;
+  const parts = cookieValue.split(':');
+  if (parts.length < 3) return false;
+  const signature = parts[parts.length - 1];
+  const timestamp = parts[parts.length - 2];
+  const email = parts.slice(0, -2).join(':');
+  const age = Date.now() - parseInt(timestamp, 10);
+  if (!email || isNaN(age) || age < 0 || age > SEVEN_DAYS_MS) return false;
+  try {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', encoder.encode(AUTH_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(`team:${email}:${timestamp}`));
+    const expected = Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    return timingSafeEqual(expected, signature);
+  } catch {
+    return false;
+  }
+}
+
+// The gated areas of the team site (everything else, e.g. the leave form, stays open).
+const isGatedTeamPath = (p) => /^\/(builder|letters)(\/|$)/.test(p);
 
 export default async function middleware(request) {
   const hostname = request.headers.get('host') || '';
@@ -175,13 +202,32 @@ export default async function middleware(request) {
       return NextResponse.redirect(url);
     }
 
-    // No portal-level auth — dashboard app handles its own auth (Microsoft OAuth)
+    // The asset builder and Letters need a Yali Microsoft sign-in. The leave form
+    // is open and the admin dashboard handles its own approver login.
+    if (isGatedTeamPath(url.pathname)) {
+      const ok = await verifyTeamCookie(request.cookies.get(TEAM_COOKIE_NAME)?.value);
+      if (!ok) {
+        const signIn = new URL('/sign-in', request.url);
+        signIn.searchParams.set('next', url.pathname);
+        return NextResponse.redirect(signIn);
+      }
+    }
     const rewritePath = `/team${url.pathname === '/' ? '' : url.pathname}`;
     url.pathname = rewritePath;
 
     const response = NextResponse.rewrite(url);
     response.headers.set('x-pathname', rewritePath);
     return response;
+  }
+
+  // Local dev: the same gate on /team/builder and /team/letters.
+  if (isLocalDev && /^\/team\/(builder|letters)(\/|$)/.test(url.pathname)) {
+    const ok = await verifyTeamCookie(request.cookies.get(TEAM_COOKIE_NAME)?.value);
+    if (!ok) {
+      const signIn = new URL('/team/sign-in', request.url);
+      signIn.searchParams.set('next', url.pathname);
+      return NextResponse.redirect(signIn);
+    }
   }
 
   // Block /team on main site (except local dev)

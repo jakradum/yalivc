@@ -3,6 +3,7 @@ import { requireDeckUser } from '@/decks/auth';
 import { ASSETS, TEMPLATES, assetStatus } from '@/decks/builder/assets';
 import { FORMATS } from '@/creative/formats';
 import { ExportPdfButton } from './ExportPdfButton';
+import { SignOutButton } from './SignOutButton';
 import s from './home.module.css';
 import '@/decks/design-system/fonts.css';
 import '@/decks/design-system/tokens.css';
@@ -12,13 +13,12 @@ export const dynamic = 'force-dynamic';
 
 const fmt = (iso) => new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-// Served at partners.yali.vc/builder/ — linked from nowhere, same
-// internal-only guard as the decks.
+// Served at team.yali.vc/builder/ behind the Yali Microsoft sign-in.
 export default async function BuilderHome() {
   const email = await requireDeckUser();
-  // On the partners subdomain the proxy serves these at the root; locally they live under /partners.
+  // On the team subdomain the proxy serves these at the root; locally they live under /team.
   const host = (await headers()).get('host') || '';
-  const prefix = /^(localhost|127\.0\.0\.1)/.test(host) ? '/partners' : '';
+  const prefix = /^(localhost|127\.0\.0\.1)/.test(host) ? '/team' : '';
   const assets = await Promise.all(ASSETS.map(async (a) => ({ ...a, status: await assetStatus(a) })));
 
   return (
@@ -26,6 +26,7 @@ export default async function BuilderHome() {
       <header className={s.bar}>
         <span className={s.title}>BUILDER</span>
         <span className={s.who}>{email}</span>
+        <SignOutButton />
       </header>
 
       <main className={s.main}>

@@ -1,18 +1,17 @@
 #!/usr/bin/env node
-// CLI export. Needs the app running at --base-url (`next dev`, or the
-// partners subdomain). The endpoint is behind the partners portal and
-// internal-only, so the CLI authenticates:
-//   - local dev (default): mints a signed portal session from
-//     PORTAL_AUTH_SECRET in .env.local, as --as <email> (default
-//     pranav@yali.vc). Never commit or log the secret or the cookie.
-//   - anywhere else: pass --cookie <portal-session value> copied from a
+// CLI export. Needs the app running at --base-url (`next dev`, or the team
+// subdomain). The endpoint needs a team session, so the CLI authenticates:
+//   - local dev (default): mints a signed team session from PORTAL_AUTH_SECRET
+//     in .env.local, as --as <email> (default pranav@yali.vc). Never commit or
+//     log the secret or the cookie.
+//   - anywhere else: pass --cookie <team-session value> copied from a
 //     signed-in browser (it's httpOnly, so DevTools > Application).
 //
 // Usage: node scripts/deck-pdf.js fund-ii [--base-url URL] [--out DIR]
 //          [--data fixture|sanity] [--as email] [--cookie value]
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
+import { signTeamSession } from '../src/lib/teamSession.js';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve('.env.local'), quiet: true });
@@ -41,15 +40,13 @@ function sessionCookie() {
     process.exit(1);
   }
   const email = flag('--as') || 'pranav@yali.vc';
-  const ts = Date.now().toString();
-  const sig = crypto.createHmac('sha256', secret).update(`${email}:${ts}`).digest('hex');
-  return `${email}:${ts}:${sig}`;
+  return signTeamSession(email);
 }
 
 async function main() {
-  const res = await fetch(`${baseUrl}/api/decks/${deckId}/pdf`, {
+  const res = await fetch(`${baseUrl}/api/builder/decks/${deckId}/pdf`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Cookie: `portal-session=${sessionCookie()}` },
+    headers: { 'Content-Type': 'application/json', Cookie: `team-session=${sessionCookie()}` },
     body: JSON.stringify({ dataSource }),
   });
   if (!res.ok) {
