@@ -70,10 +70,21 @@ const allIds = (doc) => {
   });
   return out;
 };
+// Models (and people) write "top-left" for the schema's `tl`: accept the natural
+// spellings rather than burn a round trip on a rejection.
+const ANCHOR_ALIASES = { 'top-left': 'tl', topleft: 'tl', 'top-right': 'tr', topright: 'tr', 'bottom-left': 'bl', bottomleft: 'bl', 'bottom-right': 'br', bottomright: 'br', middle: 'center', centre: 'center', centered: 'center', 'top-center': 'top', 'bottom-center': 'bottom', full: 'fill' };
+function normalizeBlock(b) {
+  if (!b || typeof b !== 'object') return b;
+  const out = { ...b };
+  if (typeof out.anchor === 'string') out.anchor = ANCHOR_ALIASES[out.anchor.toLowerCase().trim()] || out.anchor;
+  if (Array.isArray(out.children)) out.children = out.children.map(normalizeBlock);
+  return out;
+}
+
 // Give any block that lacks an id one (recursively), avoiding collisions.
 function ensureIds(block, taken) {
   if (!block || typeof block !== 'object') return block;
-  const b = { ...block };
+  const b = normalizeBlock(block);
   if (!b.id || taken.has(b.id)) {
     if (b.id && taken.has(b.id)) b.id = uid(b.type || 'b');
     else if (!b.id) b.id = uid(b.type || 'b');
@@ -154,7 +165,7 @@ const OPS = {
     for (const k of Object.keys(props || {})) {
       if (['id', 'type', 'children'].includes(k)) throw new Error(`"${k}" can't be changed here. Use add_block / remove_block / move_block.`);
       if (props[k] === null) delete loc.block[k];
-      else loc.block[k] = props[k];
+      else loc.block[k] = k === 'anchor' && typeof props[k] === 'string' ? ANCHOR_ALIASES[props[k].toLowerCase().trim()] || props[k] : props[k];
     }
     return `Updated ${loc.block.type} "${id}".`;
   },

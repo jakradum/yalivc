@@ -105,6 +105,8 @@ export const BLOCKS = {
       fit: enumOf(['cover', 'contain'], 'cover'),
       ratio: enumOf(['1:1', '4:5', '16:9', '3:2', '3:4'], '3:2'),
       radius: radius('none'),
+      size: enumOf(['fill', 's', 'm', 'l']), // fill spans the width (photos). s / m / l = a small fixed-height picture (~48 / 72 / 112px), for logos and chips. Uploaded LOGOS default to m.
+      align: ALIGN,
       tone: enumOf(['none', 'grayscale', 'house', 'dim'], 'none'), // house = the studio's photo correction (brightness 1.08, contrast 1.12, saturate .55); dim = darkened + blurred, for a cover backdrop
     },
   },
@@ -143,7 +145,7 @@ export const BLOCKS = {
 
 // Optional props any block may carry when it is a direct child of a `layer`.
 export const LAYER_CHILD_PROPS = {
-  anchor: enumOf(['fill', 'tl', 'tr', 'bl', 'br', 'top', 'bottom', 'center'], 'fill'),
+  anchor: enumOf(['fill', 'tl', 'tr', 'bl', 'br', 'top', 'bottom', 'center'], 'fill'), // tl = top-left, tr = top-right, bl = bottom-left, br = bottom-right; top and bottom span the width
   inset: space('none'),
 };
 

@@ -92,6 +92,11 @@ export function compileEmail(doc, { baseUrl = '' } = {}) {
         const up = b.src.kind === 'upload' ? (doc.assets || {})[b.src.id] : null;
         const src = up ? renditionUrl(up, 1200) : b.src.kind === 'library' ? baseUrl + brand.images.library[b.src.key] : b.src.url;
         const alt = b.decorative ? '' : b.alt || up?.alt || '';
+        const size = b.size || (up?.kind === 'logo' ? 'm' : 'fill');
+        if (size !== 'fill') {
+          const fh = { s: 32, m: 48, l: 72 }[size];
+          return table(row(`<img src="${esc(src)}" alt="${esc(alt)}" height="${fh}" style="display:block;height:${fh}px;width:auto;border:0;">`, ` align="${ALIGN[b.align] || 'left'}"`));
+        }
         const h = Math.round(width * (RATIO[b.ratio || '3:2'] || 2 / 3));
         return `<img src="${esc(src)}" alt="${esc(alt)}" width="${width}" height="${h}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${b.radius && brand.radius[b.radius] ? `border-radius:${brand.radius[b.radius]}px;` : ''}">`;
       }

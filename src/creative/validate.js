@@ -277,7 +277,7 @@ export function validateAsset(doc) {
     walk(root, `${path}.root`, { bg: page.background, depth: 1, count, inLayer: false, width: format.w - safeX, exact: true });
     // Fixed canvas: the content must fit the page. (Email grows with content.)
     if (format.h) {
-      const env = makeEnv(brand, format);
+      const env = makeEnv(brand, format, library);
       const avail = bleed ? format.h : format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * scale;
       const est = estimateHeight(root, format.w - safeX, env);
       if (est > avail * 1.02) {
