@@ -20,6 +20,9 @@ export const TEXT_ROLES = {
   eyebrow: 48,
   stat: 12,
   quote: 220,
+  headline: 110,
+  note: 260,
+  micro: 80,
 };
 
 const enumOf = (values, def) => ({ t: 'enum', values, def });
@@ -74,7 +77,7 @@ export const BLOCKS = {
 
   // ── leaves ────────────────────────────────────────────────────────────
   text: {
-    doc: 'A piece of text in a type ROLE (display, title, heading, subhead, body, caption, eyebrow, stat, quote). Wrap a word in ==double equals== to highlight it (gold marker).',
+    doc: 'A piece of text in a type ROLE (display, title, heading, headline, subhead, body, note, caption, eyebrow, micro, stat, quote). No em dashes. Wrap a word in ==double equals== to highlight it (gold marker).',
     props: {
       role: { ...enumOf(Object.keys(TEXT_ROLES)), required: true },
       text: { ...str(400), required: true },
@@ -102,20 +105,24 @@ export const BLOCKS = {
       fit: enumOf(['cover', 'contain'], 'cover'),
       ratio: enumOf(['1:1', '4:5', '16:9', '3:2', '3:4'], '3:2'),
       radius: radius('none'),
-      tone: enumOf(['none', 'grayscale'], 'none'),
+      tone: enumOf(['none', 'grayscale', 'house', 'dim'], 'none'), // house = the studio's photo correction (brightness 1.08, contrast 1.12, saturate .55); dim = darkened + blurred, for a cover backdrop
     },
   },
   logo: {
     doc: 'The brand mark or lockup. `tone` is the ground it sits on: light = dark logo, dark = white logo.',
-    props: { variant: enumOf(['mark', 'lockup'], 'mark'), tone: enumOf(['light', 'dark'], 'light'), size: enumOf(['s', 'm', 'l'], 'm'), align: ALIGN },
+    props: { variant: enumOf(['mark', 'lockup'], 'mark'), tone: enumOf(['light', 'dark'], 'light'), size: enumOf(['s', 'm', 'l', 'xl'], 'm'), align: ALIGN }, // xl (~260px) is for closing slides: the white logomark, big
   },
   shape: {
-    doc: 'A plain graphic: `bar` (a short accent rule), `dot`, or `scrim` (a translucent colour wash, for legible text over a photo). Not available in email.',
-    props: { kind: { ...enumOf(['bar', 'dot', 'scrim']), required: true }, color: { ...color(), required: true }, size: enumOf(['s', 'm', 'l'], 'm'), opacity: OPACITY },
+    doc: 'A plain graphic: `bar` (a short accent rule), `band` (a full-width 8px bar: the crimson bottom bar), `dot`, `scrim` (a flat colour wash) or `fade` (a colour fading up from the bottom of a photo, under the caption). Scrim and fade go inside a layer. Not available in email.',
+    props: { kind: { ...enumOf(['bar', 'band', 'dot', 'scrim', 'fade']), required: true }, color: { ...color(), required: true }, size: enumOf(['s', 'm', 'l'], 'm'), opacity: OPACITY },
   },
   pattern: {
     doc: 'One of the seven brand line patterns (1–7), filling its parent layer. Decorative only. Not available in email.',
     props: { name: { ...int(1, 7), required: true }, color: color('gold'), opacity: enumOf([0.15, 0.3, 0.5, 0.7], 0.5) },
+  },
+  tag: {
+    doc: 'A small caps label chip: filled (a crimson chip with the name on a guest photo) or outline (a bordered pill such as "IN-HOUSE IP"). No em dashes.',
+    props: { label: { ...str(32), required: true }, style: enumOf(['filled', 'outline'], 'filled'), color: color('crimson') },
   },
   spacer: { doc: 'Empty vertical space of one spacing step.', props: { size: { ...space(), required: true } } },
   divider: { doc: 'A thin horizontal rule.', props: { color: color('ink'), weight: enumOf(['thin', 'medium'], 'thin') } },
@@ -124,7 +131,7 @@ export const BLOCKS = {
     props: {
       items: { t: 'strs', maxItems: 8, maxLen: 120, required: true },
       marker: enumOf(['dot', 'dash', 'number'], 'dot'),
-      role: enumOf(['body', 'caption'], 'body'),
+      role: enumOf(['body', 'note', 'caption'], 'body'),
       color: { ...color(), required: true },
     },
   },

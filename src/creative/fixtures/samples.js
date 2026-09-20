@@ -115,7 +115,10 @@ export const a4 = {
 };
 
 export const SAMPLES = [
-  { key: 'carousel', label: 'LinkedIn carousel · 1:1' },
+  { key: 'roundup', label: 'LinkedIn roundup carousel · 1:1 (house style)' },
+  { key: 'news', label: 'Portfolio news post · 1:1 (house style)' },
+  { key: 'spotlight', label: 'Guest spotlight card · 1:1 (house style)' },
+  { key: 'carousel', label: 'LinkedIn carousel · 1:1 (Fund II facts)' },
   { key: 'portrait', label: 'LinkedIn carousel · 4:5' },
   { key: 'story', label: 'Story · 9:16' },
   { key: 'ogImage', label: 'Link preview · 1.91:1' },
@@ -123,4 +126,110 @@ export const SAMPLES = [
   { key: 'a4', label: 'A4 page' },
   { key: 'emailer', label: 'Emailer · 600px' },
 ];
-export const SAMPLE_DOCS = { portrait, story, ogImage, slide, a4 };
+
+// ── House-style samples: faithful re-creations of Yali's real past assets
+// (see recipes.js). Photos are synthetic placeholders and the copy is plainly
+// placeholder text: they show LAYOUT, not content.
+const img = (id, key, extra = {}) => ({ type: 'image', id, src: { kind: 'library', key }, alt: 'Placeholder photo', tone: 'house', ...extra });
+const bleedPage = (id, background, root) => ({ id, background, bleed: true, root: { type: 'stack', id: `${id}-root`, direction: 'column', gap: 'none', ...root } });
+const textStack = (id, kids, extra = {}) => ({ type: 'stack', id, direction: 'column', gap: 'm', padding: 'xl', grow: true, ...extra, children: kids });
+
+export const roundup = {
+  schema: 'creative/1', id: 'sample-roundup', title: 'LinkedIn roundup carousel (house style)', format: 'linkedin-square', brand: 'yali',
+  pages: [
+    // 1: cover: dimmed photo, big title
+    { id: 'r1', background: 'black', bleed: true, root: { type: 'stack', id: 'r1-root', direction: 'column', gap: 'none', children: [
+      { type: 'layer', id: 'r1-layer', ratio: '1:1', children: [
+        img('r1-bg', 'sample-group', { tone: 'dim', anchor: 'fill', alt: '' , decorative: true }),
+        { type: 'stack', id: 'r1-c', anchor: 'center', direction: 'column', gap: 'm', align: 'center', children: [
+          t('r1-t', 'display', 'Roundup', 'white', { align: 'center' }),
+          t('r1-s', 'heading', 'Jun ’26', 'gold', { align: 'center' }),
+          { type: 'spacer', id: 'r1-sp', size: 's' },
+          { type: 'logo', id: 'r1-logo', variant: 'lockup', tone: 'dark', size: 's', align: 'center' },
+        ] },
+      ] },
+    ] } },
+    // 2: photo + text (light)
+    bleedPage('r2', 'light', { children: [
+      img('r2-img', 'sample-wide', { ratio: '16:9' }),
+      textStack('r2-txt', [
+        t('r2-e', 'eyebrow', 'Speaker name (Organisation)', 'crimson'),
+        t('r2-h', 'heading', 'A short headline about the conversation', 'ink'),
+        t('r2-n', 'note', 'Two lines of context about what was discussed and why it mattered to the ecosystem.', 'grey'),
+        t('r2-m', 'micro', 'L-R: name, name, name', 'grey'),
+      ]),
+      { type: 'shape', id: 'r2-band', kind: 'band', color: 'crimson' },
+    ] }),
+    // 3: two photos + text (ink)
+    bleedPage('r3', 'ink', { children: [
+      { type: 'grid', id: 'r3-g', columns: 2, gap: 'xs', children: [img('r3-a', 'sample-group', { ratio: '1:1' }), img('r3-b', 'sample-wide', { ratio: '1:1' })] },
+      textStack('r3-txt', [
+        t('r3-e', 'eyebrow', 'Event name', 'gold'),
+        t('r3-h', 'heading', 'What the team took from the day', 'white'),
+        t('r3-n', 'note', 'A quiet paragraph in silver, two to three lines, mono, no em dashes.', 'silver'),
+      ]),
+    ] }),
+    // 4: panel (crimson)
+    bleedPage('r4', 'crimson', { children: [
+      { type: 'grid', id: 'r4-g', columns: 2, gap: 'xs', children: [img('r4-a', 'sample-wide', { ratio: '3:2' }), img('r4-b', 'sample-group', { ratio: '3:2' })] },
+      textStack('r4-txt', [
+        t('r4-e', 'eyebrow', 'Semiconductor panel', 'gold'),
+        t('r4-h', 'heading', 'Scaling innovation in the ecosystem', 'white'),
+        t('r4-p', 'micro', 'Panelists', 'gold'),
+        { type: 'list', id: 'r4-l', marker: 'dash', role: 'note', color: 'white', items: ['Panelist One: Organisation', 'Panelist Two: Organisation', 'Moderator: Yali Capital'] },
+      ], { gap: 's' }),
+    ] }),
+    // 5: closing
+    { id: 'r5', background: 'crimson', root: { type: 'stack', id: 'r5-root', direction: 'column', gap: 'l', justify: 'center', align: 'center', children: [
+      { type: 'logo', id: 'r5-logo', variant: 'mark', tone: 'dark', size: 'xl', align: 'center' },
+      t('r5-t', 'heading', 'yali.vc', 'white', { align: 'center' }),
+      t('r5-n', 'note', 'Follow for more updates', 'silver', { align: 'center' }),
+    ] } },
+  ],
+};
+
+export const news = {
+  schema: 'creative/1', id: 'sample-news', title: 'Portfolio news post (house style)', format: 'linkedin-square', brand: 'yali',
+  pages: [
+    bleedPage('n1', 'crimson', { children: [
+      { type: 'layer', id: 'n1-photo', ratio: '16:9', children: [
+        img('n1-img', 'sample-wide', { anchor: 'fill' }),
+        { type: 'logo', id: 'n1-mark', variant: 'lockup', tone: 'dark', size: 's', anchor: 'tl', inset: 'l' },
+      ] },
+      textStack('n1-panel', [
+        { type: 'stack', id: 'n1-row', direction: 'row', justify: 'between', align: 'start', gap: 'm', children: [
+          t('n1-e', 'eyebrow', 'Portfolio news', 'gold'),
+          { type: 'stack', id: 'n1-chip', direction: 'column', fill: 'light', padding: 's', children: [{ type: 'logo', id: 'n1-co', variant: 'lockup', tone: 'light', size: 's' }] },
+        ] },
+        t('n1-h', 'headline', '==Company== wins Best Startup Award at Event Name 2026', 'white'),
+        { type: 'stack', id: 'n1-fill', direction: 'column', gap: 'none', grow: true, children: [] },
+        { type: 'divider', id: 'n1-rule', color: 'silver' },
+        { type: 'stack', id: 'n1-foot', direction: 'row', justify: 'between', align: 'center', gap: 'm', children: [
+          { type: 'logo', id: 'n1-foot-logo', variant: 'lockup', tone: 'dark', size: 's' },
+          t('n1-url', 'micro', 'yali.vc', 'silver', { align: 'end' }),
+        ] },
+      ], { gap: 'm' }),
+    ] }),
+  ],
+};
+
+export const spotlight = {
+  schema: 'creative/1', id: 'sample-spotlight', title: 'Guest spotlight card (house style)', format: 'linkedin-square', brand: 'yali',
+  pages: [
+    bleedPage('g1', 'black', { children: [
+      { type: 'layer', id: 'g1-layer', ratio: '1:1', children: [
+        img('g1-img', 'sample-portrait', { anchor: 'fill' }),
+        { type: 'shape', id: 'g1-fade', kind: 'fade', color: 'black', anchor: 'fill' },
+        t('g1-no', 'micro', 'Yali I - 01', 'silver', { anchor: 'tr', inset: 'l' }),
+        { type: 'stack', id: 'g1-cap', anchor: 'bottom', direction: 'column', gap: 's', padding: 'xl', children: [
+          { type: 'tag', id: 'g1-tag', label: 'Firm name', style: 'filled', color: 'crimson' },
+          t('g1-n', 'heading', 'Guest Name', 'white'),
+          t('g1-r', 'caption', 'Role, Organisation · City', 'silver'),
+          t('g1-d', 'note', 'One or two lines on what the conversation covered and why it was worth having.', 'silver'),
+        ] },
+      ] },
+    ] }),
+  ],
+};
+
+export const SAMPLE_DOCS = { portrait, story, ogImage, slide, a4, roundup, news, spotlight };

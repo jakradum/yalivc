@@ -96,8 +96,13 @@ export function compileEmail(doc, { baseUrl = '' } = {}) {
         return `<img src="${esc(src)}" alt="${esc(alt)}" width="${width}" height="${h}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${b.radius && brand.radius[b.radius] ? `border-radius:${brand.radius[b.radius]}px;` : ''}">`;
       }
       case 'logo': {
-        const h = { s: 28, m: 40, l: 64 }[b.size || 'm'];
+        const h = { s: 28, m: 40, l: 64, xl: 96 }[b.size || 'm'];
         return table(row(`<img src="${baseUrl}${brand.images.library.lockup}" alt="${esc(brand.name)}" height="${h}" style="display:block;height:${h}px;width:auto;border:0;">`, ` align="${ALIGN[b.align] || 'left'}"`));
+      }
+      case 'tag': {
+        const bg = col(b.color || 'crimson');
+        const filled = (b.style || 'filled') === 'filled';
+        return table(row(`<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="${filled ? bg : ''}" style="${filled ? `background-color:${bg};` : ''}border:1px solid ${bg};padding:4px 10px;${roleCss('micro')};font-weight:700;color:${filled ? readableOn(bg, '#ffffff', col('ink')) : bg};">${esc(b.label)}</td></tr></table>`));
       }
       case 'spacer':
         return table(gapRow(space(b.size)));

@@ -20,6 +20,8 @@ const MAX_DEPTH = 6;
 // Performance / return claims are regulated territory for a fund. If one comes
 // from the person's own words (not a Sanity field) it's allowed but flagged.
 const PERFORMANCE = /\b(returns?|returned|moic|irr|tvpi|dpi|multiple|aum|growth|grew|performance|profit|gains?|yield)\b/i;
+// House rule (docs/CLAUDE.md): no em dashes in any visible text.
+const EM_DASH = /—/;
 const ID_RE = /^[a-z0-9][a-z0-9-_]{0,40}$/i;
 
 export function validateAsset(doc) {
@@ -166,6 +168,8 @@ export function validateAsset(doc) {
     if (ctx.inLayer && block.anchor === undefined) warn(path, 'no anchor set (defaults to fill)');
 
     // per-block rules
+    const visible = [block.text, block.label, block.value, ...(Array.isArray(block.items) ? block.items : [])].filter((x) => typeof x === 'string');
+    if (visible.some((x) => EM_DASH.test(x))) err(path, 'no em dashes in visible text: use a colon, comma or semicolon instead');
     let bg = ctx.bg;
     if (block.type === 'stack' || block.type === 'grid' || block.type === 'layer') {
       if (block.fill && colorNames.includes(block.fill)) bg = block.fill;
@@ -187,7 +191,7 @@ export function validateAsset(doc) {
         // legibility is then the scrim rule's job), else the layer/page colour.
         let childBg = bg;
         if (block.type === 'layer') {
-          const scrim = block.children.find((c) => c.type === 'shape' && c.kind === 'scrim' && brand.colors[c.color]);
+          const scrim = block.children.find((c) => c.type === 'shape' && (c.kind === 'scrim' || c.kind === 'fade') && brand.colors[c.color]);
           if (scrim && (scrim.opacity ?? 0.5) >= 0.5) childBg = scrim.color;
           else if (block.children.some((c) => c.type === 'image')) childBg = null;
         }
@@ -239,7 +243,7 @@ export function validateAsset(doc) {
       err(path, 'email logos must be variant "lockup" on a light ground (SVG marks and white logos have no hosted PNG yet)');
     }
     if (block.type === 'pattern' && !ctx.inLayer) err(path, 'pattern must be a direct child of a layer');
-    if (block.type === 'shape' && block.kind === 'scrim' && !ctx.inLayer) err(path, 'a scrim only makes sense inside a layer');
+    if (block.type === 'shape' && (block.kind === 'scrim' || block.kind === 'fade') && !ctx.inLayer) err(path, `a ${block.kind} only makes sense inside a layer`);
     return null;
   };
 
@@ -257,17 +261,21 @@ export function validateAsset(doc) {
     if (typeof page.id !== 'string' || !ID_RE.test(page.id)) err(`${path}.id`, 'page id is required');
     else if (pageIds.has(page.id)) err(`${path}.id`, `duplicate page id "${page.id}"`);
     else pageIds.add(page.id);
+    if (page.bleed !== undefined && typeof page.bleed !== 'boolean') err(`${path}.bleed`, 'must be true or false');
     if (!colorNames.includes(page.background)) return err(`${path}.background`, `must be a brand colour: ${colorNames.join(', ')}`);
     const root = page.root;
     if (!root || root.type !== 'stack') return err(`${path}.root`, 'each page needs a root of type "stack"');
     if (isEmail && (root.direction || 'column') !== 'column') err(`${path}.root.direction`, 'email root must be a column');
     const count = { n: 0 };
-    const safeX = (format.safe || 0) * scale * 2;
+    // A bleed page runs edge to edge (photo-led posts): no safe margin is applied, so
+    // text blocks need their own padding.
+    const bleed = page.bleed === true && format.kind !== 'email';
+    const safeX = bleed ? 0 : (format.safe || 0) * scale * 2;
     walk(root, `${path}.root`, { bg: page.background, depth: 1, count, inLayer: false, width: format.w - safeX, exact: true });
     // Fixed canvas: the content must fit the page. (Email grows with content.)
     if (format.h) {
       const env = makeEnv(brand, format);
-      const avail = format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * scale;
+      const avail = bleed ? format.h : format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * scale;
       const est = estimateHeight(root, format.w - safeX, env);
       if (est > avail * 1.02) {
         // Say WHERE the height goes, so one revision fixes it.
@@ -286,7 +294,7 @@ export function validateAsset(doc) {
     const scan = (b, p) => {
       if (b.type === 'layer' && Array.isArray(b.children)) {
         const hasImg = b.children.some((c) => c.type === 'image');
-        const hasScrim = b.children.some((c) => c.type === 'shape' && c.kind === 'scrim');
+        const hasScrim = b.children.some((c) => c.type === 'shape' && (c.kind === 'scrim' || c.kind === 'fade'));
         const hasText = b.children.some((c) => c.type === 'text' || c.type === 'stat');
         if (hasImg && hasText && !hasScrim) {
           const uploadedPhoto = b.children.some((c) => c.type === 'image' && c.src?.kind === 'upload' && library[c.src.id]?.kind !== 'logo');
