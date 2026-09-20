@@ -113,7 +113,7 @@ export async function POST(request, { params }) {
       return NextResponse.json(describe(deckId, await readManifest(deckId, 'draft')));
     }
   } catch (err) {
-    console.error('[deck-builder]', action, err);
+    console.error('[builder/deck]', action, err);
     return NextResponse.json({ error: 'Something went wrong. Nothing was published.' }, { status: 500 });
   }
   return notFound();

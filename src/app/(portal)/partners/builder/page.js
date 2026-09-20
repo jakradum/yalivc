@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { requireDeckUser } from '@/decks/auth';
 import { ASSETS, TEMPLATES, assetStatus, deckLayouts } from '@/decks/builder/assets';
 import { ExportPdfButton } from './ExportPdfButton';
@@ -14,6 +15,9 @@ const fmt = (iso) => new Date(iso).toLocaleString('en-GB', { day: 'numeric', mon
 // internal-only guard as the decks.
 export default async function BuilderHome() {
   const email = await requireDeckUser();
+  // On the partners subdomain the proxy serves these at the root; locally they live under /partners.
+  const host = (await headers()).get('host') || '';
+  const prefix = /^(localhost|127\.0\.0\.1)/.test(host) ? '/partners' : '';
   const assets = await Promise.all(ASSETS.map(async (a) => ({ ...a, status: await assetStatus(a) })));
   const layouts = await deckLayouts('fund-ii');
   const tpl = TEMPLATES.deck;
@@ -48,10 +52,10 @@ export default async function BuilderHome() {
                   </div>
                 </dl>
                 <div className={s.actions}>
-                  <a className={`${s.btn} ${s.btnPrimary}`} href={TEMPLATES[a.kind].editorPath + '/'}>Open builder</a>
-                  <a className={s.btn} href={a.previewPath} target="_blank" rel="noopener noreferrer">View published</a>
+                  <a className={`${s.btn} ${s.btnPrimary}`} href={`${prefix}${TEMPLATES[a.kind].editorPath}/`}>Open builder</a>
+                  <a className={s.btn} href={prefix + a.previewPath} target="_blank" rel="noopener noreferrer">View published</a>
                   {a.status.hasDraft ? (
-                    <a className={s.btn} href={a.draftPreviewPath} target="_blank" rel="noopener noreferrer">View draft</a>
+                    <a className={s.btn} href={prefix + a.draftPreviewPath} target="_blank" rel="noopener noreferrer">View draft</a>
                   ) : null}
                   <ExportPdfButton deckId={a.deckId} />
                 </div>
