@@ -1,8 +1,8 @@
 // Literal port of the legacy Fund I dealflow Sankey (fund2-deck-v2.0.html,
 // "SLIDE 8 — FUND I DEALFLOW SUMMARY"): same node/ribbon geometry and
 // labels, converted mechanically to JSX. The flow counts (inbound → evaluated
-// → watch / diligence / pass → portfolio) come from the CRM, not Sanity, so
-// like the process copy they are code-owned; the ribbons are scaled to those
+// → watch / diligence / pass → portfolio) come from Airtable, not Sanity, so
+// like the process copy they are hardcoded here on purpose; the ribbons are scaled to those
 // numbers, so changing one means redrawing (a developer task), not an edit.
 export function SankeyDiagram() {
   return (
