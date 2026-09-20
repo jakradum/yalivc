@@ -55,3 +55,9 @@
 .formActions { display: flex; gap: 12px; align-items: center; }
 .upErr { font-size: 12px; color: #a11; }
 .small { font-size: 11px; color: #999; line-height: 1.45; }
+
+.trace { margin-top: 8px; font-size: 11px; color: #777; }
+.trace summary { cursor: pointer; }
+.trace div { padding: 2px 0; word-break: break-word; }
+.trace b { font-family: var(--deck-font-mono); font-weight: 400; color: var(--deck-color-crimson); }
+.traceBad { color: #a11; }

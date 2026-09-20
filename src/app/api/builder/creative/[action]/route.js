@@ -105,7 +105,7 @@ export async function POST(request, { params }) {
 
   try {
     const out = await runCreativeAgent(doc, prompt, Array.isArray(body.history) ? body.history : []);
-    return NextResponse.json({ doc: out.doc, reply: out.reply, validation: out.validation, calls: out.calls, unfinished: out.unfinished });
+    return NextResponse.json({ doc: out.doc, reply: out.reply, validation: out.validation, calls: out.calls, unfinished: out.unfinished, trace: out.trace });
   } catch (err) {
     console.error('[builder/creative]', err);
     return NextResponse.json({ error: 'Generation failed. Nothing was changed.' }, { status: 500 });
