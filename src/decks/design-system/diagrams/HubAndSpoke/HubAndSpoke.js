@@ -36,11 +36,52 @@ function SectorIcon({ label, pos, color }) {
   );
 }
 
+// The legacy spokes run to the icon's centre, straight through the label
+// text beneath it. Same coordinates, but each line now stops PAD px short of
+// the icon/label cluster: the ray from the hub is clipped at the first
+// bounding box (icon, or a label line) it enters.
+const PAD = 4;
+const CHAR_W = 0.6; // JetBrains Mono advance, in em
+
+function clusterBoxes(entry, fontSize) {
+  const boxes = [{ x0: entry.icon.x, y0: entry.icon.y, x1: entry.icon.x + 22, y1: entry.icon.y + 22 }];
+  for (const l of entry.labels) {
+    const w = l.text.length * fontSize * CHAR_W;
+    boxes.push({ x0: l.x - w / 2, y0: l.y - fontSize * 0.85, x1: l.x + w / 2, y1: l.y + fontSize * 0.25 });
+  }
+  return boxes.map((b) => ({ x0: b.x0 - PAD, y0: b.y0 - PAD, x1: b.x1 + PAD, y1: b.y1 + PAD }));
+}
+
+function spokeEnd(entry, fontSize) {
+  const { cx, cy } = LAYOUT.hub;
+  const dx = entry.spoke.x - cx;
+  const dy = entry.spoke.y - cy;
+  let tEnd = 1;
+  for (const b of clusterBoxes(entry, fontSize)) {
+    // slab method: entry parameter of the ray into the box
+    let t0 = 0;
+    let t1 = 1;
+    for (const [d, o, lo, hi] of [[dx, cx, b.x0, b.x1], [dy, cy, b.y0, b.y1]]) {
+      if (d === 0) {
+        if (o < lo || o > hi) t1 = -1;
+      } else {
+        const a = (lo - o) / d;
+        const c = (hi - o) / d;
+        t0 = Math.max(t0, Math.min(a, c));
+        t1 = Math.min(t1, Math.max(a, c));
+      }
+    }
+    if (t0 <= t1) tEnd = Math.min(tEnd, t0);
+  }
+  return { x: cx + dx * tEnd, y: cy + dy * tEnd };
+}
+
 function SectorGroup({ label, entry, color, fontSize }) {
   if (!entry) return null;
+  const end = spokeEnd(entry, fontSize);
   return (
     <g>
-      <line x1={LAYOUT.hub.cx} y1={LAYOUT.hub.cy} x2={entry.spoke.x} y2={entry.spoke.y} stroke="#c0bcb8" strokeWidth={0.6} strokeDasharray="2,3" />
+      <line x1={LAYOUT.hub.cx} y1={LAYOUT.hub.cy} x2={end.x} y2={end.y} stroke="#c0bcb8" strokeWidth={0.6} strokeDasharray="2,3" />
       <SectorIcon label={label} pos={entry.icon} color="#363636" />
       {entry.labels.map((l) => (
         <text key={l.text} x={l.x} y={l.y} textAnchor="middle" fontSize={fontSize} fontWeight={700} fill={color}>

@@ -21,6 +21,7 @@ export default {
             { name: 'id', title: 'Slide instance ID', type: 'string' },
             { name: 'ref', title: 'Slide definition (code manifest ID, or "section-divider")', type: 'string' },
             { name: 'props', title: 'Prop overrides (JSON)', type: 'text', rows: 3 },
+            { name: 'hidden', title: 'Hidden (kept in the manifest, left out of preview, PDF and numbering)', type: 'boolean', initialValue: false },
           ],
           preview: { select: { title: 'id', subtitle: 'ref' } },
         },

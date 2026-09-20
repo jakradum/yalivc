@@ -14,6 +14,16 @@ async function api(action, body) {
   return json;
 }
 
+function EyeIcon({ off }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+      <circle cx="12" cy="12" r="3" />
+      {off ? <path d="M3 3l18 18" /> : null}
+    </svg>
+  );
+}
+
 const fmt = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 export function BuilderClient({ deckId }) {
@@ -71,6 +81,38 @@ export function BuilderClient({ deckId }) {
     });
   };
 
+  // Reorder and hide/show update the list instantly and sync in the
+  // background; calls are chained so quick successive actions reach the
+  // server in order.
+  const queue = useRef(Promise.resolve());
+  const sync = (ops, optimistic) => {
+    if (optimistic) setSt(optimistic);
+    queue.current = queue.current
+      .then(() => api('apply', { deckId, ops }))
+      .then((res) => {
+        setSt(res);
+        setRev((r) => r + 1);
+      })
+      .catch((e) => {
+        setThread((t) => [...t, { role: 'error', text: e.message }]);
+        load();
+      });
+  };
+  const move = (id, position) => {
+    const slides = [...st.slides];
+    const from = slides.findIndex((x) => x.id === id);
+    if (from === -1 || from === position - 1) return;
+    const [item] = slides.splice(from, 1);
+    slides.splice(position - 1, 0, item);
+    sync([{ tool: 'move_slide', input: { id, position } }], { ...st, slides, hasDraft: true });
+  };
+  const toggleHidden = (id) => {
+    const sl = st.slides.find((x) => x.id === id);
+    if (!sl) return;
+    const slides = st.slides.map((x) => (x.id === id ? { ...x, hidden: !x.hidden } : x));
+    sync([{ tool: sl.hidden ? 'show_slide' : 'hide_slide', input: { id } }], { ...st, slides, hasDraft: true });
+  };
+
   const apply = (ops) =>
     run('apply', async () => {
       setSt(await api('apply', { deckId, ops }));
@@ -104,8 +146,7 @@ export function BuilderClient({ deckId }) {
 
   const onDrop = (targetId) => {
     if (dragId && targetId && dragId !== targetId) {
-      const pos = st.slides.findIndex((x) => x.id === targetId) + 1;
-      apply([{ tool: 'move_slide', input: { id: dragId, position: pos } }]);
+      move(dragId, st.slides.findIndex((x) => x.id === targetId) + 1);
     }
     setDragId(null);
     setOverId(null);
@@ -174,17 +215,38 @@ export function BuilderClient({ deckId }) {
           {(st?.slides || []).map((sl, i) => (
             <li
               key={sl.id}
-              className={`${s.slideRow} ${overId === sl.id && dragId !== sl.id ? s.over : ''}`}
-              draggable
-              onDragStart={() => setDragId(sl.id)}
+              className={`${s.slideRow} ${sl.hidden ? s.hiddenRow : ''} ${overId === sl.id && dragId !== sl.id ? s.over : ''}`}
               onDragOver={(e) => { e.preventDefault(); setOverId(sl.id); }}
               onDrop={() => onDrop(sl.id)}
-              onDragEnd={() => { setDragId(null); setOverId(null); }}
             >
+              <span
+                className={s.grip}
+                draggable
+                role="img"
+                aria-label={`Drag to reorder ${sl.id}`}
+                title="Drag to reorder"
+                onDragStart={(e) => {
+                  setDragId(sl.id);
+                  e.dataTransfer.effectAllowed = 'move';
+                  const row = e.currentTarget.closest('li');
+                  if (row) e.dataTransfer.setDragImage(row, 12, 12);
+                }}
+                onDragEnd={() => { setDragId(null); setOverId(null); }}
+              >
+                ⠿
+              </span>
               <span className={s.num}>{i + 1}</span>
               <button className={s.sid} onClick={() => jump(sl.id)} title={`${sl.type} — click to jump`}>{sl.id}</button>
               {sl.overridden.length ? <span className={s.edited} title={`Edited: ${sl.overridden.join(', ')}`}>edited</span> : null}
-              <button className={s.x} aria-label={`Remove ${sl.id}`} disabled={!!busy} onClick={() => apply([{ tool: 'remove_slide', input: { id: sl.id } }])}>×</button>
+              <button
+                className={s.eye}
+                aria-label={sl.hidden ? `Show ${sl.id}` : `Hide ${sl.id}`}
+                aria-pressed={!!sl.hidden}
+                title={sl.hidden ? 'Hidden from preview and PDF — click to show' : 'Hide from preview and PDF'}
+                onClick={() => toggleHidden(sl.id)}
+              >
+                <EyeIcon off={!!sl.hidden} />
+              </button>
             </li>
           ))}
         </ul>

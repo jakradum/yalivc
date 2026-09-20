@@ -77,6 +77,7 @@ export const TOOLS = {
           id: e.id,
           type: typeOf(ctx.deckId, e.ref),
           overridden: Object.keys(e.props),
+          hidden: !!e.hidden,
         })),
         removed: catalogRefs(ctx.deckId).filter((c) => !present.has(c.ref)),
       });
@@ -210,8 +211,33 @@ export const TOOLS = {
     },
   },
 
+  hide_slide: {
+    description: 'Hide a slide: it stays in the deck list (so it can be shown again in place) but is left out of the preview, the PDF and the page numbering. Prefer this over remove_slide when the user says hide, skip or leave out.',
+    input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'], additionalProperties: false },
+    run(ctx, { id }) {
+      const e = ctx.entries[find(ctx, id)];
+      if (e.hidden) return `"${id}" is already hidden.`;
+      if (ctx.entries.filter((x) => !x.hidden).length <= 1) throw new Error('At least one slide must stay visible.');
+      e.hidden = true;
+      ctx.log.push(`Hid ${id}`);
+      return `OK — "${id}" is hidden.`;
+    },
+  },
+
+  show_slide: {
+    description: 'Show a hidden slide again, in its current position.',
+    input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'], additionalProperties: false },
+    run(ctx, { id }) {
+      const e = ctx.entries[find(ctx, id)];
+      if (!e.hidden) return `"${id}" is already visible.`;
+      e.hidden = false;
+      ctx.log.push(`Showed ${id}`);
+      return `OK — "${id}" is visible again.`;
+    },
+  },
+
   remove_slide: {
-    description: 'Remove a slide from the deck. Catalog slides can be re-added later with add_slide.',
+    description: 'Take a slide out of the deck entirely (it moves to the removed list and can be re-added with add_slide). Only for "delete/remove"; use hide_slide for "hide/skip".',
     input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'], additionalProperties: false },
     run(ctx, { id }) {
       const i = find(ctx, id);

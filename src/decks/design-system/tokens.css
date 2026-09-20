@@ -14,7 +14,10 @@
   --deck-color-paper: #ffffff;
   --deck-color-connector: #c0bcb8; /* spoke/connector lines — intentional exception to border rule */
 
-  --deck-font-mono: 'JetBrains Mono', monospace;
+  /* JetBrains Mono has no ₹ (U+20B9); Inter does. Without an explicit fallback
+     the glyph renders as an empty box wherever the OS has no font for it
+     (Vercel's Chromium), even though it looks fine on a Mac. */
+  --deck-font-mono: 'JetBrains Mono', 'Inter', monospace;
   --deck-font-body: 'Inter', sans-serif;
 
   --deck-border: 1px solid var(--deck-color-ink);
