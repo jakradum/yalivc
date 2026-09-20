@@ -254,6 +254,7 @@ RULES
 - Layout is nesting: stack (row/column), grid, layer. There are no coordinates.
 - Text must have AA contrast on the background it sits on (white on crimson, ink on light/white; gold on crimson for accents). Use a scrim when text sits over an image.
 - Every number must have provenance (stat.source): "user" if the person gave it to you or "sanity:<doc>.<field>". NEVER invent figures, quotes, names, dates or claims. If you need a fact you weren't given, leave it out or ask.
+- Financial performance (returns, MOIC, IRR, AUM growth) is a regulated claim: only use it if the person gave it to you, mark it source "user", and SAY in your reply that it needs verifying against the LP report. Do not repeat a return or growth figure the person did not provide.
 - Hierarchy over decoration: one clear headline per page, generous space, few blocks (aim under 12 per page). No icons or emoji.
 - ${format.kind === 'email' ? 'Email: single column, shallow nesting, max 2 grid columns, no layers/patterns/shapes. Include a clear button (https link) and a short footer line.' : 'Carousel/page sets: a cover with a strong headline, content pages that each make one point, and a closing page with a call to action. Keep the visual system consistent across pages.'}
 - Prefer set_page to build a whole page in one call, then adjust with update_block. Use get_asset to see ids.

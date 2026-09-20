@@ -45,9 +45,9 @@ function makeCtx(doc) {
 }
 
 function Highlighted({ text, ctx }) {
-  const parts = String(text).split('|');
+  const parts = String(text).split('==');
   return parts.map((seg, i) =>
-    i % 2 === 1 ? (
+    i % 2 === 1 && parts.length % 2 === 1 ? (
       <span key={i} style={{ background: ctx.color('gold'), color: ctx.color('ink'), padding: `0 ${ctx.px(6)}px` }}>
         {seg}
       </span>
@@ -125,7 +125,7 @@ function Block({ b, ctx, parentLayer }) {
     }
     case 'text':
       return wrap(
-        <div style={{ ...ctx.role(b.role), color: ctx.color(b.color), textAlign: b.align === 'center' ? 'center' : b.align === 'end' ? 'right' : 'left', whiteSpace: 'pre-line', overflowWrap: 'anywhere' }}>
+        <div style={{ ...ctx.role(b.role), color: ctx.color(b.color), textAlign: b.align === 'center' ? 'center' : b.align === 'end' ? 'right' : 'left', whiteSpace: 'pre-line', overflowWrap: 'break-word' }}>
           <Highlighted text={b.text} ctx={ctx} />
         </div>
       );

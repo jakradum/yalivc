@@ -1,4 +1,4 @@
-import { FORMATS } from './formats.js';
+import { FORMATS, formatScale } from './formats.js';
 import { getBrand } from './brands/index.js';
 import { BLOCKS, LAYER_CHILD_PROPS, TEXT_ROLES } from './blocks.js';
 import { contrast } from './contrast.js';
@@ -15,6 +15,9 @@ import { contrast } from './contrast.js';
 
 const MAX_BLOCKS_PER_PAGE = 40;
 const MAX_DEPTH = 6;
+// Performance / return claims are regulated territory for a fund. If one comes
+// from the person's own words (not a Sanity field) it's allowed but flagged.
+const PERFORMANCE = /\b(returns?|returned|moic|irr|tvpi|dpi|multiple|aum|growth|grew|performance|profit|gains?|yield)\b/i;
 const ID_RE = /^[a-z0-9][a-z0-9-_]{0,40}$/i;
 
 export function validateAsset(doc) {
@@ -45,6 +48,26 @@ export function validateAsset(doc) {
   const radiusNames = Object.keys(brand.radius);
   const ids = new Set();
   const isEmail = format.kind === 'email';
+  const scale = isEmail ? 1 : formatScale(format);
+  const mode = isEmail ? 'email' : 'canvas';
+  const sp = (k) => (brand.space[k || 'none']?.[mode] ?? 0) * scale;
+  // Rough advance width per character, in em. Estimates only — but reliable enough
+  // to catch a long word in a narrow cell, which is the failure that actually happens.
+  const CHAR = { mono: 0.6, body: 0.52 };
+  const fontPx = (role) => {
+    const t = brand.type[role];
+    return t ? { size: isEmail ? t.email : t.size * scale, k: CHAR[t.font] } : null;
+  };
+  const fit = (path, word, role, ctx, what) => {
+    const f = fontPx(role);
+    if (!f || !ctx.width) return;
+    const need = word.length * f.k * f.size;
+    if (need <= ctx.width * 1.02) return;
+    const msg = `${what} "${word.length > 24 ? `${word.slice(0, 22)}…` : word}" needs ~${Math.round(need)}px at role "${role}" but its cell is ~${Math.round(ctx.width)}px wide — use a smaller role or fewer columns`;
+    if (ctx.exact) err(path, msg);
+    else warn(path, msg);
+  };
+  const longest = (text) => String(text).replace(/==/g, '').split(/\s+/).reduce((a, w) => (w.length > a.length ? w : a), '');
 
   const checkProp = (path, name, def, val) => {
     const at = `${path}.${name}`;
@@ -139,7 +162,19 @@ export function validateAsset(doc) {
       if (block.fill && colorNames.includes(block.fill)) bg = block.fill;
       if (block.type === 'grid' && isEmail && block.columns > format.maxGridColumns) err(`${path}.columns`, `email allows at most ${format.maxGridColumns} columns`);
       if (!Array.isArray(block.children)) err(`${path}.children`, 'containers need a children list');
-      else block.children.forEach((c, i) => walk(c, `${path}.children[${i}]`, { ...ctx, bg, depth: ctx.depth + 1, inLayer: block.type === 'layer' }));
+      else {
+        const pad = block.type === 'layer' ? 0 : sp(block.padding);
+        const gap = block.type === 'layer' ? 0 : sp(block.gap ?? 'm');
+        const n = Math.max(block.children.length, 1);
+        let cw = ctx.width - pad * 2;
+        let exact = ctx.exact;
+        if (block.type === 'grid' && Number.isInteger(block.columns)) cw = (cw - gap * (block.columns - 1)) / block.columns;
+        else if (block.type === 'stack' && block.direction === 'row') {
+          cw = (cw - gap * (n - 1)) / n;
+          exact = false; // unequal children are normal in a row; only warn
+        }
+        block.children.forEach((c, i) => walk(c, `${path}.children[${i}]`, { ...ctx, bg, width: cw, exact, depth: ctx.depth + 1, inLayer: block.type === 'layer' }));
+      }
     } else if (block.children !== undefined) {
       err(`${path}.children`, `${block.type} cannot have children`);
     }
@@ -147,11 +182,20 @@ export function validateAsset(doc) {
     if (block.type === 'text' && TEXT_ROLES[block.role] !== undefined) {
       if (typeof block.text === 'string' && block.text.length > TEXT_ROLES[block.role]) err(`${path}.text`, `too long for role "${block.role}" (${block.text.length}/${TEXT_ROLES[block.role]} chars)`);
       contrastCheck(path, block.color, bg, brand.type[block.role]?.large, ctx.overImage);
+      fit(`${path}.text`, longest(block.text || ''), block.role, ctx, 'the word');
     }
+    if (block.type === 'stat' && typeof block.value === 'string') fit(`${path}.value`, block.value, 'stat', ctx, 'the figure');
+    if (block.type === 'list' && Array.isArray(block.items)) block.items.forEach((it, i) => fit(`${path}.items[${i}]`, longest(it), block.role || 'body', ctx, 'the word'));
     if (block.type === 'stat') contrastCheck(path, block.color || 'crimson', bg, true, ctx.overImage);
     if (block.type === 'list') contrastCheck(path, block.color, bg, false, ctx.overImage);
     if (block.type === 'stat' && typeof block.source === 'string' && !(block.source === 'user' || /^sanity:[\w.-]+$/.test(block.source))) {
       err(`${path}.source`, 'must be "user" or "sanity:<doc>.<field>" — numbers need provenance');
+    }
+    if (block.type === 'stat' && block.source === 'user' && PERFORMANCE.test(`${block.label} ${block.value}`)) {
+      warn(path, 'performance/return figure supplied by the user, not read from Sanity — verify it against the LP report before publishing');
+    }
+    if (block.type === 'text' && /\d/.test(block.text || '') && PERFORMANCE.test(block.text || '')) {
+      warn(path, 'text states a figure about returns or performance — confirm it is sourced before publishing');
     }
     if (block.type === 'image' && !block.decorative && !(typeof block.alt === 'string' && block.alt.trim())) err(`${path}.alt`, 'alt text is required (or set decorative: true)');
     if (block.type === 'image' && isEmail && block.ratio === undefined) warn(path, 'email images should set a ratio');
@@ -182,7 +226,8 @@ export function validateAsset(doc) {
     if (!root || root.type !== 'stack') return err(`${path}.root`, 'each page needs a root of type "stack"');
     if (isEmail && (root.direction || 'column') !== 'column') err(`${path}.root.direction`, 'email root must be a column');
     const count = { n: 0 };
-    walk(root, `${path}.root`, { bg: page.background, depth: 1, count, inLayer: false });
+    const safeX = (format.safe || 0) * scale * 2;
+    walk(root, `${path}.root`, { bg: page.background, depth: 1, count, inLayer: false, width: format.w - safeX, exact: true });
     // an image + text in the same layer without a scrim → legibility warning
     const scan = (b, p) => {
       if (b.type === 'layer' && Array.isArray(b.children)) {

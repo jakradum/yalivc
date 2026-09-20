@@ -38,6 +38,25 @@ export function CreativeClient() {
     setView('preview');
   };
 
+  function loadFile(e) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    file.text().then((txt) => {
+      try {
+        const parsed = JSON.parse(txt);
+        const v = validateAsset(parsed);
+        if (!v.ok) throw new Error(`${v.errors[0].path}: ${v.errors[0].msg}`);
+        setDoc(parsed);
+        setFormat(parsed.format);
+        setThread([{ role: 'assistant', text: `Loaded “${parsed.title}”.` }]);
+        setView('preview');
+      } catch (err) {
+        setThread((t) => [...t, { role: 'error', text: `Couldn’t load that file: ${err.message}` }]);
+      }
+    });
+  }
+
   async function send() {
     const text = prompt.trim();
     if (!text || busy) return;
@@ -84,6 +103,8 @@ export function CreativeClient() {
           {doc ? <button className={s.link} onClick={() => { setDoc(null); setThread([]); }}>New asset</button> : null}
           <div className={s.examples}>
             Examples: <button className={s.link} onClick={() => loadExample('carousel')}>carousel</button> · <button className={s.link} onClick={() => loadExample('emailer')}>emailer</button>
+            <br />
+            <label className={s.link}>Load asset JSON<input type="file" accept="application/json,.json" onChange={loadFile} hidden /></label>
           </div>
         </div>
 

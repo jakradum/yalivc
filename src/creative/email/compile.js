@@ -32,8 +32,8 @@ export function compileEmail(doc, { baseUrl = '' } = {}) {
   };
   const rich = (text) =>
     esc(text)
-      .split('|')
-      .map((seg, i) => (i % 2 ? `<span style="background-color:${col('gold')};color:${col('ink')};padding:0 3px;">${seg}</span>` : seg))
+      .split('==')
+      .map((seg, i, all) => (i % 2 && all.length % 2 === 1 ? `<span style="background-color:${col('gold')};color:${col('ink')};padding:0 3px;">${seg}</span>` : seg))
       .join('')
       .replace(/\n/g, '<br>');
   const table = (inner, extra = '') => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"${extra}>${inner}</table>`;
