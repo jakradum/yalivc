@@ -85,6 +85,12 @@ function ensureIds(block, taken) {
 
 // ── operations ─────────────────────────────────────────────────────────────
 const OPS = {
+  // Internal (not a model tool): fact lookups add a company's logo here.
+  add_asset(doc, { id, asset }) {
+    doc.assets = { ...(doc.assets || {}), [id]: asset };
+    return `Added picture "${id}".`;
+  },
+
   set_title(doc, { title }) {
     doc.title = String(title);
     return `Title set to "${doc.title}".`;
@@ -241,6 +247,13 @@ export function runTool(holder, name, input) {
   return `OK — ${message}${w}`;
 }
 
+const FACTS_SECTION = `FACTS YOU CAN LOOK UP (Sanity, read-only)
+- lookup_company(query): a Yali portfolio company's public description, sector, status, website, and whether Yali lists it publicly.
+- attach_company_logo(company): adds that company's official logo to the asset's pictures. Then use it in an image block ({ "kind":"upload", "id":"<returned id>" }) with fit "contain", on a light chip or light ground (company logos are dark on white).
+- get_fund_facts(): Fund II terms, each with the \`source\` string to put on a stat block.
+When the request is about a portfolio company (news, an award, a hire, a launch, any announcement) ALWAYS call lookup_company first, use what it returns as context (never contradict it), then attach and show that company's logo: on portfolio news it goes on a light chip beside the eyebrow. If the company isn't found or has no logo, say so; never invent a company or use one company's logo for another.
+Confidentiality: these are public assets. Never put amounts invested, valuations, ownership or returns for any company on a card, even if asked, unless the person typed the figure themselves (then flag it). A company with listedOnWebsite false is not publicly listed by Yali: name it only if the request explicitly names it.`;
+
 // ── uploaded assets, as the AI sees them ───────────────────────────────────
 function assetSection(doc) {
   const ids = Object.keys(doc.assets || {});
@@ -298,6 +311,8 @@ BRAND TOKENS (the only ones that exist)
 - brand voice: ${brand.voice.join(' ')}
 
 ${assetSection(doc)}
+
+${FACTS_SECTION}
 
 ${HOUSE_STYLE}
 

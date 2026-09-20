@@ -41,9 +41,7 @@ export function CreativeClient() {
   const [busy, setBusy] = useState(false);
   const [view, setView] = useState('preview'); // preview | email | json
   const [library, setLibrary] = useState({});
-  const [pending, setPending] = useState(null); // file awaiting its details
-  const [meta, setMeta] = useState({ kind: 'photo', alt: '', description: '', noCrop: false, people: false, ground: 'any' });
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(0); // pictures currently being added
   const [upError, setUpError] = useState('');
   const picker = useRef(null);
 
@@ -83,42 +81,33 @@ export function CreativeClient() {
     });
   }
 
-  async function pickFile(e) {
-    const file = e.target.files?.[0];
-    e.target.value = '';
+  // Choosing a picture adds it immediately: it is uploaded, looked at (kind, alt
+  // text, people), and put in the library. Nothing to type or confirm.
+  async function addFiles(fileList) {
     setUpError('');
-    if (!file) return;
-    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return setUpError('Use a PNG, JPEG or WebP image.');
-    setPending(file);
-    setMeta({ kind: /logo/i.test(file.name) ? 'logo' : 'photo', alt: '', description: '', noCrop: false, people: false, ground: 'any' });
+    for (const file of Array.from(fileList || [])) {
+      if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+        setUpError(`${file.name}: use a PNG, JPEG or WebP image.`);
+        continue;
+      }
+      setUploading((n) => n + 1);
+      try {
+        const fd = new FormData();
+        fd.append('file', await shrink(file));
+        const res = await fetch('/api/builder/creative/upload/', { method: 'POST', body: fd });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || `Upload failed (${res.status})`);
+        setLibrary((l) => ({ ...l, [json.id]: json.asset }));
+      } catch (err) {
+        setUpError(`${file.name}: ${err.message}`);
+      } finally {
+        setUploading((n) => n - 1);
+      }
+    }
   }
 
-  // → { id, asset } when the picture was added, else null.
-  async function doUpload() {
-    if (!pending || uploading) return null;
-    if (!meta.alt.trim()) {
-      setUpError('Alt text is required: describe the picture in a few words.');
-      return null;
-    }
-    setUploading(true);
-    setUpError('');
-    try {
-      const file = await shrink(pending);
-      const fd = new FormData();
-      fd.append('file', file);
-      Object.entries(meta).forEach(([k, v]) => fd.append(k, String(v)));
-      const res = await fetch('/api/builder/creative/upload/', { method: 'POST', body: fd });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || `Upload failed (${res.status})`);
-      setLibrary((l) => ({ ...l, [json.id]: json.asset }));
-      setPending(null);
-      return { id: json.id, asset: json.asset };
-    } catch (err) {
-      setUpError(err.message);
-      return null;
-    } finally {
-      setUploading(false);
-    }
+  function editAsset(id, patch) {
+    setLibrary((l) => ({ ...l, [id]: { ...l[id], ...patch } }));
   }
 
   function removeAsset(id) {
@@ -131,17 +120,8 @@ export function CreativeClient() {
   async function send() {
     const text = prompt.trim();
     if (!text || busy) return;
-    // A picture that's been picked but not added would never reach Claude. Add it
-    // now if it's ready; otherwise stop and say what's missing.
-    let sendLibrary = library;
-    if (pending) {
-      const added = await doUpload();
-      if (!added) {
-        setUpError((e) => e || 'Finish adding your picture first: give it alt text, then send again.');
-        return;
-      }
-      sendLibrary = { ...library, [added.id]: added.asset };
-    }
+    if (uploading > 0) return; // a picture is still being added
+    const sendLibrary = library;
     setPrompt('');
     setBusy(true);
     setThread((t) => [...t, { role: 'user', text }]);
@@ -217,58 +197,29 @@ export function CreativeClient() {
             <div key={id} className={s.asset}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`${a.url}?w=96&h=96&fit=crop&auto=format`} alt="" width={40} height={40} className={s.thumb} />
-              <span className={s.assetText}><b>{a.kind}</b> {a.alt}</span>
+              <span className={s.assetText}>
+                <select className={s.kindSel} value={a.kind} onChange={(e) => editAsset(id, { kind: e.target.value, ...(e.target.value === 'photo' ? {} : { noCrop: true }) })} aria-label="What is it">
+                  <option value="photo">photo</option>
+                  <option value="logo">logo</option>
+                  <option value="graphic">graphic</option>
+                </select>
+                <input className={s.altInput} value={a.alt} maxLength={160} onChange={(e) => editAsset(id, { alt: e.target.value })} aria-label="What the picture shows (Claude reads this)" title="What the picture shows. Claude can't see pictures; it works from this." />
+              </span>
               <button className={s.x} onClick={() => removeAsset(id)} aria-label={`Remove ${a.alt}`}>×</button>
             </div>
           ))}
-          {!pending ? (
-            <>
-              <button className={s.link} onClick={() => picker.current?.click()}>+ Upload a picture</button>
-              <input ref={picker} type="file" accept="image/png,image/jpeg,image/webp" onChange={pickFile} hidden />
-            </>
-          ) : (
-            <div className={s.form}>
-              <div className={s.fname}>{pending.name}</div>
-              <div className={s.notAdded}>Not attached yet. Add alt text and press Add to library (or just send: it will be added).</div>
-              <label className={s.lab}>What is it?
-                <select className={s.select} value={meta.kind} onChange={(e) => setMeta({ ...meta, kind: e.target.value })}>
-                  <option value="photo">Photo</option>
-                  <option value="logo">Logo</option>
-                  <option value="graphic">Graphic / diagram</option>
-                </select>
-              </label>
-              <label className={s.lab}>Alt text (required)
-                <input className={s.input} value={meta.alt} maxLength={160} onChange={(e) => setMeta({ ...meta, alt: e.target.value })} placeholder="e.g. The team at the C2i tape-out" />
-              </label>
-              <label className={s.lab}>Notes for the designer (optional)
-                <input className={s.input} value={meta.description} maxLength={300} onChange={(e) => setMeta({ ...meta, description: e.target.value })} placeholder="e.g. Best for cover cards; subject on the left" />
-              </label>
-              <label className={s.check}><input type="checkbox" checked={meta.noCrop} onChange={(e) => setMeta({ ...meta, noCrop: e.target.checked })} /> Never crop it</label>
-              <label className={s.check}><input type="checkbox" checked={meta.people} onChange={(e) => setMeta({ ...meta, people: e.target.checked })} /> Shows people</label>
-              {meta.kind === 'logo' ? (
-                <label className={s.lab}>Works on
-                  <select className={s.select} value={meta.ground} onChange={(e) => setMeta({ ...meta, ground: e.target.value })}>
-                    <option value="any">Any background</option>
-                    <option value="light">Light backgrounds only</option>
-                    <option value="dark">Dark backgrounds only</option>
-                  </select>
-                </label>
-              ) : null}
-              <div className={s.formActions}>
-                <button className={s.send} onClick={doUpload} disabled={uploading}>{uploading ? 'Uploading…' : 'Add to library'}</button>
-                <button className={s.link} onClick={() => { setPending(null); setUpError(''); }}>Cancel</button>
-              </div>
-            </div>
-          )}
+          {uploading > 0 ? <div className={s.small}>Adding {uploading} picture{uploading > 1 ? 's' : ''}…</div> : null}
+          <button className={s.link} onClick={() => picker.current?.click()}>+ Add pictures</button>
+          <input ref={picker} type="file" multiple accept="image/png,image/jpeg,image/webp" onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }} hidden />
           {upError ? <div className={s.upErr} role="alert">{upError}</div> : null}
-          <div className={s.small}>Claude can only use pictures listed here, and follows the rules you set (no cropping, logo grounds, text over photos needs a scrim).</div>
+          <div className={s.small}>Pictures are added as soon as you choose them. Claude can only use what is listed here, and works from the short description beside each one, so fix it if it's wrong.</div>
         </div>
 
         <div className={s.head}>Ask Claude</div>
         <div className={s.thread}>
           {thread.length === 0 ? (
             <p className={s.hint}>
-              Describe the asset: “A 5-card carousel introducing Fund II’s six sectors, ending with a call to action.”
+              Describe the asset: “Portfolio news post: Deeplase won an award at Fit Forward. Use the photo I added.” For a portfolio company, Claude looks it up and adds its logo itself.
               <br /><br />
               Claude composes it freely from blocks, but only with brand colours, type roles and spacing steps, allowed
               images and links, readable contrast, and sourced numbers. It won’t invent figures.
@@ -291,7 +242,7 @@ export function CreativeClient() {
         </div>
         <div className={s.compose}>
           <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }} placeholder="What should it be? Mention your picture if you want it used. (⌘/Ctrl + Enter)" aria-label="Describe the asset" maxLength={2000} />
-          <button className={s.send} onClick={send} disabled={busy || !prompt.trim()}>{doc ? 'Refine' : 'Create'}</button>
+          <button className={s.send} onClick={send} disabled={busy || uploading > 0 || !prompt.trim()}>{uploading > 0 ? 'Adding…' : doc ? 'Refine' : 'Create'}</button>
         </div>
       </aside>
 

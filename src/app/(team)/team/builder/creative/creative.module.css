@@ -64,3 +64,8 @@
 
 .notAdded { font-size: 11px; color: var(--deck-color-crimson); line-height: 1.4; }
 .emptyNote { font-size: 13px; color: #777; max-width: 60ch; padding: 24px 0; line-height: 1.6; }
+
+.kindSel { font-family: var(--deck-font-mono); font-size: 9px; text-transform: uppercase; color: var(--deck-color-crimson); border: 0; background: transparent; padding: 0; margin-right: 6px; cursor: pointer; }
+.altInput { font: inherit; font-size: 12px; border: 0; border-bottom: 1px dotted #bbb; background: transparent; width: 100%; padding: 2px 0; }
+.altInput:focus { outline: none; border-bottom-color: var(--deck-color-crimson); }
+.assetText { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; overflow: visible; white-space: normal; }
