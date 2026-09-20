@@ -123,16 +123,241 @@
     ]
   },
   "appendixPortfolio": {
-    "heading": "Appendix · Portfolio",
     "companies": [
-      { "name": "4baseCare", "sector": "Life Sciences", "investmentStatus": "active" },
-      { "name": "Perceptyne", "sector": "Robotics", "investmentStatus": "active" },
-      { "name": "C2i Semiconductors", "sector": "Fabless Semiconductor", "investmentStatus": "exited" },
-      { "name": "Tonbo Imaging", "sector": "Aerospace & Surveillance", "investmentStatus": "active" },
-      { "name": "PointAI", "sector": "AI", "investmentStatus": "active" },
-      { "name": "LatentForce", "sector": "AI", "investmentStatus": "active" },
-      { "name": "DeepLase", "sector": "Aerospace & Surveillance", "investmentStatus": "active" }
+      {
+        "name": "4baseCare",
+        "sector": "Life Sciences",
+        "description": "Precision oncology platform leveraging whole-exome sequencing and clinical datasets from underrepresented Indian populations. ICMR-collaborated pipeline targeting colorectal, lung, and breast cancer subtypes absent from Western cohorts. Clinico-genomic reports in clinical use at leading Indian cancer centres.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "35.38 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "104.47 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "2.95x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Aug 2024"
+          },
+          {
+            "label": "Ownership",
+            "value": "15.4%"
+          },
+          {
+            "label": "Stage",
+            "value": "Series A"
+          }
+        ],
+        "investmentStatus": "active"
+      },
+      {
+        "name": "Perceptyne",
+        "sector": "Robotics",
+        "description": "Full-stack humanoid and dextrous robot systems. PR-9D single-arm (9-DoF) and PR-34D dual-arm (34-DoF) platforms with proprietary tactile-sensing hardware trained on in-house manipulation datasets. Targeting automotive, electronics, and precision assembly lines.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "11.8 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "11.8 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Oct 2024"
+          },
+          {
+            "label": "Ownership",
+            "value": "12.8%"
+          },
+          {
+            "label": "Stage",
+            "value": "Seed"
+          }
+        ],
+        "investmentStatus": "active"
+      },
+      {
+        "name": "C2i Semiconductors",
+        "sector": "Fabless Semiconductor",
+        "description": "Digital power management ICs for AI data center infrastructure. Proprietary controllers delivering 40% efficiency improvement over analog alternatives, reducing total rack power consumption. First silicon in production; Series A co-led by Yali with anchor institutional LP participation.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "33.57 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "114.74 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "3.42x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Oct 2024"
+          },
+          {
+            "label": "Ownership",
+            "value": "29.2%"
+          },
+          {
+            "label": "Stage",
+            "value": "Seed"
+          }
+        ],
+        "investmentStatus": "exited"
+      },
+      {
+        "name": "Tonbo Imaging",
+        "sector": "Aerospace & Surveillance",
+        "description": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Active Series D follow-on in process; expanding IP base into high-power microwave directed energy applications.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "60.0 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "60.0 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Mar 2025"
+          },
+          {
+            "label": "Ownership",
+            "value": "4.2%"
+          },
+          {
+            "label": "Stage",
+            "value": "Series D"
+          }
+        ],
+        "investmentStatus": "active"
+      },
+      {
+        "name": "PointAI",
+        "sector": "Artificial Intelligence",
+        "description": "GenAI-powered spatial commerce platform enabling customers to visualise and interact with physical products in 3D before purchase. Integrates with existing e-commerce product catalogues; deployment active with consumer electronics and furniture retailers. Reduces returns rate and increases conversion on high-consideration purchases.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "35.19 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "35.19 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Jun 2025"
+          },
+          {
+            "label": "Ownership",
+            "value": "10.3%"
+          },
+          {
+            "label": "Stage",
+            "value": "Seed"
+          }
+        ],
+        "investmentStatus": "active"
+      },
+      {
+        "name": "LatentForce",
+        "sector": "Artificial Intelligence",
+        "description": "Enterprise code modernisation using AI and automation. Platform analyses legacy codebases (COBOL, Fortran, Java EE) and generates modernised equivalents with automated test coverage and regression validation. Series A fundraise in progress. Target customers: large financial institutions and public-sector IT departments.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "7.61 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "7.69 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.01x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Nov 2025"
+          },
+          {
+            "label": "Ownership",
+            "value": "15.4%"
+          },
+          {
+            "label": "Stage",
+            "value": "Seed"
+          }
+        ],
+        "investmentStatus": "active"
+      },
+      {
+        "name": "DeepLase",
+        "sector": "Smart Manufacturing",
+        "description": "IIT-Delhi spin-out with proprietary fiber laser and photonics IP developed over eight years. Applications span directed energy weapons, industrial precision cutting, and free-space optical (FSO) secure communications. iDEX-funded prototype delivered to DRDO; strategic interest from Indian defence primes and allied government labs.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "3.00 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "3.00 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Jan 2026"
+          },
+          {
+            "label": "Ownership",
+            "value": "9.4%"
+          },
+          {
+            "label": "Stage",
+            "value": "Seed"
+          }
+        ],
+        "investmentStatus": "active"
+      }
     ]
+  },
+  "appendixDescriptions": {
+    "4basecare": "Precision oncology platform leveraging whole-exome sequencing and clinical datasets from underrepresented Indian populations. ICMR-collaborated pipeline targeting colorectal, lung, and breast cancer subtypes absent from Western cohorts. Clinico-genomic reports in clinical use at leading Indian cancer centres.",
+    "perceptyne-robotics": "Full-stack humanoid and dextrous robot systems. PR-9D single-arm (9-DoF) and PR-34D dual-arm (34-DoF) platforms with proprietary tactile-sensing hardware trained on in-house manipulation datasets. Targeting automotive, electronics, and precision assembly lines.",
+    "c2i": "Digital power management ICs for AI data center infrastructure. Proprietary controllers delivering 40% efficiency improvement over analog alternatives, reducing total rack power consumption. First silicon in production; Series A co-led by Yali with anchor institutional LP participation.",
+    "tonbo-imaging-india-limited": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Active Series D follow-on in process; expanding IP base into high-power microwave directed energy applications.",
+    "pointai": "GenAI-powered spatial commerce platform enabling customers to visualise and interact with physical products in 3D before purchase. Integrates with existing e-commerce product catalogues; deployment active with consumer electronics and furniture retailers. Reduces returns rate and increases conversion on high-consideration purchases.",
+    "latentforce": "Enterprise code modernisation using AI and automation. Platform analyses legacy codebases (COBOL, Fortran, Java EE) and generates modernised equivalents with automated test coverage and regression validation. Series A fundraise in progress. Target customers: large financial institutions and public-sector IT departments.",
+    "deeplase": "IIT-Delhi spin-out with proprietary fiber laser and photonics IP developed over eight years. Applications span directed energy weapons, industrial precision cutting, and free-space optical (FSO) secure communications. iDEX-funded prototype delivered to DRDO; strategic interest from Indian defence primes and allied government labs."
   },
   "media": {
     "heading": "Media & Recognition",

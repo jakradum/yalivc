@@ -29,7 +29,41 @@ const clampPos = (ctx, position) => {
   return Math.min(Math.max(n, 1), ctx.entries.length + 1) - 1;
 };
 
-const short = (v) => JSON.stringify(v).slice(0, 4000);
+// Resolve one item of a list prop, by 1-based `index` or by `match`
+// ({ field, value }, case-insensitive) — e.g. { field: 'name', value: '4baseCare' }.
+function locateItem(list, { index, match }) {
+  if (!Array.isArray(list)) throw new Error('That prop is not a list.');
+  let i = -1;
+  if (Number.isInteger(index)) i = index - 1;
+  else if (match && match.field) {
+    const want = String(match.value).trim().toLowerCase();
+    const hits = list.map((it, n) => (String(it?.[match.field] ?? '').trim().toLowerCase() === want ? n : -1)).filter((n) => n !== -1);
+    if (hits.length > 1) throw new Error(`"${match.value}" matches ${hits.length} items; use index instead.`);
+    i = hits.length ? hits[0] : -1;
+  } else throw new Error('Give either `index` (1-based) or `match` ({ field, value }).');
+  if (i < 0 || i >= list.length) throw new Error(`No such item (list has ${list.length}).`);
+  return i;
+}
+
+function effectiveList(ctx, e, key) {
+  const eff = { ...baseProps(ctx, e.ref), ...e.props };
+  if (!(key in eff)) throw new Error(`"${key}" is not a prop of this slide (props: ${Object.keys(eff).join(', ')})`);
+  return { list: eff[key], base: baseProps(ctx, e.ref) };
+}
+
+const itemLocator = {
+  id: { type: 'string' },
+  key: { type: 'string', description: 'The list prop, e.g. "companies"' },
+  index: { type: 'integer', minimum: 1, description: '1-based position in the list' },
+  match: {
+    type: 'object',
+    properties: { field: { type: 'string' }, value: { type: 'string' } },
+    required: ['field', 'value'],
+    description: 'Alternative to index, e.g. { "field": "name", "value": "4baseCare" }',
+  },
+};
+
+const short = (v) => JSON.stringify(v).slice(0, 8000);
 
 export const TOOLS = {
   list_slides: {
@@ -89,6 +123,61 @@ export const TOOLS = {
       e.props = { ...e.props, ...props };
       ctx.log.push(`Set ${Object.keys(props).join(', ')} on ${id}`);
       return `OK — updated ${Object.keys(props).join(', ')} on "${id}".`;
+    },
+  },
+
+  edit_list_item: {
+    description: 'Edit one item in a list prop — e.g. a company card on the portfolio appendix (name, sector, description, metrics). Prefer this over set_slide_props for lists: only the fields you give change, everything else on the item (including its logo) is kept. To change a single metric use `metric` ({ label, value }, e.g. { "label": "FMV", "value": "110 Cr" }); to change other fields use `fields`. This changes the DECK only — the CMS is not touched.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ...itemLocator,
+        fields: { type: 'object', description: 'Fields to set on the item' },
+        metric: {
+          type: 'object',
+          properties: { label: { type: 'string' }, value: { type: 'string' } },
+          required: ['label', 'value'],
+        },
+      },
+      required: ['id', 'key'],
+      additionalProperties: false,
+    },
+    run(ctx, { id, key, index, match, fields, metric }) {
+      const e = ctx.entries[find(ctx, id)];
+      const { list, base } = effectiveList(ctx, e, key);
+      const i = locateItem(list, { index, match });
+      if (!fields && !metric) throw new Error('Nothing to change: give `fields` and/or `metric`.');
+      let item = { ...list[i], ...(fields || {}) };
+      if (metric) {
+        const ms = Array.isArray(item.metrics) ? [...item.metrics] : null;
+        if (!ms) throw new Error('This item has no metrics.');
+        const mi = ms.findIndex((m) => String(m.label).toLowerCase() === metric.label.trim().toLowerCase());
+        if (mi === -1) throw new Error(`No metric "${metric.label}" (has: ${ms.map((m) => m.label).join(', ')}).`);
+        ms[mi] = { ...ms[mi], value: metric.value };
+        item = { ...item, metrics: ms };
+      }
+      const next = list.map((it, n) => (n === i ? item : it));
+      validateOverrides(typeOf(ctx.deckId, e.ref), base, { [key]: next });
+      e.props = { ...e.props, [key]: next };
+      const what = metric ? `${metric.label} of item ${i + 1}` : Object.keys(fields).join(', ');
+      ctx.log.push(`Edited ${what} in ${key} on ${id}`);
+      return `OK — updated item ${i + 1} of "${key}" on "${id}".`;
+    },
+  },
+
+  remove_list_item: {
+    description: 'Remove one item from a list prop on this slide (e.g. drop a company card from the appendix). Deck only; the CMS is not touched.',
+    input_schema: { type: 'object', properties: itemLocator, required: ['id', 'key'], additionalProperties: false },
+    run(ctx, { id, key, index, match }) {
+      const e = ctx.entries[find(ctx, id)];
+      const { list, base } = effectiveList(ctx, e, key);
+      const i = locateItem(list, { index, match });
+      if (list.length <= 1) throw new Error('A list needs at least one item; remove the slide instead.');
+      const next = list.filter((_, n) => n !== i);
+      validateOverrides(typeOf(ctx.deckId, e.ref), base, { [key]: next });
+      e.props = { ...e.props, [key]: next };
+      ctx.log.push(`Removed item ${i + 1} from ${key} on ${id}`);
+      return `OK — removed item ${i + 1} from "${key}" on "${id}".`;
     },
   },
 

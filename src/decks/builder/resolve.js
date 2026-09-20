@@ -12,7 +12,9 @@ export async function resolveDeckSlides(deckId, data, manifest = 'published') {
   for (const e of entries) {
     const def = getDefinition(deckId, e.ref);
     if (!def) continue; // a stale ref (slide removed from code) is skipped, not fatal
-    slides.push({ id: e.id, type: def.type, props: { ...(def.build(data) || {}), ...e.props } });
+    const built = def.build(data);
+    if (built === null) continue; // a slide whose data doesn't exist (e.g. appendix page 2 with ≤4 companies)
+    slides.push({ id: e.id, type: def.type, props: { ...built, ...e.props } });
   }
   return slides;
 }

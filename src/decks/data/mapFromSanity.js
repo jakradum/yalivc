@@ -11,6 +11,39 @@ import fundIIFixture from './fixtures/fund-ii.json';
 // Phase 0/4 finding, not a query bug). Falls back to the fixture's
 // hand-curated strings for those two fields until that's resolved with
 // the owner, rather than showing blank badges or fabricating employers.
+const fmtDate = (iso) => new Date(iso).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+const titleCase = (slug) => slug.replace(/-/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase());
+const cr = (n) => `${Number.isInteger(n) ? n.toFixed(2) : String(n)} Cr`;
+
+// One appendix card. Facts (amounts, dates, ownership, stage) are derived
+// from the company's rounds and latest reported quarter; the description
+// is deck narrative — hand-written per company in the fixture, keyed by
+// slug, falling back to the company's one-liner. A metric with no data is
+// left out rather than shown as a dash.
+function appendixCard(c) {
+  const rounds = [...(c.rounds || [])].sort((a, b) => a.investmentDate.localeCompare(b.investmentDate));
+  const first = rounds[0];
+  const latest = rounds[rounds.length - 1];
+  const invested = rounds.reduce((sum, r) => sum + (r.yaliInvestment || 0), 0);
+  const ownership = c.latestUpdate?.currentOwnershipPercent ?? latest?.yaliOwnership;
+  const metrics = [
+    invested ? { label: 'Invested', value: cr(Math.round(invested * 100) / 100) } : null,
+    c.latestUpdate?.currentFMV != null ? { label: 'FMV', value: cr(c.latestUpdate.currentFMV) } : null,
+    c.latestUpdate?.multipleOfInvestment != null ? { label: 'MOIC', value: `${c.latestUpdate.multipleOfInvestment.toFixed(2)}x` } : null,
+    first ? { label: 'First Investment', value: fmtDate(first.investmentDate) } : null,
+    ownership != null ? { label: 'Ownership', value: `${ownership.toFixed(1)}%` } : null,
+    latest?.roundName ? { label: 'Stage', value: titleCase(latest.roundName) } : null,
+  ].filter(Boolean);
+  return {
+    name: c.name,
+    sector: c.sector,
+    logoUrl: c.logoUrl,
+    investmentStatus: c.investmentStatus,
+    description: fundIIFixture.appendixDescriptions[c.slug] || c.oneLiner || '',
+    metrics,
+  };
+}
+
 export async function loadFundIIFromSanity() {
   const [settings, portfolio, team] = await Promise.all([
     fetchFundIISettings(),
@@ -105,8 +138,8 @@ export async function loadFundIIFromSanity() {
         }
       : fundIIFixture.fundIPortfolio,
     appendixPortfolio: portfolio?.length
-      ? { heading: 'Appendix · Portfolio', companies: portfolio }
-      : fundIIFixture.fundIPortfolio,
+      ? { companies: portfolio.map(appendixCard) }
+      : fundIIFixture.appendixPortfolio,
     thesis: settings?.focusSectors?.length
       ? {
           heading: 'Our Investment Areas · Fund II Thesis',
