@@ -16,7 +16,7 @@ export class ExportCheckError extends Error {
 // Chromium setup copied exactly from src/lib/pdfRequestHandler.js (the
 // LP quarterly report's proven production pattern) rather than
 // reinvented — same pinned CHROMIUM_URL, same local/Vercel branch.
-export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false }) {
+export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', allowOverflow = false, sessionCookie }) {
   let browser;
   try {
     if (process.env.VERCEL) {
@@ -42,7 +42,18 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', a
     const page = await browser.newPage();
     await page.setViewport({ width: SLIDE_W, height: SLIDE_H, deviceScaleFactor: 1 });
 
-    const url = `${baseUrl}/team/decks/${deckId}/print${dataSource === 'sanity' ? '?data=sanity' : ''}`;
+    // The print page is behind the partners portal, so Chromium needs the
+    // requesting user's session. Set it as a cookie scoped to baseUrl —
+    // NOT a global Cookie header, which would also be sent to third
+    // parties the page loads from (cdn.sanity.io images).
+    if (!sessionCookie) throw new Error('exportDeckPdf: sessionCookie is required');
+    await page.setCookie({ name: 'portal-session', value: sessionCookie, url: baseUrl });
+
+    // On localhost the route is reached directly at /partners/...; on the
+    // partners subdomain the proxy serves it at the clean /decks/... path.
+    const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1)/.test(baseUrl);
+    const routePrefix = isLocal ? '/partners' : '';
+    const url = `${baseUrl}${routePrefix}/decks/${deckId}/print${dataSource === 'sanity' ? '?data=sanity' : ''}`;
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 20000 });
     await page.waitForFunction(() => document.body.getAttribute('data-deck-ready') === '1', {
       timeout: 15000,

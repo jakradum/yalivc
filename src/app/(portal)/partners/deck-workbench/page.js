@@ -1,3 +1,4 @@
+import { requireDeckUser } from '@/decks/auth';
 import { workbenchEntries } from '@/decks/workbench/registry';
 import '@/decks/design-system/fonts.css';
 import '@/decks/design-system/tokens.css';
@@ -6,8 +7,9 @@ export const metadata = { robots: 'noindex, nofollow' };
 
 // Isolated component preview — every block, every fixture (including
 // stress cases), side by side. Fast loop for tweaking a shared component
-// without loading the whole deck.
-export default function DeckWorkbenchPage() {
+// without loading the whole deck. Same internal-only guard as the deck.
+export default async function DeckWorkbenchPage() {
+  await requireDeckUser();
   return (
     <div className="deck-root" style={{ padding: 24, fontFamily: 'var(--deck-font-body)' }}>
       <h1 style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 16 }}>Deck Workbench</h1>
