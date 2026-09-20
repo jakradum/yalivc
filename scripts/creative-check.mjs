@@ -102,7 +102,7 @@ console.log('Uploaded assets…');
     const d = clone(FIXTURES.carousel);
     d.assets = lib();
     if (bg) d.pages[2].background = bg;
-    d.pages[2].root.children.push(block);
+    d.pages[2].root.children = [block]; // a clean page: a full-width photo fills most of a 1:1 card
     return d;
   };
   ok('uploaded photo at a near-natural ratio is valid', validateAsset(withImg(img('image-photo-1600x1067-jpg', { ratio: '3:2' }))).ok);
@@ -141,6 +141,24 @@ console.log('Uploaded assets…');
   emailDoc.assets = lib();
   emailDoc.pages[0].root.children.splice(2, 0, img('image-photo-1600x1067-jpg', { ratio: '3:2' }));
   ok('email with an uploaded photo compiles with its alt', compileEmail(emailDoc).includes('alt="The team at the tape-out"'));
+}
+
+console.log('Page height…');
+{
+  const many = clone(FIXTURES.carousel);
+  many.pages[2].root.children = Array.from({ length: 14 }, (_, i) => ({ type: 'text', id: `m${i}`, role: 'body', text: 'A sentence that takes a line or two of body text on this card.', color: 'ink' }));
+  rejects('content taller than the page', many, 'tall');
+  const fewer = clone(FIXTURES.carousel);
+  fewer.pages[2].root.children = many.pages[2].root.children.slice(0, 4);
+  ok('the same page with fewer blocks fits', validateAsset(fewer).ok);
+  const email = clone(FIXTURES.emailer);
+  for (let i = 0; i < 20; i += 1) email.pages[0].root.children.push({ type: 'text', id: `e${i}`, role: 'body', text: 'Emails scroll, so length is not a page overflow.', color: 'ink' });
+  ok('email may grow beyond a screen', validateAsset(email).ok);
+  // an op that would overflow is rejected and leaves the asset alone
+  let threw = false;
+  const before = JSON.stringify(fewer);
+  try { applyOp(fewer, 'add_block', { parent: 'cover-root', block: { type: 'spacer', size: 'xxl' } }); applyOp(fewer, 'set_page', { id: 'sectors', root: many.pages[2].root }); } catch { threw = true; }
+  ok('overflowing set_page is rejected', threw && JSON.stringify(fewer) === before);
 }
 
 console.log('Engine…');

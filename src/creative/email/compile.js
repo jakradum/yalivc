@@ -85,7 +85,7 @@ export function compileEmail(doc, { baseUrl = '' } = {}) {
         return table(row(rich(b.text), ` align="${ALIGN[b.align] || 'left'}" style="${roleCss(b.role)};color:${col(b.color)};"`));
       case 'stat':
         return table(
-          row(esc(b.value), ` align="${ALIGN[b.align] || 'left'}" style="${roleCss('stat')};color:${col(b.color || 'crimson')};"`) +
+          row(esc(b.value), ` align="${ALIGN[b.align] || 'left'}" style="${roleCss(b.size === 'medium' ? 'figure' : 'stat')};color:${col(b.color || 'crimson')};"`) +
             row(esc(b.label), ` align="${ALIGN[b.align] || 'left'}" style="${roleCss('caption')};color:${col(b.color || 'crimson')};padding-top:4px;"`)
         );
       case 'image': {

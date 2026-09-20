@@ -1,0 +1,20 @@
+.page { min-height: 100vh; background: #eceae2; color: var(--deck-color-ink); font-family: var(--deck-font-body); }
+.bar { display: flex; align-items: center; gap: 14px; padding: 12px 24px; background: var(--deck-color-crimson); }
+.back { font-family: var(--deck-font-mono); font-size: 11px; color: rgba(255, 255, 255, 0.75); text-decoration: none; }
+.back:hover { color: #fff; text-decoration: underline; }
+.title { font-family: var(--deck-font-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--deck-color-gold); }
+.main { max-width: 1180px; margin: 0 auto; padding: 32px 24px 80px; display: flex; flex-direction: column; gap: 56px; }
+.h { font-family: var(--deck-font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--deck-color-crimson); margin: 0 0 8px; }
+.lede { font-size: 13px; color: #666; line-height: 1.6; max-width: 70ch; margin: 0 0 28px; }
+.item { padding: 22px 0; border-top: 1px solid #d8d5cc; display: flex; flex-direction: column; gap: 14px; }
+.itemHead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.name { font-family: var(--deck-font-mono); font-size: 15px; margin: 0; }
+.meta { font-family: var(--deck-font-mono); font-size: 10px; color: #888; }
+.status { font-family: var(--deck-font-mono); font-size: 10px; padding: 2px 7px; border: 1px solid; margin-left: auto; }
+.ok { color: #1f6b3a; border-color: #1f6b3a; }
+.bad { color: #a11; border-color: #a11; }
+.pages { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+.frame { overflow: hidden; background: #fff; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 8px 22px rgba(0, 0, 0, 0.12); flex-shrink: 0; }
+.mail { width: 100%; max-width: 660px; height: 640px; border: 1px solid #ccc; background: #fff; }
+.prompt { margin: 0; padding: 10px 14px; border-left: 3px solid var(--deck-color-crimson); background: #fff; font-size: 13px; line-height: 1.55; color: #444; max-width: 80ch; }
+.reply { margin: 0; font-size: 12px; color: #777; line-height: 1.55; max-width: 80ch; }

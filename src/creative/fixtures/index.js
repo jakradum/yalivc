@@ -117,3 +117,10 @@ export const emailer = {
 };
 
 export const FIXTURES = { carousel, emailer };
+
+import { portrait, story, ogImage, slide, a4 } from './samples.js';
+FIXTURES.portrait = portrait;
+FIXTURES.story = story;
+FIXTURES.ogImage = ogImage;
+FIXTURES.slide = slide;
+FIXTURES.a4 = a4;

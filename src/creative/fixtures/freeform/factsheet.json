@@ -1,0 +1,242 @@
+{
+  "prompt": "A one-page fact sheet on Yali Capital Fund II for LPs. Facts: target fund size ₹1,800 Crore (~$200M), greenshoe ₹300 Crore, fund term 10+1+1 years, investment period 4 years, deployment Seed 10% (initial stage) and stage agnostic 90% (all stages). Elegant, easy to scan, lots of white space.",
+  "reply": "The fact sheet is now complete: a single elegant A4 page with the Yali Capital lockup, a clear headline, four full-width key stats (target size, greenshoe, term, investment period), a two-card deployment breakdown (10% Seed / 90% stage-agnostic), and a crimson closing bar with the yali.vc link — generous spacing throughout for easy scanning.",
+  "doc": {
+    "schema": "creative/1",
+    "id": "asset-tnyk3",
+    "title": "Untitled asset",
+    "format": "a4-portrait",
+    "brand": "yali",
+    "pages": [
+      {
+        "id": "page-1",
+        "background": "light",
+        "root": {
+          "type": "stack",
+          "id": "page-1-root",
+          "direction": "column",
+          "gap": "xl",
+          "children": [
+            {
+              "type": "stack",
+              "direction": "row",
+              "justify": "between",
+              "align": "center",
+              "children": [
+                {
+                  "type": "logo",
+                  "variant": "lockup",
+                  "tone": "light",
+                  "size": "m",
+                  "id": "logo-8a7c3"
+                },
+                {
+                  "type": "text",
+                  "role": "eyebrow",
+                  "text": "LP FACT SHEET",
+                  "color": "crimson",
+                  "align": "end",
+                  "id": "text-o8ok4"
+                }
+              ],
+              "id": "stack-z4sm2"
+            },
+            {
+              "type": "divider",
+              "color": "crimson",
+              "weight": "medium",
+              "id": "divider-0vvs5"
+            },
+            {
+              "type": "stack",
+              "direction": "column",
+              "gap": "xs",
+              "children": [
+                {
+                  "type": "text",
+                  "role": "display",
+                  "text": "Yali Capital Fund II",
+                  "color": "ink",
+                  "id": "text-uudp7"
+                },
+                {
+                  "type": "text",
+                  "role": "subhead",
+                  "text": "Deep tech investing, India-focused. Key terms for limited partners.",
+                  "color": "muted",
+                  "id": "text-2z718"
+                }
+              ],
+              "id": "stack-vgy26"
+            },
+            {
+              "type": "spacer",
+              "size": "s",
+              "id": "spacer-mzza9"
+            },
+            {
+              "type": "stack",
+              "direction": "column",
+              "gap": "l",
+              "children": [
+                {
+                  "type": "stat",
+                  "value": "₹1,800 Cr",
+                  "label": "Target fund size (~$200M)",
+                  "source": "user",
+                  "color": "crimson",
+                  "id": "stat-a5uu3"
+                },
+                {
+                  "type": "stat",
+                  "value": "₹300 Cr",
+                  "label": "Greenshoe option",
+                  "source": "user",
+                  "color": "crimson",
+                  "id": "stat-q65c3"
+                },
+                {
+                  "type": "stat",
+                  "value": "10+1+1",
+                  "label": "Fund term, years",
+                  "source": "user",
+                  "color": "crimson",
+                  "id": "stat-4ys05"
+                },
+                {
+                  "type": "stat",
+                  "value": "4 yrs",
+                  "label": "Investment period",
+                  "source": "user",
+                  "color": "crimson",
+                  "id": "stat-gak26"
+                }
+              ],
+              "id": "stack-71hm0"
+            },
+            {
+              "type": "spacer",
+              "size": "m",
+              "id": "spacer-w8rl7"
+            },
+            {
+              "type": "divider",
+              "color": "muted",
+              "id": "divider-we368"
+            },
+            {
+              "type": "spacer",
+              "size": "m",
+              "id": "spacer-2izq9"
+            },
+            {
+              "type": "stack",
+              "direction": "column",
+              "gap": "m",
+              "children": [
+                {
+                  "type": "text",
+                  "role": "heading",
+                  "text": "Deployment strategy",
+                  "color": "ink",
+                  "id": "text-wtbu1"
+                },
+                {
+                  "type": "grid",
+                  "columns": 2,
+                  "gap": "l",
+                  "children": [
+                    {
+                      "type": "stack",
+                      "fill": "white",
+                      "radius": "m",
+                      "padding": "l",
+                      "gap": "s",
+                      "children": [
+                        {
+                          "type": "stat",
+                          "value": "10%",
+                          "label": "Seed",
+                          "source": "user",
+                          "color": "rose",
+                          "id": "stat-98kh4"
+                        },
+                        {
+                          "type": "text",
+                          "role": "caption",
+                          "text": "Initial stage exposure.",
+                          "color": "ink",
+                          "id": "text-jl995"
+                        }
+                      ],
+                      "id": "stack-3d523"
+                    },
+                    {
+                      "type": "stack",
+                      "fill": "white",
+                      "radius": "m",
+                      "padding": "l",
+                      "gap": "s",
+                      "children": [
+                        {
+                          "type": "stat",
+                          "value": "90%",
+                          "label": "Stage agnostic",
+                          "source": "user",
+                          "color": "crimson",
+                          "id": "stat-ukkf7"
+                        },
+                        {
+                          "type": "text",
+                          "role": "caption",
+                          "text": "Deployed across all stages.",
+                          "color": "ink",
+                          "id": "text-6jb48"
+                        }
+                      ],
+                      "id": "stack-80l26"
+                    }
+                  ],
+                  "id": "grid-498v2"
+                }
+              ],
+              "id": "stack-mfzx0"
+            },
+            {
+              "type": "spacer",
+              "size": "l",
+              "id": "spacer-zdun9"
+            },
+            {
+              "type": "stack",
+              "fill": "crimson",
+              "radius": "m",
+              "padding": "l",
+              "direction": "row",
+              "justify": "between",
+              "align": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "role": "body",
+                  "text": "For qualified limited partners only. Terms subject to final fund documentation.",
+                  "color": "white",
+                  "id": "text-who01"
+                },
+                {
+                  "type": "button",
+                  "label": "yali.vc",
+                  "href": "https://yali.vc",
+                  "style": "outline",
+                  "color": "gold",
+                  "id": "button-p9n82"
+                }
+              ],
+              "id": "stack-mwyr0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

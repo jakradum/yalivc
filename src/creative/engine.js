@@ -168,9 +168,12 @@ const OPS = {
   },
 };
 
+// Error identity ignores figures, so "about 1450px tall" becoming "about 1310px
+// tall" is the SAME (still-open) problem, not a newly introduced one.
+const key = (msg) => msg.replace(/\d+(\.\d+)?/g, '#');
 const msgCounts = (r) => {
   const m = new Map();
-  for (const e of r.errors) m.set(e.msg, (m.get(e.msg) || 0) + 1);
+  for (const e of r.errors) m.set(key(e.msg), (m.get(key(e.msg)) || 0) + 1);
   return m;
 };
 
@@ -184,7 +187,7 @@ export function applyOp(doc, name, input = {}) {
   const message = op(next, input);
   const after = validateAsset(next);
   const prev = msgCounts(before);
-  const introduced = after.errors.filter((e) => (prev.get(e.msg) || 0) === 0 || after.errors.filter((x) => x.msg === e.msg).length > (prev.get(e.msg) || 0));
+  const introduced = after.errors.filter((e) => (prev.get(key(e.msg)) || 0) === 0 || after.errors.filter((x) => key(x.msg) === key(e.msg)).length > (prev.get(key(e.msg)) || 0));
   if (introduced.length) {
     throw new Error(`Rejected — this change breaks the guardrails:\n${formatErrors({ errors: introduced })}\n(Nothing was changed.)`);
   }

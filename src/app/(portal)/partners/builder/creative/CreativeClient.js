@@ -154,6 +154,7 @@ export function CreativeClient() {
       <header className={s.bar}>
         <a className={s.back} href="../">← Builder</a>
         <span className={s.title}>CREATIVE STUDIO</span>
+        <a className={s.back} href="gallery/">Gallery of every format →</a>
         <span className={s.beta}>BETA · not saved — download to keep</span>
       </header>
 

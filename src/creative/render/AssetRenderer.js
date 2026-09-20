@@ -80,9 +80,8 @@ function Block({ b, ctx, parentLayer }) {
             background: b.fill ? ctx.color(b.fill) : undefined,
             border: b.border ? `${ctx.px(2)}px solid ${ctx.color(b.border)}` : undefined,
             borderRadius: ctx.px(brand.radius[b.radius || 'none']),
-            flex: b.grow ? '1 1 0' : undefined,
+            flex: b.grow ? '1 1 auto' : '0 0 auto',
             minWidth: 0,
-            minHeight: 0,
             boxSizing: 'border-box',
           }}
         >
@@ -134,7 +133,7 @@ function Block({ b, ctx, parentLayer }) {
     case 'stat':
       return wrap(
         <div style={{ textAlign: b.align === 'center' ? 'center' : b.align === 'end' ? 'right' : 'left' }}>
-          <div style={{ ...ctx.role('stat'), color: ctx.color(b.color || 'crimson') }}>{b.value}</div>
+          <div style={{ ...ctx.role(b.size === 'medium' ? 'figure' : 'stat'), color: ctx.color(b.color || 'crimson') }}>{b.value}</div>
           <div style={{ ...ctx.role('caption'), color: ctx.color(b.color || 'crimson'), marginTop: ctx.space('xs') }}>{b.label}</div>
         </div>
       );
