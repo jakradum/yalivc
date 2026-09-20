@@ -1,12 +1,13 @@
 {
   "prompt": "One striking card announcing our two-sided thesis: six core sectors we invest in today (Life Sciences, Smart Manufacturing, Fabless Semiconductor, Artificial Intelligence, Robotics, Aerospace & Surveillance) and four adjacent ones we are watching (Space Tech, Quantum, Energy, Advanced Materials). Make it bold and typographic, not a bullet list.",
-  "reply": "I built a single crimson, typographic card: a gold eyebrow and bold white display line set up the two-sided thesis, a 2-column grid of the six core sectors in large gold type below it, then a divider and a quieter white line listing the four adjacent sectors you're watching — no bullets, just hierarchy and colour doing the work.",
+  "reply": "Built a single bold, typographic card: a crimson ground with a large display headline (\"Two-sided bets on deep tech\"), the six core sectors set as large white headings in a two-column grid, a gold rule dividing it from the four adjacent/watching sectors set smaller in blush below — no bullets or icons, just scale and colour carrying the hierarchy.",
   "doc": {
     "schema": "creative/1",
-    "id": "asset-xn290",
-    "title": "Untitled asset",
+    "id": "asset-38ey0",
+    "title": "Fund II thesis — LinkedIn card",
     "format": "linkedin-portrait",
     "brand": "yali",
+    "assets": {},
     "pages": [
       {
         "id": "page-1",
@@ -16,123 +17,147 @@
           "id": "page-1-root",
           "direction": "column",
           "gap": "l",
-          "padding": "xl",
-          "align": "center",
-          "justify": "center",
           "children": [
             {
               "type": "text",
               "role": "eyebrow",
-              "text": "OUR TWO-SIDED THESIS",
+              "text": "THE YALI THESIS",
               "color": "gold",
-              "align": "center",
-              "id": "text-mup77"
-            },
-            {
-              "type": "spacer",
-              "size": "xs",
-              "id": "spacer-we6r8"
+              "id": "text-ijkt1"
             },
             {
               "type": "text",
               "role": "display",
-              "text": "Six sectors we back. Four we're watching.",
+              "text": "Two-sided bets on deep tech",
               "color": "white",
-              "align": "center",
-              "id": "text-06ok9"
-            },
-            {
-              "type": "spacer",
-              "size": "m",
-              "id": "spacer-1ny70"
-            },
-            {
-              "type": "grid",
-              "columns": 2,
-              "gap": "m",
-              "children": [
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Life Sciences",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-4bey2"
-                },
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Smart Manufacturing",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-nt7j3"
-                },
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Fabless Semiconductor",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-tc2r4"
-                },
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Artificial Intelligence",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-oi5r5"
-                },
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Robotics",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-4chz6"
-                },
-                {
-                  "type": "text",
-                  "role": "heading",
-                  "text": "Aerospace & Surveillance",
-                  "color": "gold",
-                  "align": "center",
-                  "id": "text-59hg7"
-                }
-              ],
-              "id": "grid-bz3p1"
-            },
-            {
-              "type": "spacer",
-              "size": "m",
-              "id": "spacer-pmrp8"
-            },
-            {
-              "type": "divider",
-              "color": "gold",
-              "weight": "medium",
-              "id": "divider-y1mj9"
+              "id": "text-z3d12"
             },
             {
               "type": "spacer",
               "size": "s",
-              "id": "spacer-9z570"
+              "id": "spacer-2ecc3"
             },
             {
-              "type": "text",
-              "role": "eyebrow",
-              "text": "ALSO WATCHING",
-              "color": "blush",
-              "align": "center",
-              "id": "text-yenf1"
+              "type": "stack",
+              "direction": "column",
+              "gap": "s",
+              "children": [
+                {
+                  "type": "text",
+                  "role": "eyebrow",
+                  "text": "SIX CORE SECTORS, TODAY",
+                  "color": "gold",
+                  "id": "text-fdmm5"
+                },
+                {
+                  "type": "grid",
+                  "columns": 2,
+                  "gap": "m",
+                  "children": [
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Life Sciences",
+                      "color": "white",
+                      "id": "text-gjis7"
+                    },
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Smart Manufacturing",
+                      "color": "white",
+                      "id": "text-8yza8"
+                    },
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Fabless Semiconductor",
+                      "color": "white",
+                      "id": "text-6sbs9"
+                    },
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Artificial Intelligence",
+                      "color": "white",
+                      "id": "text-wlai0"
+                    },
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Robotics",
+                      "color": "white",
+                      "id": "text-s6p51"
+                    },
+                    {
+                      "type": "text",
+                      "role": "heading",
+                      "text": "Aerospace & Surveillance",
+                      "color": "white",
+                      "id": "text-j8gz2"
+                    }
+                  ],
+                  "id": "grid-lqo66"
+                }
+              ],
+              "id": "stack-h6fk4"
             },
             {
-              "type": "text",
-              "role": "subhead",
-              "text": "Space Tech · Quantum · Energy · Advanced Materials",
-              "color": "white",
-              "align": "center",
-              "id": "text-oy2v2"
+              "type": "divider",
+              "color": "gold",
+              "weight": "thin",
+              "id": "divider-vhw73"
+            },
+            {
+              "type": "stack",
+              "direction": "column",
+              "gap": "s",
+              "children": [
+                {
+                  "type": "text",
+                  "role": "eyebrow",
+                  "text": "FOUR ADJACENT, WE'RE WATCHING",
+                  "color": "blush",
+                  "id": "text-wxrk5"
+                },
+                {
+                  "type": "grid",
+                  "columns": 4,
+                  "gap": "m",
+                  "children": [
+                    {
+                      "type": "text",
+                      "role": "subhead",
+                      "text": "Space Tech",
+                      "color": "blush",
+                      "id": "text-6h8c7"
+                    },
+                    {
+                      "type": "text",
+                      "role": "subhead",
+                      "text": "Quantum",
+                      "color": "blush",
+                      "id": "text-fk0f8"
+                    },
+                    {
+                      "type": "text",
+                      "role": "subhead",
+                      "text": "Energy",
+                      "color": "blush",
+                      "id": "text-2s5a9"
+                    },
+                    {
+                      "type": "text",
+                      "role": "subhead",
+                      "text": "Advanced Materials",
+                      "color": "blush",
+                      "id": "text-064y0"
+                    }
+                  ],
+                  "id": "grid-cybl6"
+                }
+              ],
+              "id": "stack-dslz4"
             }
           ]
         }
