@@ -8,15 +8,20 @@ import { slideComponents, decks } from './registry';
 // Editing any slide type / block / manifest triggers client-side Fast
 // Refresh, which is the fast path we're protecting per the owner's
 // "instant live preview" requirement.
-export function DeckRenderer({ deckId, data }) {
+//
+// `slides` is the server-resolved list [{ id, type, props }] (code manifest
+// order + Sanity deckManifest overrides). Without it, falls back to the
+// code manifest and builds props from `data` directly.
+export function DeckRenderer({ deckId, data, slides: resolved }) {
   const deck = decks[deckId];
   if (!deck) {
     return <div style={{ padding: 24, fontFamily: 'monospace' }}>Unknown deck: {deckId}</div>;
   }
+  const slides = resolved || deck.slides.map((s) => ({ id: s.id, type: s.type, props: s.build(data) }));
 
   return (
     <>
-      {deck.slides.map((slide, index) => {
+      {slides.map((slide, index) => {
         const Component = slideComponents[slide.type];
         if (!Component) {
           return (
@@ -29,7 +34,7 @@ export function DeckRenderer({ deckId, data }) {
         }
         return (
           <SlideCanvas key={slide.id} id={slide.id} index={index}>
-            <Component {...slide.build(data)} />
+            <Component {...slide.props} />
           </SlideCanvas>
         );
       })}

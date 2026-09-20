@@ -24,13 +24,14 @@ export async function POST(request, { params }) {
   const body = await request.json().catch(() => ({}));
   const dataSource = body?.dataSource === 'sanity' ? 'sanity' : 'fixture';
   const allowOverflow = body?.allowOverflow === true;
+  const manifestSource = body?.manifest === 'draft' ? 'draft' : 'published';
 
   // Always the validated request host — never an env override — because
   // the exporter forwards the session cookie to whatever host it visits.
   const baseUrl = `${request.nextUrl.protocol}//${host}`;
 
   try {
-    const { pdfBuffer, manifest } = await exportDeckPdf({ deckId, baseUrl, dataSource, allowOverflow, sessionCookie });
+    const { pdfBuffer, manifest } = await exportDeckPdf({ deckId, baseUrl, dataSource, allowOverflow, manifestSource, sessionCookie });
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
