@@ -51,6 +51,7 @@ export function CreativeClient() {
   const withLib = useMemo(() => (doc ? { ...doc, assets: library } : null), [doc, library]);
   const check = useMemo(() => (withLib ? validateAsset(withLib) : null), [withLib]);
   const isEmail = doc && FORMATS[doc.format].kind === 'email';
+  const hasContent = !!doc?.pages.some((pg) => (pg.root.children || []).length > 0);
   const emailHtml = useMemo(() => (isEmail && check?.ok ? compileEmail(withLib, { baseUrl: typeof window !== 'undefined' ? window.location.origin : '' }) : ''), [withLib, isEmail, check]);
 
   const loadExample = (key) => {
@@ -92,9 +93,13 @@ export function CreativeClient() {
     setMeta({ kind: /logo/i.test(file.name) ? 'logo' : 'photo', alt: '', description: '', noCrop: false, people: false, ground: 'any' });
   }
 
+  // → { id, asset } when the picture was added, else null.
   async function doUpload() {
-    if (!pending || uploading) return;
-    if (!meta.alt.trim()) return setUpError('Alt text is required — describe the picture in a few words.');
+    if (!pending || uploading) return null;
+    if (!meta.alt.trim()) {
+      setUpError('Alt text is required: describe the picture in a few words.');
+      return null;
+    }
     setUploading(true);
     setUpError('');
     try {
@@ -107,8 +112,10 @@ export function CreativeClient() {
       if (!res.ok) throw new Error(json.error || `Upload failed (${res.status})`);
       setLibrary((l) => ({ ...l, [json.id]: json.asset }));
       setPending(null);
+      return { id: json.id, asset: json.asset };
     } catch (err) {
       setUpError(err.message);
+      return null;
     } finally {
       setUploading(false);
     }
@@ -124,13 +131,24 @@ export function CreativeClient() {
   async function send() {
     const text = prompt.trim();
     if (!text || busy) return;
+    // A picture that's been picked but not added would never reach Claude. Add it
+    // now if it's ready; otherwise stop and say what's missing.
+    let sendLibrary = library;
+    if (pending) {
+      const added = await doUpload();
+      if (!added) {
+        setUpError((e) => e || 'Finish adding your picture first: give it alt text, then send again.');
+        return;
+      }
+      sendLibrary = { ...library, [added.id]: added.asset };
+    }
     setPrompt('');
     setBusy(true);
     setThread((t) => [...t, { role: 'user', text }]);
     try {
       let history = thread.filter((m) => m.role !== 'error').map((m) => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
-      let current = withLib;
-      let lib = library;
+      let current = doc ? { ...doc, assets: sendLibrary } : null;
+      let lib = sendLibrary;
       let ask = text;
       const allTrace = [];
       // Generation is resumable: the server returns a valid partial asset when it
@@ -211,6 +229,7 @@ export function CreativeClient() {
           ) : (
             <div className={s.form}>
               <div className={s.fname}>{pending.name}</div>
+              <div className={s.notAdded}>Not attached yet. Add alt text and press Add to library (or just send: it will be added).</div>
               <label className={s.lab}>What is it?
                 <select className={s.select} value={meta.kind} onChange={(e) => setMeta({ ...meta, kind: e.target.value })}>
                   <option value="photo">Photo</option>
@@ -271,7 +290,7 @@ export function CreativeClient() {
           {busy ? <div className={`${s.msg} ${s.claude}`}>Composing… (up to a minute)</div> : null}
         </div>
         <div className={s.compose}>
-          <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }} placeholder="What should it be?  (⌘/Ctrl + Enter)" aria-label="Describe the asset" maxLength={2000} />
+          <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }} placeholder="What should it be? Mention your picture if you want it used. (⌘/Ctrl + Enter)" aria-label="Describe the asset" maxLength={2000} />
           <button className={s.send} onClick={send} disabled={busy || !prompt.trim()}>{doc ? 'Refine' : 'Create'}</button>
         </div>
       </aside>
@@ -291,7 +310,10 @@ export function CreativeClient() {
               {isEmail && emailHtml ? <button className={s.dl} onClick={() => download(`${doc.id}.html`, emailHtml, 'text/html')}>Download HTML</button> : null}
             </div>
 
-            {view === 'preview' ? (
+            {view === 'preview' && !hasContent ? (
+              <div className={s.emptyNote}>Nothing has been built yet. Read Claude's message on the left: it may need something from you (like a picture added to Images).</div>
+            ) : null}
+            {view === 'preview' && hasContent ? (
               <div className={s.pages}>
                 {doc.pages.map((p, i) => (
                   <figure key={p.id} className={s.figure}>

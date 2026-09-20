@@ -103,6 +103,20 @@ export async function POST(request, { params }) {
     doc = { ...newAsset({ format: body.format, brand: 'yali', title: 'Untitled asset' }), assets: library };
   }
 
+  // "use the attached photo" with an empty library can't work: say so plainly instead of
+  // letting the model guess (and offering mock-ups nobody asked for).
+  const refersToPicture = /\b(attach(ed|ment)?|upload(ed)?|(this|the|my|our) (photo|picture|image|photograph))\b/i.test(prompt);
+  if (refersToPicture && Object.keys(library).length === 0) {
+    return NextResponse.json({
+      doc,
+      reply: 'I can\'t see a picture. Nothing has been added to Images yet. Choose the file, give it alt text, press "Add to library" (or just send again after filling in the alt text), then ask again.',
+      validation: validateAsset(doc),
+      calls: 0,
+      unfinished: false,
+      trace: [],
+    });
+  }
+
   try {
     const out = await runCreativeAgent(doc, prompt, Array.isArray(body.history) ? body.history : []);
     return NextResponse.json({ doc: out.doc, reply: out.reply, validation: out.validation, calls: out.calls, unfinished: out.unfinished, trace: out.trace });

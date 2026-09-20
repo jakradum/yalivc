@@ -258,7 +258,8 @@ function assetSection(doc) {
   return `UPLOADED ASSETS — the only pictures you may use. Reference as { "type":"image", "src": { "kind":"upload", "id":"<id>" } }; its alt text is applied for you.
 ${rows.join('\n')}
 HOW TO USE THEM
-- Use only what the request calls for; do not add a picture just to fill space, and never invent or alter one.
+- Pictures were uploaded to be used: put the best-fitting one to work unless the request says otherwise (photo-led formats such as portfolio news, guest cards and roundups always feature it). Do not add a picture to a text-led asset just to fill space, and never invent or alter one.
+- If the request mentions an attached picture and none is listed above, say so in one sentence and build nothing.
 - Photos: fit "cover", with a ratio close to the picture's natural ratio (a big mismatch crops away the subject and is rejected). Never place text directly on a photo without a scrim shape between them.
 - Logos: fit "contain", never grayscale, only on a ground the logo is marked for.
 - Respect each asset's rules and note. If none of the assets suits what was asked, say so instead of stretching one.
