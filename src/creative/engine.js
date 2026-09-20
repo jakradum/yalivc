@@ -3,6 +3,7 @@ import { getBrand } from './brands/index.js';
 import { BLOCKS, TEXT_ROLES, describeBlocks } from './blocks.js';
 import { validateAsset, formatErrors } from './validate.js';
 import { cropFraction } from './library.js';
+import { makeEnv } from './measure.js';
 
 // The single place an asset is mutated. Every change (from the AI's tools or
 // a UI) is applied to a COPY, validated, and only kept if it doesn't
@@ -260,6 +261,20 @@ HOW TO USE THEM
 - Say nothing about what a picture shows beyond its alt text and note — you cannot be sure what is in it.`;
 }
 
+// The space a page actually has, in the same px the guardrail measures, so the
+// model can plan a page that fits instead of discovering it by rejection.
+function budget(format, brand) {
+  if (!format.h) return 'PAGE BUDGET: none — an email grows with its content (keep it scannable).';
+  const env = makeEnv(brand, format);
+  const sc = format.w / 1080;
+  const w = Math.round(format.w - format.safe * sc * 2);
+  const h = Math.round(format.h - ((format.safeTop || format.safe) + (format.safeBottom || format.safe)) * sc);
+  const line = (r) => Math.round(env.role(r).size * env.role(r).lh);
+  return `PAGE BUDGET (content must fit — taller pages are rejected): ${w}px wide × ${h}px tall per page.
+One line of text costs: ${Object.keys(TEXT_ROLES).filter((r) => r !== 'stat').map((r) => `${r} ${line(r)}px`).join(', ')}; a stat figure ${line('stat')}px (medium ${line('figure')}px). Gaps between blocks: ${Object.entries(brand.space).filter(([k]) => k !== 'none').map(([k, v]) => `${k} ${Math.round(v.canvas * sc)}px`).join(', ')}.
+Plan the whole page against ${h}px before building: roughly ${Math.max(1, Math.floor(h / line('body')))} lines of body text is the ceiling, and headings, gaps and lists use it up quickly. When in doubt, do less per page.`;
+}
+
 // ── system prompt ──────────────────────────────────────────────────────────
 export function systemPrompt(doc) {
   const format = FORMATS[doc.format];
@@ -268,6 +283,7 @@ export function systemPrompt(doc) {
   return `You design ${format.label} assets for ${brand.name} by composing blocks in a JSON document, using tools. You are creative and free to lay things out however serves the message — within the guardrails below, which are enforced: a change that breaks them is rejected with the reason, so read errors and fix them.
 
 FORMAT: ${format.label} — ${format.w}${format.h ? `×${format.h}` : ' wide, height follows content'} px, ${format.kind === 'email' ? 'ONE continuous page' : `${format.minPages}–${format.maxPages} pages`}. Safe margins are applied for you; do not add margin to keep things off the edge.
+${budget(format, brand)}
 
 BRAND TOKENS (the only ones that exist)
 - colours: ${Object.entries(brand.colors).map(([k, v]) => `${k} ${v}`).join(', ')}
