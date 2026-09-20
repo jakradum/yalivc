@@ -24,7 +24,7 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', a
       const puppeteer = (await import('puppeteer-core')).default;
       const CHROMIUM_URL =
         process.env.CHROMIUM_URL ||
-        'https://github.com/Sparticuz/chromium/releases/download/v143.0.0/chromium-v143.0.0-pack.tar';
+        'https://github.com/Sparticuz/chromium/releases/download/v143.0.0/chromium-v143.0.0-pack.x64.tar';
       browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
