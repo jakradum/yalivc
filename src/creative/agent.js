@@ -54,5 +54,6 @@ export async function runCreativeAgent(doc, prompt, history = []) {
       });
     messages.push({ role: 'user', content: results });
   }
+  if (!reply.trim()) reply = unfinished ? 'Still building.' : trace.some((t) => t.ok) ? 'Done. Check the preview, and tell me what to change.' : 'I could not build that. See the steps below for why.';
   return { doc: holder.doc, reply, calls, unfinished, trace, validation: validateAsset(holder.doc) };
 }
