@@ -67,3 +67,15 @@
 .slideRow button.x:hover { color: #a11; }
 .addRow { padding: 6px 14px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
 .addRow button { font-family: var(--deck-font-mono); font-size: 10px; border: 1px solid #bbb; background: #fff; cursor: pointer; padding: 2px 8px; }
+
+.grip { color: #bbb; font-size: 13px; cursor: grab; line-height: 1; }
+.slideRow:hover .grip { color: var(--deck-color-crimson); }
+
+.grip { cursor: grab; padding: 2px 2px; user-select: none; }
+.grip:active { cursor: grabbing; }
+.eye { display: inline-flex; align-items: center; background: none; border: 0; color: #888; cursor: pointer; padding: 2px; }
+.eye:hover { color: var(--deck-color-crimson); }
+.eye:focus-visible { outline: 2px solid var(--deck-color-crimson); outline-offset: 1px; }
+.hiddenRow .sid, .hiddenRow .num { color: #aaa; text-decoration: line-through; }
+.hiddenRow .eye { color: var(--deck-color-crimson); }
+.hiddenRow { background: #faf9f5; }

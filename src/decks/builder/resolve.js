@@ -10,6 +10,7 @@ export async function resolveDeckSlides(deckId, data, manifest = 'published') {
     manifest === 'code' ? await import('./catalog').then((c) => ({ entries: c.codeDefaultEntries(deckId) })) : await readManifest(deckId, manifest);
   const slides = [];
   for (const e of entries) {
+    if (e.hidden) continue; // hidden = kept in the manifest, left out of the output
     const def = getDefinition(deckId, e.ref);
     if (!def) continue; // a stale ref (slide removed from code) is skipped, not fatal
     const built = def.build(data);

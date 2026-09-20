@@ -30,7 +30,7 @@ async function loadCtx(deckId, entries) {
 function describe(deckId, m) {
   const present = new Set(m.entries.map((e) => e.ref));
   return {
-    slides: m.entries.map((e) => ({ id: e.id, ref: e.ref, type: getDefinition(deckId, e.ref)?.type, overridden: Object.keys(e.props) })),
+    slides: m.entries.map((e) => ({ id: e.id, ref: e.ref, type: getDefinition(deckId, e.ref)?.type, overridden: Object.keys(e.props), hidden: !!e.hidden })),
     removed: catalogRefs(deckId).filter((c) => !present.has(c.ref)),
     hasDraft: m.hasDraft,
     hasPublished: m.hasPublished,

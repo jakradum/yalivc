@@ -26,7 +26,7 @@ export function entriesFromDoc(doc) {
     } catch {
       props = {};
     }
-    return { id: s.id, ref: s.ref, props };
+    return { id: s.id, ref: s.ref, props, hidden: !!s.hidden };
   });
 }
 
@@ -37,6 +37,7 @@ const slidesToDoc = (entries) =>
     id: e.id,
     ref: e.ref,
     props: Object.keys(e.props).length ? JSON.stringify(e.props) : '',
+    hidden: !!e.hidden,
   }));
 
 // source: 'draft' → draft ?? published ?? code default; 'published' →
