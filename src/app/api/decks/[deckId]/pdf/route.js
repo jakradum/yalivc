@@ -5,6 +5,7 @@ import { getDeckUser, isPartnersHost, DECK_SESSION_COOKIE } from '@/decks/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60; // Hobby cap; default is 10s, too short for Chromium download + render
 
 const notFound = () => new NextResponse('Not found', { status: 404 });
 
