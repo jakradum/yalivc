@@ -157,6 +157,7 @@ export function BuilderClient({ deckId }) {
   return (
     <div className={`deck-root ${s.app}`}>
       <header className={s.bar}>
+        <a className={s.back} href={`${prefix}/builder/`} title="All assets">← Builder</a>
         <span className={s.title}>DECK BUILDER · {deckId}</span>
         <span className={`${s.badge} ${dirty ? s.badgeDraft : ''}`}>{st ? (dirty ? 'UNPUBLISHED CHANGES' : 'PUBLISHED') : '…'}</span>
         <button className={s.btn} disabled={!!busy || !st?.log?.some((l) => l.key)} onClick={() => act('undo', 'Undid the last edit.')}>Undo last</button>
