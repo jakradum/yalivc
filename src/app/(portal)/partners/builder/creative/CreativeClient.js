@@ -128,17 +128,34 @@ export function CreativeClient() {
     setBusy(true);
     setThread((t) => [...t, { role: 'user', text }]);
     try {
-      const history = thread.filter((m) => m.role !== 'error').map((m) => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
-      const res = await fetch('/api/builder/creative/generate/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ format, doc: withLib, library, prompt: text, history }),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || `Request failed (${res.status})`);
-      setDoc(json.doc);
-      setLibrary(json.doc.assets || {});
-      setThread((t) => [...t, { role: 'assistant', text: json.reply || 'Done.' }]);
+      let history = thread.filter((m) => m.role !== 'error').map((m) => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
+      let current = withLib;
+      let lib = library;
+      let ask = text;
+      // Generation is resumable: the server returns a valid partial asset when it
+      // runs out of time, and we ask it to carry on (up to 5 rounds).
+      for (let round = 1; round <= 5; round += 1) {
+        const res = await fetch('/api/builder/creative/generate/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ format, doc: current, library: lib, prompt: ask, history }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(res.status === 504 ? 'Timed out — nothing was lost; press Refine to continue.' : json.error || `Request failed (${res.status})`);
+        current = json.doc;
+        lib = json.doc.assets || {};
+        setDoc(json.doc);
+        setLibrary(lib);
+        if (!json.unfinished) {
+          setThread((t) => [...t, { role: 'assistant', text: json.reply || 'Done.' }]);
+          break;
+        }
+        setThread((t) => [...t.filter((m) => m.role !== 'progress'), { role: 'progress', text: `Still building… (step ${round + 1})` }]);
+        history = [...history, { role: 'user', content: ask }, { role: 'assistant', content: json.reply || 'Working on it.' }];
+        ask = 'Continue: call get_asset, then finish whatever is missing from my original request.';
+        if (round === 5) setThread((t) => [...t.filter((m) => m.role !== 'progress'), { role: 'assistant', text: 'Built as far as it got — ask it to continue if something is missing.' }]);
+      }
+      setThread((t) => t.filter((m) => m.role !== 'progress'));
     } catch (e) {
       setThread((t) => [...t, { role: 'error', text: e.message }]);
     } finally {
