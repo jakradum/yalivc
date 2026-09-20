@@ -8,24 +8,24 @@ export const fundIIDeck = {
     { id: 'cover', type: 'cover', build: (d) => d.cover },
     { id: 'contents', type: 'contents', build: (d) => d.contents },
 
-    { id: 'team-divider', type: 'section-divider', build: () => ({ heading: 'Team' }) },
+    { id: 'team-divider', type: 'section-divider', build: () => ({ heading: 'The\nYali\nTeam', pattern: 1 }) },
     { id: 'team-overview', type: 'team-grid', build: (d) => d.teamOverview },
     { id: 'gps-advisor', type: 'person-grid', build: (d) => d.gpsAdvisor },
     { id: 'investments-team', type: 'person-grid', build: (d) => d.investmentsTeam },
     { id: 'operations-team', type: 'person-grid', build: (d) => d.operationsTeam },
 
-    { id: 'thesis-divider', type: 'section-divider', build: () => ({ heading: 'Thesis' }) },
+    { id: 'thesis-divider', type: 'section-divider', build: () => ({ heading: 'Our\nThesis', pattern: 2 }) },
     { id: 'investment-areas', type: 'thesis-hub', build: (d) => d.thesis },
 
-    { id: 'process-divider', type: 'section-divider', build: () => ({ heading: 'Our\nProcess' }) },
+    { id: 'process-divider', type: 'section-divider', build: () => ({ heading: 'Our\nProcess', sub: 'How we source, evaluate and back', pattern: 3 }) },
     { id: 'inbound-dealflow', type: 'dealflow', build: (d) => d.dealflow },
     { id: 'portfolio-support', type: 'portfolio-support', build: (d) => d.portfolioSupport },
 
-    { id: 'fund-i-divider', type: 'section-divider', build: () => ({ heading: 'Fund\nI' }) },
+    { id: 'fund-i-divider', type: 'section-divider', build: () => ({ heading: 'Fund I', sub: 'Performance · Last updated: June 2026', pattern: 4 }) },
     { id: 'fund-i-portfolio', type: 'portfolio-table', build: (d) => d.fundIPortfolio },
     { id: 'tech-cxo-map', type: 'cxo-map', build: (d) => d.cxoMap },
 
-    { id: 'fund-ii-divider', type: 'section-divider', build: () => ({ heading: 'Fund\nII' }) },
+    { id: 'fund-ii-divider', type: 'section-divider', build: () => ({ heading: 'Fund\nII', sub: 'Structure & Terms', pattern: 5 }) },
     { id: 'proposed-structure', type: 'governance', build: (d) => d.governance },
     { id: 'fund-ii-key-terms', type: 'key-terms', build: (d) => d.fundIIKeyTerms },
     { id: 'fund-ii-deployment', type: 'deployment', build: (d) => d.fundIIDeployment },
