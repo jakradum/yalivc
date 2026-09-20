@@ -9,8 +9,13 @@ export const SLIDE_NUMBER_MODE = {
   closing: 'dark',
   logomark: 'dark',
   'person-grid': 'dark', // crimson ground
+  'portfolio-support': 'dark', // number sits on the full-width crimson banner
   title: 'skip', // legacy s-fii-blank is in the SKIP list
 };
+
+// Slides that are dark only at the bottom edge (the number turns light, the
+// section breadcrumb up top stays crimson).
+export const CRIMSON_BAND_ONLY = new Set(['portfolio-support']);
 
 export const slideNumberMode = (type) => SLIDE_NUMBER_MODE[type] || 'light';
 

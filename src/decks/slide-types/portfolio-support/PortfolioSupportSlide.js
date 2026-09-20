@@ -45,6 +45,12 @@ export function PortfolioSupportSlide({ heading, cadences = [], note }) {
 
       {note ? (
         <div style={{ background: 'var(--deck-color-crimson)', margin: '12px -40px -18px', padding: '13px 40px', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 16 }}>
+          <svg width={18} height={18} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, opacity: 0.7 }}>
+            <rect x="1" y="4" width="16" height="11" rx="0" stroke="#ebde84" strokeWidth="1.4" />
+            <line x1="1" y1="7.5" x2="17" y2="7.5" stroke="#ebde84" strokeWidth="1.2" />
+            <line x1="6" y1="4" x2="6" y2="2" stroke="#ebde84" strokeWidth="1.4" />
+            <line x1="12" y1="4" x2="12" y2="2" stroke="#ebde84" strokeWidth="1.4" />
+          </svg>
           <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, color: '#efefef', letterSpacing: '0.08em' }}>{note}</span>
         </div>
       ) : null}

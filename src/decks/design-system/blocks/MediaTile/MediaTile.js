@@ -17,6 +17,9 @@ export function MediaTile({ publication, headline, date, href, isVideo = false }
         textDecoration: 'none',
       }}
     >
+      {isVideo ? (
+        <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 7.5, fontWeight: 700, color: 'var(--deck-color-gold)', letterSpacing: '0.10em', flexShrink: 0 }}>▶ VIDEO</div>
+      ) : null}
       <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 8.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.10em', color: dark ? 'var(--deck-color-gold)' : 'var(--deck-color-crimson)', flexShrink: 0 }}>
         {publication}
       </div>

@@ -62,11 +62,18 @@ export function DealflowSlide({ heading, stages = [] }) {
                 {s.note ? (
                   <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 9, color: '#aaa', lineHeight: 1.5 }}>{s.note}</div>
                 ) : null}
-                {(s.exits || []).map((exit) => (
-                  <div key={exit} style={{ background: EXIT_STYLE[exit]?.bg, padding: '7px 10px' }}>
-                    <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: EXIT_STYLE[exit]?.fg, letterSpacing: '0.06em' }}>{exit}</div>
-                  </div>
-                ))}
+                {(s.exits || []).map((exit) => {
+                  // An exit is a label, or { label, note } (e.g. the Pitch
+                  // stage's Watch: "timing / maturity / consensus").
+                  const label = typeof exit === 'string' ? exit : exit.label;
+                  const note = typeof exit === 'string' ? null : exit.note;
+                  return (
+                    <div key={label} style={{ background: EXIT_STYLE[label]?.bg, padding: '7px 10px' }}>
+                      <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: EXIT_STYLE[label]?.fg, letterSpacing: '0.06em' }}>{label}</div>
+                      {note ? <div style={{ fontFamily: 'var(--deck-font-body)', fontSize: 8, color: 'rgba(54,54,54,0.65)', lineHeight: 1.4, marginTop: 3 }}>{note}</div> : null}
+                    </div>
+                  );
+                })}
               </div>
               {i < stages.length - 1 ? <div style={{ width: 20, flexShrink: 0 }} /> : null}
             </div>

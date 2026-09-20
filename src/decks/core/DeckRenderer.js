@@ -2,7 +2,7 @@
 
 import { SlideCanvas } from '../canvas/SlideCanvas';
 import { slideComponents, decks } from './registry';
-import { slideNumberMode, assignSections } from './slideNumbers';
+import { slideNumberMode, assignSections, CRIMSON_BAND_ONLY } from './slideNumbers';
 
 // Client-boundary render tree — same component tree used for preview
 // (inside PreviewShell) and print (inside PrintShell, still SSR'd first).
@@ -36,7 +36,7 @@ export function DeckRenderer({ deckId, data, slides: resolved }) {
           );
         }
         return (
-          <SlideCanvas key={slide.id} id={slide.id} index={index} numberMode={slideNumberMode(slide.type)} section={slide.section}>
+          <SlideCanvas key={slide.id} id={slide.id} index={index} numberMode={slideNumberMode(slide.type)} section={slide.section} crimsonGround={slideNumberMode(slide.type) === 'dark' && !CRIMSON_BAND_ONLY.has(slide.type)}>
             <Component {...slide.props} />
           </SlideCanvas>
         );

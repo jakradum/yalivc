@@ -69,7 +69,11 @@
       { "name": "Team\nVet", "description": "pickup or ignore", "exits": ["Ignore"] },
       { "name": "Initial\nMeeting", "description": "assess thesis fit", "exits": ["Pass"] },
       { "name": "Internal\nReview", "description": "wider team discusses", "note": "invite to pitch; sometimes to learn a sector" },
-      { "name": "Pitch", "description": "founder presents", "exits": ["Watch", "Pass"] },
+      { "name": "Pitch", "description": "founder presents",
+        "exits": [
+          { "label": "Watch", "note": "timing / maturity / consensus" },
+          "Pass"
+        ] },
       { "name": "Follow-on\nMeeting", "description": "further diligence", "exits": ["Watch", "Park", "Pass"] },
       { "name": "Portfolio", "description": "investment made", "isFinal": true }
     ]
@@ -96,8 +100,7 @@
     "footnote": "Our LPs feature CXOs from India, USA, Taiwan, South Korea and Singapore."
   },
   "governance": {
-    "heading": "Proposed Structure · Fund II",
-    "note": "Regulatory boundary — GIFT City / IFSC · India Domestic"
+    "title": "Proposed structure for Fund II"
   },
   "fundIIKeyTerms": {
     "heading": "Fund II · Key Terms",
@@ -415,12 +418,80 @@
   "media": {
     "heading": "Media & Recognition",
     "items": [
-      { "publication": "Mint", "headline": "Yali Capital raises $104 million in debut deep-tech fund" },
-      { "publication": "Economic Times", "headline": "Infosys Innovation Fund invests in Yali Capital to up deep-tech game plan" },
-      { "publication": "CNBC TV18", "headline": "Yali Capital Rolls Out ₹810 Cr Fund To Back Deeptech Startups" },
-      { "publication": "Inc42", "headline": "Yali Capital Invests $4 Mn In Chip Design Startup C2i Semiconductors" },
-      { "publication": "Businessworld", "headline": "Yali Capital & Lip-Bu Tan Co-invest In Fabless Chip Startup C2i Semiconductors" },
-      { "publication": "The Hindu", "headline": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology" }
+      {
+        "publication": "Mint",
+        "headline": "Yali Capital raises $104 million in debut deep-tech fund",
+        "date": "Jul 2025",
+        "href": "https://www.livemint.com/companies/start-ups/yali-capital-raises-104-million-in-debut-deep-tech-fund-11753346908886.html"
+      },
+      {
+        "publication": "Economic Times",
+        "headline": "Infosys Innovation Fund invests in Yali Capital to up deep-tech game plan",
+        "date": "Apr 2025",
+        "href": "https://timesofindia.indiatimes.com/business/india-business/infosys-innovation-fund-invests-in-yali-capital-to-up-deep-tech-game-plan/articleshow/120614882.cms"
+      },
+      {
+        "publication": "CNBC TV18",
+        "headline": "Yali Capital Rolls Out ₹810 Cr Fund To Back Deeptech Startups",
+        "date": "Jul 2024",
+        "href": "https://www.youtube.com/watch?v=83OBB_oOcrw",
+        "isVideo": true
+      },
+      {
+        "publication": "Economic Times",
+        "headline": "Ecommerce tech startup Point AI raises $5.3 million in round led by Yali Capital",
+        "date": "Oct 2025",
+        "href": "https://economictimes.indiatimes.com/tech/funding/ecommerce-tech-startup-point-ai-raises-5-3-million-in-round-led-by-yali-capital/articleshow/124911223.cms"
+      },
+      {
+        "publication": "Inc42",
+        "headline": "Yali Capital Invests $4 Mn In Chip Design Startup C2i Semiconductors",
+        "date": "Nov 2024",
+        "href": "https://inc42.com/buzz/yali-capital-invests-4-mn-in-chip-design-startup-c2i-semiconductors/"
+      },
+      {
+        "publication": "Businessworld",
+        "headline": "Yali Capital & Lip-Bu Tan Co-invest In Fabless Chip Startup C2i Semiconductors",
+        "date": "Nov 2024",
+        "href": "https://www.businessworld.in/article/yali-capital-semiconductor-veteran-lip-bu-tan-co-invest-in-fabless-chip-startup-c2i-semiconductors-538524"
+      },
+      {
+        "publication": "CNBC TV18",
+        "headline": "Generative AI Will Be Bigger Than The Internet: Walden International",
+        "date": "Jul 2024",
+        "href": "https://www.youtube.com/watch?v=5H2qRuEMbCM",
+        "isVideo": true
+      },
+      {
+        "publication": "The Hindu",
+        "headline": "Bengaluru startup strives to bridge the indigenous data gap in precision oncology",
+        "date": "Nov 2024",
+        "href": "https://www.thehindu.com/news/cities/bangalore/bengaluru-start-up-strives-to-bridge-the-indigenous-data-gap-in-precision-oncology/article68835845.ece"
+      },
+      {
+        "publication": "Moneycontrol",
+        "headline": "VC industry veterans launch Rs 810-cr deeptech-focused fund 'Yali Capital'",
+        "date": "Jul 2024",
+        "href": "https://www.moneycontrol.com/technology/vc-industry-veterans-launch-rs-810-cr-deeptech-focused-fund-yali-capital-article-12769665.html"
+      },
+      {
+        "publication": "VCCircle",
+        "headline": "Yali Capital Taps Key LP for Maiden VC Fund to Back Deep-tech Startups",
+        "date": "Apr 2025",
+        "href": "https://www.vccircle.com/yalicapital-taps-key-lp-for-maiden-vc-fund-to-back-deep-tech-startups"
+      },
+      {
+        "publication": "YourStory",
+        "headline": "4baseCare raises $6M in Series A funding led by Yali Capital",
+        "date": "Aug 2024",
+        "href": "https://yourstory.com/2024/08/4basecare-raises-6m-seriesa-funding-plans-expansion"
+      },
+      {
+        "publication": "The Tribune",
+        "headline": "Perceptyne Named Finalist at Global Humanoid Robotics Awards, Showcasing India's Deep-Tech Strength",
+        "date": "Oct 2025",
+        "href": "https://www.tribuneindia.com/news/business/perceptyne-named-finalist-at-global-humanoid-robotics-awards-showcasing-indias-deep-tech-strength/"
+      }
     ]
   },
   "closing": { "contacts": ["gani@yali.vc", "sunil@yali.vc"], "website": "yali.vc" },
