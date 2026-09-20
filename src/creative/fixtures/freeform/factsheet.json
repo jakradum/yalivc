@@ -155,7 +155,7 @@
                   "gap": "xs",
                   "padding": "m",
                   "fill": "light",
-                  "radius": "m",
+                  "radius": "none",
                   "children": [
                     {
                       "type": "stat",
@@ -175,7 +175,7 @@
                   "gap": "xs",
                   "padding": "m",
                   "fill": "light",
-                  "radius": "m",
+                  "radius": "none",
                   "children": [
                     {
                       "type": "stat",
