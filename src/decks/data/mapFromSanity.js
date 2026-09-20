@@ -61,7 +61,7 @@ function appendixCard(c) {
     f.fmv != null ? { label: 'FMV', value: cr(f.fmv) } : null,
     f.moic != null ? { label: 'MOIC', value: `${f.moic.toFixed(2)}x` } : null,
     f.firstDate ? { label: 'First Investment', value: fmtDate(f.firstDate) } : null,
-    f.ownership != null ? { label: 'Ownership', value: `${f.ownership.toFixed(1)}%` } : null,
+    f.ownership != null ? { label: 'Ownership', value: `${Number(f.ownership.toFixed(2))}%` } : null, // as stored in Sanity (14.05, not a rounded 14.1)
     f.stage ? { label: 'Stage', value: titleCase(f.stage) } : null,
   ].filter(Boolean);
   return {
@@ -102,6 +102,8 @@ function statsRows(stats, companyCount) {
   return [
     { label: 'First close date', value: stats.firstCloseDate ? shortDate(stats.firstCloseDate) : '—' },
     { label: 'Final close date', value: stats.finalCloseDate ? shortDate(stats.finalCloseDate) : '—' },
+    // Legacy labels this "Combined fund size" and shows 893.00 — Sanity's target fund size
+    // (lpFundSettings.targetFundSizeINR), not fundSizeAtClose.
     { label: 'Combined fund size', value: x(stats.targetFundSizeINR) },
     { label: 'Amount drawn down', value: x(q.amountDrawnDown) },
     { label: 'Total invested in portfolio', value: x(q.totalInvested) },
@@ -231,8 +233,8 @@ export async function loadFundIIFromSanity() {
     fundISectors: portfolio.length
       ? { heading: 'Portfolio Investments by Sector', slices: sectorSlices(portfolio) }
       : fundIIFixture.fundISectors,
-    // Inbound / evaluated / pipeline counts come from the CRM, not Sanity, so
-    // they're code-owned in the fixture; the portfolio count is live.
+    // Inbound / evaluated / pipeline counts come from Airtable, not Sanity, so
+    // they're hardcoded in the fixture on purpose; the portfolio count is live.
     fundIDealflow: {
       ...fundIIFixture.fundIDealflow,
       stats: fundIIFixture.fundIDealflow.stats.map((st) =>
