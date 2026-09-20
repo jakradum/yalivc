@@ -2,7 +2,8 @@
 // nothing about size, safe margins or block availability is left to the asset
 // author (human or AI). `w`/`h` are CSS px; `h: null` = height follows content
 // (email). Type sizes in a brand are defined at a 1080px reference width and
-// scaled by `w / 1080`, so the same roles work on every canvas.
+// scaled by `w / 1080`, so the same roles work on every canvas. `safe` (and
+// safeTop/safeBottom) are in the same reference px, scaled the same way.
 const ALL_BLOCKS = ['stack', 'grid', 'layer', 'text', 'image', 'shape', 'logo', 'spacer', 'divider', 'button', 'list', 'stat', 'pattern'];
 const EMAIL_BLOCKS = ['stack', 'grid', 'text', 'image', 'logo', 'spacer', 'divider', 'button', 'list', 'stat'];
 

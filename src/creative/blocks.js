@@ -74,7 +74,7 @@ export const BLOCKS = {
 
   // ── leaves ────────────────────────────────────────────────────────────
   text: {
-    doc: 'A piece of text in a type ROLE (display, title, heading, subhead, body, caption, eyebrow, stat, quote). Wrap a word in |pipes| to highlight it.',
+    doc: 'A piece of text in a type ROLE (display, title, heading, subhead, body, caption, eyebrow, stat, quote). Wrap a word in ==double equals== to highlight it (gold marker).',
     props: {
       role: { ...enumOf(Object.keys(TEXT_ROLES)), required: true },
       text: { ...str(400), required: true },

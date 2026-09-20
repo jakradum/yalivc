@@ -68,6 +68,24 @@ console.log('Guardrails reject…');
   rejects('email svg mark', d17, 'lockup');
 }
 
+{
+  const d = clone(FIXTURES.carousel);
+  rootOf(d, 1).children.push({ type: 'stat', id: 'perf', value: '5x', label: 'Returned to investors', source: 'user', color: 'crimson' });
+  const r = validateAsset(d);
+  ok('user-sourced return figure is allowed but flagged', r.ok && r.warnings.some((w) => w.msg.includes('performance/return')));
+}
+
+{
+  // gen1's failure: 'Manufacturing' at heading size in a narrow cell (3 columns here; the
+  // real one was 2 columns inside a padded card)
+  const d = clone(FIXTURES.carousel);
+  d.pages[2].root.children.push({ type: 'grid', id: 'gg', columns: 3, gap: 'm', children: [{ type: 'text', id: 't1', role: 'heading', text: 'Smart Manufacturing', color: 'ink' }, { type: 'text', id: 't2', role: 'heading', text: 'Fabless Semiconductor', color: 'ink' }] });
+  rejects('long word in a narrow grid cell', d, 'cell is');
+  const ok2 = clone(FIXTURES.carousel);
+  ok2.pages[2].root.children.push({ type: 'grid', id: 'gg', columns: 3, gap: 'm', children: [{ type: 'text', id: 't1', role: 'body', text: 'Smart Manufacturing', color: 'ink' }, { type: 'text', id: 't2', role: 'body', text: 'Fabless Semiconductor', color: 'ink' }] });
+  ok('same words at body size fit', validateAsset(ok2).ok);
+}
+
 console.log('Engine…');
 {
   const doc = newAsset({ format: 'linkedin-square', title: 't' });
@@ -92,6 +110,11 @@ console.log('Email compile…');
   ok('600px wide', html.includes('width="600"'));
   ok('inline styled, no <style>/<script>', !html.includes('<style') && !html.includes('<script'));
   ok('contains CTA link', html.includes('href="https://yali.vc"'));
+  {
+    const d = clone(FIXTURES.emailer);
+    find(rootOf(d), 'mail-foot').text = 'Yali Capital | yali.vc';
+    ok('a literal pipe is not a highlight marker', !compileEmail(d).includes('background-color:#ebde84;color:#363636;padding:0 3px;">'));
+  }
   ok('logo absolute url', html.includes('https://example.test/brand/yali-lockup.png'));
   console.log(`  ${html.length} chars`);
 }

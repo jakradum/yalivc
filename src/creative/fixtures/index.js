@@ -21,7 +21,7 @@ export const carousel = {
             { type: 'pattern', id: 'cover-pat', name: 5, color: 'gold', opacity: 0.3 },
             { type: 'stack', id: 'cover-copy', anchor: 'bottom', direction: 'column', gap: 'm', children: [
               t('cover-eyebrow', 'eyebrow', 'A deep tech fund', 'gold'),
-              t('cover-title', 'display', 'Yali Capital\nFund |II|', 'white'),
+              t('cover-title', 'display', 'Yali Capital\nFund ==II==', 'white'),
               { type: 'shape', id: 'cover-bar', kind: 'bar', color: 'gold', size: 'm' },
             ] },
           ] },
@@ -75,7 +75,7 @@ export const carousel = {
       root: {
         type: 'stack', id: 'cta-root', direction: 'column', gap: 'l', justify: 'center',
         children: [
-          t('cta-title', 'title', 'Learn more about |Fund II|', 'white'),
+          t('cta-title', 'title', 'Learn more about ==Fund II==', 'white'),
           { type: 'button', id: 'cta-btn', label: 'yali.vc', href: 'https://yali.vc', style: 'solid', color: 'gold' },
           { type: 'spacer', id: 'cta-space', size: 'xl' },
           { type: 'logo', id: 'cta-logo', variant: 'mark', tone: 'dark', size: 'm' },
