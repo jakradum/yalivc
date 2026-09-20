@@ -132,6 +132,7 @@ export function CreativeClient() {
       let current = withLib;
       let lib = library;
       let ask = text;
+      const allTrace = [];
       // Generation is resumable: the server returns a valid partial asset when it
       // runs out of time, and we ask it to carry on (up to 5 rounds).
       for (let round = 1; round <= 5; round += 1) {
@@ -146,8 +147,9 @@ export function CreativeClient() {
         lib = json.doc.assets || {};
         setDoc(json.doc);
         setLibrary(lib);
+        allTrace.push(...(json.trace || []));
         if (!json.unfinished) {
-          setThread((t) => [...t, { role: 'assistant', text: json.reply || 'Done.' }]);
+          setThread((t) => [...t, { role: 'assistant', text: json.reply || 'Done.', trace: allTrace }]);
           break;
         }
         setThread((t) => [...t.filter((m) => m.role !== 'progress'), { role: 'progress', text: `Still building… (step ${round + 1})` }]);
@@ -254,7 +256,17 @@ export function CreativeClient() {
             </p>
           ) : null}
           {thread.map((m, i) => (
-            <div key={i} className={`${s.msg} ${m.role === 'user' ? s.me : `${s.claude} ${m.role === 'error' ? s.err : ''}`}`}>{m.text}</div>
+            <div key={i} className={`${s.msg} ${m.role === 'user' ? s.me : `${s.claude} ${m.role === 'error' ? s.err : ''}`}`}>
+              {m.text}
+              {m.trace?.length ? (
+                <details className={s.trace}>
+                  <summary>What Claude did ({m.trace.length} steps{m.trace.some((x) => !x.ok) ? `, ${m.trace.filter((x) => !x.ok).length} rejected` : ''})</summary>
+                  {m.trace.map((x, j) => (
+                    <div key={j} className={x.ok ? '' : s.traceBad}><b>{x.tool}</b> {x.ok ? '✓' : '✗'} {x.note}</div>
+                  ))}
+                </details>
+              ) : null}
+            </div>
           ))}
           {busy ? <div className={`${s.msg} ${s.claude}`}>Composing… (up to a minute)</div> : null}
         </div>

@@ -28,6 +28,7 @@ export async function runCreativeAgent(doc, prompt, history = []) {
   let reply = '';
   let calls = 0;
   let unfinished = false;
+  const trace = []; // what each tool call did, so a surprising result can be explained
   for (let turn = 0; turn < MAX_TURNS; turn += 1) {
     if (turn > 0 && Date.now() - t0 > BUDGET_MS) {
       unfinished = true;
@@ -43,12 +44,15 @@ export async function runCreativeAgent(doc, prompt, history = []) {
       .map((b) => {
         calls += 1;
         try {
-          return { type: 'tool_result', tool_use_id: b.id, content: runTool(holder, b.name, b.input) };
+          const content = runTool(holder, b.name, b.input);
+          trace.push({ tool: b.name, ok: true, note: content.split('\n')[0].slice(0, 160) });
+          return { type: 'tool_result', tool_use_id: b.id, content };
         } catch (err) {
+          trace.push({ tool: b.name, ok: false, note: err.message.replace(/\n\(Nothing was changed\.\)/, '').slice(0, 400) });
           return { type: 'tool_result', tool_use_id: b.id, content: err.message, is_error: true };
         }
       });
     messages.push({ role: 'user', content: results });
   }
-  return { doc: holder.doc, reply, calls, unfinished, validation: validateAsset(holder.doc) };
+  return { doc: holder.doc, reply, calls, unfinished, trace, validation: validateAsset(holder.doc) };
 }
