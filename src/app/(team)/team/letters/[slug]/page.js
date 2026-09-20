@@ -29,8 +29,8 @@ function renderBody(blocks) {
   });
 }
 
-export default async function LetterPage({
-  await requireTeamUser('letters'); // Yali Microsoft sign-in (the proxy checks too) params }) {
+export default async function LetterPage({ params }) {
+  await requireTeamUser('letters'); // Yali Microsoft sign-in (the proxy checks too)
   const { slug } = await params;
   const letter = await getLetterBySlug(slug);
   if (!letter) notFound();
