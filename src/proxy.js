@@ -79,7 +79,7 @@ async function verifyTeamCookie(cookieValue) {
 }
 
 // The gated areas of the team site (everything else, e.g. the leave form, stays open).
-const isGatedTeamPath = (p) => /^\/(builder|letters)(\/|$)/.test(p);
+const isGatedTeamPath = (p) => /^\/(asset-builder|builder|letters)(\/|$)/.test(p);
 
 export default async function middleware(request) {
   const hostname = request.headers.get('host') || '';
@@ -221,7 +221,7 @@ export default async function middleware(request) {
   }
 
   // Local dev: the same gate on /team/builder and /team/letters.
-  if (isLocalDev && /^\/team\/(builder|letters)(\/|$)/.test(url.pathname)) {
+  if (isLocalDev && /^\/team\/(asset-builder|builder|letters)(\/|$)/.test(url.pathname)) {
     const ok = await verifyTeamCookie(request.cookies.get(TEAM_COOKIE_NAME)?.value);
     if (!ok) {
       const signIn = new URL('/team/sign-in', request.url);

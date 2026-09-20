@@ -24,7 +24,8 @@ export default async function BuilderHome() {
   return (
     <div className={`deck-root ${s.page}`}>
       <header className={s.bar}>
-        <span className={s.title}>BUILDER</span>
+        <a className={s.back} href={`${prefix}/asset-builder/`}>← Asset builder</a>
+        <span className={s.title}>OTHER ASSETS</span>
         <span className={s.who}>{email}</span>
         <SignOutButton />
       </header>

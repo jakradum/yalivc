@@ -19,8 +19,8 @@ const sans = 'var(--font-inter, "Inter", Arial, sans-serif)';
 
 // Only ever return to the builder or Letters; anything else falls back home.
 function safeNext(raw, prefix) {
-  const ok = /^\/(team\/)?(builder|letters)(\/|$)/.test(raw || '');
-  return ok ? raw : `${prefix}/builder/`;
+  const ok = /^\/(team\/)?(asset-builder|builder|letters)(\/|$)/.test(raw || '');
+  return ok ? raw : `${prefix}/asset-builder/`;
 }
 
 export function SignInClient({ deniedArea = null, deniedEmail = null }) {
