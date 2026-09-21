@@ -6,7 +6,7 @@ import { isBuilderHost } from '@/decks/auth';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const FROM = process.env.LEAVE_MAIL_FROM || 'Yali Leave <noreply@yali.vc>';
+const FROM = process.env.LEAVE_MAIL_FROM || 'Yali Team Portal <noreply@yali.vc>';
 const recent = new Map(); // best-effort duplicate guard (per server instance)
 const WINDOW_MS = 10 * 60 * 1000;
 
