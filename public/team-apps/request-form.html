@@ -193,6 +193,12 @@ $("tab-leave").addEventListener("click", ()=>activateTab("tab-leave"));
 $("tab-wfh").addEventListener("click", ()=>activateTab("tab-wfh"));
 $("tab-weekend").addEventListener("click", ()=>activateTab("tab-weekend"));
 
+// Best-effort confirmation emails (the server decides who gets what). Never blocks or
+// changes the request: it is already saved by the time this runs.
+function notify(payload){
+  try{ fetch("/api/team-leave-notify/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:current.name,...payload}),keepalive:true}).catch(()=>{}); }catch(e){}
+}
+
 // ---- LEAVE ----
 function typeLeft(){ return $("ltype").value==="medical" ? medLeft(current) : paidLeft(current); }
 function updateLeaveNote(){
@@ -219,6 +225,7 @@ $("submit-leave").addEventListener("click", async ()=>{
   try{
     if(leaveDays>left){
       await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
+      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
       showDone("manual", left, type);
     } else {
       await runTransaction(db, async tx=>{
@@ -229,11 +236,14 @@ $("submit-leave").addEventListener("click", async ()=>{
         tx.set(doc(collection(db,"leaveRequests")), {...base, status:"auto-approved"});
       });
       current[takenField]=(+current[takenField]||0)+leaveDays;
+      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"auto-approved",remaining:type==="medical"?medLeft(current):paidLeft(current)});
       showDone("approved", 0, type);
     }
   }catch(err){
     if(String(err.message).includes("insufficient")){
-      await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"}); showDone("manual", left, type);
+      await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
+      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
+      showDone("manual", left, type);
     } else { $("note-leave").style.color="var(--tx-danger)"; $("note-leave").textContent="Couldn't submit. Try again."; $("submit-leave").disabled=false; }
   }
 });
@@ -266,6 +276,7 @@ $("submit-wfh").addEventListener("click", async ()=>{
       offPattern:isOffPattern(v,current.wfhPattern), status:"logged",
       year:parseInt(String(v).slice(0,4),10)||null, createdAt:serverTimestamp()
     });
+    notify({kind:"wfh",date:v,offPattern:isOffPattern(v,current.wfhPattern)});
     $("panel").style.display="none"; $("done").style.display="block";
     $("done-title").textContent="WFH logged";
     $("done-detail").textContent=`${WEEKDAY[wd]} ${fmtDate(v)} recorded for ${current.name}.`;
@@ -323,6 +334,7 @@ $("submit-weekend").addEventListener("click", async ()=>{
       weekKey:wk, class:"regular-weekend", status:"logged",
       year:parseInt(String(v).slice(0,4),10)||null, createdAt:serverTimestamp()
     });
+    notify({kind:"weekend",date:v});
     $("panel").style.display="none"; $("done").style.display="block";
     $("done-title").textContent="Weekend off logged";
     $("done-detail").textContent=`${WEEKDAY[wd]} ${fmtDate(v)} recorded as your regular weekend day off (not counted).`;
