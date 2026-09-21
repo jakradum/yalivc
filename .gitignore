@@ -44,3 +44,4 @@ CLAUDE.md
 # sketchboard — local brainstorming pages, never deployed
 /src/app/sketch
 exports/
+.preview/
