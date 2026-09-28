@@ -25,6 +25,7 @@ export function CreateInvitationButton() {
 
   const [state, setState] = useState('idle');
   const [result, setResult] = useState(null); // { link, code? }
+  const [copied, setCopied] = useState(false);
 
   const docId = rawId?.replace(/^drafts\./, '');
   const isUnsaved = !docId;
@@ -34,6 +35,24 @@ export function CreateInvitationButton() {
     contactMethod === 'whatsapp' ? !whatsappNumber : !founderEmail;
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://yali.vc';
+
+  // Only relevant for whatsapp-contact invitations - the email path already
+  // sends the founder a fully-worded email itself, so there's nothing for
+  // Pranav to manually relay there.
+  const copyMessage = result?.code
+    ? `Hi! Please use this link to pick a time for our pitch call: ${result.link}\n\nEnter this code when prompted: ${result.code}\n\nThe link and code are valid for 48 hours.`
+    : null;
+
+  const copyToClipboard = async () => {
+    if (!copyMessage) return;
+    try {
+      await navigator.clipboard.writeText(copyMessage);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      console.error('Clipboard copy failed:', err);
+    }
+  };
 
   const generate = async () => {
     if (state === 'loading' || isUnsaved || alreadyGenerated || missingContact) return;
@@ -86,9 +105,21 @@ export function CreateInvitationButton() {
               <div style={{ fontSize: '11px', color: '#aaa', margin: '10px 0 4px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Code (shown once — not stored in plaintext, copy it now)
               </div>
-              <div style={{ fontFamily: 'monospace', fontSize: '32px', letterSpacing: '0.25em', color: '#fff', fontWeight: 700 }}>
+              <div style={{ fontFamily: 'monospace', fontSize: '32px', letterSpacing: '0.25em', color: '#fff', fontWeight: 700, marginBottom: '14px' }}>
                 {result.code}
               </div>
+              <button
+                type="button"
+                onClick={copyToClipboard}
+                style={{
+                  ...btnStyle,
+                  color: copied ? '#4ade80' : '#ddd',
+                  borderColor: copied ? '#4ade80' : '#555',
+                  background: 'transparent',
+                }}
+              >
+                {copied ? '✓ Copied — paste into WhatsApp' : 'Copy message (link + code)'}
+              </button>
             </>
           )}
         </div>
