@@ -8,6 +8,9 @@ Allow: /
 Disallow: /partners/
 Disallow: /api/
 
+# Disallow pitch scheduler (private, OTP-gated — not /pitch/ itself, which is public)
+Disallow: /pitch/scheduler/
+
 # Disallow Next.js build artefacts (not real pages)
 Disallow: /_next/
 

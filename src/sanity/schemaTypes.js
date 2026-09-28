@@ -45,6 +45,8 @@ import contactSubmission from './schemas/contactSubmission'
 import letterheadDocument from './schemas/letterheadDocument'
 // News monitor (auto-captured, internal)
 import newsDigest from './schemas/newsDigest'
+// Pitch scheduler
+import pitchSchedulerInvitation from './schemas/pitchSchedulerInvitation'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -90,4 +92,6 @@ export const schemaTypes = [
   letterheadDocument,
   // News monitor
   newsDigest,
+  // Pitch scheduler
+  pitchSchedulerInvitation,
 ]
