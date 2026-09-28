@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
+import { getBusyIntervals, overlapsAny } from '@/lib/graphCalendar';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 48;
@@ -36,12 +37,24 @@ function hashCode(codeSalt, code) {
 }
 
 // Same recurring-slot shape as the Outlook routine offers (Tue 10-11, Tue
-// 11-12, Fri 10-11 IST), computed for the next ~2 weeks. This is a snapshot
-// at creation time, not a live calendar check — same as the automated path.
-function computeCandidateSlots() {
-  const slots = [];
+// 11-12, Fri 10-11 IST), computed for the next ~2.5 weeks so there's enough
+// margin left after filtering out real calendar conflicts. Checks Pranav's
+// actual calendar via Microsoft Graph (see src/lib/graphCalendar.js) before
+// returning slots - this is the gap the manual/Studio path used to have
+// entirely (the routine's own automated path already checked live via its
+// Outlook MCP connector; this brings the manual path to the same standard).
+//
+// Fallback policy if calendar access isn't configured yet or Graph errors:
+// return the unfiltered pattern anyway (fail OPEN, not closed) so the
+// manual invite flow keeps working during the calendar-integration
+// rollout - Pranav already has a documented manual override (editing the
+// slots array, or catching a bad slot after the fact like the Aswin case)
+// for this gap, and failing closed would just break invitation creation
+// entirely if Graph is briefly unreachable.
+async function computeCandidateSlots() {
   const now = new Date();
-  for (let dayOffset = 2; dayOffset <= 16 && slots.length < 6; dayOffset++) {
+  const candidates = [];
+  for (let dayOffset = 2; dayOffset <= 18; dayOffset++) {
     const d = new Date(now.getTime() + dayOffset * 24 * 60 * 60 * 1000);
     const istWeekday = new Intl.DateTimeFormat('en-US', { timeZone: IST, weekday: 'short' }).format(d);
     const isTue = istWeekday === 'Tue';
@@ -51,20 +64,21 @@ function computeCandidateSlots() {
     const m = new Intl.DateTimeFormat('en-CA', { timeZone: IST, month: '2-digit' }).format(d);
     const day = new Intl.DateTimeFormat('en-CA', { timeZone: IST, day: '2-digit' }).format(d);
     // 10:00-11:00 IST == 04:30-05:30 UTC; 11:00-12:00 IST == 05:30-06:30 UTC
-    slots.push({
-      slotId: crypto.randomBytes(4).toString('hex'),
-      startUTC: `${y}-${m}-${day}T04:30:00.000Z`,
-      endUTC: `${y}-${m}-${day}T05:30:00.000Z`,
-    });
+    candidates.push({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: `${y}-${m}-${day}T04:30:00.000Z`, endUTC: `${y}-${m}-${day}T05:30:00.000Z` });
     if (isTue) {
-      slots.push({
-        slotId: crypto.randomBytes(4).toString('hex'),
-        startUTC: `${y}-${m}-${day}T05:30:00.000Z`,
-        endUTC: `${y}-${m}-${day}T06:30:00.000Z`,
-      });
+      candidates.push({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: `${y}-${m}-${day}T05:30:00.000Z`, endUTC: `${y}-${m}-${day}T06:30:00.000Z` });
     }
   }
-  return slots.slice(0, 6);
+
+  const windowStart = now.toISOString();
+  const windowEnd = new Date(now.getTime() + 19 * 24 * 60 * 60 * 1000).toISOString();
+  const busy = await getBusyIntervals(windowStart, windowEnd);
+
+  const available = busy === null
+    ? candidates // calendar check unavailable - fail open, see policy note above
+    : candidates.filter((slot) => !overlapsAny(new Date(slot.startUTC), new Date(slot.endUTC), busy));
+
+  return available.slice(0, 6);
 }
 
 function inviteEmailHtml(link) {
@@ -115,6 +129,14 @@ export async function POST(request) {
     return NextResponse.json({ error: 'A valid founder email is required' }, { status: 400, headers: CORS_HEADERS });
   }
 
+  const slots = await computeCandidateSlots();
+  if (slots.length === 0) {
+    return NextResponse.json(
+      { error: 'No open slots in the next ~2.5 weeks after checking the calendar. Try again after freeing up time, or extend the window in code.' },
+      { status: 409, headers: CORS_HEADERS }
+    );
+  }
+
   const invitationId = crypto.randomBytes(12).toString('hex');
   const code = crypto.randomInt(100000, 1000000).toString(); // full 6-digit range
   const codeSalt = crypto.randomBytes(8).toString('hex');
@@ -131,7 +153,7 @@ export async function POST(request) {
     invitationId,
     codeSalt,
     codeHash,
-    slots: computeCandidateSlots(),
+    slots,
     status: 'invited',
     createdAt: now.toISOString(),
     expiresAt: expiresAt.toISOString(),
