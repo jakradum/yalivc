@@ -40,7 +40,7 @@ function groupByDay(slots, timeZone) {
 
 export default function SchedulerPage() {
   const [invite, setInvite] = useState(null);
-  const [stage, setStage] = useState('code'); // code | slots | form | done | invalid
+  const [stage, setStage] = useState('loading'); // loading | code | slots | form | done | invalid
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -55,13 +55,35 @@ export default function SchedulerPage() {
   // The invitation ID lives in the URL (?invite=...), emailed or sent over
   // WhatsApp to the founder. Read once, client-side only — no server rendering
   // of this page, so no hydration mismatch from reading window here.
+  //
+  // Before showing the code screen, check for an existing 48h session cookie
+  // (set on a prior successful code entry) - without this, a founder who
+  // revisits the link (e.g. after closing the tab, or the page reloading)
+  // would be asked for the code again every time even though their session
+  // is still valid. A 401 here just means no valid session yet, the normal
+  // case on a first visit, not an error.
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get('invite');
-    if (!id) {
-      setStage('invalid');
-    } else {
-      setInvite(id);
-    }
+    setInvite(id || null);
+
+    (async () => {
+      try {
+        const res = await fetch('/api/pitch-scheduler-session');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setSlots(data.slots || []);
+            setNeedsEmail(Boolean(data.needsEmail));
+            setStage(data.status === 'submitted' ? 'done' : 'slots');
+            return;
+          }
+        }
+      } catch {
+        // Network hiccup checking the session - fall through to a normal
+        // code entry rather than getting stuck on the loading stage.
+      }
+      setStage(id ? 'code' : 'invalid');
+    })();
   }, []);
 
   const localTZ = useMemo(() => {
@@ -175,9 +197,17 @@ export default function SchedulerPage() {
     }
   };
 
+  const isMinimalStage = stage === 'code' || stage === 'loading';
+
   return (
-    <div className={stage === 'code' ? styles.minimalContainer : styles.container}>
-      <div className={stage === 'code' ? styles.minimalContent : `${styles.content} ${styles.calendarBox}`}>
+    <div className={isMinimalStage ? styles.minimalContainer : styles.container}>
+      <div className={isMinimalStage ? styles.minimalContent : `${styles.content} ${styles.calendarBox}`}>
+        {stage === 'loading' && (
+          <div className={styles.minimalForm}>
+            <p className={styles.minimalHint}>Loading…</p>
+          </div>
+        )}
+
         {stage === 'invalid' && (
           <div className={styles.minimalForm}>
             <p className={styles.minimalHint}>This link is missing its invitation ID. Please use the link exactly as it was sent to you.</p>
