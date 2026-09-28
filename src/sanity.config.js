@@ -161,6 +161,11 @@ export default defineConfig({
               .title('Contact Submissions')
               .child(S.documentTypeList('contactSubmission').title('Contact Submissions')),
             S.divider(),
+            // Pitch Scheduler
+            S.listItem()
+              .title('Pitch Scheduler')
+              .child(S.documentTypeList('pitchSchedulerInvitation').title('Pitch Scheduler Invitations')),
+            S.divider(),
             // Finance
             S.listItem()
               .title('Finance')
