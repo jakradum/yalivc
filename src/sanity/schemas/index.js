@@ -42,6 +42,8 @@ import contactSubmission from './contactSubmission'
 import letterheadDocument from './letterheadDocument'
 // News monitor (auto-captured, internal)
 import newsDigest from './newsDigest'
+// Pitch scheduler
+import pitchSchedulerInvitation from './pitchSchedulerInvitation'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -90,4 +92,6 @@ export const schemaTypes = [
   letterheadDocument,
   // News monitor
   newsDigest,
+  // Pitch scheduler
+  pitchSchedulerInvitation,
 ]

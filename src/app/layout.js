@@ -70,6 +70,11 @@ export default async function RootLayout({ children }) {
   const isPortalRoute = pathname.startsWith('/partners');
   const isDataroomRoute = pathname.startsWith('/dataroom');
   const isTeamRoute = pathname.startsWith('/team');
+  // Note: /pitch/scheduler deliberately uses the normal site chrome (Navbar,
+  // Breadcrumb, Footer) — a page that looks like a native part of the site reads
+  // as more trustworthy to a founder clicking an emailed link than a bare,
+  // unbranded auth screen would. Non-discoverability is handled via robots.txt
+  // + noindex metadata (see src/app/pitch/scheduler/layout.js), not by hiding chrome.
 
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
