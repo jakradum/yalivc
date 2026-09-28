@@ -44,6 +44,7 @@ import letterheadDocument from './letterheadDocument'
 import newsDigest from './newsDigest'
 // Pitch scheduler
 import pitchSchedulerInvitation from './pitchSchedulerInvitation'
+import pitchSchedulerCalendarAuth from './pitchSchedulerCalendarAuth'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -94,4 +95,5 @@ export const schemaTypes = [
   newsDigest,
   // Pitch scheduler
   pitchSchedulerInvitation,
+  pitchSchedulerCalendarAuth,
 ]

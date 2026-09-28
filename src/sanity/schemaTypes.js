@@ -47,6 +47,7 @@ import letterheadDocument from './schemas/letterheadDocument'
 import newsDigest from './schemas/newsDigest'
 // Pitch scheduler
 import pitchSchedulerInvitation from './schemas/pitchSchedulerInvitation'
+import pitchSchedulerCalendarAuth from './schemas/pitchSchedulerCalendarAuth'
 
 export const schemaTypes = [
   investor,  // Must be before company (company references investor)
@@ -94,4 +95,5 @@ export const schemaTypes = [
   newsDigest,
   // Pitch scheduler
   pitchSchedulerInvitation,
+  pitchSchedulerCalendarAuth,
 ]

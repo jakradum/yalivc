@@ -164,7 +164,22 @@ export default defineConfig({
             // Pitch Scheduler
             S.listItem()
               .title('Pitch Scheduler')
-              .child(S.documentTypeList('pitchSchedulerInvitation').title('Pitch Scheduler Invitations')),
+              .child(
+                S.list()
+                  .title('Pitch Scheduler')
+                  .items([
+                    S.listItem().title('Invitations').child(S.documentTypeList('pitchSchedulerInvitation').title('Pitch Scheduler Invitations')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Calendar Connection')
+                      .child(
+                        S.document()
+                          .schemaType('pitchSchedulerCalendarAuth')
+                          .documentId('pitchSchedulerCalendarAuth')
+                          .views([S.view.form()])
+                      ),
+                  ])
+              ),
             S.divider(),
             // Finance
             S.listItem()
