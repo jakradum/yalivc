@@ -81,7 +81,7 @@ async function computeCandidateSlots() {
   return available.slice(0, 6);
 }
 
-function inviteEmailHtml(link) {
+function inviteEmailHtml(link, code) {
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -93,13 +93,17 @@ function inviteEmailHtml(link) {
   .hero-title { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #efefef; }
   .body { padding: 32px 40px; }
   .greeting { font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .code-box { background: #ffffff; border: 1px solid rgba(54,54,54,0.15); padding: 16px 20px; margin-bottom: 24px; }
+  .code-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #666; margin-bottom: 6px; }
+  .code-value { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; letter-spacing: 0.2em; }
   .cta-button { display: inline-block; background: #830d35; color: #efefef !important; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; padding: 16px 36px; }
   .note { font-size: 12px; color: #666; margin-top: 20px; }
 </style></head>
 <body><div class="wrapper">
 <div class="hero"><div class="hero-title">Pick a time for your pitch</div></div>
 <div class="body">
-<p class="greeting">We'd like to schedule a pitch meeting. Use the link below and the one-time code we've sent to pick a slot that works for you.</p>
+<p class="greeting">We'd like to schedule a pitch meeting. Use the code below and the link to pick a slot that works for you.</p>
+<div class="code-box"><div class="code-label">Your one-time code</div><div class="code-value">${code}</div></div>
 <a href="${link}" class="cta-button">Pick a slot</a>
 <p class="note">This link and code are valid for 48 hours and are for single use.</p>
 </div>
@@ -189,7 +193,7 @@ export async function POST(request) {
           from: 'Yali Capital <scheduling-noreply@yali.vc>',
           to: normalizedEmail,
           subject: 'Your one-time code and scheduling link',
-          html: `<p>Your one-time code: <strong style="font-size:20px;letter-spacing:0.2em;">${code}</strong></p>${inviteEmailHtml(link)}`,
+          html: inviteEmailHtml(link, code),
         });
         await writeClient.patch(docId).set({ notificationStatus: 'sent' }).commit();
       } catch (err) {
