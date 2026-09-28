@@ -141,8 +141,17 @@ export async function POST(request) {
   // guaranteed — strip them explicitly.
   Object.keys(patch).forEach((k) => patch[k] === undefined && delete patch[k]);
 
+  // Studio saves new documents as drafts (id "drafts.<docId>") until
+  // explicitly published. A plain `.patch(docId)` fails if only the draft
+  // exists yet, AND even if it succeeded, the public/unauthenticated client
+  // in pitch-scheduler-auth can't see drafts at all - the founder's code
+  // would never verify. So we write straight to the PUBLISHED id via
+  // createOrReplace (using the fields already in `body`, not re-reading from
+  // Sanity - the draft may hold newer unsaved values than the published doc)
+  // and clean up any leftover draft so Studio doesn't show a stale one.
   try {
-    await writeClient.patch(docId).set(patch).commit();
+    await writeClient.createOrReplace({ _id: docId, _type: 'pitchSchedulerInvitation', ...patch });
+    await writeClient.delete(`drafts.${docId}`).catch(() => {}); // no draft to clean up is fine
   } catch (err) {
     console.error('Failed to save invitation:', err);
     return NextResponse.json({ error: 'Failed to save invitation' }, { status: 500, headers: CORS_HEADERS });
