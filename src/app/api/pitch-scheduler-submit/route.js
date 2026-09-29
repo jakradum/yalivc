@@ -180,7 +180,7 @@ export async function POST(request) {
         ? teammateEmails.map(escapeHtml).join(', ')
         : '(none listed)';
       await resend.emails.send({
-        from: 'Yali Capital <scheduling-noreply@yali.vc>',
+        from: 'Scheduler <scheduling-noreply@yali.vc>',
         to: PRANAV_EMAIL,
         subject: `Virtual Pitch Meeting: ${companyName} <> Yali`,
         html: `<p><strong>${escapeHtml(companyName)}</strong> picked a slot via the pitch scheduler.</p>
