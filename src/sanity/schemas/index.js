@@ -45,6 +45,7 @@ import newsDigest from './newsDigest'
 // Pitch scheduler
 import pitchSchedulerInvitation from './pitchSchedulerInvitation'
 import pitchSchedulerCalendarAuth from './pitchSchedulerCalendarAuth'
+import pitchSchedulerSlotCache from './pitchSchedulerSlotCache'
 export const schemaTypes = [
   // Existing schemas
   blogPost,
@@ -96,4 +97,5 @@ export const schemaTypes = [
   // Pitch scheduler
   pitchSchedulerInvitation,
   pitchSchedulerCalendarAuth,
+  pitchSchedulerSlotCache,
 ]

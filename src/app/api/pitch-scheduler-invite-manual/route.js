@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
-import { getPlaceholderSlots } from '@/lib/graphCalendar';
+import { getCachedSlots } from '@/lib/slotCache';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 48;
@@ -43,27 +43,22 @@ function hashCode(codeSalt, code) {
 // availability). A placeholder's mere existence at a given time IS the
 // availability signal; deleting an occurrence (holiday, travel, a real
 // meeting got booked there instead) is how he marks that date as not
-// offered. So we read those titled events directly off the calendar and use
-// their real start/end times - no hardcoded pattern, no busy/free check.
+// offered.
 //
-// If calendar access isn't connected or Graph errors, we genuinely have no
-// way to know what's offered (there's no pattern to fall back to anymore) -
-// the caller treats a null/empty result as "no slots available" rather than
-// fabricating times, unlike the old fail-open behaviour this replaced.
-const PLACEHOLDER_TITLE_MATCHERS = ['pitch meeting placeholder', 'additional slots'];
+// Reads from the shared slot cache (refreshed hourly by cron, see
+// src/lib/slotCache.js) rather than calling Graph directly on every
+// generation - keeps Graph traffic to one scheduled job instead of one call
+// per invitation created.
 const MIN_LEAD_DAYS = 2;
 const MAX_SLOTS = 14;
 
 async function computeCandidateSlots() {
+  const cached = await getCachedSlots();
+  if (!cached) return [];
+
   const now = new Date();
-  const windowStart = now.toISOString();
-  const windowEnd = new Date(now.getTime() + 46 * 24 * 60 * 60 * 1000).toISOString();
-
-  const events = await getPlaceholderSlots(windowStart, windowEnd, PLACEHOLDER_TITLE_MATCHERS);
-  if (!events) return [];
-
   const minStart = new Date(now.getTime() + MIN_LEAD_DAYS * 24 * 60 * 60 * 1000);
-  return events
+  return cached
     .filter((e) => new Date(e.startUTC) >= minStart)
     .slice(0, MAX_SLOTS)
     .map((e) => ({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: e.startUTC, endUTC: e.endUTC }));
@@ -124,7 +119,7 @@ export async function POST(request) {
   const slots = await computeCandidateSlots();
   if (slots.length === 0) {
     return NextResponse.json(
-      { error: 'No pitch-slot placeholders found on the calendar in the next ~6.5 weeks (or the calendar connection needs reconnecting). Add some placeholder events, or check /api/pitch-scheduler-calendar-connect.' },
+      { error: 'No pitch-slot placeholders in the cache right now (either none exist in the next ~6.5 weeks, or the cache has never been refreshed - check the cron job and /pitchSchedulerSlotCache in Studio).' },
       { status: 409, headers: CORS_HEADERS }
     );
   }

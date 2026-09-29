@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
+import { getCachedSlots, slotStillCached } from '@/lib/slotCache';
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
@@ -56,11 +57,21 @@ export async function GET(request) {
     return NextResponse.json({ success: false }, { status: 401, headers: { 'Cache-Control': 'no-store' } });
   }
 
+  // Same live-cache filtering as pitch-scheduler-auth - a refresh should show
+  // a placeholder disappearing if Pranav deleted it since this session
+  // started. Doesn't apply once submitted (nothing left to pick from).
+  const offeredSlots = invitation.slots || [];
+  let liveSlots = offeredSlots;
+  if (invitation.status === 'invited') {
+    const cached = await getCachedSlots();
+    liveSlots = cached ? offeredSlots.filter((s) => slotStillCached(s.startUTC, s.endUTC, cached)) : offeredSlots;
+  }
+
   return NextResponse.json(
     {
       success: true,
       status: invitation.status,
-      slots: invitation.slots || [],
+      slots: liveSlots,
       needsEmail: invitation.contactMethod === 'whatsapp' && !invitation.founderEmail,
     },
     { headers: { 'Cache-Control': 'no-store' } }
