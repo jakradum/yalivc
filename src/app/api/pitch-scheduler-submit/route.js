@@ -185,7 +185,7 @@ export async function POST(request) {
         subject: `Virtual Pitch Meeting: ${companyName} <> Yali`,
         html: `<p><strong>${escapeHtml(companyName)}</strong> picked a slot via the pitch scheduler.</p>
 <p><strong>Slot:</strong> ${escapeHtml(formatSlotIST(slot.startUTC, slot.endUTC))}<br/>
-<strong>Founder email:</strong> ${escapeHtml(founderEmail)}<br/>
+<strong>Contact email:</strong> ${escapeHtml(founderEmail)}<br/>
 <strong>Teammates:</strong> ${teammateList}</p>
 <p>Create the calendar invite when ready — this only confirmed their preference.</p>`,
       });

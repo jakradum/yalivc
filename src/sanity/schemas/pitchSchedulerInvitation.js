@@ -30,9 +30,10 @@ const pitchSchedulerInvitation = {
         list: [
           { title: 'Email', value: 'email' },
           { title: 'WhatsApp', value: 'whatsapp' },
+          { title: 'Name only (no email/phone yet)', value: 'name' },
         ],
       },
-      description: 'Email: OTP delivered by this app. WhatsApp: Pranav sends the link and the plaintext code himself after generating below.',
+      description: 'Email: OTP delivered by this app. WhatsApp/Name only: Pranav relays the link and the plaintext code himself after generating below — the only difference is which identifier is on file yet.',
     },
     {
       name: 'whatsappNumber',
@@ -43,19 +44,27 @@ const pitchSchedulerInvitation = {
       description: 'Only used to remember who this is for — not used for delivery by this app.',
     },
     {
+      name: 'founderName',
+      title: 'Contact Name',
+      type: 'string',
+      group: 'input',
+      hidden: ({ document }) => document?.contactMethod !== 'name',
+      description: 'Used when there\'s no email or WhatsApp number on file yet — just a name to remember who this invitation is for. Pranav relays the link and code however he\'s actually reaching this person.',
+    },
+    {
       name: 'founderEmail',
-      title: 'Founder Email',
+      title: 'Contact Email',
       type: 'string',
       group: 'input',
       validation: (Rule) => Rule.email(),
-      description: 'Required for email-contact invitations (the OTP is sent here). Leave blank for whatsapp-contact invitations with no email yet — the founder provides it in the slot-picker form on submit.',
+      description: 'Required for email-contact invitations (the OTP is sent here). Leave blank for whatsapp/name-only invitations with no email yet — they provide it in the slot-picker form on submit.',
     },
     {
       name: 'companyName',
       title: 'Startup Name',
       type: 'string',
       group: 'input',
-      description: 'Optional at creation — fill in if known, otherwise the founder provides it on submit.',
+      description: 'Optional at creation — fill in if known, otherwise provided on submit.',
     },
     // Generate action — reads the fields above via useFormValue, calls the
     // manual-invite API, and shows the resulting link (+ plaintext code for
@@ -74,7 +83,7 @@ const pitchSchedulerInvitation = {
       type: 'string',
       group: 'generated',
       readOnly: true,
-      description: 'Opaque, high-entropy ID. Matches the ?invite= param in the founder\'s link.',
+      description: 'Opaque, high-entropy ID. Matches the ?invite= param in the invitation link.',
     },
     {
       name: 'codeSalt',
@@ -193,20 +202,21 @@ const pitchSchedulerInvitation = {
       type: 'boolean',
       group: 'generated',
       initialValue: false,
-      description: 'Toggle ON if this pitch doesn\'t go ahead, to free up the slot for other founders even though this invitation was already submitted. Does not touch status or any other field.',
+      description: 'Toggle ON if this pitch doesn\'t go ahead, to free up the slot for other invitations even though this one was already submitted. Does not touch status or any other field.',
     },
   ],
   preview: {
     select: {
       title: 'founderEmail',
       whatsapp: 'whatsappNumber',
+      name: 'founderName',
       subtitle: 'status',
       company: 'companyName',
       released: 'slotReleased',
     },
-    prepare({ title, whatsapp, subtitle, company, released }) {
+    prepare({ title, whatsapp, name, subtitle, company, released }) {
       return {
-        title: `${company ? company + ' — ' : ''}${title || whatsapp || 'Unnamed'}`,
+        title: `${company ? company + ' — ' : ''}${title || whatsapp || name || 'Unnamed'}`,
         subtitle: `${subtitle || 'draft'}${released ? ' · released' : ''}`,
       };
     },

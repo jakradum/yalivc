@@ -72,7 +72,7 @@ export async function GET(request) {
       success: true,
       status: invitation.status,
       slots: liveSlots,
-      needsEmail: invitation.contactMethod === 'whatsapp' && !invitation.founderEmail,
+      needsEmail: (invitation.contactMethod === 'whatsapp' || invitation.contactMethod === 'name') && !invitation.founderEmail,
     },
     { headers: { 'Cache-Control': 'no-store' } }
   );

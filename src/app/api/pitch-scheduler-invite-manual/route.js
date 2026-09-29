@@ -101,19 +101,29 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: CORS_HEADERS });
   }
 
-  const { docId, contactMethod, whatsappNumber, founderEmail, companyName } = body || {};
+  const { docId, contactMethod, whatsappNumber, founderName, founderEmail, companyName } = body || {};
   if (!docId) {
     return NextResponse.json({ error: 'Save the document first' }, { status: 400, headers: CORS_HEADERS });
   }
 
-  const isWhatsapp = contactMethod === 'whatsapp';
+  // Three contact methods: email (this app sends the OTP directly), whatsapp
+  // or name-only (Pranav relays the link+code himself - the only difference
+  // between those two is which identifier is on file to remember who it's
+  // for; neither triggers an automated email).
+  const method = ['email', 'whatsapp', 'name'].includes(contactMethod) ? contactMethod : 'email';
+  const isEmail = method === 'email';
+  const isWhatsapp = method === 'whatsapp';
+  const isNameOnly = method === 'name';
   const normalizedEmail = founderEmail ? founderEmail.toLowerCase().trim() : '';
 
   if (isWhatsapp && !whatsappNumber) {
     return NextResponse.json({ error: 'WhatsApp number is required' }, { status: 400, headers: CORS_HEADERS });
   }
-  if (!isWhatsapp && (!normalizedEmail || !EMAIL_RE.test(normalizedEmail))) {
-    return NextResponse.json({ error: 'A valid founder email is required' }, { status: 400, headers: CORS_HEADERS });
+  if (isNameOnly && !founderName) {
+    return NextResponse.json({ error: 'A contact name is required' }, { status: 400, headers: CORS_HEADERS });
+  }
+  if (isEmail && (!normalizedEmail || !EMAIL_RE.test(normalizedEmail))) {
+    return NextResponse.json({ error: 'A valid contact email is required' }, { status: 400, headers: CORS_HEADERS });
   }
 
   const slots = await computeCandidateSlots();
@@ -133,9 +143,10 @@ export async function POST(request) {
   const link = `https://yali.vc/pitch/scheduler?invite=${invitationId}`;
 
   const patch = {
-    contactMethod: isWhatsapp ? 'whatsapp' : 'email',
+    contactMethod: method,
     whatsappNumber: isWhatsapp ? whatsappNumber : undefined,
-    founderEmail: isWhatsapp ? (normalizedEmail || undefined) : normalizedEmail,
+    founderName: isNameOnly ? founderName : undefined,
+    founderEmail: isEmail ? normalizedEmail : (normalizedEmail || undefined),
     companyName: companyName || undefined,
     invitationId,
     codeSalt,
@@ -166,8 +177,8 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Failed to save invitation' }, { status: 500, headers: CORS_HEADERS });
   }
 
-  if (!isWhatsapp) {
-    // Email path: OTP + link both go to the founder. The code is never
+  if (isEmail) {
+    // Email path: OTP + link both go to the contact. The code is never
     // returned in this response — it only ever exists in the email.
     if (RESEND_API_KEY) {
       try {
@@ -182,13 +193,14 @@ export async function POST(request) {
       } catch (err) {
         console.error('Failed to send invite email:', err);
         await writeClient.patch(docId).set({ notificationStatus: 'failed' }).commit();
-        return NextResponse.json({ error: 'Saved, but failed to email the founder' }, { status: 500, headers: CORS_HEADERS });
+        return NextResponse.json({ error: 'Saved, but failed to send the email' }, { status: 500, headers: CORS_HEADERS });
       }
     }
     return NextResponse.json({ success: true, link }, { headers: CORS_HEADERS });
   }
 
-  // WhatsApp path: nothing emailed. Return both link and plaintext code once
-  // — this is the only time the code exists outside the hash.
+  // WhatsApp / name-only path: nothing emailed. Return both link and
+  // plaintext code once — this is the only time the code exists outside the
+  // hash — for Pranav to relay however he's actually reaching this contact.
   return NextResponse.json({ success: true, link, code }, { headers: CORS_HEADERS });
 }
