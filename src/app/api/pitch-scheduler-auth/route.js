@@ -16,6 +16,17 @@ const client = createClient({
   useCdn: false,
 });
 
+// Only used to record codeVerifiedAt below - lets Pranav distinguish "never
+// opened the link" from "entered the code but hasn't picked a slot yet",
+// which otherwise look identical (both status: "invited").
+const writeClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+  token: process.env.SANITY_WRITE_TOKEN,
+});
+
 const AUTH_SECRET = process.env.PITCH_SCHEDULER_AUTH_SECRET;
 const COOKIE_NAME = 'pitch-scheduler-session';
 // Two-clock model (see plan doc): this is the SESSION clock, fresh from the
@@ -101,7 +112,7 @@ export async function POST(request) {
 
   const invitation = await client.fetch(
     `*[_type == "pitchSchedulerInvitation" && invitationId == $invite][0]{
-      _id, invitationId, founderEmail, contactMethod, codeSalt, codeHash, status, expiresAt, slots
+      _id, invitationId, founderEmail, contactMethod, codeSalt, codeHash, status, expiresAt, slots, codeVerifiedAt
     }`,
     { invite }
   );
@@ -118,6 +129,14 @@ export async function POST(request) {
   if (!invitation.codeSalt) return genericFailure();
   const expectedHash = hashCode(invitation.codeSalt, code.trim());
   if (!timingSafeEqualStr(expectedHash, invitation.codeHash)) return genericFailure();
+
+  // Record the first successful verification - best-effort, doesn't block
+  // the actual auth response if it fails.
+  if (!invitation.codeVerifiedAt) {
+    writeClient.patch(invitation._id).set({ codeVerifiedAt: new Date().toISOString() }).commit().catch((err) => {
+      console.error('Failed to record codeVerifiedAt:', err);
+    });
+  }
 
   const timestamp = Date.now().toString();
   const sessionValue = signSession(invitation.invitationId, timestamp);

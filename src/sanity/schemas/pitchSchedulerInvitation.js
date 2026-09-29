@@ -138,6 +138,14 @@ const pitchSchedulerInvitation = {
       },
     },
     {
+      name: 'codeVerifiedAt',
+      title: 'Code First Verified At',
+      type: 'datetime',
+      group: 'generated',
+      readOnly: true,
+      description: 'Set the first time the code is successfully entered. If status is still "invited" but this is set, they\'ve opened the link and gotten past the code, but haven\'t picked a slot yet - distinguishes that from never having opened it at all, which this stays blank for.',
+    },
+    {
       name: 'selectedSlotId',
       title: 'Selected Slot ID',
       type: 'string',
@@ -213,11 +221,13 @@ const pitchSchedulerInvitation = {
       subtitle: 'status',
       company: 'companyName',
       released: 'slotReleased',
+      verifiedAt: 'codeVerifiedAt',
     },
-    prepare({ title, whatsapp, name, subtitle, company, released }) {
+    prepare({ title, whatsapp, name, subtitle, company, released, verifiedAt }) {
+      const openedNote = subtitle === 'invited' && verifiedAt ? ' · code entered, no slot yet' : '';
       return {
         title: `${company ? company + ' — ' : ''}${title || whatsapp || name || 'Unnamed'}`,
-        subtitle: `${subtitle || 'draft'}${released ? ' · released' : ''}`,
+        subtitle: `${subtitle || 'draft'}${openedNote}${released ? ' · released' : ''}`,
       };
     },
   },
