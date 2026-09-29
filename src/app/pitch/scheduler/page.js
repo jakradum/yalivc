@@ -48,6 +48,7 @@ export default function SchedulerPage() {
   const [needsEmail, setNeedsEmail] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showOriginalTZ, setShowOriginalTZ] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const [company, setCompany] = useState('');
   const [founderEmail, setFounderEmail] = useState('');
   const [teammates, setTeammates] = useState(['']);
@@ -96,7 +97,15 @@ export default function SchedulerPage() {
   const localIsIST = localTZ === IST;
   const activeTZ = showOriginalTZ ? IST : localTZ;
 
-  const dayColumns = useMemo(() => groupByDay(slots, activeTZ), [slots, activeTZ]);
+  // The backend now stores up to 14 slots per invitation (widened from 6 so
+  // calendar filtering has enough headroom - see pitch-scheduler-invite-manual
+  // route). Reveal the first 6 up front and let "Show more" expand to the
+  // rest, all from what's already fetched - no extra request needed.
+  const INITIAL_SLOT_COUNT = 6;
+  const visibleSlots = showMore ? slots : slots.slice(0, INITIAL_SLOT_COUNT);
+  const dayColumns = useMemo(() => groupByDay(visibleSlots, activeTZ), [visibleSlots, activeTZ]);
+  const initialDayCount = useMemo(() => groupByDay(slots.slice(0, INITIAL_SLOT_COUNT), activeTZ).length, [slots, activeTZ]);
+  const hasMoreSlots = slots.length > INITIAL_SLOT_COUNT;
 
   // FLIP animation: when elements on the slots screen shift position (a row
   // appearing/disappearing pushes everything below it up or down), animate
@@ -254,8 +263,12 @@ export default function SchedulerPage() {
             {error && <p className={styles.helpText}>{error}</p>}
 
             <div className={styles.dayColumns}>
-              {dayColumns.map((col) => (
-                <div key={col.label} data-flip-id={`day-${col.label}`} className={styles.dayColumn}>
+              {dayColumns.map((col, i) => (
+                <div
+                  key={col.label}
+                  data-flip-id={`day-${col.label}`}
+                  className={`${styles.dayColumn} ${i >= initialDayCount ? styles.fadeIn : ''}`}
+                >
                   <div className={styles.dayColumnHeader}>{col.label}</div>
                   {col.items.map((item) => (
                     <button
@@ -273,6 +286,20 @@ export default function SchedulerPage() {
                 </div>
               ))}
             </div>
+
+            {!showMore && hasMoreSlots && (
+              <button
+                type="button"
+                className={styles.linkButton}
+                data-flip-id="showMore"
+                onClick={() => {
+                  captureFlipRects();
+                  setShowMore(true);
+                }}
+              >
+                Show more slots
+              </button>
+            )}
 
             {selectedSlot && (
               <button

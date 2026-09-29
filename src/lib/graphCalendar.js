@@ -6,9 +6,15 @@
 // singleton and gets rotated here on every use (Microsoft may issue a new one
 // each refresh; failing to persist it breaks the chain).
 //
-// Used by computeCandidateSlots() (pitch-scheduler-invite-manual route) to
-// filter out slots that conflict with a real calendar event - closing the gap
-// where the manual/Studio invitation path had no calendar awareness at all.
+// Used by computeCandidateSlots() (pitch-scheduler-invite-manual route). The
+// actual pitch slots offered are NOT hardcoded times filtered against
+// busy/free - Pranav maintains specifically-titled placeholder events on his
+// calendar ("Pitch meeting placeholder" on Tue/Fri, "Weekly Pitch Meeting:
+// Additional slots" on Mon/Wed) whose mere EXISTENCE at a given time IS the
+// availability signal. Deleting an occurrence (holiday, travel, a real
+// meeting got booked there instead) is how he marks a date as not offered -
+// so we read those titled events directly and use their real start/end
+// times, rather than computing a fixed pattern and checking for conflicts.
 
 import { createClient } from '@sanity/client';
 
@@ -83,18 +89,23 @@ async function getGraphToken() {
   return refreshAccessToken();
 }
 
-// Returns busy intervals as [{start: Date, end: Date}, ...] in the given
-// window, or null if calendar access isn't connected/reachable - callers
-// should treat null as "couldn't check" and decide their own fallback.
-export async function getBusyIntervals(startISO, endISO) {
+// Returns [{startUTC, endUTC}, ...] (ISO strings) for every calendar event in
+// the window whose subject matches one of titleMatchers (case-insensitive
+// substring match, e.g. "pitch meeting placeholder"), sorted chronologically
+// - or null if calendar access isn't connected/reachable. A deleted
+// occurrence of a recurring placeholder simply doesn't appear in Graph's
+// results, which is exactly the "not offered" signal we want - no separate
+// busy/free logic needed.
+export async function getPlaceholderSlots(startISO, endISO, titleMatchers) {
   const token = await getGraphToken();
   if (!token) return null;
 
   const params = new URLSearchParams({
     startDateTime: startISO,
     endDateTime: endISO,
-    $select: 'start,end,showAs',
+    $select: 'subject,start,end',
     $top: '250',
+    $orderby: 'start/dateTime',
   });
   // /me resolves to whichever account completed the consent flow (Pranav) -
   // no mailbox address needed, unlike the app-only approach this replaced.
@@ -109,15 +120,18 @@ export async function getBusyIntervals(startISO, endISO) {
       return null;
     }
     const data = await res.json();
+    const lowerMatchers = titleMatchers.map((m) => m.toLowerCase());
     return (data.value || [])
-      .filter((event) => event.showAs !== 'free') // tentative/busy/oof all block a slot; "free" events don't
-      .map((event) => ({ start: new Date(event.start.dateTime + 'Z'), end: new Date(event.end.dateTime + 'Z') }));
+      .filter((event) => {
+        const subject = (event.subject || '').toLowerCase();
+        return lowerMatchers.some((m) => subject.includes(m));
+      })
+      .map((event) => ({
+        startUTC: event.start.dateTime.endsWith('Z') ? event.start.dateTime : `${event.start.dateTime}Z`,
+        endUTC: event.end.dateTime.endsWith('Z') ? event.end.dateTime : `${event.end.dateTime}Z`,
+      }));
   } catch (err) {
     console.error('Graph calendarView request errored:', err);
     return null;
   }
-}
-
-export function overlapsAny(slotStart, slotEnd, busyIntervals) {
-  return busyIntervals.some((b) => slotStart < b.end && slotEnd > b.start);
 }
