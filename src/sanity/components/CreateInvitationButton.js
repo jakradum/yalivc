@@ -18,6 +18,7 @@ export function CreateInvitationButton() {
   const rawId = useFormValue(['_id']);
   const contactMethod = useFormValue(['contactMethod']) || 'email';
   const whatsappNumber = useFormValue(['whatsappNumber']);
+  const founderName = useFormValue(['founderName']);
   const founderEmail = useFormValue(['founderEmail']);
   const companyName = useFormValue(['companyName']);
   const invitationId = useFormValue(['invitationId']);
@@ -32,7 +33,9 @@ export function CreateInvitationButton() {
   const alreadyGenerated = Boolean(invitationId);
 
   const missingContact =
-    contactMethod === 'whatsapp' ? !whatsappNumber : !founderEmail;
+    contactMethod === 'whatsapp' ? !whatsappNumber :
+    contactMethod === 'name' ? !founderName :
+    !founderEmail;
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://yali.vc';
 
@@ -61,7 +64,7 @@ export function CreateInvitationButton() {
       const res = await fetch(`${origin}/api/pitch-scheduler-invite-manual/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ docId, contactMethod, whatsappNumber, founderEmail, companyName }),
+        body: JSON.stringify({ docId, contactMethod, whatsappNumber, founderName, founderEmail, companyName }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
@@ -83,7 +86,7 @@ export function CreateInvitationButton() {
       )}
       {!isUnsaved && missingContact && !alreadyGenerated && (
         <p style={{ fontSize: '12px', color: '#e65100', marginBottom: '10px' }}>
-          {contactMethod === 'whatsapp' ? 'Enter a WhatsApp number' : 'Enter a founder email'} above first.
+          {contactMethod === 'whatsapp' ? 'Enter a WhatsApp number' : contactMethod === 'name' ? 'Enter a contact name' : 'Enter a contact email'} above first.
         </p>
       )}
       {alreadyGenerated && !result && (
@@ -95,7 +98,7 @@ export function CreateInvitationButton() {
       {result && (
         <div style={{ marginBottom: '16px', padding: '16px 24px', background: '#1a1a1a', borderRadius: '4px' }}>
           <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '4px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Link {contactMethod === 'whatsapp' ? '— send both of these over WhatsApp' : '(also emailed to the founder)'}
+            Link {contactMethod === 'email' ? '(also emailed to the contact)' : '— share both of these however you\'re reaching them'}
           </div>
           <div style={{ fontFamily: 'monospace', fontSize: '13px', color: '#fff', wordBreak: 'break-all', marginBottom: result.code ? '14px' : 0 }}>
             {result.link}
@@ -118,7 +121,7 @@ export function CreateInvitationButton() {
                   background: 'transparent',
                 }}
               >
-                {copied ? '✓ Copied — paste into WhatsApp' : 'Copy message (link + code)'}
+                {copied ? '✓ Copied' : 'Copy message (link + code)'}
               </button>
             </>
           )}

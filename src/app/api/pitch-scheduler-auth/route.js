@@ -136,7 +136,7 @@ export async function POST(request) {
     slots: liveSlots,
     // Tells the frontend whether to show an email field in the form — true
     // for whatsapp-contact invitations that don't have one yet.
-    needsEmail: invitation.contactMethod === 'whatsapp' && !invitation.founderEmail,
+    needsEmail: (invitation.contactMethod === 'whatsapp' || invitation.contactMethod === 'name') && !invitation.founderEmail,
   });
   response.cookies.set(COOKIE_NAME, sessionValue, {
     httpOnly: true,
