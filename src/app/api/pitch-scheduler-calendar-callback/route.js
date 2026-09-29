@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
 const REDIRECT_URI = 'https://yali.vc/api/pitch-scheduler-calendar-callback';
 const STATE_COOKIE = 'pitch-scheduler-calendar-state';
-const SCOPE = 'openid offline_access https://graph.microsoft.com/Calendars.Read';
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
 const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
 
 const writeClient = createClient({
@@ -65,13 +65,20 @@ export async function GET(request) {
     return htmlPage('Connection failed', 'Could not reach Microsoft to complete the connection.');
   }
 
-  // Decode the id_token for a human-readable "connected as" label only -
-  // nothing here trusts this for access control, it's just for the Studio
-  // preview so Pranav can confirm the right account connected.
+  // A /me call for a human-readable "connected as" label only - nothing here
+  // trusts this for access control, it's just for the Studio preview so
+  // Pranav can confirm the right account connected. Uses /me rather than an
+  // id_token (which would need an `openid` scope this tenant hasn't
+  // explicitly granted) since User.Read is already covered.
   let connectedBy = 'unknown';
   try {
-    const claims = JSON.parse(Buffer.from(tokenData.id_token.split('.')[1], 'base64url').toString('utf8'));
-    connectedBy = claims.preferred_username || claims.email || 'unknown';
+    const meRes = await fetch('https://graph.microsoft.com/v1.0/me?$select=userPrincipalName', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    if (meRes.ok) {
+      const me = await meRes.json();
+      connectedBy = me.userPrincipalName || 'unknown';
+    }
   } catch {
     // non-fatal, just cosmetic
   }
