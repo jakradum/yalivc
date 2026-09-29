@@ -26,6 +26,13 @@ export async function GET() {
     return NextResponse.json({ error: 'MS_GRAPH_TENANT_ID / MS_GRAPH_CLIENT_ID not configured' }, { status: 500 });
   }
 
+  // No `prompt` param on purpose: forcing a consent screen (prompt=consent)
+  // triggered "needs admin approval" in this tenant even once every scope
+  // was fully admin-consented - a tenant that blocks user-facing consent
+  // screens outright seems to treat "render a consent UI at all" as the
+  // thing it blocks, regardless of whether anything new would actually be
+  // granted. Omitting prompt lets Microsoft skip the screen entirely when
+  // nothing new needs approving, which is the normal case here.
   const state = crypto.randomBytes(16).toString('hex');
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
@@ -34,7 +41,6 @@ export async function GET() {
     response_mode: 'query',
     scope: SCOPE,
     state,
-    prompt: 'consent', // always show the consent screen, even on a repeat connect
   });
 
   const response = NextResponse.redirect(`https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize?${params}`);
