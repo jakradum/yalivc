@@ -15,7 +15,7 @@ import { createClient } from '@sanity/client';
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
-const SCOPE = 'openid offline_access https://graph.microsoft.com/Calendars.Read';
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
 const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
 
 const sanityClient = createClient({
