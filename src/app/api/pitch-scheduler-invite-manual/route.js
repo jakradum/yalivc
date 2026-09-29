@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
-import { getBusyIntervals, overlapsAny } from '@/lib/graphCalendar';
+import { getPlaceholderSlots } from '@/lib/graphCalendar';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 48;
@@ -36,49 +36,37 @@ function hashCode(codeSalt, code) {
   return crypto.createHash('sha256').update(`${codeSalt}:${code}`).digest('hex');
 }
 
-// Same recurring-slot shape as the Outlook routine offers (Tue 10-11, Tue
-// 11-12, Fri 10-11 IST), computed for the next ~2.5 weeks so there's enough
-// margin left after filtering out real calendar conflicts. Checks Pranav's
-// actual calendar via Microsoft Graph (see src/lib/graphCalendar.js) before
-// returning slots - this is the gap the manual/Studio path used to have
-// entirely (the routine's own automated path already checked live via its
-// Outlook MCP connector; this brings the manual path to the same standard).
+// Offered slots are NOT a hardcoded time pattern checked against busy/free -
+// Pranav maintains specifically-titled placeholder events on his own
+// calendar ("Pitch meeting placeholder" on Tue/Fri, "Weekly Pitch Meeting:
+// Additional slots" on Mon/Wed, added later when Gani asked for more
+// availability). A placeholder's mere existence at a given time IS the
+// availability signal; deleting an occurrence (holiday, travel, a real
+// meeting got booked there instead) is how he marks that date as not
+// offered. So we read those titled events directly off the calendar and use
+// their real start/end times - no hardcoded pattern, no busy/free check.
 //
-// Fallback policy if calendar access isn't configured yet or Graph errors:
-// return the unfiltered pattern anyway (fail OPEN, not closed) so the
-// manual invite flow keeps working during the calendar-integration
-// rollout - Pranav already has a documented manual override (editing the
-// slots array, or catching a bad slot after the fact like the Aswin case)
-// for this gap, and failing closed would just break invitation creation
-// entirely if Graph is briefly unreachable.
+// If calendar access isn't connected or Graph errors, we genuinely have no
+// way to know what's offered (there's no pattern to fall back to anymore) -
+// the caller treats a null/empty result as "no slots available" rather than
+// fabricating times, unlike the old fail-open behaviour this replaced.
+const PLACEHOLDER_TITLE_MATCHERS = ['pitch meeting placeholder', 'additional slots'];
+const MIN_LEAD_DAYS = 2;
+const MAX_SLOTS = 14;
+
 async function computeCandidateSlots() {
   const now = new Date();
-  const candidates = [];
-  for (let dayOffset = 2; dayOffset <= 18; dayOffset++) {
-    const d = new Date(now.getTime() + dayOffset * 24 * 60 * 60 * 1000);
-    const istWeekday = new Intl.DateTimeFormat('en-US', { timeZone: IST, weekday: 'short' }).format(d);
-    const isTue = istWeekday === 'Tue';
-    const isFri = istWeekday === 'Fri';
-    if (!isTue && !isFri) continue;
-    const y = new Intl.DateTimeFormat('en-CA', { timeZone: IST, year: 'numeric' }).format(d);
-    const m = new Intl.DateTimeFormat('en-CA', { timeZone: IST, month: '2-digit' }).format(d);
-    const day = new Intl.DateTimeFormat('en-CA', { timeZone: IST, day: '2-digit' }).format(d);
-    // 10:00-11:00 IST == 04:30-05:30 UTC; 11:00-12:00 IST == 05:30-06:30 UTC
-    candidates.push({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: `${y}-${m}-${day}T04:30:00.000Z`, endUTC: `${y}-${m}-${day}T05:30:00.000Z` });
-    if (isTue) {
-      candidates.push({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: `${y}-${m}-${day}T05:30:00.000Z`, endUTC: `${y}-${m}-${day}T06:30:00.000Z` });
-    }
-  }
-
   const windowStart = now.toISOString();
-  const windowEnd = new Date(now.getTime() + 19 * 24 * 60 * 60 * 1000).toISOString();
-  const busy = await getBusyIntervals(windowStart, windowEnd);
+  const windowEnd = new Date(now.getTime() + 46 * 24 * 60 * 60 * 1000).toISOString();
 
-  const available = busy === null
-    ? candidates // calendar check unavailable - fail open, see policy note above
-    : candidates.filter((slot) => !overlapsAny(new Date(slot.startUTC), new Date(slot.endUTC), busy));
+  const events = await getPlaceholderSlots(windowStart, windowEnd, PLACEHOLDER_TITLE_MATCHERS);
+  if (!events) return [];
 
-  return available.slice(0, 6);
+  const minStart = new Date(now.getTime() + MIN_LEAD_DAYS * 24 * 60 * 60 * 1000);
+  return events
+    .filter((e) => new Date(e.startUTC) >= minStart)
+    .slice(0, MAX_SLOTS)
+    .map((e) => ({ slotId: crypto.randomBytes(4).toString('hex'), startUTC: e.startUTC, endUTC: e.endUTC }));
 }
 
 function inviteEmailHtml(link, code) {
@@ -136,7 +124,7 @@ export async function POST(request) {
   const slots = await computeCandidateSlots();
   if (slots.length === 0) {
     return NextResponse.json(
-      { error: 'No open slots in the next ~2.5 weeks after checking the calendar. Try again after freeing up time, or extend the window in code.' },
+      { error: 'No pitch-slot placeholders found on the calendar in the next ~6.5 weeks (or the calendar connection needs reconnecting). Add some placeholder events, or check /api/pitch-scheduler-calendar-connect.' },
       { status: 409, headers: CORS_HEADERS }
     );
   }
