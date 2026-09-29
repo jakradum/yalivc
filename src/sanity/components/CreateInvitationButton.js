@@ -39,11 +39,11 @@ export function CreateInvitationButton() {
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://yali.vc';
 
-  // Only relevant for whatsapp-contact invitations - the email path already
-  // sends the founder a fully-worded email itself, so there's nothing for
-  // Pranav to manually relay there.
+  // Only relevant for whatsapp/name-only invitations - the email path
+  // already sends a fully-worded email itself, so there's nothing to
+  // manually relay there.
   const copyMessage = result?.code
-    ? `Hi! Please use this link to pick a time for our pitch call: ${result.link}\n\nEnter this code when prompted: ${result.code}\n\nThe link and code are valid for 48 hours.`
+    ? `Please use this link to pick a time for the call: ${result.link}\n\nEnter this code when prompted: ${result.code}\n\nLet me know if you face issues, or if none of these work for you. `
     : null;
 
   const copyToClipboard = async () => {
