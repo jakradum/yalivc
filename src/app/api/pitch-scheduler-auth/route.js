@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
+import { getCachedSlots, slotStillCached } from '@/lib/slotCache';
 
 // No `send-code` action here on purpose — see docs/pitch-scheduler-plan.md.
 // Codes are only ever minted at invitation-creation time (by the routine via
@@ -121,9 +122,18 @@ export async function POST(request) {
   const timestamp = Date.now().toString();
   const sessionValue = signSession(invitation.invitationId, timestamp);
 
+  // Filter the invitation's originally-offered slots against the current
+  // slot cache, so a placeholder Pranav deletes after sending disappears
+  // from what the founder sees without anyone patching this invitation by
+  // hand. If the cache itself is unreachable, fall back to what was
+  // originally offered rather than showing nothing.
+  const cached = await getCachedSlots();
+  const offeredSlots = invitation.slots || [];
+  const liveSlots = cached ? offeredSlots.filter((s) => slotStillCached(s.startUTC, s.endUTC, cached)) : offeredSlots;
+
   const response = NextResponse.json({
     success: true,
-    slots: invitation.slots || [],
+    slots: liveSlots,
     // Tells the frontend whether to show an email field in the form — true
     // for whatsapp-contact invitations that don't have one yet.
     needsEmail: invitation.contactMethod === 'whatsapp' && !invitation.founderEmail,

@@ -116,6 +116,29 @@ export async function POST(request) {
     return NextResponse.json({ error: 'That slot is not part of this invitation' }, { status: 400 });
   }
 
+  // Double-booking check: two different invitations can independently offer
+  // the same real time (each snapshots the shared slot cache separately), so
+  // check whether another already-submitted invitation claimed this exact
+  // time first. slotId isn't comparable across invitations (randomly
+  // generated per invitation), so compare by the actual start/end instead.
+  // This narrows the race but doesn't fully close it - a genuinely
+  // simultaneous submit could still slip past both checks before either
+  // commits; acceptable given founder-submission volume is low, and Pranav
+  // still manually creates the real calendar invite as a final check.
+  const otherSubmitted = await readClient.fetch(
+    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && invitationId != $invitationId]{selectedSlotId, slots}`,
+    { invitationId }
+  );
+  const slotStart = new Date(slot.startUTC).getTime();
+  const slotEnd = new Date(slot.endUTC).getTime();
+  const alreadyTaken = otherSubmitted.some((inv) => {
+    const theirSlot = (inv.slots || []).find((s) => s.slotId === inv.selectedSlotId);
+    return theirSlot && new Date(theirSlot.startUTC).getTime() === slotStart && new Date(theirSlot.endUTC).getTime() === slotEnd;
+  });
+  if (alreadyTaken) {
+    return NextResponse.json({ error: 'That slot was just taken by someone else. Please go back and pick a different time.' }, { status: 409 });
+  }
+
   // Whatsapp-contact invitations may not have an email yet — collect it now.
   let founderEmail = invitation.founderEmail;
   if (!founderEmail) {
