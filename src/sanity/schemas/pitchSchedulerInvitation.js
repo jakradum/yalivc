@@ -1,4 +1,5 @@
 import { CreateInvitationButton } from '../components/CreateInvitationButton';
+import { ApproveMeetingButton } from '../components/ApproveMeetingButton';
 
 // Pitch scheduler invitation — written either by the Outlook routine (via its
 // Sanity MCP connector, for Yali-teammate-initiated email threads only) or by
@@ -132,10 +133,55 @@ const pitchSchedulerInvitation = {
         list: [
           { title: 'Invited', value: 'invited' },
           { title: 'Submitted', value: 'submitted' },
+          { title: 'Scheduled', value: 'scheduled' },
           { title: 'Expired', value: 'expired' },
           { title: 'Cancelled', value: 'cancelled' },
         ],
       },
+    },
+    // Review-and-approve step, shown once a founder has submitted a slot
+    // (status: submitted). Prefills a draft meeting title/body in Pranav's
+    // own style (virtual or in-person, toggle-able), lets him edit before
+    // sending - "Approve & Send" both creates the real calendar invite
+    // (Graph sends it to attendees automatically) and flips status to
+    // "scheduled". See ApproveMeetingButton.js.
+    {
+      name: 'reviewMeeting',
+      title: 'Review & Approve Meeting',
+      type: 'string',
+      group: 'generated',
+      readOnly: true,
+      components: { input: ApproveMeetingButton },
+    },
+    {
+      name: 'meetingFormat',
+      title: 'Meeting Format',
+      type: 'string',
+      group: 'generated',
+      readOnly: true,
+      options: {
+        list: [
+          { title: 'Virtual', value: 'virtual' },
+          { title: 'In-person', value: 'in-person' },
+        ],
+      },
+      description: 'Set by the Approve & Send step above.',
+    },
+    {
+      name: 'addressLink',
+      title: 'Address Link',
+      type: 'string',
+      group: 'generated',
+      readOnly: true,
+      hidden: ({ document }) => document?.meetingFormat !== 'in-person',
+      description: 'Google Maps link used in the in-person invite body.',
+    },
+    {
+      name: 'calendarEventId',
+      title: 'Calendar Event ID',
+      type: 'string',
+      group: 'generated',
+      readOnly: true,
     },
     {
       name: 'codeVerifiedAt',

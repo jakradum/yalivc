@@ -21,7 +21,12 @@ import { createClient } from '@sanity/client';
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
-const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
+// Calendars.ReadWrite - widened from Calendars.Read so createMeetingEvent()
+// below can create the actual invite (see pitch-scheduler-approve-meeting
+// route). Requires the Azure app registration's permission to be widened
+// AND the connect flow re-run to reissue a token under the new scope - an
+// existing stored refresh token keeps its original (narrower) scope forever.
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.ReadWrite';
 const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
 
 const sanityClient = createClient({
@@ -132,6 +137,44 @@ export async function getPlaceholderSlots(startISO, endISO, titleMatchers) {
       }));
   } catch (err) {
     console.error('Graph calendarView request errored:', err);
+    return null;
+  }
+}
+
+// Creates the actual meeting on Pranav's calendar via the same delegated
+// grant, with the given attendees - Graph/Outlook sends the invite emails
+// itself once the event is created, so there's no separate send step. Always
+// requests a Teams link regardless of format (isOnlineMeeting: true) -
+// matches Pranav's own actual habit of keeping the Teams link on in-person
+// invites too (observed on his real "In-person Meeting: ..." sends), as a
+// fallback if someone can't make it in person. Returns the created event
+// (including onlineMeeting.joinUrl and webLink), or null if not
+// connected/reachable.
+export async function createMeetingEvent({ subject, bodyText, startISO, endISO, attendeeEmails }) {
+  const token = await getGraphToken();
+  if (!token) return null;
+
+  try {
+    const res = await fetch('https://graph.microsoft.com/v1.0/me/events', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subject,
+        body: { contentType: 'Text', content: bodyText },
+        start: { dateTime: startISO, timeZone: 'UTC' },
+        end: { dateTime: endISO, timeZone: 'UTC' },
+        attendees: attendeeEmails.map((address) => ({ emailAddress: { address }, type: 'required' })),
+        isOnlineMeeting: true,
+        onlineMeetingProvider: 'teamsForBusiness',
+      }),
+    });
+    if (!res.ok) {
+      console.error('Graph create event request failed:', res.status, await res.text().catch(() => ''));
+      return null;
+    }
+    return res.json();
+  } catch (err) {
+    console.error('Graph create event request errored:', err);
     return null;
   }
 }
