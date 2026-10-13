@@ -484,7 +484,7 @@ function PortalContentInner({
           activeSection={activeSection}
           onMenuClick={handleMenuClick}
           reportSlug={reportSlug}
-          companies={sortedInvestments.map(c => ({ slug: c.slug, name: c.entityName || c.name }))}
+          companies={sortedInvestments.map(c => ({ slug: c.slug, name: c.entityName || c.name, isExited: c.isExited }))}
           sidebarOpen={sidebarOpen}
         />
 
@@ -683,7 +683,10 @@ function PortalContentInner({
                     )}
                     <tr>
                       <td>Number of portfolio companies</td>
-                      <td>{fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}</td>
+                      <td>
+                        {fundMetrics?.numberOfPortfolioCompanies != null ? fundMetrics.numberOfPortfolioCompanies : (investments?.length ?? '-')}
+                        {fundMetrics?.numberOfExitedCompanies > 0 && ` (${fundMetrics.numberOfExitedCompanies} exited)`}
+                      </td>
                     </tr>
                     {fundMetrics?.amountReturned != null && (
                       <tr>
@@ -943,7 +946,7 @@ function PortalContentInner({
                             </div>
                           )}
                           <div className={styles.companyTileInfo}>
-                            <h4 className={styles.companyTileName}>{company.entityName || company.name} <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" tone="inherit" /></h4>
+                            <h4 className={styles.companyTileName}>{company.entityName || company.name} <ExitedTag exited={company.isExited === true} size="sm" tone="inherit" /></h4>
                             <span className={styles.companyTileSector}>{company.sector || '-'}</span>
                           </div>
                         </div>

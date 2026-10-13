@@ -110,6 +110,41 @@ export function getEarliestInvestmentDate(company) {
 }
 
 /**
+ * Point-in-time exit check. `investmentStatus` is a *current* flag; reports must
+ * reflect the status as of their quarter end, so an exit only counts once
+ * `exitDate` has passed. A company marked exited with no exitDate is treated as
+ * exited everywhere (legacy data — Studio validation asks for the date).
+ * @param {object} company - Company with investmentStatus and exitDate
+ * @param {string} quarterEndDate - Quarter end date in YYYY-MM-DD format
+ * @returns {boolean}
+ */
+export function isExitedAsOf(company, quarterEndDate) {
+  if (company?.investmentStatus !== 'exited') return false;
+  if (!company.exitDate || !quarterEndDate) return true;
+  return company.exitDate <= quarterEndDate;
+}
+
+/**
+ * FMV to carry for a company in a report quarter. Falls back to the most recent
+ * past quarter like everything else, except that for a company exited as of the
+ * report quarter, FMV from a quarter that ended before the exit is stale (it
+ * was still held then) — the position is realised, so FMV is 0 unless the exit
+ * quarter's own update says otherwise.
+ * @param {object} company
+ * @param {object|null} quarterData - Resolved quarterly update (exact or fallback)
+ * @param {boolean} isExited - Result of isExitedAsOf for the report quarter
+ * @returns {number|null}
+ */
+export function resolveReportFMV(company, quarterData, isExited) {
+  if (!quarterData) return isExited ? 0 : null;
+  if (isExited && company?.exitDate) {
+    const dataQuarterEnd = getQuarterEndDate(quarterData.quarter, quarterData.fiscalYear);
+    if (dataQuarterEnd && dataQuarterEnd < company.exitDate) return 0;
+  }
+  return quarterData.currentFMV ?? null;
+}
+
+/**
  * Filter investments to only include companies invested on or before a quarter's end date
  * Companies without an investment date are included (legacy data)
  * @param {Array} investments - Array of investment objects with investmentRounds
@@ -362,12 +397,16 @@ export function buildReportData({
   let computedTotalFMV = 0;
   let computedTotalReturned = 0;
 
+  let exitedCount = 0;
+
   portfolioCompanies.forEach(inv => {
     const quarterData = getCompanyQuarterData(inv, quarter, fiscalYear) ||
       getMostRecentPastQuarterData(inv, quarter, fiscalYear);
+    const isExited = isExitedAsOf(inv, quarterEndDate);
+    if (isExited) exitedCount += 1;
 
+    computedTotalFMV += resolveReportFMV(inv, quarterData, isExited) || 0;
     if (quarterData) {
-      computedTotalFMV += quarterData.currentFMV || 0;
       computedTotalReturned += quarterData.amountReturned || 0;
     }
   });
@@ -385,6 +424,8 @@ export function buildReportData({
     totalInvestedInPortfolio: totalInvested,
     fmvOfPortfolio: totalFMV,
     numberOfPortfolioCompanies: portfolioCompanies.length,
+    // Exited as of this quarter's end (point-in-time, not current status)
+    numberOfExitedCompanies: exitedCount,
     amountReturned: totalReturned,
     moic: fundPerformance?.moic ?? computedMoic,
     tvpi: fundPerformance?.tvpi ?? computedMoic,
@@ -411,14 +452,19 @@ export function buildReportData({
     // Also respects showEarlyInReport flag for rounds in the next quarter
     const filteredRounds = filterInvestmentRounds(company.investmentRounds, quarterEndDate, nextQuarterEndDate);
 
+    // Point-in-time: exited only if the exit happened by this quarter's end.
+    // Snapshots bake this in, so old reports never pick up a later exit.
+    const isExited = isExitedAsOf(company, quarterEndDate);
+
     return {
       ...company,
+      isExited,
       // Quarter-specific performance data
       quarterData,
       // Filtered investment rounds
       investmentRounds: filteredRounds,
       // Convenience: current metrics from quarter data
-      currentFMV: quarterData?.currentFMV ?? null,
+      currentFMV: resolveReportFMV(company, quarterData, isExited),
       currentOwnership: quarterData?.currentOwnershipPercent ?? company.yaliOwnershipPercent,
       multipleOfInvestment: quarterData?.multipleOfInvestment ?? null,
     };
@@ -427,7 +473,7 @@ export function buildReportData({
   // 6. Build navigation list (for next/prev in company detail)
   const companyNavList = processedCompanies
     .filter(c => c.slug)
-    .map(c => ({ slug: c.slug, name: c.name }));
+    .map(c => ({ slug: c.slug, name: c.name, isExited: c.isExited }));
 
   return {
     // Quarter info

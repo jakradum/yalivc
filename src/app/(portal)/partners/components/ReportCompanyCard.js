@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './report.module.css';
+import ExitedTag from '../../../components/exited-tag';
 
 export default function ReportCompanyCard({ company, portfolioData }) {
   // Format date for display
@@ -55,7 +56,7 @@ export default function ReportCompanyCard({ company, portfolioData }) {
           </div>
         )}
         <div className={styles.companyHeaderInfo}>
-          <h3 className={styles.companyName}>{companyInfo.name}</h3>
+          <h3 className={styles.companyName}>{companyInfo.name} <ExitedTag exited={companyInfo.isExited === true} size="sm" tone="inherit" /></h3>
           {companyInfo.oneLiner && (
             <p className={styles.companyTagline}>{companyInfo.oneLiner}</p>
           )}

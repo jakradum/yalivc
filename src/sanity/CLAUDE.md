@@ -74,12 +74,14 @@ LP investor logos: upload via Studio → Investors. When pulling logos for deck 
 | `slug` | slug | Required |
 | `oneLiner` | string | Required |
 | `showOnMainWebsite` | boolean | Toggle off to hide from public site while keeping in LP reports |
+| `showOnPartnerPortal` | boolean | Default on. Toggle off to hide from partner portal + LP reports/PDFs/snapshots while keeping on public site (e.g. Covvalent) |
 | `enableCompanyPage` | boolean | Controls whether company card is clickable |
 | `isFeatured` | boolean | Pins as featured card on homepage. Only one at a time. |
 | `isRevenueMaking` | boolean | Controls whether revenue/PAT fields are editable in quarterly updates |
 | `investmentRounds` | array | All rounds (see below) |
 | `quarterlyUpdates` | array | Per-quarter FMV, revenue, PAT, metrics, narrative |
-| `investmentStatus` | string | active / exited / written-off |
+| `investmentStatus` | string | active / exited / written-off. **Current** status — reports use `exitDate` to stay point-in-time |
+| `exitDate` | date | Required when status is `exited` (custom validation; hidden otherwise). Drives `isExitedAsOf()` — Exited tag, exited count, and FMV→0 only apply to quarters ending on/after this date |
 | `founders` | array | name, photo, role, quote, LinkedIn |
 
 **`investmentRounds` per-round fields:** `isInitialRound`, `isYaliLead`, `showEarlyInReport`, `roundName`, `roundLabel`, `investmentDate`, `preMoneyValuation`, `totalRoundSize`, `postMoneyValuation`, `yaliInvestment`, `yaliOwnership`, `coInvestors` (array of `investor` refs, optionally with `displayOrder`)
@@ -94,3 +96,5 @@ LP investor logos: upload via Studio → Investors. When pulling logos for deck 
 - `company` co-investors: each round's `coInvestors` array item has optional `displayOrder` (integer) for controlling render order
 - `news.isVideo` (boolean) + `news.videoSource` (string URL) — always check `isVideo` before treating as article link; `videoSource` accepts YouTube URLs
 - `investor.logo` — logo for co-investor display and deck slides; upload via Studio → Investors
+- `company.investmentStatus` + `exitDate` — never query `investmentStatus == "active"` for portal/report lists (drops exited companies). LP queries use `in ["active", "exited"] && showOnPartnerPortal != false`. Exit is point-in-time: see `src/app/(portal)/CLAUDE.md` → "Company Visibility & Exit Status".
+- `lpQuarterlyReport.snapshotData` — frozen JSON of `buildReportData()` output; PDFs use it when set, the on-screen portal always computes live. New fields added to `buildReportData` only reach a snapshotted PDF after re-snapshotting.
