@@ -179,11 +179,6 @@ export async function POST(request) {
       const teammateList = teammateEmails.length
         ? teammateEmails.map(escapeHtml).join(', ')
         : '(none listed)';
-      // Studio's universal intent-link format - works regardless of where
-      // this doc type sits in the custom structure tree (see
-      // sanity.config.js), unlike a hardcoded /structure/... path which
-      // would break if that tree gets reorganized.
-      const studioLink = `https://yali.vc/console/intent/edit/id=${invitation._id};type=pitchSchedulerInvitation`;
       await resend.emails.send({
         from: 'Scheduler <scheduling-noreply@yali.vc>',
         to: PRANAV_EMAIL,
@@ -192,7 +187,7 @@ export async function POST(request) {
 <p><strong>Slot:</strong> ${escapeHtml(formatSlotIST(slot.startUTC, slot.endUTC))}<br/>
 <strong>Contact email:</strong> ${escapeHtml(founderEmail)}<br/>
 <strong>Teammates:</strong> ${teammateList}</p>
-<p><a href="${studioLink}">Review &amp; approve the meeting invite</a> — this only confirmed their slot preference, nothing has been sent to them yet.</p>`,
+<p>Create the calendar invite when ready — this only confirmed their preference.</p>`,
       });
       notificationStatus = 'sent';
     } catch {

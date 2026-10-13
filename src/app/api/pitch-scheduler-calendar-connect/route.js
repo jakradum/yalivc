@@ -19,13 +19,7 @@ const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const REDIRECT_URI = 'https://yali.vc/api/pitch-scheduler-calendar-callback';
 const STATE_COOKIE = 'pitch-scheduler-calendar-state';
-// Calendars.ReadWrite (widened from Calendars.Read) so the approve-meeting
-// flow can create the actual calendar invite - see
-// pitch-scheduler-approve-meeting/route.js. Re-running this connect flow
-// after the Azure app registration's permission is widened is what actually
-// upgrades the stored refresh token's scope; the app registration change
-// alone does nothing until Pranav re-consents here.
-const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.ReadWrite';
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
 
 export async function GET() {
   if (!TENANT_ID || !CLIENT_ID) {
