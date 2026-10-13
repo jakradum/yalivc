@@ -513,15 +513,6 @@ export async function getBlogCategories() {
   );
 }
 
-export async function getBlogCompanies() {
-  return client.fetch(
-    `*[_type == "company" && count(*[_type == "blogPost" && status == "published" && references(^._id)]) > 0] | order(name asc) {
-      _id,
-      name
-    }`
-  );
-}
-
 export async function getPressReleases() {
   return client.fetch(
     `*[_type == "blogPost" && contentType == "press-release" && status == "published"] | order(publishedAt desc) {
@@ -791,25 +782,6 @@ export async function getAllLPReportSlugs() {
   );
 }
 
-// Get all companies for LP reports (with full data)
-export async function getCompaniesForLPReport() {
-  return client.fetch(
-    `*[_type == "company"] | order(order asc) {
-      _id,
-      name,
-      slug,
-      oneLiner,
-      detail,
-      "logo": logo.asset->url,
-      link,
-      category->{name, slug},
-      founders,
-      companyInfo,
-      investmentDetails
-    }`
-  );
-}
-
 // ==========================================
 // NEW LP PORTAL QUERIES (MECE Schema)
 // ==========================================
@@ -872,6 +844,7 @@ export async function getLPInvestments() {
       "sector": category->name,
       "sectorSlug": category->slug.current,
       investmentStatus,
+      exitDate,
       order,
       // Investment rounds with all data
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
@@ -959,6 +932,7 @@ export async function getLPInvestmentsForPdf() {
       "sector": category->name,
       "sectorSlug": category->slug.current,
       investmentStatus,
+      exitDate,
       order,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
@@ -1024,7 +998,7 @@ export async function getLPInvestmentsForPdf() {
 // Get company investment data by slug (includes all quarterly updates)
 export async function getLPInvestmentByCompanySlug(companySlug) {
   return liveClient.fetch(
-    `*[_type == "company" && slug.current == $companySlug && showOnPartnerPortal != false][0]{
+    `*[_type == "company" && slug.current == $companySlug && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false][0]{
       _id,
       name,
       entityName,
@@ -1046,6 +1020,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       yaliOwnershipPercent,
       coInvestors,
       investmentStatus,
+      exitDate,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         isYaliLead,
@@ -1154,34 +1129,6 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
       }
     }`,
     { quarter, fiscalYear }
-  );
-}
-
-// Get historical quarterly updates for a specific company
-export async function getLPCompanyHistory(companySlug) {
-  return liveClient.fetch(
-    `*[_type == "company" && slug.current == $companySlug][0] {
-      "quarterlyHistory": quarterlyUpdates[] | order(fiscalYear desc, quarter desc) {
-        quarter,
-        fiscalYear,
-        // Confidential data filtered at source
-        "currentFMV": select(currentFMVConfidential == true => null, currentFMV),
-        currentFMVConfidential,
-        "currentOwnershipPercent": select(currentOwnershipConfidential == true => null, currentOwnershipPercent),
-        currentOwnershipConfidential,
-        "multipleOfInvestment": select(moicConfidential == true => null, multipleOfInvestment),
-        moicConfidential,
-        updateNotes,
-        "revenueINR": select(revenueConfidential == true => null, revenueINR),
-        revenueConfidential,
-        "patINR": select(patConfidential == true => null, patINR),
-        patConfidential,
-        "teamSize": select(teamSizeConfidential == true => null, teamSize),
-        teamSizeConfidential,
-        keyMetrics
-      }
-    }.quarterlyHistory`,
-    { companySlug }
   );
 }
 
@@ -1473,6 +1420,8 @@ export async function getAllLPInvestmentSlugs() {
     `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false] | order(order asc, name asc) {
       "slug": slug.current,
       name,
+      investmentStatus,
+      exitDate,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         investmentDate

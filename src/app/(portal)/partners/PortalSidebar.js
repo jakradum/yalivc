@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './partners.module.css';
+import ExitedTag from '../../components/exited-tag';
 
 export const MENU_ITEMS = [
   { id: 'cover-note', label: 'Cover note' },
@@ -52,7 +53,7 @@ export default function PortalSidebar({
                             href={`/partners/company/${company.slug}${reportParam}`}
                             className={`${styles.menuCompanyLink} ${currentCompanySlug === company.slug ? styles.menuCompanyLinkActive : ''}`}
                           >
-                            {company.name}
+                            {company.name} <ExitedTag exited={company.isExited === true} size="sm" tone="inherit" />
                           </a>
                         </li>
                       ))}

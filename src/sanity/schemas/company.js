@@ -308,6 +308,19 @@ export default {
       initialValue: 'active',
       group: 'rounds',
     },
+    {
+      name: 'exitDate',
+      title: 'Exit Date',
+      type: 'date',
+      group: 'rounds',
+      description: 'Date the exit closed. Reports are point-in-time: the company shows as Exited only in quarters ending on or after this date, and its FMV is treated as realised from then on.',
+      hidden: ({ document }) => document?.investmentStatus !== 'exited',
+      validation: (Rule) => Rule.custom((value, context) =>
+        context.document?.investmentStatus === 'exited' && !value
+          ? 'Required when Investment Status is Exited — reports need it to stay point-in-time'
+          : true
+      ),
+    },
 
     // ===== QUARTERLY PERFORMANCE =====
     {

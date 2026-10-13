@@ -8,7 +8,7 @@ import styles from '../../partners.module.css';
 import { Lightlogo } from '../../../../components/icons/lightlogo';
 import { Openicon } from '../../../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
-import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue } from '@/lib/quarterly-utils';
+import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue, isExitedAsOf } from '@/lib/quarterly-utils';
 import PortalSidebar from '../../PortalSidebar';
 
 import Footer from '../../../../components/footer';
@@ -433,7 +433,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 </div>
               )}
               <div className={styles.companyDetailHeaderInfo}>
-                <h1 className={styles.companyDetailName}>{company.entityName || company.name} <ExitedTag exited={company.investmentStatus === 'exited'} size="md" /></h1>
+                <h1 className={styles.companyDetailName}>{company.entityName || company.name} <ExitedTag exited={isExitedAsOf(company, quarterEndDate)} size="md" /></h1>
                 <span className={styles.companyDetailSector}>{company.sector || '-'}</span>
                 {company.link && (
                   <a

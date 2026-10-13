@@ -42,9 +42,11 @@ function esc(str) {
     .replace(/"/g, '&quot;');
 }
 
-// Mirrors the site's <ExitedTag> — renders nothing unless the company is exited
+// Mirrors the site's <ExitedTag>. Keys off `isExited` (point-in-time, set by
+// buildReportData / baked into snapshots), never the live investmentStatus —
+// a report must not show an exit that happened after its quarter end.
 function exitedTag(company) {
-  return company?.investmentStatus === 'exited' ? '<span class="exited-tag">Exited</span>' : '';
+  return company?.isExited === true ? '<span class="exited-tag">Exited</span>' : '';
 }
 
 function fmt(val, decimals = 2) {
@@ -847,7 +849,7 @@ export function generatePdfHtml({
           <tr><td>Amount drawn down</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
           <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
           <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
-          <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}</td></tr>
+          <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}${fundMetrics.numberOfExitedCompanies > 0 ? ` (${fundMetrics.numberOfExitedCompanies} exited)` : ''}</td></tr>
           <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmt(fundMetrics.amountReturned) : '—'}</td></tr>
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
           <tr><td>TVPI</td><td>${fundMetrics.tvpi != null ? fmt(fundMetrics.tvpi) + 'x' : '—'}</td></tr>

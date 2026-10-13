@@ -38,6 +38,28 @@
 
 ---
 
+## Company Visibility & Exit Status (read before touching any company query)
+
+**Which companies the portal shows**
+- Every LP query in `sanity-queries.js` (`getLPInvestments`, `getLPInvestmentsForPdf`, `getLPInvestmentByCompanySlug`, `getAllLPInvestmentSlugs`, `getLPQuarterUpdates`) filters on `investmentStatus in ["active", "exited"] && showOnPartnerPortal != false`. **Never filter on `investmentStatus == "active"` alone** — that silently drops exited companies (this is how C2i vanished after its exit).
+- `written-off` is excluded everywhere. If that changes, update all five queries together.
+- `company.showOnPartnerPortal` (default on) is the portal kill switch — grid, reports, PDFs, snapshots, company page (404s), prev/next nav. Independent of `showOnMainWebsite`.
+- Data room (`getDataRoomPortfolioCompanies`) is still `active`-only — known, deliberately left for now.
+
+**Exit status is point-in-time, not current**
+- `investmentStatus` is a *current* flag. Reports must reflect status **as of their quarter end**: a report for a quarter before the exit must not say "Exited".
+- `company.exitDate` is required (Studio validation) when status is `exited`. `isExitedAsOf(company, quarterEndDate)` in `quarterly-utils.js` is the only correct way to ask "was it exited for this report". Missing `exitDate` → treated as exited everywhere (legacy fallback).
+- `buildReportData()` sets `company.isExited` and `fundMetrics.numberOfExitedCompanies` for the report quarter. **UI and PDF key off `isExited === true`, never `investmentStatus === 'exited'`.** Snapshots bake `isExited` in, so old snapshotted reports never pick up a later exit.
+- FMV for an exited-as-of company: `resolveReportFMV()` discards fallback FMV from quarters that ended before `exitDate` (position is realised → 0). Only the exit quarter's own update can set a non-zero FMV.
+- Fund summary "Number of portfolio companies" shows `N (x exited)`; N still includes exited companies (capital was deployed).
+
+**The Exited tag**
+- Use `<ExitedTag>` from `src/app/components/exited-tag.js` (PDF has its own `exitedTag()` + `.exited-tag` CSS in `generateQuarterlyPdf.js`). It renders nothing when not exited, so no caller-side guard.
+- Any surface whose text recolours (hover, dark bg) must pass `tone="inherit"` — the fixed-ink default disappears on the maroon tile hover. Portal tiles, sidebar, and the on-screen report card all use `inherit`.
+- Tag sites: portal tiles (`PortalContent`), sidebar (`PortalSidebar`), company header (`CompanyDetailClient`), on-screen report card (`ReportCompanyCard`), PDF table + company pages.
+
+---
+
 ## In-Browser Report Viewer
 
 A React-based quarterly report viewer exists under `src/app/(portal)/partners/components/`. It is **not yet wired up** — `/partners/reports/[slug]/page.js` still renders the old PDF-embed UI.
