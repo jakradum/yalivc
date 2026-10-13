@@ -79,7 +79,7 @@ LP investor logos: upload via Studio → Investors. When pulling logos for deck 
 | `isFeatured` | boolean | Pins as featured card on homepage. Only one at a time. |
 | `isRevenueMaking` | boolean | Controls whether revenue/PAT fields are editable in quarterly updates |
 | `investmentRounds` | array | All rounds (see below) |
-| `quarterlyUpdates` | array | Per-quarter FMV, revenue, PAT, metrics, narrative |
+| `quarterlyUpdates` | array | Per-quarter FMV, revenue, PAT, metrics, narrative. **A company is absent from portal reports until its first update exists** — add one (even notes-only) to make a new investment appear |
 | `investmentStatus` | string | active / exited / written-off. **Current** status — reports use `exitDate` to stay point-in-time |
 | `exitDate` | date | Required when status is `exited` (custom validation; hidden otherwise). Drives `isExitedAsOf()` — Exited tag, exited count, and FMV→0 only apply to quarters ending on/after this date |
 | `founders` | array | name, photo, role, quote, LinkedIn |
