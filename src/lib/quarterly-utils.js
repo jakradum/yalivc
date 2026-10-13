@@ -145,9 +145,34 @@ export function resolveReportFMV(company, quarterData, isExited) {
 }
 
 /**
- * Filter investments to only include companies invested on or before a quarter's end date
- * Companies without an investment date are included (legacy data)
- * @param {Array} investments - Array of investment objects with investmentRounds
+ * Has the company got at least one quarterly update for this quarter or an
+ * earlier one? A company enters reports only once its first update exists —
+ * a deal closed late in a quarter with no financials yet (e.g. invested in
+ * September, report for Jul–Sep) stays out until the first update is entered.
+ * Once in, it stays in: later gaps are covered by the FMV fallback logic.
+ * @param {object} company - Company with quarterlyUpdates array
+ * @param {string} quarter - Report quarter (Q1, Q2, Q3, Q4)
+ * @param {string} fiscalYear - Report fiscal year (e.g., "FY26")
+ * @returns {boolean}
+ */
+export function hasReportableUpdateBy(company, quarter, fiscalYear) {
+  const updates = company?.quarterlyUpdates;
+  if (!updates || !Array.isArray(updates)) return false;
+  const refKey = getQuarterSortKey({ quarter, fiscalYear });
+  return updates.some(u => getQuarterSortKey(u) <= refKey);
+}
+
+/**
+ * Filter investments to the companies that belong in a quarter's report.
+ * Two gates, both required:
+ *   1. First investment round dated on or before the quarter end
+ *      (companies without any round date are let through — legacy data)
+ *   2. At least one quarterly update at or before the quarter
+ *      (see hasReportableUpdateBy — keeps freshly-closed deals out until
+ *      there is something to report)
+ * Callers must pass companies whose query projects `quarterlyUpdates`
+ * (at minimum `{quarter, fiscalYear}`), or every company is filtered out.
+ * @param {Array} investments - Array of investment objects with investmentRounds + quarterlyUpdates
  * @param {string} quarter - Quarter (Q1, Q2, Q3, Q4)
  * @param {string} fiscalYear - Fiscal year (e.g., "FY26")
  * @returns {Array} Filtered investments
@@ -159,14 +184,12 @@ export function getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear
   if (!quarterEndDate) return investments;
 
   return investments.filter(inv => {
-    // Get earliest investment date from rounds
+    // Gate 1 — invested by quarter end
     const firstInvestmentDate = getEarliestInvestmentDate(inv);
+    if (firstInvestmentDate && firstInvestmentDate > quarterEndDate) return false;
 
-    // Companies without investment date are included (legacy data)
-    if (!firstInvestmentDate) return true;
-
-    // Only include companies invested on or before the quarter end date
-    return firstInvestmentDate <= quarterEndDate;
+    // Gate 2 — has something to report
+    return hasReportableUpdateBy(inv, quarter, fiscalYear);
   });
 }
 

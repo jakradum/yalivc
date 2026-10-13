@@ -46,6 +46,8 @@
 - `company.showOnPartnerPortal` (default on) is the portal kill switch — grid, reports, PDFs, snapshots, company page (404s), prev/next nav. Independent of `showOnMainWebsite`.
 - Data room (`getDataRoomPortfolioCompanies`) is still `active`-only — known, deliberately left for now.
 
+**When a company first appears in a report** — `getPortfolioCompaniesForQuarter()` has two gates, both required: initial round date ≤ quarter end, **and** at least one `quarterlyUpdate` at or before that quarter (`hasReportableUpdateBy`). A deal that closes late in a quarter with no financials yet stays out of that quarter's report until its first update is entered; once in, it stays in. Any query whose result is passed to this gate must project `quarterlyUpdates` (at least `{quarter, fiscalYear}`) or every company is filtered out.
+
 **Exit status is point-in-time, not current**
 - `investmentStatus` is a *current* flag. Reports must reflect status **as of their quarter end**: a report for a quarter before the exit must not say "Exited".
 - `company.exitDate` is required (Studio validation) when status is `exited`. `isExitedAsOf(company, quarterEndDate)` in `quarterly-utils.js` is the only correct way to ask "was it exited for this report". Missing `exitDate` → treated as exited everywhere (legacy fallback).

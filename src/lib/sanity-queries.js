@@ -1425,7 +1425,9 @@ export async function getAllLPInvestmentSlugs() {
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         investmentDate
-      }
+      },
+      // Periods only — getPortfolioCompaniesForQuarter needs them for its "has an update" gate
+      "quarterlyUpdates": quarterlyUpdates[]{ quarter, fiscalYear }
     }`
   );
 }
