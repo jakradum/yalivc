@@ -101,6 +101,14 @@ export default {
       group: 'basic',
     },
     {
+      name: 'showOnPartnerPortal',
+      title: 'Show on Partner Portal',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Toggle off to hide from the partner portal and LP reports (PDFs and snapshots) while keeping it on the public website',
+      group: 'basic',
+    },
+    {
       name: 'enableCompanyPage',
       title: 'Enable Company Page',
       type: 'boolean',

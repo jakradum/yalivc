@@ -858,7 +858,7 @@ export async function getLPFundSettings() {
 // Get all portfolio companies with investment data (for LP reports)
 export async function getLPInvestments() {
   return liveClient.fetch(
-    `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
+    `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false] | order(order asc) {
       _id,
       name,
       entityName,
@@ -945,7 +945,7 @@ export async function getLPInvestments() {
 // Get all portfolio companies with all quarterly updates (for PDF report generation)
 export async function getLPInvestmentsForPdf() {
   return liveClient.fetch(
-    `*[_type == "company" && investmentStatus == "active"] | order(order asc) {
+    `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false] | order(order asc) {
       _id,
       name,
       entityName,
@@ -1024,7 +1024,7 @@ export async function getLPInvestmentsForPdf() {
 // Get company investment data by slug (includes all quarterly updates)
 export async function getLPInvestmentByCompanySlug(companySlug) {
   return liveClient.fetch(
-    `*[_type == "company" && slug.current == $companySlug][0]{
+    `*[_type == "company" && slug.current == $companySlug && showOnPartnerPortal != false][0]{
       _id,
       name,
       entityName,
@@ -1120,7 +1120,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
 // Get company quarter updates for a specific quarter
 export async function getLPQuarterUpdates(quarter, fiscalYear) {
   return liveClient.fetch(
-    `*[_type == "company" && investmentStatus == "active" && count(quarterlyUpdates[quarter == $quarter && fiscalYear == $fiscalYear]) > 0] | order(order asc) {
+    `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false && count(quarterlyUpdates[quarter == $quarter && fiscalYear == $fiscalYear]) > 0] | order(order asc) {
       _id,
       name,
       "slug": slug.current,
@@ -1470,7 +1470,7 @@ export async function getDataroomFundContent() {
 // Get all portfolio company slugs (for static generation and navigation)
 export async function getAllLPInvestmentSlugs() {
   return liveClient.fetch(
-    `*[_type == "company" && investmentStatus == "active"] | order(order asc, name asc) {
+    `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false] | order(order asc, name asc) {
       "slug": slug.current,
       name,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {

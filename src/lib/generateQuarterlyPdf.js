@@ -42,6 +42,11 @@ function esc(str) {
     .replace(/"/g, '&quot;');
 }
 
+// Mirrors the site's <ExitedTag> — renders nothing unless the company is exited
+function exitedTag(company) {
+  return company?.investmentStatus === 'exited' ? '<span class="exited-tag">Exited</span>' : '';
+}
+
 function fmt(val, decimals = 2) {
   if (val === undefined || val === null) return '—';
   return Number(val).toLocaleString('en-IN', {
@@ -495,6 +500,13 @@ a { cursor: pointer; }
   letter-spacing: 0.04em; text-transform: uppercase;
   color: #363636; line-height: 1.15;
 }
+.exited-tag {
+  display: inline-block; margin-left: 8px; vertical-align: middle;
+  font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1;
+  padding: 2px 5px; color: #363636; border: 1px solid #363636; white-space: nowrap;
+}
+.company-name .exited-tag { font-size: 11px; padding: 4px 9px; margin-left: 12px; }
 .company-logo-placeholder {
   width: 54px; height: 54px;
   background: #d4d0cc;
@@ -860,7 +872,7 @@ export function generatePdfHtml({
     return `
       <tr>
         <td>${idx + 1}</td>
-        <td>${esc(displayName)}</td>
+        <td>${esc(displayName)}${exitedTag(c)}</td>
         <td>${esc(c.sector || '—')}</td>
         <td>${fmtDateMonthYear(getInitialInvestmentDate(c))}</td>
         <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
@@ -1125,7 +1137,7 @@ export function generatePdfHtml({
           ? `<img src="${esc(company.logo)}" alt="${esc(company.name)}">`
           : `<div class="company-logo-placeholder">${esc((company.name || '?')[0].toUpperCase())}</div>`}
       </div>
-      <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}</div>
+      <div class="company-name">${esc((company.entityName || company.name || '').toUpperCase())}${exitedTag(company)}</div>
     </div>
     <table class="report-table">
       <tbody>
