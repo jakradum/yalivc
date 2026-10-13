@@ -943,7 +943,7 @@ function PortalContentInner({
                             </div>
                           )}
                           <div className={styles.companyTileInfo}>
-                            <h4 className={styles.companyTileName}>{company.entityName || company.name} <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" /></h4>
+                            <h4 className={styles.companyTileName}>{company.entityName || company.name} <ExitedTag exited={company.investmentStatus === 'exited'} size="sm" tone="inherit" /></h4>
                             <span className={styles.companyTileSector}>{company.sector || '-'}</span>
                           </div>
                         </div>
