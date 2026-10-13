@@ -12,6 +12,7 @@ import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuarte
 import PortalSidebar from '../../PortalSidebar';
 
 import Footer from '../../../../components/footer';
+import ExitedTag from '../../../../components/exited-tag';
 
 export default function CompanyDetailClient({ company, report, allCompanySlugs, allReports, isLatestReport }) {
   const quarter = report?.quarter || 'Q3';
@@ -432,7 +433,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 </div>
               )}
               <div className={styles.companyDetailHeaderInfo}>
-                <h1 className={styles.companyDetailName}>{company.entityName || company.name}</h1>
+                <h1 className={styles.companyDetailName}>{company.entityName || company.name} <ExitedTag exited={company.investmentStatus === 'exited'} size="md" /></h1>
                 <span className={styles.companyDetailSector}>{company.sector || '-'}</span>
                 {company.link && (
                   <a
