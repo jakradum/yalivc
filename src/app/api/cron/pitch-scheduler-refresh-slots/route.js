@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import { getPlaceholderSlots } from '@/lib/graphCalendar';
-import { sendHolidayReminderIfDue } from '@/lib/leaveEmail/holidayReminder';
 
 // Hit on a schedule by cron-job.org (not Vercel Cron, to avoid touching
 // vercel.json - see docs/pitch-scheduler-plan.md): hourly 8am-8pm IST, once
@@ -28,11 +27,6 @@ export async function GET(request) {
   if (!CRON_SECRET || token !== CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
-  // Unrelated team-portal job riding on this schedule; runs before the slot refresh so a
-  // calendar outage below can't stop it.
-  const holidayReminder = await sendHolidayReminderIfDue();
-  if (holidayReminder.sent || holidayReminder.error) console.log('[refresh-slots] holiday reminder:', holidayReminder);
 
   const now = new Date();
   const windowStart = now.toISOString();
