@@ -98,31 +98,6 @@ export function renderLeaveEmail(req) {
   return { subject: c.subject, html: layoutA(c) };
 }
 
-const LONG_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const LONG_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const longDate = (iso) => {
-  const [y, m, d] = String(iso).split('-').map(Number);
-  return `${LONG_DAYS[new Date(y, m - 1, d).getDay()]}, ${d} ${LONG_MONTHS[m - 1]}`;
-};
-
-// Office-closed reminder, sent the working day before a holiday (see holidays.js).
-// holidays: [{ date, name, isTomorrow }] — usually one, more if holidays run back to back.
-export function renderHolidayEmail(holidays) {
-  const first = holidays[0];
-  const when = (h) => (h.isTomorrow ? `tomorrow, ${longDate(h.date)}` : `on ${longDate(h.date)}`);
-  const intro = holidays.length === 1
-    ? `The office will be closed ${when(first)}, on account of ${first.name}.`
-    : `The office will be closed ${holidays.map((h) => `${when(h)} for ${h.name}`).join(', and ')}.`;
-  const c = {
-    eyebrow: 'Office holiday',
-    headline: holidays.map((h) => h.name).join(' & '),
-    intro,
-    rows: holidays.map((h) => ['Office closed', fmtDate(h.date)]),
-    note: 'This is an automated reminder from the Yali Team Portal. Please do not reply to this email.',
-  };
-  return { subject: `Office closed ${first.isTomorrow ? 'tomorrow' : `on ${longDate(first.date).split(',')[0]}`}: ${c.headline}`, html: layoutA(c) };
-}
-
 // Separate email to the approver (Sunil). Sent when a request needs approval, and to
 // him alone when the applicant has no email address.
 export function renderApproverEmail(req, { approveUrl }) {
