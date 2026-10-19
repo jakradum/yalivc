@@ -5,7 +5,7 @@ export const EMAILS = {
   'Ajay Soni': 'ajay@yali.vc',
   'Ganapathy Subramaniam': 'gani@yali.vc',
   'Karthik Madathil': 'karthik@yali.vc',
-  'Karthik Sunder': 's.karthikeyan@yali.vc',
+  'Karthik Sunder': 'skarthikeyan@yali.vc',
   'Kaushik Ram': 'kram@yali.vc',
   Manjunath: 'manjunath@yali.vc',
   'Pranav Karnad': 'pranav@yali.vc',
