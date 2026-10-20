@@ -21,7 +21,11 @@ import { createClient } from '@sanity/client';
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
-const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
+// Each caller asks for only the scope it needs - the stored refresh token
+// covers everything consented at /api/pitch-scheduler-calendar-connect, so
+// calendar reads keep working even if Files.ReadWrite hasn't been granted.
+export const CALENDAR_SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
+export const FILES_SCOPE = 'offline_access https://graph.microsoft.com/Files.ReadWrite';
 const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
 
 const sanityClient = createClient({
@@ -35,9 +39,10 @@ const sanityClient = createClient({
 // In-memory only - fine for a serverless function's short lifetime, avoids
 // hitting Sanity + Microsoft on every single request within the same warm
 // instance.
-let tokenCache = { token: null, expiresAt: 0 };
+// Keyed by scope.
+const tokenCache = new Map();
 
-async function refreshAccessToken() {
+async function refreshAccessToken(scope) {
   if (!TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) return null;
 
   const authDoc = await sanityClient.fetch(`*[_id == $id][0]{refreshToken}`, { id: AUTH_DOC_ID }).catch((err) => {
@@ -56,7 +61,7 @@ async function refreshAccessToken() {
         client_secret: CLIENT_SECRET,
         grant_type: 'refresh_token',
         refresh_token: authDoc.refreshToken,
-        scope: SCOPE,
+        scope,
       }),
     });
   } catch (err) {
@@ -80,13 +85,14 @@ async function refreshAccessToken() {
       .catch((err) => console.error('Failed to persist rotated calendar refresh token:', err));
   }
 
-  tokenCache = { token: data.access_token, expiresAt: Date.now() + (data.expires_in || 3600) * 1000 };
-  return tokenCache.token;
+  tokenCache.set(scope, { token: data.access_token, expiresAt: Date.now() + (data.expires_in || 3600) * 1000 });
+  return data.access_token;
 }
 
-async function getGraphToken() {
-  if (tokenCache.token && Date.now() < tokenCache.expiresAt - 60_000) return tokenCache.token;
-  return refreshAccessToken();
+export async function getGraphToken(scope = CALENDAR_SCOPE) {
+  const cached = tokenCache.get(scope);
+  if (cached && Date.now() < cached.expiresAt - 60_000) return cached.token;
+  return refreshAccessToken(scope);
 }
 
 // Returns [{startUTC, endUTC}, ...] (ISO strings) for every calendar event in

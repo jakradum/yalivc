@@ -52,6 +52,8 @@ export default function SchedulerPage() {
   const [company, setCompany] = useState('');
   const [founderEmail, setFounderEmail] = useState('');
   const [teammates, setTeammates] = useState(['']);
+  const [deckFile, setDeckFile] = useState(null);
+  const [submitLabel, setSubmitLabel] = useState('');
 
   // The invitation ID lives in the URL (?invite=...), emailed or sent over
   // WhatsApp to the founder. Read once, client-side only — no server rendering
@@ -179,6 +181,41 @@ export default function SchedulerPage() {
   const addTeammate = () => setTeammates((prev) => [...prev, '']);
   const removeTeammate = (index) => setTeammates((prev) => prev.filter((_, i) => i !== index));
 
+  const MAX_DECK_BYTES = 25 * 1024 * 1024;
+
+  const handleDeckChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setError('');
+    if (file && (!/\.pdf$/i.test(file.name) || file.size > MAX_DECK_BYTES)) {
+      setError('The deck must be a PDF under 25 MB.');
+      e.target.value = '';
+      setDeckFile(null);
+      return;
+    }
+    setDeckFile(file);
+  };
+
+  // Uploads straight to OneDrive via a pre-authenticated upload URL from our
+  // API - the file never goes through our server. Single PUT is fine up to
+  // 60 MB per Graph's upload-session rules. Returns the OneDrive item id.
+  const uploadDeck = async (file) => {
+    const sessionRes = await fetch('/api/pitch-scheduler-deck-upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileName: file.name, size: file.size, companyName: company.trim() }),
+    });
+    const sessionData = await sessionRes.json();
+    if (!sessionRes.ok) throw new Error(sessionData.error || 'Deck upload failed. Please try again.');
+    const putRes = await fetch(sessionData.uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Range': `bytes 0-${file.size - 1}/${file.size}` },
+      body: file,
+    });
+    if (!putRes.ok) throw new Error('Deck upload failed. Please try again, or submit without it.');
+    const item = await putRes.json();
+    return item.id;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!company.trim() || !selectedSlot) return;
@@ -186,6 +223,12 @@ export default function SchedulerPage() {
     setLoading(true);
     setError('');
     try {
+      let deckItemId = null;
+      if (deckFile) {
+        setSubmitLabel('Uploading deck…');
+        deckItemId = await uploadDeck(deckFile);
+      }
+      setSubmitLabel('Submitting…');
       const res = await fetch('/api/pitch-scheduler-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -194,6 +237,7 @@ export default function SchedulerPage() {
           companyName: company.trim(),
           teammateEmails: teammates.map((t) => t.trim()).filter(Boolean),
           ...(needsEmail ? { founderEmail: founderEmail.trim() } : {}),
+          ...(deckItemId ? { deckItemId } : {}),
         }),
       });
       const data = await res.json();
@@ -373,8 +417,12 @@ export default function SchedulerPage() {
                 + Add another
               </button>
             </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="deck">Pitch deck (optional, PDF up to 25 MB)</label>
+              <input id="deck" type="file" accept="application/pdf,.pdf" className={styles.input} onChange={handleDeckChange} />
+            </div>
             <button type="submit" className={styles.submitButton} disabled={loading || !company.trim() || (needsEmail && !founderEmail.trim())}>
-              {loading ? 'Submitting…' : 'Confirm preference'}
+              {loading ? submitLabel || 'Submitting…' : 'Confirm preference'}
             </button>
             <button type="button" className={styles.linkButton} onClick={() => setStage('slots')}>
               Back to slots

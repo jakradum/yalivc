@@ -19,7 +19,7 @@ const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const REDIRECT_URI = 'https://yali.vc/api/pitch-scheduler-calendar-callback';
 const STATE_COOKIE = 'pitch-scheduler-calendar-state';
-const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read https://graph.microsoft.com/Files.ReadWrite';
 
 export async function GET() {
   if (!TENANT_ID || !CLIENT_ID) {

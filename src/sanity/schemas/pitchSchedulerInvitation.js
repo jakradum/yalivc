@@ -161,6 +161,21 @@ const pitchSchedulerInvitation = {
       of: [{ type: 'string' }],
     },
     {
+      name: 'deckUrl',
+      title: 'Pitch Deck Link',
+      type: 'url',
+      group: 'generated',
+      readOnly: true,
+      description: 'Optional deck the founder uploaded in the slot picker. Stored in Pranav\'s OneDrive (Pitch Decks/<Company>); this link only opens for signed-in Yali accounts.',
+    },
+    {
+      name: 'deckFileName',
+      title: 'Pitch Deck File Name',
+      type: 'string',
+      group: 'generated',
+      readOnly: true,
+    },
+    {
       name: 'createdAt',
       title: 'Created At',
       type: 'datetime',
