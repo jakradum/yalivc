@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
 const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
 const REDIRECT_URI = 'https://yali.vc/api/pitch-scheduler-calendar-callback';
 const STATE_COOKIE = 'pitch-scheduler-calendar-state';
-const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
+const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read https://graph.microsoft.com/Files.ReadWrite';
 const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
 
 const writeClient = createClient({
