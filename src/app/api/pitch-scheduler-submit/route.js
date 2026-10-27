@@ -127,7 +127,7 @@ export async function POST(request) {
   // commits; acceptable given founder-submission volume is low, and Pranav
   // still manually creates the real calendar invite as a final check.
   const otherSubmitted = await readClient.fetch(
-    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && invitationId != $invitationId]{selectedSlotId, slots}`,
+    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && slotReleased != true && invitationId != $invitationId]{selectedSlotId, slots}`,
     { invitationId }
   );
   const slotStart = new Date(slot.startUTC).getTime();
