@@ -40,7 +40,8 @@ function verifyInviteToken(token) {
   const payload = token.slice(0, dot);
   const sig = token.slice(dot + 1);
   const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
-  if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig))) return null;
+  const a = Buffer.from(expected), b = Buffer.from(sig);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
   try {
     const { email, expiry } = JSON.parse(Buffer.from(payload, 'base64url').toString());
     if (Date.now() > expiry) return null;
