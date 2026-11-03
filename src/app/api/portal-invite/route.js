@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { Resend } from 'resend';
+import { createClient } from '@sanity/client';
+
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+});
+
+// The link is the login, so access is checked when it is clicked, not only when it
+// was sent: a forwarded or old link is useless once the person is off the list.
+async function hasPortalAccess(email) {
+  const user = await client.fetch(
+    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id }`,
+    { email }
+  );
+  return Boolean(user);
+}
 
 const WEBHOOK_SECRET = process.env.SANITY_INVITE_WEBHOOK_SECRET;
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
@@ -179,7 +197,7 @@ export async function GET(request) {
   }
 
   const email = verifyInviteToken(token);
-  if (!email) {
+  if (!email || !(await hasPortalAccess(email))) {
     return NextResponse.redirect('https://partners.yali.vc/sign-in?expired=1');
   }
 
