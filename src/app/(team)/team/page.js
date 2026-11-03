@@ -63,6 +63,28 @@ export default function TeamPage() {
               </div>
             </a>
 
+            {/* Travel request card */}
+            <a href="/team/travel/" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                border: '1px solid #363636',
+                borderTop: '3px solid #830d35',
+                background: 'rgba(255,255,255,0.88)',
+                padding: '28px 24px',
+                height: '100%',
+                boxSizing: 'border-box',
+              }}>
+                <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 14 }}>
+                  All employees
+                </div>
+                <div style={{ fontFamily: mono, fontSize: 18, fontWeight: 400, color: '#363636', marginBottom: 12, lineHeight: 1.3 }}>
+                  Travel request
+                </div>
+                <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
+                  Request a flight booking for yourself or colleagues. Gani approves it, then Karthik Sunder books it with the travel desk.
+                </p>
+              </div>
+            </a>
+
             {/* Admin dashboard card */}
             <a href="/team/admin" style={{ textDecoration: 'none', display: 'block' }}>
               <div style={{

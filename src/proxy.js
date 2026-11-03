@@ -78,8 +78,9 @@ async function verifyTeamCookie(cookieValue) {
   }
 }
 
-// The gated areas of the team site (everything else, e.g. the leave form, stays open).
-const isGatedTeamPath = (p) => /^\/(asset-builder|builder|letters)(\/|$)/.test(p);
+// Every page on the team site needs a Yali Microsoft sign-in except the sign-in page
+// itself. Per-area allow-lists (ACCESS in teamSession.js) are checked by the pages.
+const isOpenTeamPath = (p) => /^\/sign-in(\/|$)/.test(p);
 
 export default async function middleware(request) {
   const hostname = request.headers.get('host') || '';
@@ -202,9 +203,9 @@ export default async function middleware(request) {
       return NextResponse.redirect(url);
     }
 
-    // The asset builder and Letters need a Yali Microsoft sign-in. The leave form
-    // is open and the admin dashboard handles its own approver login.
-    if (isGatedTeamPath(url.pathname)) {
+    // The whole team site needs a Yali Microsoft sign-in (same Firebase microsoft.com
+    // sign-in as the leave dashboard, verified server-side by /api/team-auth).
+    if (!isOpenTeamPath(url.pathname)) {
       const ok = await verifyTeamCookie(request.cookies.get(TEAM_COOKIE_NAME)?.value);
       if (!ok) {
         const signIn = new URL('/sign-in', request.url);
@@ -220,8 +221,8 @@ export default async function middleware(request) {
     return response;
   }
 
-  // Local dev: the same gate on /team/builder and /team/letters.
-  if (isLocalDev && /^\/team\/(asset-builder|builder|letters)(\/|$)/.test(url.pathname)) {
+  // Local dev: the same gate on everything under /team except the sign-in page.
+  if (isLocalDev && /^\/team(\/|$)/.test(url.pathname) && !/^\/team\/sign-in(\/|$)/.test(url.pathname)) {
     const ok = await verifyTeamCookie(request.cookies.get(TEAM_COOKIE_NAME)?.value);
     if (!ok) {
       const signIn = new URL('/team/sign-in', request.url);

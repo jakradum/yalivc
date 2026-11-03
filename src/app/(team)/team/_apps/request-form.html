@@ -126,7 +126,13 @@ const WEEKDAY = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     const snap = await getDocs(collection(db,"employees"));
     employees = snap.docs.map(d=>({id:d.id, ...d.data()}))
       .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+    // Signed-in user: only the names they may log for (set by the /leave route).
+    const ME = window.__TEAM_ME || { names: [] };
+    const allowed = new Set((ME.names||[]).map(n=>String(n).toLowerCase()));
+    employees = employees.filter(e=>allowed.has(String(e.name||"").toLowerCase()));
     employees.forEach(e=>{ const o=document.createElement("option"); o.value=e.id; o.textContent=e.name; $("emp").appendChild(o); });
+    if(employees.length===1){ $("emp").value=employees[0].id; $("emp").dispatchEvent(new Event("change")); }
+    if(!employees.length){ alert(`${ME.email||"Your account"} isn't on the leave list. Ask Sunil to add you.`); }
   }catch(e){ alert("Couldn't load employees: "+e.message); }
   // Load public holidays for the current year (falls back gracefully if absent)
   try{

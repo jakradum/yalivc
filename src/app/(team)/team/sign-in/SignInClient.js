@@ -18,9 +18,10 @@ const mono = 'var(--font-jetbrains-mono, "JetBrains Mono", monospace)';
 const sans = 'var(--font-inter, "Inter", Arial, sans-serif)';
 
 // Only ever return to the builder or Letters; anything else falls back home.
+// Back to the page that sent you here: same-origin paths only, never the sign-in page.
 function safeNext(raw, prefix) {
-  const ok = /^\/(team\/)?(asset-builder|builder|letters)(\/|$)/.test(raw || '');
-  return ok ? raw : `${prefix}/asset-builder/`;
+  const ok = /^\/(?![\/\\])/.test(raw || '') && !/^\/(team\/)?sign-in(\/|$)/.test(raw);
+  return ok ? raw : `${prefix}/`;
 }
 
 export function SignInClient({ deniedArea = null, deniedEmail = null }) {

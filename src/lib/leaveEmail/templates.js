@@ -82,7 +82,8 @@ const detailRows = (rows, labelColor, valueColor, ruleColor) =>
   rows.map(([k, v]) => `<tr><td style="padding:12px 0;border-top:1px solid ${ruleColor};font-family:${MONO};font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${labelColor};width:150px;vertical-align:top">${esc(k)}</td><td style="padding:12px 0;border-top:1px solid ${ruleColor};font-family:${SANS};font-size:16px;line-height:1.4;color:${valueColor}">${esc(v)}</td></tr>`).join('');
 
 // Letterhead: quiet, mirrors the Letters PDF: logo, mono eyebrow, hairline table.
-function layoutA(c) {
+// Exported for the other team-portal emails (travel desk). Optional c.cta = { label, url }.
+export function layoutA(c) {
   return shell(`
     <tr><td style="padding:32px 32px 0"><img src="${LOGO}" width="96" alt="Yali Capital" style="display:block;border:0"></td></tr>
     <tr><td style="padding:28px 32px 4px;font-family:${MONO};font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.crimson}">${esc(c.eyebrow)}</td></tr>
@@ -90,6 +91,7 @@ function layoutA(c) {
     <tr><td style="padding:8px 32px 20px;font-family:${SANS};font-size:16px;line-height:1.5;color:${C.ink}">${esc(c.intro)}</td></tr>
     <tr><td style="padding:0 32px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${detailRows(c.rows, C.grey, C.ink, C.rule)}<tr><td colspan="2" style="border-top:1px solid ${C.rule};font-size:0;line-height:0">&nbsp;</td></tr></table></td></tr>
     ${c.note ? `<tr><td style="padding:16px 32px 0;font-family:${SANS};font-size:14px;line-height:1.5;color:${C.grey}">${esc(c.note)}</td></tr>` : ''}
+    ${c.cta ? `<tr><td style="padding:24px 32px 0"><a href="${esc(c.cta.url)}" style="display:inline-block;background:${C.crimson};color:${C.white};font-family:${MONO};font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:14px 22px">${esc(c.cta.label)}</a></td></tr>` : ''}
     <tr><td style="height:32px;font-size:0;line-height:0">&nbsp;</td></tr>`);
 }
 
