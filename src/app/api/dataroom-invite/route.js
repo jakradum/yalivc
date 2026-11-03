@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { Resend } from 'resend';
+import { createClient } from '@sanity/client';
+
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+});
+
+// Checked when the link is clicked, not only when it was sent (same rule as
+// dataroom-auth), so a forwarded or old link stops working once access is removed.
+async function hasDataroomAccess(email) {
+  const user = await client.fetch(
+    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{ _id }`,
+    { email }
+  );
+  return Boolean(user);
+}
 
 const WEBHOOK_SECRET = process.env.SANITY_INVITE_WEBHOOK_SECRET;
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
@@ -191,7 +209,7 @@ export async function GET(request) {
   }
 
   const email = verifyInviteToken(token);
-  if (!email) {
+  if (!email || !(await hasDataroomAccess(email))) {
     return NextResponse.redirect(`${signInUrl}?expired=1`);
   }
 

@@ -51,7 +51,6 @@ Add query params for resizing: `?w=280&fit=max&auto=format`
 | `noAccess` | boolean | Kill switch. Overrides all other access flags. Default false. |
 | `isGiftCityLP` | boolean | Shows GIFT City-specific fund financials PDF in quarterly report. Default false. |
 | `source` | string | `portal` or `dataroom` — how the user was onboarded. |
-| `inviteActions` | custom UI | InviteButtons component — send portal/dataroom invites from Studio. Read-only. |
 | `inviteCode` | string | Hidden. Managed by invite API. |
 | `inviteCodeExpiry` | string | Hidden. Managed by invite API. |
 
