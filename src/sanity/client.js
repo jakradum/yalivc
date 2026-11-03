@@ -6,6 +6,11 @@ export const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: true,
+  // Read token: the production dataset is private. Published docs only, so Studio
+  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
+  // the existing API token until one is created.)
+  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
+  perspective: 'published',
 });
 
 // Live client without CDN caching - use for LP portal and other real-time queries
@@ -14,6 +19,11 @@ export const liveClient = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
+  // Read token: the production dataset is private. Published docs only, so Studio
+  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
+  // the existing API token until one is created.)
+  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
+  perspective: 'published',
 });
 
 const builder = imageUrlBuilder(client);
@@ -98,16 +108,6 @@ export async function getCategories() {
     order
   }`;
   return await client.fetch(query);
-}
-
-export async function getCategoryBySlug(slug) {
-  const query = `*[_type == "category" && slug.current == $slug][0] {
-    _id,
-    name,
-    "slug": slug.current,
-    description
-  }`;
-  return await client.fetch(query, { slug });
 }
 
 // ============ BLOG POSTS ============

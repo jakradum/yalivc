@@ -14,6 +14,9 @@ const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
+  // Read token: the production dataset is private. Published docs only.
+  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
+  perspective: 'published',
 });
 
 // Returns [{startUTC, endUTC}, ...] from the cache, or null if it's never
