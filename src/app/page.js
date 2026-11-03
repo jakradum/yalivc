@@ -21,6 +21,8 @@ import SocialUpdates from './components/socialupdates';
 import FAQSection from './components/faqsection';
 import Button from './components/button';
 import JsonLd from './components/JsonLd';
+import HomeMotion from './components/HomeMotion';
+import './landing-page-styles/home-motion.css';
 
 export const revalidate = 60;
 
@@ -46,16 +48,23 @@ export const metadata = {
 const TechnologiesArticle = ({ categories }) => {
   const technologies = categories.map(cat => cat.name);
   const repeatTechnologies = (arr, times) => [].concat(...Array(times).fill(arr));
-  const repeatedTechnologies = repeatTechnologies(technologies, 10);
+  const repeatedTechnologies = repeatTechnologies(technologies, 6);
 
 
   return (
-    <div className={separatorStyles.containerWrapper}>
-      <div className={separatorStyles.repeatingContainer}>
+    <div className={separatorStyles.containerWrapper} data-ticker>
+      <div className={separatorStyles.repeatingContainer} data-ticker-track>
         {repeatedTechnologies.map((tech, index) => (
           <React.Fragment key={`${tech}-${index}`}>
             {index > 0 && <span className={separatorStyles.separator}>·</span>}
             <span className={separatorStyles.technology}>{tech}</span>
+          </React.Fragment>
+        ))}
+        {/* Second copy so the desktop ticker (home-motion.css) can loop seamlessly. */}
+        {repeatedTechnologies.map((tech, index) => (
+          <React.Fragment key={`dup-${tech}-${index}`}>
+            <span className={separatorStyles.separator} aria-hidden="true">·</span>
+            <span className={separatorStyles.technology} aria-hidden="true">{tech}</span>
           </React.Fragment>
         ))}
       </div>
@@ -104,7 +113,7 @@ const team = sanityTeam;
             </p>
             <div className={landingStyles.headerFlex}>
               <ViewfinderIcon />
-              <h1>Helping India's deep tech soar. Because, our growth story is still being written.</h1>
+              <h1 data-typewrite>Helping India's deep tech soar. Because, our growth story is still being written.</h1>
               <ViewfinderIcon />
             </div>
             <Link href="/pitch" className={landingStyles.pitchLink} aria-label="For Founders">
@@ -113,10 +122,10 @@ const team = sanityTeam;
           </div>
         </aside>
         <aside className={landingStyles.graphicWrapper}>
-          <div className={landingStyles.graphicFg}>
+          <div className={landingStyles.graphicFg} data-lion>
             <Graphicfg />
           </div>
-          <div className={landingStyles.dottedLogo}>
+          <div className={landingStyles.dottedLogo} data-dots>
             <DottedLogoGraphic />
           </div>
         </aside>
@@ -174,6 +183,7 @@ const team = sanityTeam;
           <FAQSection faqs={faqs} />
         </section>
       )}
+      <HomeMotion />
     </main>
   );
 }

@@ -1,0 +1,57 @@
+/* Motion layer for the existing homepage. Brand colours only: #363636, #830d35,
+   #efefef. Desktop only: every rule is scoped to html[data-motion="on"], which
+   HomeMotion.js sets only at min-width 901px without reduced motion. */
+
+/* Hide the lion and the hero headline until the motion layer has primed them, so the
+   finished drawing/text doesn't flash first. Same media query as DESKTOP in
+   HomeMotion.js. If the script never runs, they show after 2.5s regardless. */
+@keyframes yali-show { to { opacity: 1; } }
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  [data-lion]:not([data-ready]) svg path,
+  [data-typewrite]:not([data-ready]) { opacity: 0; animation: yali-show 0s 2.5s forwards; }
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+html[data-motion='on'] [data-rise] { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+html[data-motion='on'] [data-in] [data-rise] { opacity: 1; transform: none; transition-delay: .2s; }
+html[data-motion='on'] [data-in] [data-rise='late'] { transition-delay: 3.4s; }
+/* While the plotter is drawing, the hover fill is held off so it can't cover the strokes. */
+html[data-motion='on'] [data-drawing] [data-lion] svg { fill: transparent !important; }
+html[data-motion='on'] [data-drawing] [data-lion] svg path { stroke: black !important; }
+
+/* The lion's one-time crimson flash reuses the existing hover state. */
+html[data-motion='on'] [data-lion][data-flash='on'] svg { fill: #830d35; transition: fill .4s ease; }
+html[data-motion='on'] [data-lion][data-flash='on'] svg path { stroke: none; }
+
+
+/* ── Sector strip: scrolls; hover pauses it ───────────────────────────── */
+@keyframes yali-ticker { to { transform: translateX(-50%); } }
+html[data-motion='on'] [data-ticker-track] { width: max-content; overflow: visible; animation: yali-ticker 90s linear infinite; }
+html[data-motion='on'] [data-ticker]:hover [data-ticker-track] { animation-play-state: paused; }
+
+/* ── Viewfinder brackets lock onto section titles ─────────────────────── */
+html[data-motion='on'] [data-vf] > svg { transition: translate .8s cubic-bezier(.2,.8,.2,1), opacity .5s ease; opacity: 0; }
+html[data-motion='on'] [data-vf] > svg:first-child { translate: -28px -18px; }
+html[data-motion='on'] [data-vf] > svg:last-child { translate: 28px 18px; }
+html[data-motion='on'] [data-vf][data-in] > svg { translate: 0 0; opacity: 1; }
+html[data-motion='on'] [data-vf] > h1 { opacity: 0; transition: opacity .3s ease .2s; }
+html[data-motion='on'] [data-vf][data-in] > h1 { opacity: 1; }
+
+/* ── Portfolio grid ───────────────────────────────────────────────────── */
+html[data-motion='on'] [data-cell] { position: relative; opacity: 0; transform: translateY(10px);
+  transition: opacity .5s ease calc(var(--i, 0) * 55ms), transform .5s ease calc(var(--i, 0) * 55ms), background-color .2s ease; }
+html[data-motion='on'] [data-cell][data-in] { opacity: 1; transform: none; }
+/* Viewfinder corners on hover: the same L-bracket as the ViewfinderIcon, in crimson. */
+html[data-motion='on'] [data-cell]::before,
+html[data-motion='on'] [data-cell]::after {
+  content: ''; position: absolute; width: 14px; height: 14px; pointer-events: none; opacity: 0;
+  transition: opacity .2s ease, translate .25s cubic-bezier(.2,.8,.2,1);
+}
+html[data-motion='on'] [data-cell]::before { top: 6px; left: 6px; border-top: 2px solid #830d35; border-left: 2px solid #830d35; translate: 6px 6px; }
+html[data-motion='on'] [data-cell]::after { bottom: 6px; right: 6px; border-bottom: 2px solid #830d35; border-right: 2px solid #830d35; translate: -6px -6px; }
+html[data-motion='on'] [data-cell]:hover::before,
+html[data-motion='on'] [data-cell]:hover::after { opacity: 1; translate: 0 0; }
+
+/* ── Sections rise in ─────────────────────────────────────────────────── */
+html[data-motion='on'] [data-section] { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+html[data-motion='on'] [data-section][data-in] { opacity: 1; transform: none; }
