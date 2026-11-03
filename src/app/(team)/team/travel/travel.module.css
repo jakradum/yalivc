@@ -1,0 +1,90 @@
+/* Travel desk — same look as the team home: maroon bar, warm gradient, square
+   cards with an ink frame and a crimson top rule, mono labels. */
+.page {
+  font-family: var(--font-inter, 'Inter', Arial, sans-serif);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f7f5 0%, #e4dfd8 50%, #d8d2cb 100%);
+  color: #363636;
+}
+.bar {
+  background: #830d35; height: 52px; display: flex; align-items: center;
+  padding: 0 28px; gap: 14px; border-bottom: 1px solid #363636; box-sizing: border-box;
+}
+.bar a { display: flex; align-items: center; height: 100%; text-decoration: none; }
+.bar img { height: 22px; width: auto; filter: brightness(0) invert(1); display: block; }
+.divider { width: 1px; height: 16px; background: rgba(239, 239, 239, 0.25); }
+.barTitle { font-family: var(--font-jetbrains-mono, 'JetBrains Mono', monospace); font-size: 13px; color: #efefef; }
+.barRight { margin-left: auto; font-family: var(--font-jetbrains-mono, monospace); font-size: 12px; color: rgba(239, 239, 239, 0.8); }
+
+.main { max-width: 720px; margin: 0 auto; padding: 40px 16px 64px; box-sizing: border-box; }
+.wide { max-width: 960px; }
+.eyebrow {
+  font-family: var(--font-jetbrains-mono, monospace); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #830d35; margin-bottom: 10px;
+}
+.h1 { font-family: var(--font-jetbrains-mono, monospace); font-size: 22px; font-weight: 400; margin: 0 0 8px; }
+.lede { font-size: 14px; color: #595959; line-height: 1.6; margin: 0 0 28px; }
+
+.card {
+  border: 1px solid #363636; border-top: 3px solid #830d35; background: rgba(255, 255, 255, 0.88);
+  padding: 24px; margin-bottom: 20px; box-sizing: border-box;
+}
+.cardTitle { composes: eyebrow; margin-bottom: 16px; }
+
+.label { display: block; font-size: 13px; color: #595959; margin: 14px 0 6px; }
+.label:first-child { margin-top: 0; }
+.input, .select, .textarea {
+  width: 100%; box-sizing: border-box; padding: 9px 10px; font-size: 14px; font-family: inherit;
+  border: 1px solid #c9c3bb; border-radius: 0; background: #fff; color: #363636;
+}
+.input:focus, .select:focus, .textarea:focus { outline: 2px solid #830d35; outline-offset: -1px; }
+.textarea { min-height: 72px; resize: vertical; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.chip {
+  text-align: left; border: 1px solid #c9c3bb; background: #fff; padding: 9px 11px; cursor: pointer;
+  font-family: inherit; color: #363636;
+}
+.chip b { display: block; font-size: 14px; font-weight: 500; }
+.chip span { font-size: 12px; color: #6b6b6b; }
+.chipOn { border-color: #830d35; box-shadow: inset 3px 0 0 #830d35; }
+
+.toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+.toggle {
+  border: 1px solid #c9c3bb; background: #fff; padding: 9px 14px; cursor: pointer; font-family: inherit;
+  font-size: 13px; color: #363636;
+}
+.toggleOn { background: #830d35; border-color: #830d35; color: #fff; }
+
+.hint { font-size: 12px; color: #6b6b6b; margin-top: 6px; line-height: 1.5; }
+.thumb { max-width: 220px; max-height: 160px; border: 1px solid #c9c3bb; display: block; margin-top: 8px; }
+
+.btn {
+  background: #830d35; color: #fff; border: none; padding: 13px 22px; cursor: pointer;
+  font-family: var(--font-jetbrains-mono, monospace); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btnGhost { composes: btn; background: transparent; color: #830d35; border: 1px solid #830d35; }
+.error { color: #a32d2d; font-size: 13px; margin-top: 12px; }
+.done { text-align: center; padding: 12px 0; }
+.done p { color: #595959; font-size: 14px; line-height: 1.6; }
+
+/* Approvals list */
+.req { border-top: 1px solid #d9d4cc; padding: 16px 0; }
+.req:first-child { border-top: none; padding-top: 0; }
+.reqHead { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.reqRoute { font-family: var(--font-jetbrains-mono, monospace); font-size: 15px; }
+.pill {
+  font-family: var(--font-jetbrains-mono, monospace); font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor;
+}
+.pending { color: #854f0b; }
+.approved { color: #3b6d11; }
+.rejected { color: #a32d2d; }
+.meta { font-size: 13px; color: #595959; margin-top: 6px; line-height: 1.6; }
+.meta a { color: #830d35; }
+.actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+.empty { font-size: 14px; color: #6b6b6b; }
