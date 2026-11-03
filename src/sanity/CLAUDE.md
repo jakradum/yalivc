@@ -87,6 +87,16 @@ LP investor logos: upload via Studio → Investors. When pulling logos for deck 
 
 **`quarterlyUpdates` per-quarter fields:** `quarter`, `fiscalYear`, `currentFMV`, `currentOwnershipPercent`, `amountReturned`, `multipleOfInvestment`, `revenueINR`, `patINR`, `teamSize`, `keyMetrics` (custom label/value pairs), `tableFootnotes`, `updateNotes` (portable text)
 
+### Dataset is private (since 2026-11-03)
+
+The `production` dataset is **private**: unauthenticated reads return 401. Every server-side `createClient` carries `token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN` and `perspective: 'published'`. Both are required:
+
+- **No token → the page gets nothing.** New clients must include it. Never put the token in a `NEXT_PUBLIC_` var or a `'use client'` fetch; browser code may only use `urlFor()` (image URLs) which needs no token.
+- **`perspective: 'published'` is not optional.** With a token and the client's default perspective, Studio drafts come back from queries (17 of them when this was tested), so unpublished edits would appear on the site. Routes that deliberately read drafts pass `{ perspective: 'previewDrafts' }` per request (newsletter sends) or `withConfig({ perspective: 'raw' })` (deck store).
+- Asset URLs (`cdn.sanity.io/images|files/...`) stay publicly fetchable on a private dataset; they are unguessable, not access-controlled.
+- `SANITY_READ_TOKEN` should be a **Viewer** token created in manage.sanity.io → API → Tokens; until it exists the code falls back to `SANITY_API_TOKEN` (which can write). Set it on Vercel (all envs) and in `.env.local`, then nothing else changes.
+- To revert in an emergency: Studio → Manage → Datasets → production → public, or `update_dataset` via the Sanity MCP. Reads work again immediately.
+
 ### Non-obvious field behaviours
 
 - `portalUser.isGiftCityLP` — controls whether `lpQuarterlyReport.giftCityFundFinancialsPdf` is shown in the quarterly PDF

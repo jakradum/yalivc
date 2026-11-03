@@ -8,7 +8,12 @@ import { createClient } from '@sanity/client';
 // company records also hold LP-confidential numbers (amounts invested, FMV,
 // MOIC, ownership). None of that is ever selected, so it cannot reach the model
 // or end up on a card.
-const client = createClient({ projectId: 'nt0wmty3', dataset: 'production', apiVersion: '2024-01-01', useCdn: false });
+// Read token: the production dataset is private. Published docs only.
+const client = createClient({
+  projectId: 'nt0wmty3', dataset: 'production', apiVersion: '2024-01-01', useCdn: false,
+  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
+  perspective: 'published',
+});
 
 const norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 const plain = (v) => {

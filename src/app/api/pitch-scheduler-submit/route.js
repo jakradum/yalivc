@@ -2,13 +2,17 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
-import { shareUploadedDeck } from '@/lib/graphDrive';
 
 const readClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
+  // Read token: the production dataset is private. Published docs only, so Studio
+  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
+  // the existing API token until one is created.)
+  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
+  perspective: 'published',
 });
 
 const writeClient = createClient({
@@ -127,7 +131,7 @@ export async function POST(request) {
   // commits; acceptable given founder-submission volume is low, and Pranav
   // still manually creates the real calendar invite as a final check.
   const otherSubmitted = await readClient.fetch(
-    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && slotReleased != true && invitationId != $invitationId]{selectedSlotId, slots}`,
+    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && invitationId != $invitationId]{selectedSlotId, slots}`,
     { invitationId }
   );
   const slotStart = new Date(slot.startUTC).getTime();
@@ -171,20 +175,6 @@ export async function POST(request) {
     return NextResponse.json({ error: 'This invitation has already been used' }, { status: 409 });
   }
 
-  // Optional deck, already uploaded straight to OneDrive by the browser -
-  // just verify it and get an org-only link. Best-effort: a sharing failure
-  // shouldn't undo a booking that already went through.
-  let deck = null;
-  if (body?.deckItemId) {
-    try {
-      deck = await shareUploadedDeck(body.deckItemId);
-      await writeClient.patch(invitation._id).set({ deckUrl: deck.url, deckFileName: deck.fileName }).commit();
-    } catch (err) {
-      console.error('Deck share failed:', err);
-      deck = null;
-    }
-  }
-
   // Send the notification to Pranav — best-effort; the state transition above
   // already succeeded regardless of whether this email goes through.
   let notificationStatus = 'failed';
@@ -201,8 +191,7 @@ export async function POST(request) {
         html: `<p><strong>${escapeHtml(companyName)}</strong> picked a slot via the pitch scheduler.</p>
 <p><strong>Slot:</strong> ${escapeHtml(formatSlotIST(slot.startUTC, slot.endUTC))}<br/>
 <strong>Contact email:</strong> ${escapeHtml(founderEmail)}<br/>
-<strong>Teammates:</strong> ${teammateList}<br/>
-<strong>Pitch deck:</strong> ${deck ? `<a href="${escapeHtml(deck.url)}">${escapeHtml(deck.fileName)}</a>` : '(none uploaded)'}</p>
+<strong>Teammates:</strong> ${teammateList}</p>
 <p>Create the calendar invite when ready — this only confirmed their preference.</p>`,
       });
       notificationStatus = 'sent';
