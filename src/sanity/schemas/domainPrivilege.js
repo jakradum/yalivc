@@ -1,4 +1,3 @@
-import { GenerateCodeButton } from '../components/GenerateCodeButton';
 import { RedemptionLog } from '../components/RedemptionLog';
 
 export default {
@@ -59,30 +58,24 @@ export default {
       initialValue: false,
       description: 'ON — everyone from this domain uses one shared code to sign in. OFF — they sign in via OTP email, no user record needed.',
     },
+    // Shared code is set by hand. The old "Generate" button called a web route
+    // that anyone on the internet could call, so both were removed (5 Nov 2026).
     {
-      name: 'codeActions',
+      name: 'inviteCode',
       title: 'Shared Code',
       type: 'string',
       group: 'code',
-      readOnly: true,
       hidden: ({ document }) => !document?.requireCode,
-      components: { input: GenerateCodeButton },
-      description: 'Save the document first, then click Generate. Code is valid for 6 months.',
-    },
-    // System fields — managed by GenerateCodeButton via API
-    {
-      name: 'inviteCode',
-      title: 'Invite Code',
-      type: 'string',
-      hidden: true,
-      readOnly: true,
+      description: 'The code everyone at this domain types to sign in. Use at least 8 random characters, and share it privately. When you change it, also set a new expiry and reset Times Used to 0.',
+      validation: (Rule) => Rule.custom((v, ctx) => (!ctx.document?.requireCode || (v && v.trim().length >= 8)) ? true : 'Use at least 8 characters'),
     },
     {
       name: 'codeExpiry',
       title: 'Code Expiry',
       type: 'datetime',
-      hidden: true,
-      readOnly: true,
+      group: 'code',
+      hidden: ({ document }) => !document?.requireCode,
+      description: 'The code stops working after this date. 6 months is a sensible default.',
     },
     {
       name: 'maxUses',
@@ -100,8 +93,8 @@ export default {
       type: 'number',
       group: 'code',
       hidden: ({ document }) => !document?.requireCode,
-      readOnly: true,
       initialValue: 0,
+      description: 'Counts up automatically each time someone signs in with the code. Reset to 0 when you set a new code.',
     },
     {
       name: 'redemptionLogDisplay',
