@@ -71,7 +71,7 @@ async function verifyPortalSession(cookieValue) {
       false,
       ['sign']
     );
-    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(`${email}:${timestamp}`));
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(`portal:${email}:${timestamp}`));
     const expectedSig = Array.from(new Uint8Array(sig))
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');

@@ -11,7 +11,7 @@
 - Standard page pattern:
   ```js
   const cookieValue = cookieStore.get('portal-session')?.value;
-  const userEmail = cookieValue ? verifySession(cookieValue) : null;
+  const userEmail = cookieValue ? verifySession(cookieValue, 'portal') : null;
   if (cookieValue && userEmail === null) redirect('/partners/sign-in');
   ```
 - `redirect` must be imported from `next/navigation`, NOT `next/headers`

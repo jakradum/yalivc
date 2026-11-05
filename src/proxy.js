@@ -19,14 +19,16 @@ function timingSafeEqual(a, b) {
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
-async function verifyHMAC(cookieValue, maxSessionAge = THIRTY_DAYS_MS) {
+// scope: 'portal' or 'dataroom' — must match the signer (src/lib/session.js).
+async function verifyHMAC(cookieValue, maxSessionAge, scope) {
   if (!AUTH_SECRET || !cookieValue) return false;
 
   const parts = cookieValue.split(':');
   if (parts.length !== 3) return false;
 
   const [email, timestamp, signature] = parts;
-  const data = `${email}:${timestamp}`;
+  if (scope !== 'portal' && scope !== 'dataroom') return false;
+  const data = `${scope}:${email}:${timestamp}`;
 
   // Validate session age against the provided max
   const sessionAge = Date.now() - parseInt(timestamp, 10);
@@ -131,7 +133,7 @@ export default async function middleware(request) {
     // Protect all routes except sign-in (30-day session)
     if (!isSignInPage) {
       const sessionCookie = request.cookies.get(PORTAL_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS, 'portal') : false;
 
       if (!isValid) {
         const signInUrl = new URL('/sign-in', request.url);
@@ -160,7 +162,7 @@ export default async function middleware(request) {
 
     if (!isSignInPage) {
       const sessionCookie = request.cookies.get(PORTAL_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS) : false;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, THIRTY_DAYS_MS, 'portal') : false;
 
       if (!isValid) {
         const signInUrl = new URL('/partners/sign-in', request.url);
@@ -241,7 +243,7 @@ export default async function middleware(request) {
     // Protect all routes except sign-in (6-month session)
     if (!isSignInPage) {
       const sessionCookie = request.cookies.get(DATAROOM_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS) : false;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS, 'dataroom') : false;
 
       if (!isValid) {
         const signInUrl = new URL('/sign-in', request.url);
@@ -270,7 +272,7 @@ export default async function middleware(request) {
 
     if (!isSignInPage) {
       const sessionCookie = request.cookies.get(DATAROOM_COOKIE_NAME)?.value;
-      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS) : false;
+      const isValid = sessionCookie ? await verifyHMAC(sessionCookie, SIX_MONTHS_MS, 'dataroom') : false;
 
       if (!isValid) {
         const signInUrl = new URL('/dataroom/sign-in', request.url);

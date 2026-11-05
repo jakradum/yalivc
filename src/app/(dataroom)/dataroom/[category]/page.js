@@ -98,7 +98,7 @@ export default async function CategoryPage({ params }) {
   // Sidebar data — fetched for all branches
   const cookieStore = await cookies();
   const session = cookieStore.get('dataroom-session')?.value;
-  const email = session ? verifySession(session) : null;
+  const email = session ? verifySession(session, 'dataroom') : null;
   // Invalid signature → re-authenticate
   if (session && email === null) redirect('/dataroom/sign-in');
   // No session → sign in

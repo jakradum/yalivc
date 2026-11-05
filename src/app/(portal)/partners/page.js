@@ -32,7 +32,7 @@ export default async function PartnersPortal({ searchParams }) {
   // Get user access level from session — verify HMAC signature
   const cookieStore = await cookies();
   const cookieValue = cookieStore.get('portal-session')?.value;
-  const userEmail = cookieValue ? verifySession(cookieValue) : null;
+  const userEmail = cookieValue ? verifySession(cookieValue, 'portal') : null;
   // Cookie present but signature invalid → redirect to sign-in
   if (cookieValue && userEmail === null) redirect('/partners/sign-in');
   const hasInternalAccess = isInternalUser(userEmail);

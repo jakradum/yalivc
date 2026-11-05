@@ -29,7 +29,7 @@ export default async function ReportPage({ params }) {
   const { slug } = await params;
   const cookieStore = await cookies();
   const cookieValue = cookieStore.get('portal-session')?.value;
-  const userEmail = cookieValue ? verifySession(cookieValue) : null;
+  const userEmail = cookieValue ? verifySession(cookieValue, 'portal') : null;
   if (cookieValue && userEmail === null) redirect('/partners/sign-in');
   const report = await getLPReportBySlug(slug);
 

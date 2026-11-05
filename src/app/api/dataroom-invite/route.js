@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { Resend } from 'resend';
+import { signSessionFor } from '@/lib/session';
 import { createClient } from '@sanity/client';
 
 const client = createClient({
@@ -56,9 +57,7 @@ function verifyInviteToken(token) {
 }
 
 function signSession(email, timestamp) {
-  const data = `${email}:${timestamp}`;
-  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(data).digest('hex');
-  return `${data}:${signature}`;
+  return signSessionFor('dataroom', email, timestamp);
 }
 
 // POST — Sanity webhook: called when a portalUser with dataRoomAccess: true is created/updated
