@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
+import { signSessionFor } from '@/lib/session';
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
@@ -73,17 +74,13 @@ function generateOTP() {
 function signOTP(email, code, timestamp) {
   return crypto
     .createHmac('sha256', AUTH_SECRET)
-    .update(`${email}:${code}:${timestamp}`)
+    .update(`portal-otp:${email}:${code}:${timestamp}`)
     .digest('hex');
 }
 
+// Scoped signature: see src/lib/session.js (a portal cookie never passes elsewhere).
 function signSession(email, timestamp) {
-  const data = `${email}:${timestamp}`;
-  const signature = crypto
-    .createHmac('sha256', AUTH_SECRET)
-    .update(data)
-    .digest('hex');
-  return `${data}:${signature}`;
+  return signSessionFor('portal', email, timestamp);
 }
 
 export async function POST(request) {

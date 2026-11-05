@@ -21,7 +21,7 @@ async function verifySession(request) {
   if (parts.length !== 3) return null;
 
   const [email, timestamp, signature] = parts;
-  const data = `${email}:${timestamp}`;
+  const data = `portal:${email}:${timestamp}`; // scoped: see src/lib/session.js
 
   try {
     const encoder = new TextEncoder();

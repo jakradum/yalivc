@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic';
 export default async function DataroomPage() {
   const cookieStore = await cookies();
   const session = cookieStore.get('dataroom-session')?.value;
-  const email = session ? verifySession(session) : null;
+  const email = session ? verifySession(session, 'dataroom') : null;
   // Invalid signature → re-authenticate
   if (session && email === null) redirect('/dataroom/sign-in');
   // No session → sign in
