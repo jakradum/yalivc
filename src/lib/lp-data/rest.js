@@ -48,11 +48,19 @@ export async function supa(path, { method = 'GET', body, headers = {} } = {}) {
   return { rows: text ? JSON.parse(text) : null, res };
 }
 
-// GET every row, paging past PostgREST's 1,000-row cap with Range headers.
+// GET every row, paging past PostgREST's 1,000-row cap with Range headers. A 416
+// (range not satisfiable) on a later page means the previous page was the last one,
+// e.g. a table with exactly 1,000 rows.
 export async function supaAll(path, pageSize = 1000) {
   const out = [];
   for (let from = 0; ; from += pageSize) {
-    const { rows } = await supa(path, { headers: { Range: `${from}-${from + pageSize - 1}`, 'Range-Unit': 'items' } });
+    let rows;
+    try {
+      ({ rows } = await supa(path, { headers: { Range: `${from}-${from + pageSize - 1}`, 'Range-Unit': 'items' } }));
+    } catch (err) {
+      if (from > 0 && err?.status === 416) return out;
+      throw err;
+    }
     const page = rows || [];
     out.push(...page);
     if (page.length < pageSize) return out;
