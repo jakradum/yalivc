@@ -4,7 +4,8 @@
 //   sanity   (default) today's Sanity queries, unchanged (src/lib/sanity-queries.js
 //            and the route GROQ moved verbatim into lp-data/sanity-routes.js)
 //   supabase the twin in Supabase, read through the doc loader (lp-data/loader.js),
-//            projections reproduced in lp-data/supabase-reads.js
+//            projections reproduced in lp-data/supabase-reads.js; writes go to the
+//            type's current owner per sync_types (lp-data/write-owner.js)
 //   shadow   serve Sanity, then compare with Supabase after the response and log
 //            differences to parity_diffs (lp-data/shadow.js). Writes go to Sanity only.
 //
@@ -14,8 +15,10 @@ import { getLpSource } from './lp-source.js';
 import * as supaReads from './lp-data/supabase-reads.js';
 import * as supaWrites from './lp-data/supabase-writes.js';
 import { redemptionEntry } from './lp-data/redemption.js';
+import { makeWrite } from './lp-data/write-owner.js';
 
 export { setDocLoader, resetDocLoader } from './lp-data/loader.js';
+export { resetWriteOwnerCache } from './lp-data/write-owner.js';
 
 // Loaded on first use so the Supabase path (and fixture tests) never need the
 // Sanity clients.
@@ -37,12 +40,9 @@ function read(name, sanityFn, supabaseFn) {
   return fn;
 }
 
-// Writes: Supabase only in `supabase` mode; Sanity in `sanity` and `shadow`.
-function write(name, sanityFn, supabaseFn) {
-  const fn = async (...args) => (getLpSource() === 'supabase' ? supabaseFn(...args) : sanityFn(...args));
-  Object.defineProperty(fn, 'name', { value: name });
-  return fn;
-}
+// Writes: Sanity in `sanity` and `shadow` mode. In `supabase` mode, whichever system
+// owns the document type per `sync_types` (see lp-data/write-owner.js).
+const write = (name, type, sanityFn, supabaseFn) => makeWrite(name, type, sanityFn, supabaseFn, getLpSource);
 
 const q = (name) => async (...args) => (await sanityQueries())[name](...args);
 const r = (name) => async (...args) => (await sanityRoutes())[name](...args);
@@ -96,13 +96,13 @@ export const getActiveUserId = read('getActiveUserId', r('getActiveUserId'), sup
 
 // ── writes ─────────────────────────────────────────────────────────────────
 // Records one use of a domain's shared code (usedCount + 1, redemptionLog entry).
-export const redeemDomainSharedCode = write('redeemDomainSharedCode',
+export const redeemDomainSharedCode = write('redeemDomainSharedCode', 'domainPrivilege',
   async (domainPriv, email) => (await sanityRoutes()).redeemDomainSharedCode(domainPriv, email),
   async (domainPriv, email) => supaWrites.redeemDomainSharedCode(domainPriv, email, redemptionEntry(email)));
 // Removes a user's one-time inviteCode / inviteCodeExpiry after it was used.
-export const clearUserInviteCode = write('clearUserInviteCode', r('clearUserInviteCode'), supaWrites.clearUserInviteCode);
+export const clearUserInviteCode = write('clearUserInviteCode', 'portalUser', r('clearUserInviteCode'), supaWrites.clearUserInviteCode);
 // Creates an lpDownloadConsent / lpPortalFeedback document; resolves to the new doc (with _id).
-export const createDownloadConsent = write('createDownloadConsent', r('createDownloadConsent'), supaWrites.createDownloadConsent);
-export const createPortalFeedback = write('createPortalFeedback', r('createPortalFeedback'), supaWrites.createPortalFeedback);
+export const createDownloadConsent = write('createDownloadConsent', 'lpDownloadConsent', r('createDownloadConsent'), supaWrites.createDownloadConsent);
+export const createPortalFeedback = write('createPortalFeedback', 'lpPortalFeedback', r('createPortalFeedback'), supaWrites.createPortalFeedback);
 // Stores a report's computed snapshot on its lpQuarterlyReport document.
-export const updateLPReportSnapshot = write('updateLPReportSnapshot', q('updateLPReportSnapshot'), supaWrites.updateLPReportSnapshot);
+export const updateLPReportSnapshot = write('updateLPReportSnapshot', 'lpQuarterlyReport', q('updateLPReportSnapshot'), supaWrites.updateLPReportSnapshot);
