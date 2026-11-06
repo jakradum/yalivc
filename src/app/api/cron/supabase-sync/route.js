@@ -9,7 +9,9 @@ export const maxDuration = 60;
 // and doubles as its keep-alive: a free Supabase project pauses after 7 days
 // without activity. Called twice a week by two cron-job.org jobs at odd times,
 // with its own secret (SUPABASE_SYNC_SECRET, not the shared CRON_SECRET). Only
-// changed documents and not-yet-copied PDFs are written, so a run is seconds.
+// changed documents and not-yet-copied PDFs/images are written, so a run is
+// seconds. If a sync is already running (e.g. from the Sanity webhook) this
+// run returns { ok: true, skipped: 'locked' } and does nothing.
 export async function GET(request) {
   const secret = process.env.SUPABASE_SYNC_SECRET;
   if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
