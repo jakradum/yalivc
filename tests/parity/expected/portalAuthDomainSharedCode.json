@@ -1,0 +1,323 @@
+[
+ {
+  "scenario": "main",
+  "input": [
+   "under_score.example"
+  ],
+  "output": {
+   "_id": "dp-9",
+   "inviteCode": "US",
+   "codeExpiry": "2099-01-01",
+   "maxUses": 2,
+   "usedCount": 2,
+   "redemptionLog": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "wayne.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ünïcode.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "mixed-case.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "hooli.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "umbrella.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "initech.example"
+  ],
+  "output": {
+   "_id": "dp-3",
+   "inviteCode": "INITECH-OLD",
+   "codeExpiry": "2020-01-01",
+   "maxUses": 5,
+   "usedCount": null,
+   "redemptionLog": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "globex.example"
+  ],
+  "output": {
+   "_id": "dp-2",
+   "inviteCode": "GLOBEX-2026",
+   "codeExpiry": "2099-01-01T00:00:00Z",
+   "maxUses": 10,
+   "usedCount": 3,
+   "redemptionLog": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "cyberdyne.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "stark.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.example"
+  ],
+  "output": {
+   "_id": "dp-0",
+   "inviteCode": "ACME-SHARED",
+   "codeExpiry": "2099-12-31",
+   "maxUses": 3,
+   "usedCount": 1,
+   "redemptionLog": [
+    {
+     "_key": "rl1",
+     "email": "someone@acme-lp.example",
+     "redeemedAt": "2026-05-01T00:00:00Z"
+    }
+   ]
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.co_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "unknown.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "under-score.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "underxscore.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.exampl_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.example,globex.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "(acme-lp.example)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "yali.vc"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "("
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ","
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "é"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "example.com)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "example.com)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   ""
+  ],
+  "output": null
+ }
+]

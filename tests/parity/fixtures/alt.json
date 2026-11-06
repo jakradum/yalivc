@@ -1,0 +1,272 @@
+[
+ {
+  "_id": "r-2",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-16a705e3",
+  "title": "Fake Fund Report FY27 Q1",
+  "slug": {
+   "_type": "slug",
+   "current": "fy27-q1"
+  },
+  "quarter": "Q1",
+  "fiscalYear": "FY27",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published"
+ },
+ {
+  "_id": "r-12",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-7c5a137f",
+  "title": "No quarter or fiscal year",
+  "slug": {
+   "_type": "slug",
+   "current": "no-period"
+  },
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published"
+ },
+ {
+  "_id": "r-1",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-360bf846",
+  "title": "Fake Fund Report FY26 Q2",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q2"
+  },
+  "quarter": "Q2",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "internal"
+ },
+ {
+  "_id": "lpFundSettings-b",
+  "_type": "lpFundSettings",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-02d906a2",
+  "fundName": "Alt Fund B",
+  "fundManagerName": "Fake Managers LLP",
+  "fundManagerDescriptor": "Investment Manager",
+  "tagline": "Deep tech, fake money.",
+  "firstCloseDate": "2022-01-15",
+  "finalCloseDate": "2023-06-30",
+  "fundSizeAtClose": 5000000000,
+  "targetFundSizeINR": 6000000000,
+  "targetFundSizeUSD": 75000000,
+  "investmentStrategy": [
+   {
+    "_type": "block",
+    "_key": "is1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "is1s1",
+      "text": "Strategy.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "focusSectors": [
+   {
+    "_type": "reference",
+    "_ref": "cat-robotics",
+    "_key": "fs1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "cat-gone",
+    "_key": "fs2"
+   },
+   {
+    "_type": "reference",
+    "_ref": "cat-bio",
+    "_key": "fs3"
+   }
+  ],
+  "investorRelationsEmail": "ir@fakefund.example",
+  "additionalContacts": [
+   {
+    "_key": "ac1",
+    "name": "Ops",
+    "email": "ops@fakefund.example"
+   }
+  ],
+  "website": "https://fakefund.example",
+  "logoLight": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-25d469b024d2217f73ab672bf260af2916dba044-500x100-png"
+   }
+  },
+  "logoDark": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-b8ace45792905548c49b4ff6659b13d091d7649e-64x64-png"
+   }
+  },
+  "quarterlyPerformance": [
+   {
+    "_key": "qp-FY9-Q4-1",
+    "quarter": "Q4",
+    "fiscalYear": "FY9",
+    "amountDrawnDown": 101,
+    "totalInvested": 81,
+    "fairMarketValue": 121,
+    "amountReturned": 1,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.1,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY10-Q1-2",
+    "quarter": "Q1",
+    "fiscalYear": "FY10",
+    "amountDrawnDown": 102,
+    "totalInvested": 82,
+    "fairMarketValue": 122,
+    "amountReturned": 2,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.2,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY26-Q4-3",
+    "quarter": "Q4",
+    "fiscalYear": "FY26",
+    "amountDrawnDown": 103,
+    "totalInvested": 83,
+    "fairMarketValue": 123,
+    "amountReturned": 3,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.30000000000000004,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q2-4",
+    "quarter": "Q2",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 104,
+    "totalInvested": 84,
+    "fairMarketValue": 124,
+    "amountReturned": 4,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.4,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q5-5",
+    "quarter": "Q5",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 105,
+    "totalInvested": 85,
+    "fairMarketValue": 125,
+    "amountReturned": 5,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.5,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q2-6",
+    "quarter": "Q2",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 106,
+    "totalInvested": 86,
+    "fairMarketValue": 126,
+    "amountReturned": 6,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.6000000000000001,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q1-7",
+    "quarter": "Q1",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 107,
+    "totalInvested": 87,
+    "fairMarketValue": 127,
+    "amountReturned": 7,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.7000000000000001,
+    "rvpi": 1.3
+   }
+  ]
+ },
+ {
+  "_id": "lpFundSettings-a",
+  "_type": "lpFundSettings",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-acfac6d7",
+  "fundName": "Alt Fund A",
+  "quarterlyPerformance": []
+ },
+ {
+  "_id": "file-63530ca51f07489c408b1047c7e025f6c414ab3b-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf",
+  "originalFilename": "Fund II Thesis.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "63530ca51f07489c408b1047c7e025f6c414ab3b",
+  "size": 1054,
+  "assetId": "63530ca51f07489c408b1047c7e025f6c414ab3b",
+  "path": "files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf"
+ },
+ {
+  "_id": "dataroomFundContent",
+  "_type": "dataroomFundContent",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-11eed723",
+  "fundILpReport": {
+   "_type": "reference",
+   "_ref": "r-gone"
+  },
+  "hiddenFunds": [],
+  "commonTeamMembers": [],
+  "fundIIThesisPresentation": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-63530ca51f07489c408b1047c7e025f6c414ab3b-pdf"
+   }
+  }
+ },
+ {
+  "_id": "c-solo",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-c6a25e18",
+  "name": "Solo Co",
+  "slug": {
+   "_type": "slug",
+   "current": "solo"
+  },
+  "investmentStatus": "active"
+ }
+]

@@ -1,0 +1,758 @@
+[
+ {
+  "scenario": "main",
+  "input": [
+   "fy25-q2"
+  ],
+  "output": {
+   "_id": "r-9",
+   "title": "Fake Fund Report FY25 Q2",
+   "subtitle": null,
+   "slug": "fy25-q2",
+   "quarter": "Q2",
+   "fiscalYear": "FY25",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy27-q1"
+  ],
+  "output": {
+   "_id": "r-8",
+   "title": "Fake Fund Report FY27 Q1",
+   "subtitle": null,
+   "slug": "fy27-q1",
+   "quarter": "Q1",
+   "fiscalYear": "FY27",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q2-reissue"
+  ],
+  "output": {
+   "_id": "r-7",
+   "title": "Fake Fund Report FY26 Q2",
+   "subtitle": null,
+   "slug": "fy26-q2-reissue",
+   "quarter": "Q2",
+   "fiscalYear": "FY26",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q1"
+  ],
+  "output": {
+   "_id": "r-6",
+   "title": "Fake Fund Report FY26 Q1",
+   "subtitle": null,
+   "slug": "fy26-q1",
+   "quarter": "Q1",
+   "fiscalYear": "FY26",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy25-q3"
+  ],
+  "output": {
+   "_id": "r-5",
+   "title": "Fake Fund Report FY25 Q3",
+   "subtitle": null,
+   "slug": "fy25-q3",
+   "quarter": "Q3",
+   "fiscalYear": "FY25",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy25-q4"
+  ],
+  "output": {
+   "_id": "r-4",
+   "title": "Fake Fund Report FY25 Q4",
+   "subtitle": null,
+   "slug": "fy25-q4",
+   "quarter": "Q4",
+   "fiscalYear": "FY25",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": {
+    "_id": "tm-2",
+    "name": "Zoë Ångel",
+    "slug": {
+     "_type": "slug",
+     "current": "zoe-angel"
+    },
+    "role": "Partner",
+    "profileType": "individual",
+    "photo": "https://cdn.sanity.io/images/nt0wmty3/production/8251487d1293d32c78c870dfe519c8f661f5dd8a-600x900.webp"
+   },
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q4"
+  ],
+  "output": {
+   "_id": "r-3",
+   "title": "Fake Fund Report FY26 Q4",
+   "subtitle": null,
+   "slug": "fy26-q4",
+   "quarter": "Q4",
+   "fiscalYear": "FY26",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q3"
+  ],
+  "output": {
+   "_id": "r-0dup",
+   "title": "Duplicate slug, lower _id",
+   "subtitle": null,
+   "slug": "fy26-q3",
+   "quarter": "Q1",
+   "fiscalYear": "FY24",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy9-q1"
+  ],
+  "output": {
+   "_id": "r-10",
+   "title": "Fake Fund Report FY9 Q1",
+   "subtitle": null,
+   "slug": "fy9-q1",
+   "quarter": "Q1",
+   "fiscalYear": "FY9",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q2"
+  ],
+  "output": {
+   "_id": "r-1",
+   "title": "Fake Fund Report FY26 Q2",
+   "subtitle": "Half-year (fake)",
+   "slug": "fy26-q2",
+   "quarter": "Q2",
+   "fiscalYear": "FY26",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": "Dear Partners,",
+   "coverNoteIntro": [
+    {
+     "_type": "block",
+     "_key": "ci1",
+     "style": "normal",
+     "markDefs": [],
+     "children": [
+      {
+       "_type": "span",
+       "_key": "ci1s1",
+       "text": "Intro.",
+       "marks": []
+      }
+     ]
+    }
+   ],
+   "investmentActivityNotes": [
+    {
+     "_type": "block",
+     "_key": "ia1",
+     "style": "normal",
+     "markDefs": [
+      {
+       "_type": "link",
+       "_key": "ia1l",
+       "href": "https://example.com/activity"
+      }
+     ],
+     "children": [
+      {
+       "_type": "span",
+       "_key": "ia1s1",
+       "text": "Activity. ",
+       "marks": []
+      },
+      {
+       "_type": "span",
+       "_key": "ia1s2",
+       "text": "see link",
+       "marks": [
+        "ia1l"
+       ]
+      }
+     ]
+    }
+   ],
+   "portfolioHighlightsNotes": [],
+   "ecosystemNotes": [
+    {
+     "_type": "block",
+     "_key": "ec1",
+     "style": "normal",
+     "markDefs": [],
+     "children": [
+      {
+       "_type": "span",
+       "_key": "ec1s1",
+       "text": "Eco.",
+       "marks": []
+      }
+     ]
+    }
+   ],
+   "closingNotes": [
+    {
+     "_type": "block",
+     "_key": "cl1",
+     "style": "normal",
+     "markDefs": [],
+     "children": [
+      {
+       "_type": "span",
+       "_key": "cl1s1",
+       "text": "Closing.",
+       "marks": []
+      }
+     ]
+    }
+   ],
+   "signatory": {
+    "_id": "tm-1",
+    "name": "Jane Doe",
+    "slug": {
+     "_type": "slug",
+     "current": "jane-doe"
+    },
+    "role": "Managing Partner",
+    "profileType": "individual",
+    "photo": "https://cdn.sanity.io/images/nt0wmty3/production/87f116c90f209300944764ce94ed47597fd6755c-800x800.jpg"
+   },
+   "pipelineDeals": [
+    {
+     "_id": "pd-1",
+     "companyName": "Initrode Labs",
+     "sector": "Robotics",
+     "proposedAmountINR": 50000000,
+     "stage": "diligence",
+     "description": "Fake pipeline deal one."
+    },
+    {
+     "_id": "pd-2",
+     "companyName": "Quantum Quail",
+     "sector": "Quantum",
+     "proposedAmountINR": null,
+     "stage": "term-sheet",
+     "description": null
+    },
+    null,
+    {
+     "_id": "pd-3",
+     "companyName": "Both Sector Co",
+     "sector": "Biotech & Health",
+     "proposedAmountINR": 0,
+     "stage": "screening",
+     "description": ""
+    }
+   ],
+   "pipelineNotes": [
+    {
+     "_type": "block",
+     "_key": "pn1",
+     "style": "normal",
+     "markDefs": [],
+     "children": [
+      {
+       "_type": "span",
+       "_key": "pn1s1",
+       "text": "Pipeline note.",
+       "marks": []
+      }
+     ]
+    }
+   ],
+   "mediaFromNews": [
+    {
+     "_id": "news-1",
+     "headlineEdited": "Acme Robotics raises a fake round",
+     "date": "2026-08-15",
+     "url": "https://news.example/acme",
+     "publicationName": "The Daily Planet"
+    },
+    null,
+    {
+     "_id": "news-2",
+     "headlineEdited": "Beta Biotech exits (fictional)",
+     "date": "2026-09-01",
+     "url": "https://news.example/beta",
+     "publicationName": null
+    }
+   ],
+   "mediaNotes": "Media note.",
+   "portfolioSummaryFootnotes": [
+    {
+     "_key": "psf1",
+     "text": "Summary footnote."
+    }
+   ],
+   "snapshotData": "{\"fake\":true}",
+   "snapshotTimestamp": "2026-10-01T10:00:00Z"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "FY25-Q2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " fy25-q2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy25-q2 "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "FY27-Q1"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " fy27-q1"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy27-q1 "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "unknown-slug"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme_robotics"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-robotic_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme*"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-robotics,beta-biotech"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "(acme-robotics)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "xi-status"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ångström-analytics"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26_q2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "fy26-q%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "("
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ","
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "é"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "unknown-slug"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "acme_robotics"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "acme-robotic_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "fy27-q1"
+  ],
+  "output": {
+   "_id": "r-2",
+   "title": "Fake Fund Report FY27 Q1",
+   "subtitle": null,
+   "slug": "fy27-q1",
+   "quarter": "Q1",
+   "fiscalYear": "FY27",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "no-period"
+  ],
+  "output": {
+   "_id": "r-12",
+   "title": "No quarter or fiscal year",
+   "subtitle": null,
+   "slug": "no-period",
+   "quarter": null,
+   "fiscalYear": null,
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "fy26-q2"
+  ],
+  "output": {
+   "_id": "r-1",
+   "title": "Fake Fund Report FY26 Q2",
+   "subtitle": null,
+   "slug": "fy26-q2",
+   "quarter": "Q2",
+   "fiscalYear": "FY26",
+   "reportingDate": "2026-09-30",
+   "publishDate": "2026-10-15",
+   "coverNoteGreeting": null,
+   "coverNoteIntro": null,
+   "investmentActivityNotes": null,
+   "portfolioHighlightsNotes": null,
+   "ecosystemNotes": null,
+   "closingNotes": null,
+   "signatory": null,
+   "pipelineDeals": null,
+   "pipelineNotes": null,
+   "mediaFromNews": null,
+   "mediaNotes": null,
+   "portfolioSummaryFootnotes": null,
+   "snapshotData": null,
+   "snapshotTimestamp": null
+  }
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   ""
+  ],
+  "output": null
+ }
+]

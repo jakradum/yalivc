@@ -1,0 +1,856 @@
+[
+ {
+  "scenario": "main",
+  "input": [
+   "expired9@example.com"
+  ],
+  "output": {
+   "_id": "pu-9",
+   "email": "expired9@example.com",
+   "name": "Fake pu-9",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "invited8@example.com"
+  ],
+  "output": {
+   "_id": "pu-8",
+   "email": "invited8@example.com",
+   "name": "Fake pu-8",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "legacy7@example.com"
+  ],
+  "output": {
+   "_id": "pu-7",
+   "email": "legacy7@example.com",
+   "name": "Fake pu-7",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": false
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "legacy6@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "dronly5@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "blocked4@example.com"
+  ],
+  "output": {
+   "_id": "pu-0",
+   "email": "blocked4@example.com",
+   "name": "Fake pu-0",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "legacy3@example.com"
+  ],
+  "output": {
+   "_id": "pu-3",
+   "email": "legacy3@example.com",
+   "name": "Fake pu-3",
+   "isGiftCityLP": null,
+   "lpPortalAccess": null,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp2@example.com"
+  ],
+  "output": {
+   "_id": "pu-2",
+   "email": "LP2@Example.com",
+   "name": "Fake pu-2",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": false
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp1@example.com"
+  ],
+  "output": {
+   "_id": "pu-1",
+   "email": "lp1@example.com",
+   "name": "Fake pu-1",
+   "isGiftCityLP": false,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "nullflag@example.com"
+  ],
+  "output": {
+   "_id": "pu-22",
+   "email": "nullflag@example.com",
+   "name": "Fake pu-22",
+   "isGiftCityLP": null,
+   "lpPortalAccess": null,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "stringflag@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "okuser@acme-lp.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LP2@Example.com"
+  ],
+  "output": {
+   "_id": "pu-2",
+   "email": "LP2@Example.com",
+   "name": "Fake pu-2",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": false
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "domainuser@acme-lp.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp18@example.com"
+  ],
+  "output": {
+   "_id": "pu-18",
+   "email": "lp18@example.com",
+   "name": "Fake pu-18",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "trailing17@example.com "
+  ],
+  "output": {
+   "_id": "pu-17",
+   "email": "trailing17@example.com ",
+   "name": "Fake pu-17",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "percent%sign@example.com"
+  ],
+  "output": {
+   "_id": "pu-16",
+   "email": "percent%sign@example.com",
+   "name": "Fake pu-16",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "under_score@example.com"
+  ],
+  "output": {
+   "_id": "pu-15",
+   "email": "under_score@example.com",
+   "name": "Fake pu-15",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp+tag@example.com"
+  ],
+  "output": {
+   "_id": "pu-14",
+   "email": "lp+tag@example.com",
+   "name": "Fake pu-14",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ΟΔΟΣ@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "İLKER@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "Åsa.Öberg@example.com"
+  ],
+  "output": {
+   "_id": "pu-10",
+   "email": "Åsa.Öberg@example.com",
+   "name": "Fake pu-10",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "EXPIRED9@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-9",
+   "email": "expired9@example.com",
+   "name": "Fake pu-9",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "INVITED8@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-8",
+   "email": "invited8@example.com",
+   "name": "Fake pu-8",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LEGACY7@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-7",
+   "email": "legacy7@example.com",
+   "name": "Fake pu-7",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": false
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LEGACY6@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "DRONLY5@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "BLOCKED4@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-0",
+   "email": "blocked4@example.com",
+   "name": "Fake pu-0",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LEGACY3@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-3",
+   "email": "legacy3@example.com",
+   "name": "Fake pu-3",
+   "isGiftCityLP": null,
+   "lpPortalAccess": null,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LP2@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-2",
+   "email": "LP2@Example.com",
+   "name": "Fake pu-2",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": false
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LP1@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-1",
+   "email": "lp1@example.com",
+   "name": "Fake pu-1",
+   "isGiftCityLP": false,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "NULLFLAG@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-22",
+   "email": "nullflag@example.com",
+   "name": "Fake pu-22",
+   "isGiftCityLP": null,
+   "lpPortalAccess": null,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "STRINGFLAG@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "OKUSER@ACME-LP.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "DOMAINUSER@ACME-LP.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LP18@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-18",
+   "email": "lp18@example.com",
+   "name": "Fake pu-18",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "TRAILING17@EXAMPLE.COM "
+  ],
+  "output": {
+   "_id": "pu-17",
+   "email": "trailing17@example.com ",
+   "name": "Fake pu-17",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "PERCENT%SIGN@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-16",
+   "email": "percent%sign@example.com",
+   "name": "Fake pu-16",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "UNDER_SCORE@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-15",
+   "email": "under_score@example.com",
+   "name": "Fake pu-15",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "LP+TAG@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-14",
+   "email": "lp+tag@example.com",
+   "name": "Fake pu-14",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ΟΔΟΣ@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "İLKER@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ÅSA.ÖBERG@EXAMPLE.COM"
+  ],
+  "output": {
+   "_id": "pu-10",
+   "email": "Åsa.Öberg@example.com",
+   "name": "Fake pu-10",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " expired9@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "expired9@example.com "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "\texpired9@example.com\n"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " invited8@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "invited8@example.com "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "\tinvited8@example.com\n"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " legacy7@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "legacy7@example.com "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "\tlegacy7@example.com\n"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "nobody@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp_@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp%@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp*@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp?@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp1@example.com,lp2@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "(lp1@example.com)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp1@example.co_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "under-score@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "underXscore@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "percentXsign@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "trailing17@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ilker@example.com"
+  ],
+  "output": {
+   "_id": "pu-11",
+   "email": "İLKER@example.com",
+   "name": "Fake pu-11",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "i̇lker@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ılker@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "οδοσ@example.com"
+  ],
+  "output": {
+   "_id": "pu-12",
+   "email": "ΟΔΟΣ@example.com",
+   "name": "Fake pu-12",
+   "isGiftCityLP": null,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": null
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "οδος@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "åsa.öberg@example.com"
+  ],
+  "output": {
+   "_id": "pu-10",
+   "email": "Åsa.Öberg@example.com",
+   "name": "Fake pu-10",
+   "isGiftCityLP": true,
+   "lpPortalAccess": true,
+   "investorDataRoomAccess": true
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "lp tag@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "DomainUser@Acme-LP.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "("
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ","
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "é"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "nobody@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "LP1@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "lp_@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "nobody@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "LP1@EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "lp_@example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   ""
+  ],
+  "output": null
+ }
+]

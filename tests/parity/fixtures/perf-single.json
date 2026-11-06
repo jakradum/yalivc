@@ -1,0 +1,17 @@
+[
+ {
+  "_id": "lpFundSettings",
+  "_type": "lpFundSettings",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-02d906a2",
+  "fundName": "Single Fund",
+  "quarterlyPerformance": [
+   {
+    "_key": "only",
+    "quarter": "Q9",
+    "moic": 2
+   }
+  ]
+ }
+]

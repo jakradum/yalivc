@@ -1,0 +1,4587 @@
+[
+ {
+  "_id": "tr-8",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a3b6123b",
+  "investeeName": "Investee tr-8",
+  "investmentOrg": "Org tr-8",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-2"
+  },
+  "year": 2019
+ },
+ {
+  "_id": "tr-7",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-04094701",
+  "investeeName": "Investee tr-7",
+  "investmentOrg": "Org tr-7",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-1"
+  }
+ },
+ {
+  "_id": "tr-6",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-0981fcc1",
+  "investeeName": "Investee tr-6",
+  "investmentOrg": "Org tr-6",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-3"
+  },
+  "year": 2010
+ },
+ {
+  "_id": "tr-5",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-ec639e3e",
+  "investeeName": "Investee tr-5",
+  "investmentOrg": "Org tr-5",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "year": 2018
+ },
+ {
+  "_id": "tr-4",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-30cb0f68",
+  "investeeName": "Investee tr-4",
+  "investmentOrg": "Org tr-4",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-gone"
+  },
+  "year": 2020
+ },
+ {
+  "_id": "tr-3",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-11016ed3",
+  "investeeName": "Investee tr-3",
+  "investmentOrg": "Org tr-3",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-2"
+  },
+  "year": 2019
+ },
+ {
+  "_id": "tr-2",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-09b5f5df",
+  "investeeName": "Investee tr-2",
+  "investmentOrg": "Org tr-2",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "exited",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-1"
+  },
+  "year": 2019,
+  "exitYear": 2023,
+  "exitAmountOrValuation": {
+   "currency": "USD",
+   "value": 5000000
+  }
+ },
+ {
+  "_id": "tr-1",
+  "_type": "trackRecord",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-10d64830",
+  "investeeName": "Investee tr-1",
+  "investmentOrg": "Org tr-1",
+  "sector": "Fake sector",
+  "amountInvested": {
+   "currency": "USD",
+   "value": 1000000
+  },
+  "status": "active",
+  "irr": "20%",
+  "investor": {
+   "_type": "reference",
+   "_ref": "tm-1"
+  },
+  "year": 2015
+ },
+ {
+  "_id": "tm-3",
+  "_type": "teamMember",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f8898d8c",
+  "name": "alex lower",
+  "slug": {
+   "_type": "slug",
+   "current": "alex-lower"
+  },
+  "role": "Associate",
+  "profileType": "individual"
+ },
+ {
+  "_id": "tm-2",
+  "_type": "teamMember",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-4615b1da",
+  "name": "Zoë Ångel",
+  "slug": {
+   "_type": "slug",
+   "current": "zoe-angel"
+  },
+  "role": "Partner",
+  "profileType": "individual",
+  "photo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-8251487d1293d32c78c870dfe519c8f661f5dd8a-600x900-webp"
+   }
+  }
+ },
+ {
+  "_id": "tm-1",
+  "_type": "teamMember",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-db92a574",
+  "name": "Jane Doe",
+  "slug": {
+   "_type": "slug",
+   "current": "jane-doe"
+  },
+  "role": "Managing Partner",
+  "profileType": "individual",
+  "photo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-87f116c90f209300944764ce94ed47597fd6755c-800x800-jpg"
+   }
+  },
+  "order": 1
+ },
+ {
+  "_id": "r-9",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-2d2b419b",
+  "title": "Fake Fund Report FY25 Q2",
+  "slug": {
+   "_type": "slug",
+   "current": "fy25-q2"
+  },
+  "quarter": "Q2",
+  "fiscalYear": "FY25",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published",
+  "isPublished": false
+ },
+ {
+  "_id": "r-8",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a1f8e480",
+  "title": "Fake Fund Report FY27 Q1",
+  "slug": {
+   "_type": "slug",
+   "current": "fy27-q1"
+  },
+  "quarter": "Q1",
+  "fiscalYear": "FY27",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "Published",
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-99c2109b053a5f876072483023fccd18a3e7509e-pdf"
+   }
+  }
+ },
+ {
+  "_id": "r-7",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-ccd0a985",
+  "title": "Fake Fund Report FY26 Q2",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q2-reissue"
+  },
+  "quarter": "Q2",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published",
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-c9e240376ce5455fb83e63ad5afb2988f46b68e9-pdf"
+   }
+  },
+  "fundFinancialsPdf": {
+   "_type": "file"
+  }
+ },
+ {
+  "_id": "r-6",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a20014fa",
+  "title": "Fake Fund Report FY26 Q1",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q1"
+  },
+  "quarter": "Q1",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15"
+ },
+ {
+  "_id": "r-5",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-cfd22e2a",
+  "title": "Fake Fund Report FY25 Q3",
+  "slug": {
+   "_type": "slug",
+   "current": "fy25-q3"
+  },
+  "quarter": "Q3",
+  "fiscalYear": "FY25",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "isPublished": false
+ },
+ {
+  "_id": "r-4",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-05f95fad",
+  "title": "Fake Fund Report FY25 Q4",
+  "slug": {
+   "_type": "slug",
+   "current": "fy25-q4"
+  },
+  "quarter": "Q4",
+  "fiscalYear": "FY25",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "isPublished": true,
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-b2e8be112bad7d746e1c8936a6578ab5a875081b-pdf"
+   }
+  },
+  "signatory": {
+   "_type": "reference",
+   "_ref": "tm-2"
+  }
+ },
+ {
+  "_id": "r-3",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a5e23ed1",
+  "title": "Fake Fund Report FY26 Q4",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q4"
+  },
+  "quarter": "Q4",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "draft",
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-99c2109b053a5f876072483023fccd18a3e7509e-pdf"
+   }
+  }
+ },
+ {
+  "_id": "r-2",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-16a705e3",
+  "title": "Fake Fund Report FY26 Q3",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q3"
+  },
+  "quarter": "Q3",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "internal",
+  "signatory": {
+   "_type": "reference",
+   "_ref": "tm-gone"
+  },
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-127e15786526ae513ad23e3c3091baa9905c9b9c-pdf"
+   }
+  }
+ },
+ {
+  "_id": "r-11",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-61969f6d",
+  "title": "No slug",
+  "quarter": "Q2",
+  "fiscalYear": "FY24",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "internal"
+ },
+ {
+  "_id": "r-10",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-7caef582",
+  "title": "Fake Fund Report FY9 Q1",
+  "slug": {
+   "_type": "slug",
+   "current": "fy9-q1"
+  },
+  "quarter": "Q1",
+  "fiscalYear": "FY9",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "internal",
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-37539d87b5c37a118e908a315587ec5d9b970810-pdf"
+   }
+  }
+ },
+ {
+  "_id": "r-1",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-360bf846",
+  "title": "Fake Fund Report FY26 Q2",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q2"
+  },
+  "quarter": "Q2",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published",
+  "subtitle": "Half-year (fake)",
+  "coverNoteGreeting": "Dear Partners,",
+  "coverNoteIntro": [
+   {
+    "_type": "block",
+    "_key": "ci1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "ci1s1",
+      "text": "Intro.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "investmentActivityNotes": [
+   {
+    "_type": "block",
+    "_key": "ia1",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_type": "link",
+      "_key": "ia1l",
+      "href": "https://example.com/activity"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "ia1s1",
+      "text": "Activity. ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "ia1s2",
+      "text": "see link",
+      "marks": [
+       "ia1l"
+      ]
+     }
+    ]
+   }
+  ],
+  "portfolioHighlightsNotes": [],
+  "ecosystemNotes": [
+   {
+    "_type": "block",
+    "_key": "ec1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "ec1s1",
+      "text": "Eco.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "closingNotes": [
+   {
+    "_type": "block",
+    "_key": "cl1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "cl1s1",
+      "text": "Closing.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "signatory": {
+   "_type": "reference",
+   "_ref": "tm-1"
+  },
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-99c2109b053a5f876072483023fccd18a3e7509e-pdf"
+   }
+  },
+  "fundFinancialsPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-3c66e29f5dff3f14b57cea54e76cf4422f03022f-pdf"
+   }
+  },
+  "giftCityFundFinancialsPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-95ce8d4363b55258dbaa0bccd714d346241aeb16-pdf"
+   }
+  },
+  "pipelineDeals": [
+   {
+    "_type": "reference",
+    "_ref": "pd-1",
+    "_key": "p1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "pd-2",
+    "_key": "p2"
+   },
+   {
+    "_type": "reference",
+    "_ref": "pd-gone",
+    "_key": "p3"
+   },
+   {
+    "_type": "reference",
+    "_ref": "pd-3",
+    "_key": "p4"
+   }
+  ],
+  "pipelineNotes": [
+   {
+    "_type": "block",
+    "_key": "pn1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "pn1s1",
+      "text": "Pipeline note.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "mediaFromNews": [
+   {
+    "_type": "reference",
+    "_ref": "news-1",
+    "_key": "m1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "news-gone",
+    "_key": "m2"
+   },
+   {
+    "_type": "reference",
+    "_ref": "news-2",
+    "_key": "m3"
+   }
+  ],
+  "mediaNotes": "Media note.",
+  "portfolioSummaryFootnotes": [
+   {
+    "_key": "psf1",
+    "text": "Summary footnote."
+   }
+  ],
+  "snapshotData": "{\"fake\":true}",
+  "snapshotTimestamp": "2026-10-01T10:00:00Z"
+ },
+ {
+  "_id": "r-0dup",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-8e5090ec",
+  "title": "Duplicate slug, lower _id",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q3"
+  },
+  "quarter": "Q1",
+  "fiscalYear": "FY24",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "published"
+ },
+ {
+  "_id": "pub-1",
+  "_type": "publication",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a1fa2a71",
+  "name": "The Daily Planet"
+ },
+ {
+  "_id": "pu-9",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-7c3a4941",
+  "email": "expired9@example.com",
+  "name": "Fake pu-9",
+  "lpPortalAccess": true,
+  "inviteCode": "FAKE-9999",
+  "inviteCodeExpiry": "2020-01-01T00:00:00.000Z"
+ },
+ {
+  "_id": "pu-8",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-3c8e83ad",
+  "email": "invited8@example.com",
+  "name": "Fake pu-8",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true,
+  "inviteCode": "FAKE-1234",
+  "inviteCodeExpiry": "2099-01-01T00:00:00.000Z"
+ },
+ {
+  "_id": "pu-7",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-654d2510",
+  "email": "legacy7@example.com",
+  "name": "Fake pu-7",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": false,
+  "dataRoomAccess": true
+ },
+ {
+  "_id": "pu-6",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-cc5600bf",
+  "email": "legacy6@example.com",
+  "name": "Fake pu-6",
+  "isActive": false
+ },
+ {
+  "_id": "pu-5",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-23cd0b74",
+  "email": "dronly5@example.com",
+  "name": "Fake pu-5",
+  "lpPortalAccess": false,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pu-4",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-883a33df",
+  "email": "blocked4@example.com",
+  "name": "Fake pu-4",
+  "noAccess": true,
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pu-3",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-2138a74b",
+  "email": "legacy3@example.com",
+  "name": "Fake pu-3",
+  "isActive": true,
+  "dataRoomAccess": true
+ },
+ {
+  "_id": "pu-2b",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-9aa5dd6e",
+  "email": "lp2@example.com",
+  "name": "Fake pu-2b",
+  "lpPortalAccess": true,
+  "isGiftCityLP": false,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pu-23",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-50ffaf0d",
+  "email": "lp1@example.com",
+  "name": "Fake pu-23",
+  "lpPortalAccess": true,
+  "noAccess": true
+ },
+ {
+  "_id": "pu-22",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-c766024c",
+  "email": "nullflag@example.com",
+  "name": "Fake pu-22",
+  "lpPortalAccess": null,
+  "isActive": true,
+  "investorDataRoomAccess": null,
+  "dataRoomAccess": true
+ },
+ {
+  "_id": "pu-21",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-5c38b03d",
+  "email": "stringflag@example.com",
+  "name": "Fake pu-21",
+  "lpPortalAccess": "true",
+  "isActive": true
+ },
+ {
+  "_id": "pu-20",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-024ceaa9",
+  "email": "okuser@acme-lp.example",
+  "name": "Fake pu-20",
+  "lpPortalAccess": false
+ },
+ {
+  "_id": "pu-2",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-e07de5d9",
+  "email": "LP2@Example.com",
+  "name": "Fake pu-2",
+  "lpPortalAccess": true,
+  "isGiftCityLP": true,
+  "investorDataRoomAccess": false
+ },
+ {
+  "_id": "pu-19",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-cf06c90e",
+  "email": "domainuser@acme-lp.example",
+  "name": "Fake pu-19",
+  "noAccess": true
+ },
+ {
+  "_id": "pu-18",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a0ac7117",
+  "email": "lp18@example.com",
+  "name": "Fake pu-18",
+  "lpPortalAccess": true,
+  "noAccess": false
+ },
+ {
+  "_id": "pu-17",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-c1c5b792",
+  "email": "trailing17@example.com ",
+  "name": "Fake pu-17",
+  "lpPortalAccess": true
+ },
+ {
+  "_id": "pu-16",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-101ec665",
+  "email": "percent%sign@example.com",
+  "name": "Fake pu-16",
+  "lpPortalAccess": true
+ },
+ {
+  "_id": "pu-15",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a0c73bb8",
+  "email": "under_score@example.com",
+  "name": "Fake pu-15",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pu-14",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-6747d49c",
+  "email": "lp+tag@example.com",
+  "name": "Fake pu-14",
+  "lpPortalAccess": true,
+  "dataRoomAccess": true
+ },
+ {
+  "_id": "pu-13",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-29551706",
+  "name": "Fake pu-13",
+  "lpPortalAccess": true
+ },
+ {
+  "_id": "pu-12",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-fb0b7db6",
+  "email": "ΟΔΟΣ@example.com",
+  "name": "Fake pu-12",
+  "lpPortalAccess": true
+ },
+ {
+  "_id": "pu-11",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f15af704",
+  "email": "İLKER@example.com",
+  "name": "Fake pu-11",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pu-10",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-fd713cd1",
+  "email": "Åsa.Öberg@example.com",
+  "name": "Fake pu-10",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true,
+  "isGiftCityLP": true
+ },
+ {
+  "_id": "pu-1",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-6ae68ad5",
+  "email": "lp1@example.com",
+  "name": "Fake pu-1",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true,
+  "isGiftCityLP": false,
+  "noAccess": false,
+  "source": "portal"
+ },
+ {
+  "_id": "pu-0",
+  "_type": "portalUser",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-d4f1822a",
+  "email": "blocked4@example.com",
+  "name": "Fake pu-0",
+  "lpPortalAccess": true,
+  "investorDataRoomAccess": true
+ },
+ {
+  "_id": "pd-3",
+  "_type": "lpPipelineDeal",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f0308f68",
+  "companyName": "Both Sector Co",
+  "sector": {
+   "_type": "reference",
+   "_ref": "cat-bio"
+  },
+  "sectorOverride": "Ignored Override",
+  "proposedAmountINR": 0,
+  "stage": "screening",
+  "description": ""
+ },
+ {
+  "_id": "pd-2",
+  "_type": "lpPipelineDeal",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-5806d93d",
+  "companyName": "Quantum Quail",
+  "sectorOverride": "Quantum",
+  "stage": "term-sheet"
+ },
+ {
+  "_id": "pd-1",
+  "_type": "lpPipelineDeal",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-71d47842",
+  "companyName": "Initrode Labs",
+  "sector": {
+   "_type": "reference",
+   "_ref": "cat-robotics"
+  },
+  "proposedAmountINR": 50000000,
+  "stage": "diligence",
+  "description": "Fake pipeline deal one."
+ },
+ {
+  "_id": "news-2",
+  "_type": "news",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-1ec9aaa5",
+  "headlineEdited": "Beta Biotech exits (fictional)",
+  "date": "2026-09-01",
+  "url": "https://news.example/beta",
+  "publication": {
+   "_type": "reference",
+   "_ref": "pub-gone"
+  }
+ },
+ {
+  "_id": "news-1",
+  "_type": "news",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-5d1e5edc",
+  "headlineEdited": "Acme Robotics raises a fake round",
+  "date": "2026-08-15",
+  "url": "https://news.example/acme",
+  "publication": {
+   "_type": "reference",
+   "_ref": "pub-1"
+  },
+  "isVideo": false
+ },
+ {
+  "_id": "lpFundSettings",
+  "_type": "lpFundSettings",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-02d906a2",
+  "fundName": "Fake Fund I",
+  "fundManagerName": "Fake Managers LLP",
+  "fundManagerDescriptor": "Investment Manager",
+  "tagline": "Deep tech, fake money.",
+  "firstCloseDate": "2022-01-15",
+  "finalCloseDate": "2023-06-30",
+  "fundSizeAtClose": 5000000000,
+  "targetFundSizeINR": 6000000000,
+  "targetFundSizeUSD": 75000000,
+  "investmentStrategy": [
+   {
+    "_type": "block",
+    "_key": "is1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "is1s1",
+      "text": "Strategy.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "focusSectors": [
+   {
+    "_type": "reference",
+    "_ref": "cat-robotics",
+    "_key": "fs1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "cat-gone",
+    "_key": "fs2"
+   },
+   {
+    "_type": "reference",
+    "_ref": "cat-bio",
+    "_key": "fs3"
+   }
+  ],
+  "investorRelationsEmail": "ir@fakefund.example",
+  "additionalContacts": [
+   {
+    "_key": "ac1",
+    "name": "Ops",
+    "email": "ops@fakefund.example"
+   }
+  ],
+  "website": "https://fakefund.example",
+  "logoLight": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-25d469b024d2217f73ab672bf260af2916dba044-500x100-png"
+   }
+  },
+  "logoDark": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-b8ace45792905548c49b4ff6659b13d091d7649e-64x64-png"
+   }
+  },
+  "quarterlyPerformance": [
+   {
+    "_key": "qp-FY9-Q4-1",
+    "quarter": "Q4",
+    "fiscalYear": "FY9",
+    "amountDrawnDown": 101,
+    "totalInvested": 81,
+    "fairMarketValue": 121,
+    "amountReturned": 1,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.1,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY10-Q1-2",
+    "quarter": "Q1",
+    "fiscalYear": "FY10",
+    "amountDrawnDown": 102,
+    "totalInvested": 82,
+    "fairMarketValue": 122,
+    "amountReturned": 2,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.2,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY26-Q4-3",
+    "quarter": "Q4",
+    "fiscalYear": "FY26",
+    "amountDrawnDown": 103,
+    "totalInvested": 83,
+    "fairMarketValue": 123,
+    "amountReturned": 3,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.30000000000000004,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q2-4",
+    "quarter": "Q2",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 104,
+    "totalInvested": 84,
+    "fairMarketValue": 124,
+    "amountReturned": 4,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.4,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q5-5",
+    "quarter": "Q5",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 105,
+    "totalInvested": 85,
+    "fairMarketValue": 125,
+    "amountReturned": 5,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.5,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q2-6",
+    "quarter": "Q2",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 106,
+    "totalInvested": 86,
+    "fairMarketValue": 126,
+    "amountReturned": 6,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.6000000000000001,
+    "rvpi": 1.3
+   },
+   {
+    "_key": "qp-FY27-Q1-7",
+    "quarter": "Q1",
+    "fiscalYear": "FY27",
+    "amountDrawnDown": 107,
+    "totalInvested": 87,
+    "fairMarketValue": 127,
+    "amountReturned": 7,
+    "moic": 1.5,
+    "tvpi": 1.4,
+    "dpi": 0.7000000000000001,
+    "rvpi": 1.3
+   }
+  ]
+ },
+ {
+  "_id": "inv-3",
+  "_type": "investor",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-5b2e212f",
+  "name": "Globex Capital",
+  "type": "family-office",
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-b01af4afb51790400a51b62a854e8549a04d70fe-64x64-png"
+   }
+  }
+ },
+ {
+  "_id": "inv-2",
+  "_type": "investor",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-1738d31f",
+  "name": "Ünicorn Angels",
+  "type": "angel"
+ },
+ {
+  "_id": "inv-1",
+  "_type": "investor",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-b91df4c2",
+  "name": "Northwind Ventures",
+  "slug": {
+   "_type": "slug",
+   "current": "northwind"
+  },
+  "type": "vc",
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-33231b1c0e41b513db734ec3c46be946e4539fc7-128x128-png"
+   }
+  }
+ },
+ {
+  "_id": "image-abd532f199c2b1d0656f21195bfdb59b1cced990-200x80-svg",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/abd532f199c2b1d0656f21195bfdb59b1cced990-200x80.svg",
+  "originalFilename": "zeta-logo.svg",
+  "extension": "svg",
+  "mimeType": "image/svg",
+  "sha1hash": "abd532f199c2b1d0656f21195bfdb59b1cced990",
+  "assetId": "abd532f199c2b1d0656f21195bfdb59b1cced990",
+  "metadata": {
+   "dimensions": {
+    "width": 200,
+    "height": 80,
+    "aspectRatio": 2.5
+   }
+  }
+ },
+ {
+  "_id": "image-a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5-300x300-jpg",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5-300x300.jpg",
+  "originalFilename": "beta-logo.jpg",
+  "extension": "jpg",
+  "mimeType": "image/jpeg",
+  "sha1hash": "a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5",
+  "assetId": "a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5",
+  "metadata": {
+   "dimensions": {
+    "width": 300,
+    "height": 300,
+    "aspectRatio": 1
+   }
+  }
+ },
+ {
+  "_id": "image-a0fe7de4e6fa683f33fa43c9c60ed61f83623b96-640x160-png",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/a0fe7de4e6fa683f33fa43c9c60ed61f83623b96-640x160.png",
+  "originalFilename": "acme-typeface.png",
+  "extension": "png",
+  "mimeType": "image/png",
+  "sha1hash": "a0fe7de4e6fa683f33fa43c9c60ed61f83623b96",
+  "assetId": "a0fe7de4e6fa683f33fa43c9c60ed61f83623b96",
+  "metadata": {
+   "dimensions": {
+    "width": 640,
+    "height": 160,
+    "aspectRatio": 4
+   }
+  }
+ },
+ {
+  "_id": "image-87f116c90f209300944764ce94ed47597fd6755c-800x800-jpg",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/87f116c90f209300944764ce94ed47597fd6755c-800x800.jpg",
+  "originalFilename": "jane-photo.jpg",
+  "extension": "jpg",
+  "mimeType": "image/jpeg",
+  "sha1hash": "87f116c90f209300944764ce94ed47597fd6755c",
+  "assetId": "87f116c90f209300944764ce94ed47597fd6755c",
+  "metadata": {
+   "dimensions": {
+    "width": 800,
+    "height": 800,
+    "aspectRatio": 1
+   }
+  }
+ },
+ {
+  "_id": "image-8251487d1293d32c78c870dfe519c8f661f5dd8a-600x900-webp",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/8251487d1293d32c78c870dfe519c8f661f5dd8a-600x900.webp",
+  "originalFilename": "zoe-photo.webp",
+  "extension": "webp",
+  "mimeType": "image/webp",
+  "sha1hash": "8251487d1293d32c78c870dfe519c8f661f5dd8a",
+  "assetId": "8251487d1293d32c78c870dfe519c8f661f5dd8a",
+  "metadata": {
+   "dimensions": {
+    "width": 600,
+    "height": 900,
+    "aspectRatio": 0.6666666666666666
+   }
+  }
+ },
+ {
+  "_id": "image-54ca69433b162c26261e014aeb4243fa87f0c96f-400x120-png",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/54ca69433b162c26261e014aeb4243fa87f0c96f-400x120.png",
+  "originalFilename": "acme-logo.png",
+  "extension": "png",
+  "mimeType": "image/png",
+  "sha1hash": "54ca69433b162c26261e014aeb4243fa87f0c96f",
+  "assetId": "54ca69433b162c26261e014aeb4243fa87f0c96f",
+  "metadata": {
+   "dimensions": {
+    "width": 400,
+    "height": 120,
+    "aspectRatio": 3.3333333333333335
+   }
+  }
+ },
+ {
+  "_id": "image-33231b1c0e41b513db734ec3c46be946e4539fc7-128x128-png",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/33231b1c0e41b513db734ec3c46be946e4539fc7-128x128.png",
+  "originalFilename": "northwind-logo.png",
+  "extension": "png",
+  "mimeType": "image/png",
+  "sha1hash": "33231b1c0e41b513db734ec3c46be946e4539fc7",
+  "assetId": "33231b1c0e41b513db734ec3c46be946e4539fc7",
+  "metadata": {
+   "dimensions": {
+    "width": 128,
+    "height": 128,
+    "aspectRatio": 1
+   }
+  }
+ },
+ {
+  "_id": "image-25d469b024d2217f73ab672bf260af2916dba044-500x100-png",
+  "_type": "sanity.imageAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/images/nt0wmty3/production/25d469b024d2217f73ab672bf260af2916dba044-500x100.png",
+  "originalFilename": "fund-logo-light.png",
+  "extension": "png",
+  "mimeType": "image/png",
+  "sha1hash": "25d469b024d2217f73ab672bf260af2916dba044",
+  "assetId": "25d469b024d2217f73ab672bf260af2916dba044",
+  "metadata": {
+   "dimensions": {
+    "width": 500,
+    "height": 100,
+    "aspectRatio": 5
+   }
+  }
+ },
+ {
+  "_id": "file-b2e8be112bad7d746e1c8936a6578ab5a875081b-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf",
+  "originalFilename": "Legacy Report FY25 Q4.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "b2e8be112bad7d746e1c8936a6578ab5a875081b",
+  "size": 1098,
+  "assetId": "b2e8be112bad7d746e1c8936a6578ab5a875081b",
+  "path": "files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf"
+ },
+ {
+  "_id": "file-9e94392688189a784555a850561c3b821006d76d-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/9e94392688189a784555a850561c3b821006d76d.pdf",
+  "originalFilename": "PPM_v2*final.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "9e94392688189a784555a850561c3b821006d76d",
+  "size": 1057,
+  "assetId": "9e94392688189a784555a850561c3b821006d76d",
+  "path": "files/nt0wmty3/production/9e94392688189a784555a850561c3b821006d76d.pdf"
+ },
+ {
+  "_id": "file-99fa775740a72441960a37a4d9bf692b00d0b43b-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/99fa775740a72441960a37a4d9bf692b00d0b43b.pdf",
+  "originalFilename": "Pipeline Update (March).pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "99fa775740a72441960a37a4d9bf692b00d0b43b",
+  "size": 1057,
+  "assetId": "99fa775740a72441960a37a4d9bf692b00d0b43b",
+  "path": "files/nt0wmty3/production/99fa775740a72441960a37a4d9bf692b00d0b43b.pdf"
+ },
+ {
+  "_id": "file-99c2109b053a5f876072483023fccd18a3e7509e-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/99c2109b053a5f876072483023fccd18a3e7509e.pdf",
+  "originalFilename": "Fake Fund Report FY26 Q2.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "99c2109b053a5f876072483023fccd18a3e7509e",
+  "size": 1057,
+  "assetId": "99c2109b053a5f876072483023fccd18a3e7509e",
+  "path": "files/nt0wmty3/production/99c2109b053a5f876072483023fccd18a3e7509e.pdf"
+ },
+ {
+  "_id": "file-961c057eb04b52d7c410bc106a515b99a82c6bd9-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/961c057eb04b52d7c410bc106a515b99a82c6bd9.pdf",
+  "originalFilename": "Restricted Memo.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "961c057eb04b52d7c410bc106a515b99a82c6bd9",
+  "size": 1057,
+  "assetId": "961c057eb04b52d7c410bc106a515b99a82c6bd9",
+  "path": "files/nt0wmty3/production/961c057eb04b52d7c410bc106a515b99a82c6bd9.pdf"
+ },
+ {
+  "_id": "file-95ce8d4363b55258dbaa0bccd714d346241aeb16-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/95ce8d4363b55258dbaa0bccd714d346241aeb16.pdf",
+  "originalFilename": "GIFT City Financials FY26 Q2.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "95ce8d4363b55258dbaa0bccd714d346241aeb16",
+  "size": 1057,
+  "assetId": "95ce8d4363b55258dbaa0bccd714d346241aeb16",
+  "path": "files/nt0wmty3/production/95ce8d4363b55258dbaa0bccd714d346241aeb16.pdf"
+ },
+ {
+  "_id": "file-7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2.pdf",
+  "originalFilename": "Recommendation Letter.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2",
+  "size": 1055,
+  "assetId": "7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2",
+  "path": "files/nt0wmty3/production/7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2.pdf"
+ },
+ {
+  "_id": "file-7abe1250f22b2b22b66b05798aa58d222ed8aacd-xlsx",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/7abe1250f22b2b22b66b05798aa58d222ed8aacd.xlsx",
+  "originalFilename": "Uncategorised, 100% fake.xlsx",
+  "extension": "xlsx",
+  "mimeType": "application/octet-stream",
+  "sha1hash": "7abe1250f22b2b22b66b05798aa58d222ed8aacd",
+  "size": 1055,
+  "assetId": "7abe1250f22b2b22b66b05798aa58d222ed8aacd",
+  "path": "files/nt0wmty3/production/7abe1250f22b2b22b66b05798aa58d222ed8aacd.xlsx"
+ },
+ {
+  "_id": "file-63530ca51f07489c408b1047c7e025f6c414ab3b-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf",
+  "originalFilename": "Fund II Thesis.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "63530ca51f07489c408b1047c7e025f6c414ab3b",
+  "size": 1054,
+  "assetId": "63530ca51f07489c408b1047c7e025f6c414ab3b",
+  "path": "files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf"
+ },
+ {
+  "_id": "file-40450b6ce214c73d789a595282b770c813463db5-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/40450b6ce214c73d789a595282b770c813463db5.pdf",
+  "originalFilename": "Pipeline Summary.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "40450b6ce214c73d789a595282b770c813463db5",
+  "size": 1052,
+  "assetId": "40450b6ce214c73d789a595282b770c813463db5",
+  "path": "files/nt0wmty3/production/40450b6ce214c73d789a595282b770c813463db5.pdf"
+ },
+ {
+  "_id": "file-3c66e29f5dff3f14b57cea54e76cf4422f03022f-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/3c66e29f5dff3f14b57cea54e76cf4422f03022f.pdf",
+  "originalFilename": "Financials FY26 Q2.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "3c66e29f5dff3f14b57cea54e76cf4422f03022f",
+  "size": 1051,
+  "assetId": "3c66e29f5dff3f14b57cea54e76cf4422f03022f",
+  "path": "files/nt0wmty3/production/3c66e29f5dff3f14b57cea54e76cf4422f03022f.pdf"
+ },
+ {
+  "_id": "file-37539d87b5c37a118e908a315587ec5d9b970810-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/37539d87b5c37a118e908a315587ec5d9b970810.pdf",
+  "originalFilename": "Report FY9.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "37539d87b5c37a118e908a315587ec5d9b970810",
+  "size": 1051,
+  "assetId": "37539d87b5c37a118e908a315587ec5d9b970810",
+  "path": "files/nt0wmty3/production/37539d87b5c37a118e908a315587ec5d9b970810.pdf"
+ },
+ {
+  "_id": "file-1576b18e69cba71e1b939b160ced35666e9c879a-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/1576b18e69cba71e1b939b160ced35666e9c879a.pdf",
+  "originalFilename": "Präsentation 2026.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "1576b18e69cba71e1b939b160ced35666e9c879a",
+  "size": 1049,
+  "assetId": "1576b18e69cba71e1b939b160ced35666e9c879a",
+  "path": "files/nt0wmty3/production/1576b18e69cba71e1b939b160ced35666e9c879a.pdf"
+ },
+ {
+  "_id": "file-134df51cda9b3e5c5c18bde57cc21d52f75f5ee6-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/134df51cda9b3e5c5c18bde57cc21d52f75f5ee6.pdf",
+  "originalFilename": "Fund I Deck.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "134df51cda9b3e5c5c18bde57cc21d52f75f5ee6",
+  "size": 1049,
+  "assetId": "134df51cda9b3e5c5c18bde57cc21d52f75f5ee6",
+  "path": "files/nt0wmty3/production/134df51cda9b3e5c5c18bde57cc21d52f75f5ee6.pdf"
+ },
+ {
+  "_id": "file-127e15786526ae513ad23e3c3091baa9905c9b9c-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf",
+  "originalFilename": "Internal Draft.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "127e15786526ae513ad23e3c3091baa9905c9b9c",
+  "size": 1049,
+  "assetId": "127e15786526ae513ad23e3c3091baa9905c9b9c",
+  "path": "files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf"
+ },
+ {
+  "_id": "drd-9",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-b51e3064",
+  "title": "Fake doc drd-9",
+  "category": "ppm-agreements",
+  "publishedAt": "2024-06-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-9e94392688189a784555a850561c3b821006d76d-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-8",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-8b8fd37a",
+  "title": "Fake doc drd-8",
+  "description": "Description drd-8",
+  "category": "pipeline",
+  "publishedAt": "2026-01-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-1576b18e69cba71e1b939b160ced35666e9c879a-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-7",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-233b880e",
+  "title": "Fake doc drd-7",
+  "description": "Description drd-7",
+  "category": "team",
+  "publishedAt": "2025-12-02",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-40450b6ce214c73d789a595282b770c813463db5-pdf"
+   }
+  }
+ },
+ {
+  "_id": "drd-6",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-587d2d43",
+  "title": "Fake doc drd-6",
+  "description": "Description drd-6",
+  "category": "team",
+  "publishedAt": "2025-12-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-e3d007083124552431bc65c935d8c10df82b687d-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-5",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-90b754ff",
+  "title": "Fake doc drd-5",
+  "description": "Description drd-5",
+  "category": "team",
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-4",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-3f19209d",
+  "title": "Fake doc drd-4",
+  "description": "Description drd-4",
+  "publishedAt": "2026-02-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-7abe1250f22b2b22b66b05798aa58d222ed8aacd-xlsx"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-3",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-66b730bc",
+  "title": "Fake doc drd-3",
+  "description": "Description drd-3",
+  "category": "pipeline",
+  "publishedAt": "2026-04-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-961c057eb04b52d7c410bc106a515b99a82c6bd9-pdf"
+   }
+  },
+  "accessLevel": "restricted"
+ },
+ {
+  "_id": "drd-2",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-12e3e619",
+  "title": "Fake doc drd-2",
+  "description": "Description drd-2",
+  "category": "pipeline",
+  "publishedAt": "2026-03-01T09:30:00Z",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-99fa775740a72441960a37a4d9bf692b00d0b43b-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-10",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-84b46474",
+  "title": "Fake doc drd-10",
+  "description": "Description drd-10",
+  "category": "Pipeline",
+  "publishedAt": "2026-01-05",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-99fa775740a72441960a37a4d9bf692b00d0b43b-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "drd-1",
+  "_type": "dataRoomDocument",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-961a0d63",
+  "title": "Fake doc drd-1",
+  "description": "Description drd-1",
+  "category": "pipeline",
+  "publishedAt": "2026-01-01",
+  "file": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-40450b6ce214c73d789a595282b770c813463db5-pdf"
+   }
+  },
+  "accessLevel": "data-room"
+ },
+ {
+  "_id": "dp-9",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-011298c1",
+  "domain": "under_score.example",
+  "label": "Fake dp-9",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "US",
+  "codeExpiry": "2099-01-01",
+  "maxUses": 2,
+  "usedCount": 2
+ },
+ {
+  "_id": "dp-8",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-2e7b6f07",
+  "domain": "wayne.example",
+  "label": "Fake dp-8",
+  "dataroomAccess": true,
+  "isActive": true
+ },
+ {
+  "_id": "dp-7",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-2936fd5e",
+  "domain": "ünïcode.example",
+  "label": "Fake dp-7",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": false
+ },
+ {
+  "_id": "dp-6",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-b3e759c4",
+  "domain": "Mixed-Case.Example",
+  "label": "Fake dp-6",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "MIXED",
+  "codeExpiry": "2099-01-01",
+  "maxUses": 9,
+  "usedCount": 0
+ },
+ {
+  "_id": "dp-5",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-eddf091d",
+  "domain": "hooli.example",
+  "label": "Fake dp-5",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": false,
+  "requireCode": true,
+  "inviteCode": "HOOLI",
+  "codeExpiry": "2099-01-01",
+  "maxUses": 1
+ },
+ {
+  "_id": "dp-4",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-baaf62d7",
+  "domain": "umbrella.example",
+  "label": "Fake dp-4",
+  "lpPortalAccess": false,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "UMB-FULL",
+  "codeExpiry": "2099-01-01",
+  "maxUses": 5,
+  "usedCount": 5
+ },
+ {
+  "_id": "dp-3",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-2f0e48f8",
+  "domain": "initech.example",
+  "label": "Fake dp-3",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "INITECH-OLD",
+  "codeExpiry": "2020-01-01",
+  "maxUses": 5
+ },
+ {
+  "_id": "dp-2",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-e943461a",
+  "domain": "globex.example",
+  "label": "Fake dp-2",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "GLOBEX-2026",
+  "codeExpiry": "2099-01-01T00:00:00Z",
+  "maxUses": 10,
+  "usedCount": 3
+ },
+ {
+  "_id": "dp-11",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-37ff71bb",
+  "domain": "cyberdyne.example",
+  "label": "Fake dp-11",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "requireCode": false
+ },
+ {
+  "_id": "dp-10",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-b6e62715",
+  "domain": "stark.example",
+  "label": "Fake dp-10",
+  "lpPortalAccess": "true",
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": "true"
+ },
+ {
+  "_id": "dp-1",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f02924ae",
+  "domain": "acme-lp.example",
+  "label": "Fake dp-1",
+  "lpPortalAccess": true,
+  "dataroomAccess": true,
+  "isActive": true,
+  "requireCode": false
+ },
+ {
+  "_id": "dp-0",
+  "_type": "domainPrivilege",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-d5dd1b47",
+  "domain": "acme-lp.example",
+  "label": "Fake dp-0",
+  "lpPortalAccess": true,
+  "dataroomAccess": false,
+  "isActive": true,
+  "requireCode": true,
+  "inviteCode": "ACME-SHARED",
+  "codeExpiry": "2099-12-31",
+  "maxUses": 3,
+  "usedCount": 1,
+  "redemptionLog": [
+   {
+    "_key": "rl1",
+    "email": "someone@acme-lp.example",
+    "redeemedAt": "2026-05-01T00:00:00Z"
+   }
+  ]
+ },
+ {
+  "_id": "dataroomFundContent",
+  "_type": "dataroomFundContent",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-11eed723",
+  "fundISlideDeck": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-134df51cda9b3e5c5c18bde57cc21d52f75f5ee6-pdf"
+   }
+  },
+  "fundILpReport": {
+   "_type": "reference",
+   "_ref": "r-1"
+  },
+  "commonTeamMembers": [
+   {
+    "_type": "reference",
+    "_ref": "tm-1",
+    "_key": "ct1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "tm-gone",
+    "_key": "ct2"
+   },
+   {
+    "_type": "reference",
+    "_ref": "tm-2",
+    "_key": "ct3"
+   }
+  ],
+  "commonTrackRecord": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-e42e601abd548c8c402985f4bc4e7471bc6c82aa-pdf"
+   }
+  },
+  "commonRecommendationDocuments": [
+   {
+    "_key": "rd1",
+    "title": "Recommendation (fake)",
+    "file": {
+     "_type": "file",
+     "asset": {
+      "_type": "reference",
+      "_ref": "file-7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2-pdf"
+     }
+    }
+   },
+   {
+    "_key": "rd2",
+    "title": "No file yet"
+   },
+   {
+    "_key": "rd3",
+    "file": {
+     "_type": "file",
+     "asset": {
+      "_type": "reference",
+      "_ref": "file-63530ca51f07489c408b1047c7e025f6c414ab3b-pdf"
+     }
+    }
+   }
+  ],
+  "exitValueAsOfDate": "Sept 2026",
+  "hiddenFunds": [
+   "fund-ii"
+  ]
+ },
+ {
+  "_id": "cat-robotics",
+  "_type": "category",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-5c66bcfd",
+  "name": "Robotics",
+  "slug": {
+   "_type": "slug",
+   "current": "robotics"
+  },
+  "order": 1
+ },
+ {
+  "_id": "cat-noslug",
+  "_type": "category",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-0b3ebf65",
+  "name": "Ünclassified"
+ },
+ {
+  "_id": "cat-bio",
+  "_type": "category",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-76787b9f",
+  "name": "Biotech & Health",
+  "slug": {
+   "_type": "slug",
+   "current": "biotech"
+  }
+ },
+ {
+  "_id": "c-zeta",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-8abe74f6",
+  "name": "Zeta Zero",
+  "slug": {
+   "_type": "slug",
+   "current": "zeta-zero"
+  },
+  "oneLiner": "Hidden from the partner portal.",
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-abd532f199c2b1d0656f21195bfdb59b1cced990-200x80-svg"
+   }
+  },
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-robotics"
+  },
+  "investmentStatus": "active",
+  "order": 3,
+  "showOnPartnerPortal": false,
+  "investmentRounds": [
+   {
+    "_key": "zeta-r1",
+    "_type": "investmentRound",
+    "isInitialRound": true,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2024-05-01",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33
+   }
+  ],
+  "quarterlyUpdates": [
+   {
+    "_key": "zeta-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1041789,
+    "currentOwnershipPercent": 5.5,
+    "amountReturned": 46789,
+    "multipleOfInvestment": 4.9,
+    "revenueINR": 2041789,
+    "patINR": -489,
+    "teamSize": 34,
+    "roundMoics": [
+     {
+      "_key": "zeta-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "zeta-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "zeta-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for zeta-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "zeta-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "zeta-fy26q2b1l",
+        "href": "https://example.com/zeta-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "zeta-fy26q2b1s1",
+        "text": "Quarter note for zeta-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "zeta-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "zeta-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "zeta-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "zeta-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "zeta-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   }
+  ]
+ },
+ {
+  "_id": "c-xi",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-29fbbdaf",
+  "name": "Xi Status Case",
+  "slug": {
+   "_type": "slug",
+   "current": "Xi-Status"
+  },
+  "oneLiner": "Status in wrong case.",
+  "investmentStatus": "Active",
+  "order": 6,
+  "quarterlyUpdates": [
+   {
+    "_key": "xi-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1025421,
+    "currentOwnershipPercent": 1.5,
+    "amountReturned": 30421,
+    "multipleOfInvestment": 3.1,
+    "revenueINR": 2025421,
+    "patINR": -221,
+    "teamSize": 26,
+    "roundMoics": [
+     {
+      "_key": "xi-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "xi-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "xi-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for xi-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "xi-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "xi-fy26q2b1l",
+        "href": "https://example.com/xi-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "xi-fy26q2b1s1",
+        "text": "Quarter note for xi-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "xi-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "xi-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "xi-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "xi-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "xi-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-theta",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-1be1f9c6",
+  "name": "Theta Thermal",
+  "slug": {
+   "_type": "slug",
+   "current": "theta-thermal"
+  },
+  "oneLiner": "Written off.",
+  "investmentStatus": "written-off",
+  "order": 4,
+  "quarterlyUpdates": [
+   {
+    "_key": "theta-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1027069,
+    "currentOwnershipPercent": 5.5,
+    "amountReturned": 0,
+    "multipleOfInvestment": 2.9,
+    "revenueINR": 2027069,
+    "patINR": -469,
+    "teamSize": 34,
+    "roundMoics": [
+     {
+      "_key": "theta-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "theta-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "theta-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for theta-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "theta-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "theta-fy26q2b1l",
+        "href": "https://example.com/theta-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "theta-fy26q2b1s1",
+        "text": "Quarter note for theta-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "theta-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "theta-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "theta-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "theta-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "theta-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-omicron-0",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-fcf0139b",
+  "name": "Omicron Duplicate",
+  "slug": {
+   "_type": "slug",
+   "current": "omicron-ops"
+  },
+  "oneLiner": "Second doc with the same slug.",
+  "investmentStatus": "exited",
+  "order": 7
+ },
+ {
+  "_id": "c-omicron",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-1c4dd92c",
+  "name": "Omicron Ops",
+  "slug": {
+   "_type": "slug",
+   "current": "omicron-ops"
+  },
+  "oneLiner": "Same slug as nothing else; dup slug test.",
+  "investmentStatus": "active",
+  "order": 7,
+  "quarterlyUpdates": [
+   {
+    "_key": "omi-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1043413,
+    "currentOwnershipPercent": 7.5,
+    "amountReturned": 0,
+    "multipleOfInvestment": 2.3,
+    "revenueINR": 2043413,
+    "patINR": -13,
+    "teamSize": 18,
+    "roundMoics": [
+     {
+      "_key": "omi-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "omi-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "omi-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for omi-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "omi-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "omi-fy26q2b1l",
+        "href": "https://example.com/omi-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "omi-fy26q2b1s1",
+        "text": "Quarter note for omi-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "omi-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "omi-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "omi-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "omi-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "omi-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-nu",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-26ccb0a0",
+  "name": "Nu Nano",
+  "slug": {
+   "_type": "slug",
+   "current": "nu-nano"
+  },
+  "oneLiner": "Fractional order.",
+  "investmentStatus": "active",
+  "order": 1.5,
+  "quarterlyUpdates": [
+   {
+    "_key": "nu-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "q2",
+    "fiscalYear": "fy26",
+    "currentFMV": 1064343,
+    "currentOwnershipPercent": 2.5,
+    "amountReturned": 69343,
+    "multipleOfInvestment": 5.3,
+    "revenueINR": 2064343,
+    "patINR": -643,
+    "teamSize": 28,
+    "roundMoics": [
+     {
+      "_key": "nu-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "nu-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "nu-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for nu-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "nu-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "nu-fy26q2b1l",
+        "href": "https://example.com/nu-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "nu-fy26q2b1s1",
+        "text": "Quarter note for nu-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "nu-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "nu-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "nu-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "nu-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "nu-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-mu",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-db4e6261",
+  "name": "Mu Motors",
+  "slug": {
+   "_type": "slug",
+   "current": "mu-motors"
+  },
+  "oneLiner": "Ties with lambda on order.",
+  "investmentStatus": "active",
+  "order": 5,
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-robotics"
+  },
+  "investmentRounds": [],
+  "quarterlyUpdates": [
+   {
+    "_key": "mu-fy25q4",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q4",
+    "fiscalYear": "FY25",
+    "currentFMV": 1023506,
+    "currentOwnershipPercent": 4,
+    "amountReturned": 28506,
+    "multipleOfInvestment": 1.6,
+    "revenueINR": 2023506,
+    "patINR": -406,
+    "teamSize": 31,
+    "roundMoics": [
+     {
+      "_key": "mu-fy25q4m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "mu-fy25q4m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "mu-fy25q4f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for mu-fy25q4"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "mu-fy25q4b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "mu-fy25q4b1l",
+        "href": "https://example.com/mu-fy25q4"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "mu-fy25q4b1s1",
+        "text": "Quarter note for mu-fy25q4. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "mu-fy25q4b1s2",
+        "text": "see link",
+        "marks": [
+         "mu-fy25q4b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "mu-fy25q4b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "mu-fy25q4b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "mu-fy25q4k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-lambda",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f838121d",
+  "oneLiner": "No name and no slug.",
+  "investmentStatus": "active",
+  "order": 5,
+  "quarterlyUpdates": [
+   {
+    "_key": "lambda-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1053785,
+    "currentOwnershipPercent": 3.5,
+    "amountReturned": 58785,
+    "multipleOfInvestment": 4.5,
+    "revenueINR": 2053785,
+    "patINR": -585,
+    "teamSize": 30,
+    "roundMoics": [
+     {
+      "_key": "lambda-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "lambda-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "lambda-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for lambda-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "lambda-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "lambda-fy26q2b1l",
+        "href": "https://example.com/lambda-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "lambda-fy26q2b1s1",
+        "text": "Quarter note for lambda-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "lambda-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "lambda-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "lambda-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "lambda-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "lambda-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": true,
+    "currentOwnershipConfidential": true,
+    "amountReturnedConfidential": true,
+    "moicConfidential": true,
+    "revenueConfidential": true,
+    "patConfidential": true,
+    "teamSizeConfidential": true
+   }
+  ]
+ },
+ {
+  "_id": "c-kappa",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-a66edd24",
+  "name": "ACME Robotics Two",
+  "slug": {
+   "_type": "slug",
+   "current": "acme-robotics-2"
+  },
+  "oneLiner": "Ties with Acme on order.",
+  "investmentStatus": "active",
+  "order": 1,
+  "showOnPartnerPortal": true,
+  "quarterlyUpdates": [
+   {
+    "_key": "kappa-noq",
+    "_type": "quarterlyUpdate",
+    "fiscalYear": "FY26",
+    "currentFMV": 1017602,
+    "currentOwnershipPercent": 2,
+    "amountReturned": 22602,
+    "multipleOfInvestment": 1.2,
+    "revenueINR": 2017602,
+    "patINR": -102,
+    "teamSize": 7,
+    "roundMoics": [
+     {
+      "_key": "kappa-noqm1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "kappa-noqm2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "kappa-noqf1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for kappa-noq"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "kappa-noqb1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "kappa-noqb1l",
+        "href": "https://example.com/kappa-noq"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-noqb1s1",
+        "text": "Quarter note for kappa-noq. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "kappa-noqb1s2",
+        "text": "see link",
+        "marks": [
+         "kappa-noqb1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "kappa-noqb2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-noqb2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "kappa-noqk1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   },
+   {
+    "_key": "kappa-nofy",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q3",
+    "currentFMV": 1064264,
+    "currentOwnershipPercent": 3,
+    "amountReturned": 69264,
+    "multipleOfInvestment": 2.4,
+    "revenueINR": 2064264,
+    "patINR": -564,
+    "teamSize": 29,
+    "roundMoics": [
+     {
+      "_key": "kappa-nofym1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "kappa-nofym2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "kappa-nofyf1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for kappa-nofy"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "kappa-nofyb1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "kappa-nofyb1l",
+        "href": "https://example.com/kappa-nofy"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-nofyb1s1",
+        "text": "Quarter note for kappa-nofy. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "kappa-nofyb1s2",
+        "text": "see link",
+        "marks": [
+         "kappa-nofyb1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "kappa-nofyb2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-nofyb2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "kappa-nofyk1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   },
+   {
+    "_key": "kappa-fy26q1",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q1",
+    "fiscalYear": "FY26",
+    "currentFMV": 1043059,
+    "currentOwnershipPercent": 10.5,
+    "amountReturned": 0,
+    "multipleOfInvestment": 1.9,
+    "revenueINR": 2043059,
+    "patINR": -359,
+    "teamSize": 24,
+    "roundMoics": [
+     {
+      "_key": "kappa-fy26q1m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "kappa-fy26q1m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "kappa-fy26q1f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for kappa-fy26q1"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "kappa-fy26q1b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "kappa-fy26q1b1l",
+        "href": "https://example.com/kappa-fy26q1"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-fy26q1b1s1",
+        "text": "Quarter note for kappa-fy26q1. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "kappa-fy26q1b1s2",
+        "text": "see link",
+        "marks": [
+         "kappa-fy26q1b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "kappa-fy26q1b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "kappa-fy26q1b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "kappa-fy26q1k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   }
+  ]
+ },
+ {
+  "_id": "c-iota",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-6267862f",
+  "name": "Ångström Analytics",
+  "slug": {
+   "_type": "slug",
+   "current": "angstrom-analytics"
+  },
+  "oneLiner": "String-sorted fiscal years.",
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-bio"
+  },
+  "investmentStatus": "active",
+  "showOnPartnerPortal": null,
+  "investmentRounds": [
+   {
+    "_key": "iota-r1",
+    "_type": "investmentRound",
+    "isInitialRound": false,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2025-12-31",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33
+   },
+   {
+    "_key": "iota-r2",
+    "_type": "investmentRound",
+    "isInitialRound": true,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2025-01-01",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33
+   }
+  ],
+  "quarterlyUpdates": [
+   {
+    "_key": "iota-fy27q1",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q1",
+    "fiscalYear": "FY27",
+    "currentFMV": 1052236,
+    "currentOwnershipPercent": 9,
+    "amountReturned": 0,
+    "multipleOfInvestment": 4.6,
+    "revenueINR": 2052236,
+    "patINR": -436,
+    "teamSize": 41,
+    "roundMoics": [
+     {
+      "_key": "iota-fy27q1m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "iota-fy27q1m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "iota-fy27q1f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for iota-fy27q1"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "iota-fy27q1b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "iota-fy27q1b1l",
+        "href": "https://example.com/iota-fy27q1"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy27q1b1s1",
+        "text": "Quarter note for iota-fy27q1. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "iota-fy27q1b1s2",
+        "text": "see link",
+        "marks": [
+         "iota-fy27q1b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "iota-fy27q1b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy27q1b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "iota-fy27q1k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   },
+   {
+    "_key": "iota-fy9q1",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q1",
+    "fiscalYear": "FY9",
+    "currentFMV": 1046873,
+    "currentOwnershipPercent": 7.5,
+    "amountReturned": 51873,
+    "multipleOfInvestment": 3.3,
+    "revenueINR": 2046873,
+    "patINR": -673,
+    "teamSize": 38,
+    "roundMoics": [
+     {
+      "_key": "iota-fy9q1m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "iota-fy9q1m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "iota-fy9q1f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for iota-fy9q1"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "iota-fy9q1b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "iota-fy9q1b1l",
+        "href": "https://example.com/iota-fy9q1"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy9q1b1s1",
+        "text": "Quarter note for iota-fy9q1. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "iota-fy9q1b1s2",
+        "text": "see link",
+        "marks": [
+         "iota-fy9q1b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "iota-fy9q1b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy9q1b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "iota-fy9q1k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   },
+   {
+    "_key": "iota-fy26q2a",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1056006,
+    "currentOwnershipPercent": 4,
+    "amountReturned": 61006,
+    "multipleOfInvestment": 1.6,
+    "revenueINR": 2056006,
+    "patINR": -6,
+    "teamSize": 11,
+    "roundMoics": [
+     {
+      "_key": "iota-fy26q2am1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "iota-fy26q2am2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "iota-fy26q2af1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for iota-fy26q2a"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "iota-fy26q2ab1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "iota-fy26q2ab1l",
+        "href": "https://example.com/iota-fy26q2a"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2ab1s1",
+        "text": "Quarter note for iota-fy26q2a. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2ab1s2",
+        "text": "see link",
+        "marks": [
+         "iota-fy26q2ab1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "iota-fy26q2ab2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2ab2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "iota-fy26q2ak1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "moicConfidential": true
+   },
+   {
+    "_key": "iota-fy26q2b",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1047065,
+    "currentOwnershipPercent": 3.5,
+    "amountReturned": 52065,
+    "multipleOfInvestment": 2.5,
+    "revenueINR": 2047065,
+    "patINR": -165,
+    "teamSize": 30,
+    "roundMoics": [
+     {
+      "_key": "iota-fy26q2bm1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "iota-fy26q2bm2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "iota-fy26q2bf1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for iota-fy26q2b"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "iota-fy26q2bb1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "iota-fy26q2bb1l",
+        "href": "https://example.com/iota-fy26q2b"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2bb1s1",
+        "text": "Quarter note for iota-fy26q2b. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2bb1s2",
+        "text": "see link",
+        "marks": [
+         "iota-fy26q2bb1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "iota-fy26q2bb2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy26q2bb2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "iota-fy26q2bk1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "moicConfidential": false
+   },
+   {
+    "_key": "iota-fy10q4",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q4",
+    "fiscalYear": "FY10",
+    "currentFMV": 1015461,
+    "currentOwnershipPercent": 1.5,
+    "amountReturned": 20461,
+    "multipleOfInvestment": 2.1,
+    "revenueINR": 2015461,
+    "patINR": -61,
+    "teamSize": 26,
+    "roundMoics": [
+     {
+      "_key": "iota-fy10q4m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "iota-fy10q4m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "iota-fy10q4f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for iota-fy10q4"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "iota-fy10q4b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "iota-fy10q4b1l",
+        "href": "https://example.com/iota-fy10q4"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy10q4b1s1",
+        "text": "Quarter note for iota-fy10q4. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "iota-fy10q4b1s2",
+        "text": "see link",
+        "marks": [
+         "iota-fy10q4b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "iota-fy10q4b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "iota-fy10q4b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "iota-fy10q4k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-gamma",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-f2dda187",
+  "name": "Gamma Grids",
+  "slug": {
+   "_type": "slug",
+   "current": "gamma-grids"
+  },
+  "oneLiner": "No updates yet.",
+  "investmentStatus": "active",
+  "order": 2,
+  "investmentRounds": [
+   {
+    "_key": "gamma-r1",
+    "_type": "investmentRound",
+    "isInitialRound": true,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2026-07-01",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33
+   }
+  ]
+ },
+ {
+  "_id": "c-eta",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-d64f87e3",
+  "name": "Eta Earth",
+  "slug": {
+   "_type": "slug",
+   "current": "eta-earth"
+  },
+  "oneLiner": "No investment status.",
+  "order": 0,
+  "quarterlyUpdates": [
+   {
+    "_key": "eta-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1040926,
+    "currentOwnershipPercent": 4,
+    "amountReturned": 0,
+    "multipleOfInvestment": 3.6,
+    "revenueINR": 2040926,
+    "patINR": -326,
+    "teamSize": 11,
+    "roundMoics": [
+     {
+      "_key": "eta-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "eta-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "eta-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for eta-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "eta-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "eta-fy26q2b1l",
+        "href": "https://example.com/eta-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "eta-fy26q2b1s1",
+        "text": "Quarter note for eta-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "eta-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "eta-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "eta-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "eta-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "eta-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_id": "c-epsilon",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-3ad54828",
+  "name": "epsilon Energy",
+  "slug": {
+   "_type": "slug",
+   "current": "epsilon-energy"
+  },
+  "oneLiner": "Dangling logo.",
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-3c53d79fb81b8f25ee8a201fd2cef2e52ca4b69a-64x64-png"
+   }
+  },
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-noslug"
+  },
+  "investmentStatus": "exited",
+  "showOnPartnerPortal": true,
+  "quarterlyUpdates": [
+   {
+    "_key": "eps-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1042614,
+    "currentOwnershipPercent": 8,
+    "amountReturned": 47614,
+    "multipleOfInvestment": 2.4,
+    "revenueINR": 2042614,
+    "patINR": -614,
+    "teamSize": 19,
+    "roundMoics": null,
+    "tableFootnotes": [],
+    "updateNotes": [],
+    "keyMetrics": [
+     {
+      "_key": "eps-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "revenueConfidential": true
+   }
+  ]
+ },
+ {
+  "_id": "c-delta",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-3a9e55ae",
+  "name": "Délta Dynamics",
+  "slug": {
+   "_type": "slug",
+   "current": "delta-dynamics"
+  },
+  "oneLiner": "Unicode name, no order.",
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-gone"
+  },
+  "investmentStatus": "active",
+  "quarterlyUpdates": []
+ },
+ {
+  "_id": "c-beta",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-0802dec1",
+  "name": "beta Biotech",
+  "slug": {
+   "_type": "slug",
+   "current": "beta-biotech"
+  },
+  "oneLiner": "Fake biotech.",
+  "isRevenueMaking": false,
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5-300x300-jpg"
+   }
+  },
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-bio"
+  },
+  "investmentStatus": "exited",
+  "exitDate": "2026-06-30",
+  "order": 2,
+  "investmentRounds": [
+   {
+    "_key": "beta-r1",
+    "_type": "investmentRound",
+    "isInitialRound": true,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2022-11-11",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33
+   },
+   {
+    "_key": "beta-r0",
+    "_type": "investmentRound",
+    "isInitialRound": false,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Bridge",
+    "roundLabel": "Seed",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33,
+    "coInvestors": []
+   },
+   {
+    "_key": "beta-r2",
+    "_type": "investmentRound",
+    "isInitialRound": false,
+    "isYaliLead": false,
+    "showEarlyInReport": false,
+    "roundName": "Series B",
+    "roundLabel": "Seed",
+    "investmentDate": "2022-11-11",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 0,
+    "yaliOwnership": 8.33
+   }
+  ],
+  "quarterlyUpdates": [
+   {
+    "_key": "beta-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1038228,
+    "currentOwnershipPercent": 5,
+    "amountReturned": 99000000,
+    "multipleOfInvestment": 3.8,
+    "revenueINR": 2038228,
+    "patINR": -428,
+    "teamSize": 33,
+    "roundMoics": [
+     {
+      "_key": "beta-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "beta-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "beta-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for beta-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "beta-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "beta-fy26q2b1l",
+        "href": "https://example.com/beta-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "beta-fy26q2b1s1",
+        "text": "Quarter note for beta-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "beta-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "beta-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "beta-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "beta-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "beta-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "amountReturnedConfidential": false
+   },
+   {
+    "_key": "beta-fy26q1",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q1",
+    "fiscalYear": "FY26",
+    "currentFMV": 1046834,
+    "currentOwnershipPercent": 8,
+    "amountReturned": 51834,
+    "multipleOfInvestment": 4.4,
+    "revenueINR": 2046834,
+    "patINR": -634,
+    "teamSize": 39,
+    "roundMoics": [],
+    "tableFootnotes": [
+     {
+      "_key": "beta-fy26q1f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for beta-fy26q1"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "beta-fy26q1b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "beta-fy26q1b1l",
+        "href": "https://example.com/beta-fy26q1"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "beta-fy26q1b1s1",
+        "text": "Quarter note for beta-fy26q1. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "beta-fy26q1b1s2",
+        "text": "see link",
+        "marks": [
+         "beta-fy26q1b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "beta-fy26q1b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "beta-fy26q1b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "beta-fy26q1k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "patConfidential": true
+   }
+  ]
+ },
+ {
+  "_id": "c-acme",
+  "_type": "company",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-e9358d91",
+  "name": "Acme Robotics",
+  "entityName": "Acme Robotics Pvt Ltd (fake)",
+  "slug": {
+   "_type": "slug",
+   "current": "acme-robotics"
+  },
+  "oneLiner": "Fake robots for fake warehouses.",
+  "detail": "Detail text.",
+  "aboutCompany": [
+   {
+    "_type": "block",
+    "_key": "ab1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "ab1s1",
+      "text": "About Acme.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "isRevenueMaking": true,
+  "logo": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-54ca69433b162c26261e014aeb4243fa87f0c96f-400x120-png"
+   }
+  },
+  "logomarkTypeface": {
+   "_type": "image",
+   "asset": {
+    "_type": "reference",
+    "_ref": "image-a0fe7de4e6fa683f33fa43c9c60ed61f83623b96-640x160-png"
+   }
+  },
+  "link": "https://acme.example",
+  "category": {
+   "_type": "reference",
+   "_ref": "cat-robotics"
+  },
+  "investmentStatus": "active",
+  "order": 1,
+  "showOnPartnerPortal": true,
+  "investmentDate": "2023-04-01",
+  "fundingRound": "Seed",
+  "preMoneyValuation": 50,
+  "totalRoundSize": 10,
+  "postMoneyValuation": 60,
+  "yaliInvestmentAmount": 5,
+  "yaliOwnershipPercent": 8,
+  "coInvestors": [
+   {
+    "_type": "reference",
+    "_ref": "inv-1",
+    "_key": "lc1"
+   },
+   {
+    "_type": "reference",
+    "_ref": "inv-gone",
+    "_key": "lc2"
+   }
+  ],
+  "investmentRounds": [
+   {
+    "_key": "acme-r2",
+    "_type": "investmentRound",
+    "isInitialRound": false,
+    "isYaliLead": true,
+    "showEarlyInReport": false,
+    "roundName": "Series A",
+    "roundLabel": "Series A",
+    "investmentDate": "2025-02-10",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33,
+    "coInvestors": [
+     {
+      "_type": "coInvestorEntry",
+      "_key": "ce1",
+      "investor": {
+       "_type": "reference",
+       "_ref": "inv-2"
+      },
+      "displayOrder": 2
+     },
+     {
+      "_type": "reference",
+      "_ref": "inv-1",
+      "_key": "ce2"
+     },
+     {
+      "_type": "coInvestorEntry",
+      "_key": "ce3",
+      "investor": {
+       "_type": "reference",
+       "_ref": "inv-gone"
+      },
+      "displayOrder": 1
+     },
+     {
+      "_type": "reference",
+      "_ref": "inv-gone",
+      "_key": "ce4"
+     },
+     {
+      "_type": "coInvestorEntry",
+      "_key": "ce5",
+      "displayOrder": 3
+     },
+     {
+      "_type": "coInvestorEntry",
+      "_key": "ce6",
+      "investor": {
+       "_type": "reference",
+       "_ref": "inv-3"
+      }
+     }
+    ]
+   },
+   {
+    "_key": "acme-r1",
+    "_type": "investmentRound",
+    "isInitialRound": true,
+    "isYaliLead": false,
+    "showEarlyInReport": true,
+    "roundName": "Seed",
+    "roundLabel": "Seed",
+    "investmentDate": "2023-04-01",
+    "preMoneyValuation": 100000000,
+    "totalRoundSize": 20000000,
+    "postMoneyValuation": 120000000,
+    "yaliInvestment": 10000000,
+    "yaliOwnership": 8.33,
+    "coInvestors": [
+     {
+      "_type": "reference",
+      "_ref": "inv-3",
+      "_key": "ce7"
+     }
+    ]
+   }
+  ],
+  "quarterlyUpdates": [
+   {
+    "_key": "acme-fy26q1",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q1",
+    "fiscalYear": "FY26",
+    "currentFMV": 1032309,
+    "currentOwnershipPercent": 5.5,
+    "amountReturned": 37309,
+    "multipleOfInvestment": 1.9,
+    "revenueINR": 2032309,
+    "patINR": -109,
+    "teamSize": 34,
+    "roundMoics": [
+     {
+      "_key": "acme-fy26q1m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "acme-fy26q1m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "acme-fy26q1f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for acme-fy26q1"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "acme-fy26q1b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "acme-fy26q1b1l",
+        "href": "https://example.com/acme-fy26q1"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q1b1s1",
+        "text": "Quarter note for acme-fy26q1. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "acme-fy26q1b1s2",
+        "text": "see link",
+        "marks": [
+         "acme-fy26q1b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "acme-fy26q1b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q1b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "acme-fy26q1k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": false,
+    "currentOwnershipConfidential": false,
+    "amountReturnedConfidential": false,
+    "moicConfidential": false,
+    "revenueConfidential": false,
+    "patConfidential": false,
+    "teamSizeConfidential": false
+   },
+   {
+    "_key": "acme-fy26q2",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "currentFMV": 1030633,
+    "currentOwnershipPercent": 7.5,
+    "amountReturned": 0,
+    "multipleOfInvestment": 4.3,
+    "revenueINR": 2030633,
+    "patINR": -533,
+    "teamSize": 38,
+    "roundMoics": [
+     {
+      "_key": "acme-fy26q2m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "acme-fy26q2m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "acme-fy26q2f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for acme-fy26q2"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "acme-fy26q2b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "acme-fy26q2b1l",
+        "href": "https://example.com/acme-fy26q2"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q2b1s1",
+        "text": "Quarter note for acme-fy26q2. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "acme-fy26q2b1s2",
+        "text": "see link",
+        "marks": [
+         "acme-fy26q2b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "acme-fy26q2b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q2b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "acme-fy26q2k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": true,
+    "currentOwnershipConfidential": true,
+    "amountReturnedConfidential": true,
+    "moicConfidential": true,
+    "revenueConfidential": true,
+    "patConfidential": true,
+    "teamSizeConfidential": true
+   },
+   {
+    "_key": "acme-fy25q4",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q4",
+    "fiscalYear": "FY25",
+    "currentFMV": 1027314,
+    "currentOwnershipPercent": 8,
+    "amountReturned": 32314,
+    "multipleOfInvestment": 2.4,
+    "revenueINR": 2027314,
+    "patINR": -14,
+    "teamSize": 39,
+    "roundMoics": [
+     {
+      "_key": "acme-fy25q4m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "acme-fy25q4m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "acme-fy25q4f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for acme-fy25q4"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "acme-fy25q4b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "acme-fy25q4b1l",
+        "href": "https://example.com/acme-fy25q4"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy25q4b1s1",
+        "text": "Quarter note for acme-fy25q4. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "acme-fy25q4b1s2",
+        "text": "see link",
+        "marks": [
+         "acme-fy25q4b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "acme-fy25q4b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy25q4b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "acme-fy25q4k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "moicConfidential": true,
+    "revenueConfidential": true
+   },
+   {
+    "_key": "acme-fy26q3",
+    "_type": "quarterlyUpdate",
+    "quarter": "Q3",
+    "fiscalYear": "FY26",
+    "currentFMV": 1026030,
+    "currentOwnershipPercent": 6,
+    "amountReturned": 31030,
+    "multipleOfInvestment": 4,
+    "revenueINR": 2026030,
+    "patINR": -130,
+    "teamSize": 35,
+    "roundMoics": [
+     {
+      "_key": "acme-fy26q3m1",
+      "_type": "roundMoic",
+      "roundName": "Seed",
+      "moic": 2.5
+     },
+     {
+      "_key": "acme-fy26q3m2",
+      "_type": "roundMoic",
+      "roundName": "Series A",
+      "moic": 1.1
+     }
+    ],
+    "tableFootnotes": [
+     {
+      "_key": "acme-fy26q3f1",
+      "_type": "footnote",
+      "tableType": "portfolio",
+      "text": "Fake footnote for acme-fy26q3"
+     }
+    ],
+    "updateNotes": [
+     {
+      "_type": "block",
+      "_key": "acme-fy26q3b1",
+      "style": "normal",
+      "markDefs": [
+       {
+        "_type": "link",
+        "_key": "acme-fy26q3b1l",
+        "href": "https://example.com/acme-fy26q3"
+       }
+      ],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q3b1s1",
+        "text": "Quarter note for acme-fy26q3. ",
+        "marks": []
+       },
+       {
+        "_type": "span",
+        "_key": "acme-fy26q3b1s2",
+        "text": "see link",
+        "marks": [
+         "acme-fy26q3b1l"
+        ]
+       }
+      ]
+     },
+     {
+      "_type": "block",
+      "_key": "acme-fy26q3b2",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "acme-fy26q3b2s1",
+        "text": "Second paragraph, no link.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "keyMetrics": [
+     {
+      "_key": "acme-fy26q3k1",
+      "label": "ARR",
+      "value": "₹1.2 Cr"
+     }
+    ],
+    "currentFMVConfidential": true,
+    "currentOwnershipConfidential": false,
+    "teamSizeConfidential": null
+   }
+  ]
+ }
+]
