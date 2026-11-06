@@ -14,6 +14,8 @@
 // Schema: supabase/migrations/0001_sanity_twin.sql. Sync: ./twin.js.
 import { NextResponse } from 'next/server';
 import { verifySession } from '@/lib/session';
+import { isYaliStaff } from '@/lib/internal-user';
+import { order, cmpStr } from '@/lib/lp-data/groq';
 
 const BUCKET = 'sanity-files';
 export const SIGNED_URL_SECONDS = 600;
@@ -32,9 +34,8 @@ const SCALAR_FILE_FIELDS = {
 };
 const SCANNED_TYPES = ['dataroomFundContent'];
 
-const STAFF_DOMAINS = ['@yali.vc', '@florintree.com'];
-export const isStaffEmail = (email) =>
-  !!email && STAFF_DOMAINS.some((d) => email.toLowerCase().endsWith(d));
+// Same staff rule as the portal pages (one definition, in internal-user.js).
+export const isStaffEmail = isYaliStaff;
 
 // ── PostgREST / Storage plumbing ─────────────────────────────────────────────
 
@@ -124,12 +125,6 @@ export const isReportVisible = (r, staff) => isReportPublished(r) || (staff && r
 
 // GROQ `order(fiscalYear desc, quarter desc)` on strings: plain code-unit order.
 // Missing values sort last here (no current report lacks either; see the B3 notes).
-function cmpDesc(a, b) {
-  if (a === b) return 0;
-  if (a == null) return 1;
-  if (b == null) return -1;
-  return a < b ? 1 : -1;
-}
 
 /** The latest published lpQuarterlyReport: { id, generatedPdfRef } or null. */
 export async function getLatestPublishedReport() {
@@ -137,8 +132,10 @@ export async function getLatestPublishedReport() {
     `/rest/v1/sanity_docs?select=${REPORT_SELECT},generatedPdfRef:doc->generatedPdf->asset->>_ref&type=${eq('lpQuarterlyReport')}`
   );
   const published = (rows || []).filter((r) => isPublishedId(r.id) && isReportPublished(r));
-  published.sort((a, b) => cmpDesc(a.fiscalYear, b.fiscalYear) || cmpDesc(a.quarter, b.quarter));
-  return published[0] || null;
+  // Same pick as GROQ `order(fiscalYear desc, quarter desc)[0]` in getLatestLPReportForDataRoom:
+  // input in _id order, missing values first under desc, ties by _id.
+  published.sort((a, b) => cmpStr(String(a.id), String(b.id)));
+  return order(published, [[(r) => r.fiscalYear, 'desc'], [(r) => r.quarter, 'desc']])[0] || null;
 }
 
 /**

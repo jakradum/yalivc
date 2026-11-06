@@ -49,6 +49,8 @@ export async function allRows(rest, table) {
       // PGRST205: table not in the schema cache (e.g. a later migration not applied yet).
       if (body?.code === 'PGRST205') throw new MissingTableError(`${table} does not exist`);
     }
+    // 416: this page starts past the last row (row count is a multiple of PAGE).
+    if (res.status === 416 && from > 0) return rows;
     if (!res.ok) throw new Error(`Supabase read ${table} failed: ${res.status}`);
     const page = await res.json();
     rows.push(...page);
@@ -56,7 +58,8 @@ export async function allRows(rest, table) {
   }
 }
 
-export const toJsonl = (rows) => rows.map((r) => JSON.stringify(r)).join('\n') + '\n';
+// One line per row; an empty table is an empty file, so line count == row count.
+export const toJsonl = (rows) => (rows.length ? rows.map((r) => JSON.stringify(r)).join('\n') + '\n' : '');
 
 // Reads every backup table. → { tableFiles: { name: Buffer }, manifestTables, typeCounts, fileRows, missing }
 export async function exportTables(rest) {

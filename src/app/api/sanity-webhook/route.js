@@ -19,9 +19,14 @@ export const maxDuration = 60;
 // compares revisions across all twin types, so any change is picked up.
 const SIGNATURE_RE = /^t=(\d+)[, ]+v1=([^, ]+)$/;
 
+// A signed delivery older or newer than this is refused, so a captured
+// request cannot be replayed later.
+const MAX_SKEW_MS = 5 * 60 * 1000;
+
 function validSignature(header, body, secret) {
   const m = (header || '').trim().match(SIGNATURE_RE);
   if (!m) return false;
+  if (Math.abs(Date.now() - Number(m[1])) > MAX_SKEW_MS) return false;
   const expected = createHmac('sha256', secret).update(`${m[1]}.${body}`).digest('base64url');
   const a = Buffer.from(m[2]);
   const b = Buffer.from(expected);
