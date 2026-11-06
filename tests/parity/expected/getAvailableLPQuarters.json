@@ -1,0 +1,139 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": [
+   {
+    "_id": "r-10",
+    "title": "Fake Fund Report FY9 Q1",
+    "slug": "fy9-q1",
+    "quarter": "Q1",
+    "fiscalYear": "FY9",
+    "publishDate": "2026-10-15",
+    "visibility": "internal",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/37539d87b5c37a118e908a315587ec5d9b970810.pdf"
+   },
+   {
+    "_id": "r-2",
+    "title": "Fake Fund Report FY26 Q3",
+    "slug": "fy26-q3",
+    "quarter": "Q3",
+    "fiscalYear": "FY26",
+    "publishDate": "2026-10-15",
+    "visibility": "internal",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf"
+   },
+   {
+    "_id": "r-1",
+    "title": "Fake Fund Report FY26 Q2",
+    "slug": "fy26-q2",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/99c2109b053a5f876072483023fccd18a3e7509e.pdf"
+   },
+   {
+    "_id": "r-7",
+    "title": "Fake Fund Report FY26 Q2",
+    "slug": "fy26-q2-reissue",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": null
+   },
+   {
+    "_id": "r-4",
+    "title": "Fake Fund Report FY25 Q4",
+    "slug": "fy25-q4",
+    "quarter": "Q4",
+    "fiscalYear": "FY25",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf"
+   },
+   {
+    "_id": "r-9",
+    "title": "Fake Fund Report FY25 Q2",
+    "slug": "fy25-q2",
+    "quarter": "Q2",
+    "fiscalYear": "FY25",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": null
+   },
+   {
+    "_id": "r-11",
+    "title": "No slug",
+    "slug": null,
+    "quarter": "Q2",
+    "fiscalYear": "FY24",
+    "publishDate": "2026-10-15",
+    "visibility": "internal",
+    "pdfUrl": null
+   },
+   {
+    "_id": "r-0dup",
+    "title": "Duplicate slug, lower _id",
+    "slug": "fy26-q3",
+    "quarter": "Q1",
+    "fiscalYear": "FY24",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": null
+   }
+  ]
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": [
+   {
+    "_id": "r-12",
+    "title": "No quarter or fiscal year",
+    "slug": "no-period",
+    "quarter": null,
+    "fiscalYear": null,
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": null
+   },
+   {
+    "_id": "r-2",
+    "title": "Fake Fund Report FY27 Q1",
+    "slug": "fy27-q1",
+    "quarter": "Q1",
+    "fiscalYear": "FY27",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": null
+   },
+   {
+    "_id": "r-1",
+    "title": "Fake Fund Report FY26 Q2",
+    "slug": "fy26-q2",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "publishDate": "2026-10-15",
+    "visibility": "internal",
+    "pdfUrl": null
+   }
+  ]
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": []
+ }
+]

@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "gh-pages": "^6.1.1",
+    "groq-js": "^2.0.1",
     "puppeteer": "^24.42.0",
     "sharp": "^0.34.5"
   }

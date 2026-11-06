@@ -1,0 +1,2754 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": [
+   {
+    "_id": "c-acme",
+    "name": "Acme Robotics",
+    "entityName": "Acme Robotics Pvt Ltd (fake)",
+    "slug": "acme-robotics",
+    "oneLiner": "Fake robots for fake warehouses.",
+    "detail": "Detail text.",
+    "aboutCompany": [
+     {
+      "_type": "block",
+      "_key": "ab1",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "ab1s1",
+        "text": "About Acme.",
+        "marks": []
+       }
+      ]
+     }
+    ],
+    "isRevenueMaking": true,
+    "logo": "https://cdn.sanity.io/images/nt0wmty3/production/54ca69433b162c26261e014aeb4243fa87f0c96f-400x120.png",
+    "link": "https://acme.example",
+    "sector": "Robotics",
+    "sectorSlug": "robotics",
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 1,
+    "investmentRounds": [
+     {
+      "isInitialRound": true,
+      "isYaliLead": false,
+      "showEarlyInReport": true,
+      "roundName": "Seed",
+      "roundLabel": "Seed",
+      "investmentDate": "2023-04-01",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": [
+       {
+        "displayOrder": null,
+        "_id": "inv-3",
+        "name": "Globex Capital",
+        "type": "family-office"
+       }
+      ]
+     },
+     {
+      "isInitialRound": false,
+      "isYaliLead": true,
+      "showEarlyInReport": false,
+      "roundName": "Series A",
+      "roundLabel": "Series A",
+      "investmentDate": "2025-02-10",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": [
+       {
+        "displayOrder": 2,
+        "_id": "inv-2",
+        "name": "Ünicorn Angels",
+        "type": "angel"
+       },
+       {
+        "displayOrder": null,
+        "_id": "inv-1",
+        "name": "Northwind Ventures",
+        "type": "vc"
+       },
+       {
+        "displayOrder": 1,
+        "_id": null,
+        "name": null,
+        "type": null
+       },
+       {
+        "displayOrder": null,
+        "_id": null,
+        "name": null,
+        "type": null
+       },
+       {
+        "displayOrder": 3,
+        "_id": null,
+        "name": null,
+        "type": null
+       },
+       {
+        "displayOrder": null,
+        "_id": "inv-3",
+        "name": "Globex Capital",
+        "type": "family-office"
+       }
+      ]
+     }
+    ],
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q3",
+      "fiscalYear": "FY26",
+      "currentFMV": null,
+      "currentFMVConfidential": true,
+      "currentOwnershipPercent": 6,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 31030,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 4,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "acme-fy26q3f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for acme-fy26q3"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "acme-fy26q3b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "acme-fy26q3b1l",
+          "href": "https://example.com/acme-fy26q3"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q3b1s1",
+          "text": "Quarter note for acme-fy26q3. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "acme-fy26q3b1s2",
+          "text": "see link",
+          "marks": [
+           "acme-fy26q3b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "acme-fy26q3b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q3b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2026030,
+      "revenueConfidential": null,
+      "patINR": -130,
+      "patConfidential": null,
+      "teamSize": 35,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "acme-fy26q3k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "acme-fy26q3m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "acme-fy26q3m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": null,
+      "currentFMVConfidential": true,
+      "currentOwnershipPercent": null,
+      "currentOwnershipConfidential": true,
+      "amountReturned": null,
+      "amountReturnedConfidential": true,
+      "multipleOfInvestment": null,
+      "moicConfidential": true,
+      "tableFootnotes": [
+       {
+        "_key": "acme-fy26q2f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for acme-fy26q2"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "acme-fy26q2b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "acme-fy26q2b1l",
+          "href": "https://example.com/acme-fy26q2"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q2b1s1",
+          "text": "Quarter note for acme-fy26q2. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "acme-fy26q2b1s2",
+          "text": "see link",
+          "marks": [
+           "acme-fy26q2b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "acme-fy26q2b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q2b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": null,
+      "revenueConfidential": true,
+      "patINR": null,
+      "patConfidential": true,
+      "teamSize": null,
+      "teamSizeConfidential": true,
+      "keyMetrics": [
+       {
+        "_key": "acme-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": null
+     },
+     {
+      "quarter": "Q1",
+      "fiscalYear": "FY26",
+      "currentFMV": 1032309,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 5.5,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 37309,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 1.9,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "acme-fy26q1f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for acme-fy26q1"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "acme-fy26q1b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "acme-fy26q1b1l",
+          "href": "https://example.com/acme-fy26q1"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q1b1s1",
+          "text": "Quarter note for acme-fy26q1. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "acme-fy26q1b1s2",
+          "text": "see link",
+          "marks": [
+           "acme-fy26q1b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "acme-fy26q1b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy26q1b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2032309,
+      "revenueConfidential": false,
+      "patINR": -109,
+      "patConfidential": false,
+      "teamSize": 34,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "acme-fy26q1k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "acme-fy26q1m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "acme-fy26q1m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q4",
+      "fiscalYear": "FY25",
+      "currentFMV": 1027314,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 8,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 32314,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": null,
+      "moicConfidential": true,
+      "tableFootnotes": [
+       {
+        "_key": "acme-fy25q4f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for acme-fy25q4"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "acme-fy25q4b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "acme-fy25q4b1l",
+          "href": "https://example.com/acme-fy25q4"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy25q4b1s1",
+          "text": "Quarter note for acme-fy25q4. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "acme-fy25q4b1s2",
+          "text": "see link",
+          "marks": [
+           "acme-fy25q4b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "acme-fy25q4b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "acme-fy25q4b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": null,
+      "revenueConfidential": true,
+      "patINR": -14,
+      "patConfidential": null,
+      "teamSize": 39,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "acme-fy25q4k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": null
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q3",
+     "fiscalYear": "FY26",
+     "currentFMV": null,
+     "currentOwnershipPercent": 6,
+     "amountReturned": 31030,
+     "multipleOfInvestment": 4,
+     "tableFootnotes": [
+      {
+       "_key": "acme-fy26q3f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for acme-fy26q3"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "acme-fy26q3b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "acme-fy26q3b1l",
+         "href": "https://example.com/acme-fy26q3"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "acme-fy26q3b1s1",
+         "text": "Quarter note for acme-fy26q3. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "acme-fy26q3b1s2",
+         "text": "see link",
+         "marks": [
+          "acme-fy26q3b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "acme-fy26q3b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "acme-fy26q3b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2026030,
+     "patINR": -130,
+     "teamSize": 35,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "acme-fy26q3k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "acme-fy26q3m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "acme-fy26q3m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-kappa",
+    "name": "ACME Robotics Two",
+    "entityName": null,
+    "slug": "acme-robotics-2",
+    "oneLiner": "Ties with Acme on order.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 1,
+    "investmentRounds": null,
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q3",
+      "fiscalYear": null,
+      "currentFMV": 1064264,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 3,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 69264,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 2.4,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "kappa-nofyf1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for kappa-nofy"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "kappa-nofyb1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "kappa-nofyb1l",
+          "href": "https://example.com/kappa-nofy"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-nofyb1s1",
+          "text": "Quarter note for kappa-nofy. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "kappa-nofyb1s2",
+          "text": "see link",
+          "marks": [
+           "kappa-nofyb1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "kappa-nofyb2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-nofyb2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2064264,
+      "revenueConfidential": false,
+      "patINR": -564,
+      "patConfidential": false,
+      "teamSize": 29,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "kappa-nofyk1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "kappa-nofym1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "kappa-nofym2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": null,
+      "fiscalYear": "FY26",
+      "currentFMV": 1017602,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 2,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 22602,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 1.2,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "kappa-noqf1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for kappa-noq"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "kappa-noqb1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "kappa-noqb1l",
+          "href": "https://example.com/kappa-noq"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-noqb1s1",
+          "text": "Quarter note for kappa-noq. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "kappa-noqb1s2",
+          "text": "see link",
+          "marks": [
+           "kappa-noqb1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "kappa-noqb2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-noqb2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2017602,
+      "revenueConfidential": false,
+      "patINR": -102,
+      "patConfidential": false,
+      "teamSize": 7,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "kappa-noqk1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "kappa-noqm1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "kappa-noqm2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q1",
+      "fiscalYear": "FY26",
+      "currentFMV": 1043059,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 10.5,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 0,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 1.9,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "kappa-fy26q1f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for kappa-fy26q1"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "kappa-fy26q1b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "kappa-fy26q1b1l",
+          "href": "https://example.com/kappa-fy26q1"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-fy26q1b1s1",
+          "text": "Quarter note for kappa-fy26q1. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "kappa-fy26q1b1s2",
+          "text": "see link",
+          "marks": [
+           "kappa-fy26q1b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "kappa-fy26q1b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "kappa-fy26q1b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2043059,
+      "revenueConfidential": false,
+      "patINR": -359,
+      "patConfidential": false,
+      "teamSize": 24,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "kappa-fy26q1k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "kappa-fy26q1m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "kappa-fy26q1m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q3",
+     "fiscalYear": null,
+     "currentFMV": 1064264,
+     "currentOwnershipPercent": 3,
+     "amountReturned": 69264,
+     "multipleOfInvestment": 2.4,
+     "tableFootnotes": [
+      {
+       "_key": "kappa-nofyf1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for kappa-nofy"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "kappa-nofyb1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "kappa-nofyb1l",
+         "href": "https://example.com/kappa-nofy"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "kappa-nofyb1s1",
+         "text": "Quarter note for kappa-nofy. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "kappa-nofyb1s2",
+         "text": "see link",
+         "marks": [
+          "kappa-nofyb1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "kappa-nofyb2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "kappa-nofyb2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2064264,
+     "patINR": -564,
+     "teamSize": 29,
+     "teamSizeConfidential": false,
+     "keyMetrics": [
+      {
+       "_key": "kappa-nofyk1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "kappa-nofym1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "kappa-nofym2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-nu",
+    "name": "Nu Nano",
+    "entityName": null,
+    "slug": "nu-nano",
+    "oneLiner": "Fractional order.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 1.5,
+    "investmentRounds": null,
+    "quarterlyUpdates": [
+     {
+      "quarter": "q2",
+      "fiscalYear": "fy26",
+      "currentFMV": 1064343,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 2.5,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 69343,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 5.3,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "nu-fy26q2f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for nu-fy26q2"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "nu-fy26q2b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "nu-fy26q2b1l",
+          "href": "https://example.com/nu-fy26q2"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "nu-fy26q2b1s1",
+          "text": "Quarter note for nu-fy26q2. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "nu-fy26q2b1s2",
+          "text": "see link",
+          "marks": [
+           "nu-fy26q2b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "nu-fy26q2b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "nu-fy26q2b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2064343,
+      "revenueConfidential": null,
+      "patINR": -643,
+      "patConfidential": null,
+      "teamSize": 28,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "nu-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "nu-fy26q2m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "nu-fy26q2m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "q2",
+     "fiscalYear": "fy26",
+     "currentFMV": 1064343,
+     "currentOwnershipPercent": 2.5,
+     "amountReturned": 69343,
+     "multipleOfInvestment": 5.3,
+     "tableFootnotes": [
+      {
+       "_key": "nu-fy26q2f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for nu-fy26q2"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "nu-fy26q2b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "nu-fy26q2b1l",
+         "href": "https://example.com/nu-fy26q2"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "nu-fy26q2b1s1",
+         "text": "Quarter note for nu-fy26q2. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "nu-fy26q2b1s2",
+         "text": "see link",
+         "marks": [
+          "nu-fy26q2b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "nu-fy26q2b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "nu-fy26q2b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2064343,
+     "patINR": -643,
+     "teamSize": 28,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "nu-fy26q2k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "nu-fy26q2m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "nu-fy26q2m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-beta",
+    "name": "beta Biotech",
+    "entityName": null,
+    "slug": "beta-biotech",
+    "oneLiner": "Fake biotech.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": false,
+    "logo": "https://cdn.sanity.io/images/nt0wmty3/production/a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5-300x300.jpg",
+    "link": null,
+    "sector": "Biotech & Health",
+    "sectorSlug": "biotech",
+    "investmentStatus": "exited",
+    "exitDate": "2026-06-30",
+    "order": 2,
+    "investmentRounds": [
+     {
+      "isInitialRound": true,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Seed",
+      "roundLabel": "Seed",
+      "investmentDate": "2022-11-11",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": null
+     },
+     {
+      "isInitialRound": false,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Series B",
+      "roundLabel": "Seed",
+      "investmentDate": "2022-11-11",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 0,
+      "yaliOwnership": 8.33,
+      "coInvestors": null
+     },
+     {
+      "isInitialRound": false,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Bridge",
+      "roundLabel": "Seed",
+      "investmentDate": null,
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": []
+     }
+    ],
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": 1038228,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 5,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 99000000,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 3.8,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "beta-fy26q2f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for beta-fy26q2"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "beta-fy26q2b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "beta-fy26q2b1l",
+          "href": "https://example.com/beta-fy26q2"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "beta-fy26q2b1s1",
+          "text": "Quarter note for beta-fy26q2. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "beta-fy26q2b1s2",
+          "text": "see link",
+          "marks": [
+           "beta-fy26q2b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "beta-fy26q2b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "beta-fy26q2b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2038228,
+      "revenueConfidential": null,
+      "patINR": -428,
+      "patConfidential": null,
+      "teamSize": 33,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "beta-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "beta-fy26q2m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "beta-fy26q2m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q1",
+      "fiscalYear": "FY26",
+      "currentFMV": 1046834,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 8,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 51834,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 4.4,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "beta-fy26q1f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for beta-fy26q1"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "beta-fy26q1b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "beta-fy26q1b1l",
+          "href": "https://example.com/beta-fy26q1"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "beta-fy26q1b1s1",
+          "text": "Quarter note for beta-fy26q1. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "beta-fy26q1b1s2",
+          "text": "see link",
+          "marks": [
+           "beta-fy26q1b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "beta-fy26q1b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "beta-fy26q1b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2046834,
+      "revenueConfidential": null,
+      "patINR": null,
+      "patConfidential": true,
+      "teamSize": 39,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "beta-fy26q1k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": []
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q2",
+     "fiscalYear": "FY26",
+     "currentFMV": 1038228,
+     "currentOwnershipPercent": 5,
+     "amountReturned": 99000000,
+     "multipleOfInvestment": 3.8,
+     "tableFootnotes": [
+      {
+       "_key": "beta-fy26q2f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for beta-fy26q2"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "beta-fy26q2b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "beta-fy26q2b1l",
+         "href": "https://example.com/beta-fy26q2"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "beta-fy26q2b1s1",
+         "text": "Quarter note for beta-fy26q2. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "beta-fy26q2b1s2",
+         "text": "see link",
+         "marks": [
+          "beta-fy26q2b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "beta-fy26q2b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "beta-fy26q2b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2038228,
+     "patINR": -428,
+     "teamSize": 33,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "beta-fy26q2k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "beta-fy26q2m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "beta-fy26q2m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-gamma",
+    "name": "Gamma Grids",
+    "entityName": null,
+    "slug": "gamma-grids",
+    "oneLiner": "No updates yet.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 2,
+    "investmentRounds": [
+     {
+      "isInitialRound": true,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Seed",
+      "roundLabel": "Seed",
+      "investmentDate": "2026-07-01",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": null
+     }
+    ],
+    "quarterlyUpdates": null,
+    "latestQuarter": null
+   },
+   {
+    "_id": "c-lambda",
+    "name": null,
+    "entityName": null,
+    "slug": null,
+    "oneLiner": "No name and no slug.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 5,
+    "investmentRounds": null,
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": null,
+      "currentFMVConfidential": true,
+      "currentOwnershipPercent": null,
+      "currentOwnershipConfidential": true,
+      "amountReturned": null,
+      "amountReturnedConfidential": true,
+      "multipleOfInvestment": null,
+      "moicConfidential": true,
+      "tableFootnotes": [
+       {
+        "_key": "lambda-fy26q2f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for lambda-fy26q2"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "lambda-fy26q2b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "lambda-fy26q2b1l",
+          "href": "https://example.com/lambda-fy26q2"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "lambda-fy26q2b1s1",
+          "text": "Quarter note for lambda-fy26q2. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "lambda-fy26q2b1s2",
+          "text": "see link",
+          "marks": [
+           "lambda-fy26q2b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "lambda-fy26q2b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "lambda-fy26q2b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": null,
+      "revenueConfidential": true,
+      "patINR": null,
+      "patConfidential": true,
+      "teamSize": null,
+      "teamSizeConfidential": true,
+      "keyMetrics": [
+       {
+        "_key": "lambda-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": null
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q2",
+     "fiscalYear": "FY26",
+     "currentFMV": null,
+     "currentOwnershipPercent": null,
+     "amountReturned": null,
+     "multipleOfInvestment": null,
+     "tableFootnotes": [
+      {
+       "_key": "lambda-fy26q2f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for lambda-fy26q2"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "lambda-fy26q2b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "lambda-fy26q2b1l",
+         "href": "https://example.com/lambda-fy26q2"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "lambda-fy26q2b1s1",
+         "text": "Quarter note for lambda-fy26q2. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "lambda-fy26q2b1s2",
+         "text": "see link",
+         "marks": [
+          "lambda-fy26q2b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "lambda-fy26q2b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "lambda-fy26q2b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": null,
+     "patINR": null,
+     "teamSize": null,
+     "teamSizeConfidential": true,
+     "keyMetrics": [
+      {
+       "_key": "lambda-fy26q2k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": null
+    }
+   },
+   {
+    "_id": "c-mu",
+    "name": "Mu Motors",
+    "entityName": null,
+    "slug": "mu-motors",
+    "oneLiner": "Ties with lambda on order.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": "Robotics",
+    "sectorSlug": "robotics",
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 5,
+    "investmentRounds": [],
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q4",
+      "fiscalYear": "FY25",
+      "currentFMV": 1023506,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 4,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 28506,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 1.6,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "mu-fy25q4f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for mu-fy25q4"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "mu-fy25q4b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "mu-fy25q4b1l",
+          "href": "https://example.com/mu-fy25q4"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "mu-fy25q4b1s1",
+          "text": "Quarter note for mu-fy25q4. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "mu-fy25q4b1s2",
+          "text": "see link",
+          "marks": [
+           "mu-fy25q4b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "mu-fy25q4b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "mu-fy25q4b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2023506,
+      "revenueConfidential": null,
+      "patINR": -406,
+      "patConfidential": null,
+      "teamSize": 31,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "mu-fy25q4k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "mu-fy25q4m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "mu-fy25q4m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q4",
+     "fiscalYear": "FY25",
+     "currentFMV": 1023506,
+     "currentOwnershipPercent": 4,
+     "amountReturned": 28506,
+     "multipleOfInvestment": 1.6,
+     "tableFootnotes": [
+      {
+       "_key": "mu-fy25q4f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for mu-fy25q4"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "mu-fy25q4b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "mu-fy25q4b1l",
+         "href": "https://example.com/mu-fy25q4"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "mu-fy25q4b1s1",
+         "text": "Quarter note for mu-fy25q4. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "mu-fy25q4b1s2",
+         "text": "see link",
+         "marks": [
+          "mu-fy25q4b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "mu-fy25q4b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "mu-fy25q4b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2023506,
+     "patINR": -406,
+     "teamSize": 31,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "mu-fy25q4k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "mu-fy25q4m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "mu-fy25q4m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-omicron",
+    "name": "Omicron Ops",
+    "entityName": null,
+    "slug": "omicron-ops",
+    "oneLiner": "Same slug as nothing else; dup slug test.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": 7,
+    "investmentRounds": null,
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": 1043413,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 7.5,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 0,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 2.3,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "omi-fy26q2f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for omi-fy26q2"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "omi-fy26q2b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "omi-fy26q2b1l",
+          "href": "https://example.com/omi-fy26q2"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "omi-fy26q2b1s1",
+          "text": "Quarter note for omi-fy26q2. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "omi-fy26q2b1s2",
+          "text": "see link",
+          "marks": [
+           "omi-fy26q2b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "omi-fy26q2b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "omi-fy26q2b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2043413,
+      "revenueConfidential": null,
+      "patINR": -13,
+      "patConfidential": null,
+      "teamSize": 18,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "omi-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "omi-fy26q2m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "omi-fy26q2m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q2",
+     "fiscalYear": "FY26",
+     "currentFMV": 1043413,
+     "currentOwnershipPercent": 7.5,
+     "amountReturned": 0,
+     "multipleOfInvestment": 2.3,
+     "tableFootnotes": [
+      {
+       "_key": "omi-fy26q2f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for omi-fy26q2"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "omi-fy26q2b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "omi-fy26q2b1l",
+         "href": "https://example.com/omi-fy26q2"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "omi-fy26q2b1s1",
+         "text": "Quarter note for omi-fy26q2. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "omi-fy26q2b1s2",
+         "text": "see link",
+         "marks": [
+          "omi-fy26q2b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "omi-fy26q2b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "omi-fy26q2b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2043413,
+     "patINR": -13,
+     "teamSize": 18,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "omi-fy26q2k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "omi-fy26q2m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "omi-fy26q2m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   },
+   {
+    "_id": "c-omicron-0",
+    "name": "Omicron Duplicate",
+    "entityName": null,
+    "slug": "omicron-ops",
+    "oneLiner": "Second doc with the same slug.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "exited",
+    "exitDate": null,
+    "order": 7,
+    "investmentRounds": null,
+    "quarterlyUpdates": null,
+    "latestQuarter": null
+   },
+   {
+    "_id": "c-delta",
+    "name": "Délta Dynamics",
+    "entityName": null,
+    "slug": "delta-dynamics",
+    "oneLiner": "Unicode name, no order.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": null,
+    "investmentRounds": null,
+    "quarterlyUpdates": [],
+    "latestQuarter": null
+   },
+   {
+    "_id": "c-epsilon",
+    "name": "epsilon Energy",
+    "entityName": null,
+    "slug": "epsilon-energy",
+    "oneLiner": "Dangling logo.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": "Ünclassified",
+    "sectorSlug": null,
+    "investmentStatus": "exited",
+    "exitDate": null,
+    "order": null,
+    "investmentRounds": null,
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": 1042614,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 8,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 47614,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 2.4,
+      "moicConfidential": null,
+      "tableFootnotes": [],
+      "updateNotes": [],
+      "revenueINR": null,
+      "revenueConfidential": true,
+      "patINR": -614,
+      "patConfidential": null,
+      "teamSize": 19,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "eps-fy26q2k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": null
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q2",
+     "fiscalYear": "FY26",
+     "currentFMV": 1042614,
+     "currentOwnershipPercent": 8,
+     "amountReturned": 47614,
+     "multipleOfInvestment": 2.4,
+     "tableFootnotes": [],
+     "updateNotes": [],
+     "revenueINR": null,
+     "patINR": -614,
+     "teamSize": 19,
+     "teamSizeConfidential": null,
+     "keyMetrics": [
+      {
+       "_key": "eps-fy26q2k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": null
+    }
+   },
+   {
+    "_id": "c-iota",
+    "name": "Ångström Analytics",
+    "entityName": null,
+    "slug": "angstrom-analytics",
+    "oneLiner": "String-sorted fiscal years.",
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": "Biotech & Health",
+    "sectorSlug": "biotech",
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": null,
+    "investmentRounds": [
+     {
+      "isInitialRound": true,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Seed",
+      "roundLabel": "Seed",
+      "investmentDate": "2025-01-01",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": null
+     },
+     {
+      "isInitialRound": false,
+      "isYaliLead": false,
+      "showEarlyInReport": false,
+      "roundName": "Seed",
+      "roundLabel": "Seed",
+      "investmentDate": "2025-12-31",
+      "preMoneyValuation": 100000000,
+      "totalRoundSize": 20000000,
+      "postMoneyValuation": 120000000,
+      "yaliInvestment": 10000000,
+      "yaliOwnership": 8.33,
+      "coInvestors": null
+     }
+    ],
+    "quarterlyUpdates": [
+     {
+      "quarter": "Q1",
+      "fiscalYear": "FY9",
+      "currentFMV": 1046873,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 7.5,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 51873,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 3.3,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "iota-fy9q1f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for iota-fy9q1"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "iota-fy9q1b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "iota-fy9q1b1l",
+          "href": "https://example.com/iota-fy9q1"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy9q1b1s1",
+          "text": "Quarter note for iota-fy9q1. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "iota-fy9q1b1s2",
+          "text": "see link",
+          "marks": [
+           "iota-fy9q1b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "iota-fy9q1b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy9q1b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2046873,
+      "revenueConfidential": false,
+      "patINR": -673,
+      "patConfidential": false,
+      "teamSize": 38,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "iota-fy9q1k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "iota-fy9q1m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "iota-fy9q1m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q1",
+      "fiscalYear": "FY27",
+      "currentFMV": 1052236,
+      "currentFMVConfidential": false,
+      "currentOwnershipPercent": 9,
+      "currentOwnershipConfidential": false,
+      "amountReturned": 0,
+      "amountReturnedConfidential": false,
+      "multipleOfInvestment": 4.6,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "iota-fy27q1f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for iota-fy27q1"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "iota-fy27q1b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "iota-fy27q1b1l",
+          "href": "https://example.com/iota-fy27q1"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy27q1b1s1",
+          "text": "Quarter note for iota-fy27q1. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "iota-fy27q1b1s2",
+          "text": "see link",
+          "marks": [
+           "iota-fy27q1b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "iota-fy27q1b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy27q1b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2052236,
+      "revenueConfidential": false,
+      "patINR": -436,
+      "patConfidential": false,
+      "teamSize": 41,
+      "teamSizeConfidential": false,
+      "keyMetrics": [
+       {
+        "_key": "iota-fy27q1k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "iota-fy27q1m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "iota-fy27q1m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": 1056006,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 4,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 61006,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": null,
+      "moicConfidential": true,
+      "tableFootnotes": [
+       {
+        "_key": "iota-fy26q2af1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for iota-fy26q2a"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "iota-fy26q2ab1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "iota-fy26q2ab1l",
+          "href": "https://example.com/iota-fy26q2a"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2ab1s1",
+          "text": "Quarter note for iota-fy26q2a. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2ab1s2",
+          "text": "see link",
+          "marks": [
+           "iota-fy26q2ab1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "iota-fy26q2ab2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2ab2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2056006,
+      "revenueConfidential": null,
+      "patINR": -6,
+      "patConfidential": null,
+      "teamSize": 11,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "iota-fy26q2ak1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": null
+     },
+     {
+      "quarter": "Q2",
+      "fiscalYear": "FY26",
+      "currentFMV": 1047065,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 3.5,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 52065,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 2.5,
+      "moicConfidential": false,
+      "tableFootnotes": [
+       {
+        "_key": "iota-fy26q2bf1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for iota-fy26q2b"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "iota-fy26q2bb1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "iota-fy26q2bb1l",
+          "href": "https://example.com/iota-fy26q2b"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2bb1s1",
+          "text": "Quarter note for iota-fy26q2b. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2bb1s2",
+          "text": "see link",
+          "marks": [
+           "iota-fy26q2bb1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "iota-fy26q2bb2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy26q2bb2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2047065,
+      "revenueConfidential": null,
+      "patINR": -165,
+      "patConfidential": null,
+      "teamSize": 30,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "iota-fy26q2bk1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "iota-fy26q2bm1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "iota-fy26q2bm2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     },
+     {
+      "quarter": "Q4",
+      "fiscalYear": "FY10",
+      "currentFMV": 1015461,
+      "currentFMVConfidential": null,
+      "currentOwnershipPercent": 1.5,
+      "currentOwnershipConfidential": null,
+      "amountReturned": 20461,
+      "amountReturnedConfidential": null,
+      "multipleOfInvestment": 2.1,
+      "moicConfidential": null,
+      "tableFootnotes": [
+       {
+        "_key": "iota-fy10q4f1",
+        "_type": "footnote",
+        "tableType": "portfolio",
+        "text": "Fake footnote for iota-fy10q4"
+       }
+      ],
+      "updateNotes": [
+       {
+        "_type": "block",
+        "_key": "iota-fy10q4b1",
+        "style": "normal",
+        "markDefs": [
+         {
+          "_type": "link",
+          "_key": "iota-fy10q4b1l",
+          "href": "https://example.com/iota-fy10q4"
+         }
+        ],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy10q4b1s1",
+          "text": "Quarter note for iota-fy10q4. ",
+          "marks": []
+         },
+         {
+          "_type": "span",
+          "_key": "iota-fy10q4b1s2",
+          "text": "see link",
+          "marks": [
+           "iota-fy10q4b1l"
+          ]
+         }
+        ]
+       },
+       {
+        "_type": "block",
+        "_key": "iota-fy10q4b2",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "iota-fy10q4b2s1",
+          "text": "Second paragraph, no link.",
+          "marks": []
+         }
+        ]
+       }
+      ],
+      "revenueINR": 2015461,
+      "revenueConfidential": null,
+      "patINR": -61,
+      "patConfidential": null,
+      "teamSize": 26,
+      "teamSizeConfidential": null,
+      "keyMetrics": [
+       {
+        "_key": "iota-fy10q4k1",
+        "label": "ARR",
+        "value": "₹1.2 Cr"
+       }
+      ],
+      "roundMoics": [
+       {
+        "_key": "iota-fy10q4m1",
+        "_type": "roundMoic",
+        "roundName": "Seed",
+        "moic": 2.5
+       },
+       {
+        "_key": "iota-fy10q4m2",
+        "_type": "roundMoic",
+        "roundName": "Series A",
+        "moic": 1.1
+       }
+      ]
+     }
+    ],
+    "latestQuarter": {
+     "quarter": "Q1",
+     "fiscalYear": "FY9",
+     "currentFMV": 1046873,
+     "currentOwnershipPercent": 7.5,
+     "amountReturned": 51873,
+     "multipleOfInvestment": 3.3,
+     "tableFootnotes": [
+      {
+       "_key": "iota-fy9q1f1",
+       "_type": "footnote",
+       "tableType": "portfolio",
+       "text": "Fake footnote for iota-fy9q1"
+      }
+     ],
+     "updateNotes": [
+      {
+       "_type": "block",
+       "_key": "iota-fy9q1b1",
+       "style": "normal",
+       "markDefs": [
+        {
+         "_type": "link",
+         "_key": "iota-fy9q1b1l",
+         "href": "https://example.com/iota-fy9q1"
+        }
+       ],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "iota-fy9q1b1s1",
+         "text": "Quarter note for iota-fy9q1. ",
+         "marks": []
+        },
+        {
+         "_type": "span",
+         "_key": "iota-fy9q1b1s2",
+         "text": "see link",
+         "marks": [
+          "iota-fy9q1b1l"
+         ]
+        }
+       ]
+      },
+      {
+       "_type": "block",
+       "_key": "iota-fy9q1b2",
+       "style": "normal",
+       "markDefs": [],
+       "children": [
+        {
+         "_type": "span",
+         "_key": "iota-fy9q1b2s1",
+         "text": "Second paragraph, no link.",
+         "marks": []
+        }
+       ]
+      }
+     ],
+     "revenueINR": 2046873,
+     "patINR": -673,
+     "teamSize": 38,
+     "teamSizeConfidential": false,
+     "keyMetrics": [
+      {
+       "_key": "iota-fy9q1k1",
+       "label": "ARR",
+       "value": "₹1.2 Cr"
+      }
+     ],
+     "roundMoics": [
+      {
+       "_key": "iota-fy9q1m1",
+       "_type": "roundMoic",
+       "roundName": "Seed",
+       "moic": 2.5
+      },
+      {
+       "_key": "iota-fy9q1m2",
+       "_type": "roundMoic",
+       "roundName": "Series A",
+       "moic": 1.1
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": [
+   {
+    "_id": "c-solo",
+    "name": "Solo Co",
+    "entityName": null,
+    "slug": "solo",
+    "oneLiner": null,
+    "detail": null,
+    "aboutCompany": null,
+    "isRevenueMaking": null,
+    "logo": null,
+    "link": null,
+    "sector": null,
+    "sectorSlug": null,
+    "investmentStatus": "active",
+    "exitDate": null,
+    "order": null,
+    "investmentRounds": null,
+    "quarterlyUpdates": null,
+    "latestQuarter": null
+   }
+  ]
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": []
+ }
+]
