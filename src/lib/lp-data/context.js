@@ -4,13 +4,13 @@ import { getDocLoader } from './loader.js';
 import { attr, isObj, byId } from './groq.js';
 import { SANITY_CDN_IMAGES } from './rest.js';
 
-// Collect `_ref` strings found anywhere inside the given values (images skipped:
-// their URL comes from the ref itself).
+// Collect `_ref` strings found anywhere inside the given values (asset refs included:
+// an asset that does not exist resolves to null, like `asset->` in GROQ).
 export function refsIn(values, out = new Set()) {
   const walk = (v) => {
     if (Array.isArray(v)) v.forEach(walk);
     else if (isObj(v)) {
-      if (typeof v._ref === 'string' && !v._ref.startsWith('image-')) out.add(v._ref);
+      if (typeof v._ref === 'string') out.add(v._ref);
       for (const k of Object.keys(v)) walk(v[k]);
     }
   };
@@ -58,12 +58,14 @@ export class Ctx {
     return this.docs.get(ref) ?? null;
   }
 
-  // `x.asset->url` given the `asset` reference value.
+  // `x.asset->url` given the `asset` reference value. Null when the asset document
+  // does not exist (the loader returned nothing for it); otherwise images stay on
+  // Sanity's CDN and files point at the session-checked file route.
   assetUrl(assetRef) {
     const ref = attr(assetRef, '_ref');
-    if (typeof ref !== 'string') return null;
+    if (typeof ref !== 'string' || !this.docs.get(ref)) return null;
     if (ref.startsWith('image-')) return imageUrlFromRef(ref);
-    if (ref.startsWith('file-')) return this.docs.get(ref) ? `/${this.fileBase}/file/${ref}/` : null;
+    if (ref.startsWith('file-')) return `/${this.fileBase}/file/${ref}/`;
     return null;
   }
 

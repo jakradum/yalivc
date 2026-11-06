@@ -7,6 +7,8 @@
 //     `desc` is the exact reverse (null/missing first), ties keep input order.
 //   - array `| order()` is stable over the stored array order.
 //   - strings compare by code point (not localeCompare).
+//   - order() ties fall back to _id ascending, also under desc (same as a stable
+//     sort over _id-ordered input).
 //   - `null == null` is true; a missing attribute is null.
 //   - a reference to a missing document, or `->` on a non-reference, is null.
 //   - a projection of a missing field gives the key with null.
@@ -38,8 +40,15 @@ export function eq(a, b) {
 // GROQ `in [...]` for a list of primitives.
 export const inList = (v, list) => list.some((x) => eq(v, x));
 
-// GROQ lower(): strings only, anything else → null.
-export const lower = (v) => (typeof v === 'string' ? v.toLowerCase() : null);
+// GROQ lower(): strings only, anything else → null. Hosted Sanity lowercases one
+// code point at a time (simple case mapping): 'İ' → 'i' and every 'Σ' → 'σ', where
+// JS toLowerCase() gives 'i̇' and a word-final 'ς'.
+export function lower(v) {
+  if (typeof v !== 'string') return null;
+  let out = '';
+  for (const ch of v) out += ch === '\u0130' ? 'i' : ch.toLowerCase();
+  return out;
+}
 
 // select(flag == true => null, value)
 export const unlessTrue = (flag, value) => (flag === true ? null : raw(value));

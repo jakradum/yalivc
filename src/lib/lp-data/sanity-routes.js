@@ -51,7 +51,7 @@ const ACTIVE_USER = {
 };
 
 function scoped(table, scope) {
-  const q = table[scope];
+  const q = Object.prototype.hasOwnProperty.call(table, scope) ? table[scope] : null;
   if (!q) throw new Error(`Unknown scope: ${scope}`);
   return q;
 }

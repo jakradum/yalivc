@@ -129,9 +129,10 @@ const roundsSorted = (c, proj) => {
   return a ? byInvestmentDate(a).map((r) => (isObj(r) ? proj(r) : null)) : null;
 };
 
-// Load what company projections dereference: category, co-investors.
-const loadCompanyRefs = (ctx, companies) =>
-  ctx.load(companies.map((c) => [c.category, arr(c.investmentRounds)?.map((r) => attr(r, 'coInvestors'))]));
+// Load what company projections dereference: category, logo, co-investors
+// (depth 2 also reaches the co-investors' logo assets).
+const loadCompanyRefs = (ctx, companies, depth = 1) =>
+  ctx.load(companies.map((c) => [c.category, c.logo, c.logomarkTypeface, arr(c.investmentRounds)?.map((r) => attr(r, 'coInvestors'))]), depth);
 
 // ── portal reads ───────────────────────────────────────────────────────────
 
@@ -144,7 +145,7 @@ export async function getLPFundSettings() {
   const ctx = new Ctx(PORTAL);
   const s = first(await ctx.type('lpFundSettings'));
   if (!s) return null;
-  await ctx.load([s.focusSectors]);
+  await ctx.load([s.focusSectors, s.logoLight, s.logoDark]);
   return {
     ...pick(s, ['fundName', 'fundManagerName', 'fundManagerDescriptor', 'tagline', 'firstCloseDate', 'finalCloseDate',
       'fundSizeAtClose', 'targetFundSizeINR', 'targetFundSizeUSD', 'investmentStrategy']),
@@ -212,7 +213,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
   const ctx = new Ctx(PORTAL);
   const c = first((await ctx.type('company')).filter((d) => eq(slugOf(d), companySlug) && onPortal(d)));
   if (!c) return null;
-  await loadCompanyRefs(ctx, [c]);
+  await loadCompanyRefs(ctx, [c], 2);
   return {
     _id: raw(c._id),
     name: raw(c.name),
@@ -241,7 +242,7 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
   const ctx = new Ctx(PORTAL);
   const matches = (c) => (arr(c.quarterlyUpdates) || []).filter((u) => eq(attr(u, 'quarter'), quarter) && eq(attr(u, 'fiscalYear'), fiscalYear));
   const companies = byOrder((await ctx.type('company')).filter((c) => onPortal(c) && count(arr(c.quarterlyUpdates) && matches(c)) > 0));
-  await ctx.load(companies.map((c) => c.category));
+  await ctx.load(companies.map((c) => [c.category, c.logo]));
   return companies.map((c) => {
     const u = first(matches(c));
     return {
@@ -482,7 +483,7 @@ export async function getDataRoomFundPerformanceSettings() {
 export async function getDataRoomPortfolioCompanies() {
   const ctx = new Ctx(DATAROOM);
   const companies = byOrder((await ctx.type('company')).filter((c) => eq(c.investmentStatus, 'active')));
-  await ctx.load(companies.map((c) => c.category));
+  await ctx.load(companies.map((c) => [c.category, c.logo]));
   return companies.map((c) => ({
     _id: raw(c._id),
     name: raw(c.name),
@@ -512,6 +513,10 @@ export async function getDataRoomAllFundSettings() {
 // ── route lookups (formerly inline GROQ in the API routes) ──────────────────
 
 const ACCESS_FLAG = { portal: 'lpPortalAccess', dataroom: 'dataroomAccess' };
+function scoped(table, scope) {
+  if (!Object.prototype.hasOwnProperty.call(table, scope)) throw new Error(`Unknown scope: ${scope}`);
+  return table[scope];
+}
 
 async function findDomain(domain, pred) {
   needParam('domain', domain);
@@ -522,14 +527,14 @@ async function findDomain(domain, pred) {
 /* *[_type == "domainPrivilege" && domain == $domain && <lpPortalAccess|dataroomAccess> == true && isActive == true][0]{
      _id, requireCode, inviteCode, codeExpiry, maxUses, usedCount } */
 export async function getDomainPrivilegeForSignIn(scope, domain) {
-  const flag = ACCESS_FLAG[scope];
+  const flag = scoped(ACCESS_FLAG, scope);
   const p = await findDomain(domain, (d) => d[flag] === true && d.isActive === true);
   return p ? pick(p, ['_id', 'requireCode', 'inviteCode', 'codeExpiry', 'maxUses', 'usedCount']) : null;
 }
 
 /* ... && <flag> == true && requireCode == true && isActive == true][0]{ _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog } */
 export async function getDomainSharedCode(scope, domain) {
-  const flag = ACCESS_FLAG[scope];
+  const flag = scoped(ACCESS_FLAG, scope);
   const p = await findDomain(domain, (d) => d[flag] === true && d.requireCode === true && d.isActive === true);
   return p ? pick(p, ['_id', 'inviteCode', 'codeExpiry', 'maxUses', 'usedCount', 'redemptionLog']) : null;
 }
@@ -550,18 +555,18 @@ const ACTIVE = { portal: lpPortalActive, dataroom: dataroomActive };
 
 /* active user (portal: lpPortalAccess rule, dataroom: investorDataRoomAccess rule) [0]{ _id, name } */
 export async function getActiveUserForSignIn(scope, email) {
-  const u = await findUser(email, ACTIVE[scope]);
+  const u = await findUser(email, scoped(ACTIVE, scope));
   return u ? pick(u, ['_id', 'name']) : null;
 }
 
 /* ... [0]{ _id, inviteCode, inviteCodeExpiry } */
 export async function getActiveUserInviteCode(scope, email) {
-  const u = await findUser(email, ACTIVE[scope]);
+  const u = await findUser(email, scoped(ACTIVE, scope));
   return u ? pick(u, ['_id', 'inviteCode', 'inviteCodeExpiry']) : null;
 }
 
 /* ... [0]{ _id } */
 export async function getActiveUserId(scope, email) {
-  const u = await findUser(email, ACTIVE[scope]);
+  const u = await findUser(email, scoped(ACTIVE, scope));
   return u ? { _id: raw(u._id) } : null;
 }

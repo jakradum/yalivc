@@ -9,15 +9,17 @@
 //   - private types come from `sanity_docs` (PostgREST, secret key, paged).
 //   - public types (PUBLIC_TYPES) come from Sanity, published perspective.
 //   - file assets (`file-<sha1>-<ext>` ids) come from `sanity_files` and are returned
-//     as { _id, _type: 'sanity.fileAsset', originalFilename }. A file ref with no
-//     row there resolves to null, like a deleted asset in Sanity.
-//   - image assets are never loaded: image URLs are built from the ref.
+//     as { _id, _type: 'sanity.fileAsset', originalFilename, mimeType, size }. A file
+//     ref with no row there resolves to null, like a deleted asset in Sanity.
+//   - image assets (`image-…` ids) are `sanity.imageAsset` docs from Sanity; only
+//     their existence matters (the URL is built from the ref).
+// Nothing is cached: every call reads fresh.
 // Tests replace it with fixtures via setDocLoader(); a fixture loader returns file
 // asset docs from byIds the same way.
 import { supa, supaAll, sanityQuery, enc, isSafeId } from './rest.js';
 import { byId } from './groq.js';
 
-export const PUBLIC_TYPES = new Set(['category', 'teamMember', 'publication', 'news', 'socialUpdate']);
+export const PUBLIC_TYPES = new Set(['category', 'teamMember', 'publication', 'news', 'socialUpdate', 'sanity.imageAsset']);
 
 // Private types that are read from Sanity while the twin does not hold them yet.
 // `investor` joins the twin in Phase 1 (B2); until its rows exist, byType falls
@@ -46,12 +48,15 @@ export const defaultLoader = {
   async byIds(ids) {
     const want = [...new Set(ids)].filter(isSafeId);
     const fileIds = want.filter((id) => id.startsWith('file-'));
+    const imageIds = want.filter((id) => id.startsWith('image-'));
     const docIds = want.filter((id) => !id.startsWith('file-') && !id.startsWith('image-'));
     const out = [];
 
     for (const part of chunk(fileIds, CHUNK)) {
-      const { rows } = await supa(`/rest/v1/sanity_files?select=asset_id,original_filename&asset_id=${inFilter(part)}`);
-      for (const r of rows || []) out.push({ _id: r.asset_id, _type: 'sanity.fileAsset', originalFilename: r.original_filename ?? null });
+      const { rows } = await supa(`/rest/v1/sanity_files?select=asset_id,original_filename,mime_type,size_bytes&asset_id=${inFilter(part)}`);
+      for (const r of rows || []) {
+        out.push({ _id: r.asset_id, _type: 'sanity.fileAsset', originalFilename: r.original_filename ?? null, mimeType: r.mime_type ?? null, size: r.size_bytes ?? null });
+      }
     }
 
     const found = new Set();
@@ -60,7 +65,7 @@ export const defaultLoader = {
       for (const r of rows || []) { out.push(r.doc); found.add(r.doc._id); }
     }
 
-    const rest = docIds.filter((id) => !found.has(id));
+    const rest = [...imageIds, ...docIds.filter((id) => !found.has(id))];
     if (rest.length) {
       const docs = await sanityQuery('*[_id in $ids]', { ids: rest });
       for (const d of docs || []) {
