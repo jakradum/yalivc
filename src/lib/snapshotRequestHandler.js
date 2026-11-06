@@ -2,8 +2,8 @@
  * snapshotRequestHandler.js
  * POST handler for /api/snapshot-report/[slug].
  * Computes a data snapshot of the current portal view for a given quarterly report
- * and writes it back to the Sanity document.
- * Internal access only (@yali.vc / @florintree.com).
+ * and writes it back to the report document (Sanity, or Supabase when LP_DATA_SOURCE=supabase).
+ * Internal access only (canBuildReports in src/lib/internal-user.js).
  */
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
@@ -12,7 +12,8 @@ import {
   getLPQuarterlyReportBySlugAdmin,
   getLPInvestmentsForPdf,
   updateLPReportSnapshot,
-} from '@/lib/sanity-queries';
+} from '@/lib/lp-data';
+import { canBuildReports } from '@/lib/internal-user';
 import { buildReportData } from '@/lib/quarterly-utils';
 
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
@@ -47,8 +48,7 @@ export async function handleSnapshotPost(slug) {
 
   if (!email) return new NextResponse('Unauthorized', { status: 401 });
 
-  const isInternal = email.endsWith('@yali.vc') || email.endsWith('@florintree.com') || email === 'pranavkarnad@gmail.com';
-  if (!isInternal) return new NextResponse('Forbidden — internal access only', { status: 403 });
+  if (!canBuildReports(email)) return new NextResponse('Forbidden — internal access only', { status: 403 });
 
   if (!slug || typeof slug !== 'string') return new NextResponse('Missing slug', { status: 400 });
 

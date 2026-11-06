@@ -1,20 +1,18 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { signSessionFor } from '@/lib/session';
+import {
+  getDomainPrivilegeForSignIn,
+  getDomainSharedCode,
+  getBlockedPortalUser,
+  getActiveUserForSignIn,
+  getActiveUserInviteCode,
+  redeemDomainSharedCode,
+  clearUserInviteCode,
+} from '@/lib/lp-data';
+import { isYaliStaff } from '@/lib/internal-user';
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only, so Studio
-  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
-  // the existing API token until one is created.)
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
 
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -105,12 +103,7 @@ export async function POST(request) {
 
       // Check domain privilege
       const domain = normalizedEmail.split('@')[1];
-      const domainPriv = await client.fetch(
-        `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && isActive == true][0]{
-          _id, requireCode, inviteCode, codeExpiry, maxUses, usedCount
-        }`,
-        { domain }
-      );
+      const domainPriv = await getDomainPrivilegeForSignIn('dataroom', domain);
 
       if (domainPriv?.requireCode) {
         if (!domainPriv.inviteCode || !domainPriv.codeExpiry || new Date(domainPriv.codeExpiry) < new Date()) {
@@ -124,26 +117,19 @@ export async function POST(request) {
 
       // @yali.vc and @florintree.com always have access — no Sanity lookup needed
       // domainPriv with requireCode: false also grants open access
-      const isTrustedDomain = normalizedEmail.endsWith('@yali.vc') ||
-        normalizedEmail.endsWith('@florintree.com') ||
+      const isTrustedDomain = isYaliStaff(normalizedEmail) ||
         (domainPriv && !domainPriv.requireCode);
 
       let user = null;
       if (isTrustedDomain) {
         // noAccess: true is a kill switch even for domain privilege and trusted domain users
-        const blocked = await client.fetch(
-          `*[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id }`,
-          { email: normalizedEmail }
-        );
+        const blocked = await getBlockedPortalUser(normalizedEmail);
         if (blocked) {
           await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
           return NextResponse.json({ success: true, ref: 'DR-01' });
         }
       } else {
-        user = await client.fetch(
-          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{ _id, name }`,
-          { email: normalizedEmail }
-        );
+        user = await getActiveUserForSignIn('dataroom', normalizedEmail);
         if (!user) {
           await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
           return NextResponse.json({ success: true, ref: 'DR-01' });
@@ -256,12 +242,7 @@ export async function POST(request) {
       if (email) {
         const normalizedEmail = email.toLowerCase().trim();
         const domain = normalizedEmail.split('@')[1];
-        const domainPriv = await client.fetch(
-          `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && requireCode == true && isActive == true][0]{
-            _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog
-          }`,
-          { domain }
-        );
+        const domainPriv = await getDomainSharedCode('dataroom', domain);
 
         if (domainPriv?.inviteCode && domainPriv.codeExpiry && new Date(domainPriv.codeExpiry) >= new Date()) {
           if ((domainPriv.usedCount || 0) < domainPriv.maxUses) {
@@ -269,26 +250,11 @@ export async function POST(request) {
             const b = Buffer.from(domainPriv.inviteCode.padEnd(32));
             if (crypto.timingSafeEqual(a, b) && code.trim() === domainPriv.inviteCode) {
               // noAccess: true is a kill switch even for domain shared-code users
-              const blocked = await client.fetch(
-                `*[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id }`,
-                { email: normalizedEmail }
-              );
+              const blocked = await getBlockedPortalUser(normalizedEmail);
               if (blocked) {
                 return NextResponse.json({ error: 'Code expired. Please request a new one.' }, { status: 401 });
               }
-              const writeClient = createClient({
-                projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-                dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-                apiVersion: '2024-01-01',
-                useCdn: false,
-                token: process.env.SANITY_WRITE_TOKEN,
-              });
-              const logEntry = { _key: crypto.randomBytes(8).toString('hex'), email: normalizedEmail, redeemedAt: new Date().toISOString() };
-              const existingLog = Array.isArray(domainPriv.redemptionLog) ? domainPriv.redemptionLog : [];
-              await writeClient
-                .patch(domainPriv._id)
-                .set({ usedCount: (domainPriv.usedCount || 0) + 1, redemptionLog: [...existingLog, logEntry] })
-                .commit();
+              await redeemDomainSharedCode(domainPriv, normalizedEmail);
 
               const sessionTimestamp = Date.now().toString();
               const sessionValue = signSession(normalizedEmail, sessionTimestamp);
@@ -309,25 +275,13 @@ export async function POST(request) {
       // --- Path B: Sanity invite code (checked first so manually-issued codes always win) ---
       if (email) {
         const normalizedEmail = email.toLowerCase().trim();
-        const user = await client.fetch(
-          `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{
-            _id, inviteCode, inviteCodeExpiry
-          }`,
-          { email: normalizedEmail }
-        );
+        const user = await getActiveUserInviteCode('dataroom', normalizedEmail);
 
         if (user?.inviteCode && user?.inviteCodeExpiry && new Date(user.inviteCodeExpiry) >= new Date()) {
           const a = Buffer.from(code.trim().padEnd(32));
           const b = Buffer.from(user.inviteCode.padEnd(32));
           if (crypto.timingSafeEqual(a, b) && code.trim() === user.inviteCode) {
-            const writeClient = createClient({
-              projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-              dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-              apiVersion: '2024-01-01',
-              useCdn: false,
-              token: process.env.SANITY_WRITE_TOKEN,
-            });
-            await writeClient.patch(user._id).unset(['inviteCode', 'inviteCodeExpiry']).commit();
+            await clearUserInviteCode(user._id);
 
             const sessionTimestamp = Date.now().toString();
             const sessionValue = signSession(normalizedEmail, sessionTimestamp);

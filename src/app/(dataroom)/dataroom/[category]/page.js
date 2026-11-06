@@ -2,10 +2,11 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/session';
+import { getDataRoomTeamMembers } from '@/lib/sanity-queries';
+import { isYaliStaff } from '@/lib/internal-user';
 import {
   getDataRoomDocuments,
   getDataRoomTrackRecords,
-  getDataRoomTeamMembers,
   getDataRoomFundPerformance,
   getDataRoomAllFundSettings,
   getDataRoomPortfolioCompanies,
@@ -13,7 +14,7 @@ import {
   getDataroomFundContent,
   getLatestLPReportForDataRoom,
   getDataroomDomainPrivilege,
-} from '@/lib/sanity-queries';
+} from '@/lib/lp-data';
 import DataroomTopbar from '../DataroomTopbar';
 import DrSidebar from '../DrSidebar';
 import TeamGrid from '../TeamGrid';
@@ -104,7 +105,7 @@ export default async function CategoryPage({ params }) {
   // No session → sign in
   if (!email) redirect('/dataroom/sign-in');
   // Authorise: trusted domain, active domain privilege, or individual user access
-  const isTrustedDomain = email.endsWith('@yali.vc') || email.endsWith('@florintree.com');
+  const isTrustedDomain = isYaliStaff(email);
   if (!isTrustedDomain) {
     const domain = email.split('@')[1];
     const [domainPriv, user] = await Promise.all([

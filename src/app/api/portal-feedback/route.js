@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { createPortalFeedback } from '@/lib/lp-data';
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
 
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
 const COOKIE_NAME = 'portal-session';
@@ -66,8 +59,7 @@ export async function POST(request) {
     }
 
     // Create feedback record in Sanity
-    const doc = await client.create({
-      _type: 'lpPortalFeedback',
+    const doc = await createPortalFeedback({
       email,
       npsScore: score,
       reportQuarter: reportQuarter || null,

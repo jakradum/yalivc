@@ -1,19 +1,13 @@
 import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/sanity-queries';
+import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/lp-data';
+import { isYaliStaff } from '@/lib/internal-user';
 import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate, getEarliestInvestmentDate, isExitedAsOf } from '@/lib/quarterly-utils';
 import { verifySession } from '@/lib/session';
 import CompanyDetailClient from './CompanyDetailClient';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
-
-// Check if user is internal (has @yali.vc or @florintree.com email)
-function isInternalUser(email) {
-  if (!email) return false;
-  const lower = email.toLowerCase();
-  return lower.endsWith('@yali.vc') || lower.endsWith('@florintree.com');
-}
 
 // Generate metadata
 export async function generateMetadata({ params }) {
@@ -43,7 +37,7 @@ export default async function CompanyPage({ params, searchParams }) {
   const userEmail = cookieValue ? verifySession(cookieValue, 'portal') : null;
   // Cookie present but signature invalid → redirect to sign-in
   if (cookieValue && userEmail === null) redirect('/partners/sign-in');
-  const hasInternalAccess = isInternalUser(userEmail);
+  const hasInternalAccess = isYaliStaff(userEmail);
 
   const [company, latestReport, allSlugs, availableQuarters] = await Promise.all([
     getLPInvestmentByCompanySlug(slug),

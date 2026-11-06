@@ -5,12 +5,11 @@ import {
   getLatestLPQuarterlyReport,
   getLPQuarterlyReportBySlug,
   getLPInvestments,
-  getTeamMembers,
   getAvailableLPQuarters,
-  getNewsByDateRange,
-  getSocialUpdatesByDateRange,
   getPortalUserByEmail,
-} from '@/lib/sanity-queries';
+} from '@/lib/lp-data';
+import { getTeamMembers, getNewsByDateRange, getSocialUpdatesByDateRange } from '@/lib/sanity-queries';
+import { isYaliStaff } from '@/lib/internal-user';
 import { buildReportData, getQuarterStartDate, getQuarterEndDate } from '@/lib/quarterly-utils';
 import { verifySession } from '@/lib/session';
 import PortalLanding from './PortalLanding';
@@ -18,13 +17,6 @@ import PortalContent from './PortalContent';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
-
-// Check if user is internal (has @yali.vc or @florintree.com email)
-function isInternalUser(email) {
-  if (!email) return false;
-  const lower = email.toLowerCase();
-  return lower.endsWith('@yali.vc') || lower.endsWith('@florintree.com');
-}
 
 export default async function PartnersPortal({ searchParams }) {
   const { report: reportSlug, section: initialSection } = await searchParams;
@@ -35,7 +27,7 @@ export default async function PartnersPortal({ searchParams }) {
   const userEmail = cookieValue ? verifySession(cookieValue, 'portal') : null;
   // Cookie present but signature invalid → redirect to sign-in
   if (cookieValue && userEmail === null) redirect('/partners/sign-in');
-  const hasInternalAccess = isInternalUser(userEmail);
+  const hasInternalAccess = isYaliStaff(userEmail);
 
   // Fetch all raw data in parallel (including user info for GIFT City status)
   const [fundSettings, latestReport, investments, teamMembers, availableQuarters, portalUser] = await Promise.all([
