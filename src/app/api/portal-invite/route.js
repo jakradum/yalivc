@@ -2,27 +2,13 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { signSessionFor } from '@/lib/session';
-import { createClient } from '@sanity/client';
+import { getActiveUserId } from '@/lib/lp-data';
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only, so Studio
-  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
-  // the existing API token until one is created.)
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
 
 // The link is the login, so access is checked when it is clicked, not only when it
 // was sent: a forwarded or old link is useless once the person is off the list.
 async function hasPortalAccess(email) {
-  const user = await client.fetch(
-    `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id }`,
-    { email }
-  );
+  const user = await getActiveUserId('portal', email);
   return Boolean(user);
 }
 

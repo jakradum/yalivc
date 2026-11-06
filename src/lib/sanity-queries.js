@@ -695,93 +695,6 @@ export async function getLatestNewsletter() {
   );
 }
 
-// LP REPORT QUERIES
-export async function getLPReports() {
-  return client.fetch(
-    `*[_type == "quarterlyReport" && isPublished == true] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      quarter,
-      fiscalYear,
-      publishedAt,
-      summary,
-      highlights,
-      "pdfUrl": pdfFile.asset->url
-    }`
-  );
-}
-
-export async function getLPReportBySlug(slug) {
-  return client.fetch(
-    `*[_type == "quarterlyReport" && slug.current == $slug && isPublished == true][0]{
-      _id,
-      title,
-      slug,
-      quarter,
-      fiscalYear,
-      visibility,
-      publishedAt,
-      summary,
-      highlights,
-      "pdfUrl": pdfFile.asset->url,
-      "pdfFileName": pdfFile.asset->originalFilename,
-      coverNote {
-        greeting,
-        paragraphs,
-        signatoryName,
-        signatoryTitle
-      },
-      fundSummary {
-        targetCorpus,
-        capitalRaised,
-        capitalDeployed,
-        navPerUnit,
-        irr,
-        moic
-      },
-      portfolioData[] {
-        company->{
-          _id,
-          name,
-          slug,
-          oneLiner,
-          detail,
-          "logo": logo.asset->url,
-          link,
-          category->{name, slug}
-        },
-        dateOfFirstInvestment,
-        fundingRound,
-        totalAmountInvested,
-        ownershipFullyDiluted,
-        fmv,
-        amountReturnedToInvestors,
-        multipleOfInvestment,
-        keyCoInvestors
-      },
-      mediaCoverage[] {
-        date,
-        title,
-        url
-      },
-      contactInfo {
-        newsroomUrl,
-        irEmail
-      }
-    }`,
-    { slug }
-  );
-}
-
-export async function getAllLPReportSlugs() {
-  return client.fetch(
-    `*[_type == "quarterlyReport" && isPublished == true] {
-      "slug": slug.current
-    }`
-  );
-}
-
 // ==========================================
 // NEW LP PORTAL QUERIES (MECE Schema)
 // ==========================================
@@ -1132,59 +1045,6 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
   );
 }
 
-// Get active pipeline deals
-export async function getLPActivePipeline() {
-  return liveClient.fetch(
-    `*[_type == "lpPipelineDeal" && isActive == true && stage != "passed" && stage != "closed"] | order(stage asc, addedDate desc) {
-      _id,
-      companyName,
-      "sector": coalesce(sector->name, sectorOverride),
-      proposedAmountINR,
-      stage,
-      description,
-      addedDate
-    }`
-  );
-}
-
-// Get all pipeline deals (including closed/passed for tracking)
-export async function getLPAllPipelineDeals() {
-  return liveClient.fetch(
-    `*[_type == "lpPipelineDeal"] | order(stage asc, addedDate desc) {
-      _id,
-      companyName,
-      "sector": coalesce(sector->name, sectorOverride),
-      proposedAmountINR,
-      stage,
-      description,
-      isActive,
-      addedDate,
-      lastUpdated,
-      notes
-    }`
-  );
-}
-
-// Get new LP quarterly reports list
-// Returns reports that are either internal (for @yali.vc review) or published (for all LPs)
-// Backward compatible: also includes legacy reports with isPublished=true but no visibility field
-export async function getLPQuarterlyReports() {
-  return liveClient.fetch(
-    `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] | order(fiscalYear desc, quarter desc) {
-      _id,
-      title,
-      "slug": slug.current,
-      quarter,
-      fiscalYear,
-      reportingDate,
-      publishDate,
-      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft")),
-      "pdfUrl": generatedPdf.asset->url,
-      fundMetrics
-    }`
-  );
-}
-
 // Get new LP quarterly report by slug (full data)
 // Returns report if visibility is internal or published (frontend checks access)
 // Backward compatible: also includes legacy reports with isPublished=true but no visibility field
@@ -1326,17 +1186,6 @@ export async function getNewsForQuarter(quarter, fiscalYear) {
       "publicationName": publication->name
     }`,
     { startDate, endDate }
-  );
-}
-
-// Get all LP quarterly report slugs (for static generation)
-// Backward compatible: includes legacy reports with isPublished=true
-export async function getAllLPQuarterlyReportSlugs() {
-  return liveClient.fetch(
-    `*[_type == "lpQuarterlyReport" && (visibility in ["internal", "published"] || (isPublished == true && !defined(visibility)))] {
-      "slug": slug.current,
-      "visibility": coalesce(visibility, select(isPublished == true => "published", "draft"))
-    }`
   );
 }
 
@@ -1621,17 +1470,6 @@ export async function getDataRoomPortfolioCompanies() {
   );
 }
 
-
-export async function getDomainPrivilegeByDomain(domain) {
-  if (!domain) return null;
-  return client.fetch(
-    `*[_type == "domainPrivilege" && domain == $domain][0]{
-      _id, domain, label, lpPortalAccess, dataroomAccess,
-      requireCode, inviteCode, codeExpiry, maxUses, usedCount
-    }`,
-    { domain }
-  );
-}
 
 export async function getDataRoomAllFundSettings() {
   return client.fetch(

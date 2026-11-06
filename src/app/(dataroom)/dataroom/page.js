@@ -5,7 +5,8 @@ import {
   getLatestLPReportForDataRoom,
   getDataroomDomainPrivilege,
   getPortalUserByEmail,
-} from '@/lib/sanity-queries';
+} from '@/lib/lp-data';
+import { isYaliStaff } from '@/lib/internal-user';
 import { verifySession } from '@/lib/session';
 import DataroomTopbar from './DataroomTopbar';
 import DrSidebar from './DrSidebar';
@@ -24,7 +25,7 @@ export default async function DataroomPage() {
   // No session → sign in
   if (!email) redirect('/dataroom/sign-in');
   // Authorise: trusted domain, active domain privilege, or individual user access
-  const isTrustedDomain = email.endsWith('@yali.vc') || email.endsWith('@florintree.com');
+  const isTrustedDomain = isYaliStaff(email);
   if (!isTrustedDomain) {
     const domain = email.split('@')[1];
     const [domainPriv, user] = await Promise.all([

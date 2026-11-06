@@ -10,10 +10,13 @@ import {
   getLPFundSettings,
   getLPQuarterlyReportBySlugAdmin,
   getLPInvestmentsForPdf,
+} from '@/lib/lp-data';
+import {
   getTeamMembers,
   getNewsForQuarter,
   getSocialUpdatesByDateRange,
 } from '@/lib/sanity-queries';
+import { canBuildReports } from '@/lib/internal-user';
 import { buildReportData } from '@/lib/quarterly-utils';
 import { generatePdfHtml } from '@/lib/generateQuarterlyPdf';
 import {
@@ -95,8 +98,7 @@ export async function handlePdfGet(slug, { returnHtml = false, debugMode = false
   if (!email) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  const isInternalUser = email.endsWith('@yali.vc') || email.endsWith('@florintree.com') || email === 'pranavkarnad@gmail.com';
-  if (!isInternalUser) {
+  if (!canBuildReports(email)) {
     return new NextResponse('Forbidden — internal access only', { status: 403 });
   }
   if (!slug || typeof slug !== 'string') {
