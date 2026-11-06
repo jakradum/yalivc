@@ -1,13 +1,16 @@
 // Shadow mode: after the response has gone out, run the Supabase version of a read,
 // compare it with the Sanity result that was served, and record each differing JSON
-// path in `parity_diffs` as sha256 hashes of the two values. Never raw values, never
-// logged. If the table does not exist yet, the insert error is swallowed.
+// path in `parity_diffs` as HMAC-SHA256 hashes (keyed with PORTAL_AUTH_SECRET) of the
+// two values, so short secrets such as invite codes cannot be brute-forced from the
+// table. Never raw values, never logged; without the key nothing is recorded. If the
+// table does not exist yet, the insert error is swallowed.
 import crypto from 'crypto';
 import { supa, SANITY_CDN_FILES } from './rest.js';
 import { isObj } from './groq.js';
 
 const MAX_ROWS = 200;
-const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
+const hmacKey = () => process.env.PORTAL_AUTH_SECRET || null;
+const sha = (s) => crypto.createHmac('sha256', hmacKey()).update(s).digest('hex');
 
 // Stable JSON (sorted keys) so equal values hash equally.
 export function stableJson(v) {
@@ -70,6 +73,7 @@ async function record(rows) {
 }
 
 export async function compareAndRecord(fn, args, sanityResult, runSupabase) {
+  if (!hmacKey()) return; // no key, no hashes: record nothing rather than plain digests
   const inputHash = sha(stableJson(args));
   let supabaseResult;
   try {
