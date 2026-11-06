@@ -64,7 +64,7 @@
 
 ## In-Browser Report Viewer
 
-A React-based quarterly report viewer exists under `src/app/(portal)/partners/components/`. It is **not yet wired up** — `/partners/reports/[slug]/page.js` still renders the old PDF-embed UI.
+A React-based quarterly report viewer exists under `src/app/(portal)/partners/components/`. It is **not yet wired up**. The old PDF-embed page `/partners/reports/[slug]/` was deleted in Nov 2026 (it read the legacy `quarterlyReport` type and always 404'd).
 
 **Component tree:**
 - `ReportDocument.js` — shell with sticky nav, cover hero, and section routing

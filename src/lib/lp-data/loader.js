@@ -21,12 +21,6 @@ import { byId } from './groq.js';
 
 export const PUBLIC_TYPES = new Set(['category', 'teamMember', 'publication', 'news', 'socialUpdate', 'sanity.imageAsset']);
 
-// Private types that are read from Sanity while the twin does not hold them yet.
-// `investor` joins the twin in Phase 1 (B2); until its rows exist, byType falls
-// back to Sanity when sanity_docs has none, and byIds fetches missing ids from
-// Sanity. Remove once the twin sync covers it.
-export const SANITY_FALLBACK_TYPES = new Set(['investor']);
-
 const CHUNK = 100;
 const chunk = (a, n) => Array.from({ length: Math.ceil(a.length / n) }, (_, i) => a.slice(i * n, i * n + n));
 const inFilter = (ids) => `in.(${ids.map((id) => `"${enc(id)}"`).join(',')})`;
@@ -40,9 +34,7 @@ export const defaultLoader = {
   async byType(type) {
     if (!isSafeId(type)) return [];
     if (PUBLIC_TYPES.has(type)) return byId(await sanityQuery('*[_type == $type]', { type }));
-    const docs = await twinByType(type);
-    if (!docs.length && SANITY_FALLBACK_TYPES.has(type)) return byId(await sanityQuery('*[_type == $type]', { type }));
-    return docs;
+    return twinByType(type);
   },
 
   async byIds(ids) {
@@ -69,7 +61,7 @@ export const defaultLoader = {
     if (rest.length) {
       const docs = await sanityQuery('*[_id in $ids]', { ids: rest });
       for (const d of docs || []) {
-        if (PUBLIC_TYPES.has(d._type) || SANITY_FALLBACK_TYPES.has(d._type)) out.push(d);
+        if (PUBLIC_TYPES.has(d._type)) out.push(d);
       }
     }
     return out;

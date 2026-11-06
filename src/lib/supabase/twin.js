@@ -25,7 +25,7 @@ export const TWIN_TYPES = [
   'portalUser', 'domainPrivilege', 'lpDownloadConsent', 'lpPortalFeedback',
   'lpFundSettings', 'lpQuarterlyReport', 'company',
   // legacy LP records (no longer read by the site; mirrored so nothing is lost)
-  'lpInvestment', 'lpCompanyQuarterUpdate', 'quarterlyReport',
+  'lpInvestment', 'lpCompanyQuarterUpdate', 'quarterlyReport', 'lpPipelineDeal',
   // data room
   'dataRoomDocument', 'dataroomFundContent', 'dataroomSectionVisibility',
   'fund2Settings', 'trackRecord', 'investor',

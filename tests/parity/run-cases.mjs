@@ -83,7 +83,7 @@ function loaderFor(docs) {
 }
 
 // ---------- comparison ----------
-const FILE_PATH = /^\/(partners|dataroom)\/file\/([^?#/]+)(\?dl=[^#]*)?$/;
+const FILE_PATH = /^\/(partners|dataroom)\/file\/([^?#/]+)\/?(\?dl=[^#]*)?$/; // trailing slash allowed (contract, 6 Nov)
 const CDN_FILE = /^https:\/\/cdn\.sanity\.io\/files\/nt0wmty3\/production\/([0-9a-f]+)\.([A-Za-z0-9]+)(\?.*)?$/;
 function fileUrlInfo(s) {
   if (typeof s !== 'string') return null;
