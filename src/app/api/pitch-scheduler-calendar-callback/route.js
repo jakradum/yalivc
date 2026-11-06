@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
+import { handleBackupCallback, isBackupState } from '@/lib/backup/connect';
 
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
@@ -26,6 +27,9 @@ function htmlPage(title, body) {
 
 export async function GET(request) {
   const url = new URL(request.url);
+  // The OneDrive backup consent reuses this registered redirect URI; its
+  // signed state starts with "bk1." (this flow's state is plain hex).
+  if (isBackupState(url.searchParams.get('state'))) return handleBackupCallback(request);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
   const errorParam = url.searchParams.get('error');
