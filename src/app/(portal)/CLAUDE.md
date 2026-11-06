@@ -33,7 +33,7 @@
 
 ## Access Rules
 
-- Internal reports (`visibility: 'internal'`) are restricted to `@yali.vc` email addresses only
+- Internal reports (`visibility: 'internal'`) are visible to `@yali.vc` and `@florintree.com` addresses (both preview reports before release; confirmed by Pranav, 6 Nov 2026)
 - Do not add `generateStaticParams` to any portal page — all pages require runtime auth checks
 
 ---
