@@ -396,6 +396,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
           activeSection="portfolio-company-updates"
           onMenuClick={handleMenuClick}
           reportSlug={reportSlug}
+          report={{ slug: reportSlug, quarter, fiscalYear }}
+          allReports={allReports}
+          quarterHref={(r) => `/partners/company/${company.slug}?report=${r.slug}`}
           companies={allCompanySlugs}
           currentCompanySlug={company.slug}
           sidebarOpen={sidebarOpen}

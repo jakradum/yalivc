@@ -484,7 +484,10 @@ function PortalContentInner({
           activeSection={activeSection}
           onMenuClick={handleMenuClick}
           reportSlug={reportSlug}
-          companies={sortedInvestments.map(c => ({ slug: c.slug, name: c.entityName || c.name, isExited: c.isExited }))}
+          report={{ slug: reportSlug, quarter, fiscalYear }}
+          allReports={allReports}
+          quarterHref={(r) => `/partners?report=${r.slug}&section=${activeSection}`}
+          companies={sortedInvestments.map(c => ({ slug: c.slug, name: c.entityName || c.name, isExited: c.isExited, logo: c.logo }))}
           sidebarOpen={sidebarOpen}
         />
 
@@ -1161,9 +1164,13 @@ function PortalContentInner({
                 const otherUpdates = quarterSocialUpdates.filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
                 const hasAnySocial = linkedInUpdates.length > 0 || videoUpdates.length > 0 || otherUpdates.length > 0;
                 if (!hasAnySocial) return null;
+                // Collapsed by default: one expandable header for all social updates
                 return (
-                  <>
-                    <h2 className={styles.mediaSectionTitle} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>Social Updates</h2>
+                  <details className={styles.socialDetails} style={{ marginTop: quarterNews?.length > 0 ? '2rem' : 0 }}>
+                    <summary className={`${styles.mediaSectionTitle} ${styles.socialSummary}`}>
+                      Social Updates ({quarterSocialUpdates.length})
+                      <span className={styles.socialToggle} aria-hidden="true" />
+                    </summary>
 
                     {/* LinkedIn — crimson section bg, efefef cards */}
                     {linkedInUpdates.length > 0 && (
@@ -1253,7 +1260,7 @@ function PortalContentInner({
                         ))}
                       </div>
                     )}
-                  </>
+                  </details>
                 );
               })()}
 

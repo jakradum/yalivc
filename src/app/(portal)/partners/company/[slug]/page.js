@@ -113,7 +113,7 @@ export default async function CompanyPage({ params, searchParams }) {
       if (!dateB) return -1;
       return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
     })
-    .map(item => ({ slug: item.slug, name: item.name, isExited: isExitedAsOf(item, scopeQuarterEnd) }));
+    .map(item => ({ slug: item.slug, name: item.name, isExited: isExitedAsOf(item, scopeQuarterEnd), logo: item.logo }));
 
   // Filter investment rounds to only those on or before this quarter's end date
   const quarterEndDate = getQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);
