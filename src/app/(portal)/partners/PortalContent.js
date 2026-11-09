@@ -11,6 +11,7 @@ import { CloseIcon } from '../../components/icons/small-icons/closeicon';
 import { PortableText } from '@portabletext/react';
 import Footer from '../../components/footer';
 import ExitedTag from '../../components/exited-tag';
+import Footnote from './components/Footnote';
 import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
@@ -741,9 +742,7 @@ function PortalContentInner({
                 {report?.fundSummaryFootnotes?.length > 0 && (
                   <div className={styles.tableFootnoteContainer}>
                     {report.fundSummaryFootnotes.map((fn, idx) => (
-                      <p key={fn._key || idx} className={styles.tableFootnote}>
-                        <sup>{fn.marker}</sup> {fn.text}
-                      </p>
+                      <Footnote key={fn._key || idx} marker={fn.marker} text={fn.text} />
                     ))}
                   </div>
                 )}
@@ -850,9 +849,7 @@ function PortalContentInner({
               {report?.portfolioSummaryFootnotes && report.portfolioSummaryFootnotes.length > 0 && (
                 <div className={styles.tableFootnoteContainer}>
                   {report.portfolioSummaryFootnotes.map((fn, idx) => (
-                    <p key={idx} className={styles.tableFootnote}>
-                      <sup>{fn.marker}</sup> {fn.text}
-                    </p>
+                    <Footnote key={idx} marker={fn.marker} text={fn.text} />
                   ))}
                 </div>
               )}

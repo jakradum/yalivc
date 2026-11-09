@@ -13,6 +13,7 @@ import PortalSidebar from '../../PortalSidebar';
 
 import Footer from '../../../../components/footer';
 import ExitedTag from '../../../../components/exited-tag';
+import Footnote from '../../components/Footnote';
 
 export default function CompanyDetailClient({ company, report, allCompanySlugs, allReports, isLatestReport, userEmail = null }) {
   const quarter = report?.quarter || 'Q3';
@@ -550,9 +551,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 {effectiveFootnotesList()
                   .filter(fn => fn.fieldName?.startsWith('snapshot-'))
                   .map((fn, idx) => (
-                    <p key={idx} className={styles.tableFootnote}>
-                      <sup>{fn.marker}</sup> {fn.text}
-                    </p>
+                    <Footnote key={idx} marker={fn.marker} text={fn.text} />
                   ))}
               </div>
             )}
@@ -668,9 +667,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                       {effectiveFootnotesList()
                         .filter(fn => fn.fieldName?.startsWith('rounds-'))
                         .map((fn, idx) => (
-                          <p key={idx} className={styles.tableFootnote}>
-                            <sup>{fn.marker}</sup> {fn.text}
-                          </p>
+                          <Footnote key={idx} marker={fn.marker} text={fn.text} />
                         ))}
                     </div>
                   )}
@@ -740,9 +737,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                     {effectiveFootnotesList()
                       .filter(fn => fn.fieldName?.startsWith('financials-'))
                       .map((fn, idx) => (
-                        <p key={idx} className={styles.tableFootnote}>
-                          <sup>{fn.marker}</sup> {fn.text}
-                        </p>
+                        <Footnote key={idx} marker={fn.marker} text={fn.text} />
                       ))}
                   </div>
                 </div>
