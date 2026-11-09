@@ -74,5 +74,39 @@
   "scenario": "perf-single",
   "input": [],
   "output": null
+ },
+ {
+  "scenario": "fund-lp-internal",
+  "input": [],
+  "output": {
+   "fundISlideDeckUrl": null,
+   "fundILpReport": null,
+   "fundIIThesisPresentationUrl": null,
+   "commonTeamMembers": null,
+   "commonTrackRecordUrl": null,
+   "commonRecommendationDocuments": null,
+   "exitValueAsOfDate": null,
+   "hiddenFunds": null
+  }
+ },
+ {
+  "scenario": "fund-lp-legacy",
+  "input": [],
+  "output": {
+   "fundISlideDeckUrl": null,
+   "fundILpReport": {
+    "_id": "r-4",
+    "title": "Fake Fund Report FY25 Q4",
+    "quarter": "Q4",
+    "fiscalYear": "FY25",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf"
+   },
+   "fundIIThesisPresentationUrl": null,
+   "commonTeamMembers": null,
+   "commonTrackRecordUrl": null,
+   "commonRecommendationDocuments": null,
+   "exitValueAsOfDate": null,
+   "hiddenFunds": null
+  }
  }
 ]

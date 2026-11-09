@@ -9,7 +9,7 @@ import { makeFetch } from './engine.mjs';
 import { inputsFor, sampleForScenario } from './inputs.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-export const SCENARIOS = ['main', 'empty', 'alt', 'perf-throws', 'perf-single'];
+export const SCENARIOS = ['main', 'empty', 'alt', 'perf-throws', 'perf-single', 'fund-lp-internal', 'fund-lp-legacy'];
 const PARAM_SCENARIOS = ['main', 'empty', 'alt'];
 const loadScenario = (s) => JSON.parse(readFileSync(path.join(here, 'fixtures', `${s}.json`), 'utf8'));
 

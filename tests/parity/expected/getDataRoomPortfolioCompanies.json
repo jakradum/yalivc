@@ -302,5 +302,15 @@
   "scenario": "perf-single",
   "input": [],
   "output": []
+ },
+ {
+  "scenario": "fund-lp-internal",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "fund-lp-legacy",
+  "input": [],
+  "output": []
  }
 ]

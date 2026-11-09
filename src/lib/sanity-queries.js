@@ -1239,7 +1239,7 @@ export async function getDataroomFundContent() {
   return client.fetch(
     `*[_type == "dataroomFundContent"][0] {
       "fundISlideDeckUrl": fundISlideDeck.asset->url,
-      fundILpReport->{
+      "fundILpReport": *[_id == ^.fundILpReport._ref && (visibility == "published" || (isPublished == true && !defined(visibility)))][0]{
         _id,
         title,
         quarter,

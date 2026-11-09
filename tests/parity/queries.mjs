@@ -460,7 +460,7 @@ export const Q = {
   getDataroomDomainPrivilege: `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && isActive == true][0]{ _id }`,
   getDataroomFundContent: `*[_type == "dataroomFundContent"][0] {
       "fundISlideDeckUrl": fundISlideDeck.asset->url,
-      fundILpReport->{
+      "fundILpReport": *[_id == ^.fundILpReport._ref && (visibility == "published" || (isPublished == true && !defined(visibility)))][0]{
         _id,
         title,
         quarter,

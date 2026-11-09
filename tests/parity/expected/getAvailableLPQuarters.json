@@ -135,5 +135,37 @@
   "scenario": "perf-single",
   "input": [],
   "output": []
+ },
+ {
+  "scenario": "fund-lp-internal",
+  "input": [],
+  "output": [
+   {
+    "_id": "r-2",
+    "title": "Fake Fund Report FY26 Q3",
+    "slug": "fy26-q3",
+    "quarter": "Q3",
+    "fiscalYear": "FY26",
+    "publishDate": "2026-10-15",
+    "visibility": "internal",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf"
+   }
+  ]
+ },
+ {
+  "scenario": "fund-lp-legacy",
+  "input": [],
+  "output": [
+   {
+    "_id": "r-4",
+    "title": "Fake Fund Report FY25 Q4",
+    "slug": "fy25-q4",
+    "quarter": "Q4",
+    "fiscalYear": "FY25",
+    "publishDate": "2026-10-15",
+    "visibility": "published",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf"
+   }
+  ]
  }
 ]

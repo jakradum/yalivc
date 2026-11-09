@@ -381,7 +381,20 @@ const perfSingle = clean([
   { ...meta('lpFundSettings', 'lpFundSettings'), fundName: 'Single Fund', quarterlyPerformance: [{ _key: 'only', quarter: 'Q9', moic: 2 }] },
 ]);
 
-const SCENARIOS = { main, empty: [], alt, 'perf-throws': perfThrows, 'perf-single': perfSingle };
+// fund-lp-internal: the data room fund content points at an INTERNAL report; its title and PDF must not show
+const fundLpInternal = clean([
+  { ...meta('dataroomFundContent', 'dataroomFundContent'), fundILpReport: ref('r-2') },
+  reportBase('r-2', 'fy26-q3', 'Q3', 'FY26', { visibility: 'internal', generatedPdf: fileRef(A.pdfInternal) }),
+  A.pdfInternal,
+]);
+// fund-lp-legacy: it points at a legacy published report (isPublished true, no visibility), which does show
+const fundLpLegacy = clean([
+  { ...meta('dataroomFundContent', 'dataroomFundContent'), fundILpReport: ref('r-4') },
+  reportBase('r-4', 'fy25-q4', 'Q4', 'FY25', { isPublished: true, generatedPdf: fileRef(A.pdfR4) }),
+  A.pdfR4,
+]);
+
+const SCENARIOS = { main, empty: [], alt, 'perf-throws': perfThrows, 'perf-single': perfSingle, 'fund-lp-internal': fundLpInternal, 'fund-lp-legacy': fundLpLegacy };
 for (const [name, docs] of Object.entries(SCENARIOS)) {
   const ids = docs.map((d) => d._id);
   if (new Set(ids).size !== ids.length) throw new Error(`duplicate _id in ${name}`);

@@ -418,17 +418,19 @@ export async function getDataroomDomainPrivilege(domain) {
   return d ? { _id: raw(d._id) } : null;
 }
 
-/* *[_type == "dataroomFundContent"][0] {...} */
+/* *[_type == "dataroomFundContent"][0] {..., "fundILpReport": *[_id == ^.fundILpReport._ref && <visPublished>][0]{...}, ...} */
 export async function getDataroomFundContent() {
   const ctx = new Ctx(DATAROOM);
   const f = first(await ctx.type('dataroomFundContent'));
   if (!f) return null;
   await ctx.load([f.fundISlideDeck, f.fundILpReport, f.fundIIThesisPresentation, f.commonTeamMembers, f.commonTrackRecord,
     arr(f.commonRecommendationDocuments)?.map((d) => attr(d, 'file'))], 2);
+  // Only a published report (an internal one's title and PDF must not reach the data room).
   const lp = ctx.deref(f.fundILpReport);
+  const lpOk = lp && visPublished(lp);
   return {
     fundISlideDeckUrl: ctx.assetUrl(attr(f, 'fundISlideDeck', 'asset')),
-    fundILpReport: lp
+    fundILpReport: lpOk
       ? { ...pick(lp, ['_id', 'title', 'quarter', 'fiscalYear']), pdfUrl: ctx.assetUrl(attr(lp, 'generatedPdf', 'asset')) }
       : null,
     fundIIThesisPresentationUrl: ctx.assetUrl(attr(f, 'fundIIThesisPresentation', 'asset')),

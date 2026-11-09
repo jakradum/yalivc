@@ -174,5 +174,15 @@
     }
    ]
   }
+ },
+ {
+  "scenario": "fund-lp-internal",
+  "input": [],
+  "output": null
+ },
+ {
+  "scenario": "fund-lp-legacy",
+  "input": [],
+  "output": null
  }
 ]

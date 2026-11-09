@@ -1,0 +1,51 @@
+[
+ {
+  "_id": "r-4",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-05f95fad",
+  "title": "Fake Fund Report FY25 Q4",
+  "slug": {
+   "_type": "slug",
+   "current": "fy25-q4"
+  },
+  "quarter": "Q4",
+  "fiscalYear": "FY25",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "isPublished": true,
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-b2e8be112bad7d746e1c8936a6578ab5a875081b-pdf"
+   }
+  }
+ },
+ {
+  "_id": "file-b2e8be112bad7d746e1c8936a6578ab5a875081b-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf",
+  "originalFilename": "Legacy Report FY25 Q4.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "b2e8be112bad7d746e1c8936a6578ab5a875081b",
+  "size": 1098,
+  "assetId": "b2e8be112bad7d746e1c8936a6578ab5a875081b",
+  "path": "files/nt0wmty3/production/b2e8be112bad7d746e1c8936a6578ab5a875081b.pdf"
+ },
+ {
+  "_id": "dataroomFundContent",
+  "_type": "dataroomFundContent",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-11eed723",
+  "fundILpReport": {
+   "_type": "reference",
+   "_ref": "r-4"
+  }
+ }
+]

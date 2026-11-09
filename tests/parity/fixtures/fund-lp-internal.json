@@ -1,0 +1,51 @@
+[
+ {
+  "_id": "r-2",
+  "_type": "lpQuarterlyReport",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-16a705e3",
+  "title": "Fake Fund Report FY26 Q3",
+  "slug": {
+   "_type": "slug",
+   "current": "fy26-q3"
+  },
+  "quarter": "Q3",
+  "fiscalYear": "FY26",
+  "reportingDate": "2026-09-30",
+  "publishDate": "2026-10-15",
+  "visibility": "internal",
+  "generatedPdf": {
+   "_type": "file",
+   "asset": {
+    "_type": "reference",
+    "_ref": "file-127e15786526ae513ad23e3c3091baa9905c9b9c-pdf"
+   }
+  }
+ },
+ {
+  "_id": "file-127e15786526ae513ad23e3c3091baa9905c9b9c-pdf",
+  "_type": "sanity.fileAsset",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-01-01T00:00:00Z",
+  "url": "https://cdn.sanity.io/files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf",
+  "originalFilename": "Internal Draft.pdf",
+  "extension": "pdf",
+  "mimeType": "application/pdf",
+  "sha1hash": "127e15786526ae513ad23e3c3091baa9905c9b9c",
+  "size": 1049,
+  "assetId": "127e15786526ae513ad23e3c3091baa9905c9b9c",
+  "path": "files/nt0wmty3/production/127e15786526ae513ad23e3c3091baa9905c9b9c.pdf"
+ },
+ {
+  "_id": "dataroomFundContent",
+  "_type": "dataroomFundContent",
+  "_createdAt": "2026-01-01T00:00:00Z",
+  "_updatedAt": "2026-02-01T00:00:00Z",
+  "_rev": "rev-11eed723",
+  "fundILpReport": {
+   "_type": "reference",
+   "_ref": "r-2"
+  }
+ }
+]
