@@ -125,17 +125,21 @@ Private copy of the Supabase project \`yali-lp-data\` (the LP portal and data ro
 
 ## Layout
 
-- \`records/<type>/<id>.json\`: one file per row of \`sanity_docs\` (one per LP, company, report, user, …): the row's \`doc\` JSON, keys sorted, 2-space indent. A deleted record is a deleted file. Credentials (any field named like token, secret, password or API key) are written as \`"[redacted]"\`; the real values live only in Supabase, so restoring such a record needs the credential set again (e.g. reconnect the calendar).
+- \`records/<type>/<id>.json\`: one file per row of \`sanity_docs\` (one per LP, company, report, user, …): the row's \`doc\` JSON, keys sorted, 2-space indent. A deleted record is a deleted file.
 - \`records/_tables/<table>.json\`: the other tables (${Object.entries(BACKUP_TABLES).filter(([t]) => t !== 'sanity_docs').map(([t, k]) => `\`${t}\` by \`${k}\``).join(', ')}), rows sorted by key.
 - \`records/INDEX.md\`: type, name and file of every record, to find one by name (records about people are listed by id only).
 - \`files/\`: every object of the private \`${BUCKET}\` storage bucket (including \`archive/\`) under its storage path, copied once. Files with a \`sanity_files\` row are checked against its SHA-1 when copied.
-- Dated folders (\`2026-11-09T07-26/\` …): whole-table snapshots from before per-record history began (9 Nov 2026). Frozen; no new ones are made.
-- The Microsoft sign-in token (\`ms_graph_tokens\`) is never backed up.
+- \`records/\` and \`files/\` are the whole backup. The earlier dated whole-table snapshot folders were removed (superseded by \`records/\`); no dated folders are written any more.
+- Not backed up: the Microsoft sign-in token (\`ms_graph_tokens\`), and \`sanity_docs.synced_at\` (only each row's \`doc\` is kept; see Restore).
+
+## Credentials
+
+Credentials are never stored here: in \`records/\`, any field named like token, secret, password or API key (any case, any depth) is written as \`"[redacted]"\`; the real values live only in Supabase. Commits before \`records: redact credentials\` (fc95900) and the removed dated snapshots held one unredacted credential; that older history is being purged, so commit ids from before then may change.
 
 ## How it is kept up to date
 
 - \`/api/cron/supabase-sync\` in the yali-site repo, twice a week after the Supabase keep-alive ping, commits only the records that changed since the last commit, as \`portal changes: <n> records (<counts by type>)\` (log-type records the portal writes itself: download consents, feedback, invite-code use, report snapshots), plus new bucket files. No change, no commit.
-- Edits to the data are made with \`scripts/lp-edit.mjs\` in yali-site: it first commits any \`portal changes\`, then saves the edit to Supabase and commits exactly the edited records with the reason as the message (\`Edited by Claude for Pranav\`).
+- Edits to the data are made with \`scripts/lp-edit.mjs\` in yali-site: it first commits any \`portal changes\`, then saves the edit to Supabase and commits exactly the edited records, with the reason as the message and the line \`Edited by Claude for Pranav\`. Only lp-edit commits carry that line; \`portal changes\` commits and the one-off setup commits (the initial per-record history, Sunil's Q2 update of 9 Nov 2026, the redaction and snapshot removal) do not.
 - After every commit the tree is read back and each changed file's git blob SHA checked.
 
 ## History of one record
@@ -150,12 +154,22 @@ git show <commit>:lp-data-backups/records/<type>/<id>.json  # the record as it w
 
 ## Restore
 
-One record (to its state at \`<commit>\`): \`git show <commit>:lp-data-backups/records/<type>/<id>.json > doc.json\`, then upsert it into \`sanity_docs\` with the Supabase secret key: PostgREST \`POST /rest/v1/sanity_docs?on_conflict=id\` with \`Prefer: resolution=merge-duplicates\` and the body \`{"id": doc._id, "type": doc._type, "rev": doc._rev, "sanity_updated_at": doc._updatedAt, "doc": doc}\`. A record deleted since: same, from the last commit that still had the file (\`git log --diff-filter=D -- <file>\` gives the deleting commit; use its parent).
+All writes use the Supabase secret key against PostgREST (\`/rest/v1/...\`) and Storage (\`/storage/v1/...\`).
 
-Everything (to the state at \`<commit>\`, e.g. \`HEAD\`): check out that commit, then
-1. upsert every \`records/<type>/<id>.json\` into \`sanity_docs\` as above (batches of a few hundred per request), and delete \`sanity_docs\` rows whose file does not exist;
-2. upsert each \`records/_tables/<table>.json\` (a JSON array of rows) into its table (\`on_conflict\` = the key listed above);
-3. upload each file in \`files/\` to the \`${BUCKET}\` bucket under the same path (\`files/archive/x.pdf\` goes back to \`archive/x.pdf\`).
+**Redacted fields.** Never write \`"[redacted]"\` over a working credential. Before upserting a record, compare it with the current row: for every field whose backed-up value is \`"[redacted]"\`, keep the current row's value. If there is no current row (or no current value), drop that field and set the credential again afterwards (e.g. reconnect the pitch-scheduler calendar).
+
+**One record** (to its state at \`<commit>\`): \`git show <commit>:lp-data-backups/records/<type>/<id>.json > doc.json\`, merge redacted fields as above, then \`POST /rest/v1/sanity_docs?on_conflict=id\` with \`Prefer: resolution=merge-duplicates\` and the body \`{"id": doc._id, "type": doc._type, "rev": doc._rev, "sanity_updated_at": doc._updatedAt, "doc": doc, "synced_at": <now>}\`. \`synced_at\` is not backed up, so it resets to the restore time. A record deleted since: same, from the last commit that still had the file (\`git log --diff-filter=D -- <file>\` gives the deleting commit; use its parent).
+
+**Everything** (to the state at \`<commit>\`, e.g. \`HEAD\`): check out that commit, then
+1. upsert every \`records/<type>/<id>.json\` into \`sanity_docs\` as for one record (redacted fields merged, \`synced_at\` = now; batches of a few hundred per request), and delete \`sanity_docs\` rows whose file does not exist;
+2. upsert each \`records/_tables/<table>.json\` (a JSON array of rows) into its table with \`on_conflict\` = its key (listed above) and \`Prefer: resolution=merge-duplicates\`;
+3. \`sync_runs\` and \`parity_diffs\` were restored with explicit ids, so reset their id sequences (SQL editor):
+   \`\`\`
+   select setval(pg_get_serial_sequence('public.sync_runs','id'), (select max(id) from sync_runs));
+   select setval(pg_get_serial_sequence('public.parity_diffs','id'), (select max(id) from parity_diffs));
+   \`\`\`
+   (skip a table that is empty: \`setval\` needs a value of at least 1);
+4. upload each file in \`files/\` to the \`${BUCKET}\` bucket under the same path (\`files/archive/x.pdf\` goes back to \`archive/x.pdf\`): \`POST /storage/v1/object/${BUCKET}/<path>\` with the header \`x-upsert: true\` and \`Content-Type\` from \`sanity_files.mime_type\` for that \`storage_path\` (in \`_tables/sanity_files.json\`), or by extension for files without a row (\`.pdf\` application/pdf, \`.png\` image/png, \`.jpg\`/\`.jpeg\` image/jpeg, \`.webp\` image/webp, \`.svg\` image/svg+xml, otherwise application/octet-stream).
 `;
 
 const RESTORE_TABLES = () => Object.entries(BACKUP_TABLES).map(([t, k]) => `\`${t}.${k}\``).join(', ');

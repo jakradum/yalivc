@@ -179,3 +179,16 @@ test('keep-alive route: a failed ping throws before any backup', async () => {
   }), /supabase down/);
   assert.equal(ran, false);
 });
+
+test('dated snapshot folders: never written; a leftover one is neither touched nor verified', async () => {
+  const { gh, run } = setup({ files: { 'deck.html': 'deck', 'lp-data-backups/2026-01-01T00-00/sanity_docs.jsonl': '{}\n' } });
+  gh.state.dropOnRead = '2026-01-01T00-00/sanity_docs.jsonl'; // verification must not look at it
+  const r = await run();
+  assert.equal(r.verified, true);
+  assert.ok(!gh.changedIn(r.commit).some((p) => /\d{4}-\d{2}-\d{2}T/.test(p)));
+  assert.equal(gh.read('lp-data-backups/2026-01-01T00-00/sanity_docs.jsonl'), '{}\n');
+  const readme = gh.read('lp-data-backups/README.md');
+  assert.match(readme, /\[redacted\]/);
+  assert.match(readme, /x-upsert: true/);
+  assert.match(readme, /pg_get_serial_sequence\('public\.sync_runs','id'\)/);
+});
