@@ -8,6 +8,10 @@
 
 The portal reads Supabase (`LP_DATA_SOURCE=supabase`). Never write to Supabase directly (no SQL updates, no REST PATCH) and never edit LP data in Sanity Studio (frozen legacy copy). Every change goes through `node scripts/lp-edit.mjs --message "<why>" --edits <file.mjs> [--dry-run]`: it saves with a revision check and commits the changed records to the private backup repo, which is the only version history. Code deploys don't touch that repo; data edits always do.
 
+## Building a report PDF
+
+Build locally (`/partners/api/generate-pdf/<slug>/`, dev server on `LP_DATA_SOURCE=supabase`), then have a SEPARATE checker agent compare the PDF (text and page images) with the live portal for that report before uploading; upload only on PASS. Upload to the private Supabase bucket (never Sanity) and point the report's `generatedPdf` at it via `scripts/lp-edit.mjs`. Full steps in the project's root notes, "Building and publishing a report PDF".
+
 ## Auth — Portal (`portal-session` cookie)
 
 - OTP flow via `/api/portal-auth/route.js`
