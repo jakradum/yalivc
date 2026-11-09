@@ -4,6 +4,10 @@
 
 ---
 
+## Editing LP data (read before changing any record)
+
+The portal reads Supabase (`LP_DATA_SOURCE=supabase`). Never write to Supabase directly (no SQL updates, no REST PATCH) and never edit LP data in Sanity Studio (frozen legacy copy). Every change goes through `node scripts/lp-edit.mjs --message "<why>" --edits <file.mjs> [--dry-run]`: it saves with a revision check and commits the changed records to the private backup repo, which is the only version history. Code deploys don't touch that repo; data edits always do.
+
 ## Auth — Portal (`portal-session` cookie)
 
 - OTP flow via `/api/portal-auth/route.js`
