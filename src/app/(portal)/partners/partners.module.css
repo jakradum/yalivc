@@ -970,6 +970,22 @@
 
 /* Company logos in one grey: the logo turned solid black, then faded to
    #363636 on white (54/255 grey = black at 79% opacity). */
+/* Monochrome company logo (#363636 on white) before the name in the investments table */
+.tableCompany {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tableLogo {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0);
+  opacity: 0.79;
+}
+
 .sbLogo {
   width: 16px;
   height: 16px;

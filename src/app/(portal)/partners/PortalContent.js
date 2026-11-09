@@ -773,7 +773,19 @@ function PortalContentInner({
                         >
                           <td>{idx + 1}</td>
                           <td className={styles.companyNameCell}>
-                            {investment.entityName || investment.name || '-'}
+                            <span className={styles.tableCompany}>
+                              {investment.logo ? (
+                                <img
+                                  className={styles.tableLogo}
+                                  src={investment.logo.startsWith('https://cdn.sanity.io/') && !investment.logo.includes('?') ? `${investment.logo}?w=96&fm=png` : investment.logo}
+                                  alt=""
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <span className={styles.tableLogo} aria-hidden="true" />
+                              )}
+                              <span>{investment.entityName || investment.name || '-'}</span>
+                            </span>
                           </td>
                           <td>{investment.sector || '-'}</td>
                           <td>
