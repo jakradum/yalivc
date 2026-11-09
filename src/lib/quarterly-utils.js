@@ -125,6 +125,25 @@ export function isExitedAsOf(company, quarterEndDate) {
 }
 
 /**
+ * Should a report show the Exited tag (and count the company as exited)?
+ * Normally only when the exit happened by the quarter's end (isExitedAsOf).
+ * A company can opt in to an early exit label with `showExitEarlyInReport`
+ * (like `showEarlyInReport` on rounds): an exit up to the end of the NEXT
+ * quarter then also shows, because the report goes out after the exit
+ * (Pranav, 9 Nov 2026: Tonbo listed on 23 Oct, after Q2 FY27 ended).
+ * Money stays point-in-time: FMV still uses isExitedAsOf, so an early-labelled
+ * exit keeps its quarter-end value.
+ * @param {object} company - with investmentStatus, exitDate, showExitEarlyInReport
+ * @param {string} quarterEndDate - YYYY-MM-DD
+ * @param {string|null} nextQuarterEndDate - YYYY-MM-DD
+ * @returns {boolean}
+ */
+export function isExitLabelledAsOf(company, quarterEndDate, nextQuarterEndDate) {
+  if (isExitedAsOf(company, quarterEndDate)) return true;
+  return company?.showExitEarlyInReport === true && !!nextQuarterEndDate && isExitedAsOf(company, nextQuarterEndDate);
+}
+
+/**
  * FMV to carry for a company in a report quarter. Falls back to the most recent
  * past quarter like everything else, except that for a company exited as of the
  * report quarter, FMV from a quarter that ended before the exit is stale (it
@@ -426,7 +445,7 @@ export function buildReportData({
     const quarterData = getCompanyQuarterData(inv, quarter, fiscalYear) ||
       getMostRecentPastQuarterData(inv, quarter, fiscalYear);
     const isExited = isExitedAsOf(inv, quarterEndDate);
-    if (isExited) exitedCount += 1;
+    if (isExitLabelledAsOf(inv, quarterEndDate, nextQuarterEndDate)) exitedCount += 1;
 
     computedTotalFMV += resolveReportFMV(inv, quarterData, isExited) || 0;
     if (quarterData) {
@@ -481,7 +500,8 @@ export function buildReportData({
 
     return {
       ...company,
-      isExited,
+      // Label: may include an early-labelled exit (see isExitLabelledAsOf)
+      isExited: isExitLabelledAsOf(company, quarterEndDate, nextQuarterEndDate),
       // Quarter-specific performance data
       quarterData,
       // Filtered investment rounds

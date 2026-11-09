@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { getLPInvestmentByCompanySlug, getAllLPInvestmentSlugs, getLatestLPQuarterlyReport, getLPQuarterlyReportBySlug, getAvailableLPQuarters } from '@/lib/lp-data';
 import { isYaliStaff } from '@/lib/internal-user';
-import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate, getEarliestInvestmentDate, isExitedAsOf } from '@/lib/quarterly-utils';
+import { getPortfolioCompaniesForQuarter, filterInvestmentRounds, getQuarterEndDate, getNextQuarterEndDate, getEarliestInvestmentDate, isExitLabelledAsOf } from '@/lib/quarterly-utils';
 import { verifySession } from '@/lib/session';
 import CompanyDetailClient from './CompanyDetailClient';
 
@@ -97,6 +97,7 @@ export default async function CompanyPage({ params, searchParams }) {
   // Sort by initial investment date ascending — matches the portfolio investments table order.
   // isExited is point-in-time for the selected report's quarter (sidebar tag).
   const scopeQuarterEnd = getQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);
+  const scopeNextQuarterEnd = getNextQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);
   const allCompanySlugs = companiesInScope
     .filter(item => item.slug)
     .sort((a, b) => {
@@ -107,7 +108,7 @@ export default async function CompanyPage({ params, searchParams }) {
       if (!dateB) return -1;
       return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
     })
-    .map(item => ({ slug: item.slug, name: item.name, isExited: isExitedAsOf(item, scopeQuarterEnd), logo: item.logo }));
+    .map(item => ({ slug: item.slug, name: item.name, isExited: isExitLabelledAsOf(item, scopeQuarterEnd, scopeNextQuarterEnd), logo: item.logo }));
 
   // Filter investment rounds to only those on or before this quarter's end date
   const quarterEndDate = getQuarterEndDate(currentReportPeriod.quarter, currentReportPeriod.fiscalYear);

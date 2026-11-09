@@ -758,6 +758,7 @@ export async function getLPInvestments() {
       "sectorSlug": category->slug.current,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       order,
       // Investment rounds with all data
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
@@ -846,6 +847,7 @@ export async function getLPInvestmentsForPdf() {
       "sectorSlug": category->slug.current,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       order,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
@@ -934,6 +936,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
       coInvestors,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         isYaliLead,
@@ -1272,6 +1275,7 @@ export async function getAllLPInvestmentSlugs() {
       "logo": logo.asset->url,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         investmentDate

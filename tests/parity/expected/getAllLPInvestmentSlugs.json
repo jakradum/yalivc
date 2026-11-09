@@ -9,6 +9,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
      {
@@ -31,6 +32,7 @@
     "logo": "https://cdn.sanity.io/images/nt0wmty3/production/54ca69433b162c26261e014aeb4243fa87f0c96f-400x120.png",
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": [
      {
       "isInitialRound": true,
@@ -66,6 +68,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
      {
@@ -80,6 +83,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": [
      {
       "isInitialRound": true,
@@ -94,6 +98,7 @@
     "logo": "https://cdn.sanity.io/images/nt0wmty3/production/a99c7c1bd90a9be1842b49a555efbb2b7aaf71e5-300x300.jpg",
     "investmentStatus": "exited",
     "exitDate": "2026-06-30",
+    "showExitEarlyInReport": null,
     "investmentRounds": [
      {
       "isInitialRound": true,
@@ -125,6 +130,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": [],
     "quarterlyUpdates": [
      {
@@ -139,6 +145,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
      {
@@ -153,6 +160,7 @@
     "logo": null,
     "investmentStatus": "exited",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": null
    },
@@ -162,6 +170,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
      {
@@ -176,6 +185,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": []
    },
@@ -185,6 +195,7 @@
     "logo": null,
     "investmentStatus": "exited",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
      {
@@ -199,6 +210,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": [
      {
       "isInitialRound": true,
@@ -249,6 +261,7 @@
     "logo": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "investmentRounds": null,
     "quarterlyUpdates": null
    }

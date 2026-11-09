@@ -33,6 +33,7 @@
     "sectorSlug": "robotics",
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 1,
     "investmentRounds": [
      {
@@ -555,6 +556,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 1,
     "investmentRounds": null,
     "quarterlyUpdates": [
@@ -939,6 +941,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 1.5,
     "investmentRounds": null,
     "quarterlyUpdates": [
@@ -1141,6 +1144,7 @@
     "sectorSlug": "biotech",
     "investmentStatus": "exited",
     "exitDate": "2026-06-30",
+    "showExitEarlyInReport": null,
     "order": 2,
     "investmentRounds": [
      {
@@ -1464,6 +1468,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 2,
     "investmentRounds": [
      {
@@ -1499,6 +1504,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 5,
     "investmentRounds": null,
     "quarterlyUpdates": [
@@ -1675,6 +1681,7 @@
     "sectorSlug": "robotics",
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 5,
     "investmentRounds": [],
     "quarterlyUpdates": [
@@ -1877,6 +1884,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 7,
     "investmentRounds": null,
     "quarterlyUpdates": [
@@ -2079,6 +2087,7 @@
     "sectorSlug": null,
     "investmentStatus": "exited",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": 7,
     "investmentRounds": null,
     "quarterlyUpdates": null,
@@ -2099,6 +2108,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": null,
     "investmentRounds": null,
     "quarterlyUpdates": [],
@@ -2119,6 +2129,7 @@
     "sectorSlug": null,
     "investmentStatus": "exited",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": null,
     "investmentRounds": null,
     "quarterlyUpdates": [
@@ -2195,6 +2206,7 @@
     "sectorSlug": "biotech",
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": null,
     "investmentRounds": [
      {
@@ -2788,6 +2800,7 @@
     "sectorSlug": null,
     "investmentStatus": "active",
     "exitDate": null,
+    "showExitEarlyInReport": null,
     "order": null,
     "investmentRounds": null,
     "quarterlyUpdates": null,

@@ -48,6 +48,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": [
     {
@@ -263,6 +264,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": [
     {
@@ -478,6 +480,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": [],
    "quarterlyUpdates": [
     {
@@ -693,6 +696,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": [
     {
@@ -1090,6 +1094,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": [
     {
      "isInitialRound": true,
@@ -1685,6 +1690,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": [
     {
      "isInitialRound": true,
@@ -1740,6 +1746,7 @@
    "coInvestors": null,
    "investmentStatus": "exited",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": [
     {
@@ -1829,6 +1836,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": [],
    "latestQuarter": null
@@ -1862,6 +1870,7 @@
    "coInvestors": null,
    "investmentStatus": "exited",
    "exitDate": "2026-06-30",
+   "showExitEarlyInReport": null,
    "investmentRounds": [
     {
      "isInitialRound": true,
@@ -2224,6 +2233,7 @@
    ],
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": [
     {
      "isInitialRound": true,
@@ -2969,6 +2979,7 @@
    "coInvestors": null,
    "investmentStatus": "active",
    "exitDate": null,
+   "showExitEarlyInReport": null,
    "investmentRounds": null,
    "quarterlyUpdates": null,
    "latestQuarter": null

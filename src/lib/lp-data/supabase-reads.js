@@ -179,6 +179,7 @@ const companyListHead = (ctx, c) => ({
   sectorSlug: attr(ctx.deref(c.category), 'slug', 'current'),
   investmentStatus: raw(c.investmentStatus),
   exitDate: raw(c.exitDate),
+  showExitEarlyInReport: raw(c.showExitEarlyInReport),
   order: raw(c.order),
 });
 
@@ -228,7 +229,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
     link: raw(c.link),
     sector: attr(ctx.deref(c.category), 'name'),
     ...pick(c, ['investmentDate', 'fundingRound', 'preMoneyValuation', 'totalRoundSize', 'postMoneyValuation',
-      'yaliInvestmentAmount', 'yaliOwnershipPercent', 'coInvestors', 'investmentStatus', 'exitDate']),
+      'yaliInvestmentAmount', 'yaliOwnershipPercent', 'coInvestors', 'investmentStatus', 'exitDate', 'showExitEarlyInReport']),
     investmentRounds: roundsSorted(c, roundDetailProj(ctx)),
     quarterlyUpdates: updatesSorted(c, QU_FULL),
     latestQuarter: latestUpdate(c, QU_FULL),
@@ -270,6 +271,7 @@ export async function getAllLPInvestmentSlugs() {
     logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
     investmentStatus: raw(c.investmentStatus),
     exitDate: raw(c.exitDate),
+    showExitEarlyInReport: raw(c.showExitEarlyInReport),
     investmentRounds: roundsSorted(c, (r) => pick(r, ['isInitialRound', 'investmentDate'])),
     quarterlyUpdates: mapProj(c.quarterlyUpdates, (u) => pick(u, ['quarter', 'fiscalYear'])),
   }));

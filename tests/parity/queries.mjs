@@ -62,6 +62,7 @@ export const Q = {
       "sectorSlug": category->slug.current,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       order,
       // Investment rounds with all data
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
@@ -144,6 +145,7 @@ export const Q = {
       "sectorSlug": category->slug.current,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       order,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
@@ -226,6 +228,7 @@ export const Q = {
       coInvestors,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         isYaliLead,
@@ -425,6 +428,7 @@ export const Q = {
       "logo": logo.asset->url,
       investmentStatus,
       exitDate,
+      showExitEarlyInReport,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
         isInitialRound,
         investmentDate
