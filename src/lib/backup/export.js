@@ -125,9 +125,9 @@ Private copy of the Supabase project \`yali-lp-data\` (the LP portal and data ro
 
 ## Layout
 
-- \`records/<type>/<id>.json\`: one file per row of \`sanity_docs\` (one per LP, company, report, user, …): the row's \`doc\` JSON, keys sorted, 2-space indent. A deleted record is a deleted file.
+- \`records/<type>/<id>.json\`: one file per row of \`sanity_docs\` (one per LP, company, report, user, …): the row's \`doc\` JSON, keys sorted, 2-space indent. A deleted record is a deleted file. Credentials (any field named like token, secret, password or API key) are written as \`"[redacted]"\`; the real values live only in Supabase, so restoring such a record needs the credential set again (e.g. reconnect the calendar).
 - \`records/_tables/<table>.json\`: the other tables (${Object.entries(BACKUP_TABLES).filter(([t]) => t !== 'sanity_docs').map(([t, k]) => `\`${t}\` by \`${k}\``).join(', ')}), rows sorted by key.
-- \`records/INDEX.md\`: type, name and file of every record, to find one by name (people are listed by id; no emails).
+- \`records/INDEX.md\`: type, name and file of every record, to find one by name (records about people are listed by id only).
 - \`files/\`: every object of the private \`${BUCKET}\` storage bucket (including \`archive/\`) under its storage path, copied once. Files with a \`sanity_files\` row are checked against its SHA-1 when copied.
 - Dated folders (\`2026-11-09T07-26/\` …): whole-table snapshots from before per-record history began (9 Nov 2026). Frozen; no new ones are made.
 - The Microsoft sign-in token (\`ms_graph_tokens\`) is never backed up.

@@ -3,11 +3,11 @@
 // Run: node --test tests/backup/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ENV, docRow, setup } from './fakes.mjs';
+import { DEFAULT_DOCS, ENV, docRow, setup } from './fakes.mjs';
 
 const { runBackup } = await import('../../src/lib/backup/run.js');
 const { runEdit, changedKeys, EDIT_TRAILER } = await import('../../src/lib/backup/edit.js');
-const { indexMarkdown, recordLabel, stableJson, buildRecordFiles, recordPath } = await import('../../src/lib/backup/records.js');
+const { indexMarkdown, recordLabel, stableJson, buildRecordFiles, recordPath, redact } = await import('../../src/lib/backup/records.js');
 const { gitBlobSha } = await import('../../src/lib/backup/github.js');
 
 const R = 'lp-data-backups/records';
@@ -57,7 +57,7 @@ test('deletion: a removed row removes its file (and its INDEX line); an added ro
   assert.match(s.gh.commits.get(r.commit).message, /^portal changes: 2 records \(company 1, lpDownloadConsent 1\)\n\nadded 1, changed 0, removed 1$/);
   const index = s.gh.read(`${R}/INDEX.md`);
   assert.ok(!index.includes('co-1'));
-  assert.match(index, /\| lpDownloadConsent \| report Q1 2026-11-08 \| \[lpDownloadConsent\/consent-1\.json\]/);
+  assert.match(index, /\| lpDownloadConsent \| consent-1 \| \[lpDownloadConsent\/consent-1\.json\]/);
   assert.equal(r.verified, true);
 });
 
@@ -79,6 +79,10 @@ test('INDEX.md: names for humans, never an email', async () => {
     { _id: 'upd-1', _type: 'lpCompanyQuarterUpdate', investment: { _ref: 'inv-1', _type: 'reference' }, quarter: 'Q2', fiscalYear: 'FY27' },
     { _id: 'cs-1', _type: 'contactSubmission', name: 'mail@example.test', email: 'mail@example.test' },
     { _id: 'rep-1', _type: 'lpQuarterlyReport', title: 'Q2 | report\nline two' },
+    { _id: 'cs-2', _type: 'contactSubmission', name: 'Jane Person' },
+    { _id: 'inv-2', _type: 'pitchSchedulerInvitation', founderName: 'Joe Founder', companyName: 'Startup Co' },
+    { _id: 'fb-1', _type: 'lpPortalFeedback', name: 'Some Name' },
+    { _id: 'tr-1', _type: 'travelRequest', title: 'Trip of Some Name' },
   ];
   const index = indexMarkdown(docs);
   assert.ok(!index.includes('@'), 'no email anywhere in INDEX.md');
@@ -87,6 +91,8 @@ test('INDEX.md: names for humans, never an email', async () => {
   assert.match(index, /\| lpInvestment \| Acme Widgets \|/);
   assert.match(index, /\| lpCompanyQuarterUpdate \| Acme Widgets Q2 FY27 \|/);
   assert.match(index, /\| contactSubmission \| cs-1 \|/);
+  for (const id of ['cs-2', 'inv-2', 'fb-1', 'tr-1']) assert.match(index, new RegExp(`\\| ${id} \\|`));
+  for (const name of ['Jane Person', 'Joe Founder', 'Startup Co', 'Some Name']) assert.ok(!index.includes(name), `${name} not in INDEX`);
   assert.match(index, /\| lpQuarterlyReport \| Q2 report line two \|/);
   assert.equal(recordLabel({ _id: 'x', _type: 'company' }), 'x');
 });
@@ -210,6 +216,24 @@ test('lp-edit: refuses an email in the message, a _type change, and unchanged do
   assert.equal(r.commit, null);
   assert.equal(s.gh.state.ref, head0);
   assert.deepEqual(s.supa.writes, []);
+});
+
+test('credentials are redacted in record files and tables, at any depth, any case; cron and lp-edit agree', async () => {
+  const auth = { _id: 'auth-1', _type: 'pitchSchedulerCalendarAuth', refreshToken: 'fake-refresh', connectedBy: 'team', nested: [{ API_KEY: 'k', accessToken: null, clientSecret: 's', Password: 'p', note: 'keep' }] };
+  const s = setup({ docs: [...DEFAULT_DOCS, auth] });
+  await backup(s);
+  const file = s.gh.read(`${R}/pitchSchedulerCalendarAuth/auth-1.json`);
+  for (const v of ['fake-refresh', '"k"', '"s"', '"p"']) assert.ok(!file.includes(v), `${v} redacted`);
+  assert.equal(JSON.parse(file).refreshToken, '[redacted]');
+  assert.deepEqual(JSON.parse(file).nested, [{ API_KEY: '[redacted]', Password: '[redacted]', accessToken: null, clientSecret: '[redacted]', note: 'keep' }]);
+  assert.equal(redact({ token: 'x', tokenized: 'y', plain: 'z' }).plain, 'z');
+
+  // lp-edit on that doc: Supabase keeps the real value, GitHub the redacted one, read-back passes
+  const r = await edit(s, { message: 'Note who connected', edit: async (api) => { const d = await api.getDoc('auth-1'); d.connectedBy = 'ops'; return [d]; } });
+  assert.equal(r.verified, true);
+  assert.equal(docOf(s, 'auth-1').doc.refreshToken, 'fake-refresh');
+  assert.equal(JSON.parse(s.gh.read(`${R}/pitchSchedulerCalendarAuth/auth-1.json`)).refreshToken, '[redacted]');
+  assert.equal((await backup(s)).commit, null, 'the cron sees no difference afterwards');
 });
 
 test('changedKeys lists dotted paths and array indexes', () => {

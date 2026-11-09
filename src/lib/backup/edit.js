@@ -11,11 +11,12 @@
 //      given message and a line `Edited by Claude for Pranav`.
 //   5. Read back from Supabase and from GitHub and confirm both match.
 // dryRun: steps 1-2 are computed and printed (paths and changed keys, never
-// values); nothing is written anywhere.
+// values); nothing is written anywhere. Record files redact credentials
+// (records.js), so the GitHub check compares the redacted form.
 import { randomBytes } from 'node:crypto';
 import { readTables } from './export.js';
 import { RefRaceError, gitBlobSha, githubClient, githubConfig } from './github.js';
-import { INDEX_FILE, RECORDS_DIR, indexMarkdown, portalChangesMessage, recordPath, stableJson } from './records.js';
+import { INDEX_FILE, RECORDS_DIR, indexMarkdown, portalChangesMessage, recordJson, recordPath, stableJson } from './records.js';
 import { stageRecords, supabaseRest, verifyCommitted } from './run.js';
 
 export const EDIT_TRAILER = 'Edited by Claude for Pranav';
@@ -206,7 +207,7 @@ export async function runEdit(opts) {
   // 4. Commit exactly what was saved (+ INDEX.md if it changed).
   const after = new Map(rows.map((r) => [r.id, r.doc]));
   for (const s of saved) (s.deleted ? after.delete(s.id) : after.set(s.id, s.doc));
-  const files = saved.map((s) => [`${RECORDS_DIR}/${recordPath(s.type, s.id)}`, s.deleted ? null : stableJson(s.doc)]);
+  const files = saved.map((s) => [`${RECORDS_DIR}/${recordPath(s.type, s.id)}`, s.deleted ? null : recordJson(s.doc)]);
   files.push([`${RECORDS_DIR}/${INDEX_FILE}`, indexMarkdown([...after.values()])]);
   const note = failure ? `\n\nIncomplete: saved ${saved.length} of ${ids.length}; the rest failed (${failure.message.slice(0, 200)})` : '';
   const commitMessage = `${message}\n\n${EDIT_TRAILER}${note}`;
@@ -251,7 +252,7 @@ export async function runEdit(opts) {
     const rel = recordPath(s.type, s.id);
     const row = back.get(s.id);
     if (s.deleted) { if (tree.has(rel)) bad.push(`${rel} still in GitHub`); continue; }
-    if (row && tree.get(rel)?.sha !== gitBlobSha(Buffer.from(stableJson(row.doc), 'utf8'))) bad.push(`${rel} in GitHub does not match Supabase`);
+    if (row && tree.get(rel)?.sha !== gitBlobSha(Buffer.from(recordJson(row.doc), 'utf8'))) bad.push(`${rel} in GitHub does not match Supabase`);
   }
   if (bad.length) throw new Error(`Read-back failed: ${bad.slice(0, 5).join('; ')}`);
   if (failure) throw new Error(`Saved and committed ${saved.length} of ${ids.length} (${committed.sha}); then failed: ${failure.message}`);

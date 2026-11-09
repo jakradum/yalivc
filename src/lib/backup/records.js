@@ -3,7 +3,8 @@
 //
 //   <root>/records/<type>/<id>.json      one file per sanity_docs row: its `doc`,
 //                                         keys sorted recursively, 2-space indent,
-//                                         trailing newline (stable diffs)
+//                                         trailing newline (stable diffs);
+//                                         credentials written as "[redacted]"
 //   <root>/records/_tables/<table>.json  the other tables: rows sorted by primary
 //                                         key, same formatting
 //   <root>/records/INDEX.md              type | name | file, to find a record by name
@@ -32,6 +33,24 @@ export function sortKeys(v) {
 
 export const stableJson = (v) => `${JSON.stringify(sortKeys(v), null, 2)}\n`;
 
+// Credentials never go into the repo: any key whose name contains token,
+// secret, password or api key (any case, any depth) is written as "[redacted]"
+// (null/undefined values are kept, so "no token" stays visible).
+export const REDACTED = '[redacted]';
+export const SECRET_KEY = /token|secret|passw(or)?d|api_?key/i;
+export function redact(v) {
+  if (Array.isArray(v)) return v.map(redact);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const [k, x] of Object.entries(v)) out[k] = SECRET_KEY.test(k) && x != null ? REDACTED : redact(x);
+    return out;
+  }
+  return v;
+}
+
+// The content of a record file: the doc, credentials redacted, stable JSON.
+export const recordJson = (doc) => stableJson(redact(doc));
+
 function segment(s, what) {
   if (typeof s !== 'string' || !SAFE_SEGMENT.test(s) || s.length > 200) throw new Error(`unsafe ${what} for a record path: ${JSON.stringify(String(s).slice(0, 40))}`);
   return s;
@@ -53,12 +72,13 @@ const cmp = (a, b) => {
 export function tableJson(table, rows) {
   const pk = BACKUP_TABLES[table];
   if (!pk) throw new Error(`${table} is not a backup table`);
-  return stableJson([...rows].sort((a, b) => cmp(a[pk], b[pk])));
+  return stableJson(redact([...rows].sort((a, b) => cmp(a[pk], b[pk]))));
 }
 
 // ── INDEX.md ─────────────────────────────────────────────────────────────────
-// A readable name per record, never an email: types keyed by email get the id.
-const ID_ONLY = new Set(['portalUser', 'newsletterSubscriber']);
+// A readable name per record, never an email or a person's name: records about
+// people are listed by id only.
+const ID_ONLY = new Set(['portalUser', 'newsletterSubscriber', 'contactSubmission', 'lpDownloadConsent', 'lpPortalFeedback', 'pitchSchedulerInvitation', 'travelRequest']);
 const NAME_FIELDS = ['name', 'title', 'companyName', 'investeeName', 'fundName', 'label', 'subject'];
 const EMAILISH = /@|%40/;
 
@@ -78,7 +98,6 @@ export function recordLabel(doc, byId = new Map()) {
   if (ID_ONLY.has(t)) label = doc._id;
   else if (t === 'lpInvestment') label = nameOf(doc.company);
   else if (t === 'lpCompanyQuarterUpdate') label = [nameOf(doc.investment), doc.quarter, doc.fiscalYear].filter(Boolean).join(' ');
-  else if (t === 'lpDownloadConsent') label = [doc.downloadType || 'download', doc.reportQuarter, String(doc.consentedAt || '').slice(0, 10)].filter(Boolean).join(' ');
   else {
     for (const f of NAME_FIELDS) {
       if (typeof doc[f] === 'string' && doc[f].trim()) { label = doc[f]; break; }
@@ -117,7 +136,7 @@ export function buildRecordFiles(tables) {
   for (const row of tables.sanity_docs || []) {
     const doc = row.doc;
     if (!doc || doc._id !== row.id || doc._type !== row.type) throw new Error(`sanity_docs row ${String(row.id).slice(0, 40)}: doc._id/_type do not match the row`);
-    files.set(recordPath(row.type, row.id), stableJson(doc));
+    files.set(recordPath(row.type, row.id), recordJson(doc));
     docs.push(doc);
   }
   for (const [table, rows] of Object.entries(tables)) {
