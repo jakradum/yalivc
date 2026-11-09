@@ -47,6 +47,13 @@ async function supa(path, { method = 'GET', body, headers = {}, raw = false } = 
   return text ? JSON.parse(text) : null;
 }
 
+// One cheap read, so the free project doesn't pause after 7 idle days. Used by
+// the cron route while the copy from Sanity is off (Pranav, 9 Nov 2026).
+export async function keepAlive() {
+  const rows = await supa('/rest/v1/sanity_docs?select=id&limit=1');
+  return { pinged: true, rows: rows?.length ?? 0 };
+}
+
 const chunk = (arr, n) => Array.from({ length: Math.ceil(arr.length / n) }, (_, i) => arr.slice(i * n, i * n + n));
 
 // File assets referenced anywhere inside a document (asset refs look like
