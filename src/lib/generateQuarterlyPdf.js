@@ -552,6 +552,14 @@ a { cursor: pointer; }
 }
 .media-arrow { font-size: 52px; color: #363636; font-weight: 300; line-height: 1; }
 .media-subhead { font-size: 13px; color: #555; margin-bottom: 16px; }
+.media-feature { display: flex; gap: 20px; border: 1px solid #363636; padding: 16px; }
+.media-feature-thumb { width: 240px; flex-shrink: 0; display: block; }
+.media-feature-thumb img { width: 100%; display: block; }
+.media-feature-body { flex: 1; }
+.media-feature-title { font-size: 15px; font-weight: 700; color: #363636; line-height: 1.35; margin-bottom: 8px; }
+.media-feature-body .body-text p { font-size: 12px; line-height: 1.55; }
+.media-feature-body a { color: #830d35; text-decoration: underline; }
+.media-feature-link { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; }
 .media-cards { display: flex; flex-direction: column; gap: 20px; }
 .media-card { border: 1px solid #363636; padding: 16px 20px; width: 55%; }
 .media-card.right { margin-left: auto; }
@@ -809,7 +817,7 @@ export function generatePdfHtml({
   <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="section-heading">Closing Note</div></div>
   <div class="pdf-block cn-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="body-text">${closingHtml}</div></div>` : ''}
   <div class="pdf-block cn-block" style="padding: 0 40px;">
-    ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.65;">Warm regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
+    ${signatory?.name ? `<p style="margin-top: 16px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.65;">With regards,<br><strong>${esc(signatory.name)}</strong><br>${esc(signatory.role || '')}</p>` : ''}
     <div style="margin-top: 32px;">
       <div class="yali-team-note-label">→ &nbsp; A note from the Yali Team</div>
       <div class="confidentiality-box" style="margin-top: 12px;">
@@ -828,6 +836,16 @@ export function generatePdfHtml({
   const fundSizeSubtitle = fundSizeVal != null
     ? `Combined size of both funds at final close: ₹${Number.isInteger(fundSizeVal) ? fundSizeVal : fmt(fundSizeVal, 0)} crore`
     : `As of ${esc(asOf)}`;
+
+  // Footnote marker for a fund summary row (report.fundSummaryFootnotes), as on the portal
+  function fundFnMarker(fieldName) {
+    const fn = (report.fundSummaryFootnotes || []).find(f => f.fieldName === fieldName && f.marker);
+    return fn ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(fn.marker)}</sup>` : '';
+  }
+  const fundSumFootnotes = (report.fundSummaryFootnotes || [])
+    .filter(f => f.text)
+    .map(f => `<div class="footnote-italic">${f.marker ? esc(f.marker) + ' ' : ''}${esc(f.text)}</div>`)
+    .join('');
 
   const fundSumHtml = `
   <div class="page" id="section-fund-summary" data-section-end="true">
@@ -848,7 +866,7 @@ export function generatePdfHtml({
           <tr><td>Combined fund size</td><td>${fundSizeVal != null ? fmt(fundSizeVal) : '—'}</td></tr>
           <tr><td>Amount drawn down</td><td>${fundMetrics.amountDrawnDown != null ? fmt(fundMetrics.amountDrawnDown) : '—'}</td></tr>
           <tr><td>Total invested in portfolio</td><td>${fundMetrics.totalInvestedInPortfolio != null ? fmt(fundMetrics.totalInvestedInPortfolio) : '—'}</td></tr>
-          <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}</td></tr>
+          <tr><td>Fair Market Value of Portfolio Investments (including realized value)</td><td>${fundMetrics.fmvOfPortfolio != null ? fmt(fundMetrics.fmvOfPortfolio) : '—'}${fundFnMarker('fmv')}</td></tr>
           <tr><td>Number of portfolio companies</td><td>${fundMetrics.numberOfPortfolioCompanies ?? '—'}${fundMetrics.numberOfExitedCompanies > 0 ? ` (${fundMetrics.numberOfExitedCompanies} exited)` : ''}</td></tr>
           <tr><td>Amount returned (including passive income returned)</td><td>${fundMetrics.amountReturned != null ? fmt(fundMetrics.amountReturned) : '—'}</td></tr>
           <tr><td>MOIC</td><td>${fundMetrics.moic != null ? fmt(fundMetrics.moic) + 'x' : '—'}</td></tr>
@@ -857,6 +875,7 @@ export function generatePdfHtml({
           ${fundMetrics.rvpi != null ? `<tr><td>RVPI</td><td>${fmt(fundMetrics.rvpi)}x</td></tr>` : ''}
         </tbody>
       </table>
+      ${fundSumFootnotes ? `<div style="margin-top: 16px;">${fundSumFootnotes}</div>` : ''}
     </div>
     ${pgNum(fundSumPageNum)}
   </div>`;
@@ -871,6 +890,8 @@ export function generatePdfHtml({
     const totalInv = getTotalInvestment(c);
     const ownership = c.quarterData?.currentOwnershipPercent ?? getLatestOwnership(c);
     const ownershipConf = c.quarterData?.currentOwnershipConfidential;
+    const ownFn = (report.portfolioSummaryFootnotes || []).find(f => f.fieldName === 'ownership' && f.companySlug && f.companySlug === c.slug && f.marker);
+    const ownMarker = ownFn ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(ownFn.marker)}</sup>` : '';
     return `
       <tr>
         <td>${idx + 1}</td>
@@ -878,7 +899,7 @@ export function generatePdfHtml({
         <td>${esc(c.sector || '—')}</td>
         <td>${fmtDateMonthYear(getInitialInvestmentDate(c))}</td>
         <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
-        <td>${ownershipConf ? '**' : (ownership != null ? fmt(ownership, 2) : '—')}</td>
+        <td>${ownershipConf ? '**' : (ownership != null ? fmt(ownership, 2) + ownMarker : '—')}</td>
       </tr>`;
   }).join('');
 
@@ -944,13 +965,10 @@ export function generatePdfHtml({
     const moicConf = qd?.moicConfidential;
     const roundMoics = qd?.roundMoics || [];
 
-    // MOIC marker: use custom snapshot-moic footnote marker if present, otherwise ★
-    const customMoicFn = (qd?.tableFootnotes || []).find(f => f.tableType === 'snapshot' && f.fieldName === 'snapshot-moic' && f.marker);
-    const moicMarkerHtml = customMoicFn
-      ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(customMoicFn.marker)}</sup>`
-      : ' ★';
-    const defaultMoicFootnote = roundMoics.length > 0 && !customMoicFn
-      ? `<div class="footnote-italic">★ MOIC is based on Price Round (unaudited)</div>`
+    // MOIC marker: the snapshot-moic footnote marker on every MOIC row, as on the portal
+    const moicFn = (qd?.tableFootnotes || []).find(f => f.fieldName === 'snapshot-moic' && f.marker);
+    const moicMarkerHtml = moicFn
+      ? `<sup style="font-size:9px;line-height:0;vertical-align:super;">${esc(moicFn.marker)}</sup>`
       : '';
 
     // Co-investors from the latest investment round only
@@ -974,7 +992,7 @@ export function generatePdfHtml({
       return `<tr><td>• ${esc(label)}${dateStr ? ` (${esc(dateStr)})` : ''}</td><td>${r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'}</td></tr>`;
     }).join('');
 
-    const roundMoicRows = roundMoics.map(rm => {
+    const roundMoicRows = moicConf ? '' : roundMoics.map(rm => {
       const label = roundNameToLabel(rm.roundName);
       return `<tr><td>MOIC ${esc(label)}${moicMarkerHtml}</td><td>${rm.moic != null ? fmt(rm.moic) + 'x' : '—'}</td></tr>`;
     }).join('');
@@ -1025,12 +1043,17 @@ export function generatePdfHtml({
     // Exclude the current quarter from financials if both revenue and PAT are confidential
     // (quiet-period companies like Tonbo don't show the current quarter column at all)
     const currentQFinConf = currentQUpdate?.revenueConfidential && currentQUpdate?.patConfidential;
-    const financialsUpdatesRaw = allUpdates.slice(0, 5);
+    const financialsUpdatesRaw = company.isRevenueMaking
+      ? allUpdates.filter(u =>
+          !isQuarterBefore(quarter, fiscalYear, u.quarter, u.fiscalYear)
+          && (u.revenueINR != null || u.patINR != null || u.revenueConfidential || u.patConfidential)
+        ).slice(0, 5)
+      : [];
     const financialsUpdates = currentQFinConf
       ? financialsUpdatesRaw.filter(u => !(u.quarter === quarter && u.fiscalYear === fiscalYear))
       : financialsUpdatesRaw;
     const hasRevPat = financialsUpdates.some(u => u.revenueINR != null || u.patINR != null || u.revenueConfidential || u.patConfidential);
-    const hasKeyMetrics = (currentQUpdate?.keyMetrics || qd?.keyMetrics || []).length > 0;
+    const hasKeyMetrics = company.isRevenueMaking && (currentQUpdate?.keyMetrics || qd?.keyMetrics || []).length > 0;
 
     // Helper: one <tr> containing a flex row, with optional top/bottom borders on the <td>
     function flexTr(cells, { topBorder = false, bottomBorder = 'thin', isHeader = false, extraTopPadding = 0 } = {}) {
@@ -1151,11 +1174,11 @@ export function generatePdfHtml({
         <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
         <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
         ${roundMoicRows}
-        <tr><td>MOIC Cumulative${roundMoics.length > 0 ? moicMarkerHtml : ''}</td><td>${moicConf ? '**' : (moic != null ? fmt(moic) + 'x' : '—')}</td></tr>
+        ${moic != null ? `<tr><td>MOIC Cumulative${moicMarkerHtml}</td><td>${moicConf ? '**' : fmt(moic) + 'x'}</td></tr>` : ''}
         ${coInvestors.length > 0 ? `<tr><td>Key co-investors${fnMarker('snapshot', 'snapshot-coinvestors')}</td><td>${coInvestors.length === 1 ? esc(coInvestors[0]) : coInvestors.map((ci, i) => `${i + 1}. ${esc(ci)}`).join('<br>')}</td></tr>` : ''}
       </tbody>
     </table>
-    ${snapshotFootnotes || defaultMoicFootnote}
+    ${snapshotFootnotes}
   </div>
 
   ${aboutText ? `
@@ -1200,7 +1223,7 @@ export function generatePdfHtml({
   </div>
 
   ${prevQUpdates.length > 0 ? `
-  <div class="pdf-block" style="padding: 0 40px;">
+  <div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true">
     <div class="prev-quarters-heading" style="margin-top: 16px;">
       <div class="prev-quarters-label">Previous quarters</div>
       <div class="prev-quarters-line"></div>
@@ -1232,7 +1255,9 @@ export function generatePdfHtml({
     <div style="padding: 24px 40px; position: relative; min-height: 900px;">
       <div class="heading-mono">Fund<br>financials</div>
       <div style="margin-top: 12px; font-size: 13px; color: #555;">
-        Available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a>
+        ${report.fundFinancialsPdfUrl
+          ? `Available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a>`
+          : `Will be available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a> once uploaded for this quarter.`}
       </div>
       ${fundFinancialsSvgHtml ? `
         <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; opacity: 0.18;">
@@ -1257,6 +1282,8 @@ export function generatePdfHtml({
         <div class="body-text" style="margin-top: 28px; max-width: 560px;">
           ${pipelineNotesHtml}
         </div>` : ''}
+      ${!pipelineNotesHtml && !(report.pipelineDeals || []).length ? `
+        <div class="body-text" style="margin-top: 28px; color:#888;"><p>No pipeline deals for this quarter.</p></div>` : ''}
       ${pipelineSvgHtml ? `
         <div style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); width: 90px; opacity: 0.18;">
           ${pipelineSvgHtml}
@@ -1282,13 +1309,14 @@ export function generatePdfHtml({
     ? report.mediaFromNews : [];
 
   const mediaCardsHtml = mediaItems.length > 0
-    ? mediaItems.map((item, idx) => `
+    // One pdf-block per card so a page can break between cards
+    ? mediaItems.map((item, idx) => `<div class="pdf-block" style="padding: 0 40px 20px;">
         <div class="media-card${idx % 2 === 1 ? ' right' : ''}">
           <div class="media-card-date">${esc(fmtShortDate(item.date))}</div>
           <div class="media-card-title">${esc(item.headlineEdited || '')}</div>
           ${item.isVideo && item.videoSource === 'youtube' ? `<div class="media-card-source" style="color:#cc0000;">▶ YouTube</div>` : item.publicationName ? `<div class="media-card-source">${esc(item.publicationName)}</div>` : ''}
           ${item.url ? `<div style="margin-top:10px;"><a href="${esc(item.url)}" style="font-size:12px;font-weight:700;color:#363636;text-decoration:underline;">${item.isVideo && item.videoSource === 'youtube' ? 'Watch on YouTube ↗' : item.isVideo ? 'Watch ↗' : 'Read more'}</a></div>` : ''}
-        </div>`).join('')
+        </div></div>`).join('')
     : '';
 
   function platformLabel(platform) {
@@ -1324,20 +1352,19 @@ export function generatePdfHtml({
   const videoUpdates = (quarterSocialUpdates || []).filter(i => i.platform === 'video');
   const otherUpdates = (quarterSocialUpdates || []).filter(i => i.platform !== 'linkedin' && i.platform !== 'video');
 
-  const linkedInCards = linkedInUpdates.map(item => {
+  const linkedInCards = linkedInUpdates.map((item, i) => {
+    const first = i === 0, last = i === linkedInUpdates.length - 1;
+    const framePad = `padding:${first ? 14 : 0}px 14px ${last ? 14 : 10}px;`;
     const href = item.url || 'https://linkedin.com/company/yalicapital';
     const excerpt = item.excerpt
       ? (item.excerpt.length > 140 ? item.excerpt.substring(0, 140) + '…' : item.excerpt)
       : '';
-    return `<a href="${esc(href)}" class="linkedin-card">
+    return `<div class="pdf-block" style="padding: 0 40px;"><div class="linkedin-section" style="${framePad}"><a href="${esc(href)}" class="linkedin-card">
       <div class="linkedin-card-label">LinkedIn</div>
       ${excerpt ? `<div class="linkedin-card-text">${esc(excerpt)}</div>` : ''}
       <div class="linkedin-card-date">${esc(fmtShortDate(item.date))}</div>
-    </a>`;
-  }).join('');
-  const linkedInBannerHtml = linkedInUpdates.length > 0
-    ? `<div class="linkedin-section">${linkedInCards}</div>`
-    : '';
+    </a></div></div>`;
+  });
 
   const videoCardsHtml = videoUpdates.map(item => {
     const excerpt = item.excerpt
@@ -1358,10 +1385,10 @@ export function generatePdfHtml({
           <div class="video-card-date">${esc(fmtShortDate(item.date))}</div>
         </div>
       </div>`;
-    return item.url
+    return `<div class="pdf-block" style="padding: 0 40px;">${item.url
       ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${card}</a>`
-      : card;
-  }).join('');
+      : card}</div>`;
+  });
 
   const otherCardsHtml = otherUpdates.map(item => {
     const excerpt = item.excerpt
@@ -1379,18 +1406,31 @@ export function generatePdfHtml({
           <div class="social-card-date">${esc(fmtShortDate(item.date))}</div>
         </div>
       </div>`;
-    return item.url
+    return `<div class="pdf-block" style="padding: 0 40px;">${item.url
       ? `<a href="${esc(item.url)}" style="display:block;text-decoration:none;color:inherit;">${cardInner}</a>`
-      : cardInner;
-  }).join('');
+      : cardInner}</div>`;
+  });
 
   const hasSocialUpdates = (quarterSocialUpdates || []).length > 0;
   const socialCardsHtml = hasSocialUpdates
-    ? `<div class="social-updates-heading">Social Updates</div>` +
-      linkedInBannerHtml + videoCardsHtml + otherCardsHtml
+    ? `<div class="pdf-block" style="padding: 0 40px;" data-keep-with-next="true"><div class="social-updates-heading">Social Updates</div></div>` +
+      [...linkedInCards, ...videoCardsHtml, ...otherCardsHtml].join('')
     : '';
 
-  const hasMedia = mediaItems.length > 0 || hasSocialUpdates;
+  const feature = report.mediaFeature?.url ? report.mediaFeature : null;
+  const mediaFeatureHtml = feature ? `
+  <div class="pdf-block" style="padding: 16px 40px 0;">
+    <div class="media-feature">
+      ${report.mediaFeatureThumb ? `<a href="${esc(feature.url)}" class="media-feature-thumb"><img src="${esc(report.mediaFeatureThumb)}" alt=""></a>` : ''}
+      <div class="media-feature-body">
+        ${feature.title ? `<div class="media-feature-title">${esc(feature.title)}</div>` : ''}
+        <div class="body-text">${renderMediaNotesBlocks(feature.blocks)}</div>
+        <a href="${esc(feature.url)}" class="media-feature-link">${esc(feature.linkLabel || 'Watch on YouTube')}</a>
+      </div>
+    </div>
+  </div>` : '';
+
+  const hasMedia = mediaItems.length > 0 || hasSocialUpdates || !!feature;
 
   const mediaHtml = `
 <div class="pdf-var-section">
@@ -1400,11 +1440,14 @@ export function generatePdfHtml({
       <div class="media-arrow">↗</div>
     </div>
     <div class="media-subhead">Key highlights and press coverage</div>
+  </div>
+  ${mediaFeatureHtml}
+  <div class="pdf-block" style="padding: 0 40px 0;">
     ${report.mediaNotes && Array.isArray(report.mediaNotes) && report.mediaNotes.length > 0 ? `<div class="body-text" style="margin: 12px 0 4px;">${renderMediaNotesBlocks(report.mediaNotes)}</div>` : ''}
     <div class="section-divider-light"></div>
   </div>
-  ${mediaCardsHtml ? `<div class="pdf-block" style="padding: 0 40px;"><div class="media-cards">${mediaCardsHtml}</div></div>` : ''}
-  ${hasSocialUpdates ? `<div class="pdf-block" style="padding: 0 40px;">${socialCardsHtml}</div>` : ''}
+  ${mediaCardsHtml}
+  ${socialCardsHtml}
   ${!hasMedia ? `<div class="pdf-block" style="padding: 0 40px;"><p style="color:#888;font-size:12px;padding-top:16px;">No media items recorded for this quarter.</p></div>` : ''}
 </div>`;
 
@@ -1434,6 +1477,18 @@ export function generatePdfHtml({
             <a href="mailto:${esc(irEmail)}" class="contact-box-link" style="color:#efefef;">${esc(irEmail.toUpperCase())}</a> FOR INVESTOR QUERIES
           </div>
         </div>` : ''}
+      ${websiteDisplay ? `
+        <div class="contact-box">
+          <div class="contact-box-text">
+            <a href="${esc(fundSettings.website)}" class="contact-box-link" style="color:#efefef;">${esc(websiteDisplay)}</a> WEBSITE
+          </div>
+        </div>` : ''}
+      ${(fundSettings?.additionalContacts || []).filter(c => c?.name).map(c => `
+        <div class="contact-box">
+          <div class="contact-box-text">
+            ${esc((c.role || 'Contact').toUpperCase())}: ${esc(c.name.toUpperCase())}${c.email ? `, <a href="mailto:${esc(c.email)}" class="contact-box-link" style="color:#efefef;">${esc(c.email.toUpperCase())}</a>` : ''}
+          </div>
+        </div>`).join('')}
       ${fundSettings?.fundName ? `
         <div class="contact-box">
           <div class="contact-box-text">${esc(fundSettings.fundName.toUpperCase())}</div>

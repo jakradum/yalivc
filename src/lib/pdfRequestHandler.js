@@ -171,6 +171,14 @@ export async function handlePdfGet(slug, { returnHtml = false, debugMode = false
       fetchAsDataUri(fundSettings.logoLight).then(uri => { if (uri) fundSettings.logoLight = uri; })
     );
   }
+  // YouTube thumbnail for the featured media item, as on the portal
+  const featureVideoId = report.mediaFeature?.url
+    && (report.mediaFeature.url.match(/[?&]v=([\w-]{11})/) || report.mediaFeature.url.match(/youtu\.be\/([\w-]{11})/) || [])[1];
+  if (featureVideoId) {
+    imageFetches.push(
+      fetchAsDataUri(`https://i.ytimg.com/vi/${featureVideoId}/hqdefault.jpg`).then(uri => { if (uri) report.mediaFeatureThumb = uri; })
+    );
+  }
   for (const company of portfolioCompanies) {
     if (company.logo && !company.logo.startsWith('data:')) {
       imageFetches.push(fetchAsDataUri(company.logo).then(uri => { if (uri) company.logo = uri; }));
