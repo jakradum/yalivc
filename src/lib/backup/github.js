@@ -6,11 +6,13 @@
 // that folder.
 //
 // Same interface as the OneDrive client in graph.js (listTree, upload), plus
-// commit(): uploads only create blobs and stage them; commit() makes ONE tree +
-// ONE commit for the whole run and moves refs/heads/<branch> without force. If
-// the branch moved meanwhile (non-fast-forward), it rebuilds on the new head and
-// retries once. listTree() reads the tree back from GitHub, before the commit
-// (what is already backed up) and after it (verification).
+// stageText / stageRemove / commit(): upload() creates a blob and stages it,
+// stageText() stages a text file sent inline in the tree request, stageRemove()
+// stages a deletion; commit() makes ONE commit for everything staged and moves
+// refs/heads/<branch> without force. If the branch moved meanwhile
+// (non-fast-forward), commit() throws RefRaceError and the caller re-diffs on the
+// new head and commits again (once). listTree() reads the tree back from GitHub,
+// before the commit (what is already backed up) and after it (verification).
 //
 // GITHUB_BACKUP_TOKEN: fine-grained PAT, Contents read/write on that one repo.
 // Never logged or put in error messages; only GitHub's status and message are.
@@ -22,6 +24,10 @@ export const DEFAULT_BRANCH = 'main';
 export const BACKUP_ROOT = 'lp-data-backups';
 // GitHub rejects files over 100 MB; stay clear of it.
 export const MAX_BLOB_BYTES = 95 * 1024 * 1024;
+// Inline text (record JSON, INDEX, README) and per-request limits for tree creation.
+export const MAX_TEXT_BYTES = 10 * 1024 * 1024;
+const TREE_CHUNK_ENTRIES = 400;
+const TREE_CHUNK_BYTES = 2 * 1024 * 1024;
 const API = 'https://api.github.com';
 
 // Git's object id for file content: SHA-1 of "blob <size>\0<content>".
@@ -102,8 +108,8 @@ export function githubClient({ token, repo, branch = DEFAULT_BRANCH, root = BACK
     return out;
   }
 
-  // Stages rel (under root/) for the run's commit. A path already holding the
-  // same content is left alone (no blob, no tree entry). → bytes.
+  // Stages rel (under root/) for the run's commit as a blob. A path already
+  // holding the same content is left alone (no blob, no tree entry). → bytes.
   async function upload(rel, buf) {
     if (buf.length > MAX_BLOB_BYTES) {
       throw new Error(`${rel} is ${(buf.length / 1048576).toFixed(1)} MB; GitHub backups take files up to ${MAX_BLOB_BYTES / 1048576} MB`);
@@ -116,29 +122,76 @@ export function githubClient({ token, repo, branch = DEFAULT_BRANCH, root = BACK
     return buf.length;
   }
 
+  // Stages a UTF-8 text file sent inline in the tree request (no blob call).
+  // The caller decides whether it changed (records.js diffs by blob SHA).
+  function stageText(rel, text) {
+    const buf = Buffer.from(text, 'utf8');
+    if (buf.length > MAX_TEXT_BYTES) throw new Error(`${rel} is ${(buf.length / 1048576).toFixed(1)} MB; inline text files go up to ${MAX_TEXT_BYTES / 1048576} MB`);
+    staged.set(rel, { content: text, sha: gitBlobSha(buf), size: buf.length });
+  }
+
+  // Stages the removal of rel from the tree.
+  function stageRemove(rel) {
+    staged.set(rel, { remove: true });
+  }
+
+  // Tree entries, chunked so no single request carries too much inline text;
+  // each chunk's tree is the base of the next.
+  function chunks(entries) {
+    const out = [];
+    let cur = [];
+    let bytes = 0;
+    for (const e of entries) {
+      const b = e.content ? Buffer.byteLength(e.content) : 0;
+      if (cur.length && (cur.length >= TREE_CHUNK_ENTRIES || bytes + b > TREE_CHUNK_BYTES)) {
+        out.push(cur);
+        cur = [];
+        bytes = 0;
+      }
+      cur.push(e);
+      bytes += b;
+    }
+    if (cur.length) out.push(cur);
+    return out;
+  }
+
   async function attempt(on, message, entries) {
-    const tree = await json('POST', '/git/trees', { what: 'create tree', body: { base_tree: on.tree, tree: entries } });
-    const commit = await json('POST', '/git/commits', { what: 'create commit', body: { message, tree: tree.sha, parents: [on.commit] } });
+    let tree = on.tree;
+    for (const part of chunks(entries)) {
+      tree = (await json('POST', '/git/trees', { what: 'create tree', body: { base_tree: tree, tree: part } })).sha;
+    }
+    const commit = await json('POST', '/git/commits', { what: 'create commit', body: { message, tree, parents: [on.commit] } });
     const res = await call('PATCH', `/git/refs/heads/${encodeURIComponent(branch)}`, {
       what: `update branch ${branch}`,
       body: { sha: commit.sha, force: false },
       ok: [409, 422], // not a fast-forward: the branch moved since we read it
     });
     if (!res.ok) throw new RefRaceError(`branch ${branch} moved during the backup (${res.status})`);
-    return { commit: commit.sha, tree: tree.sha };
+    return { commit: commit.sha, tree };
   }
 
-  // One commit with everything staged. → { sha, files } (sha null when nothing changed).
+  // ONE commit with everything staged, on the head read by listTree(). Removals
+  // of paths not in that tree are dropped. If the branch moved meanwhile, throws
+  // RefRaceError with the staging kept and the client reset to read the new head:
+  // the caller re-diffs (listTree) and calls commit() again.
+  // → { sha, files } (sha null when nothing is staged).
   async function commit(message) {
+    const all = await current();
+    for (const [rel, v] of staged) if (v.remove && !all.has(rel)) staged.delete(rel);
     if (!staged.size) return { sha: null, files: 0 };
-    await current();
-    const entries = [...staged].map(([rel, { sha }]) => ({ path: `${root}/${rel}`, mode: '100644', type: 'blob', sha }));
+    const entries = [...staged].map(([rel, v]) => {
+      const e = { path: `${root}/${rel}`, mode: '100644', type: 'blob' };
+      if (v.remove) e.sha = null;
+      else if (v.content !== undefined) e.content = v.content;
+      else e.sha = v.sha;
+      return e;
+    });
     let made;
     try {
       made = await attempt(base, message, entries);
     } catch (err) {
-      if (!(err instanceof RefRaceError)) throw err;
-      made = await attempt(await readHead(), message, entries); // second race: throws
+      if (err instanceof RefRaceError) reset();
+      throw err;
     }
     const files = staged.size;
     staged.clear();
@@ -147,5 +200,19 @@ export function githubClient({ token, repo, branch = DEFAULT_BRANCH, root = BACK
     return { sha: made.commit, files };
   }
 
-  return { kind: 'github', maxBytes: MAX_BLOB_BYTES, listTree, upload, commit, staged };
+  // Drop staged text files and removals (blobs stay staged): before re-diffing
+  // on a new head after a race.
+  function unstageText() {
+    for (const [rel, v] of staged) if (v.remove || v.content !== undefined) staged.delete(rel);
+  }
+
+  // Forget the head and listing (next listTree reads the branch again).
+  function reset() {
+    base = null;
+    listing = null;
+  }
+
+  const head = async () => { await current(); return base.commit; };
+
+  return { kind: 'github', maxBytes: MAX_BLOB_BYTES, listTree, upload, stageText, stageRemove, unstageText, commit, reset, head, staged };
 }
