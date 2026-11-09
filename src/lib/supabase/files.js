@@ -16,6 +16,7 @@ import { NextResponse } from 'next/server';
 import { verifySession } from '@/lib/session';
 import { isYaliStaff } from '@/lib/internal-user';
 import { order, cmpStr } from '@/lib/lp-data/groq';
+import { supaAll } from '@/lib/lp-data/rest';
 
 const BUCKET = 'sanity-files';
 export const SIGNED_URL_SECONDS = 600;
@@ -38,6 +39,8 @@ const SCANNED_TYPES = ['dataroomFundContent'];
 export const isStaffEmail = isYaliStaff;
 
 // ── PostgREST / Storage plumbing ─────────────────────────────────────────────
+// Single-row and write requests use supa() below; every read that can return many
+// rows uses the data layer's keyset-paged supaAll() (rest.js).
 
 function config() {
   const url = process.env.SUPABASE_URL;
@@ -102,14 +105,14 @@ export async function findFileReferences(assetId, types = [...Object.keys(SCALAR
   for (const type of types) {
     for (const field of SCALAR_FILE_FIELDS[type] || []) {
       jobs.push(
-        supa(`/rest/v1/sanity_docs?select=${REPORT_SELECT}&type=${eq(type)}&doc->${field}->asset->>_ref=${eq(assetId)}`)
-          .then((rows) => (rows || []).map((r) => ({ ...r, field })))
+        supaAll(`/rest/v1/sanity_docs?select=${REPORT_SELECT}&type=${eq(type)}&doc->${field}->asset->>_ref=${eq(assetId)}`)
+          .then((rows) => rows.map((r) => ({ ...r, field })))
       );
     }
     if (SCANNED_TYPES.includes(type)) {
       jobs.push(
-        supa(`/rest/v1/sanity_docs?select=id,type,doc&type=${eq(type)}`).then((rows) =>
-          (rows || []).flatMap((r) => refPaths(r.doc, assetId).map((field) => ({ id: r.id, type: r.type, field })))
+        supaAll(`/rest/v1/sanity_docs?select=id,type,doc&type=${eq(type)}`).then((rows) =>
+          rows.flatMap((r) => refPaths(r.doc, assetId).map((field) => ({ id: r.id, type: r.type, field })))
         )
       );
     }
@@ -128,10 +131,10 @@ export const isReportVisible = (r, staff) => isReportPublished(r) || (staff && r
 
 /** The latest published lpQuarterlyReport: { id, generatedPdfRef } or null. */
 export async function getLatestPublishedReport() {
-  const rows = await supa(
+  const rows = await supaAll(
     `/rest/v1/sanity_docs?select=${REPORT_SELECT},generatedPdfRef:doc->generatedPdf->asset->>_ref&type=${eq('lpQuarterlyReport')}`
   );
-  const published = (rows || []).filter((r) => isPublishedId(r.id) && isReportPublished(r));
+  const published = rows.filter((r) => isPublishedId(r.id) && isReportPublished(r));
   // Same pick as GROQ `order(fiscalYear desc, quarter desc)[0]` in getLatestLPReportForDataRoom:
   // input in _id order, missing values first under desc, ties by _id.
   published.sort((a, b) => cmpStr(String(a.id), String(b.id)));

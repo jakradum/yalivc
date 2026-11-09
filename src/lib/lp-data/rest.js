@@ -48,22 +48,28 @@ export async function supa(path, { method = 'GET', body, headers = {} } = {}) {
   return { rows: text ? JSON.parse(text) : null, res };
 }
 
-// GET every row, paging past PostgREST's 1,000-row cap with Range headers. A 416
-// (range not satisfiable) on a later page means the previous page was the last one,
-// e.g. a table with exactly 1,000 rows.
-export async function supaAll(path, pageSize = 1000) {
+// GET every row of a table read, paging by key: `order=<key>.asc&limit=<pageSize>`,
+// then `<key>=gt.<last key>` until a page comes back EMPTY. A short page is not the
+// end: PostgREST's db-max-rows may be below pageSize. Keyset paging also cannot skip
+// or repeat rows when other rows are inserted or deleted between page requests
+// (offset paging can). `path` must select `key` and must not set order/limit/offset.
+// `complete(rows)` may end the read early once the caller knows it has every row
+// (e.g. all ids of an `in.(...)` filter found), saving the final empty request.
+export async function supaAll(path, { key = 'id', pageSize = 1000, complete } = {}) {
+  if (/[?&](order|limit|offset)=/.test(path)) throw new Error('supaAll: path must not set order, limit or offset');
+  const sep = path.includes('?') ? '&' : '?';
   const out = [];
-  for (let from = 0; ; from += pageSize) {
-    let rows;
-    try {
-      ({ rows } = await supa(path, { headers: { Range: `${from}-${from + pageSize - 1}`, 'Range-Unit': 'items' } }));
-    } catch (err) {
-      if (from > 0 && err?.status === 416) return out;
-      throw err;
-    }
+  let last;
+  for (;;) {
+    const after = last === undefined ? '' : `&${key}=gt.${enc(last)}`;
+    const { rows } = await supa(`${path}${sep}order=${key}.asc&limit=${pageSize}${after}`);
     const page = rows || [];
+    if (!page.length) return out;
+    const next = page[page.length - 1]?.[key];
+    if (typeof next !== 'string' || next === last) throw new Error(`supaAll: page rows lack an increasing "${key}"`);
     out.push(...page);
-    if (page.length < pageSize) return out;
+    if (complete?.(out)) return out;
+    last = next;
   }
 }
 

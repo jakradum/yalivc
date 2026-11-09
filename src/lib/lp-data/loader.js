@@ -6,7 +6,7 @@
 //   }
 //
 // Default loader:
-//   - private types come from `sanity_docs` (PostgREST, secret key, paged).
+//   - private types come from `sanity_docs` (PostgREST, secret key, keyset-paged by id).
 //   - public types (PUBLIC_TYPES) come from Sanity, published perspective.
 //   - file assets (`file-<sha1>-<ext>` ids) come from `sanity_files` and are returned
 //     as { _id, _type: 'sanity.fileAsset', originalFilename, mimeType, size }. A file
@@ -16,7 +16,7 @@
 // Nothing is cached: every call reads fresh.
 // Tests replace it with fixtures via setDocLoader(); a fixture loader returns file
 // asset docs from byIds the same way.
-import { supa, supaAll, sanityQuery, enc, isSafeId } from './rest.js';
+import { supaAll, sanityQuery, enc, isSafeId } from './rest.js';
 import { byId } from './groq.js';
 
 export const PUBLIC_TYPES = new Set(['category', 'teamMember', 'publication', 'news', 'socialUpdate', 'sanity.imageAsset']);
@@ -26,7 +26,7 @@ const chunk = (a, n) => Array.from({ length: Math.ceil(a.length / n) }, (_, i) =
 const inFilter = (ids) => `in.(${ids.map((id) => `"${enc(id)}"`).join(',')})`;
 
 async function twinByType(type) {
-  const rows = await supaAll(`/rest/v1/sanity_docs?select=doc&type=eq.${enc(type)}&order=id.asc`);
+  const rows = await supaAll(`/rest/v1/sanity_docs?select=id,doc&type=eq.${enc(type)}`);
   return rows.map((r) => r.doc);
 }
 
@@ -45,16 +45,17 @@ export const defaultLoader = {
     const out = [];
 
     for (const part of chunk(fileIds, CHUNK)) {
-      const { rows } = await supa(`/rest/v1/sanity_files?select=asset_id,original_filename,mime_type,size_bytes&asset_id=${inFilter(part)}`);
-      for (const r of rows || []) {
+      const rows = await supaAll(`/rest/v1/sanity_files?select=asset_id,original_filename,mime_type,size_bytes&asset_id=${inFilter(part)}`,
+        { key: 'asset_id', complete: (got) => got.length >= part.length });
+      for (const r of rows) {
         out.push({ _id: r.asset_id, _type: 'sanity.fileAsset', originalFilename: r.original_filename ?? null, mimeType: r.mime_type ?? null, size: r.size_bytes ?? null });
       }
     }
 
     const found = new Set();
     for (const part of chunk(docIds, CHUNK)) {
-      const { rows } = await supa(`/rest/v1/sanity_docs?select=doc&id=${inFilter(part)}`);
-      for (const r of rows || []) { out.push(r.doc); found.add(r.doc._id); }
+      const rows = await supaAll(`/rest/v1/sanity_docs?select=id,doc&id=${inFilter(part)}`, { complete: (got) => got.length >= part.length });
+      for (const r of rows) { out.push(r.doc); found.add(r.doc._id); }
     }
 
     const rest = [...imageIds, ...docIds.filter((id) => !found.has(id))];

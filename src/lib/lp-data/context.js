@@ -32,9 +32,12 @@ export class Ctx {
     this.docs = new Map();
   }
 
+  // All docs of type t in _id order, each _id once (a loader that pages or merges
+  // sources must never make GROQ's single snapshot show a document twice).
   async type(t) {
     const docs = await this.loader.byType(t);
-    return byId((docs || []).filter((d) => isObj(d) && d._type === t));
+    const seen = new Set();
+    return byId((docs || []).filter((d) => isObj(d) && d._type === t)).filter((d) => !seen.has(d._id) && seen.add(d._id));
   }
 
   // Load every reference inside `values` (and, `depth` levels down, inside the

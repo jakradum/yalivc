@@ -1,5 +1,5 @@
 // Mocked-fetch tests for the lp-data review fixes: write ownership via sync_types,
-// supaAll paging at exactly one full page, HMAC-keyed parity hashes.
+// supaAll keyset paging (full page, short pages, concurrent writes), HMAC-keyed parity hashes.
 // Run: node --test tests/lp-data/*.test.mjs
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
@@ -94,16 +94,56 @@ test('sync_types is cached for at most 30 seconds', async () => {
   assert.ok(requests.every((r) => r.opts.cache === 'no-store'));
 });
 
-test('supaAll: exactly 1,000 rows then 416 ends cleanly', async () => {
-  const rows = Array.from({ length: 1000 }, (_, i) => ({ id: i }));
-  handler = (u, opts) => (opts.headers.Range === '0-999' ? json(rows, 206) : new Response('{"code":"PGRST103"}', { status: 416 }));
-  const out = await supaAll('/rest/v1/sanity_docs?select=doc&type=eq.x');
+// A tiny PostgREST: `order=id.asc`, `limit`, `id=gt.<x>`, and a db-max-rows cap.
+function keysetTable(rows, { maxRows = 1000, beforePage } = {}) {
+  return (u) => {
+    beforePage?.(u);
+    const sp = u.searchParams;
+    assert.equal(sp.get('order'), 'id.asc');
+    const gt = sp.get('id')?.replace(/^gt\./, '');
+    const limit = Math.min(Number(sp.get('limit')), maxRows);
+    const sorted = [...rows()].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+    return json(sorted.filter((r) => gt === undefined || r.id > gt).slice(0, limit));
+  };
+}
+const ids = (n, prefix = 'r') => Array.from({ length: n }, (_, i) => ({ id: `${prefix}-${String(i).padStart(5, '0')}` }));
+
+test('supaAll: exactly 1,000 rows then an empty page ends cleanly', async () => {
+  const rows = ids(1000);
+  handler = keysetTable(() => rows);
+  const out = await supaAll('/rest/v1/sanity_docs?select=id,doc&type=eq.x');
   assert.equal(out.length, 1000);
+  assert.equal(requests.length, 2);
+  assert.ok(requests[1].url.includes('id=gt.r-00999'));
 });
 
-test('supaAll: 416 on the first page is still an error', async () => {
+test('supaAll: a short page is not the end (db-max-rows below the page size)', async () => {
+  const rows = ids(801);
+  handler = keysetTable(() => rows, { maxRows: 500 });
+  const out = await supaAll('/rest/v1/sanity_docs?select=id,doc&type=eq.x');
+  assert.equal(out.length, 801);
+  assert.equal(new Set(out.map((r) => r.id)).size, 801);
+});
+
+test('supaAll: rows inserted or deleted between pages are never skipped or repeated', async () => {
+  let rows = ids(1500);
+  let page = 0;
+  handler = keysetTable(() => rows, {
+    beforePage: () => {
+      if (++page !== 2) return;
+      rows = rows.filter((r) => r.id !== 'r-00010'); // delete before the boundary
+      rows.push({ id: 'r-00000a' }); // insert before the boundary
+    },
+  });
+  const out = (await supaAll('/rest/v1/sanity_docs?select=id,doc&type=eq.x')).map((r) => r.id);
+  assert.equal(out.length, new Set(out).size);
+  assert.ok(out.includes('r-01000') && out.includes('r-01499'));
+});
+
+test('supaAll: errors are thrown, and a path with its own order/limit is refused', async () => {
   handler = () => new Response('', { status: 416 });
-  await assert.rejects(supaAll('/rest/v1/sanity_docs?select=doc'), (e) => e.status === 416);
+  await assert.rejects(supaAll('/rest/v1/sanity_docs?select=id,doc'), (e) => e.status === 416);
+  await assert.rejects(supaAll('/rest/v1/sanity_docs?select=id&order=id'), /must not set order/);
 });
 
 test('parity hashes are HMAC-SHA256 keyed by PORTAL_AUTH_SECRET, never plain values', async () => {
@@ -146,4 +186,15 @@ test('lp-data end to end: Supabase-owned type is written to sanity_docs', async 
     assert.equal(inserted.id, doc._id);
     assert.equal(inserted.doc._type, 'lpPortalFeedback');
   } finally { process.env.LP_DATA_SOURCE = saved; }
+});
+
+test('Ctx.type: a loader that returns a document twice yields it once', async () => {
+  const lp = await import('../../src/lib/lp-data.js');
+  const saved = process.env.LP_DATA_SOURCE;
+  process.env.LP_DATA_SOURCE = 'supabase';
+  const c = { _id: 'company-a', _type: 'company', name: 'A', slug: { current: 'a' }, investmentStatus: 'active' };
+  lp.setDocLoader({ byType: async (t) => (t === 'company' ? [c, { ...c }, { ...c, _id: 'company-b', slug: { current: 'b' } }] : []), byIds: async () => [] });
+  try {
+    assert.deepEqual((await lp.getAllLPInvestmentSlugs()).map((x) => x.slug ?? x), ['a', 'b']);
+  } finally { lp.resetDocLoader(); process.env.LP_DATA_SOURCE = saved; }
 });
