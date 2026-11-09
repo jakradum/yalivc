@@ -319,6 +319,42 @@ function PortalContentInner({
     }
   }, [showCollapsePopup]);
 
+  // A new section glides back to its top, slowing down as it arrives (ease-out),
+  // rather than keeping the previous section's scroll position. Runs after the new
+  // section has rendered; stops if the reader scrolls during the glide.
+  const firstSectionRender = useRef(true);
+  useEffect(() => {
+    if (firstSectionRender.current) { firstSectionRender.current = false; return; }
+    const start = window.scrollY;
+    if (start <= 0) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+    const duration = Math.min(900, 450 + start / 6);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    let frame;
+    let startTime;
+    const stop = () => { cancelAnimationFrame(frame); removeListeners(); };
+    const removeListeners = () => {
+      window.removeEventListener('wheel', stop);
+      window.removeEventListener('touchstart', stop);
+      window.removeEventListener('keydown', stop);
+    };
+    const step = (now) => {
+      if (startTime === undefined) startTime = now;
+      const t = Math.min(1, (now - startTime) / duration);
+      window.scrollTo({ top: Math.round(start * (1 - easeOutCubic(t))), behavior: 'instant' });
+      if (t < 1) frame = requestAnimationFrame(step);
+      else removeListeners();
+    };
+    window.addEventListener('wheel', stop, { passive: true });
+    window.addEventListener('touchstart', stop, { passive: true });
+    window.addEventListener('keydown', stop);
+    frame = requestAnimationFrame(step);
+    return stop;
+  }, [activeSection]);
+
   // Handle menu click - update state and URL without triggering navigation
   const handleMenuClick = (id) => {
     setActiveSection(id);
