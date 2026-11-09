@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 // Backs up the Supabase LP database to Pranav's OneDrive (src/lib/backup/run.js).
+// Not scheduled since the GitHub backup (/api/cron/supabase-sync); kept working.
 // Same secret as the twin sync (SUPABASE_SYNC_SECRET), but independent of it.
 // 200 = complete; 202 = tables done but some new PDFs left for the next run;
 // 503 = not connected / not configured (no email); 500 = failed (Pranav is emailed).
@@ -16,7 +17,7 @@ export async function GET(request) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
   try {
-    const result = await runBackup();
+    const result = await runBackup({ target: 'onedrive' });
     return NextResponse.json(result, { status: result.complete ? 200 : 202 });
   } catch (err) {
     if (err instanceof NotConnectedError || err instanceof NotConfiguredError) {
