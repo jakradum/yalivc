@@ -144,6 +144,7 @@
   z-index: 50;
   height: 64px;
   box-sizing: border-box;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* separates it from the crimson sidebar head */
   transition: transform 0.3s ease;
 }
 
@@ -701,160 +702,267 @@
   display: none;
 }
 
-.sidebarNav {
-  padding: 2rem 0;
+/* ── Sidebar (B1 revised): crimson quarter block + report contents ── */
+/* Everything in DM Sans except the quarter itself (JetBrains Mono). */
+
+.sbHead {
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: 0.15rem;
+  padding: 1.5rem 1.25rem 1.25rem;
+  background: #830d35;
 }
 
-.sidebarLogout {
-  display: block;
-  padding: 0.625rem 1.5rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.75rem;
-  color: #aaa;
-  text-decoration: none;
-  border-top: 1px solid #363636;
-  transition: color 0.2s ease;
-  letter-spacing: 0.04em;
-}
-.sidebarLogout:hover {
-  color: #830D35;
-}
-
-.sidebarHeader {
-  padding: 0 1.5rem 1rem 1.5rem;
-  border-bottom: 1px solid #363636;
-  margin-bottom: 1rem;
-}
-
-.sidebarTitle {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.6875rem;
-  font-weight: 600;
+.sbEyebrow {
+  font-family: var(--font-inter);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #999;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.menuList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.menuList li {
-  margin: 0;
-}
-
-.menuItem {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  padding: 0.625rem 1.5rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8125rem;
-  color: #666;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.menuItem:hover {
-  color: #830D35;
-}
-
-.menuItemActive {
-  color: #830D35;
-  font-weight: 600;
-}
-
-/* Menu List Item - clean stack */
-.menuListItem {
-  border: none;
-  margin: 0;
-}
-
-/* Parent menu item (non-clickable) */
-.menuParent {
-  display: block;
-  padding: 0.625rem 1.5rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8125rem;
-  color: #666;
-}
-
-/* Sub-menu list */
-.menuSubList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menuSubList li {
-  border: none;
-}
-
-.menuSubItem {
-  padding-left: 2.5rem !important;
-}
-
-.menuItemExpandable {
+.sbQuarterBtn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  gap: 0.5rem;
+  margin: 0.15rem 0 0.1rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
 }
 
-.menuChevron {
-  font-style: normal;
-  font-size: 1rem;
-  line-height: 1;
-  color: #888;
-  transition: transform 0.2s ease;
-  display: inline-block;
-  transform: rotate(0deg);
+.sbQuarterBtn:disabled {
+  cursor: default;
+}
+
+.sbQuarter {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.sbQuarterLatest {
+  color: #ebde84;
+}
+
+.sbQuarterPast {
+  color: #efefef;
+}
+
+.sbLatestTag,
+.sbLatestTagSmall {
+  font-family: var(--font-inter);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #ebde84;
+  border-radius: 2px;
+  line-height: 1.2;
+}
+
+.sbLatestTag {
+  font-size: 0.5625rem;
+  color: #830d35;
+  padding: 0.15rem 0.4rem;
+}
+
+.sbLatestTagSmall {
+  font-size: 0.5625rem;
+  color: #6b6420;
+  padding: 0.1rem 0.35rem;
+}
+
+.sbChange {
+  margin-left: auto;
+  font-family: var(--font-inter);
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sbQuarterBtn:hover .sbChange {
+  color: #fff;
+}
+
+.sbMonths {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.sbQuarterMenu {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  top: calc(100% - 0.5rem);
+  z-index: 5;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  background: #fff;
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.sbQuarterOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #333;
+  text-decoration: none;
+}
+
+.sbQuarterOption:hover {
+  background: #f5f5f5;
+}
+
+.sbQuarterOptionActive {
+  color: #830d35;
+  font-weight: 600;
+}
+
+.sbNav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0 1rem;
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #333;
+}
+
+.sbGroup {
+  font-family: var(--font-inter);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #830d35;
+  padding: 0.75rem 1.25rem 0.375rem;
+}
+
+.sbList,
+.sbSubList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sbItem {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.45rem 1.25rem;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sbItem:hover {
+  background: #f5f5f5;
+}
+
+.sbItemActive,
+.sbItemActive:hover {
+  background: #830d35;
+  color: #fff;
+}
+
+.sbLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.sbItem:has(.sbLeader) .sbLabel {
+  flex: 0 1 auto;
+}
+
+/* Dotted leader from the section name to its number */
+.sbLeader {
+  flex: 1;
+  min-width: 0.75rem;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0.35;
+  transform: translateY(-0.3em);
+}
+
+.sbNum {
+  font-size: 0.6875rem;
+  color: #aaa;
   flex-shrink: 0;
 }
 
-.menuChevronOpen {
-  transform: rotate(90deg);
+.sbItemActive .sbNum {
+  color: #fff;
 }
 
-.companySubList {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.2s ease;
-  opacity: 0;
+.sbSubList {
+  margin: 0.25rem 0 0.5rem;
 }
 
-.companySubListOpen {
-  max-height: 600px;
-  opacity: 1;
-}
-
-.menuCompanyLink {
-  display: block;
-  padding: 0.4rem 1.5rem 0.4rem 2.5rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.7rem;
-  color: #888;
+.sbCompany {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.28rem 1.25rem 0.28rem 1.5rem;
+  font-size: 0.75rem;
+  color: #777;
   text-decoration: none;
-  line-height: 1.4;
   transition: color 0.15s ease;
 }
 
-.menuCompanyLink:hover {
-  color: #363636;
+.sbCompany:hover {
+  color: #1a1a1a;
 }
 
-.menuCompanyLinkActive {
+.sbCompanyActive {
   color: #830d35;
+  font-weight: 600;
+}
+
+/* Company logos in one grey: the logo turned solid black, then faded to
+   #363636 on white (54/255 grey = black at 79% opacity). */
+.sbLogo {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0);
+  opacity: 0.79;
+}
+
+.sbSignOut {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem 0;
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  color: #888;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.sbSignOut:hover {
+  color: #830d35;
+}
+
+/* The quarter switcher lives in the sidebar on desktop; the header copy is
+   only needed on phones, where the sidebar starts closed. */
+@media (min-width: 768px) {
+  .fyDropdown {
+    display: none;
+  }
 }
 
 /* Sidebar toggle button */
@@ -3564,6 +3672,39 @@
 
 .mediaSectionTitle:first-of-type {
   margin-top: 0;
+}
+
+/* Social updates: one collapsible header (native <details>) */
+.socialSummary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.socialSummary::-webkit-details-marker {
+  display: none;
+}
+
+.socialToggle::after {
+  content: 'Show';
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.socialDetails[open] .socialToggle::after {
+  content: 'Hide';
+}
+
+.socialDetails[open] > .socialSummary {
+  margin-bottom: 0.5rem;
 }
 
 .mediaCoverageGrid {
