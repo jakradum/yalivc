@@ -46,7 +46,9 @@
 - `company.showOnPartnerPortal` (default on) is the portal kill switch — grid, reports, PDFs, snapshots, company page (404s), prev/next nav. Independent of `showOnMainWebsite`.
 - Data room (`getDataRoomPortfolioCompanies`) is still `active`-only — known, deliberately left for now.
 
-**When a company first appears in a report** — `getPortfolioCompaniesForQuarter()` has two gates, both required: initial round date ≤ quarter end, **and** at least one `quarterlyUpdate` at or before that quarter (`hasReportableUpdateBy`). A deal that closes late in a quarter with no financials yet stays out of that quarter's report until its first update is entered; once in, it stays in. Any query whose result is passed to this gate must project `quarterlyUpdates` (at least `{quarter, fiscalYear}`) or every company is filtered out.
+**When a company first appears in a report** — `getPortfolioCompaniesForQuarter()` has three gates (see the next paragraph for the third), the first two being: initial round date ≤ quarter end, **and** at least one `quarterlyUpdate` at or before that quarter (`hasReportableUpdateBy`). A deal that closes late in a quarter with no financials yet stays out of that quarter's report until its first update is entered; once in, it stays in. Any query whose result is passed to this gate must project `quarterlyUpdates` (at least `{quarter, fiscalYear}`) or every company is filtered out.
+
+**When an exited company leaves the reports** — gate 3 in `getPortfolioCompaniesForQuarter()`: a company with `investmentStatus: exited` and an `exitDate` before the quarter's start date is left out. It stays in its exit quarter (with the Exited tag) and in every earlier report. Separately, `showExitEarlyInReport` lets the Exited tag show one quarter early (`isExitLabelledAsOf`); FMV stays quarter-end (`isExitedAsOf`). Decided by Pranav, 9 Nov 2026.
 
 **Exit status is point-in-time, not current**
 - `investmentStatus` is a *current* flag. Reports must reflect status **as of their quarter end**: a report for a quarter before the exit must not say "Exited".

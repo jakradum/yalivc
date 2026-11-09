@@ -183,12 +183,16 @@ export function hasReportableUpdateBy(company, quarter, fiscalYear) {
 
 /**
  * Filter investments to the companies that belong in a quarter's report.
- * Two gates, both required:
+ * Three gates, all required:
  *   1. First investment round dated on or before the quarter end
  *      (companies without any round date are let through — legacy data)
  *   2. At least one quarterly update at or before the quarter
  *      (see hasReportableUpdateBy — keeps freshly-closed deals out until
  *      there is something to report)
+ *   3. Not exited before the quarter began: an exited company stays in reports
+ *      up to and including its exit quarter, then drops out of later ones.
+ *      Earlier reports are unaffected (each checks its own quarter). An exited
+ *      company with no exitDate is kept (legacy data; can't place the exit).
  * Callers must pass companies whose query projects `quarterlyUpdates`
  * (at minimum `{quarter, fiscalYear}`), or every company is filtered out.
  * @param {Array} investments - Array of investment objects with investmentRounds + quarterlyUpdates
@@ -201,8 +205,12 @@ export function getPortfolioCompaniesForQuarter(investments, quarter, fiscalYear
 
   const quarterEndDate = getQuarterEndDate(quarter, fiscalYear);
   if (!quarterEndDate) return investments;
+  const quarterStartDate = getQuarterStartDate(quarter, fiscalYear);
 
   return investments.filter(inv => {
+    // Gate 3 — exited before this quarter began: no longer reported
+    if (inv?.investmentStatus === 'exited' && inv.exitDate && quarterStartDate && inv.exitDate < quarterStartDate) return false;
+
     // Gate 1 — invested by quarter end
     const firstInvestmentDate = getEarliestInvestmentDate(inv);
     if (firstInvestmentDate && firstInvestmentDate > quarterEndDate) return false;
