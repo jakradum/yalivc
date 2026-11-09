@@ -128,6 +128,7 @@ export default async function CompanyPage({ params, searchParams }) {
       allCompanySlugs={allCompanySlugs}
       allReports={accessibleReports}
       isLatestReport={isLatestReport}
+      userEmail={userEmail}
     />
   );
 }

@@ -116,7 +116,8 @@ function PortalContentInner({
   initialSection,
   quarterNews,
   quarterSocialUpdates,
-  isGiftCityLP = false
+  isGiftCityLP = false,
+  userEmail = null
 }) {
   const quarter = report?.quarter || 'Q3';
   const fiscalYear = report?.fiscalYear || 'FY26';
@@ -408,6 +409,13 @@ function PortalContentInner({
         <div className={styles.headerRight}>
           {report?.visibility === 'internal' && (
             <span className={styles.internalPreviewBadge}>internal preview</span>
+          )}
+          {userEmail && (
+            <span className={styles.loggedInAs}>
+              <span className={styles.loggedInInitial} aria-hidden="true">{userEmail.charAt(0).toUpperCase()}</span>
+              <span className={styles.loggedInLabel}>Logged in as</span>
+              <span className={styles.loggedInEmail}>{userEmail}</span>
+            </span>
           )}
           <div
             className={styles.fyDropdown}

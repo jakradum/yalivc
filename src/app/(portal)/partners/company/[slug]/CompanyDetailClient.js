@@ -14,7 +14,7 @@ import PortalSidebar from '../../PortalSidebar';
 import Footer from '../../../../components/footer';
 import ExitedTag from '../../../../components/exited-tag';
 
-export default function CompanyDetailClient({ company, report, allCompanySlugs, allReports, isLatestReport }) {
+export default function CompanyDetailClient({ company, report, allCompanySlugs, allReports, isLatestReport, userEmail = null }) {
   const quarter = report?.quarter || 'Q3';
   const fiscalYear = report?.fiscalYear || 'FY26';
   const reportSlug = report?.slug || null;
@@ -333,6 +333,13 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
         <div className={styles.headerRight}>
           {isInternalReport && (
             <span className={styles.internalPreviewBadge}>internal preview</span>
+          )}
+          {userEmail && (
+            <span className={styles.loggedInAs}>
+              <span className={styles.loggedInInitial} aria-hidden="true">{userEmail.charAt(0).toUpperCase()}</span>
+              <span className={styles.loggedInLabel}>Logged in as</span>
+              <span className={styles.loggedInEmail}>{userEmail}</span>
+            </span>
           )}
           <div
             className={styles.fyDropdown}

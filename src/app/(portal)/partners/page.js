@@ -112,6 +112,7 @@ export default async function PartnersPortal({ searchParams }) {
         quarterNews={reportData.quarterNews}
         quarterSocialUpdates={reportData.quarterSocialUpdates}
         isGiftCityLP={isGiftCityLP}
+        userEmail={userEmail}
       />
     </PortalLanding>
   );
