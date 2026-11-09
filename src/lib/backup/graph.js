@@ -160,6 +160,29 @@ export function driveClient({ token, target, fetchImpl = fetch }) {
     return out;
   }
 
+  // → Map(path relative to rel → { size }) of the files under rel (subfolders
+  // walked unless recursive is false); empty if rel doesn't exist.
+  async function listTree(rel = '', { recursive = true } = {}) {
+    const out = new Map();
+    async function walk(sub) {
+      let next = `${addr(root(join(rel, sub)))}/children?$select=name,size,file,folder&$top=999`;
+      while (next) {
+        const res = await call('GET', next, { what: `list ${join(rel, sub) || 'root'}`, ok: [404] });
+        if (res.status === 404) return;
+        const data = await res.json();
+        for (const item of data.value || []) {
+          const p = join(sub, item.name);
+          if (item.folder) {
+            if (recursive) await walk(p);
+          } else out.set(p, { size: item.size });
+        }
+        next = data['@odata.nextLink'] || null;
+      }
+    }
+    await walk('');
+    return out;
+  }
+
   // Uploads (replacing) a file at rel under the backup root. → the driveItem's size.
   async function upload(rel, buf) {
     const path = root(rel);
@@ -207,5 +230,5 @@ export function driveClient({ token, target, fetchImpl = fetch }) {
     return res.json();
   }
 
-  return { ensureFolder, listChildren, upload, me, rootInfo };
+  return { kind: 'onedrive', ensureFolder, listChildren, listTree, upload, me, rootInfo };
 }
