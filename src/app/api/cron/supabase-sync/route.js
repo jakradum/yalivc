@@ -11,7 +11,8 @@ export const maxDuration = 60;
 // days without activity. Called twice a week by two cron-job.org jobs at odd
 // times, with its own secret (SUPABASE_SYNC_SECRET, not the shared CRON_SECRET).
 // After the ping, backs up the LP data to the private GitHub repo
-// (src/lib/backup/run.js, target 'github') when GITHUB_BACKUP_TOKEN is set;
+// (src/lib/backup/run.js, target 'github') when GITHUB_BACKUP_TOKEN is set:
+// one commit with only the records that changed (none if nothing did); bucket
 // files not copied within the time box are copied by the next run.
 // The copy from Sanity (syncTwin) is OFF since 9 Nov 2026: Sanity is legacy
 // until 3 Dec and edits are made in Supabase directly, so a sync would

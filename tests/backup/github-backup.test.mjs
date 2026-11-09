@@ -1,147 +1,22 @@
-// GitHub backup target with a mocked GitHub Git Data API and a mocked Supabase
-// (REST tables, storage list + download). Fake data only.
+// GitHub backup target (per-record history) with a mocked GitHub Git Data API
+// and a mocked Supabase (REST tables, storage list + download). Fake data only.
 // Run: node --test tests/backup/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
+import { ENV, SUPA, setup as baseSetup, fakeGitHub } from './fakes.mjs';
 
 const { runBackup } = await import('../../src/lib/backup/run.js');
-const { gitBlobSha, githubClient, MAX_BLOB_BYTES } = await import('../../src/lib/backup/github.js');
+const { githubClient, MAX_BLOB_BYTES } = await import('../../src/lib/backup/github.js');
 const { keepAliveAndBackup } = await import('../../src/lib/backup/keepalive.js');
 
-const SUPA = 'https://supabase.test';
-const ENV = { SUPABASE_URL: SUPA, SUPABASE_SECRET_KEY: 'fake-key', GITHUB_BACKUP_TOKEN: 'fake-token', GITHUB_BACKUP_REPO: 'owner/private-docs' };
-const json = (body, status = 200) => new Response(JSON.stringify(body), { status });
-const sha1 = (b) => createHash('sha1').update(b).digest('hex');
-
-// ── fake Supabase ────────────────────────────────────────────────────────────
-function fakeSupabase({ objects }) {
-  // objects: { 'path/in/bucket': Buffer | { size } } ({ size } = listed but never downloadable)
-  const downloads = [];
-  const fileRows = Object.entries(objects)
-    .filter(([p, b]) => Buffer.isBuffer(b) && !p.startsWith('archive/originals/'))
-    .map(([p, b], i) => ({ asset_id: `file-${i}`, storage_path: p, sha1: sha1(b), size_bytes: b.length }));
-  const tables = {
-    sanity_docs: [{ id: 'doc-1', type: 'portalUser', doc: { name: 'Test User' } }, { id: 'doc-2', type: 'company', doc: {} }],
-    sanity_files: fileRows,
-    sync_runs: [],
-    sync_types: [{ type: 'portalUser', enabled: false }],
-    parity_diffs: [],
-  };
-  async function handle(url, opts) {
-    const u = new URL(url);
-    if (u.pathname.startsWith('/rest/v1/')) {
-      const t = u.pathname.slice('/rest/v1/'.length);
-      const from = Number(String(opts.headers?.Range || '0-').split('-')[0]);
-      return json(from === 0 ? tables[t] || [] : []);
-    }
-    if (u.pathname === '/storage/v1/object/list/sanity-files') {
-      const { prefix } = JSON.parse(opts.body);
-      const pre = prefix ? `${prefix}/` : '';
-      const seen = new Map();
-      for (const [p, b] of Object.entries(objects)) {
-        if (!p.startsWith(pre)) continue;
-        const rest = p.slice(pre.length);
-        const name = rest.split('/')[0];
-        if (rest.includes('/')) seen.set(name, { name, id: null, metadata: null });
-        else seen.set(name, { name, id: `id-${p}`, metadata: { size: Buffer.isBuffer(b) ? b.length : b.size, mimetype: 'application/pdf' } });
-      }
-      return json([...seen.values()]);
-    }
-    if (u.pathname.startsWith('/storage/v1/object/sanity-files/')) {
-      const p = decodeURIComponent(u.pathname.slice('/storage/v1/object/sanity-files/'.length));
-      downloads.push(p);
-      const b = objects[p];
-      return Buffer.isBuffer(b) ? new Response(b) : new Response('no', { status: 404 });
-    }
-    return new Response('unexpected supabase call', { status: 500 });
-  }
-  return { handle, downloads };
-}
-
-// ── fake GitHub (one repo, branch main) ──────────────────────────────────────
-function fakeGitHub({ files = { 'deck.html': 'deck' } } = {}) {
-  const blobs = new Map(); // sha → Buffer
-  const trees = new Map(); // id → Map(path → { sha, size })
-  const commits = new Map(); // sha → { tree, parents, message }
-  const calls = [];
-  let n = 0;
-  const state = { ref: null, raceOnce: 0, dropOnRead: null };
-  const putBlob = (buf) => { const s = gitBlobSha(buf); blobs.set(s, buf); return s; };
-  const mkTree = (map) => { const id = `t${++n}`; trees.set(id, map); return id; };
-  const mkCommit = (tree, parents, message) => { const s = createHash('sha1').update(`c${++n}`).digest('hex'); commits.set(s, { tree, parents, message }); return s; };
-  const init = new Map(Object.entries(files).map(([p, c]) => { const b = Buffer.from(c); return [p, { sha: putBlob(b), size: b.length }]; }));
-  state.ref = mkCommit(mkTree(init), [], 'init');
-
-  // Someone else pushes to main (outside lp-data-backups/).
-  function foreignPush(path) {
-    const base = trees.get(commits.get(state.ref).tree);
-    const next = new Map(base);
-    const b = Buffer.from(`other ${n}`);
-    next.set(path, { sha: putBlob(b), size: b.length });
-    state.ref = mkCommit(mkTree(next), [state.ref], 'other');
-  }
-
-  async function handle(url, opts = {}) {
-    const u = new URL(url);
-    const m = opts.method || 'GET';
-    const p = u.pathname.replace('/repos/owner/private-docs', '');
-    calls.push(`${m} ${p}`);
-    assert.equal(opts.headers.Authorization, 'Bearer fake-token');
-    const body = opts.body ? JSON.parse(opts.body) : null;
-    if (m === 'GET' && p === '/git/ref/heads/main') return json({ object: { sha: state.ref } });
-    if (m === 'GET' && p.startsWith('/git/commits/')) return json({ tree: { sha: commits.get(p.split('/').pop()).tree } });
-    if (m === 'GET' && p.startsWith('/git/trees/')) {
-      const id = decodeURIComponent(p.split('/').pop());
-      if (id.startsWith('sub:')) {
-        const map = trees.get(id.slice(4));
-        const out = [];
-        for (const [path, v] of map) {
-          if (!path.startsWith('lp-data-backups/')) continue;
-          if (state.dropOnRead && path.endsWith(state.dropOnRead)) continue;
-          out.push({ path: path.slice('lp-data-backups/'.length), type: 'blob', sha: v.sha, size: v.size });
-        }
-        return json({ tree: out, truncated: false });
-      }
-      const map = trees.get(id);
-      const top = new Map();
-      for (const [path, v] of map) {
-        const [first] = path.split('/');
-        if (path.includes('/')) top.set(first, { path: first, type: 'tree', sha: `sub:${id}` });
-        else top.set(first, { path: first, type: 'blob', sha: v.sha, size: v.size });
-      }
-      return json({ tree: [...top.values()], truncated: false });
-    }
-    if (m === 'POST' && p === '/git/blobs') return json({ sha: putBlob(Buffer.from(body.content, 'base64')) }, 201);
-    if (m === 'POST' && p === '/git/trees') {
-      const next = new Map(trees.get(body.base_tree));
-      for (const e of body.tree) next.set(e.path, { sha: e.sha, size: blobs.get(e.sha).length });
-      return json({ sha: mkTree(next) }, 201);
-    }
-    if (m === 'POST' && p === '/git/commits') return json({ sha: mkCommit(body.tree, body.parents, body.message) }, 201);
-    if (m === 'PATCH' && p === '/git/refs/heads/main') {
-      assert.equal(body.force, false);
-      if (state.raceOnce > 0) { state.raceOnce--; foreignPush(`other-${n}.html`); }
-      if (commits.get(body.sha).parents[0] !== state.ref) return json({ message: 'Update is not a fast forward' }, 422);
-      state.ref = body.sha;
-      return json({ object: { sha: body.sha } });
-    }
-    return json({ message: 'Not Found' }, 404);
-  }
-  const headTree = () => trees.get(commits.get(state.ref).tree);
-  return { handle, calls, state, commits, headTree, foreignPush };
-}
-
-function setup({ objects, files } = {}) {
-  const supa = fakeSupabase({ objects: objects || { 'file-a-pdf': Buffer.from('%PDF a'), 'archive/file-b-pdf': Buffer.from('%PDF bb'), 'archive/originals/big.pdf': Buffer.from('%PDF original') } });
-  const gh = fakeGitHub({ files });
-  const fetchImpl = (url, opts) => (String(url).startsWith(SUPA) ? supa.handle(url, opts) : gh.handle(url, opts));
+function setup(opts) {
+  const s = baseSetup(opts);
   let t = Date.parse('2026-11-09T06:30:00Z');
-  const run = (extra = {}) => runBackup({ target: 'github', env: ENV, fetchImpl, now: () => (t += 10), ...extra });
-  return { supa, gh, run };
+  const run = (extra = {}) => runBackup({ target: 'github', env: ENV, fetchImpl: s.fetchImpl, now: () => (t += 10), ...extra });
+  return { ...s, run };
 }
 
-test('one commit per run, only under lp-data-backups/, other files untouched', async () => {
+test('first run: one commit, one file per record, only under lp-data-backups/, other files untouched', async () => {
   const { gh, run } = setup();
   const before = gh.state.ref;
   const r = await run();
@@ -149,56 +24,67 @@ test('one commit per run, only under lp-data-backups/, other files untouched', a
   assert.equal(r.complete, true);
   assert.equal(r.verified, true);
   assert.deepEqual(r.files, { total: 3, kept: 0, copied: 3, pending: 0 });
+  assert.deepEqual(r.records, { added: 2, changed: 0, removed: 0, byType: { company: 1, portalUser: 1 } });
   assert.equal(gh.calls.filter((c) => c === 'POST /git/commits').length, 1);
   assert.equal(gh.calls.filter((c) => c === 'PATCH /git/refs/heads/main').length, 1);
+  // record files go inline in the tree request: blobs only for the 3 bucket files
+  assert.equal(gh.calls.filter((c) => c === 'POST /git/blobs').length, 3);
   const c = gh.commits.get(gh.state.ref);
   assert.deepEqual(c.parents, [before]);
-  assert.equal(c.message, 'backup: 2026-11-09T06-30 (2 docs, 3 new files)');
+  assert.match(c.message, /^portal changes: 2 records \(company 1, portalUser 1\)\n\nadded 2, changed 0, removed 0\ntables: parity_diffs, sanity_files, sync_runs, sync_types\nnew bucket files: 3$/);
   assert.equal(r.commit, gh.state.ref);
   const paths = [...gh.headTree().keys()].sort();
   assert.deepEqual(paths, [
     'deck.html',
-    'lp-data-backups/2026-11-09T06-30/manifest.json',
-    'lp-data-backups/2026-11-09T06-30/parity_diffs.jsonl',
-    'lp-data-backups/2026-11-09T06-30/sanity_docs.jsonl',
-    'lp-data-backups/2026-11-09T06-30/sanity_files.jsonl',
-    'lp-data-backups/2026-11-09T06-30/sync_runs.jsonl',
-    'lp-data-backups/2026-11-09T06-30/sync_types.jsonl',
     'lp-data-backups/README.md',
     'lp-data-backups/files/archive/file-b-pdf',
     'lp-data-backups/files/archive/originals/big.pdf',
     'lp-data-backups/files/file-a-pdf',
+    'lp-data-backups/records/INDEX.md',
+    'lp-data-backups/records/_tables/parity_diffs.json',
+    'lp-data-backups/records/_tables/sanity_files.json',
+    'lp-data-backups/records/_tables/sync_runs.json',
+    'lp-data-backups/records/_tables/sync_types.json',
+    'lp-data-backups/records/company/co-1.json',
+    'lp-data-backups/records/portalUser/user-1.json',
   ]);
   assert.equal(gh.headTree().get('deck.html').size, 4);
+  assert.ok(!paths.some((p) => /\d{4}-\d{2}-\d{2}T/.test(p)), 'no dated snapshot folder');
+  // the record file: the doc, keys sorted recursively, 2-space indent, trailing newline
+  assert.equal(gh.read('lp-data-backups/records/company/co-1.json'),
+    '{\n  "_id": "co-1",\n  "_rev": "r1",\n  "_type": "company",\n  "name": "Acme Widgets",\n  "order": 2,\n  "slug": {\n    "_type": "slug",\n    "current": "acme"\n  }\n}\n');
 });
 
-test('second run: existing files skipped (no download, no blob), README unchanged, still one commit', async () => {
+test('second run with nothing changed: no commit, no blobs, no downloads; changed 0', async () => {
   const { gh, supa, run } = setup();
   await run();
+  const head = gh.state.ref;
   const downloads = supa.downloads.length;
-  const blobsBefore = gh.calls.filter((c) => c === 'POST /git/blobs').length;
   gh.calls.length = 0;
-  const r = await run({ now: (() => { let t = Date.parse('2026-11-12T18:05:00Z'); return () => (t += 10); })() });
+  const r = await run();
+  assert.equal(r.ok, true);
+  assert.equal(r.changed, 0);
+  assert.equal(r.commit, null);
   assert.deepEqual(r.files, { total: 3, kept: 3, copied: 0, pending: 0 });
+  assert.equal(gh.state.ref, head);
   assert.equal(supa.downloads.length, downloads);
-  assert.equal(gh.calls.filter((c) => c === 'POST /git/commits').length, 1);
-  // only the new run folder: 5 table files + manifest (README and files unchanged)
-  assert.equal(gh.calls.filter((c) => c === 'POST /git/blobs').length, 6);
-  assert.ok(blobsBefore > 6);
-  assert.match(gh.commits.get(gh.state.ref).message, /^backup: 2026-11-12T18-05 \(2 docs, 0 new files\)$/);
+  assert.deepEqual(gh.calls.filter((c) => c.startsWith('POST') || c.startsWith('PATCH')), []);
 });
 
-test('ref race: rebuilds on the new head and retries once, keeping the other push', async () => {
-  const { gh, run } = setup();
+test('ref race: re-reads Supabase, re-diffs on the new head and retries once, keeping the other push', async () => {
+  const { gh, supa, run } = setup();
   gh.state.raceOnce = 1;
+  // the race also changes a record in Supabase: the retry must commit the new version
+  gh.state.onRace = () => { gh.foreignPush('other.html'); supa.tables.sanity_docs[1].doc.order = 3; };
   const r = await run();
   assert.equal(r.ok, true);
   assert.equal(gh.calls.filter((c) => c === 'PATCH /git/refs/heads/main').length, 2);
   assert.equal(gh.calls.filter((c) => c === 'POST /git/commits').length, 2);
   const paths = [...gh.headTree().keys()];
-  assert.ok(paths.some((p) => /^other-\d+\.html$/.test(p)), 'the concurrent push survives');
+  assert.ok(paths.includes('other.html'), 'the concurrent push survives');
   assert.ok(paths.includes('lp-data-backups/README.md'));
   assert.ok(paths.includes('deck.html'));
+  assert.match(gh.read('lp-data-backups/records/company/co-1.json'), /"order": 3/);
 });
 
 test('ref race twice: fails loudly, nothing forced', async () => {
@@ -217,8 +103,7 @@ test('size limit: an object over 95 MB is never downloaded, the rest is committe
   const tree = gh.headTree();
   assert.ok(tree.has('lp-data-backups/files/file-a-pdf'));
   assert.ok(!tree.has('lp-data-backups/files/archive/originals/huge.pdf'));
-  const manifestPath = [...tree.keys()].find((p) => p.endsWith('manifest.json'));
-  assert.ok(manifestPath);
+  assert.ok(tree.has('lp-data-backups/records/INDEX.md'));
 });
 
 test('upload() refuses a buffer over the limit', async () => {
@@ -228,10 +113,13 @@ test('upload() refuses a buffer over the limit', async () => {
   assert.equal(gh.calls.filter((c) => c === 'POST /git/blobs').length, 0);
 });
 
-test('verification failure: a file missing from the committed tree fails the run', async () => {
+test('verification failure: a changed path missing from the committed tree fails the run', async () => {
   const { gh, run } = setup();
   gh.state.dropOnRead = 'files/archive/file-b-pdf';
-  await assert.rejects(run(), /Verification of files\/ failed: archive\/file-b-pdf missing/);
+  await assert.rejects(run(), /Verification of the commit failed: files\/archive\/file-b-pdf missing/);
+  const r = setup();
+  r.gh.state.dropOnRead = 'records/company/co-1.json';
+  await assert.rejects(r.run(), /Verification of the commit failed: records\/company\/co-1\.json missing/);
 });
 
 test('time box: files past the per-run cap are pending and picked up next run', async () => {
@@ -239,8 +127,9 @@ test('time box: files past the per-run cap are pending and picked up next run', 
   const r1 = await run({ maxFiles: 1 });
   assert.equal(r1.complete, false);
   assert.deepEqual(r1.files, { total: 3, kept: 0, copied: 1, pending: 2 });
-  const r2 = await run({ now: (() => { let t = Date.parse('2026-11-12T18:05:00Z'); return () => (t += 10); })() });
+  const r2 = await run();
   assert.equal(r2.complete, true);
+  assert.match(r2.commit, /^[0-9a-f]{40}$/);
   assert.deepEqual(r2.files, { total: 3, kept: 1, copied: 2, pending: 0 });
 });
 
@@ -289,4 +178,17 @@ test('keep-alive route: a failed ping throws before any backup', async () => {
     notifyFailure: async () => true,
   }), /supabase down/);
   assert.equal(ran, false);
+});
+
+test('dated snapshot folders: never written; a leftover one is neither touched nor verified', async () => {
+  const { gh, run } = setup({ files: { 'deck.html': 'deck', 'lp-data-backups/2026-01-01T00-00/sanity_docs.jsonl': '{}\n' } });
+  gh.state.dropOnRead = '2026-01-01T00-00/sanity_docs.jsonl'; // verification must not look at it
+  const r = await run();
+  assert.equal(r.verified, true);
+  assert.ok(!gh.changedIn(r.commit).some((p) => /\d{4}-\d{2}-\d{2}T/.test(p)));
+  assert.equal(gh.read('lp-data-backups/2026-01-01T00-00/sanity_docs.jsonl'), '{}\n');
+  const readme = gh.read('lp-data-backups/README.md');
+  assert.match(readme, /\[redacted\]/);
+  assert.match(readme, /x-upsert: true/);
+  assert.match(readme, /pg_get_serial_sequence\('public\.sync_runs','id'\)/);
 });

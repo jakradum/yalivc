@@ -1,9 +1,9 @@
 // Full backup of the Supabase LP database (yali-lp-data) to the private GitHub
 // repo (GITHUB_BACKUP_REPO, default jakradum/yali-docs, folder lp-data-backups/).
 // Same code and layout as the scheduled run in /api/cron/supabase-sync
-// (src/lib/backup/run.js, target 'github'), but with no time box: every bucket
-// object not yet in the repo is copied, in ONE commit. Use it for the first full
-// backup (too big for one 60 s cron run) or to catch up by hand.
+// (src/lib/backup/run.js, target 'github': one file per record under records/,
+// only changed records committed), but with no time box: every bucket object not
+// yet in the repo is copied, in ONE commit. Use it to catch up by hand.
 //
 //   node scripts/backup-to-github.mjs             back up
 //   node scripts/backup-to-github.mjs --recheck   also download files already in the
@@ -60,5 +60,5 @@ const r = await runBackup({
   recheck: args.has('--recheck'),
   by: 'scripts/backup-to-github.mjs',
 });
-console.log(`backup ${r.stamp}: commit ${r.commit}; tables ${Object.entries(r.tables).map(([t, n]) => `${t}=${n}`).join(' ')}`);
+console.log(`backup: ${r.commit ? `commit ${r.commit}, ${r.changed} path(s) changed (records added ${r.records.added}, changed ${r.records.changed}, removed ${r.records.removed})` : 'nothing changed, no commit'}; tables ${Object.entries(r.tables).map(([t, n]) => `${t}=${n}`).join(' ')}`);
 console.log(`files: ${r.files.total} in bucket, ${r.files.copied} copied now, ${r.files.kept} already backed up, ${r.files.pending} pending; verified ${r.verified}; ${(r.ms / 1000).toFixed(1)} s`);

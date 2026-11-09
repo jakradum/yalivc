@@ -3,15 +3,18 @@
 //              /api/cron/supabase-sync after the keep-alive ping. The live target.
 //   'onedrive' OneDrive via Microsoft Graph (src/lib/backup/graph.js), behind
 //              /api/cron/onedrive-backup. Kept working, not scheduled.
-// Steps: export the tables → stage the dated folder → copy bucket objects not
-// yet backed up (time-boxed; the rest are marked `pending` and copied by the
-// next run) → manifest.json + README.md → commit (GitHub: one commit per run)
-// → read the listing back and verify every file's size (and git blob SHA on
-// GitHub).
+// GitHub steps: read the tables → copy bucket objects not yet backed up
+// (time-boxed; the rest are `pending` and copied by the next run) → diff the
+// per-record files (records.js) against the branch head by git blob SHA → ONE
+// commit with only what changed (none if nothing did) → read the tree back and
+// verify every changed path. A ref race re-reads Supabase and retries once.
+// OneDrive steps (unchanged): one dated folder of whole tables + manifest per
+// run, bucket objects, README, verify sizes.
 import { Resend } from 'resend';
-import { BUCKET, FILES_DIR, buildManifest, exportTables, readmeText, runStamp, sha } from './export.js';
+import { BUCKET, FILES_DIR, buildManifest, exportTables, readTables, readmeText, runStamp, sha } from './export.js';
 import { BACKUP_OWNER, backupTarget, driveClient, getBackupAccessToken, graphConfig, supabaseTokenStore } from './graph.js';
-import { gitBlobSha, githubClient, githubConfig } from './github.js';
+import { RefRaceError, gitBlobSha, githubClient, githubConfig } from './github.js';
+import { RECORDS_DIR, buildRecordFiles, diffRecordFiles, portalChangesMessage, summarize } from './records.js';
 
 // Stop starting new file copies after this long, so the run (tables, commit,
 // verify) always fits inside the function's 60 s.
@@ -27,6 +30,19 @@ export function supabaseRest({ url = process.env.SUPABASE_URL, key = process.env
   return {
     url,
     rest: (path, extra = {}) => fetchImpl(`${url}${path}`, { headers: { ...headers, ...extra } }),
+    // A write to PostgREST (lp-edit only). → parsed JSON rows (Prefer: return=representation).
+    async send(method, path, body) {
+      const res = await fetchImpl(`${url}${path}`, {
+        method,
+        headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+        body: body === undefined ? undefined : JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(`Supabase ${method} ${path.split('?')[0]} failed: ${res.status} ${String(err?.message || '').slice(0, 200)}`.trim());
+      }
+      return res.status === 204 ? [] : res.json();
+    },
     async download(storagePath) {
       const p = storagePath.split('/').map(encodeURIComponent).join('/');
       const res = await fetchImpl(`${url}/storage/v1/object/${BUCKET}/${p}`, { headers });
@@ -81,45 +97,16 @@ async function oneDriveClient(env, deps, fetchImpl) {
 
 const parentDir = (p) => p.split('/').slice(0, -1).join('/');
 
-/**
- * deps (all optional, for tests and the script):
- *   { target: 'github' | 'onedrive', env, fetchImpl, now, store, supabase, drive,
- *     budgetMs, maxFiles, recheck, by }
- * recheck: also download files already backed up at the right size and rewrite
- * them only if their content differs (GitHub: compared by git blob SHA).
- * → { ok, complete, stamp, target, commit, tables, files: { total, kept, copied, pending, tooLarge }, verified, ms }
- * Throws NotConfiguredError / NotConnectedError before touching anything when not set up.
- */
-export async function runBackup(deps = {}) {
-  const env = deps.env || process.env;
-  const fetchImpl = deps.fetchImpl || fetch;
-  const now = deps.now || Date.now;
-  const started = now();
-  const target = deps.target || 'onedrive';
-  if (!TARGET_ROUTE[target]) throw new Error(`unknown backup target ${target}`);
-  const budgetMs = deps.budgetMs ?? (Number(env.BACKUP_FILE_BUDGET_MS) || FILE_BUDGET_MS);
-  const maxFiles = deps.maxFiles ?? MAX_FILES_PER_RUN;
-
-  const drive = deps.drive || (target === 'github' ? githubClient({ ...githubConfig(env), fetchImpl }) : await oneDriveClient(env, deps, fetchImpl));
+// Copies bucket objects not already in files/ at the right size (time-boxed:
+// the rest are `pending` for the next run). → { files, copied, expected }
+// files: manifest entries; expected: [[path under the root, bytes, gitSha?]] for
+// every file present after the run.
+async function copyBucketFiles({ drive, supabase, objects, fileRows, recheck, budgetMs, maxFiles, started, now }) {
   const isGit = drive.kind === 'github';
-  const supabase = deps.supabase || supabaseRest({ url: env.SUPABASE_URL, key: env.SUPABASE_SECRET_KEY, fetchImpl });
-
-  const stamp = runStamp(new Date(started));
-  const { tableFiles, manifestTables, typeCounts, fileRows } = await exportTables(supabase.rest);
-  const objects = await supabase.listBucket();
   const rowByPath = new Map(fileRows.map((r) => [r.storage_path, r]));
-  const expected = []; // [path under the backup root, bytes, gitSha?]
-
-  // 1. Dated folder with the table files.
-  await drive.ensureFolder?.(stamp);
-  for (const [name, buf] of Object.entries(tableFiles)) {
-    await drive.upload(`${stamp}/${name}`, buf);
-    expected.push([`${stamp}/${name}`, buf.length, gitBlobSha(buf)]);
-  }
-
-  // 2. Bucket objects: copy only those not already in files/ at the right size.
   const present = await drive.listTree(FILES_DIR);
   const files = [];
+  const expected = [];
   let copied = 0;
   for (const o of objects) {
     const row = rowByPath.get(o.path);
@@ -127,7 +114,7 @@ export async function runBackup(deps = {}) {
     files.push(entry);
     const have = present.get(o.path);
     const sizeOk = have && (entry.bytes == null || have.size === entry.bytes);
-    if (sizeOk && !deps.recheck) {
+    if (sizeOk && !recheck) {
       if (have.sha) entry.gitSha = have.sha;
       expected.push([entry.path, have.size, entry.gitSha]);
       continue;
@@ -159,10 +146,154 @@ export async function runBackup(deps = {}) {
     expected.push([entry.path, buf.length, isGit ? gitSha : undefined]);
   }
   const pending = files.filter((f) => f.state === 'pending').length;
-  const tooLarge = files.filter((f) => f.state === 'too-large');
   if (pending && copied === 0) throw new Error(`No new bucket file could be copied this run (${pending} pending); the time budget ran out before the first copy`);
+  return { files, copied, expected };
+}
 
-  // 3. Manifest + README (GitHub leaves an unchanged README alone).
+function tooLargeError(drive, files, commitSha) {
+  const tooLarge = files.filter((f) => f.state === 'too-large');
+  if (!tooLarge.length) return null;
+  const list = tooLarge.map((f) => `${f.path} (${(f.bytes / 1048576).toFixed(1)} MB)`).join(', ');
+  return new Error(`${tooLarge.length} bucket file(s) over the ${drive.maxBytes / 1048576} MB limit were NOT backed up: ${list}. Tables and other files were backed up${commitSha ? ` in ${commitSha}` : ''}.`);
+}
+
+const fileCounts = (files, copied) => {
+  const pending = files.filter((f) => f.state === 'pending').length;
+  return { total: files.length, kept: files.length - copied - pending, copied, pending };
+};
+
+// Reads back the committed tree and checks every path this commit wrote (git
+// blob SHA) or removed (absent). → true or throws.
+export async function verifyCommitted(drive, written, removed = []) {
+  const listing = await drive.listTree('');
+  const bad = [];
+  for (const [rel, sha] of written) {
+    const got = listing.get(rel);
+    if (!got) bad.push(`${rel} missing`);
+    else if (got.sha !== sha) bad.push(`${rel} has blob ${got.sha}, expected ${sha}`);
+  }
+  for (const rel of removed) if (listing.has(rel)) bad.push(`${rel} still present`);
+  if (bad.length) throw new Error(`Verification of the commit failed: ${bad.slice(0, 5).join('; ')}${bad.length > 5 ? ` (+${bad.length - 5} more)` : ''}`);
+  return true;
+}
+
+// Stages records/ so the repo matches `tables`, for the next commit.
+// → { written: [[path under root, sha]], removed: [path under root], sum }
+export async function stageRecords(drive, tables) {
+  const listing = await drive.listTree(RECORDS_DIR);
+  const diff = diffRecordFiles(buildRecordFiles(tables), listing);
+  for (const [rel, content] of diff.write) drive.stageText(`${RECORDS_DIR}/${rel}`, content);
+  for (const rel of diff.remove) drive.stageRemove(`${RECORDS_DIR}/${rel}`);
+  return {
+    written: diff.write.map(([rel, , s]) => [`${RECORDS_DIR}/${rel}`, s]),
+    removed: diff.remove.map((rel) => `${RECORDS_DIR}/${rel}`),
+    sum: summarize(diff, listing),
+  };
+}
+
+// Stages README.md if it differs. → [[path, sha]] (empty when unchanged)
+async function stageReadme(drive) {
+  const text = readmeText({ target: 'github' });
+  const s = gitBlobSha(Buffer.from(text, 'utf8'));
+  if ((await drive.listTree('', { recursive: false })).get('README.md')?.sha === s) return [];
+  drive.stageText('README.md', text);
+  return [['README.md', s]];
+}
+
+function runMessage(sum, newFiles) {
+  if (sum.records || sum.tables.length || sum.index) return portalChangesMessage(sum, { newFiles });
+  if (newFiles) return `backup: ${newFiles} new bucket file${newFiles === 1 ? '' : 's'}`;
+  return 'backup: README';
+}
+
+// GitHub: commit only what changed since the branch head, per record.
+async function runRecordBackup({ drive, supabase, deps, env, started, now, budgetMs, maxFiles }) {
+  let { rows: tables } = await readTables(supabase.rest);
+  const objects = await supabase.listBucket();
+  const bucket = await copyBucketFiles({ drive, supabase, objects, fileRows: tables.sanity_files || [], recheck: deps.recheck, budgetMs, maxFiles, started, now });
+  const newFiles = bucket.files.filter((f) => f.state === 'copied').map((f) => [f.path, f.gitSha]);
+
+  let staged;
+  let committed = null;
+  for (let attempt = 0; ; attempt++) {
+    if (attempt) {
+      // the branch moved: read Supabase again and diff against the new head
+      drive.unstageText();
+      ({ rows: tables } = await readTables(supabase.rest));
+    }
+    staged = await stageRecords(drive, tables);
+    staged.readme = await stageReadme(drive);
+    if (!drive.staged.size) break;
+    try {
+      committed = await drive.commit(runMessage(staged.sum, bucket.copied));
+      break;
+    } catch (err) {
+      if (!(err instanceof RefRaceError) || attempt) throw err;
+    }
+  }
+
+  const written = committed?.sha ? [...staged.written, ...staged.readme, ...newFiles] : [];
+  const verified = committed?.sha ? await verifyCommitted(drive, written, staged.removed) : true;
+  const tooBig = tooLargeError(drive, bucket.files, committed?.sha);
+  if (tooBig) throw tooBig;
+
+  return {
+    ok: true,
+    complete: bucket.files.every((f) => f.state !== 'pending'),
+    target: 'github',
+    commit: committed?.sha ?? null,
+    changed: committed?.sha ? written.length + staged.removed.length : 0,
+    records: committed?.sha ? { added: staged.sum.added, changed: staged.sum.changed, removed: staged.sum.removed, byType: staged.sum.byType } : { added: 0, changed: 0, removed: 0, byType: {} },
+    tables: Object.fromEntries(Object.entries(tables).map(([t, rows]) => [t, rows.length])),
+    files: fileCounts(bucket.files, bucket.copied),
+    verified,
+    ms: now() - started,
+  };
+}
+
+/**
+ * deps (all optional, for tests and the script):
+ *   { target: 'github' | 'onedrive', env, fetchImpl, now, store, supabase, drive,
+ *     budgetMs, maxFiles, recheck, by }
+ * recheck: also download files already backed up at the right size and rewrite
+ * them only if their content differs (GitHub: compared by git blob SHA).
+ * GitHub → { ok, complete, target, commit, changed, records, tables, files, verified, ms }
+ *   (commit null and changed 0 when nothing changed: no commit is made)
+ * OneDrive → { ok, complete, stamp, target, commit, tables, files: { total, kept, copied, pending }, verified, ms }
+ * Throws NotConfiguredError / NotConnectedError before touching anything when not set up.
+ */
+export async function runBackup(deps = {}) {
+  const env = deps.env || process.env;
+  const fetchImpl = deps.fetchImpl || fetch;
+  const now = deps.now || Date.now;
+  const started = now();
+  const target = deps.target || 'onedrive';
+  if (!TARGET_ROUTE[target]) throw new Error(`unknown backup target ${target}`);
+  const budgetMs = deps.budgetMs ?? (Number(env.BACKUP_FILE_BUDGET_MS) || FILE_BUDGET_MS);
+  const maxFiles = deps.maxFiles ?? MAX_FILES_PER_RUN;
+
+  const drive = deps.drive || (target === 'github' ? githubClient({ ...githubConfig(env), fetchImpl }) : await oneDriveClient(env, deps, fetchImpl));
+  const supabase = deps.supabase || supabaseRest({ url: env.SUPABASE_URL, key: env.SUPABASE_SECRET_KEY, fetchImpl });
+  if (drive.kind === 'github') return runRecordBackup({ drive, supabase, deps, env, started, now, budgetMs, maxFiles });
+
+  // OneDrive: one dated folder of whole tables per run.
+  const stamp = runStamp(new Date(started));
+  const { tableFiles, manifestTables, typeCounts, fileRows } = await exportTables(supabase.rest);
+  const objects = await supabase.listBucket();
+  const expected = []; // [path under the backup root, bytes]
+
+  // 1. Dated folder with the table files.
+  await drive.ensureFolder?.(stamp);
+  for (const [name, buf] of Object.entries(tableFiles)) {
+    await drive.upload(`${stamp}/${name}`, buf);
+    expected.push([`${stamp}/${name}`, buf.length]);
+  }
+
+  // 2. Bucket objects.
+  const bucket = await copyBucketFiles({ drive, supabase, objects, fileRows, recheck: deps.recheck, budgetMs, maxFiles, started, now });
+  expected.push(...bucket.expected);
+
+  // 3. Manifest + README.
   const manifest = buildManifest({
     createdAt: new Date(started).toISOString(),
     source: supabase.url.replace(/^https:\/\//, ''),
@@ -170,37 +301,31 @@ export async function runBackup(deps = {}) {
     by: deps.by || TARGET_ROUTE[target],
     tables: manifestTables,
     typeCounts,
-    files,
+    files: bucket.files,
   });
   const manifestBuf = Buffer.from(JSON.stringify(manifest, null, 2), 'utf8');
   const readmeBuf = Buffer.from(readmeText({ target }), 'utf8');
   await drive.upload(`${stamp}/manifest.json`, manifestBuf);
   await drive.upload('README.md', readmeBuf);
-  expected.push([`${stamp}/manifest.json`, manifestBuf.length, gitBlobSha(manifestBuf)], ['README.md', readmeBuf.length, gitBlobSha(readmeBuf)]);
+  expected.push([`${stamp}/manifest.json`, manifestBuf.length], ['README.md', readmeBuf.length]);
 
-  // 4. GitHub: one commit for the whole run.
-  const docs = manifestTables.sanity_docs?.rows ?? 0;
-  const committed = drive.commit ? await drive.commit(`backup: ${stamp} (${docs} docs, ${copied} new files)`) : null;
-
-  // 5. Read back and verify every file of this run, every file kept from earlier runs, and the README.
+  // 4. Read back and verify every file of this run, every file kept from earlier runs, and the README.
   const under = (dir) => expected.filter(([p]) => p.startsWith(`${dir}/`)).map(([p, ...rest]) => [p.slice(dir.length + 1), ...rest]);
   verifyListing(await drive.listTree(stamp), under(stamp), `run folder ${stamp}`);
   verifyListing(await drive.listTree(FILES_DIR), under(FILES_DIR), `${FILES_DIR}/`);
   verifyListing(await drive.listTree('', { recursive: false }), expected.filter(([p]) => !p.includes('/')), 'backup root');
 
-  if (tooLarge.length) {
-    const list = tooLarge.map((f) => `${f.path} (${(f.bytes / 1048576).toFixed(1)} MB)`).join(', ');
-    throw new Error(`${tooLarge.length} bucket file(s) over the ${drive.maxBytes / 1048576} MB limit were NOT backed up: ${list}. Tables and other files were backed up${committed?.sha ? ` in ${committed.sha}` : ''}.`);
-  }
+  const tooBig = tooLargeError(drive, bucket.files, null);
+  if (tooBig) throw tooBig;
 
   return {
     ok: true,
-    complete: pending === 0,
+    complete: bucket.files.every((f) => f.state !== 'pending'),
     stamp,
     target,
-    commit: committed?.sha ?? null,
+    commit: null,
     tables: Object.fromEntries(Object.entries(manifestTables).map(([t, v]) => [t, v.missing ? 'missing' : v.rows])),
-    files: { total: files.length, kept: files.length - copied - pending, copied, pending },
+    files: fileCounts(bucket.files, bucket.copied),
     verified: true,
     ms: now() - started,
   };
