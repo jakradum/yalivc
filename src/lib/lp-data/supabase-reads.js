@@ -326,6 +326,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
     mediaFromNews: mediaProj(ctx, r),
     mediaNotes: raw(r.mediaNotes),
     portfolioSummaryFootnotes: raw(r.portfolioSummaryFootnotes),
+    fundSummaryFootnotes: raw(r.fundSummaryFootnotes),
   };
 }
 
@@ -349,6 +350,7 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
     mediaFromNews: mediaProj(ctx, r),
     mediaNotes: raw(r.mediaNotes),
     portfolioSummaryFootnotes: raw(r.portfolioSummaryFootnotes),
+    fundSummaryFootnotes: raw(r.fundSummaryFootnotes),
     snapshotData: raw(r.snapshotData),
     snapshotTimestamp: raw(r.snapshotTimestamp),
   };

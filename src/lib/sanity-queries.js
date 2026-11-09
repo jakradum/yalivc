@@ -1100,7 +1100,9 @@ export async function getLPQuarterlyReportBySlug(slug) {
       },
       mediaNotes,
       // Portfolio Summary table footnotes
-      portfolioSummaryFootnotes
+      portfolioSummaryFootnotes,
+      // Fund summary table footnotes
+      fundSummaryFootnotes
     }`,
     { slug }
   );
@@ -1150,6 +1152,7 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
       },
       mediaNotes,
       portfolioSummaryFootnotes,
+      fundSummaryFootnotes,
       snapshotData,
       snapshotTimestamp
     }`,

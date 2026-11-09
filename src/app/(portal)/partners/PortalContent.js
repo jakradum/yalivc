@@ -122,6 +122,11 @@ function PortalContentInner({
   const quarter = report?.quarter || 'Q3';
   const fiscalYear = report?.fiscalYear || 'FY26';
   const reportSlug = report?.slug || null;
+  // Footnote marker for a row of the fund summary table (report.fundSummaryFootnotes)
+  const fundFootnoteMarker = (fieldName) => {
+    const footnote = report?.fundSummaryFootnotes?.find(fn => fn.fieldName === fieldName);
+    return footnote ? <sup>{footnote.marker}</sup> : null;
+  };
   const reportingDate = report?.reportingDate
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
@@ -688,7 +693,10 @@ function PortalContentInner({
                     {fundMetrics?.fmvOfPortfolio != null && (
                       <tr>
                         <td>Fair Market Value of Portfolio Investments (including realised value)</td>
-                        <td>{fundMetrics.fmvOfPortfolio.toFixed(2)}</td>
+                        <td>
+                          {fundMetrics.fmvOfPortfolio.toFixed(2)}
+                          {fundFootnoteMarker('fmv')}
+                        </td>
                       </tr>
                     )}
                     <tr>
@@ -730,6 +738,15 @@ function PortalContentInner({
                     )}
                   </tbody>
                 </table>
+                {report?.fundSummaryFootnotes?.length > 0 && (
+                  <div className={styles.tableFootnoteContainer}>
+                    {report.fundSummaryFootnotes.map((fn, idx) => (
+                      <p key={fn._key || idx} className={styles.tableFootnote}>
+                        <sup>{fn.marker}</sup> {fn.text}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
           )}
@@ -743,7 +760,12 @@ function PortalContentInner({
               {(() => {
                 // Helper to get footnote marker for a field (used next to ** values)
                 const getFootnoteMarker = (fieldName) => {
-                  const footnote = report?.portfolioSummaryFootnotes?.find(fn => fn.fieldName === fieldName);
+                  const footnote = report?.portfolioSummaryFootnotes?.find(fn => fn.fieldName === fieldName && !fn.companySlug);
+                  return footnote ? <sup>{footnote.marker}</sup> : null;
+                };
+                // A footnote can also point at one company's value (companySlug), e.g. C2i's exit ownership
+                const getCompanyFootnoteMarker = (fieldName, slug) => {
+                  const footnote = report?.portfolioSummaryFootnotes?.find(fn => fn.fieldName === fieldName && fn.companySlug === slug);
                   return footnote ? <sup>{footnote.marker}</sup> : null;
                 };
 
@@ -784,6 +806,7 @@ function PortalContentInner({
                                 <span className={styles.tableLogo} aria-hidden="true" />
                               )}
                               <span>{investment.entityName || investment.name || '-'}</span>
+                              <ExitedTag exited={investment.isExited === true} size="sm" />
                             </span>
                           </td>
                           <td>{investment.sector || '-'}</td>
@@ -804,8 +827,11 @@ function PortalContentInner({
                             if (qData?.currentOwnershipConfidential) {
                               return <span>**{getFootnoteMarker('ownership')}</span>;
                             }
-                            const ownership = getLatestOwnership(investment);
-                            return ownership != null ? ownership.toFixed(2) : '-';
+                            // The quarter's own ownership figure (e.g. ownership at exit) wins over the latest round's
+                            const ownership = qData?.currentOwnershipPercent ?? getLatestOwnership(investment);
+                            return ownership != null
+                              ? <>{ownership.toFixed(2)}{getCompanyFootnoteMarker('ownership', investment.slug)}</>
+                              : '-';
                           })()}</td>
                         </tr>
                       ))

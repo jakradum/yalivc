@@ -376,7 +376,9 @@ export const Q = {
       },
       mediaNotes,
       // Portfolio Summary table footnotes
-      portfolioSummaryFootnotes
+      portfolioSummaryFootnotes,
+      // Fund summary table footnotes
+      fundSummaryFootnotes
     }`,
   getLPQuarterlyReportBySlugAdmin: `*[_type == "lpQuarterlyReport" && slug.current == $slug][0]{
       _id,
@@ -419,6 +421,7 @@ export const Q = {
       },
       mediaNotes,
       portfolioSummaryFootnotes,
+      fundSummaryFootnotes,
       snapshotData,
       snapshotTimestamp
     }`,
