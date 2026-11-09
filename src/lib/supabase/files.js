@@ -17,6 +17,7 @@ import { verifySession } from '@/lib/session';
 import { isYaliStaff } from '@/lib/internal-user';
 import { order, cmpStr } from '@/lib/lp-data/groq';
 import { supaAll } from '@/lib/lp-data/rest';
+import { getPortalUserByEmail, getDataroomDomainPrivilege } from '@/lib/lp-data/supabase-reads';
 
 const BUCKET = 'sanity-files';
 export const SIGNED_URL_SECONDS = 600;
@@ -142,39 +143,26 @@ export async function getLatestPublishedReport() {
 }
 
 /**
- * The portalUser doc for an email, under getPortalUserByEmail's rules:
- * case-insensitive email, noAccess != true, lpPortalAccess == true or
- * (lpPortalAccess undefined and isActive == true). Only the flags are returned.
+ * The portal user's file-access flags, resolved exactly as the pages resolve the
+ * user: the data layer's getPortalUserByEmail (hosted-GROQ lower() on the stored
+ * email, lowest _id wins, every row read through the doc loader), not a second
+ * implementation.
  */
 export async function getPortalUserFlags(email) {
-  if (!email) return null;
-  const rows = await supa(
-    `/rest/v1/sanity_docs?select=id,email:doc->>email,isGiftCityLP:doc->isGiftCityLP,noAccess:doc->noAccess,lpPortalAccess:doc->lpPortalAccess,isActive:doc->isActive,investorDataRoomAccess:doc->investorDataRoomAccess&type=${eq('portalUser')}`
-  );
-  const lower = email.toLowerCase();
-  const u = (rows || []).find(
-    (r) =>
-      isPublishedId(r.id) &&
-      typeof r.email === 'string' && r.email.toLowerCase() === lower &&
-      r.noAccess !== true &&
-      (r.lpPortalAccess === true || ((r.lpPortalAccess === null || r.lpPortalAccess === undefined) && r.isActive === true))
-  );
+  const u = await getPortalUserByEmail(email);
   return u ? { isGiftCityLP: u.isGiftCityLP === true, investorDataRoomAccess: u.investorDataRoomAccess === true } : null;
 }
 
-/** Data room authorisation, as the data room pages do it. */
+/** Data room authorisation, as the data room pages do it (same data layer lookups). */
 export async function hasDataroomAccess(email) {
   if (!email) return false;
   if (isStaffEmail(email)) return true;
   const domain = email.split('@')[1];
-  const [privs, user] = await Promise.all([
-    domain
-      ? supa(`/rest/v1/sanity_docs?select=id,dataroomAccess:doc->dataroomAccess,isActive:doc->isActive&type=${eq('domainPrivilege')}&doc->>domain=${eq(domain)}`)
-      : [],
+  const [priv, user] = await Promise.all([
+    domain ? getDataroomDomainPrivilege(domain) : null,
     getPortalUserFlags(email),
   ]);
-  const domainOk = (privs || []).some((p) => isPublishedId(p.id) && p.dataroomAccess === true && p.isActive === true);
-  return domainOk || !!user?.investorDataRoomAccess;
+  return !!priv || !!user?.investorDataRoomAccess;
 }
 
 // ── Signed URLs ──────────────────────────────────────────────────────────────
