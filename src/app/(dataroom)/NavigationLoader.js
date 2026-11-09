@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import Lottie from 'lottie-react';
-import animationData from '@/yali-loader.json';
+import YaliBlueprintLoader from '@/app/components/YaliBlueprintLoader';
 
 const MIN_DISPLAY_MS = 600;
 
@@ -55,7 +54,7 @@ export default function DataroomNavigationLoader() {
       background: 'rgba(239, 239, 239, 0.85)',
       backdropFilter: 'blur(2px)',
     }}>
-      <Lottie animationData={animationData} loop style={{ width: 120, height: 120 }} />
+      <YaliBlueprintLoader size={120} />
     </div>
   );
 }

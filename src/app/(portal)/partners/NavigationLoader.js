@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import Lottie from 'lottie-react';
-import animationData from '@/yali-loader.json';
+import YaliBlueprintLoader from '@/app/components/YaliBlueprintLoader';
 import styles from './partners.module.css';
 
 const MIN_DISPLAY_MS = 600;
@@ -48,7 +47,7 @@ export default function NavigationLoader() {
 
   return (
     <div className={styles.loadingOverlay}>
-      <Lottie animationData={animationData} loop style={{ width: 120, height: 120 }} />
+      <YaliBlueprintLoader size={120} />
     </div>
   );
 }
