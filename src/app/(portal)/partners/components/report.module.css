@@ -206,7 +206,7 @@
   background-color: white;
   padding: 3rem;
   margin-bottom: 2rem;
-  border-radius: 4px;
+  border-radius: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -325,7 +325,7 @@
   border: 1px solid #e0e0e0;
   padding: 2rem;
   margin-bottom: 2rem;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .summaryGrid {
@@ -367,7 +367,7 @@
   background-color: white;
   border: 1px solid #e0e0e0;
   margin-bottom: 2rem;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -384,7 +384,7 @@
   height: 60px;
   object-fit: contain;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 0;
   padding: 8px;
 }
 
@@ -392,7 +392,7 @@
   width: 60px;
   height: 60px;
   background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,7 +505,7 @@
   background-color: #830D35;
   padding: 0.25rem 0.75rem;
   text-transform: uppercase;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .companyMeta {
@@ -559,7 +559,7 @@
   padding: 0.375rem 0.75rem;
   margin-right: 0.75rem;
   margin-bottom: 0.75rem;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .metricValue {
@@ -583,7 +583,7 @@
   font-weight: 600;
   padding: 0.375rem 0.75rem;
   text-transform: uppercase;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .statusActive {
@@ -644,7 +644,7 @@
   background-color: #830D35 !important;
   text-align: center;
   padding: 4rem;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .contactLogoSvg {
@@ -710,7 +710,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-left: auto;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 /* Two Column Grid for sections */

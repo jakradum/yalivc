@@ -797,7 +797,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: #ebde84;
-  border-radius: 2px;
+  border-radius: 0;
   line-height: 1.2;
 }
 
@@ -3965,7 +3965,7 @@
   position: absolute;
   background: white;
   padding: 0.875rem 1rem;
-  border-radius: 6px;
+  border-radius: 0;
   max-width: 240px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   animation: tourSlideIn 0.4s ease;
@@ -4053,7 +4053,7 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 0;
   transition: background 0.2s ease;
   animation: tourSlideIn 0.4s ease 0.4s both;
 }
@@ -4251,11 +4251,11 @@
 
 .npsScoreBtn:first-child {
   margin-left: 0;
-  border-radius: 4px 0 0 4px;
+  border-radius: 0;
 }
 
 .npsScoreBtn:last-child {
-  border-radius: 0 4px 4px 0;
+  border-radius: 0;
 }
 
 .npsScoreBtn:hover {
@@ -4362,20 +4362,20 @@
   }
 
   .npsScoreBtn:first-child {
-    border-radius: 4px 0 0 0;
+    border-radius: 0;
   }
 
   .npsScoreBtn:nth-child(6) {
-    border-radius: 0 4px 0 0;
+    border-radius: 0;
   }
 
   .npsScoreBtn:nth-child(7) {
-    border-radius: 0 0 0 4px;
+    border-radius: 0;
     margin-left: 0;
   }
 
   .npsScoreBtn:last-child {
-    border-radius: 0 0 4px 0;
+    border-radius: 0;
   }
 
   .disclaimerActions {
