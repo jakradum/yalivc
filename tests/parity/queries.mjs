@@ -375,6 +375,7 @@ export const Q = {
         "publicationName": publication->name
       },
       mediaNotes,
+      mediaFeature,
       // Portfolio Summary table footnotes
       portfolioSummaryFootnotes,
       // Fund summary table footnotes
@@ -420,6 +421,7 @@ export const Q = {
         "publicationName": publication->name
       },
       mediaNotes,
+      mediaFeature,
       portfolioSummaryFootnotes,
       fundSummaryFootnotes,
       snapshotData,

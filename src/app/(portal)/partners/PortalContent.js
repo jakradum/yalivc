@@ -1151,6 +1151,32 @@ function PortalContentInner({
               <div className={styles.sectionHeader}>
                 <h1 className={styles.sectionPageTitle}>Media Coverage</h1>
               </div>
+              {/* Featured item at the top (report.mediaFeature: title, url, text blocks), e.g. our own podcast */}
+              {report?.mediaFeature?.url && (() => {
+                const feature = report.mediaFeature;
+                const videoId = (feature.url.match(/[?&]v=([\w-]{11})/) || feature.url.match(/youtu\.be\/([\w-]{11})/) || [])[1];
+                const linkMark = ({ value, children }) => (
+                  <a href={value?.href} target="_blank" rel="noopener noreferrer" className={styles.mediaFeatureLink}>{children}</a>
+                );
+                return (
+                  <div className={styles.mediaFeature}>
+                    {videoId && (
+                      <a href={feature.url} target="_blank" rel="noopener noreferrer" className={styles.mediaFeatureThumb}>
+                        <img src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`} alt="" />
+                      </a>
+                    )}
+                    <div className={styles.mediaFeatureBody}>
+                      {feature.title && <h2 className={styles.mediaFeatureTitle}>{feature.title}</h2>}
+                      <div className={styles.mediaFeatureText}>
+                        <PortableText value={feature.blocks || []} components={{ marks: { link: linkMark } }} />
+                      </div>
+                      <a href={feature.url} target="_blank" rel="noopener noreferrer" className={styles.mediaFeatureLink}>
+                        {feature.linkLabel || 'Watch on YouTube'}
+                      </a>
+                    </div>
+                  </div>
+                );
+              })()}
               {report?.mediaNotes && report.mediaNotes.length > 0 && (
                 <div className={styles.mediaCoverageEditorNote}>
                   <PortableText

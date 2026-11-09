@@ -1099,6 +1099,7 @@ export async function getLPQuarterlyReportBySlug(slug) {
         "publicationName": publication->name
       },
       mediaNotes,
+      mediaFeature,
       // Portfolio Summary table footnotes
       portfolioSummaryFootnotes,
       // Fund summary table footnotes
@@ -1151,6 +1152,7 @@ export async function getLPQuarterlyReportBySlugAdmin(slug) {
         "publicationName": publication->name
       },
       mediaNotes,
+      mediaFeature,
       portfolioSummaryFootnotes,
       fundSummaryFootnotes,
       snapshotData,

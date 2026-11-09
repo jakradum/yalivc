@@ -27,6 +27,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -66,6 +67,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -122,6 +124,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -161,6 +164,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -193,6 +197,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -366,6 +371,7 @@
     }
    ],
    "mediaNotes": "Media note.",
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": [
     {
      "_key": "psf1",
@@ -606,6 +612,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -638,6 +645,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
@@ -670,6 +678,7 @@
    "pipelineNotes": null,
    "mediaFromNews": null,
    "mediaNotes": null,
+   "mediaFeature": null,
    "portfolioSummaryFootnotes": null,
    "fundSummaryFootnotes": null
   }
