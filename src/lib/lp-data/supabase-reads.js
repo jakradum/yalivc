@@ -263,9 +263,11 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
 export async function getAllLPInvestmentSlugs() {
   const ctx = new Ctx(PORTAL);
   const companies = order((await ctx.type('company')).filter(onPortal), [[(c) => c.order, 'asc'], [(c) => c.name, 'asc']]);
+  await ctx.load(companies.map((c) => c.logo));
   return companies.map((c) => ({
     slug: slugOf(c),
     name: raw(c.name),
+    logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
     investmentStatus: raw(c.investmentStatus),
     exitDate: raw(c.exitDate),
     investmentRounds: roundsSorted(c, (r) => pick(r, ['isInitialRound', 'investmentDate'])),

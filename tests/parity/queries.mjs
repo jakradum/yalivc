@@ -422,6 +422,7 @@ export const Q = {
   getAllLPInvestmentSlugs: `*[_type == "company" && investmentStatus in ["active", "exited"] && showOnPartnerPortal != false] | order(order asc, name asc) {
       "slug": slug.current,
       name,
+      "logo": logo.asset->url,
       investmentStatus,
       exitDate,
       "investmentRounds": investmentRounds[] | order(investmentDate asc) {
