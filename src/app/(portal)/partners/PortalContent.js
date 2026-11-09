@@ -842,18 +842,22 @@ function PortalContentInner({
                     if (chartData.length === 0) return null;
 
                     const total = chartData.reduce((sum, d) => sum + d.value, 0);
-                    // Crimson-to-blush gradient matching the fund2 deck sector pie chart.
-                    // Sectors sorted largest→smallest map to darkest→lightest shade.
-                    const SECTOR_COLORS = {
-                      'Aerospace & Surveillance': '#830d35',
-                      'Artificial Intelligence':  '#bb3e68',
-                      'Life Sciences':            '#d65d85',
-                      'Fabless Semiconductor':    '#db90a9',
-                      'Robotics':                 '#f4c0d4',
-                      'Smart Manufacturing':      '#e8a8be',
+                    // Muted Prussian-blue-to-gold gradient (Pranav, 9 Nov 2026). chartData is
+                    // sorted largest first, so the largest sector gets the darkest shade. With
+                    // fewer than 6 sectors the shades are picked evenly across the ramp; with
+                    // more, the ramp is interpolated so every slice keeps its own shade.
+                    const SECTOR_RAMP = ['#153148', '#3b4c54', '#61675d', '#888364', '#b29f69', '#dcbc6c'];
+                    const rampAt = (t) => {
+                      const pos = t * (SECTOR_RAMP.length - 1);
+                      const i = Math.min(Math.floor(pos), SECTOR_RAMP.length - 2);
+                      const f = pos - i;
+                      const a = SECTOR_RAMP[i], b = SECTOR_RAMP[i + 1];
+                      const mix = (k) => Math.round(parseInt(a.slice(k, k + 2), 16) * (1 - f) + parseInt(b.slice(k, k + 2), 16) * f).toString(16).padStart(2, '0');
+                      return `#${mix(1)}${mix(3)}${mix(5)}`;
                     };
-                    const FALLBACK_COLORS = ['#830d35','#bb3e68','#d65d85','#db90a9','#f4c0d4','#e8a8be'];
-                    const getColor = (name, idx) => SECTOR_COLORS[name] ?? FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
+                    const getColor = (name, idx) => (chartData.length === SECTOR_RAMP.length
+                      ? SECTOR_RAMP[idx]
+                      : rampAt(chartData.length > 1 ? idx / (chartData.length - 1) : 0));
 
                     // SVG Pie Chart calculations
                     const size = 220;
