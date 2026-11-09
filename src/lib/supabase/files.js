@@ -15,7 +15,7 @@
 import { NextResponse } from 'next/server';
 import { verifySession } from '@/lib/session';
 import { isYaliStaff } from '@/lib/internal-user';
-import { order, cmpStr } from '@/lib/lp-data/groq';
+import { order, cmpStr, isPublishedId } from '@/lib/lp-data/groq';
 import { supaAll } from '@/lib/lp-data/rest';
 import { getPortalUserByEmail, getDataroomDomainPrivilege } from '@/lib/lp-data/supabase-reads';
 
@@ -65,9 +65,6 @@ async function supa(path, { method = 'GET', body } = {}) {
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
-
-// Twin rows are published documents only; skip anything draft/version-shaped regardless.
-const isPublishedId = (id) => typeof id === 'string' && !id.startsWith('drafts.') && !id.startsWith('versions.');
 
 // ── Lookups ──────────────────────────────────────────────────────────────────
 

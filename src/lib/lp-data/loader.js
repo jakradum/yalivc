@@ -13,11 +13,12 @@
 //     ref with no row there resolves to null, like a deleted asset in Sanity.
 //   - image assets (`image-…` ids) are `sanity.imageAsset` docs from Sanity; only
 //     their existence matters (the URL is built from the ref).
+// `drafts.` and `versions.` ids are never returned (isPublishedId, groq.js).
 // Nothing is cached: every call reads fresh.
 // Tests replace it with fixtures via setDocLoader(); a fixture loader returns file
 // asset docs from byIds the same way.
 import { supaAll, sanityQuery, enc, isSafeId } from './rest.js';
-import { byId } from './groq.js';
+import { byId, isPublishedId } from './groq.js';
 
 export const PUBLIC_TYPES = new Set(['category', 'teamMember', 'publication', 'news', 'socialUpdate', 'sanity.imageAsset']);
 
@@ -27,18 +28,18 @@ const inFilter = (ids) => `in.(${ids.map((id) => `"${enc(id)}"`).join(',')})`;
 
 async function twinByType(type) {
   const rows = await supaAll(`/rest/v1/sanity_docs?select=id,doc&type=eq.${enc(type)}`);
-  return rows.map((r) => r.doc);
+  return rows.filter((r) => isPublishedId(r.id) && isPublishedId(r.doc?._id)).map((r) => r.doc);
 }
 
 export const defaultLoader = {
   async byType(type) {
     if (!isSafeId(type)) return [];
-    if (PUBLIC_TYPES.has(type)) return byId(await sanityQuery('*[_type == $type]', { type }));
+    if (PUBLIC_TYPES.has(type)) return byId((await sanityQuery('*[_type == $type]', { type })).filter((d) => isPublishedId(d?._id)));
     return twinByType(type);
   },
 
   async byIds(ids) {
-    const want = [...new Set(ids)].filter(isSafeId);
+    const want = [...new Set(ids)].filter((id) => isSafeId(id) && isPublishedId(id));
     const fileIds = want.filter((id) => id.startsWith('file-'));
     const imageIds = want.filter((id) => id.startsWith('image-'));
     const docIds = want.filter((id) => !id.startsWith('file-') && !id.startsWith('image-'));
@@ -55,14 +56,14 @@ export const defaultLoader = {
     const found = new Set();
     for (const part of chunk(docIds, CHUNK)) {
       const rows = await supaAll(`/rest/v1/sanity_docs?select=id,doc&id=${inFilter(part)}`, { complete: (got) => got.length >= part.length });
-      for (const r of rows) { out.push(r.doc); found.add(r.doc._id); }
+      for (const r of rows) if (isPublishedId(r.doc?._id)) { out.push(r.doc); found.add(r.doc._id); }
     }
 
     const rest = [...imageIds, ...docIds.filter((id) => !found.has(id))];
     if (rest.length) {
       const docs = await sanityQuery('*[_id in $ids]', { ids: rest });
       for (const d of docs || []) {
-        if (PUBLIC_TYPES.has(d._type)) out.push(d);
+        if (PUBLIC_TYPES.has(d._type) && isPublishedId(d._id)) out.push(d);
       }
     }
     return out;

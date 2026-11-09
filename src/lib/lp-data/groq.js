@@ -106,6 +106,10 @@ export function order(list, keys) {
     .map(([x]) => x);
 }
 
+// The published perspective: `drafts.` and `versions.` documents do not exist.
+// Every read of the twin applies this, so a draft that reached it is never served.
+export const isPublishedId = (id) => typeof id === 'string' && !id.startsWith('drafts.') && !id.startsWith('versions.');
+
 // Documents in the order an unordered `*[...]` returns them.
 export const byId = (docs) => [...docs].sort((a, b) => cmpStr(String(a._id), String(b._id)));
 

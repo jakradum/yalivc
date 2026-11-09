@@ -198,3 +198,23 @@ test('Ctx.type: a loader that returns a document twice yields it once', async ()
     assert.deepEqual((await lp.getAllLPInvestmentSlugs()).map((x) => x.slug ?? x), ['a', 'b']);
   } finally { lp.resetDocLoader(); process.env.LP_DATA_SOURCE = saved; }
 });
+
+test('drafts and versions: never served by Ctx or the default loader', async () => {
+  const lp = await import('../../src/lib/lp-data.js');
+  const { defaultLoader } = await import('../../src/lib/lp-data/loader.js');
+  const saved = process.env.LP_DATA_SOURCE;
+  process.env.LP_DATA_SOURCE = 'supabase';
+  const co = (id, slug) => ({ _id: id, _type: 'company', name: slug, slug: { current: slug }, investmentStatus: 'active' });
+  const docs = [co('company-a', 'a'), co('drafts.company-a', 'a-draft'), co('versions.r1.company-b', 'b-version')];
+  lp.setDocLoader({ byType: async (t) => docs.filter((d) => d._type === t), byIds: async () => [] });
+  try {
+    assert.deepEqual((await lp.getAllLPInvestmentSlugs()).map((x) => x.slug ?? x), ['a']);
+  } finally { lp.resetDocLoader(); process.env.LP_DATA_SOURCE = saved; }
+
+  handler = keysetTable(() => docs.map((d) => ({ id: d._id, doc: d })));
+  assert.deepEqual((await defaultLoader.byType('company')).map((d) => d._id), ['company-a']);
+  handler = (u) => json(docs.filter((d) => u.searchParams.get('id').includes(encodeURIComponent(d._id))).map((d) => ({ id: d._id, doc: d })));
+  requests = [];
+  assert.deepEqual((await defaultLoader.byIds(['drafts.company-a', 'company-a'])).map((d) => d._id), ['company-a']);
+  assert.ok(requests.every((r) => !r.url.includes('drafts.')));
+});

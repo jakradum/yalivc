@@ -1,7 +1,7 @@
 // Per-call reference resolver for the Supabase path: loads referenced documents
 // through the loader in batches and answers `->` lookups and `asset->url`.
 import { getDocLoader } from './loader.js';
-import { attr, isObj, byId } from './groq.js';
+import { attr, isObj, byId, isPublishedId } from './groq.js';
 import { SANITY_CDN_IMAGES } from './rest.js';
 
 // Collect `_ref` strings found anywhere inside the given values (asset refs included:
@@ -32,12 +32,14 @@ export class Ctx {
     this.docs = new Map();
   }
 
-  // All docs of type t in _id order, each _id once (a loader that pages or merges
-  // sources must never make GROQ's single snapshot show a document twice).
+  // All published docs of type t in _id order, each _id once (a loader that pages
+  // or merges sources must never make GROQ's single snapshot show a document twice;
+  // drafts and versions do not exist in the published perspective).
   async type(t) {
     const docs = await this.loader.byType(t);
     const seen = new Set();
-    return byId((docs || []).filter((d) => isObj(d) && d._type === t)).filter((d) => !seen.has(d._id) && seen.add(d._id));
+    return byId((docs || []).filter((d) => isObj(d) && d._type === t && isPublishedId(d._id)))
+      .filter((d) => !seen.has(d._id) && seen.add(d._id));
   }
 
   // Load every reference inside `values` (and, `depth` levels down, inside the
@@ -46,8 +48,10 @@ export class Ctx {
     let frontier = values;
     for (let level = 0; level < depth; level++) {
       const ids = [...refsIn(frontier)].filter((id) => !this.docs.has(id));
+      // A ref to a draft or version id resolves to null, as under perspective 'published'.
       if (!ids.length) return;
-      const got = (await this.loader.byIds(ids)) || [];
+      const ask = ids.filter(isPublishedId);
+      const got = ask.length ? ((await this.loader.byIds(ask)) || []).filter((d) => isObj(d) && isPublishedId(d._id)) : [];
       for (const id of ids) this.docs.set(id, null);
       for (const d of got) if (isObj(d) && ids.includes(d._id)) this.docs.set(d._id, d);
       frontier = got;
