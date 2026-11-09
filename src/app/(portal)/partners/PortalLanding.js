@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Lightlogo } from '../../components/icons/lightlogo';
 import styles from './partners.module.css';
 
@@ -9,6 +9,20 @@ const SESSION_KEY = 'yali-portal-entered';
 export default function PortalLanding({ children }) {
   const [entered, setEntered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const containerRef = useRef(null);
+
+  // The grid's light follows the mouse (desktop only; touch keeps the slow sweep).
+  // Written straight to CSS variables so moving the mouse doesn't re-render.
+  const handlePointerMove = (e) => {
+    if (e.pointerType !== 'mouse' || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    containerRef.current.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    containerRef.current.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    containerRef.current.classList.add(styles.landingPointer);
+  };
+  const handlePointerLeave = () => {
+    containerRef.current?.classList.remove(styles.landingPointer);
+  };
 
   // Check sessionStorage on mount
   useEffect(() => {
@@ -42,7 +56,12 @@ export default function PortalLanding({ children }) {
   }
 
   return (
-    <div className={styles.landingContainer}>
+    <div
+      ref={containerRef}
+      className={styles.landingContainer}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
       {/* Logo at top */}
       <div className={styles.landingLogo}>
         <Lightlogo />

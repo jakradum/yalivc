@@ -13,6 +13,79 @@
   overflow: hidden;
 }
 
+/* Diamond grid from the Fund II deck (gold diagonals both ways, 32px apart),
+   fading out towards the centre so the title and note stay clear */
+.landingContainer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M0 0L32 32M32 0L0 32' stroke='%23ebde84' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 32px 32px;
+  opacity: 0.45;
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%);
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* A slow band of light travels across the grid, continuously: the same grid,
+   brighter, seen only through a moving diagonal band (and the same centre fade) */
+@keyframes landingPatternShine {
+  0%   { -webkit-mask-position: 0 0, 120% 0; mask-position: 0 0, 120% 0; }
+  100% { -webkit-mask-position: 0 0, -20% 0; mask-position: 0 0, -20% 0; }
+}
+
+.landingContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M0 0L32 32M32 0L0 32' stroke='%23ebde84' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 32px 32px;
+  opacity: 0.9;
+  -webkit-mask-image:
+    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%),
+    linear-gradient(105deg, transparent 42%, #000 50%, transparent 58%);
+  mask-image:
+    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%),
+    linear-gradient(105deg, transparent 42%, #000 50%, transparent 58%);
+  -webkit-mask-size: 100% 100%, 300% 100%;
+  mask-size: 100% 100%, 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  animation: landingPatternShine 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* With a mouse over the page, the light follows the cursor instead of sweeping */
+.landingPointer::after {
+  animation: none;
+  -webkit-mask-image:
+    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%),
+    radial-gradient(circle 260px at var(--mx, -999px) var(--my, -999px), #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  mask-image:
+    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 35%, #000 100%),
+    radial-gradient(circle 260px at var(--mx, -999px) var(--my, -999px), #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  mask-size: 100% 100%, 100% 100%;
+  -webkit-mask-position: 0 0, 0 0;
+  mask-position: 0 0, 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landingContainer::after {
+    animation: none;
+    display: none;
+  }
+}
+
+.landingContainer > * {
+  position: relative;
+  z-index: 1;
+}
+
 .landingLogo {
   position: absolute;
   top: 2rem;
@@ -48,6 +121,7 @@
   position: relative;
   z-index: 5;
 }
+
 
 .landingSubtitle {
   font-family: var(--font-jetbrains-mono);
