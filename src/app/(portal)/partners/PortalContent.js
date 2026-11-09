@@ -515,122 +515,85 @@ function PortalContentInner({
           {/* Cover Note Section */}
           {activeSection === 'cover-note' && (
             <section id="cover-note" className={styles.coverNoteSection}>
-              {/* Letterhead */}
-              <div className={styles.letterhead}>
-                <div className={styles.letterheadLogo}>
-                  <Lightlogo />
-                </div>
-                <div className={styles.letterheadInfo}>
-                  <span className={styles.letterheadName}>{fundSettings?.fundManagerName || '-'}</span>
-                  <span className={styles.letterheadDescriptor}>
-                    {fundSettings?.fundManagerDescriptor
-                      ? fundSettings.fundManagerDescriptor.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
-                      : '-'}
-                  </span>
-                </div>
-              </div>
+              {(() => {
+                // Editor's-note layout (Pranav, 9 Nov 2026): no letterhead or labels,
+                // plain headings, a large hollow JetBrains Mono first letter, and a
+                // portrait-card signature.
+                const sections = [
+                  ['Investment activity', report?.investmentActivityNotes],
+                  ['Portfolio highlights', report?.portfolioHighlightsNotes],
+                  ['Ecosystem and tailwinds', report?.ecosystemNotes],
+                  ['Closing note', report?.closingNotes],
+                ].filter(([, blocks]) => blocks?.length);
+                // Every note opens "Greetings from Yali Capital", so the big letter goes on
+                // the paragraph after the first one: the intro's second paragraph if it has
+                // one, otherwise the first paragraph of the first section.
+                const isPara = (b) => b?._type === 'block' && (!b.style || b.style === 'normal') && !b.listItem;
+                const introParas = (report?.coverNoteIntro || []).filter(isPara);
+                const capKey = introParas.length > 1
+                  ? introParas[1]._key
+                  : sections.map(([, blocks]) => blocks.find(isPara)).find(Boolean)?._key;
+                const components = {
+                  block: {
+                    normal: ({ value, children }) => {
+                      const kids = Array.isArray(children) ? children : [children];
+                      if (value._key !== capKey || typeof kids[0] !== 'string' || !kids[0]) return <p>{children}</p>;
+                      return (
+                        <p className={styles.dropCapPara}>
+                          <span className={styles.dropCap} aria-hidden="true">{kids[0][0]}</span>
+                          <span className={styles.srOnly}>{kids[0][0]}</span>
+                          {kids[0].slice(1)}
+                          {kids.slice(1)}
+                        </p>
+                      );
+                    },
+                  },
+                };
+                const hasContent = report?.coverNoteIntro?.length || sections.length;
+                return (
+                  <div className={styles.coverNoteColumn}>
+                    {report?.coverNoteGreeting && (
+                      <p className={styles.letterGreeting}>{report.coverNoteGreeting}</p>
+                    )}
 
-
-              {/* Greeting */}
-              {report?.coverNoteGreeting && (
-                <div className={styles.letterGreeting}>
-                  {report.coverNoteGreeting}
-                </div>
-              )}
-
-              <div className={styles.coverNoteContent}>
-                {report?.coverNoteIntro && report.coverNoteIntro.length > 0 && (
-                  <PortableText value={report.coverNoteIntro} />
-                )}
-
-                {report?.investmentActivityNotes && report.investmentActivityNotes.length > 0 && (
-                  <>
-                    <h3>Investment Activity</h3>
-                    <PortableText value={report.investmentActivityNotes} />
-                  </>
-                )}
-
-                {report?.portfolioHighlightsNotes && report.portfolioHighlightsNotes.length > 0 && (
-                  <>
-                    <h3>Portfolio Highlights</h3>
-                    <PortableText value={report.portfolioHighlightsNotes} />
-                  </>
-                )}
-
-                {report?.ecosystemNotes && report.ecosystemNotes.length > 0 && (
-                  <>
-                    <h3>Ecosystem & Tailwinds</h3>
-                    <PortableText value={report.ecosystemNotes} />
-                  </>
-                )}
-
-                {report?.closingNotes && report.closingNotes.length > 0 && (
-                  <>
-                    <h3>Closing Note</h3>
-                    <PortableText value={report.closingNotes} />
-                  </>
-                )}
-
-                {/* Show message if no content from Sanity */}
-                {!report?.coverNoteIntro?.length &&
-                 !report?.investmentActivityNotes?.length &&
-                 !report?.portfolioHighlightsNotes?.length &&
-                 !report?.closingNotes?.length && (
-                  <p className={styles.noContentMessage}>
-                    Cover note content will appear here once added in Sanity CMS.
-                  </p>
-                )}
-              </div>
-
-              {/* Author Attribution - Groups link to /about-yali, individuals link to their profile */}
-              {(signatory?.photo || signatory?.name) && (
-                <div className={styles.coverNoteAuthor}>
-                  {(signatory?.profileType === 'group' || signatory?.slug?.current) ? (
-                    <a
-                      href={signatory?.profileType === 'group'
-                        ? 'https://yali.vc/about-yali/'
-                        : `https://yali.vc/about-yali/${signatory.slug.current}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.authorLink}
-                    >
-                      {signatory?.photo && (
-                        <div className={styles.authorPhoto}>
-                          <Image
-                            src={signatory.photo}
-                            alt={signatory?.name || 'Signatory'}
-                            width={80}
-                            height={80}
-                            style={{ objectFit: 'cover' }}
-                          />
-                        </div>
+                    <div className={styles.coverNoteContent}>
+                      {report?.coverNoteIntro?.length > 0 && (
+                        <PortableText value={report.coverNoteIntro} components={components} />
                       )}
-                      <div className={styles.authorInfo}>
-                        {signatory?.name && <p className={styles.authorName}>{signatory.name}</p>}
-                        {signatory?.role && <p className={styles.authorRole}>{signatory.role}</p>}
-                      </div>
-                    </a>
-                  ) : (
-                    <>
-                      {signatory?.photo && (
-                        <div className={styles.authorPhoto}>
-                          <Image
-                            src={signatory.photo}
-                            alt={signatory?.name || 'Signatory'}
-                            width={80}
-                            height={80}
-                            style={{ objectFit: 'cover' }}
-                          />
+                      {sections.map(([title, blocks]) => (
+                        <div key={title}>
+                          <h3>{title}</h3>
+                          <PortableText value={blocks} components={components} />
                         </div>
+                      ))}
+                      {!hasContent && (
+                        <p className={styles.noContentMessage}>The cover note will appear here once it is added.</p>
                       )}
-                      <div className={styles.authorInfo}>
-                        {signatory?.name && <p className={styles.authorName}>{signatory.name}</p>}
-                        {signatory?.role && <p className={styles.authorRole}>{signatory.role}</p>}
+                    </div>
+
+                    {signatory?.name && (
+                      <div className={styles.coverNoteSignoff}>
+                        <p className={styles.signoffLine}>With regards,</p>
+                        <div className={styles.signatureCard}>
+                          {signatory?.photo && (
+                            <Image
+                              src={signatory.photo}
+                              alt=""
+                              width={112}
+                              height={112}
+                              className={styles.signaturePhoto}
+                            />
+                          )}
+                          <div className={styles.signatureText}>
+                            <p className={styles.authorName}>{signatory.name}</p>
+                            {signatory?.role && <p className={styles.authorRole}>{signatory.role}</p>}
+                          </div>
+                        </div>
                       </div>
-                    </>
-                  )}
-                </div>
-              )}
+                    )}
+                  </div>
+                );
+              })()}
             </section>
           )}
 

@@ -1322,95 +1322,18 @@
   max-width: 900px;
 }
 
-/* Letterhead */
-.letterhead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  margin-bottom: 2rem;
-  margin-left: -3rem;
-  margin-right: -3rem;
-  border-bottom: 2px solid #830D35;
+/* Cover note: editor's-note layout (one narrow column) */
+.coverNoteColumn {
+  max-width: 680px;
+  margin: 0 auto;
 }
 
-.letterheadLogo {
-  flex-shrink: 0;
-}
-
-.letterheadLogo svg {
-  height: 40px;
-  width: auto;
-}
-
-.letterheadLogo svg path {
-  fill: #830D35;
-}
-
-.letterheadInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  text-align: right;
-}
-
-.letterheadName {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #830D35;
-}
-
-.letterheadDescriptor {
-  font-family: var(--font-inter);
-  font-size: 0.8125rem;
-  color: #666;
-}
-
-/* Letter Date */
-.letterDate {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.875rem;
-  color: #363636;
-  margin-bottom: 2rem;
-  text-align: right;
-}
-
-/* Letter Greeting */
 .letterGreeting {
   font-family: var(--font-inter);
-  font-size: 1rem;
-  color: #363636;
-  margin-bottom: 1.5rem;
-}
-
-.coverNoteHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  margin-left: -3rem;
-  margin-right: -3rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  border-bottom: 1px solid #363636;
-}
-
-.coverNoteTitle {
-  font-family: var(--font-jetbrains-mono);
   font-size: 1.5rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-.coverNoteDate {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8125rem;
-  color: #830D35;
+  font-weight: 500;
+  color: #0a0a0a;
+  margin: 0 0 1.375rem;
 }
 
 .coverNoteContent {
@@ -1440,61 +1363,107 @@
   margin-top: 2rem;
 }
 
-/* Author Attribution */
-.coverNoteAuthor {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  margin-top: 3rem;
-  margin-left: -3rem;
-  margin-right: -3rem;
-  padding-top: 2rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  border-top: 1px solid #363636;
+.coverNoteColumn .coverNoteContent {
+  color: #0a0a0a;
 }
 
-.coverNoteAuthor:has(.authorLink) {
-  display: block;
+/* Section headings and any heading typed inside the note: plain, sentence case */
+.coverNoteColumn .coverNoteContent h2,
+.coverNoteColumn .coverNoteContent h3,
+.coverNoteColumn .coverNoteContent h4 {
+  font-family: var(--font-inter);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 2.75rem 0 0.875rem;
+  clear: both;
 }
 
-.authorPhoto {
-  width: 80px;
-  height: 80px;
+/* Smaller headings inside a section (e.g. a company name under Portfolio highlights) */
+.coverNoteColumn .coverNoteContent div h4,
+.coverNoteColumn .coverNoteContent div h3 {
+  font-size: 1.0625rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.coverNoteColumn .coverNoteContent > div > h3 {
+  font-size: 1.25rem;
+  margin: 2.75rem 0 0.875rem;
+}
+
+/* Large hollow first letter on the paragraph after the greeting */
+.dropCapPara {
+  display: flow-root;
+  font-size: 1.1875rem;
+  line-height: 1.7;
+}
+
+.dropCap {
+  float: left;
+  font-family: var(--font-jetbrains-mono);
+  font-weight: 700;
+  font-size: 168px;
+  line-height: 0.78;
+  margin: 8px 16px 0 -4px;
+  color: transparent;
+  -webkit-text-stroke: 1px #830D35;
+}
+
+@media (max-width: 767px) {
+  .dropCap {
+    font-size: 112px;
+    margin-right: 12px;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
-  border-radius: 50%;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Sign-off: "With regards," and a square portrait card */
+.coverNoteSignoff {
+  margin-top: 2.5rem;
+}
+
+.signoffLine {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  color: #0a0a0a;
+  margin: 0 0 1.125rem;
+}
+
+.signatureCard {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid #363636;
+}
+
+.signaturePhoto {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  display: block;
+  border-right: 1px solid #363636;
   flex-shrink: 0;
 }
 
-.authorPhoto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.authorLink {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease;
-}
-
-.authorLink:hover {
-  opacity: 0.7;
-}
-
-.authorInfo {
+.signatureText {
+  padding: 1rem 1.375rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 0.25rem;
 }
 
 .authorName {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 1rem;
+  font-family: var(--font-inter);
+  font-size: 1.125rem;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
@@ -1503,7 +1472,7 @@
 .authorRole {
   font-family: var(--font-inter);
   font-size: 0.875rem;
-  color: #666;
+  color: #363636;
   margin: 0;
 }
 
