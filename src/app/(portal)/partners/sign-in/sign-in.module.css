@@ -20,8 +20,9 @@
 }
 
 .logoWrapper svg {
-  width: 180px;
-  height: auto;
+  display: block;
+  height: 56px;
+  width: auto;
 }
 
 .title {

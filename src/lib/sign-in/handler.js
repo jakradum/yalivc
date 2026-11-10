@@ -1,7 +1,7 @@
 // POST handler behind /api/portal-auth and /api/dataroom-auth.
 //
 // Actions:
-//   send-code    { email }        → { status: 'issued', resendsLeft } | { status: 'limit' | 'locked', until }
+//   send-code    { email }        → { status: 'issued', resendsLeft } | { status: 'limit' | 'locked' | 'busy', until }
 //   verify-code  { email, code }  → { success: true } and the session cookie
 //                                  | { status: 'wrong' | 'dead' | 'expired' | 'locked', ... }
 //   sign-out (data room only)
@@ -19,6 +19,10 @@ import { codeEmail, lockoutEmail } from './emails.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const pause = () => new Promise((r) => setTimeout(r, 500 + Math.random() * 500));
+
+// The caller's IP as Vercel reports it (x-real-ip), else the first x-forwarded-for hop.
+const clientIp = (request) =>
+  request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0].trim() || '';
 
 // May this email sign in? Yali staff and open domains always may (unless blocked
 // with noAccess); everyone else needs an active user record for this scope.
@@ -69,7 +73,7 @@ export function signInHandler({ scope, place, cookieName, legacyOtpCookie, allow
       if (action === 'send-code') {
         const allowed = await hasAccess(scope, email);
         const code = allowed ? newCode() : null;
-        const result = await issueCode(scope, email, code);
+        const result = await issueCode(scope, email, code, clientIp(request));
         if (result.status !== 'issued') {
           return NextResponse.json({ status: result.status, until: result.until }, { status: 429 });
         }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from './sign-in.module.css';
-import { Lightlogo } from '../../../components/icons/lightlogo';
+import { LightMonogram } from '../../../components/icons/lightMonogram';
 import { trackEvent } from '@/lib/analytics';
 import { signInMessage } from '@/lib/sign-in/messages';
 
@@ -92,7 +92,7 @@ export default function SignInPage() {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.logoWrapper}>
-          <Lightlogo />
+          <LightMonogram />
         </div>
         <h1 className={styles.title}>Limited Partners' Reports</h1>
 

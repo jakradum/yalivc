@@ -21,6 +21,8 @@ export function signInMessage(data) {
       return 'This code no longer works. Click Resend code to get a new one.';
     case 'limit':
       return `You can get 2 codes in 24 hours. Use the latest code we sent you, or try again after ${when(data.until)}.`;
+    case 'busy':
+      return `Too many sign-in requests from your network. Please try again after ${when(data.until)}.`;
     case 'locked':
       return `Too many wrong codes. Sign-in for this email is locked until ${when(data.until)}.`;
     default:

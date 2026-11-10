@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from './sign-in.module.css';
-import { Lightlogo } from '../../../components/icons/lightlogo';
+import { LightMonogram } from '../../../components/icons/lightMonogram';
 import { signInMessage } from '@/lib/sign-in/messages';
 
 const API = '/api/dataroom-auth/';
@@ -89,7 +89,7 @@ export default function DataroomSignInPage() {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.logoWrapper}>
-          <Lightlogo />
+          <LightMonogram />
         </div>
         <h1 className={styles.title}>Data Room</h1>
 
