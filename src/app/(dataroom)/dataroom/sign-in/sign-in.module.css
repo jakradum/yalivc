@@ -145,13 +145,13 @@
   margin: 0;
 }
 
-.refCode {
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.2);
+.hint {
+  font-family: var(--font-inter);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #6b6b6b;
   text-align: center;
-  margin: 4px 0 0;
-  user-select: all;
+  margin: 0;
 }
 
 @media (max-width: 480px) {

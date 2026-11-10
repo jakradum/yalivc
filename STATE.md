@@ -27,7 +27,6 @@ No active task. Awaiting next instruction.
 
 - **`submit-application` auto-reply not implemented.** A `// TODO Phase 2A` comment in `src/app/api/submit-application/route.js` marks where a Resend confirmation email to the applicant should be triggered. The form saves to Sanity but sends no reply.
 
-- **In-memory rate limiting in auth routes.** `portal-auth` and `dataroom-auth` use an in-memory `Map` that resets on cold start. Code comments note Redis as the proper fix. Acceptable at current scale; silent gap under multi-instance or high-traffic conditions.
 
 ---
 

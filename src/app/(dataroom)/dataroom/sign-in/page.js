@@ -3,80 +3,44 @@
 import { useState } from 'react';
 import styles from './sign-in.module.css';
 import { Lightlogo } from '../../../components/icons/lightlogo';
+import { signInMessage } from '@/lib/sign-in/messages';
+
+const API = '/api/dataroom-auth/';
+
+async function post(body) {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return { ok: res.ok, data: await res.json().catch(() => ({})) };
+}
 
 export default function DataroomSignInPage() {
   const [step, setStep] = useState('email'); // 'email' or 'code'
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
-  const [ref, setRef] = useState('');
-  const [isSharedDomain, setIsSharedDomain] = useState(false);
+  const [resendsLeft, setResendsLeft] = useState(1);
 
-  const checkDomain = async (val) => {
-    const domain = val.split('@')[1];
-    if (!domain) return;
-    try {
-      const res = await fetch(`/api/check-domain/?domain=${encodeURIComponent(domain)}`);
-      const data = await res.json();
-      setIsSharedDomain(!!data.shared);
-    } catch {
-      setIsSharedDomain(false);
+  const requestCode = async () => {
+    const { ok, data } = await post({ action: 'send-code', email });
+    if (!ok) {
+      setError(signInMessage(data));
+      return false;
     }
-  };
-
-  const handleEmailBlur = (e) => {
-    if (e.target.value.includes('@')) checkDomain(e.target.value);
+    setResendsLeft(data.resendsLeft ?? 0);
+    return true;
   };
 
   const handleSendCode = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      const res = await fetch('/api/dataroom-auth/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send-code', email }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setRef(data.ref || '');
-        setStep('code');
-      } else {
-        setError(data.error || 'Something went wrong');
-      }
-    } catch {
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // For shared-domain users: email + code submitted together in one step
-  const handleSharedSignIn = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/dataroom-auth/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'verify-code', code, email }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        window.location.href = isLocalDev ? '/dataroom' : '/';
-      } else {
-        setError(data.error || 'Invalid code');
-      }
+      if (await requestCode()) setStep('code');
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -87,22 +51,16 @@ export default function DataroomSignInPage() {
   const handleVerifyCode = async (e) => {
     e.preventDefault();
     setError('');
+    setNotice('');
     setLoading(true);
-
     try {
-      const res = await fetch('/api/dataroom-auth/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'verify-code', code, email }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
+      const { ok, data } = await post({ action: 'verify-code', code, email });
+      if (ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         window.location.href = isLocalDev ? '/dataroom' : '/';
       } else {
-        setError(data.error || 'Verification failed');
+        setError(signInMessage(data));
+        setCode('');
       }
     } catch {
       setError('Something went wrong. Please try again.');
@@ -113,75 +71,19 @@ export default function DataroomSignInPage() {
 
   const handleResend = async () => {
     setError('');
+    setNotice('');
     setLoading(true);
     try {
-      const res = await fetch('/api/dataroom-auth/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send-code', email }),
-      });
-      if (res.ok) {
-        setError('');
+      if (await requestCode()) {
         setCode('');
-      } else {
-        const data = await res.json();
-        setError(data.error || 'Failed to resend code');
+        setNotice('We sent you a new code. The earlier code no longer works.');
       }
     } catch {
-      setError('Something went wrong.');
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  // Shared-domain: single form with email + code
-  if (isSharedDomain) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <div className={styles.logoWrapper}>
-            <Lightlogo />
-          </div>
-          <h1 className={styles.title}>Data Room</h1>
-          <p className={styles.subtitle}>Enter your email and access code to sign in</p>
-          <form className={styles.form} onSubmit={handleSharedSignIn}>
-            <div className={styles.fieldGroup}>
-              <label className={styles.label} htmlFor="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                className={styles.input}
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={handleEmailBlur}
-                required
-                autoComplete="email"
-              />
-            </div>
-            <div className={styles.fieldGroup}>
-              <label className={styles.label} htmlFor="code">Access Code</label>
-              <input
-                id="code"
-                type="text"
-                inputMode="numeric"
-                className={`${styles.input} ${styles.codeInput}`}
-                placeholder="000000"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                maxLength={6}
-                required
-              />
-            </div>
-            {error && <p className={styles.error}>{error}</p>}
-            <button type="submit" className={styles.submitButton} disabled={loading || code.length !== 6}>
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>
@@ -204,8 +106,8 @@ export default function DataroomSignInPage() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onBlur={handleEmailBlur}
                   required
+                  autoComplete="email"
                 />
               </div>
               {error && <p className={styles.error}>{error}</p>}
@@ -233,15 +135,18 @@ export default function DataroomSignInPage() {
                   required
                 />
               </div>
+              <p className={styles.hint}>{notice || 'It can take a minute to arrive. If you don’t see it, check your spam or junk folder.'}</p>
               {error && <p className={styles.error}>{error}</p>}
               <button type="submit" className={styles.submitButton} disabled={loading || code.length !== 6}>
                 {loading ? 'Verifying...' : 'Verify & Sign In'}
               </button>
               <div className={styles.secondaryActions}>
-                <button type="button" className={styles.linkButton} onClick={handleResend} disabled={loading}>
-                  Resend code
-                </button>
-                <button type="button" className={styles.linkButton} onClick={() => { setStep('email'); setCode(''); setError(''); }}>
+                {resendsLeft > 0 && (
+                  <button type="button" className={styles.linkButton} onClick={handleResend} disabled={loading}>
+                    Resend code
+                  </button>
+                )}
+                <button type="button" className={styles.linkButton} onClick={() => { setStep('email'); setCode(''); setError(''); setNotice(''); }}>
                   Use a different email
                 </button>
               </div>

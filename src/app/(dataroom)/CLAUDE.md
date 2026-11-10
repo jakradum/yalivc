@@ -6,14 +6,12 @@
 
 ## Auth — Dataroom (`dataroom-session` cookie)
 
-- OTP flow via `/api/dataroom-auth/route.js`
+- Sign-in: `/api/dataroom-auth/route.js`, a thin wrapper over the emailed-code sign-in in `src/lib/sign-in/` (rules: 1 code, 3 wrong tries per code, 1 resend, 6th wrong try locks the email 24 h with a lockout email; counted in Supabase `sign_in_codes`, `supabase/migrations/0004_sign_in_codes.sql`). No shared firm codes: every person gets their own code. Replies are identical for non-LP emails, so never return anything that reveals membership.
 - Verifier: `src/lib/session.js` — same as portal, returns `email` string or `null`
 - `redirect` must be imported from `next/navigation`, NOT `next/headers`
 - Trusted domains (no Sanity lookup needed): `@yali.vc`, `@florintree.com`
 - Non-trusted access: `portalUser.investorDataRoomAccess == true` OR active `domainPrivilege` Sanity doc
-- `domainPrivilege` modes:
-  - `requireCode: true` — user must enter a shared invite code
-  - `requireCode: false` — anyone with a matching email domain gets in automatically
+- `domainPrivilege` with `requireCode: false`: anyone at that email domain can request a code. `requireCode: true` (the old shared firm code) is ignored since 10 Nov 2026; those people need their own `portalUser` access
 - Kill switch: `noAccess: true` on `portalUser` blocks even trusted domains and domain-privilege users
 
 ---

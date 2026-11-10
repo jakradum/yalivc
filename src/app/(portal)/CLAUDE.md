@@ -14,7 +14,7 @@ Build locally (`/partners/api/generate-pdf/<slug>/`, dev server on `LP_DATA_SOUR
 
 ## Auth — Portal (`portal-session` cookie)
 
-- OTP flow via `/api/portal-auth/route.js`
+- Sign-in: `/api/portal-auth/route.js`, a thin wrapper over the emailed-code sign-in in `src/lib/sign-in/` (rules: 1 code, 3 wrong tries per code, 1 resend, 6th wrong try locks the email 24 h with a lockout email; counted in Supabase `sign_in_codes`, `supabase/migrations/0004_sign_in_codes.sql`). No shared firm codes: every person gets their own code. Replies are identical for non-LP emails, so never return anything that reveals membership.
 - Page-level verification: `src/lib/session.js` (Node.js `crypto`, server components only)
 - Standard page pattern:
   ```js
