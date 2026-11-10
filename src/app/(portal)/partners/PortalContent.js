@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './partners.module.css';
-import { Lightlogo } from '../../components/icons/lightlogo';
+import { LightMonogram } from '../../components/icons/lightMonogram';
 import { Openicon } from '../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../components/icons/small-icons/closeicon';
 import { PortableText } from '@portabletext/react';
@@ -445,7 +445,7 @@ function PortalContentInner({
             )}
           </button>
           <Link href="/partners" className={styles.logoLink}>
-            <Lightlogo />
+            <LightMonogram />
           </Link>
         </div>
         <div className={styles.headerRight}>

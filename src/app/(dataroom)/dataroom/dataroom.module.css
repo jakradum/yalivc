@@ -65,6 +65,12 @@
   display: block;
 }
 
+.sidebarLogo svg {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
 .logoDot {
   color: #ebde84;
   animation: dotPulse 2.8s ease-in-out infinite;

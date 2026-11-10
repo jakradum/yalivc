@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PortableText } from '@portabletext/react';
 import styles from '../../partners.module.css';
-import { Lightlogo } from '../../../../components/icons/lightlogo';
+import { LightMonogram } from '../../../../components/icons/lightMonogram';
 import { Openicon } from '../../../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
 import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue, isExitLabelledAsOf } from '@/lib/quarterly-utils';
@@ -328,7 +328,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
             {sidebarOpen ? <CloseIcon /> : <Openicon />}
           </button>
           <Link href="/partners" className={styles.logoLink}>
-            <Lightlogo />
+            <LightMonogram />
           </Link>
         </div>
         <div className={styles.headerRight}>

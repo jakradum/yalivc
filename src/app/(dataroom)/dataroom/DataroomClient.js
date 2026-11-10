@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './dataroom.module.css';
-import { Lightlogo } from '../../components/icons/lightlogo';
+import { LightMonogram } from '../../components/icons/lightMonogram';
 
 const CATEGORY_LABELS = {
   'pipeline':       'Dealflow & Pipeline',
@@ -53,7 +53,7 @@ export default function DataroomClient({ documents }) {
       {/* ── Sidebar ── */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarLogo}>
-          <Lightlogo />
+          <LightMonogram />
         </div>
         <p className={styles.sidebarLabel}>DATA ROOM</p>
 

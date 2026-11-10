@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Lightlogo } from '../../components/icons/lightlogo';
+import { LightMonogram } from '../../components/icons/lightMonogram';
 import styles from './partners.module.css';
 
 const SESSION_KEY = 'yali-portal-entered';
@@ -64,7 +64,7 @@ export default function PortalLanding({ children }) {
     >
       {/* Logo at top */}
       <div className={styles.landingLogo}>
-        <Lightlogo />
+        <LightMonogram />
       </div>
 
       {/* Center content */}
