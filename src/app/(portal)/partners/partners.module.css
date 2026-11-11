@@ -934,6 +934,13 @@
   padding: 0.1rem 0.35rem;
 }
 
+/* The latest report's row in the Download Center */
+.downloadLatestTag {
+  display: inline-block;
+  margin-left: 0.625rem;
+  vertical-align: middle;
+}
+
 .sbChange {
   margin-left: auto;
   font-family: var(--font-inter);

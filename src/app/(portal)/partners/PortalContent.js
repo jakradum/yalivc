@@ -1444,6 +1444,10 @@ function PortalContentInner({
                         <tr key={rpt._id}>
                           <td className={styles.downloadReportName}>
                             {rpt.title || `${rpt.quarter} ${rpt.fiscalYear} Report`}
+                            {/* Same tag as the sidebar; allReports is newest first */}
+                            {rpt.slug === allReports[0]?.slug && (
+                              <span className={`${styles.sbLatestTag} ${styles.downloadLatestTag}`}>Latest</span>
+                            )}
                           </td>
                           <td>{rpt.quarter} {rpt.fiscalYear}</td>
                           <td>
