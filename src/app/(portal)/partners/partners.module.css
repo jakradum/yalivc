@@ -3718,6 +3718,17 @@
   margin-top: 0.5rem;
 }
 
+/* A size step down from the main site's link, to sit under the company name
+   (scoped so it outranks the shared link styles whatever order they load in) */
+.companyDetailHeaderInfo .companyHeaderLink {
+  font-size: 0.8125rem;
+}
+
+.companyDetailHeaderInfo .companyHeaderLink svg {
+  height: 0.7rem;
+  padding-left: 0.375rem;
+}
+
 /* ===== DOWNLOAD CENTRE ===== */
 .downloadTableWrapper {
   overflow-x: auto;
