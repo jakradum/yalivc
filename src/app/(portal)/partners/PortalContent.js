@@ -1427,7 +1427,7 @@ function PortalContentInner({
           {activeSection === 'download-centre' && (
             <section className={styles.contentSection}>
               <div className={styles.sectionHeader}>
-                <h1 className={styles.sectionPageTitle}>Download Center</h1>
+                <h1 className={styles.sectionPageTitle}>Downloads</h1>
               </div>
               {allReports && allReports.filter(r => r.pdfUrl && r.quarter && r.fiscalYear).length > 0 ? (
                 <div className={styles.downloadTableWrapper}>
