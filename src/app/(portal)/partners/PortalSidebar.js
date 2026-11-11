@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './partners.module.css';
 import ExitedTag from '../../components/exited-tag';
+import { logoSrc, logoBox } from '@/lib/logo-image';
 
 // Report sections in reading order (also drives prev/next in PortalContent).
 // `group: 'resources'` items sit under their own label below the contents.
@@ -32,10 +33,6 @@ function quarterMonths(quarter, fiscalYear) {
 }
 
 // Small square-ish rendition of a Sanity logo URL; other URLs pass through.
-function sidebarLogo(url) {
-  if (!url) return null;
-  return url.startsWith('https://cdn.sanity.io/') && !url.includes('?') ? `${url}?w=64&fm=png` : url;
-}
 
 function QuarterSwitcher({ report, allReports, quarterHref }) {
   const [open, setOpen] = useState(false);
@@ -134,11 +131,11 @@ export default function PortalSidebar({
                   href={`/partners/company/${company.slug}${reportParam}`}
                   className={`${styles.sbCompany} ${currentCompanySlug === company.slug ? styles.sbCompanyActive : ''}`}
                 >
-                  {company.logo ? (
-                    <img className={styles.sbLogo} src={sidebarLogo(company.logo)} alt="" aria-hidden="true" />
-                  ) : (
-                    <span className={styles.sbLogo} aria-hidden="true" />
-                  )}
+                  <span className={styles.sbLogoSlot} aria-hidden="true">
+                    {company.logo && (
+                      <img className={styles.sbLogo} src={logoSrc(company.logo, 64)} style={logoBox(company.logo, 16, { maxW: 24, maxH: 19 })} alt="" />
+                    )}
+                  </span>
                   <span className={styles.sbLabel}>{company.name}</span>
                   <ExitedTag exited={company.isExited === true} size="sm" />
                 </a>

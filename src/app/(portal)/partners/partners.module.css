@@ -1105,6 +1105,16 @@
   gap: 12px;
 }
 
+.tableLogoSlot {
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Size set inline by logoBox() so every mark has the same visual area */
 .tableLogo {
   width: 24px;
   height: 24px;
@@ -1112,6 +1122,15 @@
   object-fit: contain;
   filter: brightness(0);
   opacity: 0.79;
+}
+
+.sbLogoSlot {
+  width: 24px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .sbLogo {
@@ -2981,14 +3000,22 @@
   margin-bottom: 0.75rem;
 }
 
-.companyTileLogo {
+.companyTileLogoBox {
   width: 48px;
   height: 48px;
-  object-fit: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   border: 1px solid #363636;
-  padding: 4px;
   flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Size set inline by logoBox() so every mark has the same visual area */
+.companyTileLogo {
+  object-fit: contain;
+  display: block;
 }
 
 .companyTileLogoPlaceholder {

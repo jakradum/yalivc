@@ -5,6 +5,7 @@
 import {
   attr, raw, eq, inList, lower, unlessTrue, coalesce, defined, order, arr, mapProj, count, needParam, isObj,
 } from './groq.js';
+import { croppedLogoUrl } from '../logo-image.js';
 import { Ctx } from './context.js';
 
 const PORTAL = 'partners';
@@ -173,7 +174,7 @@ const companyListHead = (ctx, c) => ({
   detail: raw(c.detail),
   aboutCompany: raw(c.aboutCompany),
   isRevenueMaking: raw(c.isRevenueMaking),
-  logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
+  logo: croppedLogoUrl(ctx.assetUrl(attr(c, 'logo', 'asset')), raw(c.logoCrop)),
   link: raw(c.link),
   sector: attr(ctx.deref(c.category), 'name'),
   sectorSlug: attr(ctx.deref(c.category), 'slug', 'current'),
@@ -224,7 +225,7 @@ export async function getLPInvestmentByCompanySlug(companySlug) {
     detail: raw(c.detail),
     aboutCompany: raw(c.aboutCompany),
     isRevenueMaking: raw(c.isRevenueMaking),
-    logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
+    logo: croppedLogoUrl(ctx.assetUrl(attr(c, 'logo', 'asset')), raw(c.logoCrop)),
     logomarkTypeface: ctx.assetUrl(attr(c, 'logomarkTypeface', 'asset')),
     link: raw(c.link),
     sector: attr(ctx.deref(c.category), 'name'),
@@ -250,7 +251,7 @@ export async function getLPQuarterUpdates(quarter, fiscalYear) {
       _id: raw(c._id),
       name: raw(c.name),
       slug: slugOf(c),
-      logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
+      logo: croppedLogoUrl(ctx.assetUrl(attr(c, 'logo', 'asset')), raw(c.logoCrop)),
       sector: attr(ctx.deref(c.category), 'name'),
       ...pick(c, ['investmentDate', 'fundingRound', 'yaliInvestmentAmount', 'yaliOwnershipPercent', 'coInvestors']),
       quarterUpdate: isObj(u) ? QU_QUARTER(u) : null,
@@ -268,7 +269,7 @@ export async function getAllLPInvestmentSlugs() {
   return companies.map((c) => ({
     slug: slugOf(c),
     name: raw(c.name),
-    logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
+    logo: croppedLogoUrl(ctx.assetUrl(attr(c, 'logo', 'asset')), raw(c.logoCrop)),
     investmentStatus: raw(c.investmentStatus),
     exitDate: raw(c.exitDate),
     showExitEarlyInReport: raw(c.showExitEarlyInReport),
@@ -499,7 +500,7 @@ export async function getDataRoomPortfolioCompanies() {
     name: raw(c.name),
     slug: slugOf(c),
     oneLiner: raw(c.oneLiner),
-    logo: ctx.assetUrl(attr(c, 'logo', 'asset')),
+    logo: croppedLogoUrl(ctx.assetUrl(attr(c, 'logo', 'asset')), raw(c.logoCrop)),
     sector: attr(ctx.deref(c.category), 'name'),
     sectorSlug: attr(ctx.deref(c.category), 'slug', 'current'),
     investmentStatus: raw(c.investmentStatus),

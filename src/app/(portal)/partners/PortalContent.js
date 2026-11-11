@@ -15,6 +15,7 @@ import Footnote from './components/Footnote';
 import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
 import { startNavigationLoader } from './NavigationLoader';
+import { logoSrc, logoBox } from '@/lib/logo-image';
 import { ArrowLinkOpen } from '../../components/icons/small-icons/arrowLinkOpen';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
 import { trackEvent } from '@/lib/analytics';
@@ -825,16 +826,17 @@ function PortalContentInner({
                           <td>{idx + 1}</td>
                           <td className={styles.companyNameCell}>
                             <span className={styles.tableCompany}>
-                              {investment.logo ? (
-                                <img
-                                  className={styles.tableLogo}
-                                  src={investment.logo.startsWith('https://cdn.sanity.io/') && !investment.logo.includes('?') ? `${investment.logo}?w=96&fm=png` : investment.logo}
-                                  alt=""
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <span className={styles.tableLogo} aria-hidden="true" />
-                              )}
+                              {/* Logos at an even visual size: cropped to their edges, sized by area (src/lib/logo-image.js) */}
+                              <span className={styles.tableLogoSlot} aria-hidden="true">
+                                {investment.logo && (
+                                  <img
+                                    className={styles.tableLogo}
+                                    src={logoSrc(investment.logo, 96)}
+                                    style={logoBox(investment.logo, 24, { maxW: 36, maxH: 28 })}
+                                    alt=""
+                                  />
+                                )}
+                              </span>
                               <span>{investment.entityName || investment.name || '-'}</span>
                               <ExitedTag exited={investment.isExited === true} size="sm" tone="inherit" />
                             </span>
@@ -1013,13 +1015,21 @@ function PortalContentInner({
                       >
                         <div className={styles.companyTileHeader}>
                           {company.logo ? (
-                            <Image
-                              src={company.logo}
-                              alt={company.entityName || company.name}
-                              width={48}
-                              height={48}
-                              className={styles.companyTileLogo}
-                            />
+                            <span className={styles.companyTileLogoBox}>
+                              {(() => {
+                                const box = logoBox(company.logo, 30, { maxW: 40, maxH: 40 });
+                                return (
+                                  <Image
+                                    src={logoSrc(company.logo, 128)}
+                                    alt={company.entityName || company.name}
+                                    width={box.width}
+                                    height={box.height}
+                                    style={box}
+                                    className={styles.companyTileLogo}
+                                  />
+                                );
+                              })()}
+                            </span>
                           ) : (
                             <div className={styles.companyTileLogoPlaceholder}>
                               {(company.entityName || company.name)?.charAt(0) || '-'}
