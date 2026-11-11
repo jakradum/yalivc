@@ -102,6 +102,8 @@ A React-based quarterly report viewer exists under `src/app/(portal)/partners/co
 
 ## PDF Generation
 
+- **Section title styles in the PDF are deliberate** (Pranav, 11 Nov 2026): ALL CAPS bold for some sections, Title Case or sentence case regular for others, at different sizes. Do not "standardise" them, even if a review flags it.
+
 **ALWAYS preview with `?html=1` in the browser — never generate a direct PDF for review.** The HTML web-to-print preview is the source of truth for layout debugging. Only generate the actual PDF (via Puppeteer) as the final delivery step after the HTML preview looks correct.
 
 ```bash
