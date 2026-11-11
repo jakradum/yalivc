@@ -15,7 +15,6 @@ import Footnote from './components/Footnote';
 import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
 import { startNavigationLoader } from './NavigationLoader';
-import SiteLink from '../../components/SiteLink';
 import { ArrowLinkOpen } from '../../components/icons/small-icons/arrowLinkOpen';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
 import { trackEvent } from '@/lib/analytics';
@@ -1482,14 +1481,30 @@ function PortalContentInner({
 
           {/* Section Navigation */}
           <div className={styles.sectionNavigation}>
-            {/* The main site's link style, no arrows (Pranav, 11 Nov 2026) */}
+            {/* Boxed buttons with a drawn chevron, no typed arrows (Pranav, 11 Nov 2026, option A1) */}
             {prevSection ? (
-              <SiteLink onClick={() => handleMenuClick(prevSection)}>Previous: {sectionLabel(prevSection)}</SiteLink>
+              <button
+                type="button"
+                className={styles.sectionNavBtn}
+                onClick={() => handleMenuClick(prevSection)}
+                aria-label={`Previous: ${sectionLabel(prevSection)}`}
+              >
+                <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M6 1 1 6l5 5" /></svg>
+                <span className={styles.sectionNavLabel}>Previous</span>
+              </button>
             ) : (
               <div></div>
             )}
             {nextSection ? (
-              <SiteLink onClick={() => handleMenuClick(nextSection)}>Next: {sectionLabel(nextSection)}</SiteLink>
+              <button
+                type="button"
+                className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
+                onClick={() => handleMenuClick(nextSection)}
+                aria-label={`Next: ${sectionLabel(nextSection)}`}
+              >
+                <span className={styles.sectionNavLabel}>Next</span>
+                <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="m1 1 5 5-5 5" /></svg>
+              </button>
             ) : (
               <div></div>
             )}
@@ -1555,7 +1570,7 @@ function PortalContentInner({
               <h2 id="rating-title" className={styles.disclaimerTitle}>Thank you for your feedback.</h2>
             ) : (
               <>
-                <h2 id="rating-title" className={styles.disclaimerTitle}>How would you rate your experience of the LP portal?</h2>
+                <h2 id="rating-title" className={styles.disclaimerTitle}>Rate your experience of this portal</h2>
                 <div className={styles.ratingScale} role="radiogroup" aria-label="Rating from 0 to 10">
                   {Array.from({ length: 11 }, (_, n) => (
                     <button

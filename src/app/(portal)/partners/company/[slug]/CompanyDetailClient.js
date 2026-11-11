@@ -908,22 +908,34 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
             {/* Next/Prev Company Navigation */}
             <div className={styles.sectionNavigation}>
-              {/* The main site's link style, no arrows (Pranav, 11 Nov 2026) */}
+              {/* Boxed buttons with a drawn chevron, no typed arrows (Pranav, 11 Nov 2026, option A1) */}
               {prevCompany ? (
-                <SiteLink href={`/partners/company/${prevCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}>
-                  Previous: {prevCompany.name}
-                </SiteLink>
+                <Link
+                  href={`/partners/company/${prevCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
+                  className={styles.sectionNavBtn}
+                >
+                  <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M6 1 1 6l5 5" /></svg>
+                  <span className={styles.sectionNavLabel}>{prevCompany.name}</span>
+                </Link>
               ) : (
                 <div></div>
               )}
               {nextCompany ? (
-                <SiteLink href={`/partners/company/${nextCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}>
-                  Next: {nextCompany.name}
-                </SiteLink>
+                <Link
+                  href={`/partners/company/${nextCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
+                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
+                >
+                  <span className={styles.sectionNavLabel}>{nextCompany.name}</span>
+                  <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="m1 1 5 5-5 5" /></svg>
+                </Link>
               ) : (
-                <SiteLink href={`/partners?section=fund-financials${reportSlug ? `&report=${reportSlug}` : ''}`}>
-                  Next: Fund financials
-                </SiteLink>
+                <Link
+                  href={`/partners?section=fund-financials${reportSlug ? `&report=${reportSlug}` : ''}`}
+                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
+                >
+                  <span className={styles.sectionNavLabel}>Fund financials</span>
+                  <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="m1 1 5 5-5 5" /></svg>
+                </Link>
               )}
             </div>
 

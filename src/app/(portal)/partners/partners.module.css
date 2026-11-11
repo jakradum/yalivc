@@ -1380,18 +1380,36 @@
 }
 
 .sectionNavBtn:hover .sectionNavLabel,
-.sectionNavBtn:hover .sectionNavArrow {
+.sectionNavBtn:hover .sectionNavPointer {
   color: white;
 }
 
-.sectionNavBtnNext {
-  flex-direction: row-reverse;
+/* Drawn chevron (option A1); nudges the way it points on hover */
+.sectionNavPointer {
+  width: 7px;
+  height: 12px;
+  flex-shrink: 0;
+  display: block;
+  color: #830D35;
+  transition: transform 0.25s ease, color 0.2s ease;
 }
 
-.sectionNavArrow {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 1rem;
-  color: #830D35;
+.sectionNavBtn:hover .sectionNavPointer {
+  transform: translateX(-3px);
+}
+
+.sectionNavBtnNext:hover .sectionNavPointer {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionNavPointer {
+    transition: none;
+  }
+
+  .sectionNavBtn:hover .sectionNavPointer {
+    transform: none;
+  }
 }
 
 .sectionNavLabel {

@@ -32,6 +32,7 @@ Build locally (`/partners/api/generate-pdf/<slug>/`, dev server on `LP_DATA_SOUR
 ## Look and feel (agreed with Pranav, 10-11 Nov 2026)
 
 - **Links match the main site:** use `src/app/components/SiteLink.js` (same styles as the main site's `components/button.js`: light uppercase, underline that retracts on hover). Only links that open another site get the ↗ icon. No typed arrows (→ ← ▼) anywhere.
+- **Next / previous buttons stay boxed** (`.sectionNavBtn`, crimson fill on hover) with a drawn thin chevron (`.sectionNavPointer`, option A1). Pranav did not want them turned into text links.
 - **Lines run to the box edges.** `.contentSection` / `.coverNoteSection` define `--box-pad`; a rule, table or header inside the box cancels it with `margin: 0 calc(-1 * var(--box-pad))` and pads its content back in. Never two lines stacked where one will do.
 - **Monogram only** (`src/app/components/icons/lightMonogram.js`, `color` prop for crimson). Top bar: monogram centred on the homepage's dashed blueprint grid (option D), report quarter at left, account at right; phones keep menu, monogram, initial and quarter.
 - Code that changes page with `router.push` must call `startNavigationLoader()` (NavigationLoader.js) first, or the loader never shows.
