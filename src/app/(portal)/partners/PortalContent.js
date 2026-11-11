@@ -14,6 +14,9 @@ import ExitedTag from '../../components/exited-tag';
 import Footnote from './components/Footnote';
 import PortalSidebar, { MENU_ITEMS } from './PortalSidebar';
 import PortalTour, { replayPortalTour } from './PortalTour';
+import { startNavigationLoader } from './NavigationLoader';
+import SiteLink from '../../components/SiteLink';
+import { ArrowLinkOpen } from '../../components/icons/small-icons/arrowLinkOpen';
 import { getCompanyQuarterData, getMostRecentPastQuarterData, getMostRecentPastQuarterWithValue, getMostRecentPastQuarterMatching } from '@/lib/quarterly-utils';
 import { trackEvent } from '@/lib/analytics';
 
@@ -160,11 +163,25 @@ function PortalContentInner({
   const [pendingDownload, setPendingDownload] = useState(null);
   const [isLoggingConsent, setIsLoggingConsent] = useState(false);
 
-  // NPS Feedback state
+  // Rating pop-up after a download (NPS, 0 to 10; below 7 asks what to improve)
+  const [ratingOpen, setRatingOpen] = useState(false);
   const [npsScore, setNpsScore] = useState(null);
   const [feedbackDetails, setFeedbackDetails] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  // Asked once per report per browser, whether the LP rates or skips
+  const ratingKey = `portal-rated-${reportSlug || `${quarter}-${fiscalYear}`}`;
+  const askForRating = () => {
+    try { if (localStorage.getItem(ratingKey)) return; } catch {}
+    setNpsScore(null);
+    setFeedbackDetails('');
+    setFeedbackSubmitted(false);
+    setRatingOpen(true);
+  };
+  const closeRating = () => {
+    try { localStorage.setItem(ratingKey, '1'); } catch {}
+    setRatingOpen(false);
+  };
 
   // Handle download click - show disclaimer first
   const handleDownloadClick = (downloadUrl, downloadType, reportQuarter, fileName) => {
@@ -172,49 +189,38 @@ function PortalContentInner({
     setDisclaimerOpen(true);
   };
 
-  // Handle disclaimer agreement
+  // Handle disclaimer agreement: record the consent, open the file in a new tab,
+  // then ask the LP to rate the portal.
   const handleDisclaimerAgree = async () => {
     if (!pendingDownload) return;
+    const { url, type, quarter: fileQuarter, fileName } = pendingDownload;
+
+    // Open the tab now, while this still counts as the reader's click: browsers refuse
+    // (or open in the same tab) a new tab started after waiting on the network.
+    const tab = window.open('', '_blank');
 
     setIsLoggingConsent(true);
     try {
-      // Log consent to Sanity
       await fetch('/api/portal-download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          downloadType: pendingDownload.type,
-          reportQuarter: pendingDownload.quarter,
-          fileName: pendingDownload.fileName,
-        }),
+        body: JSON.stringify({ downloadType: type, reportQuarter: fileQuarter, fileName }),
       });
-
-      // Trigger download using anchor element (works on mobile)
-      triggerDownload(pendingDownload.url, pendingDownload.fileName);
     } catch (error) {
+      // Still open the file if logging fails
       console.error('Failed to log download consent:', error);
-      // Still allow download even if logging fails
-      triggerDownload(pendingDownload.url, pendingDownload.fileName);
     } finally {
+      if (tab) {
+        tab.opener = null;
+        tab.location.href = url;
+      } else {
+        window.open(url, '_blank', 'noopener');
+      }
       setIsLoggingConsent(false);
       setDisclaimerOpen(false);
       setPendingDownload(null);
+      askForRating();
     }
-  };
-
-  // Trigger file download (mobile-friendly)
-  const triggerDownload = (url, fileName) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    // Set download attribute for proper filename (may not work for cross-origin)
-    if (fileName) {
-      link.download = fileName.endsWith('.pdf') ? fileName : `${fileName}.pdf`;
-    }
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   // Handle feedback submission
@@ -229,10 +235,12 @@ function PortalContentInner({
         body: JSON.stringify({
           npsScore,
           reportQuarter: `${quarter} ${fiscalYear}`,
-          feedbackDetails: npsScore < 8 ? feedbackDetails : null,
+          feedbackDetails: npsScore < 7 ? feedbackDetails.trim() || null : null,
         }),
       });
       setFeedbackSubmitted(true);
+      try { localStorage.setItem(ratingKey, '1'); } catch {}
+      setTimeout(() => setRatingOpen(false), 1800);
     } catch (error) {
       console.error('Failed to submit feedback:', error);
     } finally {
@@ -398,6 +406,7 @@ function PortalContentInner({
   const currentIndex = allSections.indexOf(activeSection);
   const prevSection = currentIndex > 0 ? allSections[currentIndex - 1] : null;
   const nextSection = currentIndex < allSections.length - 1 ? allSections[currentIndex + 1] : null;
+  const sectionLabel = (id) => MENU_ITEMS.find((item) => item.id === id)?.label || id;
 
   // Format helpers
   const formatCurrency = (value, decimals = 0) => {
@@ -448,10 +457,12 @@ function PortalContentInner({
               <Openicon />
             )}
           </button>
-          <Link href="/partners" className={styles.logoLink}>
-            <LightMonogram />
-          </Link>
+          <span className={styles.headerReport}>{quarter} {fiscalYear}</span>
         </div>
+        {/* Top bar option D (Pranav, 11 Nov 2026): monogram centred on the homepage's blueprint grid */}
+        <Link href="/partners" className={styles.logoLink} aria-label="Yali Capital LP portal home">
+          <LightMonogram />
+        </Link>
         <div className={styles.headerRight}>
           {report?.visibility === 'internal' && (
             <span className={styles.internalPreviewBadge}>internal preview</span>
@@ -476,7 +487,6 @@ function PortalContentInner({
               onClick={() => setFyDropdownOpen(!fyDropdownOpen)}
             >
               <span>{quarter} {fiscalYear}</span>
-              <span className={styles.fyDropdownArrow}>▼</span>
             </button>
             {fyDropdownOpen && allReports && allReports.length > 0 && (
               <div className={styles.fyDropdownMenu}>
@@ -502,7 +512,7 @@ function PortalContentInner({
           <span>
             You are viewing an older report ({quarter} {fiscalYear}).{' '}
             <a href={`/partners?section=${activeSection}`} className={styles.olderReportBannerLink}>
-              Switch to the latest →
+              Switch to the latest
             </a>
           </span>
           <button
@@ -597,13 +607,17 @@ function PortalContentInner({
                 };
                 const hasContent = report?.coverNoteIntro?.length || sections.length;
                 return (
-                  <div className={styles.coverNoteColumn}>
-                    {/* Masthead (Pranav, 11 Nov 2026): monogram and the quarter's name, nothing else */}
-                    <header className={styles.coverMasthead}>
+                  <>
+                  {/* Masthead (Pranav, 11 Nov 2026): monogram and the quarter's name, nothing else.
+                      Outside the narrow column so its rule runs to the edges of the box. */}
+                  <header className={styles.coverMasthead}>
+                    <div className={styles.coverMastheadInner}>
                       <LightMonogram color="#830d35" />
                       <h1 className={styles.coverMastheadTitle}>Limited Partners’ Report, {quarter} {fiscalYear}</h1>
                       {quarterEnd && <p className={styles.coverMastheadMeta}>Quarter ended {quarterEnd}</p>}
-                    </header>
+                    </div>
+                  </header>
+                  <div className={styles.coverNoteColumn}>
                     {report?.coverNoteGreeting && (
                       <p className={styles.letterGreeting}>{report.coverNoteGreeting}</p>
                     )}
@@ -627,7 +641,11 @@ function PortalContentInner({
                       <div className={styles.coverNoteSignoff}>
                         <p className={styles.signoffLine}>With regards,</p>
                         <div className={styles.signatureCard}>
-                          {signatory?.photo && (
+                          {/* The team signs with the monogram, drawn as a vector (the uploaded
+                              image is low resolution and blurs at the edges) */}
+                          {/^yali team$/i.test(signatory.name.trim()) ? (
+                            <span className={styles.signatureMark}><LightMonogram color="#830d35" /></span>
+                          ) : signatory?.photo && (
                             <Image
                               src={signatory.photo}
                               alt=""
@@ -644,6 +662,7 @@ function PortalContentInner({
                       </div>
                     )}
                   </div>
+                  </>
                 );
               })()}
             </section>
@@ -798,7 +817,10 @@ function PortalContentInner({
                         <tr
                           key={investment._id || idx}
                           className={styles.clickableRow}
-                          onClick={() => router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`)}
+                          onClick={() => {
+                            startNavigationLoader();
+                            router.push(`/partners/company/${investment.slug}${reportSlug ? `?report=${reportSlug}` : ''}`);
+                          }}
                           style={{ cursor: 'pointer' }}
                         >
                           <td>{idx + 1}</td>
@@ -1232,7 +1254,7 @@ function PortalContentInner({
                             </span>
                           )}
                         </div>
-                        <span className={styles.mediaCoverageArrow}>→</span>
+                        <span className={styles.mediaCoverageArrow}><ArrowLinkOpen /></span>
                       </a>
                     ))}
                   </div>
@@ -1337,7 +1359,7 @@ function PortalContentInner({
                                 </span>
                               )}
                             </div>
-                            <span className={styles.mediaCoverageArrow}>→</span>
+                            <span className={styles.mediaCoverageArrow}><ArrowLinkOpen /></span>
                           </a>
                         ))}
                       </div>
@@ -1460,25 +1482,14 @@ function PortalContentInner({
 
           {/* Section Navigation */}
           <div className={styles.sectionNavigation}>
+            {/* The main site's link style, no arrows (Pranav, 11 Nov 2026) */}
             {prevSection ? (
-              <button
-                className={styles.sectionNavBtn}
-                onClick={() => handleMenuClick(prevSection)}
-              >
-                <span className={styles.sectionNavArrow}>←</span>
-                <span className={styles.sectionNavLabel}>Previous</span>
-              </button>
+              <SiteLink onClick={() => handleMenuClick(prevSection)}>Previous: {sectionLabel(prevSection)}</SiteLink>
             ) : (
               <div></div>
             )}
             {nextSection ? (
-              <button
-                className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
-                onClick={() => handleMenuClick(nextSection)}
-              >
-                <span className={styles.sectionNavLabel}>Next</span>
-                <span className={styles.sectionNavArrow}>→</span>
-              </button>
+              <SiteLink onClick={() => handleMenuClick(nextSection)}>Next: {sectionLabel(nextSection)}</SiteLink>
             ) : (
               <div></div>
             )}
@@ -1532,6 +1543,64 @@ function PortalContentInner({
                 {isLoggingConsent ? 'Processing...' : 'I Agree & Download'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rating pop-up after a download */}
+      {ratingOpen && (
+        <div className={styles.disclaimerOverlay} role="dialog" aria-modal="true" aria-labelledby="rating-title">
+          <div className={styles.disclaimerDialog}>
+            {feedbackSubmitted ? (
+              <h2 id="rating-title" className={styles.disclaimerTitle}>Thank you for your feedback.</h2>
+            ) : (
+              <>
+                <h2 id="rating-title" className={styles.disclaimerTitle}>How would you rate your experience of the LP portal?</h2>
+                <div className={styles.ratingScale} role="radiogroup" aria-label="Rating from 0 to 10">
+                  {Array.from({ length: 11 }, (_, n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      role="radio"
+                      aria-checked={npsScore === n}
+                      className={`${styles.ratingOption} ${npsScore === n ? styles.ratingOptionActive : ''}`}
+                      onClick={() => setNpsScore(n)}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
+                <div className={styles.ratingEnds} aria-hidden="true">
+                  <span>Poor</span>
+                  <span>Excellent</span>
+                </div>
+                {npsScore !== null && npsScore < 7 && (
+                  <div className={styles.ratingComment}>
+                    <label htmlFor="rating-comment">What could we do better?</label>
+                    <textarea
+                      id="rating-comment"
+                      rows={4}
+                      maxLength={2000}
+                      value={feedbackDetails}
+                      onChange={(e) => setFeedbackDetails(e.target.value)}
+                    />
+                  </div>
+                )}
+                <div className={styles.disclaimerActions}>
+                  <button type="button" onClick={closeRating} className={styles.disclaimerCancelBtn}>
+                    Not now
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleFeedbackSubmit}
+                    disabled={npsScore === null || isSubmittingFeedback}
+                    className={styles.disclaimerAgreeBtn}
+                  >
+                    {isSubmittingFeedback ? 'Sending...' : 'Submit'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

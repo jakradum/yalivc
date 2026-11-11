@@ -146,7 +146,7 @@ export default async function CategoryPage({ params }) {
           {sidebar}
           <div className={styles.drInnerMain}>
             <div className={styles.breadcrumb}>
-              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>Data Room</Link>
               <span className={styles.breadcrumbSep}>/</span>
               <span className={styles.breadcrumbCurrent}>Fund Performance</span>
             </div>
@@ -234,7 +234,7 @@ export default async function CategoryPage({ params }) {
           {sidebar}
           <div className={styles.drInnerMain}>
             <div className={styles.breadcrumb}>
-              <Link href="/dataroom" className={styles.breadcrumbBack}>← Categories</Link>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>Categories</Link>
               <span className={styles.breadcrumbSep}>/</span>
               <span className={styles.breadcrumbCurrent}>Portfolio</span>
             </div>
@@ -324,7 +324,7 @@ export default async function CategoryPage({ params }) {
           {sidebar}
           <div className={styles.drInnerMain}>
             <div className={styles.breadcrumb}>
-              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>Data Room</Link>
               <span className={styles.breadcrumbSep}>/</span>
               <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
             </div>
@@ -356,7 +356,7 @@ export default async function CategoryPage({ params }) {
           {sidebar}
           <div className={styles.drInnerMain}>
             <div className={styles.breadcrumb}>
-              <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+              <Link href="/dataroom" className={styles.breadcrumbBack}>Data Room</Link>
               <span className={styles.breadcrumbSep}>/</span>
               <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
             </div>
@@ -389,7 +389,7 @@ export default async function CategoryPage({ params }) {
         {sidebar}
         <div className={styles.drInnerMain}>
           <div className={styles.breadcrumb}>
-            <Link href="/dataroom" className={styles.breadcrumbBack}>← Data Room</Link>
+            <Link href="/dataroom" className={styles.breadcrumbBack}>Data Room</Link>
             <span className={styles.breadcrumbSep}>/</span>
             <span className={styles.breadcrumbCurrent}>{categoryTitle}</span>
           </div>

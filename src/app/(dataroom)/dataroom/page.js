@@ -13,6 +13,7 @@ import DrSidebar from './DrSidebar';
 import DrTableRow from './DrTableRow';
 import DrCollapsibleGroup from './DrCollapsibleGroup';
 import styles from './dataroom.module.css';
+import SiteLink from '../../components/SiteLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -142,7 +143,7 @@ export default async function DataroomPage() {
                   <td className={styles.drTd}>Investment team</td>
                   <td className={styles.drTd} />
                   <td className={styles.drTdActions}>
-                    <a href="/dataroom/team" className={styles.drAction}>View →</a>
+                    <SiteLink href="/dataroom/team" inline className={styles.drAction}>View</SiteLink>
                   </td>
                 </DrTableRow>
 
@@ -154,7 +155,7 @@ export default async function DataroomPage() {
                   <td className={styles.drTd}>Track record (prior to Yali)</td>
                   <td className={styles.drTd} />
                   <td className={styles.drTdActions}>
-                    <a href="/dataroom/track-record" className={styles.drAction}>View →</a>
+                    <SiteLink href="/dataroom/track-record" inline className={styles.drAction}>View</SiteLink>
                   </td>
                 </DrTableRow>
 

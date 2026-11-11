@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './dataroom.module.css';
 import TrackRecordTable from './TrackRecordTable';
+import SiteLink from '../../components/SiteLink';
 
 export default function TrackRecordRow({ records }) {
   const [expanded, setExpanded] = useState(false);
@@ -24,7 +25,7 @@ export default function TrackRecordRow({ records }) {
         </td>
         <td className={styles.drTd} />
         <td className={styles.drTdActions}>
-          <a href="/dataroom/track-record" className={styles.drAction}>View →</a>
+          <SiteLink href="/dataroom/track-record" inline className={styles.drAction}>View</SiteLink>
         </td>
       </tr>
       {expanded && (

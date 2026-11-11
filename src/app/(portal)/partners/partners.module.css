@@ -208,8 +208,9 @@
 .portalHeader {
   background-color: #830D35;
   padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
+  /* left controls | centred monogram | right controls */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   position: fixed;
   top: 0;
@@ -226,6 +227,46 @@
   transform: translateY(-100%);
 }
 
+/* The homepage's dashed blueprint grid behind the monogram, fading out towards the controls */
+.portalHeader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M16 0H0V16' fill='none' stroke='%23ffffff' stroke-opacity='.3' stroke-width='1' stroke-dasharray='2 2'/%3E%3C/svg%3E");
+  -webkit-mask-image: radial-gradient(ellipse 30% 160% at 50% 50%, #000 25%, transparent 80%);
+  mask-image: radial-gradient(ellipse 30% 160% at 50% 50%, #000 25%, transparent 80%);
+  pointer-events: none;
+}
+
+.portalHeader > * {
+  position: relative;
+}
+
+/* The report being read, at the left of the top bar (the main site's light uppercase) */
+.headerReport {
+  font-family: var(--font-inter);
+  font-weight: 300;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  /* Phones: menu, monogram, the LP's initial and the quarter switcher only */
+  .headerReport,
+  .internalPreviewBadge,
+  .loggedInLabel,
+  .loggedInEmail {
+    display: none;
+  }
+
+  .loggedInAs {
+    padding: 3px;
+  }
+}
+
 .headerLeft {
   display: flex;
   align-items: center;
@@ -235,6 +276,7 @@
 .logoLink {
   display: flex;
   align-items: center;
+  justify-self: center;
 }
 
 .logoLink svg {
@@ -245,7 +287,9 @@
 .headerRight {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 1rem;
+  min-width: 0;
 }
 
 /* "Logged in as <email>" at the right of the top bar (outlined chip with initial; square corners per the Yali system) */
@@ -1162,11 +1206,6 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-.fyDropdownArrow {
-  font-size: 0.5rem;
-  opacity: 0.7;
-}
-
 .fyDropdownMenu {
   position: absolute;
   top: 100%;
@@ -1390,9 +1429,10 @@
 
 /* Cover Note Section */
 .coverNoteSection {
+  --box-pad: 3rem; /* lets a rule inside run to the box edges: margin calc(-1 * var(--box-pad)) */
   background-color: white;
   border: 1px solid #363636;
-  padding: 3rem;
+  padding: var(--box-pad);
   max-width: 900px;
 }
 
@@ -1402,11 +1442,17 @@
   margin: 0 auto;
 }
 
-/* Cover note masthead: monogram, report name, quarter end; a rule before the letter */
+/* Cover note masthead: monogram, report name, quarter end; a rule before the letter.
+   The rule runs to the edges of the box; the content lines up with the letter column. */
 .coverMasthead {
-  margin: 0 0 2.5rem;
-  padding-bottom: 1.75rem;
+  margin: 0 calc(-1 * var(--box-pad)) 2.5rem;
+  padding: 0 var(--box-pad) 1.75rem;
   border-bottom: 1px solid #363636;
+}
+
+.coverMastheadInner {
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .coverMasthead svg {
@@ -1564,6 +1610,23 @@
   flex-shrink: 0;
 }
 
+.signatureMark {
+  width: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #efefef;
+  border-right: 1px solid #363636;
+  flex-shrink: 0;
+}
+
+.signatureMark svg {
+  height: 76px;
+  width: auto;
+  display: block;
+}
+
 .signatureText {
   padding: 1rem 1.375rem;
   display: flex;
@@ -1589,9 +1652,10 @@
 
 /* ===== CONTENT SECTIONS ===== */
 .contentSection {
+  --box-pad: 3rem;
   background-color: white;
   border: 1px solid #363636;
-  padding: 3rem;
+  padding: var(--box-pad);
   max-width: 900px;
 }
 
@@ -1879,8 +1943,20 @@
 
 /* Table View */
 .fundTable {
-  width: 100%;
+  /* Runs to the edges of the section box, so every row line does too */
+  width: calc(100% + 2 * var(--box-pad));
+  margin: 0 calc(-1 * var(--box-pad));
   border-collapse: collapse;
+}
+
+.fundTable th:first-child,
+.fundTable td:first-child {
+  padding-left: var(--box-pad);
+}
+
+.fundTable th:last-child,
+.fundTable td:last-child {
+  padding-right: var(--box-pad);
 }
 
 .fundTableHeader {
@@ -2042,6 +2118,19 @@
 .portfolioTableWrapper {
   overflow-x: auto;
   margin-top: 1.5rem;
+  /* Runs to the edges of the section box, so the header band and row lines do too */
+  margin-left: calc(-1 * var(--box-pad));
+  margin-right: calc(-1 * var(--box-pad));
+}
+
+.portfolioTable th:first-child,
+.portfolioTable td:first-child {
+  padding-left: var(--box-pad);
+}
+
+.portfolioTable th:last-child,
+.portfolioTable td:last-child {
+  padding-right: var(--box-pad);
 }
 
 .portfolioTable {
@@ -2246,7 +2335,7 @@
   }
 
   .coverNoteSection {
-    padding: 2rem;
+    --box-pad: 2rem;
   }
 }
 
@@ -2266,7 +2355,7 @@
 
   .coverNoteSection,
   .contentSection {
-    padding: 1.5rem;
+    --box-pad: 1.5rem;
   }
 
   .sectionHeader,
@@ -2794,18 +2883,8 @@
 
 /* Company Tiles Grid */
 .companyTilesSection {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  position: relative;
-}
-
-.companyTilesSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -3rem;
-  right: -3rem;
-  border-top: 1px solid #363636;
+  /* sits right under the section header, whose rule is the only line here */
+  margin-top: 2rem;
 }
 
 .companyTilesTitle {
@@ -2922,7 +3001,9 @@
 .companyTileMetrics {
   display: flex;
   gap: 1.5rem;
-  padding-top: 0.75rem;
+  /* the rule runs to the tile's edges (tile padding is 1.25rem) */
+  margin: 0 -1.25rem;
+  padding: 0.75rem 1.25rem 0;
   border-top: 1px solid #363636;
 }
 
@@ -2985,8 +3066,9 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
+  /* the rule runs to the edges of the section box */
+  margin: 0 calc(-1 * var(--box-pad)) 2rem;
+  padding: 0 var(--box-pad) 1.5rem;
   border-bottom: 2px solid #830D35;
 }
 
@@ -3040,9 +3122,18 @@
 
 /* Investment Details Table */
 .investmentDetailsTable {
-  width: 100%;
+  /* Runs to the edges of the section box, so every row line does too */
+  width: calc(100% + 2 * var(--box-pad));
+  margin: 0 calc(-1 * var(--box-pad)) 2rem;
   border-collapse: collapse;
-  margin-bottom: 2rem;
+}
+
+.investmentDetailsTable td:first-child {
+  padding-left: var(--box-pad);
+}
+
+.investmentDetailsTable td:last-child {
+  padding-right: var(--box-pad);
 }
 
 .investmentDetailsTable sup {
@@ -3492,24 +3583,9 @@
 
 /* Back Link */
 .backLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #830D35;
-  text-decoration: none;
+  /* type and colour come from SiteLink (the main site's link style) */
+  width: fit-content;
   margin-bottom: 1.5rem;
-  transition: color 0.2s ease;
-}
-
-.backLink:hover {
-  color: #5a0925;
-}
-
-.backLinkArrow {
-  font-size: 1rem;
 }
 
 /* Responsive */
@@ -3637,25 +3713,28 @@
 
 /* ===== COMPANY HEADER LINK ===== */
 .companyHeaderLink {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.75rem;
-  color: #830D35;
-  text-decoration: none;
-  display: block;
-  margin-top: 0.375rem;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s ease;
-}
-
-.companyHeaderLink:hover {
-  opacity: 0.7;
-  text-decoration: underline;
+  /* type and colour come from SiteLink (the main site's link style) */
+  width: fit-content;
+  margin-top: 0.5rem;
 }
 
 /* ===== DOWNLOAD CENTRE ===== */
 .downloadTableWrapper {
   overflow-x: auto;
   margin-top: 1.5rem;
+  /* Runs to the edges of the section box, so every row line does too */
+  margin-left: calc(-1 * var(--box-pad));
+  margin-right: calc(-1 * var(--box-pad));
+}
+
+.downloadTable th:first-child,
+.downloadTable td:first-child {
+  padding-left: var(--box-pad);
+}
+
+.downloadTable th:last-child,
+.downloadTable td:last-child {
+  padding-right: var(--box-pad);
 }
 
 .downloadTable {
@@ -4050,11 +4129,21 @@
 }
 
 .mediaCoverageArrow {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 1.25rem;
+  /* the main site's open-in-new-tab icon (these cards open the article elsewhere) */
   color: #830D35;
   flex-shrink: 0;
-  transition: color 0.2s ease;
+  display: flex;
+  transition: color 0.2s ease, transform 0.3s ease;
+}
+
+.mediaCoverageArrow svg {
+  height: 0.9rem;
+  width: auto;
+  display: block;
+}
+
+.mediaCoverageArrow svg path {
+  fill: currentColor;
 }
 
 /* ===== PORTAL TOUR ===== */
@@ -4279,6 +4368,80 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+}
+
+/* Rating pop-up after a download: 0 to 10 in one row of square cells */
+.ratingScale {
+  display: grid;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+  border: 1px solid #363636;
+}
+
+.ratingOption {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.75rem 0;
+  background: white;
+  color: #363636;
+  border: 0;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.ratingOption + .ratingOption {
+  border-left: 1px solid #363636;
+}
+
+.ratingOption:hover {
+  background: #efefef;
+}
+
+.ratingOptionActive,
+.ratingOptionActive:hover {
+  background: #830D35;
+  color: white;
+}
+
+.ratingOption:focus-visible {
+  outline: 2px solid #830D35;
+  outline-offset: -4px;
+}
+
+.ratingEnds {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-inter);
+  font-size: 0.8125rem;
+  color: #6b6b6b;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.ratingComment {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ratingComment label {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #363636;
+}
+
+.ratingComment textarea {
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  color: #1a1a1a;
+  border: 1px solid #363636;
+  border-radius: 0;
+  padding: 0.75rem;
+  resize: vertical;
+}
+
+.ratingComment textarea:focus-visible {
+  outline: 2px solid #830D35;
+  outline-offset: 1px;
 }
 
 .disclaimerCancelBtn {

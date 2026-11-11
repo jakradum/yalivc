@@ -6,6 +6,12 @@ import YaliBlueprintLoader from '@/app/components/YaliBlueprintLoader';
 import styles from './partners.module.css';
 
 const MIN_DISPLAY_MS = 600;
+const START_EVENT = 'portal-navigation-start';
+
+// Shows the loader for a page change made in code (router.push) rather than by a link click.
+export function startNavigationLoader() {
+  window.dispatchEvent(new Event(START_EVENT));
+}
 
 export default function NavigationLoader() {
   const pathname = usePathname();
@@ -39,8 +45,17 @@ export default function NavigationLoader() {
       }
     };
 
+    const handleStart = () => {
+      shownAtRef.current = Date.now();
+      setVisible(true);
+    };
+
     document.addEventListener('click', handleClick, true);
-    return () => document.removeEventListener('click', handleClick, true);
+    window.addEventListener(START_EVENT, handleStart);
+    return () => {
+      document.removeEventListener('click', handleClick, true);
+      window.removeEventListener(START_EVENT, handleStart);
+    };
   }, []);
 
   if (!visible) return null;

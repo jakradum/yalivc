@@ -57,3 +57,25 @@
     margin: 2rem 0 0 0;
   }
 }
+/* SiteLink (components/SiteLink.js): the same link drawn as a <button>
+   (on phones it keeps the main site's box from the rule above) */
+.asButton {
+  background: none;
+  cursor: pointer;
+}
+
+@media (min-width: 801px) {
+  .asButton {
+    border: 0;
+    padding: 0;
+  }
+}
+
+/* SiteLink inline: no phone box, for links inside text or table cells */
+@media (max-width: 800px) {
+  .inline {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+}

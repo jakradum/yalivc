@@ -10,6 +10,8 @@ import { Openicon } from '../../../../components/icons/small-icons/Openicon';
 import { CloseIcon } from '../../../../components/icons/small-icons/closeicon';
 import { getQuarterEndDate, getNextQuarterEndDate, getQuartersBefore, sortQuartersDescending, getMostRecentPastQuarterWithValue, isExitLabelledAsOf } from '@/lib/quarterly-utils';
 import PortalSidebar from '../../PortalSidebar';
+import { startNavigationLoader } from '../../NavigationLoader';
+import SiteLink from '../../../../components/SiteLink';
 
 import Footer from '../../../../components/footer';
 import ExitedTag from '../../../../components/exited-tag';
@@ -302,6 +304,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
   // Handle menu click - navigate to main portal with section (preserve report context)
   const handleMenuClick = (id) => {
     const reportParam = reportSlug ? `&report=${reportSlug}` : '';
+    startNavigationLoader();
     router.push(`/partners?section=${id}${reportParam}`);
     if (isMobile) {
       setSidebarOpen(false);
@@ -327,10 +330,12 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
           >
             {sidebarOpen ? <CloseIcon /> : <Openicon />}
           </button>
-          <Link href="/partners" className={styles.logoLink}>
-            <LightMonogram />
-          </Link>
+          <span className={styles.headerReport}>{currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}</span>
         </div>
+        {/* Top bar option D (Pranav, 11 Nov 2026): monogram centred on the homepage's blueprint grid */}
+        <Link href="/partners" className={styles.logoLink} aria-label="Yali Capital LP portal home">
+          <LightMonogram />
+        </Link>
         <div className={styles.headerRight}>
           {isInternalReport && (
             <span className={styles.internalPreviewBadge}>internal preview</span>
@@ -355,7 +360,6 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
               onClick={() => setFyDropdownOpen(!fyDropdownOpen)}
             >
               <span>{currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}</span>
-              <span className={styles.fyDropdownArrow}>▼</span>
             </button>
             {fyDropdownOpen && allReports && allReports.length > 0 && (
               <div className={styles.fyDropdownMenu}>
@@ -381,7 +385,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
           <span>
             You are viewing an older report ({currentReportPeriod?.quarter} {currentReportPeriod?.fiscalYear}).{' '}
             <a href={`/partners/company/${company.slug}`} className={styles.olderReportBannerLink}>
-              Switch to the latest →
+              Switch to the latest
             </a>
           </span>
           <button
@@ -424,10 +428,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
         <main className={styles.mainArea}>
           <section className={`${styles.contentSection} ${styles.companyDetailSection}`}>
             {/* Back Link */}
-            <Link href={`/partners?section=portfolio-company-updates${reportSlug ? `&report=${reportSlug}` : ''}`} className={styles.backLink}>
-              <span className={styles.backLinkArrow}>←</span>
-              Back to Portfolio
-            </Link>
+            <SiteLink href={`/partners?section=portfolio-company-updates${reportSlug ? `&report=${reportSlug}` : ''}`} className={styles.backLink}>
+              Back to portfolio
+            </SiteLink>
 
             {/* Company Header */}
             <div className={styles.companyDetailHeader}>
@@ -447,14 +450,9 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 <h1 className={styles.companyDetailName}>{company.entityName || company.name} <ExitedTag exited={isExitLabelledAsOf(company, quarterEndDate, getNextQuarterEndDate(currentReportPeriod?.quarter, currentReportPeriod?.fiscalYear))} size="md" /></h1>
                 <span className={styles.companyDetailSector}>{company.sector || '-'}</span>
                 {company.link && (
-                  <a
-                    href={company.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.companyHeaderLink}
-                  >
-                    Visit Website →
-                  </a>
+                  <SiteLink href={company.link} external inline className={styles.companyHeaderLink}>
+                    Visit website
+                  </SiteLink>
                 )}
               </div>
             </div>
@@ -910,33 +908,22 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
 
             {/* Next/Prev Company Navigation */}
             <div className={styles.sectionNavigation}>
+              {/* The main site's link style, no arrows (Pranav, 11 Nov 2026) */}
               {prevCompany ? (
-                <Link
-                  href={`/partners/company/${prevCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
-                  className={styles.sectionNavBtn}
-                >
-                  <span className={styles.sectionNavArrow}>←</span>
-                  <span className={styles.sectionNavLabel}>{prevCompany.name}</span>
-                </Link>
+                <SiteLink href={`/partners/company/${prevCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}>
+                  Previous: {prevCompany.name}
+                </SiteLink>
               ) : (
                 <div></div>
               )}
               {nextCompany ? (
-                <Link
-                  href={`/partners/company/${nextCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}
-                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
-                >
-                  <span className={styles.sectionNavLabel}>{nextCompany.name}</span>
-                  <span className={styles.sectionNavArrow}>→</span>
-                </Link>
+                <SiteLink href={`/partners/company/${nextCompany.slug}${reportSlug ? `?report=${reportSlug}` : ''}`}>
+                  Next: {nextCompany.name}
+                </SiteLink>
               ) : (
-                <Link
-                  href={`/partners?section=fund-financials${reportSlug ? `&report=${reportSlug}` : ''}`}
-                  className={`${styles.sectionNavBtn} ${styles.sectionNavBtnNext}`}
-                >
-                  <span className={styles.sectionNavLabel}>Fund Financials</span>
-                  <span className={styles.sectionNavArrow}>→</span>
-                </Link>
+                <SiteLink href={`/partners?section=fund-financials${reportSlug ? `&report=${reportSlug}` : ''}`}>
+                  Next: Fund financials
+                </SiteLink>
               )}
             </div>
 

@@ -142,7 +142,7 @@ export default function ReportCompanyCard({ company, portfolioData }) {
                 rel="noopener noreferrer"
                 style={{ color: '#830D35', textDecoration: 'none' }}
               >
-                Visit website →
+                Visit website
               </a>
             </p>
           )}

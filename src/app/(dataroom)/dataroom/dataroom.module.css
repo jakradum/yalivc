@@ -363,17 +363,8 @@ a.drSidebarSubItem:hover {
 }
 
 .drAction {
-  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: #830d35;
-  text-decoration: none;
-  letter-spacing: 0.04em;
+  /* type and colour come from SiteLink (the main site's link style) */
   margin-left: 16px;
-}
-
-.drAction:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 .drComingSoon {
