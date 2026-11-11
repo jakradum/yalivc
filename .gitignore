@@ -45,3 +45,6 @@ CLAUDE.md
 /src/app/sketch
 exports/
 .preview/
+
+# iCloud / Finder duplicates ("file 2.json")
+* [0-9].*
