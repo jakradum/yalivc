@@ -2227,7 +2227,14 @@
 }
 
 .clickableRow:hover td {
-  color: white !important;
+  color: #efefef !important;
+}
+
+/* On the crimson hover the dark marks flip to #efefef too: the logo (black via
+   brightness(0), then inverted 93.7% = #efefef) and the Exited tag (follows the text) */
+.clickableRow:hover .tableLogo {
+  filter: brightness(0) invert(0.937);
+  opacity: 1;
 }
 
 .portfolioTable td {

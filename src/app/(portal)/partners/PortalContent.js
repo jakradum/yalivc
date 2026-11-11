@@ -836,7 +836,7 @@ function PortalContentInner({
                                 <span className={styles.tableLogo} aria-hidden="true" />
                               )}
                               <span>{investment.entityName || investment.name || '-'}</span>
-                              <ExitedTag exited={investment.isExited === true} size="sm" />
+                              <ExitedTag exited={investment.isExited === true} size="sm" tone="inherit" />
                             </span>
                           </td>
                           <td>{investment.sector || '-'}</td>
