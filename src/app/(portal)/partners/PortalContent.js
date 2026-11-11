@@ -128,6 +128,10 @@ function PortalContentInner({
     const footnote = report?.fundSummaryFootnotes?.find(fn => fn.fieldName === fieldName);
     return footnote ? <sup>{footnote.marker}</sup> : null;
   };
+  // e.g. "30 September 2026", for the cover note masthead
+  const quarterEnd = report?.reportingDate
+    ? new Date(report.reportingDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+    : null;
   const reportingDate = report?.reportingDate
     ? new Date(report.reportingDate).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : 'December 2025';
@@ -594,6 +598,12 @@ function PortalContentInner({
                 const hasContent = report?.coverNoteIntro?.length || sections.length;
                 return (
                   <div className={styles.coverNoteColumn}>
+                    {/* Masthead (Pranav, 11 Nov 2026): monogram and the quarter's name, nothing else */}
+                    <header className={styles.coverMasthead}>
+                      <LightMonogram color="#830d35" />
+                      <h1 className={styles.coverMastheadTitle}>Limited Partners’ Report, {quarter} {fiscalYear}</h1>
+                      {quarterEnd && <p className={styles.coverMastheadMeta}>Quarter ended {quarterEnd}</p>}
+                    </header>
                     {report?.coverNoteGreeting && (
                       <p className={styles.letterGreeting}>{report.coverNoteGreeting}</p>
                     )}

@@ -1402,6 +1402,43 @@
   margin: 0 auto;
 }
 
+/* Cover note masthead: monogram, report name, quarter end; a rule before the letter */
+.coverMasthead {
+  margin: 0 0 2.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid #363636;
+}
+
+.coverMasthead svg {
+  display: block;
+  height: 52px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+.coverMastheadTitle {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #830d35;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.coverMastheadMeta {
+  font-family: var(--font-inter);
+  font-size: 0.95rem;
+  color: #6b6b6b;
+  margin: 0.5rem 0 0;
+}
+
+@media (max-width: 767px) {
+  .coverMastheadTitle {
+    font-size: 1.5rem;
+  }
+}
+
 .letterGreeting {
   font-family: var(--font-inter);
   font-size: 1.5rem;
