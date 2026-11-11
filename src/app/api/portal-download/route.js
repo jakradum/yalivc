@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createDownloadConsent } from '@/lib/lp-data';
+import { markVisit } from '@/lib/visits';
 
 
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
@@ -66,6 +67,7 @@ export async function POST(request) {
       consentedAt: new Date().toISOString(),
       ipAddress,
     });
+    await markVisit(email, { downloaded: true });
 
     return NextResponse.json({ success: true, id: doc._id });
   } catch (error) {

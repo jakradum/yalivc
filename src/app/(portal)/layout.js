@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import './portal-globals.css';
 import NavigationLoader from './partners/NavigationLoader';
+import ActivityTracker from './ActivityTracker';
 
 export const metadata = {
   title: "Limited Partners' Reports | Yali Capital",
@@ -14,6 +15,7 @@ export default function PortalLayout({ children }) {
       <Suspense fallback={null}>
         <NavigationLoader />
       </Suspense>
+      <ActivityTracker />
       {children}
     </>
   );

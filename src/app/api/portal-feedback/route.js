@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createPortalFeedback } from '@/lib/lp-data';
+import { markVisit } from '@/lib/visits';
 
 
 const AUTH_SECRET = process.env.PORTAL_AUTH_SECRET;
@@ -66,6 +67,7 @@ export async function POST(request) {
       feedbackDetails: feedbackDetails || null,
       submittedAt: new Date().toISOString(),
     });
+    await markVisit(email, { rating: score });
 
     return NextResponse.json({ success: true, id: doc._id });
   } catch (error) {

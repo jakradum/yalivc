@@ -36,6 +36,7 @@ Build locally (`/partners/api/generate-pdf/<slug>/`, dev server on `LP_DATA_SOUR
 - **Lines run to the box edges.** `.contentSection` / `.coverNoteSection` define `--box-pad`; a rule, table or header inside the box cancels it with `margin: 0 calc(-1 * var(--box-pad))` and pads its content back in. Never two lines stacked where one will do.
 - **Monogram only** (`src/app/components/icons/lightMonogram.js`, `color` prop for crimson). Top bar: monogram centred on the homepage's dashed blueprint grid (option D), report quarter at left, account at right; phones keep menu, monogram, initial and quarter.
 - Code that changes page with `router.push` must call `startNavigationLoader()` (NavigationLoader.js) first, or the loader never shows.
+- **Usage, in-house (no Google Analytics on the portal):** `ActivityTracker.js` in the portal layout beats `/api/portal-activity/` on load and every 30 s while the LP is active (tab visible, input in the last 5 min); downloads and ratings mark the visit too (`src/lib/visits.js`). One row per visit in Supabase `portal_visits` (`supabase/migrations/0007_portal_visits.sql`); read the `portal_visits_report` view (staff hidden). Holds LP emails: server only.
 - Downloads open in a new tab (the tab is opened on the click, then pointed at the file), then a 0 to 10 rating pop-up asks once per report per browser; below 7 asks for a comment (`/api/portal-feedback`).
 
 ## Quarterly Logic
