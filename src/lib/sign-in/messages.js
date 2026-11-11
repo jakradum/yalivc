@@ -10,13 +10,21 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 export function signInMessage(data) {
   switch (data?.status) {
     case 'wrong':
-      // No resend left: every wrong try now counts towards the 24-hour lock.
-      if (data.attemptsLeft === data.triesLeft) {
-        return `Wrong code. You have ${plural(data.attemptsLeft, 'attempt')} remaining before this email is locked for 24 hours.`;
+      // Last code of the day: say whether running out of tries locks the email or just ends the code.
+      if (data.resend === false && data.lockLeft <= data.triesLeft) {
+        return `Wrong code. You have ${plural(data.lockLeft, 'attempt')} remaining before this email is locked for 24 hours.`;
+      }
+      if (data.resend === false) {
+        return `Wrong code. ${plural(data.triesLeft, 'attempt')} left on this code, and it is your last code for today.`;
       }
       return `Wrong code. Please try again (${plural(data.triesLeft, 'attempt')} left on this code).`;
     case 'dead':
+      if (data.resend === false) {
+        return `That code has had 3 wrong attempts, and you have used both codes for today. Please try again after ${when(data.until)}.`;
+      }
       return 'That code has had 3 wrong attempts and no longer works. Click Resend code to get a new one.';
+    case 'send_failed':
+      return 'We couldn’t send the email just now. Please try again in a minute.';
     case 'expired':
       return 'This code no longer works. Click Resend code to get a new one.';
     case 'limit':

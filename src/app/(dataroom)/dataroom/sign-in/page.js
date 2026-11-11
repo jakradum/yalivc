@@ -27,6 +27,13 @@ export default function DataroomSignInPage() {
 
   const requestCode = async () => {
     const { ok, data } = await post({ action: 'send-code', email });
+    if (!ok && data.status === 'limit') {
+      // Both codes for today already sent: the latest may still work, so show the code box.
+      setResendsLeft(0);
+      setNotice(signInMessage(data));
+      setStep('code');
+      return false;
+    }
     if (!ok) {
       setError(signInMessage(data));
       return false;
@@ -55,6 +62,7 @@ export default function DataroomSignInPage() {
     setLoading(true);
     try {
       const { ok, data } = await post({ action: 'verify-code', code, email });
+      if (data.resend === false) setResendsLeft(0);
       if (ok) {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         window.location.href = isLocalDev ? '/dataroom' : '/';

@@ -1,7 +1,8 @@
 // POST handler behind /api/portal-auth and /api/dataroom-auth.
 //
 // Actions:
-//   send-code    { email }        → { status: 'issued', resendsLeft } | { status: 'limit' | 'locked' | 'busy', until }
+//   send-code    { email }        → { status: 'issued', resendsLeft }
+//                                  | { status: 'limit' | 'locked' | 'busy', until } | { status: 'send_failed' }
 //   verify-code  { email, code }  → { success: true } and the session cookie
 //                                  | { status: 'wrong' | 'dead' | 'expired' | 'locked', ... }
 //   sign-out (data room only)
@@ -14,7 +15,7 @@ import { Resend } from 'resend';
 import { signSessionFor, SESSION_SCOPES } from '@/lib/session';
 import { getDomainPrivilegeForSignIn, getBlockedPortalUser, getActiveUserForSignIn } from '@/lib/lp-data';
 import { isYaliStaff } from '@/lib/internal-user';
-import { issueCode, checkCode, newCode } from './codes.js';
+import { issueCode, checkCode, voidCode, newCode } from './codes.js';
 import { codeEmail, lockoutEmail } from './emails.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,11 +36,18 @@ async function hasAccess(scope, email) {
   return Boolean(await getActiveUserForSignIn(scope, email));
 }
 
+// Returns whether Resend accepted the email.
 async function send(tag, to, { subject, html }) {
-  const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
-    from: 'Yali Partners <noreply@yali.vc>', to, subject, html,
-  });
-  if (error) console.error(`[${tag}] Resend error:`, error.name || 'unknown');
+  try {
+    const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
+      from: 'Yali Partners <noreply@yali.vc>', to, subject, html,
+    });
+    if (!error) return true;
+    console.error(`[${tag}] Resend error:`, error.name || 'unknown');
+  } catch (err) {
+    console.error(`[${tag}] Resend error:`, err?.name || 'unknown');
+  }
+  return false;
 }
 
 export function signInHandler({ scope, place, cookieName, legacyOtpCookie, allowSignOut = false }) {
@@ -47,7 +55,9 @@ export function signInHandler({ scope, place, cookieName, legacyOtpCookie, allow
   const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    // lax, not strict: a link to the portal clicked in an email must arrive signed in.
+    // Every sign-in action is a POST, which lax never sends cross-site.
+    sameSite: 'lax',
     maxAge: SESSION_SCOPES[scope] / 1000,
     path: '/',
   };
@@ -77,8 +87,14 @@ export function signInHandler({ scope, place, cookieName, legacyOtpCookie, allow
         if (result.status !== 'issued') {
           return NextResponse.json({ status: result.status, until: result.until }, { status: 429 });
         }
-        if (allowed) await send(tag, email, codeEmail(place, code));
-        else await pause();
+        if (allowed) {
+          if (!(await send(tag, email, codeEmail(place, code)))) {
+            await voidCode(scope, email, code);
+            return NextResponse.json({ status: 'send_failed' }, { status: 503 });
+          }
+        } else {
+          await pause();
+        }
         return NextResponse.json({ success: true, status: 'issued', resendsLeft: result.resends_left });
       }
 
@@ -102,6 +118,8 @@ export function signInHandler({ scope, place, cookieName, legacyOtpCookie, allow
           status: result.status,
           until: result.until,
           triesLeft: result.tries_left,
+          lockLeft: result.lock_left,
+          resend: result.resend,
           attemptsLeft: result.attempts_left,
         }, { status: result.status === 'locked' ? 429 : 401 });
       }

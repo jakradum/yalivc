@@ -14,7 +14,6 @@
 import { getLpSource } from './lp-source.js';
 import * as supaReads from './lp-data/supabase-reads.js';
 import * as supaWrites from './lp-data/supabase-writes.js';
-import { redemptionEntry } from './lp-data/redemption.js';
 import { makeWrite } from './lp-data/write-owner.js';
 
 export { setDocLoader, resetDocLoader } from './lp-data/loader.js';
@@ -87,20 +86,11 @@ export const getDataRoomFundPerformance = read('getDataRoomFundPerformance', q('
 // ── route lookups (were inline GROQ in the API routes) ──────────────────────
 // scope: 'portal' (LP portal rules) or 'dataroom' (data room rules)
 export const getDomainPrivilegeForSignIn = read('getDomainPrivilegeForSignIn', r('getDomainPrivilegeForSignIn'), supaReads.getDomainPrivilegeForSignIn);
-export const getDomainSharedCode = read('getDomainSharedCode', r('getDomainSharedCode'), supaReads.getDomainSharedCode);
-export const getSharedCodeDomain = read('getSharedCodeDomain', r('getSharedCodeDomain'), supaReads.getSharedCodeDomain);
 export const getBlockedPortalUser = read('getBlockedPortalUser', r('getBlockedPortalUser'), supaReads.getBlockedPortalUser);
 export const getActiveUserForSignIn = read('getActiveUserForSignIn', r('getActiveUserForSignIn'), supaReads.getActiveUserForSignIn);
-export const getActiveUserInviteCode = read('getActiveUserInviteCode', r('getActiveUserInviteCode'), supaReads.getActiveUserInviteCode);
 export const getActiveUserId = read('getActiveUserId', r('getActiveUserId'), supaReads.getActiveUserId);
 
 // ── writes ─────────────────────────────────────────────────────────────────
-// Records one use of a domain's shared code (usedCount + 1, redemptionLog entry).
-export const redeemDomainSharedCode = write('redeemDomainSharedCode', 'domainPrivilege',
-  async (domainPriv, email) => (await sanityRoutes()).redeemDomainSharedCode(domainPriv, email),
-  async (domainPriv, email) => supaWrites.redeemDomainSharedCode(domainPriv, email, redemptionEntry(email)));
-// Removes a user's one-time inviteCode / inviteCodeExpiry after it was used.
-export const clearUserInviteCode = write('clearUserInviteCode', 'portalUser', r('clearUserInviteCode'), supaWrites.clearUserInviteCode);
 // Creates an lpDownloadConsent / lpPortalFeedback document; resolves to the new doc (with _id).
 export const createDownloadConsent = write('createDownloadConsent', 'lpDownloadConsent', r('createDownloadConsent'), supaWrites.createDownloadConsent);
 export const createPortalFeedback = write('createPortalFeedback', 'lpPortalFeedback', r('createPortalFeedback'), supaWrites.createPortalFeedback);

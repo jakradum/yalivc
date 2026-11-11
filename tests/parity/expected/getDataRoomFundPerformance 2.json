@@ -1,0 +1,50 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": {
+   "quarter": "Q2",
+   "fiscalYear": "FY27",
+   "amountDrawnDown": 104,
+   "totalInvested": 84,
+   "fairMarketValue": 124,
+   "amountReturned": 4,
+   "moic": 1.5,
+   "tvpi": 1.4,
+   "dpi": 0.4,
+   "rvpi": 1.3
+  }
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": null
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "throws": "TypeError",
+  "message": "Cannot read properties of null (reading 'replace')"
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": {
+   "quarter": "Q9",
+   "fiscalYear": null,
+   "amountDrawnDown": null,
+   "totalInvested": null,
+   "fairMarketValue": null,
+   "amountReturned": null,
+   "moic": 2,
+   "tvpi": null,
+   "dpi": null,
+   "rvpi": null
+  }
+ }
+]

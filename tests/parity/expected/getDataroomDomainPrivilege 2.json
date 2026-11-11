@@ -1,0 +1,461 @@
+[
+ {
+  "scenario": "main",
+  "input": [
+   "under_score.example"
+  ],
+  "output": {
+   "_id": "dp-9"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "wayne.example"
+  ],
+  "output": {
+   "_id": "dp-8"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ünïcode.example"
+  ],
+  "output": {
+   "_id": "dp-7"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "Mixed-Case.Example"
+  ],
+  "output": {
+   "_id": "dp-6"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "hooli.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "umbrella.example"
+  ],
+  "output": {
+   "_id": "dp-4"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "initech.example"
+  ],
+  "output": {
+   "_id": "dp-3"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "globex.example"
+  ],
+  "output": {
+   "_id": "dp-2"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "cyberdyne.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "stark.example"
+  ],
+  "output": {
+   "_id": "dp-10"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.example"
+  ],
+  "output": {
+   "_id": "dp-1"
+  }
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "UNDER_SCORE.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "WAYNE.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ÜNÏCODE.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "MIXED-CASE.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "HOOLI.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "UMBRELLA.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "INITECH.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "GLOBEX.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "CYBERDYNE.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "STARK.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "ACME-LP.EXAMPLE"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " under_score.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "under_score.example "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   " wayne.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "wayne.example "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "Example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "EXAMPLE.COM "
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com\n"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.com)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "example.co_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "Acme-LP.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "unknown.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "under-score.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "underXscore.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.exampl_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "acme-lp.example,globex.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "(acme-lp.example)"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "mixed-case.example"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "yali.vc"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "%"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "_"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "*"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "("
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   ","
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "é"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "main",
+  "input": [
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "empty",
+  "input": [
+   ""
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "example.com"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "EXAMPLE.COM"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   "example.com,lp2"
+  ],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [
+   ""
+  ],
+  "output": null
+ }
+]

@@ -1,0 +1,159 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": [
+   {
+    "_id": "tr-7",
+    "investeeName": "Investee tr-7",
+    "investmentOrg": "Org tr-7",
+    "year": null,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": "Jane Doe"
+   },
+   {
+    "_id": "tr-2",
+    "investeeName": "Investee tr-2",
+    "investmentOrg": "Org tr-2",
+    "year": 2019,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "exited",
+    "exitYear": 2023,
+    "exitAmountOrValuation": {
+     "currency": "USD",
+     "value": 5000000
+    },
+    "irr": "20%",
+    "investorName": "Jane Doe"
+   },
+   {
+    "_id": "tr-1",
+    "investeeName": "Investee tr-1",
+    "investmentOrg": "Org tr-1",
+    "year": 2015,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": "Jane Doe"
+   },
+   {
+    "_id": "tr-3",
+    "investeeName": "Investee tr-3",
+    "investmentOrg": "Org tr-3",
+    "year": 2019,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": "Zoë Ångel"
+   },
+   {
+    "_id": "tr-8",
+    "investeeName": "Investee tr-8",
+    "investmentOrg": "Org tr-8",
+    "year": 2019,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": "Zoë Ångel"
+   },
+   {
+    "_id": "tr-6",
+    "investeeName": "Investee tr-6",
+    "investmentOrg": "Org tr-6",
+    "year": 2010,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": "alex lower"
+   },
+   {
+    "_id": "tr-4",
+    "investeeName": "Investee tr-4",
+    "investmentOrg": "Org tr-4",
+    "year": 2020,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": null
+   },
+   {
+    "_id": "tr-5",
+    "investeeName": "Investee tr-5",
+    "investmentOrg": "Org tr-5",
+    "year": 2018,
+    "sector": "Fake sector",
+    "amountInvested": {
+     "currency": "USD",
+     "value": 1000000
+    },
+    "status": "active",
+    "exitYear": null,
+    "exitAmountOrValuation": null,
+    "irr": "20%",
+    "investorName": null
+   }
+  ]
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": []
+ }
+]

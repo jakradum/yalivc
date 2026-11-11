@@ -49,21 +49,6 @@ export async function patchDoc(id, change) {
   throw new Error('Document changed while patching; try again');
 }
 
-export async function redeemDomainSharedCode(domainPriv, email, logEntry) {
-  await patchDoc(domainPriv._id, (doc) => ({
-    ...doc,
-    usedCount: (doc.usedCount || 0) + 1,
-    redemptionLog: [...(Array.isArray(doc.redemptionLog) ? doc.redemptionLog : []), logEntry],
-  }));
-}
-
-export async function clearUserInviteCode(userId) {
-  await patchDoc(userId, (doc) => {
-    const { inviteCode, inviteCodeExpiry, ...rest } = doc; // eslint-disable-line no-unused-vars
-    return rest;
-  });
-}
-
 export const createDownloadConsent = (fields) => createDoc('lpDownloadConsent', fields);
 export const createPortalFeedback = (fields) => createDoc('lpPortalFeedback', fields);
 

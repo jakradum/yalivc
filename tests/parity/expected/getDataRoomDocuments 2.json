@@ -1,0 +1,100 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": [
+   {
+    "_id": "drd-10",
+    "title": "Fake doc drd-10",
+    "category": "Pipeline",
+    "description": "Description drd-10",
+    "publishedAt": "2026-01-05",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/99fa775740a72441960a37a4d9bf692b00d0b43b.pdf",
+    "fileName": "Pipeline Update (March).pdf"
+   },
+   {
+    "_id": "drd-2",
+    "title": "Fake doc drd-2",
+    "category": "pipeline",
+    "description": "Description drd-2",
+    "publishedAt": "2026-03-01T09:30:00Z",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/99fa775740a72441960a37a4d9bf692b00d0b43b.pdf",
+    "fileName": "Pipeline Update (March).pdf"
+   },
+   {
+    "_id": "drd-1",
+    "title": "Fake doc drd-1",
+    "category": "pipeline",
+    "description": "Description drd-1",
+    "publishedAt": "2026-01-01",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/40450b6ce214c73d789a595282b770c813463db5.pdf",
+    "fileName": "Pipeline Summary.pdf"
+   },
+   {
+    "_id": "drd-8",
+    "title": "Fake doc drd-8",
+    "category": "pipeline",
+    "description": "Description drd-8",
+    "publishedAt": "2026-01-01",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/1576b18e69cba71e1b939b160ced35666e9c879a.pdf",
+    "fileName": "Präsentation 2026.pdf"
+   },
+   {
+    "_id": "drd-9",
+    "title": "Fake doc drd-9",
+    "category": "ppm-agreements",
+    "description": null,
+    "publishedAt": "2024-06-01",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/9e94392688189a784555a850561c3b821006d76d.pdf",
+    "fileName": "PPM_v2*final.pdf"
+   },
+   {
+    "_id": "drd-5",
+    "title": "Fake doc drd-5",
+    "category": "team",
+    "description": "Description drd-5",
+    "publishedAt": null,
+    "fileUrl": null,
+    "fileName": null
+   },
+   {
+    "_id": "drd-6",
+    "title": "Fake doc drd-6",
+    "category": "team",
+    "description": "Description drd-6",
+    "publishedAt": "2025-12-01",
+    "fileUrl": null,
+    "fileName": null
+   },
+   {
+    "_id": "drd-4",
+    "title": "Fake doc drd-4",
+    "category": null,
+    "description": "Description drd-4",
+    "publishedAt": "2026-02-01",
+    "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/7abe1250f22b2b22b66b05798aa58d222ed8aacd.xlsx",
+    "fileName": "Uncategorised, 100% fake.xlsx"
+   }
+  ]
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "output": []
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": []
+ }
+]

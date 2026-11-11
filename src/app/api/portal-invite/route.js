@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { signSessionFor } from '@/lib/session';
+import { MONOGRAM } from '@/lib/sign-in/emails';
 import { getActiveUserId } from '@/lib/lp-data';
 
 
@@ -133,7 +134,7 @@ export async function POST(request) {
     <div class="header-tag">LP Portal</div>
   </div>
   <div class="hero">
-    <img src="https://yali.vc/yali-logo.png" alt="Yali Capital" style="position: absolute; top: 20px; right: 32px; height: 24px; width: auto; filter: brightness(0) invert(1);" />
+    <img src="${MONOGRAM}" alt="Yali Capital" width="31" height="40" style="display: block; width: 31px; height: 40px; border: 0; margin-bottom: 28px;" />
     <div class="hero-label">Investor Access</div>
     <div class="hero-title">You&#8217;ve been invited to view the <span>LP Portal</span></div>
   </div>
@@ -154,7 +155,7 @@ export async function POST(request) {
     </div>
     <div class="access-note">
       <p>
-        Your session will remain active for <strong>12 weeks</strong> from first sign-in. After that, you can request a one-time code to re-authenticate yourself at any time.
+        Your session will remain active for <strong>30 days</strong> from first sign-in. After that, you can request a one-time code to re-authenticate yourself at any time.
       </p>
     </div>
   </div>
@@ -199,7 +200,7 @@ export async function GET(request) {
   response.cookies.set('portal-session', sessionValue, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'lax', // a link clicked in an email must arrive signed in
     maxAge: COOKIE_MAX_AGE,
     path: '/',
   });

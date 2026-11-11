@@ -601,8 +601,7 @@ export function latestLPQuarterlyReportQuery(includeInternal = false) {
 // Inline lookups in the 7 API routes (verbatim). The names are this answer key's own;
 // the port may name them differently (run-cases.mjs takes --alias ours=theirs).
 // All of them receive an already-normalised value: the routes do
-// `email.toLowerCase().trim()` and `domain = normalizedEmail.split('@')[1]` (check-domain:
-// `searchParams.get('domain')?.toLowerCase().trim()`, and skips the query when empty).
+// `email.toLowerCase().trim()` and `domain = normalizedEmail.split('@')[1]`.
 export const ROUTE_Q = {
   // src/app/api/portal-auth/route.js, action send-code
   portalAuthDomainPrivilege: `*[_type == "domainPrivilege" && domain == $domain && lpPortalAccess == true && isActive == true][0]{
@@ -612,31 +611,15 @@ export const ROUTE_Q = {
   blockedPortalUser: `*[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id }`,
   // portal-auth send-code (non-trusted domain)
   portalAuthUser: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id, name }`,
-  // portal-auth verify-code, path 0 (domain shared code)
-  portalAuthDomainSharedCode: `*[_type == "domainPrivilege" && domain == $domain && lpPortalAccess == true && requireCode == true && isActive == true][0]{
-            _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog
-          }`,
-  // portal-auth verify-code, path B (per-user invite code)
-  portalAuthInviteUser: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{
-            _id, inviteCode, inviteCodeExpiry
-          }`,
   // src/app/api/dataroom-auth/route.js, send-code
   dataroomAuthDomainPrivilege: `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && isActive == true][0]{
           _id, requireCode, inviteCode, codeExpiry, maxUses, usedCount
         }`,
   dataroomAuthUser: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{ _id, name }`,
-  dataroomAuthDomainSharedCode: `*[_type == "domainPrivilege" && domain == $domain && dataroomAccess == true && requireCode == true && isActive == true][0]{
-            _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog
-          }`,
-  dataroomAuthInviteUser: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{
-            _id, inviteCode, inviteCodeExpiry
-          }`,
   // src/app/api/portal-invite/route.js hasPortalAccess(email)
   portalInviteAccess: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (lpPortalAccess == true || (!defined(lpPortalAccess) && isActive == true))][0]{ _id }`,
   // src/app/api/dataroom-invite/route.js hasDataroomAccess(email)
   dataroomInviteAccess: `*[_type == "portalUser" && lower(email) == $email && noAccess != true && (investorDataRoomAccess == true || (dataRoomAccess == true && !defined(investorDataRoomAccess)))][0]{ _id }`,
-  // src/app/api/check-domain/route.js
-  checkDomainShared: `*[_type == "domainPrivilege" && domain == $domain && requireCode == true && isActive == true][0]{ _id }`,
 };
 
 // Writes in the routes (not read cases; listed so the port's write path can be checked by hand / by C2):
@@ -722,19 +705,13 @@ export const FUNCTIONS = {
 
   // ---- inline route lookups (input = the already-normalised value the route passes) ----
   portalAuthDomainPrivilege: { surface: PORTAL, route: true, kind: 'domain', run: (fetch, domain) => fetch(ROUTE_Q.portalAuthDomainPrivilege, { domain }) },
-  portalAuthDomainSharedCode: { surface: PORTAL, route: true, kind: 'domain', run: (fetch, domain) => fetch(ROUTE_Q.portalAuthDomainSharedCode, { domain }) },
   blockedPortalUser: { surface: PORTAL, route: true, kind: 'email', run: (fetch, email) => fetch(ROUTE_Q.blockedPortalUser, { email }) },
   portalAuthUser: { surface: PORTAL, route: true, kind: 'email', run: (fetch, email) => fetch(ROUTE_Q.portalAuthUser, { email }) },
-  portalAuthInviteUser: { surface: PORTAL, route: true, kind: 'email', run: (fetch, email) => fetch(ROUTE_Q.portalAuthInviteUser, { email }) },
   dataroomAuthDomainPrivilege: { surface: DATAROOM, route: true, kind: 'domain', run: (fetch, domain) => fetch(ROUTE_Q.dataroomAuthDomainPrivilege, { domain }) },
-  dataroomAuthDomainSharedCode: { surface: DATAROOM, route: true, kind: 'domain', run: (fetch, domain) => fetch(ROUTE_Q.dataroomAuthDomainSharedCode, { domain }) },
   dataroomAuthUser: { surface: DATAROOM, route: true, kind: 'email', run: (fetch, email) => fetch(ROUTE_Q.dataroomAuthUser, { email }) },
-  dataroomAuthInviteUser: { surface: DATAROOM, route: true, kind: 'email', run: (fetch, email) => fetch(ROUTE_Q.dataroomAuthInviteUser, { email }) },
   // the invite routes wrap the lookup in Boolean(user)
   hasPortalAccess: { surface: PORTAL, route: true, kind: 'email', run: async (fetch, email) => Boolean(await fetch(ROUTE_Q.portalInviteAccess, { email })) },
   hasDataroomAccess: { surface: DATAROOM, route: true, kind: 'email', run: async (fetch, email) => Boolean(await fetch(ROUTE_Q.dataroomInviteAccess, { email })) },
-  // check-domain returns { shared: !!result }; the lookup itself returns { _id } or null
-  checkDomainShared: { surface: PORTAL, route: true, kind: 'domain', run: (fetch, domain) => fetch(ROUTE_Q.checkDomainShared, { domain }) },
 };
 
 // Every document type the queries read (for loaders that need a type list).

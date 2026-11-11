@@ -62,9 +62,6 @@ const SKELETONS = [
   ['blockedPortalUser', 'blockedPortalUser', `$cases[]{"r": SRC[_type == "portalUser" && lower(email) == ^.a && noAccess == true][0]._id}`],
   ['getDataroomDomainPrivilege', 'getDataroomDomainPrivilege', `$cases[]{"r": SRC[_type == "domainPrivilege" && domain == ^.a && dataroomAccess == true && isActive == true][0]._id}`],
   ['portalAuthDomainPrivilege', 'portalAuthDomainPrivilege', `$cases[]{"r": SRC[_type == "domainPrivilege" && domain == ^.a && lpPortalAccess == true && isActive == true][0]{_id, requireCode}}`],
-  ['portalAuthDomainSharedCode', 'portalAuthDomainSharedCode', `$cases[]{"r": SRC[_type == "domainPrivilege" && domain == ^.a && lpPortalAccess == true && requireCode == true && isActive == true][0]._id}`],
-  ['dataroomAuthDomainSharedCode', 'dataroomAuthDomainSharedCode', `$cases[]{"r": SRC[_type == "domainPrivilege" && domain == ^.a && dataroomAccess == true && requireCode == true && isActive == true][0]._id}`],
-  ['checkDomainShared', 'checkDomainShared', `$cases[]{"r": SRC[_type == "domainPrivilege" && domain == ^.a && requireCode == true && isActive == true][0]._id}`],
 ];
 
 let same = 0, differ = 0;

@@ -1,0 +1,78 @@
+[
+ {
+  "scenario": "main",
+  "input": [],
+  "output": {
+   "fundISlideDeckUrl": "https://cdn.sanity.io/files/nt0wmty3/production/134df51cda9b3e5c5c18bde57cc21d52f75f5ee6.pdf",
+   "fundILpReport": {
+    "_id": "r-1",
+    "title": "Fake Fund Report FY26 Q2",
+    "quarter": "Q2",
+    "fiscalYear": "FY26",
+    "pdfUrl": "https://cdn.sanity.io/files/nt0wmty3/production/99c2109b053a5f876072483023fccd18a3e7509e.pdf"
+   },
+   "fundIIThesisPresentationUrl": null,
+   "commonTeamMembers": [
+    {
+     "_id": "tm-1",
+     "name": "Jane Doe",
+     "slug": "jane-doe"
+    },
+    null,
+    {
+     "_id": "tm-2",
+     "name": "Zoë Ångel",
+     "slug": "zoe-angel"
+    }
+   ],
+   "commonTrackRecordUrl": null,
+   "commonRecommendationDocuments": [
+    {
+     "title": "Recommendation (fake)",
+     "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/7cca92a2ed978bd08ced0a63cd07a4f672e0c4b2.pdf"
+    },
+    {
+     "title": "No file yet",
+     "fileUrl": null
+    },
+    {
+     "title": null,
+     "fileUrl": "https://cdn.sanity.io/files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf"
+    }
+   ],
+   "exitValueAsOfDate": "Sept 2026",
+   "hiddenFunds": [
+    "fund-ii"
+   ]
+  }
+ },
+ {
+  "scenario": "empty",
+  "input": [],
+  "output": null
+ },
+ {
+  "scenario": "alt",
+  "input": [],
+  "output": {
+   "fundISlideDeckUrl": null,
+   "fundILpReport": null,
+   "fundIIThesisPresentationUrl": "https://cdn.sanity.io/files/nt0wmty3/production/63530ca51f07489c408b1047c7e025f6c414ab3b.pdf",
+   "commonTeamMembers": [],
+   "commonTrackRecordUrl": null,
+   "commonRecommendationDocuments": null,
+   "exitValueAsOfDate": null,
+   "hiddenFunds": []
+  }
+ },
+ {
+  "scenario": "perf-throws",
+  "input": [],
+  "output": null
+ },
+ {
+  "scenario": "perf-single",
+  "input": [],
+  "output": null
+ }
+]

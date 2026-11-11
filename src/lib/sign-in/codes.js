@@ -30,5 +30,9 @@ async function rpc(fn, scope, email, code, extra = {}) {
 // { status: 'issued' | 'limit' | 'locked' | 'busy', ... }.
 export const issueCode = (scope, email, code, ip) => rpc('sign_in_issue', scope, email, code, { p_ip_hash: ipHash(ip) });
 
-// Returns { status: 'ok' | 'wrong' | 'dead' | 'locked' | 'expired', ... }.
+// Returns { status: 'ok' | 'wrong' | 'dead' | 'locked' | 'expired', ... }
+// (rules: supabase/migrations/0006_sign_in_lock_at_six.sql).
 export const checkCode = (scope, email, code) => rpc('sign_in_check', scope, email, code);
+
+// Removes a code whose email failed to send, so it does not use up the day's codes.
+export const voidCode = (scope, email, code) => rpc('sign_in_void', scope, email, code);

@@ -542,19 +542,6 @@ export async function getDomainPrivilegeForSignIn(scope, domain) {
   return p ? pick(p, ['_id', 'requireCode', 'inviteCode', 'codeExpiry', 'maxUses', 'usedCount']) : null;
 }
 
-/* ... && <flag> == true && requireCode == true && isActive == true][0]{ _id, inviteCode, codeExpiry, maxUses, usedCount, redemptionLog } */
-export async function getDomainSharedCode(scope, domain) {
-  const flag = scoped(ACCESS_FLAG, scope);
-  const p = await findDomain(domain, (d) => d[flag] === true && d.requireCode === true && d.isActive === true);
-  return p ? pick(p, ['_id', 'inviteCode', 'codeExpiry', 'maxUses', 'usedCount', 'redemptionLog']) : null;
-}
-
-/* *[_type == "domainPrivilege" && domain == $domain && requireCode == true && isActive == true][0]{ _id } */
-export async function getSharedCodeDomain(domain) {
-  const p = await findDomain(domain, (d) => d.requireCode === true && d.isActive === true);
-  return p ? { _id: raw(p._id) } : null;
-}
-
 /* *[_type == "portalUser" && lower(email) == $email && noAccess == true][0]{ _id } */
 export async function getBlockedPortalUser(email) {
   const u = await findUser(email, (x) => x.noAccess === true);
@@ -567,12 +554,6 @@ const ACTIVE = { portal: lpPortalActive, dataroom: dataroomActive };
 export async function getActiveUserForSignIn(scope, email) {
   const u = await findUser(email, scoped(ACTIVE, scope));
   return u ? pick(u, ['_id', 'name']) : null;
-}
-
-/* ... [0]{ _id, inviteCode, inviteCodeExpiry } */
-export async function getActiveUserInviteCode(scope, email) {
-  const u = await findUser(email, scoped(ACTIVE, scope));
-  return u ? pick(u, ['_id', 'inviteCode', 'inviteCodeExpiry']) : null;
 }
 
 /* ... [0]{ _id } */

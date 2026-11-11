@@ -54,7 +54,7 @@ export const {
   getAvailableLPQuarters, getPortalUserByEmail, getLatestLPReportForDataRoom, getDataroomDomainPrivilege,
   getDataroomFundContent, getDataRoomDocuments, getDataRoomTrackRecords, getDataRoomFundPerformance,
   getDataRoomPortfolioCompanies, getDataRoomAllFundSettings,
-  portalAuthDomainPrivilege, portalAuthDomainSharedCode, blockedPortalUser, portalAuthUser, portalAuthInviteUser,
-  dataroomAuthDomainPrivilege, dataroomAuthDomainSharedCode, dataroomAuthUser, dataroomAuthInviteUser,
-  hasPortalAccess, hasDataroomAccess, checkDomainShared,
+  portalAuthDomainPrivilege, blockedPortalUser, portalAuthUser,
+  dataroomAuthDomainPrivilege, dataroomAuthUser,
+  hasPortalAccess, hasDataroomAccess,
 } = S;
