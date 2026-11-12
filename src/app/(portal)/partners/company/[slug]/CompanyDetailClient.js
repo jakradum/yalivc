@@ -428,9 +428,14 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
         <main className={styles.mainArea}>
           <section className={`${styles.contentSection} ${styles.companyDetailSection}`}>
             {/* Back Link */}
-            <SiteLink href={`/partners?section=portfolio-company-updates${reportSlug ? `&report=${reportSlug}` : ''}`} className={styles.backLink}>
-              Back to portfolio
-            </SiteLink>
+            {/* Back button: the next/previous box pointing back (Pranav, 12 Nov 2026, option B1) */}
+            <Link
+              href={`/partners?section=portfolio-company-updates${reportSlug ? `&report=${reportSlug}` : ''}`}
+              className={`${styles.sectionNavBtn} ${styles.backLink}`}
+            >
+              <svg className={styles.sectionNavPointer} viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M6 1 1 6l5 5" /></svg>
+              <span className={styles.sectionNavLabel}>Portfolio</span>
+            </Link>
 
             {/* Company Header */}
             <div className={styles.companyDetailHeader}>

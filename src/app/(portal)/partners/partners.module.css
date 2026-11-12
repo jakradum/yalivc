@@ -3153,7 +3153,8 @@
   object-fit: contain;
   background-color: white;
   border: 1px solid #363636;
-  padding: 8px;
+  /* logos are cropped to their edges (logoCrop), so the frame supplies the margin */
+  padding: 14px 18px;
   flex-shrink: 0;
 }
 
@@ -3657,9 +3658,15 @@
 
 /* Back Link */
 .backLink {
-  /* type and colour come from SiteLink (the main site's link style) */
+  /* The next/previous box (.sectionNavBtn) used as a back button */
   width: fit-content;
   margin-bottom: 1.5rem;
+}
+
+/* Phones make .sectionNavBtn full width; the back button stays its own size */
+.sectionNavBtn.backLink {
+  width: fit-content;
+  max-width: 100%;
 }
 
 /* Responsive */
