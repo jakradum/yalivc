@@ -53,21 +53,21 @@ const quProj = (keys) => (u) => {
 };
 
 const QU_FULL = quProj([
-  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential',
+  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential', 'currentOwnershipLabel',
   'amountReturned', 'amountReturnedConfidential', 'multipleOfInvestment', 'moicConfidential', 'roundMoics', 'tableFootnotes',
   'updateNotes', 'revenueINR', 'revenueConfidential', 'patINR', 'patConfidential', 'teamSize', 'teamSizeConfidential', 'keyMetrics',
 ]);
 const QU_PDF = quProj([
-  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential',
+  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential', 'currentOwnershipLabel',
   'amountReturned', 'amountReturnedConfidential', 'multipleOfInvestment', 'moicConfidential', 'tableFootnotes', 'updateNotes',
   'revenueINR', 'revenueConfidential', 'patINR', 'patConfidential', 'teamSize', 'teamSizeConfidential', 'keyMetrics', 'roundMoics',
 ]);
 const QU_PDF_LATEST = quProj([
-  'quarter', 'fiscalYear', 'currentFMV', 'currentOwnershipPercent', 'amountReturned', 'multipleOfInvestment', 'tableFootnotes',
+  'quarter', 'fiscalYear', 'currentFMV', 'currentOwnershipPercent', 'currentOwnershipLabel', 'amountReturned', 'multipleOfInvestment', 'tableFootnotes',
   'updateNotes', 'revenueINR', 'patINR', 'teamSize', 'teamSizeConfidential', 'keyMetrics', 'roundMoics',
 ]);
 const QU_QUARTER = quProj([
-  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential',
+  'quarter', 'fiscalYear', 'currentFMV', 'currentFMVConfidential', 'currentOwnershipPercent', 'currentOwnershipConfidential', 'currentOwnershipLabel',
   'amountReturned', 'amountReturnedConfidential', 'multipleOfInvestment', 'moicConfidential', 'updateNotes', 'revenueINR',
   'revenueConfidential', 'patINR', 'patConfidential', 'teamSize', 'teamSizeConfidential', 'keyMetrics',
 ]);
@@ -97,6 +97,8 @@ const coInvestorDoc = (ctx, e) => (e._type === 'reference' ? ctx.deref(e) : ctx.
 const ROUND_KEYS = [
   'isInitialRound', 'isYaliLead', 'showEarlyInReport', 'roundName', 'roundLabel', 'investmentDate',
   'preMoneyValuation', 'totalRoundSize', 'postMoneyValuation', 'yaliInvestment', 'yaliOwnership',
+  // Shown instead of the number when set, e.g. "~6" (Micropack, Pranav 12 Nov 2026); the number still drives the maths
+  'yaliOwnershipLabel',
 ];
 const pick = (o, keys) => Object.fromEntries(keys.map((k) => [k, raw(o[k])]));
 

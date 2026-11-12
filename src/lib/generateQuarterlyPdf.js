@@ -899,7 +899,7 @@ export function generatePdfHtml({
         <td>${esc(c.sector || '—')}</td>
         <td>${fmtDateMonthYear(getInitialInvestmentDate(c))}</td>
         <td>${totalInv ? fmtCr(totalInv) : '—'}</td>
-        <td>${ownershipConf ? '**' : (ownership != null ? fmt(ownership, 2) + ownMarker : '—')}</td>
+        <td>${ownershipConf ? '**' : c.quarterData?.currentOwnershipLabel ? esc(c.quarterData.currentOwnershipLabel) + ownMarker : (ownership != null ? fmt(ownership, 2) + ownMarker : '—')}</td>
       </tr>`;
   }).join('');
 
@@ -1084,7 +1084,7 @@ export function generatePdfHtml({
         ['Total round size', 'rounds-size', r => r.totalRoundSize != null ? fmtCr(r.totalRoundSize) : '—'],
         ['Post-money valuation', 'rounds-postmoney', r => r.postMoneyValuation != null ? fmtCr(r.postMoneyValuation) : '—'],
         ["Yali's investment", 'rounds-yali-investment', r => r.yaliInvestment != null ? fmtCr(r.yaliInvestment) : '—'],
-        ["Yali's ownership in %", 'rounds-ownership', r => r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
+        ["Yali's ownership in %", 'rounds-ownership', r => r.yaliOwnershipLabel ? esc(r.yaliOwnershipLabel) : r.yaliOwnership != null ? fmt(r.yaliOwnership, 2) : '—'],
         ...(Object.keys(roundMoicsMap).length > 0
           ? [['MOIC', null, r => roundMoicsMap[r.roundName] != null ? fmt(roundMoicsMap[r.roundName]) + 'x' : '—']]
           : []),
@@ -1171,7 +1171,7 @@ export function generatePdfHtml({
           <tr class="table-section-header"><td colspan="2">Investment rounds</td></tr>
           ${roundsRows}` : ''}
         <tr><td>Total investment${fnMarker('snapshot', 'snapshot-total-investment')}</td><td>${totalInv ? fmtCr(totalInv) : '—'}</td></tr>
-        <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : fmtPct(ownership)}</td></tr>
+        <tr><td>Ownership (FD)${fnMarker('snapshot', 'snapshot-ownership')}</td><td>${ownershipConf ? '**' : qd?.currentOwnershipLabel ? esc(qd.currentOwnershipLabel) + '%' : fmtPct(ownership)}</td></tr>
         <tr><td>Current FMV${fnMarker('snapshot', 'snapshot-fmv')}</td><td>${fmvConf ? '**' : (fmv != null ? fmtCr(fmv) : '—')}</td></tr>
         ${roundMoicRows}
         ${moic != null ? `<tr><td>MOIC Cumulative${moicMarkerHtml}</td><td>${moicConf ? '**' : fmt(moic) + 'x'}</td></tr>` : ''}

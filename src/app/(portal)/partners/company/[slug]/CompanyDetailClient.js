@@ -494,7 +494,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                 )}
                 <tr>
                   <td>Ownership (FD){getFieldMarker('snapshot-ownership')}</td>
-                  <td>{ownershipQuarter?.currentOwnershipConfidential ? '**' : (ownershipQuarter?.currentOwnershipPercent != null ? `${ownershipQuarter.currentOwnershipPercent.toFixed(2)}%` : (latestClosedRound?.yaliOwnership != null ? `${latestClosedRound.yaliOwnership.toFixed(2)}%` : '-'))}</td>
+                  <td>{ownershipQuarter?.currentOwnershipConfidential ? '**' : ownershipQuarter?.currentOwnershipLabel ? `${ownershipQuarter.currentOwnershipLabel}%` : (ownershipQuarter?.currentOwnershipPercent != null ? `${ownershipQuarter.currentOwnershipPercent.toFixed(2)}%` : (latestClosedRound?.yaliOwnership != null ? `${latestClosedRound.yaliOwnership.toFixed(2)}%` : '-'))}</td>
                 </tr>
                 <tr>
                   <td>Current FMV{getFieldMarker('snapshot-fmv')}</td>
@@ -643,7 +643,7 @@ export default function CompanyDetailClient({ company, report, allCompanySlugs, 
                         <tr>
                           <td>Yali&apos;s ownership %</td>
                           {displayRounds.map((round, idx) => (
-                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? <><strong>**</strong>{getRoundsFootnoteMarker('rounds-ownership')}</> : (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-')}</td>
+                            <td key={idx}>{latestQuarter?.currentOwnershipConfidential ? <><strong>**</strong>{getRoundsFootnoteMarker('rounds-ownership')}</> : (round.yaliOwnershipLabel || (round.yaliOwnership ? round.yaliOwnership.toFixed(2) : '-'))}</td>
                           ))}
                         </tr>
                         {latestQuarter?.roundMoics && latestQuarter.roundMoics.length > 0 && (

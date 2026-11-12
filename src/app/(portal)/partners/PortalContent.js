@@ -861,6 +861,10 @@ function PortalContentInner({
                             }
                             // The quarter's own ownership figure (e.g. ownership at exit) wins over the latest round's
                             const ownership = qData?.currentOwnershipPercent ?? getLatestOwnership(investment);
+                            // A label such as "~6" is shown instead of the exact figure (Micropack)
+                            if (qData?.currentOwnershipLabel) {
+                              return <>{qData.currentOwnershipLabel}{getCompanyFootnoteMarker('ownership', investment.slug)}</>;
+                            }
                             return ownership != null
                               ? <>{ownership.toFixed(2)}{getCompanyFootnoteMarker('ownership', investment.slug)}</>
                               : '-';
