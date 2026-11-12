@@ -262,6 +262,9 @@ async function decide(reqId, action, btn){
         tx.update(doc(db,"leaveRequests",reqId), { status:"approved" });
       });
     }
+    // Keep the Monday digest's Supabase copy in step (best effort).
+    fetch("/api/team-leave-status/",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({requestId:reqId,decision:action==="reject"?"rejected":"approved"}),keepalive:true}).catch(()=>{});
   }catch(err){
     wrap.querySelectorAll("button").forEach(b=>b.disabled=false);
     alert("Couldn't update. Try again.");

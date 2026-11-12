@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { isBuilderHost } from '@/decks/auth';
 import { TEAM_COOKIE, verifyTeamSession } from '@/lib/teamSession';
 import { allowedNamesFor, canonicalName } from '@/lib/leaveEmail/directory';
+import { saveLeave, isRequestId } from '@/lib/leaveEmail/upcoming';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -29,6 +30,17 @@ export async function POST(request) {
   }
   const plan = planEmails(body);
   if (plan.error) return NextResponse.json({ error: plan.error }, { status: 400 });
+
+  // Leave (not WFH/weekend) also goes into Supabase for the Monday digest. Best
+  // effort like the email: Firebase already holds the request.
+  if (plan.req.kind === 'leave') {
+    if (isRequestId(body.requestId)) {
+      await saveLeave({ requestId: body.requestId, ...plan.req }).catch((err) =>
+        console.error('[leave-notify] Supabase save failed:', err?.status || err?.message));
+    } else {
+      console.error('[leave-notify] no requestId; leave not copied for the digest:', plan.req.name);
+    }
+  }
 
   const key = JSON.stringify([body.name, body.kind, body.from, body.to, body.date]);
   const now = Date.now();

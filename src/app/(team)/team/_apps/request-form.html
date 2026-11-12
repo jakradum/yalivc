@@ -230,25 +230,26 @@ $("submit-leave").addEventListener("click", async ()=>{
                days:leaveDays, reason:"", year:parseInt(String($("from").value).slice(0,4),10)||null, createdAt:serverTimestamp() };
   try{
     if(leaveDays>left){
-      await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
-      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
+      const pref=await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
+      notify({kind:"leave",requestId:pref.id,type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
       showDone("manual", left, type);
     } else {
+      const lref=doc(collection(db,"leaveRequests")); // id known up front, for the digest copy
       await runTransaction(db, async tx=>{
         const ref=doc(db,"employees",current.id); const cur=await tx.get(ref); const d=cur.data();
         const taken=+d[takenField]||0, ent=+d[entField]||0;
         if(taken+leaveDays>ent) throw new Error("insufficient");
         tx.update(ref, {[takenField]: taken+leaveDays});
-        tx.set(doc(collection(db,"leaveRequests")), {...base, status:"auto-approved"});
+        tx.set(lref, {...base, status:"auto-approved"});
       });
       current[takenField]=(+current[takenField]||0)+leaveDays;
-      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"auto-approved",remaining:type==="medical"?medLeft(current):paidLeft(current)});
+      notify({kind:"leave",requestId:lref.id,type,from:base.from,to:base.to,days:leaveDays,status:"auto-approved",remaining:type==="medical"?medLeft(current):paidLeft(current)});
       showDone("approved", 0, type);
     }
   }catch(err){
     if(String(err.message).includes("insufficient")){
-      await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
-      notify({kind:"leave",type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
+      const pref=await addDoc(collection(db,"leaveRequests"), {...base, status:"pending"});
+      notify({kind:"leave",requestId:pref.id,type,from:base.from,to:base.to,days:leaveDays,status:"pending",left});
       showDone("manual", left, type);
     } else { $("note-leave").style.color="var(--tx-danger)"; $("note-leave").textContent="Couldn't submit. Try again."; $("submit-leave").disabled=false; }
   }

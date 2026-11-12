@@ -5,8 +5,9 @@ const ISO = /^\d{4}-\d{2}-\d{2}$/;
 const int = (v, lo, hi) => (Number.isInteger(v) && v >= lo && v <= hi ? v : null);
 
 // Validates what the leave form reports and decides who is emailed what. Pure: returns
-// { emails: [{to, subject, html}], why } and never sends. Recipients come ONLY from the
-// directory, never from the request, so this can't be used to mail arbitrary addresses.
+// { emails: [{to, subject, html}], req } (req = the validated request) and never
+// sends. Recipients come ONLY from the directory, never from the request, so this
+// can't be used to mail arbitrary addresses.
 export function planEmails(body) {
   const name = canonicalName(body?.name);
   if (!name) return { error: 'Unknown employee.' };
@@ -38,5 +39,5 @@ export function planEmails(body) {
   if (kind === 'leave' && req.status === 'pending' && own !== APPROVER.email) {
     emails.push({ to: APPROVER.email, ...renderApproverEmail(req, { approveUrl: APPROVE_URL }) });
   }
-  return { emails };
+  return { emails, req };
 }
