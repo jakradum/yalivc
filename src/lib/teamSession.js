@@ -21,8 +21,8 @@ export const ACCESS = {
   // Travel approvals page. Only Gani can approve (TRAVEL_APPROVER in
   // src/lib/travel/profiles.js); the others can see where requests stand.
   travel: ['gani@yali.vc', 'pranav@yali.vc', 'skarthikeyan@yali.vc'],
-  // LP portal usage (who signed in, time spent, downloads, ratings). Shows LP emails.
-  usage: ['pranav@yali.vc', 'kram@yali.vc', 'gani@yali.vc'],
+  // LP portal usage (who signed in, time spent, downloads, ratings). Any Yali account.
+  usage: null,
 };
 
 const secret = () => process.env.PORTAL_AUTH_SECRET;
