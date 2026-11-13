@@ -1,5 +1,6 @@
 import { requireTeamUser } from '@/decks/auth';
 import { supa } from '@/lib/lp-data/rest';
+import { isYaliStaff } from '@/lib/internal-user';
 import { SignOutButton } from '../_components/SignOutButton';
 import { Breadcrumbs, TEAM } from '../_components/Breadcrumbs';
 import t from '../travel/travel.module.css';
@@ -41,20 +42,58 @@ function duration(seconds) {
   return mins < 60 ? `${mins} min` : `${Math.floor(mins / 60)} h ${mins % 60} min`;
 }
 
+// `companies` (slugs of company pages opened) arrives with
+// supabase/migrations/0009_portal_visit_companies.sql; until then visits load without it.
 async function loadVisits() {
-  const { rows } = await supa('/rest/v1/portal_visits?select=email,started_at,active_seconds,downloaded,rating&is_staff=eq.false&order=started_at.desc&limit=5000');
-  return rows || [];
+  const base = 'email,started_at,active_seconds,downloaded,rating';
+  const q = (cols) => supa(`/rest/v1/portal_visits?select=${cols}&is_staff=eq.false&order=started_at.desc&limit=5000`);
+  const { rows } = await q(`${base},companies`).catch(() => q(base));
+  return (rows || []).map((v) => ({ ...v, companies: v.companies || [] }));
 }
 
-// LP names from the portal user records; an LP without one shows their email only.
-async function loadNames() {
+const docs = async (type, cols) => {
   try {
-    const { rows } = await supa('/rest/v1/sanity_docs?select=email:doc->>email,name:doc->>name&type=eq.portalUser&limit=2000');
-    return new Map((rows || []).filter((r) => r.email).map((r) => [r.email.toLowerCase(), r.name || null]));
+    return (await supa(`/rest/v1/sanity_docs?select=${cols}&type=eq.${type}&limit=5000`)).rows || [];
   } catch {
-    return new Map();
+    return [];
   }
+};
+
+// Portal user records (names, who has access), company names, every download (logged
+// since June 2026, before visits were tracked) and every rating with its comment.
+async function loadRecords() {
+  const [users, companies, downloads, feedback] = await Promise.all([
+    docs('portalUser', 'email:doc->>email,name:doc->>name,noAccess:doc->noAccess,lpPortalAccess:doc->lpPortalAccess,isActive:doc->isActive,gift:doc->isGiftCityLP'),
+    docs('company', 'slug:doc->slug->>current,name:doc->>name'),
+    docs('lpDownloadConsent', 'email:doc->>email,type:doc->>downloadType,quarter:doc->>reportQuarter,at:doc->>consentedAt'),
+    docs('lpPortalFeedback', 'email:doc->>email,score:doc->npsScore,quarter:doc->>reportQuarter,comment:doc->>feedbackDetails,at:doc->>submittedAt'),
+  ]);
+  const lp = (r) => r.email && !isYaliStaff(r.email);
+  return {
+    users: dedupeUsers(users.filter(lp)),
+    companyNames: new Map(companies.filter((c) => c.slug).map((c) => [c.slug, c.name || c.slug])),
+    downloads: downloads.filter((d) => lp(d) && FILES[d.type]).map((d) => ({ ...d, email: d.email.toLowerCase() })).sort((a, b) => new Date(b.at) - new Date(a.at)),
+    feedback: feedback.filter(lp).map((f) => ({ ...f, email: f.email.toLowerCase() })).sort((a, b) => new Date(b.at) - new Date(a.at)),
+  };
 }
+
+// One row per email: some LPs have two records. Access if either record grants it; keep a name.
+function dedupeUsers(users) {
+  const map = new Map();
+  for (const u of users) {
+    const email = u.email.toLowerCase();
+    const prev = map.get(email);
+    map.set(email, prev && hasPortalAccess(prev) && !hasPortalAccess(u)
+      ? { ...prev, name: prev.name || u.name }
+      : { ...u, email, name: u.name || prev?.name || null, gift: u.gift === true || prev?.gift === true });
+  }
+  return [...map.values()];
+}
+
+const FILES = { 'quarterly-report': 'Report', 'fund-financials': 'Fund financials', 'fund-financials-gift-city': 'GIFT City financials' };
+// Same rule as sign-in (lpPortalActive in src/lib/lp-data/supabase-reads.js).
+const hasPortalAccess = (u) => u.noAccess !== true && (u.lpPortalAccess === true || (u.lpPortalAccess == null && u.isActive === true));
+const TRACKING_FROM = '11 Nov 2026';
 
 function summarise(visits) {
   const lps = new Set(visits.map((v) => v.email));
@@ -76,11 +115,12 @@ function summarise(visits) {
 function byLp(visits, names) {
   const map = new Map();
   for (const v of visits) { // newest first, so the first visit seen per LP is their latest
-    const lp = map.get(v.email) || { email: v.email, name: names.get(v.email) || null, visits: 0, seconds: 0, downloaded: false, rating: null, last: v.started_at };
+    const lp = map.get(v.email) || { email: v.email, name: names.get(v.email) || null, visits: 0, seconds: 0, downloaded: false, rating: null, last: v.started_at, companies: new Map() };
     lp.visits += 1;
     lp.seconds += v.active_seconds;
     lp.downloaded ||= v.downloaded;
     if (lp.rating == null && v.rating != null) lp.rating = v.rating;
+    for (const c of v.companies) lp.companies.set(c, (lp.companies.get(c) || 0) + 1);
     map.set(v.email, lp);
   }
   return [...map.values()].sort((a, b) => b.seconds - a.seconds || new Date(b.last) - new Date(a.last));
@@ -133,13 +173,16 @@ export default async function PortalUsage({ searchParams }) {
   const range = RANGES.some(([k]) => k === sp?.range) ? sp.range : '30';
 
   let all = [];
-  let names = new Map();
+  let rec = { users: [], companyNames: new Map(), downloads: [], feedback: [] };
   let failed = false;
   try {
-    [all, names] = await Promise.all([loadVisits(), loadNames()]);
+    [all, rec] = await Promise.all([loadVisits(), loadRecords()]);
   } catch {
     failed = true;
   }
+  const names = new Map(rec.users.map((u) => [u.email, u.name || null]));
+  const companyName = (slug) => rec.companyNames.get(slug) || slug;
+  const who = (e) => names.get(e) || e;
 
   const now = Date.now();
   const today = istDay(now);
@@ -177,6 +220,40 @@ export default async function PortalUsage({ searchParams }) {
   const lps = byLp(inRange, names);
   const recent = inRange.slice(0, 12);
   const rangeLabel = RANGES.find(([k]) => k === range)[1].toLowerCase();
+  const inDays = (iso) => range === 'all' || istDay(iso) >= startDay;
+
+  // downloads, by file and quarter
+  const downloads = rec.downloads.filter((d) => inDays(d.at));
+  const fileMap = new Map();
+  for (const d of downloads) {
+    const k = `${d.quarter || ''}|${d.type}`;
+    const f = fileMap.get(k) || { quarter: d.quarter || '', type: d.type, lps: new Set(), count: 0 };
+    f.lps.add(d.email);
+    f.count += 1;
+    fileMap.set(k, f);
+  }
+  const fileOrder = Object.keys(FILES);
+  const qKey = (q) => { const m = /Q(\d) FY(\d+)/.exec(q); return m ? Number(m[2]) * 10 + Number(m[1]) : 0; };
+  const byFile = [...fileMap.values()].sort((a, b) => qKey(b.quarter) - qKey(a.quarter) || fileOrder.indexOf(a.type) - fileOrder.indexOf(b.type));
+
+  // company pages opened (each visit counts a company once)
+  const compMap = new Map();
+  for (const v of inRange) for (const c of v.companies) {
+    const x = compMap.get(c) || { slug: c, lps: new Set(), visits: 0 };
+    x.lps.add(v.email);
+    x.visits += 1;
+    compMap.set(c, x);
+  }
+  const companiesOpened = [...compMap.values()].sort((a, b) => b.lps.size - a.lps.size || b.visits - a.visits);
+
+  const comments = rec.feedback.filter((f) => f.comment && f.comment.trim() && inDays(f.at));
+
+  // LPs with portal access and no visit since tracking began (all time, whatever the range)
+  const seen = new Set(all.map((v) => v.email));
+  const lastDownload = new Map();
+  for (const d of rec.downloads) if (!lastDownload.has(d.email)) lastDownload.set(d.email, d); // newest first
+  const notSignedIn = rec.users.filter((u) => hasPortalAccess(u) && !seen.has(u.email))
+    .sort((a, b) => (a.name || a.email).localeCompare(b.name || b.email));
 
   return (
     <div className={t.page}>
@@ -241,7 +318,7 @@ export default async function PortalUsage({ searchParams }) {
                 <div className={s.scroll}>
                   <table className={s.table}>
                     <thead>
-                      <tr><th>LP</th><th className={s.num}>Visits</th><th className={s.num}>Total time</th><th className={s.num}>Avg per visit</th><th>Last seen</th><th>Downloaded</th><th className={s.num}>Latest rating</th></tr>
+                      <tr><th>LP</th><th className={s.num}>Visits</th><th className={s.num}>Total time</th><th className={s.num}>Avg per visit</th><th>Last seen</th><th>Downloaded</th><th className={s.num}>Latest rating</th><th>Company pages opened</th></tr>
                     </thead>
                     <tbody>
                       {lps.map((l) => (
@@ -256,6 +333,7 @@ export default async function PortalUsage({ searchParams }) {
                           <td>{ago(l.last, now)}<span className={s.muted}>{`  ${when(l.last)}`}</span></td>
                           <td>{l.downloaded ? 'Yes' : <span className={s.muted}>No</span>}</td>
                           <td className={s.num}>{l.rating == null ? <span className={s.muted}>Not rated</span> : `${l.rating} / 10`}</td>
+                          <td className={s.wrap}>{l.companies.size ? [...l.companies].map(([c, n]) => (n > 1 ? `${companyName(c)} (${n} visits)` : companyName(c))).join(', ') : <span className={s.muted}>None</span>}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -265,15 +343,125 @@ export default async function PortalUsage({ searchParams }) {
             </section>
 
             <section className={t.card}>
+              <h2 className={s.h2}>Company pages opened</h2>
+              {companiesOpened.length ? (
+                <div className={s.scroll}>
+                  <table className={s.table}>
+                    <thead><tr><th>Company</th><th className={s.num}>LPs</th><th className={s.num}>Visits</th><th>Opened by</th></tr></thead>
+                    <tbody>
+                      {companiesOpened.map((c) => (
+                        <tr key={c.slug}>
+                          <td className={s.lpName}>{companyName(c.slug)}</td>
+                          <td className={s.num}>{c.lps.size}</td>
+                          <td className={s.num}>{c.visits}</td>
+                          <td className={s.wrap}>{[...c.lps].map(who).join(', ')}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : <p className={t.empty}>No company pages opened {rangeLabel}.</p>}
+            </section>
+
+            <div className={s.two}>
+              <section className={t.card}>
+                <h2 className={s.h2}>Downloads, by file</h2>
+                {byFile.length ? (
+                  <div className={s.scroll}>
+                    <table className={s.table}>
+                      <thead><tr><th>Quarter</th><th>File</th><th className={s.num}>LPs</th><th className={s.num}>Downloads</th></tr></thead>
+                      <tbody>
+                        {byFile.map((f) => (
+                          <tr key={`${f.quarter}-${f.type}`}>
+                            <td>{f.quarter || <span className={s.muted}>Unknown</span>}</td>
+                            <td>{FILES[f.type]}</td>
+                            <td className={s.num}>{f.lps.size}</td>
+                            <td className={s.num}>{f.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : <p className={t.empty}>No downloads {rangeLabel}.</p>}
+              </section>
+              <section className={t.card}>
+                <h2 className={s.h2}>Latest downloads</h2>
+                {downloads.length ? (
+                  <ul className={s.feed}>
+                    {downloads.slice(0, 12).map((d, i) => (
+                      <li key={`${d.email}-${d.at}-${i}`}>
+                        <span className={s.feedWho}>{who(d.email)}</span>
+                        <span>{` ${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}`}</span>
+                        <span className={s.feedWhen}>{ago(d.at, now)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : <p className={t.empty}>Nothing {rangeLabel}.</p>}
+              </section>
+            </div>
+
+            <section className={t.card}>
+              <h2 className={s.h2}>Rating comments</h2>
+              {comments.length ? (
+                <ul className={s.feed}>
+                  {comments.map((f, i) => (
+                    <li key={`${f.email}-${f.at}-${i}`} className={s.comment}>
+                      <div>
+                        <span className={s.feedWho}>{who(f.email)}</span>
+                        <span>{` rated ${f.score} / 10${f.quarter ? `, ${f.quarter}` : ''}`}</span>
+                        <p className={s.commentText}>{f.comment}</p>
+                      </div>
+                      <span className={s.feedWhen}>{ago(f.at, now)}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p className={t.empty}>No comments {rangeLabel}. LPs are asked for one when they rate the portal below 7.</p>}
+            </section>
+
+            <section className={t.card}>
+              <h2 className={s.h2}>Not signed in yet</h2>
+              <p className={s.lede}>
+                {notSignedIn.length} of {rec.users.filter(hasPortalAccess).length} LPs with portal access have not signed in since tracking began on {TRACKING_FROM}.
+                Firms let in by email domain are not listed.
+              </p>
+              {notSignedIn.length > 0 && (
+                <details className={s.more}>
+                  <summary>Show the list</summary>
+                  <div className={s.scroll}>
+                    <table className={s.table}>
+                      <thead><tr><th>LP</th><th>GIFT City</th><th>Last download</th></tr></thead>
+                      <tbody>
+                        {notSignedIn.map((u) => {
+                          const d = lastDownload.get(u.email);
+                          return (
+                            <tr key={u.email}>
+                              <td>
+                                <div className={s.lpName}>{u.name || u.email}</div>
+                                {u.name ? <div className={s.lpEmail}>{u.email}</div> : null}
+                              </td>
+                              <td>{u.gift === true ? 'Yes' : <span className={s.muted}>No</span>}</td>
+                              <td>{d ? `${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}, ${when(d.at)}` : <span className={s.muted}>Never</span>}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
+              )}
+            </section>
+
+            <section className={t.card}>
               <h2 className={s.h2}>Recent activity</h2>
               {recent.length ? (
                 <ul className={s.feed}>
                   {recent.map((v) => (
                     <li key={`${v.email}-${v.started_at}`}>
-                      <span className={s.feedWho}>{names.get(v.email) || v.email}</span>
+                      <span className={s.feedWho}>{who(v.email)}</span>
                       <span>
                         {` signed in, ${duration(v.active_seconds)} on the portal`}
-                        {v.downloaded ? ', downloaded the report' : ''}
+                        {v.companies.length ? `, opened ${v.companies.map(companyName).join(', ')}` : ''}
+                        {v.downloaded ? ', downloaded a file' : ''}
                         {v.rating != null ? `, rated it ${v.rating} / 10` : ''}
                       </span>
                       <span className={s.feedWhen}>{ago(v.started_at, now)}</span>

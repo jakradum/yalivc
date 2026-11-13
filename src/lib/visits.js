@@ -18,6 +18,10 @@ const who = (email) => ({ p_email: email.toLowerCase(), p_is_staff: isYaliStaff(
 // A heartbeat from the open portal: `seconds` of activity since the last one (capped at 60).
 export const pingVisit = (email, seconds) => call('portal_visit_ping', { ...who(email), p_seconds: seconds });
 
+// A company page (its slug) opened on the LP's current visit
+// (supabase/migrations/0009_portal_visit_companies.sql).
+export const viewVisit = (email, company) => call('portal_visit_view', { ...who(email), p_company: company });
+
 // A download or a rating on the LP's current visit.
 export const markVisit = (email, { downloaded = null, rating = null } = {}) =>
   call('portal_visit_mark', { ...who(email), p_downloaded: downloaded, p_rating: rating });

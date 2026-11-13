@@ -1255,9 +1255,7 @@ export function generatePdfHtml({
     <div style="padding: 24px 40px; position: relative; min-height: 900px;">
       <div class="heading-mono">Fund<br>financials</div>
       <div style="margin-top: 12px; font-size: 13px; color: #555;">
-        ${report.fundFinancialsPdfUrl
-          ? `Available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a>`
-          : `Will be available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a> once uploaded for this quarter.`}
+        Available on <a href="https://partners.yali.vc" style="color:#555;text-decoration:underline;">partners.yali.vc</a>
       </div>
       ${fundFinancialsSvgHtml ? `
         <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; opacity: 0.18;">

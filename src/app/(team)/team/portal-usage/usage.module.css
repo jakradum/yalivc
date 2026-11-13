@@ -65,3 +65,11 @@
 .feed li { display: flex; gap: 6px; align-items: baseline; padding: 10px 24px; border-top: 1px solid #e4e0da; color: #363636; }
 .feedWho { font-weight: 600; }
 .feedWhen { margin-left: auto; color: #6b6b6b; font-size: 12px; white-space: nowrap; padding-left: 12px; }
+
+.wrap { white-space: normal !important; min-width: 180px; }
+.comment { align-items: flex-start !important; }
+.commentText { margin: 6px 0 0; color: #363636; line-height: 1.55; white-space: pre-wrap; }
+.more summary { cursor: pointer; font-family: var(--font-jetbrains-mono, monospace); font-size: 12px; color: #830d35; margin: 14px 0; list-style: none; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary:hover { text-decoration: underline; }
+.more[open] summary { margin-bottom: 14px; }
