@@ -14,13 +14,15 @@ export const YALI_DOMAIN = '@yali.vc';
 
 // Per-area allow-lists (lowercase Yali Microsoft addresses). Anyone with a Yali
 // account can SIGN IN; each area then checks this list. `null` would mean any
-// Yali account. Change access by editing these two lists.
+// Yali account. Change access by editing these lists.
 export const ACCESS = {
   builder: ['pranav@yali.vc', 'kram@yali.vc', 'gani@yali.vc'],
   letters: ['pranav@yali.vc', 'manjunath@yali.vc'],
   // Travel approvals page. Only Gani can approve (TRAVEL_APPROVER in
   // src/lib/travel/profiles.js); the others can see where requests stand.
   travel: ['gani@yali.vc', 'pranav@yali.vc', 'skarthikeyan@yali.vc'],
+  // LP portal usage (who signed in, time spent, downloads, ratings). Shows LP emails.
+  usage: ['pranav@yali.vc', 'kram@yali.vc', 'gani@yali.vc'],
 };
 
 const secret = () => process.env.PORTAL_AUTH_SECRET;

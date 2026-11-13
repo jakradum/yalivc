@@ -36,7 +36,7 @@ export async function requireTeamUser(area = 'builder') {
   const email = getTeamUser(raw, area);
   if (email) return email;
   const prefix = await teamPrefix();
-  const home = `${prefix}/${{ letters: 'letters', travel: 'travel/approvals' }[area] || 'builder'}/`;
+  const home = `${prefix}/${{ letters: 'letters', travel: 'travel/approvals', usage: 'portal-usage' }[area] || 'builder'}/`;
   // Signed in, but not on this area's list: say so instead of looping back to sign-in.
   if (verifyTeamSession(raw)) redirect(`${prefix}/sign-in?denied=${area}`);
   redirect(`${prefix}/sign-in?next=${encodeURIComponent(home)}`);
