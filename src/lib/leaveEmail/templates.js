@@ -72,7 +72,7 @@ export function buildContent(req) {
       ...balance,
     ],
     note: needsApproval
-      ? `${plural(req.days, 'day')} were requested against a balance of ${plural(req.left ?? 0, 'day')}, so this application is subject to approval.`
+      ? `${plural(req.days, 'day')} ${req.days === 1 ? 'was' : 'were'} requested against a balance of ${plural(req.left ?? 0, 'day')}, so this application is subject to approval.`
       : null,
   };
 }

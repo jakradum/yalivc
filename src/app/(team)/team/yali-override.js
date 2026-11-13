@@ -94,9 +94,9 @@ export const YALI_HEAD_INJECT = `
   /* ── Labels ──────────────────────────────────────────────────────────── */
   label {
     font-family: 'JetBrains Mono', monospace !important;
-    font-size: 10px !important; font-weight: 700 !important;
-    letter-spacing: 0.18em !important; text-transform: uppercase !important;
-    color: #830d35 !important; margin-bottom: 8px !important;
+    font-size: 12px !important; font-weight: 400 !important;
+    letter-spacing: 0 !important; text-transform: none !important;
+    color: #595959 !important; margin-bottom: 8px !important;
     display: block;
   }
 
@@ -118,9 +118,9 @@ export const YALI_HEAD_INJECT = `
   }
   .stat .l {
     font-family: 'JetBrains Mono', monospace !important;
-    font-size: 9px !important; font-weight: 700 !important;
-    letter-spacing: 0.18em !important; text-transform: uppercase !important;
-    color: #830d35 !important;
+    font-size: 11.5px !important; font-weight: 400 !important;
+    letter-spacing: 0 !important; text-transform: none !important;
+    color: #595959 !important;
   }
   .stat .v {
     font-family: 'JetBrains Mono', monospace !important;
@@ -300,12 +300,19 @@ export const LEAVE_SKELETON_SCRIPT = `<script>
   var emp = document.getElementById('emp');
   if (emp) emp.parentNode.insertBefore(skel, emp.nextSibling);
 
+  // Placeholder only until a name is picked: hidden while the form or the
+  // confirmation (#done) is showing. It used to key off the form alone, so the
+  // shimmer came back over the confirmation after every submission.
   var panel = document.getElementById('panel');
-  if (panel) {
-    new MutationObserver(function() {
-      skel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    }).observe(panel, { attributes: true, attributeFilter: ['style'] });
+  var done = document.getElementById('done');
+  function sync() {
+    var formOpen = panel && panel.style.display !== 'none';
+    var doneOpen = done && done.style.display !== 'none';
+    skel.style.display = formOpen || doneOpen ? 'none' : 'block';
   }
+  [panel, done].forEach(function(el) {
+    if (el) new MutationObserver(sync).observe(el, { attributes: true, attributeFilter: ['style'] });
+  });
 })();
 <\/script>`;
 
@@ -490,3 +497,13 @@ export const YALI_ADMIN_PDF_SCRIPT = `<script>
   }
 })();
 <\/script>`;
+
+// Breadcrumbs for the plain-HTML pages (leave, admin): same markup and styles as
+// _components/Breadcrumbs.js. trail = [[label, href], ..., [label]].
+import { CRUMBS_CSS } from './_components/Breadcrumbs';
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+export function crumbsHtml(trail, position = 'top') {
+  const items = trail.map(([label, href], i) => (i ? '<span class="sep" aria-hidden="true">/</span>' : '')
+    + (href && i < trail.length - 1 ? `<a href="${href}">${esc(label)}</a>` : `<span class="here" aria-current="page">${esc(label)}</span>`)).join('');
+  return `${position === 'top' ? `<style>${CRUMBS_CSS}</style>` : ''}<nav class="yali-crumbs ${position}" aria-label="Breadcrumb">${items}</nav>`;
+}

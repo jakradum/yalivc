@@ -76,7 +76,6 @@ export function SignInClient({ deniedArea = null, deniedEmail = null }) {
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 24px' }}>
         <div style={{ width: '100%', maxWidth: 420, border: '1px solid #363636', borderTop: '3px solid #830d35', background: 'rgba(255,255,255,0.92)', padding: '32px 28px', boxSizing: 'border-box' }}>
-          <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 14 }}>Yali team</div>
           <h1 style={{ fontFamily: mono, fontSize: 20, fontWeight: 400, margin: '0 0 12px', lineHeight: 1.3 }}>Sign in</h1>
           {deniedArea ? (
             <p role="alert" style={{ fontSize: 13, color: '#a11', lineHeight: 1.6, margin: '0 0 20px' }}>

@@ -23,6 +23,8 @@ export const ACCESS = {
   travel: ['gani@yali.vc', 'pranav@yali.vc', 'skarthikeyan@yali.vc'],
   // LP portal usage (who signed in, time spent, downloads, ratings). Any Yali account.
   usage: null,
+  // Yali Assets (/assets): deck PDFs for the team. Any Yali account.
+  assets: null,
 };
 
 const secret = () => process.env.PORTAL_AUTH_SECRET;

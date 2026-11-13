@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getLetterBySlug } from '@/lib/sanity-queries';
 import PrintButton from './PrintButton';
 import { requireTeamUser } from '@/decks/auth';
+import { Breadcrumbs, TEAM } from '../../_components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,6 +72,7 @@ export default async function LetterPage({ params }) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
+      <Breadcrumbs trail={[TEAM, ['Letters', '/team/letters/'], [letter.subject || 'Letter']]} />
       <PrintButton />
       <div className="letter-page">
         <div className="letter-header">
@@ -115,6 +117,7 @@ export default async function LetterPage({ params }) {
           <span className="footer-right">505, 3rd Cross Road, B Block, AECS Layout, Kundalahalli, Bengaluru 560037</span>
         </div>
       </div>
+      <Breadcrumbs trail={[TEAM, ['Letters', '/team/letters/'], [letter.subject || 'Letter']]} position="bottom" />
     </>
   );
 }

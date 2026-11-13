@@ -3,7 +3,7 @@ import { requireDeckUser } from '@/decks/auth';
 import { ASSETS, TEMPLATES, assetStatus } from '@/decks/builder/assets';
 import { FORMATS } from '@/creative/formats';
 import { ExportPdfButton } from './ExportPdfButton';
-import { SignOutButton } from './SignOutButton';
+import { SignOutButton } from '../_components/SignOutButton';
 import s from './home.module.css';
 import '@/decks/design-system/fonts.css';
 import '@/decks/design-system/tokens.css';

@@ -2,9 +2,10 @@ import { requireTeamUser } from '@/decks/auth';
 import { fmtDate } from '@/lib/leaveEmail/templates';
 import { TRAVEL_APPROVER } from '@/lib/travel/profiles';
 import { listTravelRequests } from '@/lib/travel/store';
-import { SignOutButton } from '../../builder/SignOutButton';
+import { SignOutButton } from '../../_components/SignOutButton';
 import { DecideButtons } from './DecideButtons';
 import s from '../travel.module.css';
+import { Breadcrumbs, TEAM } from '../../_components/Breadcrumbs';
 
 export const metadata = { title: 'Travel approvals — Yali Team', robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';
@@ -51,8 +52,8 @@ export default async function TravelApprovals() {
         <span className={s.barRight}>{email}</span>
         <SignOutButton />
       </div>
+      <Breadcrumbs trail={[TEAM, ['Travel request', '/team/travel/'], ['Approvals']]} />
       <main className={`${s.main} ${s.wide}`}>
-        <div className={s.eyebrow}>Travel desk</div>
         <h1 className={s.h1}>Travel approvals</h1>
         <p className={s.lede}>
           {canDecide
@@ -70,6 +71,7 @@ export default async function TravelApprovals() {
           {decided.length ? decided.map((r) => <Item key={r._id} r={r} />) : <p className={s.empty}>None yet.</p>}
         </div>
       </main>
+      <Breadcrumbs trail={[TEAM, ['Travel request', '/team/travel/'], ['Approvals']]} position="bottom" />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { getAllLetters } from '@/lib/sanity-queries';
 import { requireTeamUser } from '@/decks/auth';
+import { Breadcrumbs, TEAM } from '../_components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Letters — Yali Team' };
@@ -32,11 +33,9 @@ export default async function LettersIndexPage() {
         <span style={{ width: 1, height: 16, background: 'rgba(239,239,239,0.25)', flexShrink: 0 }} />
         <span style={{ fontFamily: mono, fontSize: 13, fontWeight: 400, color: '#efefef' }}>Letters</span>
       </div>
+      <Breadcrumbs trail={[TEAM, ['Letters']]} />
 
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px' }}>
-        <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#830d35', marginBottom: 12 }}>
-          Yali Partners LLP
-        </div>
         <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 400, color: '#363636', marginBottom: 32 }}>
           Official Letters
         </div>
@@ -85,6 +84,7 @@ export default async function LettersIndexPage() {
           </p>
         </div>
       </div>
+      <Breadcrumbs trail={[TEAM, ['Letters']]} position="bottom" />
     </div>
   );
 }

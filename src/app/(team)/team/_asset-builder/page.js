@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { TEAM_COOKIE } from '@/lib/teamSession';
 import { teamAreas, teamPrefix } from '@/decks/auth';
-import { SignOutButton } from '../builder/SignOutButton';
+import { SignOutButton } from '../_components/SignOutButton';
 
 export const metadata = { title: 'Asset builder — Yali Team', robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';

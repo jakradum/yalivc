@@ -1,6 +1,6 @@
 'use client';
 
-import s from './home.module.css';
+import s from './signout.module.css';
 
 export function SignOutButton() {
   async function out() {

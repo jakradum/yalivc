@@ -1,5 +1,6 @@
 import { TravelForm } from './TravelForm';
 import s from './travel.module.css';
+import { Breadcrumbs, TEAM } from '../_components/Breadcrumbs';
 
 export const metadata = { title: 'Travel request — Yali Team', robots: 'noindex, nofollow' };
 
@@ -14,12 +15,13 @@ export default function TravelPage() {
         <span className={s.divider} />
         <span className={s.barTitle}>Travel request</span>
       </div>
+      <Breadcrumbs trail={[TEAM, ['Travel request']]} />
       <main className={s.main}>
-        <div className={s.eyebrow}>Travel desk</div>
         <h1 className={s.h1}>Flight booking request</h1>
         <p className={s.lede}>Pick the travellers and add the trip. Gani approves it, then Karthik Sunder books it with the travel desk.</p>
         <TravelForm />
       </main>
+      <Breadcrumbs trail={[TEAM, ['Travel request']]} position="bottom" />
     </div>
   );
 }

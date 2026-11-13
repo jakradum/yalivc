@@ -92,10 +92,16 @@
       </div>
     </div>
 
-    <div id="done" style="display:none; text-align:center; padding:0.5rem 0;">
-      <div id="done-title" style="font-size:17px; font-weight:bold; color:var(--maroon-deep); margin-bottom:6px;"></div>
-      <div id="done-detail" style="font-size:13px; color:var(--grey); margin-bottom:1.25rem;"></div>
-      <button class="btn" id="reset" style="background:var(--grey);">Done</button>
+    <!-- Confirmation: mirrors the confirmation email (src/lib/leaveEmail/templates.js buildContent) -->
+    <div id="done" style="display:none; padding:0.25rem 0;">
+      <div id="done-title" style="font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:bold; color:#363636; line-height:1.2; margin-bottom:8px;"></div>
+      <div id="done-detail" style="font-size:14px; color:#363636; line-height:1.5; margin-bottom:16px;"></div>
+      <table id="done-rows" style="width:100%; border-collapse:collapse; margin-bottom:12px;"></table>
+      <div id="done-note" style="font-size:13px; color:#6b6b6b; line-height:1.5; margin-bottom:16px;"></div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn" id="reset" style="background:var(--grey);">Done</button>
+        <a class="btn" href="/team/" style="text-align:center; text-decoration:none; background:var(--maroon);">Back to Team</a>
+      </div>
     </div>
   </div>
 </div>
@@ -284,9 +290,7 @@ $("submit-wfh").addEventListener("click", async ()=>{
       year:parseInt(String(v).slice(0,4),10)||null, createdAt:serverTimestamp()
     });
     notify({kind:"wfh",date:v,offPattern:isOffPattern(v,current.wfhPattern)});
-    $("panel").style.display="none"; $("done").style.display="block";
-    $("done-title").textContent="WFH logged";
-    $("done-detail").textContent=`${WEEKDAY[wd]} ${fmtDate(v)} recorded for ${current.name}.`;
+    showConfirm({kind:"wfh",date:v,offPattern:isOffPattern(v,current.wfhPattern)});
   }catch(err){ $("note-wfh").style.color="var(--tx-danger)"; $("note-wfh").textContent="Couldn't log. Try again."; $("submit-wfh").disabled=false; }
 });
 
@@ -342,9 +346,7 @@ $("submit-weekend").addEventListener("click", async ()=>{
       year:parseInt(String(v).slice(0,4),10)||null, createdAt:serverTimestamp()
     });
     notify({kind:"weekend",date:v});
-    $("panel").style.display="none"; $("done").style.display="block";
-    $("done-title").textContent="Weekend off logged";
-    $("done-detail").textContent=`${WEEKDAY[wd]} ${fmtDate(v)} recorded as your regular weekend day off (not counted).`;
+    showConfirm({kind:"weekend",date:v});
   }catch(err){
     $("submit-weekend").disabled=false;
     $("note-weekend").style.color="var(--tx-danger)"; $("note-weekend").textContent="Couldn't log. Try again.";
@@ -352,16 +354,39 @@ $("submit-weekend").addEventListener("click", async ()=>{
 });
 
 function showDone(kind, left, type){
+  const req = {kind:"leave", type, from:$("from").value, to:$("to").value, days:leaveDays};
+  if(kind==="approved"){ req.status="auto-approved"; req.remaining = type==="medical"?medLeft(current):paidLeft(current); }
+  else { req.status="pending"; req.left=left; }
+  showConfirm(req);
+}
+
+// ---- Confirmation (same wording and rows as the confirmation email) ----
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function longDate(s){ const [y,m,d]=String(s).split("-").map(Number); return `${WEEKDAY[new Date(y,m-1,d).getDay()]} ${d} ${MON[m-1]} ${y}`; }
+const plural=(n,w)=>`${String(n).replace("-","\u2212")} ${w}${n===1||n===-1?"":"s"}`;
+function confirmContent(req){
+  const first=String(current.name||"").split(" ")[0]||"there";
+  if(req.kind==="wfh") return { headline:"WFH logged", intro:`Hi ${first}, your work-from-home day has been logged.`,
+    rows:[["Date",longDate(req.date)],["Pattern",req.offPattern?"Outside your usual WFH days (logged for visibility)":"A usual WFH day for you"]], note:null };
+  if(req.kind==="weekend") return { headline:"Weekend off logged", intro:`Hi ${first}, your weekend day off has been recorded.`,
+    rows:[["Date",longDate(req.date)],["Counts as","Your regular weekend day (no leave used)"]], note:null };
+  const label=req.type==="medical"?"Sick / casual leave":"Paid leave";
+  const pending=req.status==="pending";
+  const span=req.from===req.to?longDate(req.from):`${longDate(req.from)} to ${longDate(req.to)}`;
+  const after=pending?(req.left??0)-req.days:req.remaining;
+  return { headline:"Application received", intro:`Hi ${first}, your leave application has been received.`,
+    rows:[["Type",label],["Dates",span],["Working days",plural(req.days,"day")],
+      ...(pending?[["Status","Subject to approval"]]:[]), ...(after==null?[]:[["Balance left",plural(after,"day")]])],
+    note: pending?`${plural(req.days,"day")} ${req.days===1?"was":"were"} requested against a balance of ${plural(req.left??0,"day")}, so this application is subject to approval. Questions: sunil@yali.vc`:null };
+}
+function showConfirm(req){
+  const c=confirmContent(req), esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
   $("panel").style.display="none"; $("done").style.display="block";
-  const label = type==="medical"?"sick/casual":"paid";
-  if(kind==="approved"){
-    const rem = type==="medical"?medLeft(current):paidLeft(current);
-    $("done-title").textContent="Request auto-approved";
-    $("done-detail").innerHTML=`${leaveDays} ${label} day(s) approved for ${current.name}. ${rem} day(s) now remain.`;
-  } else {
-    $("done-title").textContent="Sent for approval";
-    $("done-detail").innerHTML=`You requested ${leaveDays} ${label} day(s) but have ${left} left. It's been sent to management for approval. Contact <a href="mailto:sunil@yali.vc" style="color:var(--maroon); font-weight:bold;">sunil@yali.vc</a> for any questions or concerns.`;
-  }
+  $("done-title").textContent=c.headline;
+  $("done-detail").textContent=c.intro;
+  $("done-rows").innerHTML=c.rows.map(([k,v])=>`<tr><td style="padding:10px 12px 10px 0;border-top:1px solid #d9d9d9;font-family:'JetBrains Mono',monospace;font-size:12px;color:#6b6b6b;width:120px;vertical-align:top">${esc(k)}</td><td style="padding:10px 0;border-top:1px solid #d9d9d9;font-size:15px;line-height:1.4;color:#363636">${esc(v)}</td></tr>`).join("")
+    + `<tr><td colspan="2" style="border-top:1px solid #d9d9d9"></td></tr>`;
+  $("done-note").textContent=c.note||""; $("done-note").style.display=c.note?"block":"none";
 }
 $("reset").addEventListener("click", ()=>{
   $("done").style.display="none"; $("emp").value=""; $("panel").style.display="none"; current=null;
