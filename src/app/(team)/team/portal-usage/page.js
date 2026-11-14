@@ -95,6 +95,7 @@ const FILES = { 'quarterly-report': 'Report', 'fund-financials': 'Fund financial
 // Same rule as sign-in (lpPortalActive in src/lib/lp-data/supabase-reads.js).
 const hasPortalAccess = (u) => u.noAccess !== true && (u.lpPortalAccess === true || (u.lpPortalAccess == null && u.isActive === true));
 const TRACKING_FROM = '11 Nov 2026';
+const TRACKING_DAY = '2026-11-11'; // the same day as an IST day key
 
 function summarise(visits) {
   const lps = new Set(visits.map((v) => v.email));
@@ -127,13 +128,13 @@ function byLp(visits, names) {
   return [...map.values()].sort((a, b) => b.seconds - a.seconds || new Date(b.last) - new Date(a.last));
 }
 
-// "+3 vs previous 30 days"; nothing to compare on All time or with an empty previous period
+// "Up 3", "Down 2 min", "Up 5 pts" or "Same"; read as "… from the 7 days before"
 function delta(cur, prev, { pct = false, unit = '' } = {}) {
   if (prev == null || cur == null) return null;
-  const d = cur - prev;
-  if (!pct && d === 0) return 'No change';
-  const fmt = pct ? `${d > 0 ? '+' : ''}${Math.round(d * 100)} pts` : `${d > 0 ? '+' : '−'}${unit === 'min' ? duration(Math.abs(d)) : Math.abs(Math.round(d * 10) / 10)}`;
-  return fmt;
+  const d = pct ? Math.round((cur - prev) * 100) : cur - prev;
+  if (d === 0) return 'Same';
+  const size = pct ? `${Math.abs(d)} pts` : unit === 'min' ? duration(Math.abs(d)) : Math.abs(Math.round(d * 10) / 10);
+  return `${d > 0 ? 'Up' : 'Down'} ${size}`;
 }
 
 // Single-series bar chart, SVG. Bars are square (Yali), one crimson, with a native hover title.
@@ -197,13 +198,15 @@ export default async function PortalUsage({ searchParams }) {
   const prev = range === 'all' ? null : all.filter((v) => { const d = istDay(v.started_at); return d >= prevStartDay && d < startDay; });
 
   const cur = summarise(inRange);
-  const was = prev && prev.length ? summarise(prev) : null;
-  const vs = range === 'all' ? null : `vs previous ${days} days`;
+  // Compare only when the whole earlier stretch falls after tracking began; before
+  // that there is no data, which is not the same as no visits.
+  const was = prev && prevStartDay >= TRACKING_DAY ? summarise(prev) : null;
+  const vs = (d) => (d === 'Same' ? `Same as the ${days} days before` : `${d} from the ${days} days before`);
 
   const kpis = [
     { label: 'Active LPs', value: cur.lps, d: was && delta(cur.lps, was.lps) },
     { label: 'Visits', value: cur.visits, d: was && delta(cur.visits, was.visits) },
-    { label: 'Avg time per visit', value: cur.visits ? duration(cur.avgSeconds) : '–', d: was && cur.visits && delta(cur.avgSeconds, was.avgSeconds, { unit: 'min' }) },
+    { label: 'Avg time per visit', value: cur.visits ? duration(cur.avgSeconds) : '–', d: was && cur.visits && was.visits && delta(cur.avgSeconds, was.avgSeconds, { unit: 'min' }) },
     { label: 'Total time on portal', value: duration(cur.seconds), d: was && delta(cur.seconds, was.seconds, { unit: 'min' }) },
     { label: 'Downloaded a report', value: cur.downloadRate == null ? '–' : `${Math.round(cur.downloadRate * 100)}%`, sub: cur.lps ? `${cur.downloaders} of ${cur.lps} LP${cur.lps === 1 ? '' : 's'}` : null, d: was && delta(cur.downloadRate, was.downloadRate, { pct: true }) },
     { label: 'Avg rating', value: cur.avgRating == null ? '–' : `${cur.avgRating.toFixed(1)} / 10`, sub: cur.ratings.length ? `${cur.ratings.length} rating${cur.ratings.length === 1 ? '' : 's'}` : 'No ratings yet', d: was && cur.avgRating != null && was.avgRating != null ? delta(cur.avgRating, was.avgRating) : null },
@@ -272,7 +275,7 @@ export default async function PortalUsage({ searchParams }) {
         <div className={s.head}>
           <div>
             <h1 className={t.h1}>LP portal usage</h1>
-            <p className={s.lede}>partners.yali.vc, {rangeLabel}. Time counts only while an LP is active on the page. IST. Yali staff not shown.</p>
+            <p className={s.lede}>partners.yali.vc, {rangeLabel}. Time counts only while an LP is active on the page. IST. Yali staff not shown. Tracking began {TRACKING_FROM}.</p>
           </div>
           <nav className={s.ranges} aria-label="Date range">
             {RANGES.map(([k, l]) => (
@@ -290,8 +293,8 @@ export default async function PortalUsage({ searchParams }) {
                 <div key={k.label} className={s.kpi}>
                   <div className={s.kpiLabel}>{k.label}</div>
                   <div className={s.kpiValue}>{k.value}</div>
-                  <div className={s.kpiSub}>{k.sub || (k.d ? `${k.d} ${vs}` : vs && !was ? `No visits in the previous ${days} days` : ' ')}</div>
-                  {k.sub && k.d ? <div className={s.kpiSub}>{`${k.d} ${vs}`}</div> : null}
+                  <div className={s.kpiSub}>{k.sub || (k.d ? vs(k.d) : ' ')}</div>
+                  {k.sub && k.d ? <div className={s.kpiSub}>{vs(k.d)}</div> : null}
                 </div>
               ))}
             </div>
