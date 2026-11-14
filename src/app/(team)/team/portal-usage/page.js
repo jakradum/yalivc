@@ -5,6 +5,7 @@ import { SignOutButton } from '../_components/SignOutButton';
 import { Breadcrumbs, TEAM } from '../_components/Breadcrumbs';
 import t from '../travel/travel.module.css';
 import s from './usage.module.css';
+import { AutoRefresh } from './AutoRefresh';
 
 export const metadata = { title: 'Portal usage | Yali Team', robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';
@@ -257,6 +258,7 @@ export default async function PortalUsage({ searchParams }) {
 
   return (
     <div className={t.page}>
+      <AutoRefresh />
       <div className={t.bar}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <a href="/team/"><img src="/favicon.svg" alt="Yali" /></a>
