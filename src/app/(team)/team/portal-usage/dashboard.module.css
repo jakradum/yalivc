@@ -1,0 +1,174 @@
+/* team.yali.vc/portal-usage: a dense internal tool. Colours are tokens on .page;
+   night comes from the Day / Night / System switch or, on System, the computer's
+   setting (day when there is none). Square corners only. */
+.page {
+  --ground: linear-gradient(165deg, #ebde84 0%, #efefef 55%, #efefef 100%);
+  --surface: #ffffff;
+  --surface-end: #fbfaf8;
+  --ink: #2f3437;
+  --ink-strong: #0a0a0a;
+  --soft: #6b6b6b;
+  --faint: #8a8780;
+  --muted: #9a958e;
+  --rule: #e9e6df;
+  --rule-strong: #d6d3cc;
+  --switch: rgba(47, 52, 55, 0.08);
+  --switch-hover: rgba(255, 255, 255, 0.6);
+  --switch-on: #ffffff;
+  --chart: #5f7182;
+  --chart-grid: #ece9e3;
+
+  min-height: 100vh;
+  background: var(--ground);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-size: 13px;
+  font-family: var(--font-inter), sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+/* Night: chosen in the switch, or System when the computer is set to dark. */
+@media (prefers-color-scheme: dark) {
+  .page:not([data-theme="light"]) {
+    --ground: linear-gradient(165deg, #3a3520 0%, #1b1b1a 50%, #161616 100%);
+    --surface: #1f1f1e;
+    --surface-end: #1c1c1b;
+    --ink: #e6e4df;
+    --ink-strong: #ffffff;
+    --soft: #a7a49d;
+    --faint: #8f8c85;
+    --muted: #77746e;
+    --rule: #2c2c2a;
+    --rule-strong: #3a3a37;
+    --switch: rgba(255, 255, 255, 0.07);
+    --switch-hover: rgba(255, 255, 255, 0.06);
+    --switch-on: #33332f;
+    --chart: #8fa3b5;
+    --chart-grid: #2c2c2a;
+    color-scheme: dark;
+  }
+}
+.page[data-theme="dark"] {
+  --ground: linear-gradient(165deg, #3a3520 0%, #1b1b1a 50%, #161616 100%);
+  --surface: #1f1f1e;
+  --surface-end: #1c1c1b;
+  --ink: #e6e4df;
+  --ink-strong: #ffffff;
+  --soft: #a7a49d;
+  --faint: #8f8c85;
+  --muted: #77746e;
+  --rule: #2c2c2a;
+  --rule-strong: #3a3a37;
+  --switch: rgba(255, 255, 255, 0.07);
+  --switch-hover: rgba(255, 255, 255, 0.06);
+  --switch-on: #33332f;
+  --chart: #8fa3b5;
+  --chart-grid: #2c2c2a;
+  color-scheme: dark;
+}
+.page h1, .page h2, .page button, .page summary, .page a { font-family: inherit; }
+
+/* Top bar */
+.bar { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 24px; background: linear-gradient(180deg, var(--surface), var(--surface-end)); border-bottom: 1px solid var(--rule); }
+.home { display: flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font-weight: 600; }
+.home img { height: 20px; width: auto; display: block; }
+.crumb { color: var(--muted); }
+.barRight { margin-left: auto; color: var(--soft); font-size: 12px; }
+.bar button { background: none !important; color: var(--ink) !important; border: none !important; font-size: 12px !important; padding: 4px 0 !important; text-decoration: underline; cursor: pointer; }
+
+/* Head */
+.body { padding: 16px 24px 48px; max-width: 1640px; margin: 0 auto; }
+.top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+.title { font-size: 17px; font-weight: 600; margin: 0; color: var(--ink); }
+.meta { color: var(--soft); font-size: 12px; }
+.ranges { display: flex; gap: 2px; padding: 2px; background: var(--switch); margin-left: auto; }
+.range, .rangeOn { font-size: 12px; padding: 5px 12px; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.range:hover { background: var(--switch-hover); }
+.rangeOn { background: var(--switch-on); font-weight: 600; }
+
+/* Headline numbers */
+.stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 12px; }
+.stat { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; min-width: 0; padding: 10px 14px; background: linear-gradient(180deg, var(--surface), var(--surface-end)); }
+.statLabel { color: var(--soft); font-size: 12px; white-space: nowrap; }
+.statValue { font-size: 16px; font-weight: 600; white-space: nowrap; }
+.statSub { color: var(--soft); font-size: 11px; font-weight: 400; margin-left: 4px; }
+@media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+
+/* Layout and panels */
+.grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+@media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+.col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel { min-width: 0; background: linear-gradient(180deg, var(--surface) 0%, var(--surface) 60%, var(--surface-end) 100%); }
+.panelHead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+.h2 { font-size: 13px; font-weight: 600; margin: 0; }
+.count { font-size: 11.5px; color: var(--faint); }
+.chartBox { padding: 8px 14px 4px; }
+.chartBox [class*="bar"] { fill: var(--chart); }
+.chartBox [class*="grid"] { stroke: var(--chart-grid); }
+.chartBox [class*="axis"] { fill: var(--soft); font-family: var(--font-inter), sans-serif; }
+.chartBox [class*="hit"]:hover { fill: var(--switch); }
+
+/* Tables */
+.scrollWrap { position: relative; }
+.scroll { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.table th { text-align: left; font-weight: 500; color: var(--faint); font-size: 11.5px; padding: 6px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.table td { padding: 6px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: top; }
+.table tr:last-child td { border-bottom: none; }
+.table th:first-child, .table td:first-child { padding-left: 14px; }
+.table th:last-child, .table td:last-child { padding-right: 14px; }
+.num { text-align: right !important; }
+.lpName { font-weight: 600; }
+.lpEmail { font-size: 11px; color: var(--soft); }
+.muted { color: var(--muted); }
+.wrap { white-space: normal !important; min-width: 160px; }
+.mono { font-size: 12px; }
+
+.sort, .sortOn { all: unset; cursor: pointer; white-space: nowrap; }
+.sort:hover { color: var(--ink); text-decoration: underline; }
+.sortOn { color: var(--ink-strong); font-weight: 600; }
+.sort:focus-visible, .sortOn:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.sortDir { font-size: 10px; margin-left: 5px; }
+
+/* Sideways scroll cue (ScrollX) */
+.fadeLeft, .fadeRight { position: absolute; top: 0; bottom: 28px; width: 36px; pointer-events: none; }
+.fadeLeft { left: 0; background: linear-gradient(to right, var(--surface), transparent); }
+.fadeRight { right: 0; background: linear-gradient(to left, var(--surface), transparent); }
+.scrollHint { margin: 0; padding: 6px 14px; height: 28px; box-sizing: border-box; border-top: 1px solid var(--rule); font-size: 11.5px; color: var(--soft); text-align: right; }
+
+/* Text blocks */
+.empty { padding: 10px 14px; color: var(--soft); margin: 0; }
+.note { padding: 8px 14px; color: var(--soft); font-size: 12px; margin: 0; }
+.comment { padding: 8px 14px; border-bottom: 1px solid var(--rule); }
+.comment:last-child { border-bottom: none; }
+.commentText { margin: 4px 0 0; line-height: 1.5; white-space: pre-wrap; }
+
+/* "Show the list" */
+.more summary { cursor: pointer; font-size: 11.5px; color: var(--ink); text-decoration: underline; padding: 0 14px 8px; list-style: none; }
+.more summary::-webkit-details-marker { display: none; }
+.more[open] summary { border-bottom: 1px solid var(--rule); }
+
+/* Collapsible panel (Activity log): the head is the click target. */
+.collapse > summary { list-style: none; cursor: pointer; }
+.collapse > summary::-webkit-details-marker { display: none; }
+.collapse:not([open]) > summary { border-bottom: none; }
+.toggle { margin-left: 10px; color: var(--ink); text-decoration: underline; }
+.toggle::after { content: attr(data-show); }
+.collapse[open] .toggle::after { content: attr(data-hide); }
+
+/* Crimson top bar, same in light and dark */
+.bar { background: #830d35; border-bottom: none; color: #efefef; }
+.home, .bar button { color: #ffffff !important; }
+.home img { filter: brightness(0) invert(1); }
+.crumb { color: rgba(239, 239, 239, 0.5); }
+.barRight { color: rgba(239, 239, 239, 0.8); }
+
+/* Day / Night / System switch, in the crimson bar */
+.theme { display: flex; gap: 2px; padding: 2px; background: rgba(255, 255, 255, 0.12); }
+.themeOff, .themeOn { all: unset; cursor: pointer; font-size: 11.5px; padding: 3px 9px; color: #ffffff; }
+.themeOff:hover { background: rgba(255, 255, 255, 0.12); }
+.themeOn { background: #ffffff; color: #830d35; font-weight: 600; }
+.themeOff:focus-visible, .themeOn:focus-visible { outline: 1px solid #ffffff; outline-offset: 1px; }
+.bar .theme button { text-decoration: none; padding: 3px 9px !important; font-size: 11.5px !important; }
+.bar .theme .themeOn { color: #830d35 !important; background: #ffffff !important; }
+.bar .theme .themeOff { color: #ffffff !important; }
+.bar .theme .themeOff:hover { background: rgba(255, 255, 255, 0.12) !important; }

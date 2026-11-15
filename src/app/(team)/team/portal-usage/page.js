@@ -2,20 +2,22 @@ import { requireTeamUser } from '@/decks/auth';
 import { supa } from '@/lib/lp-data/rest';
 import { isYaliStaff } from '@/lib/internal-user';
 import { SignOutButton } from '../_components/SignOutButton';
-import { Breadcrumbs, TEAM } from '../_components/Breadcrumbs';
-import t from '../travel/travel.module.css';
 import s from './usage.module.css';
+import o from './dashboard.module.css';
+import { ScrollX } from './ScrollX';
+import { ThemeSwitch, THEME_SCRIPT } from './ThemeSwitch';
 import { AutoRefresh } from './AutoRefresh';
+import { LpTable } from './LpTable';
 
 export const metadata = { title: 'Portal usage | Yali Team', robots: 'noindex, nofollow' };
 export const dynamic = 'force-dynamic';
 
-// LP portal analytics, laid out like a standard analytics page: a date range, headline
-// numbers against the previous period, visits over time, when LPs come and how they
-// rate the portal, then the LP table and recent activity. Read from Supabase
-// `portal_visits` (rules in supabase/migrations/0007_portal_visits.sql); Yali staff
-// visits are left out. Charts are plain server-rendered SVG with a hover title per bar.
-// Data is sparse for now, so every block reads sensibly with little or nothing in it.
+// LP portal analytics as a dense internal tool: a date range, headline numbers, a
+// sortable LP table, a collapsible activity log, LPs not signed in yet, and side panels
+// for visits per day, downloads by file, company pages and ratings. Read from Supabase
+// `portal_visits` (rules in supabase/migrations/0007_portal_visits.sql) and the LP
+// records; Yali staff visits are left out. Day, night or the system setting
+// (ThemeSwitch). Data is sparse for now, so every block reads sensibly with little in it.
 
 const TZ = 'Asia/Kolkata';
 const RANGES = [['7', 'Last 7 days'], ['30', 'Last 30 days'], ['90', 'Last 90 days'], ['all', 'All time']];
@@ -228,6 +230,12 @@ export default async function PortalUsage({ searchParams }) {
 
   // downloads, by file and quarter
   const downloads = rec.downloads.filter((d) => inDays(d.at));
+  const filesByLp = new Map(); // what each LP downloaded in the range, oldest first
+  for (const d of [...downloads].reverse()) {
+    const set = filesByLp.get(d.email) || new Set();
+    set.add(`${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}`);
+    filesByLp.set(d.email, set);
+  }
   const fileMap = new Map();
   for (const d of downloads) {
     const k = `${d.quarter || ''}|${d.type}`;
@@ -260,225 +268,193 @@ export default async function PortalUsage({ searchParams }) {
     .sort((a, b) => (a.name || a.email).localeCompare(b.name || b.email));
 
   return (
-    <div className={t.page}>
+    <div className={o.page} data-ops-page="" suppressHydrationWarning>
+      <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       <AutoRefresh />
-      <div className={t.bar}>
+      <div className={o.bar}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <a href="/team/"><img src="/favicon.svg" alt="Yali" /></a>
-        <span className={t.divider} />
-        <span className={t.barTitle}>Portal usage</span>
-        <span className={t.barRight}>{email}</span>
+        <a href="/team/" className={o.home}><img src="/favicon.svg" alt="Yali" /><span>Team</span></a>
+        <span className={o.crumb}>/</span>
+        <span>Portal usage</span>
+        <span className={o.barRight}>{email}</span>
+        <ThemeSwitch />
         <SignOutButton />
       </div>
-      <Breadcrumbs trail={[TEAM, ['Portal usage']]} />
-      <main className={`${t.main} ${t.wide}`}>
-        <div className={s.head}>
-          <div>
-            <h1 className={t.h1}>LP portal usage</h1>
-            <p className={s.lede}>partners.yali.vc, {rangeLabel}. Time counts only while an LP is active on the page. IST. Yali staff not shown. Tracking began {TRACKING_FROM}.</p>
-          </div>
-          <nav className={s.ranges} aria-label="Date range">
+      <div className={o.body}>
+        <div className={o.top}>
+          <h1 className={o.title}>LP portal usage</h1>
+          <span className={o.meta}>{rangeLabel[0].toUpperCase() + rangeLabel.slice(1)}. IST. Staff excluded. Tracking since {TRACKING_FROM}. Refreshes every 30 min.</span>
+          <nav className={o.ranges} aria-label="Date range">
             {RANGES.map(([k, l]) => (
-              <a key={k} href={`?range=${k}`} className={k === range ? s.rangeOn : s.range} aria-current={k === range ? 'page' : undefined}>{l}</a>
+              <a key={k} href={`?range=${k}`} className={k === range ? o.rangeOn : o.range} aria-current={k === range ? 'page' : undefined}>{l}</a>
             ))}
           </nav>
         </div>
 
         {failed ? (
-          <div className={t.card}><p className={t.empty}>Could not load usage right now. Try again in a minute.</p></div>
+          <div className={o.panel}><p className={o.empty}>Could not load usage right now. Try again in a minute.</p></div>
         ) : (
           <>
-            <div className={s.kpis}>
+            <div className={o.stats}>
               {kpis.map((k) => (
-                <div key={k.label} className={s.kpi}>
-                  <div className={s.kpiLabel}>{k.label}</div>
-                  <div className={s.kpiValue}>{k.value}</div>
-                  <div className={s.kpiSub}>{k.sub || (k.d ? vs(k.d) : ' ')}</div>
-                  {k.sub && k.d ? <div className={s.kpiSub}>{vs(k.d)}</div> : null}
+                <div key={k.label} className={o.stat}>
+                  <span className={o.statLabel}>{k.label}</span>
+                  <span className={o.statValue}>{k.value}{k.label === 'Downloaded a report' && cur.lps ? <span className={o.statSub}>{`${cur.downloaders}/${cur.lps}`}</span> : null}</span>
                 </div>
               ))}
             </div>
 
-            <section className={t.card}>
-              <h2 className={s.h2}>Visits per day</h2>
-              {inRange.length ? (
-                <Bars data={daySeries} label="Visits per day" xLabel={shortDay} valueLabel={(v) => `${v} visit${v === 1 ? '' : 's'}`} every={Math.max(1, Math.ceil(days / 8))} />
-              ) : <p className={t.empty}>No LP visits {rangeLabel}.</p>}
-            </section>
+            <div className={o.grid}>
+              <div className={o.col}>
+                <section className={o.panel}>
+                  {lps.length ? (
+                    <LpTable
+                      rows={lps.map((l) => ({
+                        email: l.email,
+                        name: l.name,
+                        visits: l.visits,
+                        seconds: l.seconds,
+                        time: duration(l.seconds),
+                        avgSeconds: l.seconds / l.visits,
+                        avg: duration(l.seconds / l.visits),
+                        lastMs: new Date(l.last).getTime(),
+                        ago: ago(l.last, now),
+                        when: when(l.last),
+                        downloaded: l.downloaded,
+                        files: [...(filesByLp.get(l.email) || [])],
+                        rating: l.rating,
+                        companyCount: l.companies.size,
+                        companies: [...l.companies].map(([c, n]) => (n > 1 ? `${companyName(c)} (${n})` : companyName(c))).join(', '),
+                      }))}
+                    />
+                  ) : (
+                    <>
+                      <div className={o.panelHead}><h2 className={o.h2}>LPs</h2><span className={o.count}>0</span></div>
+                      <p className={o.empty}>No LP has signed in {rangeLabel}.</p>
+                    </>
+                  )}
+                </section>
 
-            <div className={s.two}>
-              <section className={t.card}>
-                <h2 className={s.h2}>Visits by day of week</h2>
-                {inRange.length ? <Bars data={weekday} label="Visits by day of week" width={380} height={170} valueLabel={(v) => `${v} visit${v === 1 ? '' : 's'}`} /> : <p className={t.empty}>Nothing yet.</p>}
-              </section>
-              <section className={t.card}>
-                <h2 className={s.h2}>Ratings, 0 to 10</h2>
-                {cur.ratings.length ? <Bars data={ratingDist} label="Ratings" width={380} height={170} xLabel={(k) => k} valueLabel={(v) => `${v} rating${v === 1 ? '' : 's'}`} /> : <p className={t.empty}>No ratings {rangeLabel}.</p>}
-              </section>
-            </div>
-
-            <section className={t.card}>
-              <h2 className={s.h2}>LPs, by time on portal</h2>
-              {lps.length ? (
-                <div className={s.scroll}>
-                  <table className={s.table}>
-                    <thead>
-                      <tr><th>LP</th><th className={s.num}>Visits</th><th className={s.num}>Total time</th><th className={s.num}>Avg per visit</th><th>Last seen</th><th>Downloaded</th><th className={s.num}>Latest rating</th><th>Company pages opened</th></tr>
-                    </thead>
-                    <tbody>
-                      {lps.map((l) => (
-                        <tr key={l.email}>
-                          <td>
-                            <div className={s.lpName}>{l.name || l.email}</div>
-                            {l.name ? <div className={s.lpEmail}>{l.email}</div> : null}
-                          </td>
-                          <td className={s.num}>{l.visits}</td>
-                          <td className={s.num}>{duration(l.seconds)}</td>
-                          <td className={s.num}>{duration(l.seconds / l.visits)}</td>
-                          <td>{ago(l.last, now)}<span className={s.muted}>{`  ${when(l.last)}`}</span></td>
-                          <td>{l.downloaded ? 'Yes' : <span className={s.muted}>No</span>}</td>
-                          <td className={s.num}>{l.rating == null ? <span className={s.muted}>Not rated</span> : `${l.rating} / 10`}</td>
-                          <td className={s.wrap}>{l.companies.size ? [...l.companies].map(([c, n]) => (n > 1 ? `${companyName(c)} (${n} visits)` : companyName(c))).join(', ') : <span className={s.muted}>None</span>}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : <p className={t.empty}>No LP has signed in {rangeLabel}.</p>}
-            </section>
-
-            <section className={t.card}>
-              <h2 className={s.h2}>Company pages opened</h2>
-              {companiesOpened.length ? (
-                <div className={s.scroll}>
-                  <table className={s.table}>
-                    <thead><tr><th>Company</th><th className={s.num}>LPs</th><th className={s.num}>Visits</th><th>Opened by</th></tr></thead>
-                    <tbody>
-                      {companiesOpened.map((c) => (
-                        <tr key={c.slug}>
-                          <td className={s.lpName}>{companyName(c.slug)}</td>
-                          <td className={s.num}>{c.lps.size}</td>
-                          <td className={s.num}>{c.visits}</td>
-                          <td className={s.wrap}>{[...c.lps].map(who).join(', ')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : <p className={t.empty}>No company pages opened {rangeLabel}.</p>}
-            </section>
-
-            <div className={s.two}>
-              <section className={t.card}>
-                <h2 className={s.h2}>Downloads, by file</h2>
-                {byFile.length ? (
-                  <div className={s.scroll}>
-                    <table className={s.table}>
-                      <thead><tr><th>Quarter</th><th>File</th><th className={s.num}>LPs</th><th className={s.num}>Downloads</th></tr></thead>
-                      <tbody>
-                        {byFile.map((f) => (
-                          <tr key={`${f.quarter}-${f.type}`}>
-                            <td>{f.quarter || <span className={s.muted}>Unknown</span>}</td>
-                            <td>{FILES[f.type]}</td>
-                            <td className={s.num}>{f.lps.size}</td>
-                            <td className={s.num}>{f.count}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : <p className={t.empty}>No downloads {rangeLabel}.</p>}
-              </section>
-              <section className={t.card}>
-                <h2 className={s.h2}>Latest downloads</h2>
-                {downloads.length ? (
-                  <ul className={s.feed}>
-                    {downloads.slice(0, 12).map((d, i) => (
-                      <li key={`${d.email}-${d.at}-${i}`}>
-                        <span className={s.feedWho}>{who(d.email)}</span>
-                        <span>{` ${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}`}</span>
-                        <span className={s.feedWhen}>{ago(d.at, now)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : <p className={t.empty}>Nothing {rangeLabel}.</p>}
-              </section>
-            </div>
-
-            <section className={t.card}>
-              <h2 className={s.h2}>Rating comments</h2>
-              {comments.length ? (
-                <ul className={s.feed}>
-                  {comments.map((f, i) => (
-                    <li key={`${f.email}-${f.at}-${i}`} className={s.comment}>
-                      <div>
-                        <span className={s.feedWho}>{who(f.email)}</span>
-                        <span>{` rated ${f.score} / 10${f.quarter ? `, ${f.quarter}` : ''}`}</span>
-                        <p className={s.commentText}>{f.comment}</p>
-                      </div>
-                      <span className={s.feedWhen}>{ago(f.at, now)}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : <p className={t.empty}>No comments {rangeLabel}. LPs are asked for one when they rate the portal below 7.</p>}
-            </section>
-
-            <section className={t.card}>
-              <h2 className={s.h2}>Not signed in yet</h2>
-              <p className={s.lede}>
-                {notSignedIn.length} of {rec.users.filter(hasPortalAccess).length} LPs with portal access have not signed in since tracking began on {TRACKING_FROM}.
-                Firms let in by email domain are not listed.
-              </p>
-              {notSignedIn.length > 0 && (
-                <details className={s.more}>
-                  <summary>Show the list</summary>
-                  <div className={s.scroll}>
-                    <table className={s.table}>
-                      <thead><tr><th>LP</th><th>GIFT City</th><th>Last download</th></tr></thead>
-                      <tbody>
-                        {notSignedIn.map((u) => {
-                          const d = lastDownload.get(u.email);
-                          return (
-                            <tr key={u.email}>
-                              <td>
-                                <div className={s.lpName}>{u.name || u.email}</div>
-                                {u.name ? <div className={s.lpEmail}>{u.email}</div> : null}
-                              </td>
-                              <td>{u.gift === true ? 'Yes' : <span className={s.muted}>No</span>}</td>
-                              <td>{d ? `${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}, ${when(d.at)}` : <span className={s.muted}>Never</span>}</td>
+                <details className={`${o.panel} ${o.collapse}`}>
+                  <summary className={o.panelHead}>
+                    <h2 className={o.h2}>Activity log</h2>
+                    <span className={o.count}>{inRange.length} visits <span className={o.toggle} data-show="Show" data-hide="Hide" /></span>
+                  </summary>
+                  {inRange.length ? (
+                    <ScrollX>
+                      <table className={o.table}>
+                        <thead><tr><th>Signed in</th><th>LP</th><th className={o.num}>Time</th><th>Company pages</th><th>Downloaded</th><th className={o.num}>Rating</th></tr></thead>
+                        <tbody>
+                          {inRange.slice(0, 50).map((v) => (
+                            <tr key={`${v.email}-${v.started_at}`}>
+                              <td className={o.mono}>{when(v.started_at)}</td>
+                              <td>{who(v.email)}</td>
+                              <td className={o.num}>{duration(v.active_seconds)}</td>
+                              <td className={o.wrap}>{v.companies.length ? v.companies.map(companyName).join(', ') : <span className={o.muted}>None</span>}</td>
+                              <td>{v.downloaded ? 'Yes' : <span className={o.muted}>No</span>}</td>
+                              <td className={o.num}>{v.rating == null ? <span className={o.muted}>-</span> : v.rating}</td>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                          ))}
+                        </tbody>
+                      </table>
+                    </ScrollX>
+                  ) : <p className={o.empty}>Nothing {rangeLabel}.</p>}
                 </details>
-              )}
-            </section>
 
-            <section className={t.card}>
-              <h2 className={s.h2}>Recent activity</h2>
-              {recent.length ? (
-                <ul className={s.feed}>
-                  {recent.map((v) => (
-                    <li key={`${v.email}-${v.started_at}`}>
-                      <span className={s.feedWho}>{who(v.email)}</span>
-                      <span>
-                        {` signed in, ${duration(v.active_seconds)} on the portal`}
-                        {v.companies.length ? `, opened ${v.companies.map(companyName).join(', ')}` : ''}
-                        {v.downloaded ? ', downloaded a file' : ''}
-                        {v.rating != null ? `, rated it ${v.rating} / 10` : ''}
-                      </span>
-                      <span className={s.feedWhen}>{ago(v.started_at, now)}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : <p className={t.empty}>Nothing {rangeLabel}.</p>}
-            </section>
+                <section className={o.panel}>
+                  <div className={o.panelHead}><h2 className={o.h2}>Not signed in yet</h2><span className={o.count}>{notSignedIn.length} of {rec.users.filter(hasPortalAccess).length}</span></div>
+                  <p className={o.note}>LPs with portal access and no visit since {TRACKING_FROM}. Firms let in by email domain are not listed.</p>
+                  {notSignedIn.length > 0 && (
+                    <details className={o.more}>
+                      <summary>Show the list</summary>
+                      <ScrollX>
+                        <table className={o.table}>
+                          <thead><tr><th>LP</th><th>Email</th><th>GIFT City</th><th>Last download</th></tr></thead>
+                          <tbody>
+                            {notSignedIn.map((u) => {
+                              const d = lastDownload.get(u.email);
+                              return (
+                                <tr key={u.email}>
+                                  <td className={o.lpName}>{u.name || <span className={o.muted}>No name</span>}</td>
+                                  <td className={o.mono}>{u.email}</td>
+                                  <td>{u.gift === true ? 'Yes' : <span className={o.muted}>No</span>}</td>
+                                  <td>{d ? `${FILES[d.type]}${d.quarter ? `, ${d.quarter}` : ''}, ${when(d.at)}` : <span className={o.muted}>Never</span>}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </ScrollX>
+                    </details>
+                  )}
+                </section>
+              </div>
+
+              <div className={o.col}>
+                <section className={o.panel}>
+                  <div className={o.panelHead}><h2 className={o.h2}>Visits per day</h2><span className={o.count}>{inRange.length}</span></div>
+                  {inRange.length ? (
+                    <div className={o.chartBox}>
+                      <Bars data={daySeries} label="Visits per day" width={420} height={150} xLabel={shortDay} valueLabel={(v) => `${v} visit${v === 1 ? '' : 's'}`} every={Math.max(1, Math.ceil(days / 5))} />
+                    </div>
+                  ) : <p className={o.empty}>No LP visits {rangeLabel}.</p>}
+                </section>
+
+                <section className={o.panel}>
+                  <div className={o.panelHead}><h2 className={o.h2}>Downloads, by file</h2><span className={o.count}>{downloads.length}</span></div>
+                  {byFile.length ? (
+                    <ScrollX>
+                      <table className={o.table}>
+                        <thead><tr><th>Quarter</th><th>File</th><th className={o.num}>LPs</th><th className={o.num}>Count</th></tr></thead>
+                        <tbody>
+                          {byFile.map((f) => (
+                            <tr key={`${f.quarter}-${f.type}`}>
+                              <td className={o.mono}>{f.quarter || <span className={o.muted}>Unknown</span>}</td>
+                              <td>{FILES[f.type]}</td>
+                              <td className={o.num}>{f.lps.size}</td>
+                              <td className={o.num}>{f.count}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </ScrollX>
+                  ) : <p className={o.empty}>No downloads {rangeLabel}.</p>}
+                </section>
+
+                <section className={o.panel}>
+                  <div className={o.panelHead}><h2 className={o.h2}>Company pages opened</h2><span className={o.count}>{companiesOpened.length}</span></div>
+                  {companiesOpened.length ? (
+                    <ScrollX>
+                      <table className={o.table}>
+                        <thead><tr><th>Company</th><th className={o.num}>LPs</th><th className={o.num}>Visits</th></tr></thead>
+                        <tbody>
+                          {companiesOpened.map((c) => (
+                            <tr key={c.slug} title={[...c.lps].map(who).join(', ')}>
+                              <td>{companyName(c.slug)}</td>
+                              <td className={o.num}>{c.lps.size}</td>
+                              <td className={o.num}>{c.visits}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </ScrollX>
+                  ) : <p className={o.empty}>None {rangeLabel}.</p>}
+                </section>
+
+                <section className={o.panel}>
+                  <div className={o.panelHead}><h2 className={o.h2}>Ratings</h2><span className={o.count}>{cur.ratings.length ? `avg ${cur.avgRating.toFixed(1)}` : 'none'}</span></div>
+                  {comments.length ? comments.map((f, i) => (
+                    <div key={`${f.email}-${f.at}-${i}`} className={o.comment}>
+                      <span className={o.lpName}>{who(f.email)}</span> <span className={o.mono}>{f.score} / 10</span> <span className={o.muted}>{ago(f.at, now)}</span>
+                      <p className={o.commentText}>{f.comment}</p>
+                    </div>
+                  )) : <p className={o.empty}>{cur.ratings.length ? 'No comments.' : `No ratings ${rangeLabel}.`}</p>}
+                </section>
+              </div>
+            </div>
           </>
         )}
-      </main>
-      <Breadcrumbs trail={[TEAM, ['Portal usage']]} position="bottom" />
+      </div>
     </div>
   );
 }
