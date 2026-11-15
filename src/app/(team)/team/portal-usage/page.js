@@ -7,6 +7,7 @@ import o from './dashboard.module.css';
 import { ScrollX } from './ScrollX';
 import { ThemeSwitch, THEME_SCRIPT } from './ThemeSwitch';
 import { AutoRefresh } from './AutoRefresh';
+import { refreshLabel } from './refreshSchedule';
 import { LpTable } from './LpTable';
 
 export const metadata = { title: 'Portal usage | Yali Team', robots: 'noindex, nofollow' };
@@ -283,7 +284,7 @@ export default async function PortalUsage({ searchParams }) {
       <div className={o.body}>
         <div className={o.top}>
           <h1 className={o.title}>LP portal usage</h1>
-          <span className={o.meta}>{rangeLabel[0].toUpperCase() + rangeLabel.slice(1)}. IST. Staff excluded. Tracking since {TRACKING_FROM}. Refreshes every 30 min.</span>
+          <span className={o.meta}>{rangeLabel[0].toUpperCase() + rangeLabel.slice(1)}. IST. Staff excluded. Tracking since {TRACKING_FROM}. {refreshLabel(now)}.</span>
           <nav className={o.ranges} aria-label="Date range">
             {RANGES.map(([k, l]) => (
               <a key={k} href={`?range=${k}`} className={k === range ? o.rangeOn : o.range} aria-current={k === range ? 'page' : undefined}>{l}</a>
