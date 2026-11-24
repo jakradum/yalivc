@@ -2,8 +2,8 @@
 // + offline_access) that he consented to himself at
 // /api/pitch-scheduler-calendar-connect - not an app-only Application
 // permission, since that needs Global Admin consent which wasn't available.
-// The resulting refresh token lives in the pitchSchedulerCalendarAuth Sanity
-// singleton and gets rotated here on every use (Microsoft may issue a new one
+// The resulting refresh token lives in Supabase `ms_graph_tokens` (purpose
+// 'pitch-calendar', see src/lib/calendarToken.js) and gets rotated here on every use (Microsoft may issue a new one
 // each refresh; failing to persist it breaks the chain).
 //
 // Used by computeCandidateSlots() (pitch-scheduler-invite-manual route). The
@@ -16,7 +16,7 @@
 // so we read those titled events directly and use their real start/end
 // times, rather than computing a fixed pattern and checking for conflicts.
 
-import { createClient } from '@sanity/client';
+import { readCalendarToken, saveCalendarToken } from './calendarToken.js';
 
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
 const CLIENT_ID = process.env.MS_GRAPH_CLIENT_ID;
@@ -26,18 +26,9 @@ const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
 // calendar reads keep working even if Files.ReadWrite hasn't been granted.
 export const CALENDAR_SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read';
 export const FILES_SCOPE = 'offline_access https://graph.microsoft.com/Files.ReadWrite';
-const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
-
-const sanityClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN, // needed to both read the stored token and rotate it
-});
 
 // In-memory only - fine for a serverless function's short lifetime, avoids
-// hitting Sanity + Microsoft on every single request within the same warm
+// hitting Supabase + Microsoft on every single request within the same warm
 // instance.
 // Keyed by scope.
 const tokenCache = new Map();
@@ -45,11 +36,11 @@ const tokenCache = new Map();
 async function refreshAccessToken(scope) {
   if (!TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) return null;
 
-  const authDoc = await sanityClient.fetch(`*[_id == $id][0]{refreshToken}`, { id: AUTH_DOC_ID }).catch((err) => {
-    console.error('Failed to read stored calendar refresh token:', err);
+  const stored = await readCalendarToken().catch((err) => {
+    console.error('Failed to read stored calendar refresh token:', err.message);
     return null;
   });
-  if (!authDoc?.refreshToken) return null; // not connected yet - see the connect route
+  if (!stored) return null; // not connected yet - see the connect route
 
   let res;
   try {
@@ -60,7 +51,7 @@ async function refreshAccessToken(scope) {
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
         grant_type: 'refresh_token',
-        refresh_token: authDoc.refreshToken,
+        refresh_token: stored,
         scope,
       }),
     });
@@ -74,15 +65,12 @@ async function refreshAccessToken(scope) {
   }
 
   const data = await res.json();
-  if (data.refresh_token && data.refresh_token !== authDoc.refreshToken) {
+  if (data.refresh_token && data.refresh_token !== stored) {
     // Rotation happened - persist it or the next refresh will fail with the
     // old (now invalid) token. Best-effort: don't block returning the access
     // token we already have just because this write hiccups.
-    await sanityClient
-      .patch(AUTH_DOC_ID)
-      .set({ refreshToken: data.refresh_token, updatedAt: new Date().toISOString() })
-      .commit()
-      .catch((err) => console.error('Failed to persist rotated calendar refresh token:', err));
+    await saveCalendarToken(data.refresh_token)
+      .catch((err) => console.error('Failed to persist rotated calendar refresh token:', err.message));
   }
 
   tokenCache.set(scope, { token: data.access_token, expiresAt: Date.now() + (data.expires_in || 3600) * 1000 });

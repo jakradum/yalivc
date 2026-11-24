@@ -5,26 +5,17 @@
 // current contents so a deleted placeholder disappears from what a founder
 // sees without anyone patching the invitation by hand.
 
-import { createClient } from '@sanity/client';
+// Kept in Supabase (src/lib/private-docs.js) since 24 Nov 2026, same document shape.
+import { getDoc } from './private-docs.js';
 
-const CACHE_DOC_ID = 'pitchSchedulerSlotCache';
-
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only.
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
+export const CACHE_DOC_ID = 'pitchSchedulerSlotCache';
 
 // Returns [{startUTC, endUTC}, ...] from the cache, or null if it's never
 // been populated (cron hasn't run yet, or Graph was unreachable on every
 // attempt so far).
 export async function getCachedSlots() {
-  const doc = await client.fetch(`*[_id == $id][0]{slots}`, { id: CACHE_DOC_ID }).catch((err) => {
-    console.error('Failed to read slot cache:', err);
+  const doc = await getDoc(CACHE_DOC_ID).catch((err) => {
+    console.error('Failed to read slot cache:', err.message);
     return null;
   });
   return doc?.slots || null;

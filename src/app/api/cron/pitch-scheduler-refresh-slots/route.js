@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
 import { getPlaceholderSlots } from '@/lib/graphCalendar';
+import { putDoc } from '@/lib/private-docs';
+import { CACHE_DOC_ID } from '@/lib/slotCache';
 
 // Hit on a schedule by cron-job.org (not Vercel Cron, to avoid touching
 // vercel.json - see docs/pitch-scheduler-plan.md): hourly 8am-8pm IST, once
@@ -10,16 +11,7 @@ import { getPlaceholderSlots } from '@/lib/graphCalendar';
 // pitchSchedulerSlotCache.js for why.
 
 const PLACEHOLDER_TITLE_MATCHERS = ['pitch meeting placeholder', 'additional slots'];
-const CACHE_DOC_ID = 'pitchSchedulerSlotCache';
 const CRON_SECRET = process.env.PITCH_SCHEDULER_CRON_SECRET;
-
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
 
 export async function GET(request) {
   const url = new URL(request.url);
@@ -40,14 +32,9 @@ export async function GET(request) {
   const slots = events.map((e) => ({ startUTC: e.startUTC, endUTC: e.endUTC }));
 
   try {
-    await writeClient.createOrReplace({
-      _id: CACHE_DOC_ID,
-      _type: 'pitchSchedulerSlotCache',
-      slots,
-      updatedAt: now.toISOString(),
-    });
+    await putDoc(CACHE_DOC_ID, 'pitchSchedulerSlotCache', { slots, updatedAt: now.toISOString() });
   } catch (err) {
-    console.error('Failed to write slot cache:', err);
+    console.error('Failed to write slot cache:', err.message);
     return NextResponse.json({ error: 'Fetched slots but failed to save the cache' }, { status: 500 });
   }
 

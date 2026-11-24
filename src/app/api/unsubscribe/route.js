@@ -1,21 +1,12 @@
 import { NextResponse } from 'next/server';
-import { writeClient } from '@/lib/sanity';
+import { unsubscribe } from '@/lib/newsletter-subscribers';
 
 export async function POST(request) {
   try {
     const { token } = await request.json();
     if (token) {
       const email = Buffer.from(token, 'base64').toString('utf-8');
-      const subscriber = await writeClient.fetch(
-        `*[_type == "newsletterSubscriber" && email == $email][0]{ _id }`,
-        { email }
-      );
-      if (subscriber?._id) {
-        await writeClient
-          .patch(subscriber._id)
-          .set({ unsubscribed: true, unsubscribedAt: new Date().toISOString() })
-          .commit();
-      }
+      await unsubscribe(email);
     }
   } catch { /* swallow — always return 200 */ }
   return NextResponse.json({ ok: true });

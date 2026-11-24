@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeClient } from '@/lib/sanity';
+import { addSubscriber } from '@/lib/newsletter-subscribers';
 
 export async function POST(request) {
   try {
@@ -22,20 +22,7 @@ export async function POST(request) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    if (!process.env.SANITY_API_TOKEN) {
-      console.error('SANITY_API_TOKEN not configured');
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
-
-    await writeClient.create({
-      _type: 'newsletterSubscriber',
-      email: normalizedEmail,
-      subscribedAt: new Date().toISOString(),
-      source: 'homepage-footer',
-    });
+    await addSubscriber(normalizedEmail, 'homepage-footer');
 
     return NextResponse.json({ success: true });
   } catch (error) {

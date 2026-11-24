@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { saveCalendarToken } from '@/lib/calendarToken';
 import { handleBackupCallback, isBackupState } from '@/lib/backup/connect';
 
 const TENANT_ID = process.env.MS_GRAPH_TENANT_ID;
@@ -8,16 +8,6 @@ const CLIENT_SECRET = process.env.MS_GRAPH_CLIENT_SECRET;
 const REDIRECT_URI = 'https://yali.vc/api/pitch-scheduler-calendar-callback';
 const STATE_COOKIE = 'pitch-scheduler-calendar-state';
 const SCOPE = 'https://graph.microsoft.com/User.Read offline_access https://graph.microsoft.com/Calendars.Read https://graph.microsoft.com/Files.ReadWrite';
-const AUTH_DOC_ID = 'pitchSchedulerCalendarAuth';
-
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
-
 function htmlPage(title, body) {
   return new NextResponse(
     `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title></head><body style="font-family:system-ui,sans-serif;padding:48px;color:#363636;"><h2>${title}</h2><p>${body}</p></body></html>`,
@@ -88,15 +78,9 @@ export async function GET(request) {
   }
 
   try {
-    await writeClient.createOrReplace({
-      _id: AUTH_DOC_ID,
-      _type: 'pitchSchedulerCalendarAuth',
-      refreshToken: tokenData.refresh_token,
-      connectedBy,
-      updatedAt: new Date().toISOString(),
-    });
+    await saveCalendarToken(tokenData.refresh_token, `${SCOPE} (connected by ${connectedBy})`);
   } catch (err) {
-    console.error('Failed to save calendar connection:', err);
+    console.error('Failed to save calendar connection:', err.message);
     return htmlPage('Connection failed', 'Got the token from Microsoft but failed to save it. Check server logs.');
   }
 

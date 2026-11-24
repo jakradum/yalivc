@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { writeClient } from '@/lib/sanity';
+import { addSubscriber } from '@/lib/newsletter-subscribers';
 import { getUnsubscribeUrl } from '@/lib/newsletter-email';
 import { buildWelcomeEmail } from '@/lib/welcome-email';
 
@@ -25,22 +25,10 @@ export async function POST(request) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    if (!process.env.SANITY_API_TOKEN) {
-      console.error('SANITY_API_TOKEN not configured');
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
+    const added = await addSubscriber(normalizedEmail, 'homepage-footer');
 
-    await writeClient.create({
-      _type: 'newsletterSubscriber',
-      email: normalizedEmail,
-      subscribedAt: new Date().toISOString(),
-      source: 'homepage-footer',
-    });
-
-    if (process.env.RESEND_API_KEY) {
+    // Welcome email only for a new (or returning) subscriber, not a repeat sign-up.
+    if (added && process.env.RESEND_API_KEY) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY);
         const unsubscribeUrl = getUnsubscribeUrl(normalizedEmail);

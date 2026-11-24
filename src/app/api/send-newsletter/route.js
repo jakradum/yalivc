@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { writeClient } from '@/lib/sanity';
 import { NEWSLETTER_QUERY, batchSend } from '@/lib/newsletter-email';
+import { recipients } from '@/lib/newsletter-subscribers';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -21,17 +22,15 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Newsletter not found' }, { status: 404 });
     }
 
-    const subscribers = await writeClient.fetch(
-      `*[_type == "newsletterSubscriber" && unsubscribed != true && source != "press-mailing-list"]{email}`,
-      {},
-      { perspective: 'previewDrafts' }
-    );
+    // Subscribers live in Supabase; the newsletter itself is still a Sanity document.
+    const subscribers = await recipients();
     if (!subscribers.length) {
       return NextResponse.json({ error: 'No subscribers found' }, { status: 400 });
     }
 
     const sent = await batchSend(resend, newsletter, subscribers);
-    return NextResponse.json({ success: true, sent, recipients: subscribers.map((s) => s.email) });
+    // Counts only: subscriber addresses never go back to the browser.
+    return NextResponse.json({ success: true, sent });
   } catch (err) {
     console.error('send-newsletter error:', err);
     return NextResponse.json({ error: err.message || 'Unexpected error' }, { status: 500 });

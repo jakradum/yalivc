@@ -1,10 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { listSubscribers, deleteSubscribers } from '@/lib/newsletter-subscribers';
 
 export const maxDuration = 60;
-
-const SANITY_PROJECT_ID = 'nt0wmty3';
-const SANITY_DATASET = 'production';
-const SANITY_API_VERSION = '2024-01-01';
 
 export async function GET(request) {
   const authHeader = request.headers.get('authorization');
@@ -12,14 +9,8 @@ export async function GET(request) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Fetch all subscribers
-  const query = encodeURIComponent('*[_type=="newsletterSubscriber" && unsubscribed != true]{_id,email,source}');
-  const sanityUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}?query=${query}`;
-
-  const subscriberRes = await fetch(sanityUrl, {
-    headers: { Authorization: `Bearer ${process.env.SANITY_WRITE_TOKEN}` },
-  });
-  const { result: subscribers } = await subscriberRes.json();
+  // Active subscribers (Supabase)
+  const subscribers = (await listSubscribers()).filter((s) => s.unsubscribed !== true);
 
   if (!subscribers || subscribers.length === 0) {
     return Response.json({ deleted: 0, message: 'No subscribers found' });
@@ -38,7 +29,7 @@ export async function GET(request) {
     messages: [
       {
         role: 'user',
-        content: `You are helping clean up a newsletter subscriber list. Below is a list of email addresses with their Sanity document IDs. Identify which ones are clearly fake, test, spam, or bot-generated — things like test@test.com, email@email.com, all-number addresses, gibberish strings, duplicate entries (same email appearing more than once — keep only the FIRST occurrence and mark the rest for deletion), or addresses from known cold-email/spam tool domains.
+        content: `You are helping clean up a newsletter subscriber list. Below is a list of email addresses with their document IDs. Identify which ones are clearly fake, test, spam, or bot-generated — things like test@test.com, email@email.com, all-number addresses, gibberish strings, duplicate entries (same email appearing more than once — keep only the FIRST occurrence and mark the rest for deletion), or addresses from known cold-email/spam tool domains.
 
 Be conservative: if an email looks like a real person's address, even if unusual, do NOT include it. Only flag the obvious junk.
 
@@ -65,23 +56,14 @@ ${emailList}`,
     return Response.json({ deleted: 0, reason });
   }
 
-  // Delete via Sanity mutations
-  const mutations = toDelete.map((id) => ({ delete: { id } }));
-  const mutationRes = await fetch(
-    `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data/mutate/${SANITY_DATASET}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.SANITY_WRITE_TOKEN}`,
-      },
-      body: JSON.stringify({ mutations }),
-    }
-  );
-
-  if (!mutationRes.ok) {
-    const err = await mutationRes.text();
-    return Response.json({ error: 'Sanity mutation failed', details: err }, { status: 500 });
+  // Only ids that are really on the list: never delete anything else on the model's say-so.
+  const known = new Set(subscribers.map((s) => s._id));
+  toDelete = toDelete.filter((id) => known.has(id));
+  try {
+    await deleteSubscribers(toDelete);
+  } catch (err) {
+    console.error('clean-subscribers delete failed:', err.message);
+    return Response.json({ error: 'Delete failed' }, { status: 500 });
   }
 
   const deletedEmails = subscribers
