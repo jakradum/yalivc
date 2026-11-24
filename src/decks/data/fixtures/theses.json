@@ -1,0 +1,1342 @@
+{
+  "cover": {
+    "eyebrow": "Yali Capital Fund II",
+    "title": "Investment\nTheses",
+    "subtitle": "How we map each sector, where we are searching, and what has to be true for us to write a cheque.",
+    "version": "theses-deck-v1.2",
+    "date": "November 2026",
+    "variant": "pattern"
+  },
+  "sectors": [
+    {
+      "id": "artificial-intelligence-divider",
+      "section": "Artificial Intelligence",
+      "divider": {
+        "index": "01",
+        "name": "Artificial Intelligence",
+        "subtitle": "Data, regulation, physical access and talent decide the rest.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/d5a0fee563aed447b2c40c187a0a30633a84ffd4-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "artificial-intelligence-map",
+      "map": {
+        "eyebrow": "Artificial Intelligence · How we see the AI stack · September 2026",
+        "title": "Capital decides most layers of AI. We fund `the layers it does not`.",
+        "subtitle": "Data, regulation, physical access and talent decide the rest.",
+        "segmentLabel": "The layer",
+        "rows": [
+          {
+            "segment": "AI & Agent Tooling",
+            "detail": "orchestration, evals, agents, routing, memory",
+            "position": "active",
+            "decides": "Developer adoption decides this, and Indian teams compete globally.",
+            "leader": "LangChain",
+            "others": [
+              {
+                "text": "LatentForce",
+                "portfolio": true
+              },
+              {
+                "text": ", Portkey (acq. Palo Alto Networks), Composio",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Physical AI",
+            "detail": "AI that perceives and acts",
+            "position": "active",
+            "decides": "Training environments decide it, and Indian factories and roads are closed.",
+            "leader": "Physical Intelligence",
+            "others": [
+              {
+                "text": "Perceptyne",
+                "portfolio": true
+              },
+              {
+                "text": ", CynLr",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Trust, Safety & Governance",
+            "detail": "red-teaming, governance, deepfake detection",
+            "position": "active",
+            "decides": "Indian law creates this market. Labelling and take-down rules took effect in February 2026.",
+            "leader": "Palo Alto Networks",
+            "others": [
+              {
+                "text": "Kroop AI, Repello AI, Enkrypt AI",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Foundation Models",
+            "detail": "indic, speech and on-device, not frontier",
+            "position": "selective",
+            "decides": "Capital decides frontier models. Data decides Indic and speech.",
+            "leader": "Anthropic, OpenAI, Kimi",
+            "others": [
+              {
+                "text": "Sarvam",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Domain-Specific Models",
+            "detail": "industry models and small language models",
+            "position": "selective",
+            "decides": "The company trains the model on its own data. Workflow on a rented model is not this.",
+            "leader": "Bloomberg",
+            "others": [
+              {
+                "text": "PointAI",
+                "portfolio": true
+              },
+              {
+                "text": ", Jivi AI, Fractal Vaidya",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "AI for Science & Engineering",
+            "detail": "drug discovery, chip design, geospatial",
+            "position": "selective",
+            "decides": "The science is proven and Indian platforms are underfunded against it.",
+            "leader": "Isomorphic Labs",
+            "others": [
+              {
+                "text": "Peptris, Aganitha, SatSure",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Compute Infrastructure",
+            "detail": "clouds, inference, datacenters",
+            "position": "selective",
+            "decides": "Capex decides it. Sovereign cloud and serving efficiency are the exceptions.",
+            "leader": "CoreWeave",
+            "others": [
+              {
+                "text": "Simplismart",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Applied Vertical AI",
+            "detail": "copilots built on rented models",
+            "position": "none",
+            "decides": "Many companies, little technological differentiation. Distribution is the moat.",
+            "leader": "—",
+            "others": []
+          }
+        ],
+        "footers": [
+          {
+            "label": "The export engine",
+            "text": "2,117 GCCs, 2.4 million people, and more than 1,200 running AI mandates."
+          },
+          {
+            "label": "The domestic engine",
+            "text": "RBI has required payment data to sit in India since 2018. The 2026 IT Rules add labelling and take-down duties."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/d5a0fee563aed447b2c40c187a0a30633a84ffd4-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/ac13812f6c990a4c63ec21f2538397e73f5b6a24-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "artificial-intelligence-tests",
+      "tests": {
+        "eyebrow": "Artificial Intelligence · What wins here, and why now · September 2026",
+        "title": "Three things `stay valuable` when models get cheaper",
+        "subtitle": "General models are rented. Domain data, design quality and regulation are not.",
+        "testsLabel": "What makes a company defensible here",
+        "tests": [
+          {
+            "title": "A dataset that takes years to assemble",
+            "body": "Twenty-two languages of telephony audio. Factory floors, Indian roads, defence trials. Collected over years. The collection is the asset.",
+            "evidence": "$234M — raised by Sarvam in 2026, on an Indic data asset.",
+            "figure": "$234M",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/d5a0fee563aed447b2c40c187a0a30633a84ffd4-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "Adoption, not spend",
+            "body": "Developer adoption decides these layers. A tool wins on how good it is, and Indian teams compete globally on that.",
+            "evidence": "Palo Alto Networks bought Portkey, an India-founded gateway, in 2026.",
+            "figure": "ACQUIRED",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/5cfe1aae505d3e86d8438480dd7a139caa136a8d-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "A position foreign vendors cannot occupy",
+            "body": "When the rule names the jurisdiction, the foreign vendor is excluded before evaluation. Two-hour takedowns became law in February.",
+            "evidence": "5M — Indian users, the threshold above which platforms must run automated detection since February 2026.",
+            "figure": "5M",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/ac13812f6c990a4c63ec21f2538397e73f5b6a24-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Cost ↓",
+            "value": "38,000 GPUs",
+            "body": "Compute is no longer what stops an Indian team from starting.",
+            "source": "IndiaAI compute pillar, subsidised at ₹65-92 per GPU hour"
+          },
+          {
+            "label": "Demand ↑",
+            "value": "May 2027",
+            "body": "Compliance now has a fixed date.",
+            "source": "DPDP obligations commence, with penalties up to ₹250 crore"
+          },
+          {
+            "label": "Supply ↑",
+            "value": "$676M",
+            "body": "Four times the same period in 2025.",
+            "source": "raised by Indian AI startups across 57 deals (Inc42) in the first half of 2026"
+          }
+        ],
+        "notFund": "Frontier model training runs. Orchestration a hyperscaler gives away free. Copilots built on rented models, where distribution is the moat.",
+        "changeView": "Frontier models closing the Indic gap. Hyperscalers certified for regulated workloads. Subsidised compute still unused in 2027."
+      }
+    },
+    {
+      "id": "aerospace-and-surveillance-divider",
+      "section": "Aerospace and Surveillance",
+      "divider": {
+        "index": "02",
+        "name": "Aerospace and Surveillance",
+        "subtitle": "Indian demand gets these companies started. A globally competitive part is what makes them worth owning.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/be36069e5ad6c761833cf0a4475f22f8f3607ace-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "aerospace-and-surveillance-map",
+      "map": {
+        "eyebrow": "Aerospace and Surveillance · How we see the sector · September 2026",
+        "title": "We fund `the parts inside the platform`, not the platform.",
+        "subtitle": "Indian demand gets these companies started. A globally competitive part is what makes them worth owning.",
+        "segmentLabel": "The segment",
+        "rows": [
+          {
+            "segment": "Navigation, Avionics & Spectrum",
+            "detail": "GPS-denied navigation, flight computers, secure comms",
+            "position": "active",
+            "decides": "A qualified part is sole-sourced for the platform's life.",
+            "leader": "Honeywell",
+            "others": [
+              {
+                "text": "Aeron Systems, QuBeats",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Sensors, Radar & Counter-Drone",
+            "detail": "EO/IR sights, thermal, radar, detection",
+            "position": "active",
+            "decides": "Trials history. Every other bidder imports the same detector.",
+            "leader": "Teledyne FLIR",
+            "others": [
+              {
+                "text": "Tonbo",
+                "portfolio": true
+              },
+              {
+                "text": ", Data Patterns, Indrajaal",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Wide-Area Sensing & Geospatial Data",
+            "detail": "imagery missions, geospatial analytics, coastal radar",
+            "position": "active",
+            "decides": "The archive compounds while the satellite depreciates. Only Indian firms may own the data.",
+            "leader": "Planet Labs",
+            "others": [
+              {
+                "text": "Pixxel, SatSure, Aereo",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Propulsion",
+            "detail": "micro-turbojets, small gas turbines, airbreathing",
+            "position": "selective",
+            "decides": "The prime cannot build the engine, and cannot change it once it flies.",
+            "leader": "Safran",
+            "others": [
+              {
+                "text": "DG Propulsion, Nabhdrishti",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Precision Manufacturing",
+            "detail": "flight-critical machining, forgings, special processes",
+            "position": "selective",
+            "decides": "The approvals, not the machines. A qualified process transfers to nobody.",
+            "leader": "Howmet Aerospace",
+            "others": [
+              {
+                "text": "MTAR, Azad Engineering, Jeh Aerospace",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Commercial Drones & Services",
+            "detail": "platforms, spraying, mapping, inspection, delivery",
+            "position": "selective",
+            "decides": "Anyone can assemble a drone. Few hold the survey data or the certifications.",
+            "leader": "DJI",
+            "others": [
+              {
+                "text": "ideaForge, Skye Air, Airbound",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Maintenance, Structures & Munitions",
+            "detail": "heavy checks, engine shops, ammunition, armour",
+            "position": "none",
+            "decides": "Capacity and price decide it, not technology.",
+            "leader": "Lufthansa Technik",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "footers": [
+          {
+            "label": "Global supply chain",
+            "text": "Airbus takes India sourcing to $2 billion before 2030, building A320, A330 and A350 parts at Aequs, Dynamatic, Gardner and Mahindra."
+          },
+          {
+            "label": "Listing route",
+            "text": "Seven Indian aerospace and defence suppliers have listed since 2021, among them MTAR, Data Patterns, Azad Engineering and Aequs."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/be36069e5ad6c761833cf0a4475f22f8f3607ace-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/6f9291de1f4013cf15b6501caf38103080f4a8e8-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "aerospace-and-surveillance-tests",
+      "tests": {
+        "eyebrow": "Aerospace and Surveillance · What wins here, and why now · September 2026",
+        "title": "A qualified part is bought `for the life of the platform`.",
+        "subtitle": "Three things get a company qualified in the first place.",
+        "testsLabel": "What makes a company defensible here",
+        "tests": [
+          {
+            "title": "Qualification locks the supplier in",
+            "body": "Once qualified onto a platform, a part stays for its life. The barrier is time, not capital.",
+            "evidence": "10,000 — inertial systems Aeron Systems has in service with HAL, BEL, DRDO and the Navy.",
+            "figure": "10,000",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/be36069e5ad6c761833cf0a4475f22f8f3607ace-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "What cannot be imported is reserved",
+            "body": "Fine-resolution mapping and GPS-denied navigation are closed to foreign suppliers by regulation.",
+            "evidence": "₹25 CR — the contract QuBeats won to build navigation that works without GPS.",
+            "figure": "₹25 CR",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/49081f933c6c53964bb850348f5a528747b64a65-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "The work accumulates and keeps selling",
+            "body": "Every survey flown and every threat library built is an asset a competitor cannot buy.",
+            "evidence": "45,000 — villages Aereo has mapped, an archive no competitor can buy.",
+            "figure": "45,000",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/6f9291de1f4013cf15b6501caf38103080f4a8e8-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Exports ↑",
+            "value": "₹38,424 crore",
+            "body": "Up 63% in a year. FY29 target: ₹50,000 crore.",
+            "source": "Ministry of Defence, defence exports FY2025-26"
+          },
+          {
+            "label": "Denial ↑",
+            "value": "923 incidents",
+            "body": "GNSS interference, most over Amritsar and Jammu.",
+            "source": "Airports Authority of India to ICAO, Feb 2024 to Feb 2025"
+          },
+          {
+            "label": "Mandate →",
+            "value": "5-10 cm accuracy",
+            "body": "Only village land is surveyed at this accuracy. Not cities, farmland or infrastructure.",
+            "source": "National Geospatial Policy, Dec 2022"
+          }
+        ],
+        "notFund": "Maintenance, structures and munitions, where a licensed plant and volume price decide it. Platforms already funded past our cheque size.",
+        "changeView": "Drone flights beyond visual line of sight (BVLOS) still uncertified after 2026. An eVTOL certified outside of China. IRSA opens conformance testing to private vendors."
+      }
+    },
+    {
+      "id": "life-sciences-divider",
+      "section": "Life Sciences",
+      "divider": {
+        "index": "03",
+        "name": "Life Sciences",
+        "subtitle": "A company qualifies when it owns the IP and the clearance, holds data or a channel that cannot be assembled elsewhere, and can reach its next clearance or clinical readout inside the round we lead.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/9f36ec968cad56dc0d01d8edd97eb31b9430284a-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "life-sciences-map",
+      "map": {
+        "eyebrow": "Life Sciences · Where we invest · September 2026",
+        "title": "Indian companies now originate diagnostics, devices and therapies, and `hold the clearances` behind them.",
+        "subtitle": "A company qualifies when it owns the IP and the clearance, holds data or a channel that cannot be assembled elsewhere, and can reach its next clearance or clinical readout inside the round we lead.",
+        "segmentLabel": "The segment",
+        "rows": [
+          {
+            "segment": "Molecular & Point-of-Care Diagnostics",
+            "detail": "instruments, assays, biosensors",
+            "position": "active",
+            "decides": "Ownership of both instrument and consumable, and inclusion in public testing protocols.",
+            "leader": "Cepheid",
+            "others": [
+              {
+                "text": "Molbio, HaystackAnalytics",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Imaging & Clinical Decision AI",
+            "detail": "radiology, pathology, ophthalmology",
+            "position": "active",
+            "decides": "CDSCO Class C clearance, then repeat purchase after the first pilot. Both depend on the ability to work with hospitals.",
+            "leader": "Aidoc",
+            "others": [
+              {
+                "text": "Qure.ai, DeepTek, Remidio",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Therapeutic & Monitoring Devices",
+            "detail": "implants, neuro devices, monitors, drug delivery",
+            "position": "selective",
+            "decides": "Domestic design at roughly a tenth of import price, cleared to the same device class.",
+            "leader": "Medtronic",
+            "others": [
+              {
+                "text": "Noccarc, Alfaleus, LuxMatra",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Genomics & Precision Medicine",
+            "detail": "clinical interpretation, population data",
+            "position": "selective",
+            "decides": "Interpretation against Indian population data; sequencing itself is commoditised.",
+            "leader": "Tempus",
+            "others": [
+              {
+                "text": "4baseCare",
+                "portfolio": true
+              },
+              {
+                "text": ", MedGenome",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "AI Drug Discovery & Computational Biology",
+            "detail": "target finding, generative chemistry",
+            "position": "selective",
+            "decides": "Equity in the platform output rather than fee-for-service analysis revenue.",
+            "leader": "Recursion",
+            "others": [
+              {
+                "text": "ImmunitoAI, Peptris",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Advanced Therapeutic Modalities",
+            "detail": "cell, gene, oral small molecule",
+            "position": "watching",
+            "decides": "Grant capital funds the asset to clinic, so the first equity round enters de-risked.",
+            "leader": "Novartis",
+            "others": [
+              {
+                "text": "ImmunoACT, Renestera",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Biologics & Regenerative Medicine",
+            "detail": "cell therapy, tissue engineering, antibodies",
+            "position": "watching",
+            "decides": "Preclinical data packages built at Indian cost, then a CDSCO trial pathway run domestically.",
+            "leader": "Vertex",
+            "others": [
+              {
+                "text": "Pandorum, EyeStem, Ahammune",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Bioprocessing & Biomanufacturing Tools",
+            "detail": "bioreactors, process analytics",
+            "position": "watching",
+            "decides": "Qualification into validated production lines, which are re-specified about once a decade.",
+            "leader": "Sartorius",
+            "others": [
+              {
+                "text": "OmniBRx, Leucine",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Care Delivery & Generics",
+            "detail": "care platforms, health IT, generic formulations",
+            "position": "none",
+            "decides": "Distribution, price or a manufacturing scale a global incumbent already holds.",
+            "leader": "Teva",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "footers": [
+          {
+            "label": "The industrial base",
+            "text": "A ₹17.4 lakh crore bioeconomy, 4.8% of GDP, on vaccines, generics and CRO capacity. Programmes run at a fifth to a tenth of US cost against the same ISO 13485 and CDSCO standards."
+          },
+          {
+            "label": "The data base",
+            "text": "GenomeIndia has released 10,000 whole genomes, an input Indian interpretation companies did not have three years ago."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/9f36ec968cad56dc0d01d8edd97eb31b9430284a-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/00e8a0ec5603754cc06c96b89de3922eefb9259f-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "life-sciences-tests",
+      "tests": {
+        "eyebrow": "Life Sciences · What we look for, and why now · September 2026",
+        "title": "Three conditions shape how we look at a life sciences company",
+        "subtitle": "We require all three.",
+        "testsLabel": "What we look for",
+        "tests": [
+          {
+            "title": "The IP and the clearance are owned",
+            "body": "The patents sit with the company, and the approval or protocol listing built on them takes years to earn and stays with whoever earned it. We do not underwrite licensed-in science or distribution of someone else's clearance.",
+            "evidence": "ImmunoACT holds CDSCO authorisation for India's first approved CAR-T. Molbio's Truenat is one of two rapid molecular TB tests the WHO has endorsed. Peptris holds a US FDA orphan drug designation.",
+            "figure": "FIRST",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/9f36ec968cad56dc0d01d8edd97eb31b9430284a-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "Data that cannot be assembled elsewhere",
+            "body": "Sequencing, compute and cloud are commodities. Interpretation against Indian population data is not.",
+            "evidence": "10,000 — whole genomes GenomeIndia has released; 4baseCare holds one of the largest genomic and clinical collections apart from MSKCC.",
+            "figure": "10,000",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/fbd0fabc4457274fd7a70d2f5349f22ed05db69c-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "The next milestone is achievable",
+            "body": "The clearance or clinical readout that re-rates the company must be achievable within realistic timelines. At Indian cost most are, and grant capital extends the runway further.",
+            "evidence": "60,000 — patients Alfaleus tested on 350+ shipped devices before raising ₹3.5 crore; ImmunoACT ran its pivotal trial to approval at Indian cost.",
+            "figure": "60,000",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/00e8a0ec5603754cc06c96b89de3922eefb9259f-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Market ↑",
+            "value": "70% imported",
+            "body": "The demand is already funded, by hospital and government budgets rather than by venture capital.",
+            "source": "of India's medical device consumption, FY24; imports near ₹63,000 crore"
+          },
+          {
+            "label": "Capital ↑",
+            "value": "₹2,000 crore",
+            "body": "Loans at 3-4% over 12-15 years, or equity to 25%, for TRL 4-6 companies. Live since May 2026.",
+            "source": "allocated to BIRAC as an RDI fund manager"
+          },
+          {
+            "label": "Exit ↑",
+            "value": "70× subscribed",
+            "body": "Institutional subscription reached 186.39 times; listed at ₹980 against a ₹807 issue price.",
+            "source": "Molbio's IPO, listed 17 August 2026"
+          }
+        ],
+        "notFund": "Care delivery businesses. Licensed-in IP with no owned patents. Services revenue reported as platform revenue.",
+        "changeView": "Clearance timelines or trial costs pushing the next milestone beyond one round. A foreign vendor clearing CDSCO faster than a domestic one."
+      }
+    },
+    {
+      "id": "robotics-divider",
+      "section": "Robotics",
+      "divider": {
+        "index": "04",
+        "name": "Robotics",
+        "subtitle": "The demand gap is real, and most of it will be filled by assembled systems with no defensible layer.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/781431feda6f9259b1e08ba705c552fab9df6023-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "robotics-map",
+      "map": {
+        "eyebrow": "Robotics · How we see the robotics map · September 2026",
+        "title": "Most robotics companies are integrators. We fund the ones that `own a layer`.",
+        "subtitle": "The demand gap is real, and most of it will be filled by assembled systems with no defensible layer.",
+        "segmentLabel": "The segment",
+        "rows": [
+          {
+            "segment": "Warehouse & Intralogistics",
+            "detail": "AMRs, sortation, piece-picking",
+            "position": "active",
+            "decides": "Indian warehouses are narrower, less structured and more cost-sensitive than these systems were designed for.",
+            "leader": "Locus Robotics",
+            "others": [
+              {
+                "text": "Ati Robotics, Unbox Robotics, ANSCER",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Embodiment for Physical AI",
+            "detail": "task specific robots, manipulation policy, robot learning",
+            "position": "active",
+            "decides": "A machine that is as complex as the task demands, and no more. The policy shops inside a machine the company owns.",
+            "leader": "Physical Intelligence",
+            "others": [
+              {
+                "text": "Perceptyne",
+                "portfolio": true
+              },
+              {
+                "text": ", CynLr",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Factory Robots & Manipulation",
+            "detail": "welding cells, cobots, arms",
+            "position": "selective",
+            "decides": "The arm is a commodity. Value sits in the software and the hands that do high-mix work without reprogramming.",
+            "leader": "FANUC",
+            "others": [
+              {
+                "text": "Terafac, Synkrity, Systemantics",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Field, Agriculture & Off-Road Autonomy",
+            "detail": "spot-spray, plant inspection, sanitation, tractors",
+            "position": "selective",
+            "decides": "Municipal and plant procurement is a qualification gate, and no imported system is tuned for Indian field conditions.",
+            "leader": "John Deere",
+            "others": [
+              {
+                "text": "Niqo Robotics, Solinas Integrity, Genrobotics",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Medical Robots",
+            "detail": "surgical, endoluminal, nanorobotics",
+            "position": "selective",
+            "decides": "Regulatory clearance, then hospital go-to-market. Both take years and neither is a technology problem.",
+            "leader": "Intuitive Surgical",
+            "others": [
+              {
+                "text": "SS Innovations, Theranautilus, Articulus, Meril",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Components & Subsystems",
+            "detail": "actuators, reducers, force and tactile sensors",
+            "position": "tracking",
+            "decides": "Scale sits with Japanese, German and Chinese suppliers. An Indian component wins only bundled into a system that needs it.",
+            "leader": "Harmonic Drive",
+            "others": [
+              {
+                "text": "Twara Robotics",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Marine & Underwater",
+            "detail": "uncrewed vessels, AUVs, inspection ROVs",
+            "position": "watching",
+            "decides": "Sea trials build a real moat, but the government is the only buyer and there is no visible order book yet.",
+            "leader": "Kongsberg",
+            "others": [
+              {
+                "text": "EyeROV, Planys Technologies",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "General-Purpose Humanoids",
+            "detail": "general-purpose, service and assistive platforms",
+            "position": "watching",
+            "decides": "Capital, and a first industrial customer. Consumer and assistive robots are possible for us, but not where we look first.",
+            "leader": "Figure",
+            "others": [
+              {
+                "text": "General Autonomy",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Cleaning & Consumer Robots",
+            "detail": "floor care, meet-and-greet",
+            "position": "none",
+            "decides": "The same problem everywhere, so there is no Indian advantage to build on.",
+            "leader": "Ecovacs",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "footers": [
+          {
+            "label": "The factory engine",
+            "text": "India's entire installed base is ~50,000 industrial robots, tenth in the world. There is almost nothing here to displace."
+          },
+          {
+            "label": "The outcome engine",
+            "text": "GreyOrange has raised over $110 million and Reliance-backed Addverb is raising over $100 million to expand. Indian warehouse robotics already produces companies at scale."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/781431feda6f9259b1e08ba705c552fab9df6023-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/1a87e260557daa913cf30c269df41f30940504e4-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "robotics-tests",
+      "tests": {
+        "eyebrow": "Robotics · What wins here, and why now · September 2026",
+        "title": "The assembled robot `is not the moat`. Three other things are.",
+        "subtitle": "Every part of a robot is purchasable. Three things are not.",
+        "testsLabel": "What makes a robotics company durable",
+        "tests": [
+          {
+            "title": "The Indian environment is a potential moat",
+            "body": "Indian manufacturing is starting to automate from a low base and is at an inflection point. Its factories and warehouses differ from those abroad and adapting to them takes years on site.",
+            "evidence": "$28M — 2026's largest Indian robot round, raised by Unbox Robotics (built for Indian parcel floors) in January.",
+            "figure": "$28M",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/781431feda6f9259b1e08ba705c552fab9df6023-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "A qualification gate the foreign vendor cannot pass",
+            "body": "Naval sea trials, hospital procurement, refinery certification, municipal contracts. Passing takes years, and the buyer's rules often exclude the foreign vendor.",
+            "evidence": "Genrobotics sells into a statutory ban on manual sewer cleaning, with a central scheme subsidising the replacements.",
+            "figure": "YEARS",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/f6bdecf72557f5f7129d503da10937406b2af332-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "Own one layer, sell the system around it",
+            "body": "Chassis, motors, gearboxes, even the policy models are purchasable, and a bare Indian component cannot match Japanese or Chinese scale.",
+            "evidence": "Perceptyne builds its own actuators, sensing and policy, and sells the cell.",
+            "figure": "<$6,000",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/1a87e260557daa913cf30c269df41f30940504e4-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Installed ↑",
+            "value": "9,120 robots",
+            "body": "A record year, and sixth in the world ahead of every European market except Germany.",
+            "source": "IFR World Robotics 2025, India installations for 2024"
+          },
+          {
+            "label": "Capital ↑",
+            "value": "$90M",
+            "body": "Raised by Indian companies building robots in seven months, already past all of 2025.",
+            "source": "Venture Intelligence via Entrackr, January to July 2026"
+          },
+          {
+            "label": "Cost ↓",
+            "value": "Under $6,000",
+            "body": "The bought-in stack gets cheaper every year.",
+            "source": "Unitree R1 humanoid, launched July 2025 at 39,900 yuan"
+          }
+        ],
+        "notFund": "Integration sold as robotics. Demos that have never run a full shift. Robots with no route to market. Egocentric data capture sold as robotics.",
+        "changeView": "A manipulation model that removes years on site. A foreign vendor clearing a gate built to exclude it. An Indian conglomerate running a humanoid programme with paying industrial customers."
+      }
+    },
+    {
+      "id": "fabless-semiconductor-divider",
+      "section": "Fabless Semiconductor",
+      "divider": {
+        "index": "05",
+        "name": "Fabless Semiconductor",
+        "subtitle": "We fund companies that already have line of sight on a customer.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/86e43b607b674208a9ae42365eb0e4639da1308d-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "fabless-semiconductor-map",
+      "map": {
+        "eyebrow": "Fabless Semiconductor · How we see the stack · September 2026",
+        "title": "Design capability is not the constraint for strong Indian teams. `Finding the customer` is.",
+        "subtitle": "We fund companies that already have line of sight on a customer.",
+        "segmentLabel": "The segment",
+        "rows": [
+          {
+            "segment": "Design IP & EDA",
+            "detail": "licensable cores, verification, design tools",
+            "position": "active",
+            "decides": "Whether a chip company anywhere will pay for the tool.",
+            "leader": "Synopsys",
+            "others": [
+              {
+                "text": "Maieutic, ArchGen, Silizium, Terminus",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Processors & Compute SoCs",
+            "detail": "inference, edge AI, RISC-V cores, MCUs",
+            "position": "selective",
+            "decides": "Turning one tape-out into repeat commercial orders.",
+            "leader": "Arm",
+            "others": [
+              {
+                "text": "Agrani, Mindgrove, Netrasemi, IndieSemiC",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Analog, Mixed-Signal & Power",
+            "detail": "converters, PMICs, GaN",
+            "position": "active",
+            "decides": "A small team that has taped out before.",
+            "leader": "Texas Instruments",
+            "others": [
+              {
+                "text": "C2i Semiconductors",
+                "portfolio": true
+              },
+              {
+                "text": ", Vervesemi, AGNIT",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Communications & Networking",
+            "detail": "RF, radar, 5G, access networks",
+            "position": "selective",
+            "decides": "A buyer who places a second order.",
+            "leader": "Qualcomm",
+            "others": [
+              {
+                "text": "FermionIC, WiSig, XARK Tech, Mbit Wireless",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Optical & Imaging Silicon",
+            "detail": "image sensors, silicon photonics",
+            "position": "tracking",
+            "decides": "A defence programme that pays for the qualification cycle.",
+            "leader": "Teledyne FLIR",
+            "others": [
+              {
+                "text": "3rdiTech, VisionAI",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Hardware Security",
+            "detail": "secure elements, root of trust, PUFs",
+            "position": "watching",
+            "decides": "Certification, then a place in a procurement specification.",
+            "leader": "Rambus",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "MEMS Transducers",
+            "detail": "gyroscopes, accelerometers, microphones",
+            "position": "watching",
+            "decides": "The process makes the sensor, so there is little to design.",
+            "leader": "Bosch",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Server & HPC CPUs",
+            "detail": "datacenter and leading-edge digital",
+            "position": "none",
+            "decides": "Hundreds of millions per generation, and the CPU IP is closed.",
+            "leader": "AMD",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "footers": [
+          {
+            "label": "The state engine",
+            "text": "ISM 2.0 and the Design Linked Incentive (DLI) provide grants to smaller companies and equity to larger ones."
+          },
+          {
+            "label": "The acquirer engine",
+            "text": "Global chip companies have acquired Indian design IP in four transactions since 2024."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/86e43b607b674208a9ae42365eb0e4639da1308d-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/b53aaf9d531b16e04483dbecf1e8aebc5faccf26-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "fabless-semiconductor-tests",
+      "tests": {
+        "eyebrow": "Fabless Semiconductor · What wins here, and why now · September 2026",
+        "title": "Indian fabless companies now have `two routes to an exit`",
+        "subtitle": "Global buyers acquire companies with competitive IP. Domestic demand can carry a company to listing.",
+        "testsLabel": "What makes a company defensible here",
+        "tests": [
+          {
+            "title": "IP that is hard to reproduce",
+            "body": "A small team that has shipped silicon produces IP an incumbent cannot scale quickly. Globally competitive from day 1, especially in RF and analog.",
+            "evidence": "Infineon agreed to buy C2i in August 2026 for its datacenter power IP.",
+            "figure": "ACQUIRED",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/86e43b607b674208a9ae42365eb0e4639da1308d-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "India as the proving ground",
+            "body": "Companies win their first customers and repeat orders in India. The product matures at home before it competes abroad.",
+            "evidence": "May 2026 — when Mindgrove declared its RISC-V microcontroller ready for mass production.",
+            "figure": "MAY 2026",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/cfdf96376efd9cc564398d8e04ba07aed7590d38-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "Licensable IP, sold on standards",
+            "body": "Licensable cores and design tools sell on quality and standard positions. One good block ships inside many customers' chips.",
+            "evidence": "50+ — silicon-proven IP blocks Terminus Circuits licenses; partnered with SiFive in April 2026.",
+            "figure": "50+",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/b53aaf9d531b16e04483dbecf1e8aebc5faccf26-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Cost ↓",
+            "value": "No ISA license",
+            "body": "A team can start a processor without a license negotiation.",
+            "source": "RISC-V is an open instruction set"
+          },
+          {
+            "label": "Exits ↑",
+            "value": "August 2026",
+            "body": "Strategic buyers now pay for Indian IP.",
+            "source": "Infineon agreed to acquire C2i Semiconductors, a Yali holding"
+          },
+          {
+            "label": "Supply ↑",
+            "value": "24 design projects",
+            "body": "The Indian fabless cohort is now large enough to source from and we have a large talent pool from GCCs.",
+            "source": "sanctioned under the Design Linked Incentive scheme"
+          }
+        ],
+        "notFund": "Fabs and packaging. Frontier digital SoCs. Design services billed by the hour.",
+        "changeView": "An Indian security block licensed to a third party. A merchant foundry offering a qualified MEMS process. No DLI company past ₹100 crore by 2028."
+      }
+    },
+    {
+      "id": "smart-manufacturing-divider",
+      "section": "Smart Manufacturing",
+      "divider": {
+        "index": "06",
+        "name": "Smart Manufacturing",
+        "subtitle": "A regulator, an auditor or a customer's inspection is usually the reason to buy, and the reason to switch supplier.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/6e31a69281eeb0810af67fadf87f69eb4616716a-1376x768.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "smart-manufacturing-map",
+      "map": {
+        "eyebrow": "Smart Manufacturing · How we see the Indian factory · September 2026",
+        "title": "In Indian manufacturing, `qualification decides who wins`.",
+        "subtitle": "A regulator, an auditor or a customer's inspection is usually the reason to buy, and the reason to switch supplier.",
+        "segmentLabel": "The layer",
+        "rows": [
+          {
+            "segment": "Inspection & Machine Health",
+            "detail": "inspection, process control, machine health",
+            "position": "active",
+            "decides": "Vendor accuracy converges. The cost of each new line stays high.",
+            "leader": "Cognex",
+            "others": [
+              {
+                "text": "SwitchOn, Frinks AI, Senquire",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Factory Digitisation and Compliance",
+            "detail": "legacy machine connectivity, MES, batch records, traceability",
+            "position": "selective",
+            "decides": "Most plants still run old machines and paper records. The first system that connects is rarely replaced.",
+            "leader": "Rockwell Automation",
+            "others": [
+              {
+                "text": "AMiT, AltiusHub",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Production Equipment & Machining",
+            "detail": "additive, industrial lasers, machine tools",
+            "position": "selective",
+            "decides": "Plants buy repeatability and local service. Assembly is copied.",
+            "leader": "Trumpf",
+            "others": [
+              {
+                "text": "DeepLase",
+                "portfolio": true
+              },
+              {
+                "text": ", Fabheads, Ethereal Machines",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Process Manufacturing",
+            "detail": "continuous-flow chemistry, materials recovery",
+            "position": "selective",
+            "decides": "A cheaper, cleaner way to make a known product. Switching suppliers means requalifying, rarely happens.",
+            "leader": "Lonza",
+            "others": [
+              {
+                "text": "Covvalent",
+                "portfolio": true
+              },
+              {
+                "text": ", Metastable Materials",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Industrial IoT, Edge & Security",
+            "detail": "sensing, gateways, energy, OT security",
+            "position": "tracking",
+            "decides": "Most of this layer assembles gateways. Few own the sensing.",
+            "leader": "Siemens",
+            "others": [
+              {
+                "text": "Folium Sensing, Multi Nano Sense",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Agtech & Precision Agriculture",
+            "detail": "farm monitoring, aquaculture, post-harvest",
+            "position": "watching",
+            "decides": "The technology travels. The buyer is a farmer, not a plant.",
+            "leader": "Trimble",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Industrial Water, Emissions & Heat",
+            "detail": "site-by-site treatment and recovery projects",
+            "position": "none",
+            "decides": "Project work, priced site by site. The next one costs the same.",
+            "leader": "Veolia",
+            "others": [
+              {
+                "text": "—",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "footers": [
+          {
+            "label": "Who is forcing the purchase",
+            "text": "Three compliance deadlines passed by January 2026. Plants are now inspected against all three."
+          },
+          {
+            "label": "Who is building new capacity",
+            "text": "₹69,548 crore of new electronics factories approved since April 2025. Systems are being chosen now."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/6e31a69281eeb0810af67fadf87f69eb4616716a-1376x768.png?w=480&h=540&fit=crop&auto=format",
+        "railImageUrl2": "https://cdn.sanity.io/images/nt0wmty3/production/adb96e8a31d61a00970fc77d1f6535e36460b2af-1376x768.png?w=640&h=560&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "smart-manufacturing-tests",
+      "tests": {
+        "eyebrow": "Smart Manufacturing · What wins here, and why now · September 2026",
+        "title": "The technology is rarely the hard part. `Qualifying it in a plant` is.",
+        "subtitle": "Three things here are hard to copy. None of them is the technology.",
+        "testsLabel": "What makes a company hard to replace",
+        "tests": [
+          {
+            "title": "Software alone does not get onto the production line",
+            "body": "Plants are offline and budgets are written for equipment. Everything that works on the line ships hardware.",
+            "evidence": "SwitchOn runs its models on the line. Folium Sensing builds its own reader.",
+            "figure": "HARDWARE",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/6e31a69281eeb0810af67fadf87f69eb4616716a-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "The first system validated, or supplier qualified, stays",
+            "body": "Switching a validated system, or a qualified supplier, means repeating the audit. Getting in now is cheap; it will not stay cheap.",
+            "evidence": "400+ — regulated plants Leucine has reached from zero since 2019, against incumbents dating to 2001.",
+            "figure": "400+",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/1957cd0985853e912881d15715dbfd523bed598e-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          },
+          {
+            "title": "The winner installs fastest, not most accurately",
+            "body": "Accuracy gaps close within a year or two. The cost of validating one more line does not, and that is where the margin sits.",
+            "evidence": "$8M — raised by SwitchOn in July 2026, which runs 170 lines across 60+ plants.",
+            "figure": "$8M",
+            "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/adb96e8a31d61a00970fc77d1f6535e36460b2af-1376x768.png?w=640&h=560&fit=crop&auto=format"
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "Rules ↑",
+            "value": "8,500 plants",
+            "body": "The December 2025 deadline was not extended. Only 1,700 of 8,500 plants applied.",
+            "source": "Revised Schedule M; inspections from Jan 2026"
+          },
+          {
+            "label": "Imports ↓",
+            "value": "By 2030",
+            "body": "India plans to stop importing SCADA for the grid. No domestic supplier base exists.",
+            "source": "Central Electricity Authority plan, Aug 2026"
+          },
+          {
+            "label": "Capital ↑",
+            "value": "~$200M",
+            "body": "A generalist fund led a $10M Series A into Fabheads. The median cheque is $3M.",
+            "source": "nearly 30 rounds across CY2025 and CY2026"
+          }
+        ],
+        "notFund": "Businesses that scale on working capital. Machines assembled in India with everything imported. Compliance software no plant has installed.",
+        "changeView": "Schedule M enforcement relaxed. An Indian industrial group buying a factory-AI company. A foreign vendor winning the first-time plants."
+      }
+    },
+    {
+      "id": "other-deep-tech-divider",
+      "section": "Other Deep Tech",
+      "divider": {
+        "index": "07",
+        "eyebrowLabel": "OTHER DEEP TECH",
+        "outlineLabel": "+4",
+        "name": "Other Deep Tech",
+        "subtitle": "In all four, the Indian buyer has only just appeared. We seek out the startups that supply them.",
+        "imageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/dcafc35e75a26f5c7540b31b103a79d599d91fa4-1672x941.png?w=480&h=540&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "other-deep-tech",
+      "section": "Other Deep Tech",
+      "otherDeepTech": {
+        "eyebrow": "Other deep tech · Where we play · September 2026",
+        "title": "Four more sectors where Yali invests selectively",
+        "rows": [
+          {
+            "segment": "Space Tech",
+            "detail": "components, propulsion, payloads",
+            "position": "selective",
+            "decides": "Selling components to launch and satellite companies, in India and abroad.",
+            "leader": "Rocket Lab",
+            "others": [
+              {
+                "text": "Bellatrix, Manastu Space, InspeCity, AADYAH Aerospace",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Quantum",
+            "detail": "security, sensing, components",
+            "position": "selective",
+            "decides": "The first government order. Key distribution is already won; sensing is still open.",
+            "leader": "Q-CTRL",
+            "others": [
+              {
+                "text": "QNu Labs, QuBeats, Indrarka, Prenishq",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Energy",
+            "detail": "storage, power electronics, motors, recycling",
+            "position": "selective",
+            "decides": "A product that earns revenue without building a factory and without selling to a utility.",
+            "leader": "Redwood Materials",
+            "others": [
+              {
+                "text": "Chara Technologies, Dreamfly, Vecmocon, Metastable",
+                "portfolio": false
+              }
+            ]
+          },
+          {
+            "segment": "Advanced Materials",
+            "detail": "wafers, magnets, cathodes, speciality chemicals",
+            "position": "selective",
+            "decides": "Getting approved as a supplier, by plants that are choosing their suppliers right now.",
+            "leader": "MP Materials",
+            "others": [
+              {
+                "text": "Lohum, AGNIT, Altmin, altM, CarbonStrong",
+                "portfolio": false
+              }
+            ]
+          }
+        ],
+        "subtitle": "In all four, the Indian buyer has only just appeared. We seek out the startups that supply them.",
+        "notInvesting": {
+          "segment": "Cells and gigafactories, green hydrogen systems, quantum computers, whole launch vehicles, charging networks",
+          "detail": "",
+          "position": "none",
+          "decides": "The first unit costs more than we invest in a company, or the only buyer is the government.",
+          "others": []
+        },
+        "footers": [
+          {
+            "label": "What changed",
+            "text": "Export controls and new national missions created a domestic buyer in all four sectors at once."
+          },
+          {
+            "label": "What did not",
+            "text": "Demand is new. So the first suppliers to qualify will hold their positions for years."
+          }
+        ],
+        "railImageUrl": "https://cdn.sanity.io/images/nt0wmty3/production/dcafc35e75a26f5c7540b31b103a79d599d91fa4-1672x941.png?w=236&h=176&fit=crop&auto=format"
+      }
+    },
+    {
+      "id": "other-deep-tech-tests",
+      "tests": {
+        "eyebrow": "Other Deep Tech · What we look for, and why now · September 2026",
+        "title": "Three tests decide where we invest in these sectors",
+        "subtitle": "The same three tests apply in all four sectors. They rule out more companies than they let in.",
+        "tests": [
+          {
+            "title": "The buyer is named and already switching",
+            "body": "An Indian company needs this input to ship its own product, and is willing to buy it from a young startup.",
+            "evidence": "Dreamfly sells drone packs to Tata Advanced Systems and L&T.",
+            "figure": null,
+            "imageUrl": null
+          },
+          {
+            "title": "The qualification is still open",
+            "body": "Once a supplier is approved into a product specification, it stays there for years. We want the places where no one has won that spot yet.",
+            "evidence": "No approved semiconductor plant in India has qualified a domestic materials supplier.",
+            "figure": null,
+            "imageUrl": null
+          },
+          {
+            "title": "The first commercial unit fits in a venture round",
+            "body": "We back companies that reach revenue without having to own the factory, the fleet or the grid asset.",
+            "evidence": "AmpereHour commissioned 360 MWh on a $5M round; IndiGrid financed the asset.",
+            "figure": null,
+            "imageUrl": null
+          }
+        ],
+        "whyNow": [
+          {
+            "label": "The shock",
+            "value": "Since April 2025",
+            "source": "China's licensing of seven medium and heavy rare earths, in force since April 2025",
+            "body": "The controls have never been lifted. India's answer is a ₹7,280 crore magnet scheme."
+          },
+          {
+            "label": "The buyer",
+            "value": "₹1.39 lakh crore",
+            "source": "75% of the defence capital budget reserved for domestic industry, February 2026",
+            "body": "One buyer, the defence ministry, funds satellites, quantum navigation, drone batteries and aerospace alloys."
+          },
+          {
+            "label": "The proof",
+            "value": "25 systems",
+            "source": "QKD units delivered to the Indian Navy in 2024, two years after an iDEX challenge",
+            "body": "A startup won a government challenge, delivered the systems, and that same government now funds the company."
+          }
+        ],
+        "notFund": "Battery cells, green hydrogen at system scale, quantum computers, whole launch vehicles. When the first plant costs more than a venture round we back suppliers instead of the plant.",
+        "changeView": "China lifts its export controls. An Indian chip plant approves a domestic supplier. A space parts company raises at a seed-stage price."
+      }
+    }
+  ],
+  "closing": {
+    "contacts": [
+      "gani@yali.vc",
+      "sunil@yali.vc"
+    ],
+    "website": "yali.vc"
+  }
+}

@@ -4,7 +4,7 @@
 // Flags are SVG files (public/flags), not emoji: serverless Chromium has no
 // emoji font, so 🇮🇳 etc. rendered as blanks in the exported PDF. Unknown
 // codes fall back to the emoji text.
-const FLAG_FILE = { IND: 'in', USA: 'us', TWN: 'tw', KOR: 'kr', SGP: 'sg' };
+const FLAG_FILE = { IND: 'in', USA: 'us', JPN: 'jp', TWN: 'tw', KOR: 'kr', SGP: 'sg' };
 
 function Flag({ code, flag, name }) {
   const file = FLAG_FILE[code];

@@ -58,8 +58,10 @@ export async function exportDeckPdf({ deckId, baseUrl, dataSource = 'fixture', a
       preferCSSPageSize: true,
     });
 
+    const version = await page.$eval('meta[name="deck-version"]', (m) => m.content).catch(() => null);
     const manifest = {
       deckId,
+      version,
       generatedAt: new Date().toISOString(),
       dataSource,
       slideCount: await page.$$eval('.deck-slide', (els) => els.length),

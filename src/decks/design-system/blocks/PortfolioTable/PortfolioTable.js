@@ -2,10 +2,12 @@
 // "Fund I Portfolio" slide — .fi-card/.fi-cards, read earlier, turned out
 // to belong to the Appendix slide instead, a real mis-mapping found via
 // the export overflow check). Columns: logo / company+sector / invested
-// / MOIC / FMV / first investment date.
-const COLS = '44px 1fr 120px 88px 88px 110px';
+// / MOIC / FMV / first investment date. `exited` rows get an Exited tag
+// beside the name, and their FMV column carries the exit value (`fmvLabel`
+// renames the column to say so, e.g. "FMV / Exit Value").
+const COLS = '44px 1fr 120px 88px 130px 110px';
 
-export function PortfolioTable({ heading, asOf, rows = [] }) {
+export function PortfolioTable({ heading, asOf, rows = [], fmvLabel = 'FMV' }) {
   return (
     <div style={{ padding: '22px 36px 18px', background: '#efefef', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14, flexShrink: 0 }}>
@@ -14,7 +16,7 @@ export function PortfolioTable({ heading, asOf, rows = [] }) {
       </div>
       <div style={{ flex: 1, border: 'var(--deck-border)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'grid', gridTemplateColumns: COLS, borderBottom: 'var(--deck-border)', background: 'var(--deck-color-ink)', flexShrink: 0 }}>
-          {['', 'Company', 'Invested', 'MOIC', 'FMV', 'First Investment'].map((h) => (
+          {['', 'Company', 'Invested', 'MOIC', fmvLabel, 'First Investment'].map((h) => (
             <span key={h} style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 7.5, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#efefef', padding: '7px 10px' }}>{h}</span>
           ))}
         </div>
@@ -27,7 +29,12 @@ export function PortfolioTable({ heading, asOf, rows = [] }) {
               ) : null}
             </div>
             <div style={{ padding: '0 12px', borderRight: 'var(--deck-border)', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--deck-color-ink)' }}>{r.name}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--deck-color-ink)' }}>{r.name}</span>
+                {r.exited ? (
+                  <span style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 7, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', background: 'var(--deck-color-crimson)', color: '#fff', padding: '1px 5px' }}>Exited</span>
+                ) : null}
+              </div>
               {r.sector ? <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 8, color: 'var(--deck-color-crimson)', marginTop: 2 }}>{r.sector}</div> : null}
             </div>
             {[r.invested, r.moic, r.fmv].map((val, j) => (

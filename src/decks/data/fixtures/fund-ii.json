@@ -4,121 +4,354 @@
     "title": "Yali Capital Fund",
     "numeral": "II",
     "subtitle": "A deep tech fund",
-    "version": "fund2-deck"
+    "version": "fund2-deck-v3.4"
   },
   "contents": {
     "title": "Contents",
     "subtitle": "Yali Capital Fund II\nInvestor Presentation",
     "sections": [
-      { "name": "The Yali Team" },
-      { "name": "Our Thesis" },
-      { "name": "Our Process" },
-      { "name": "Fund I Performance" },
-      { "name": "Fund II · Structure & Terms" },
-      { "name": "Media & Recognition" }
+      {
+        "name": "The Yali Team"
+      },
+      {
+        "name": "Our Thesis"
+      },
+      {
+        "name": "Our Process"
+      },
+      {
+        "name": "Fund I Performance"
+      },
+      {
+        "name": "Fund II · Structure & Terms"
+      },
+      {
+        "name": "Media & Recognition"
+      }
     ]
   },
   "teamOverview": {
     "label": "The Yali Team",
     "people": [
-      { "name": "Ganapathy Subramaniam", "experienceBadge": "35 yrs in deep tech & investing", "badgeTone": "crimson" },
-      { "name": "Mathew Cyriac", "experienceBadge": "30 years in finance & investing", "badgeTone": "white" },
-      { "name": "Lip-Bu Tan", "experienceBadge": "40+ years in deep tech & investing", "badgeTone": "crimson" },
-      { "name": "Karthik Madathil", "experienceBadge": "30 years in deep tech", "badgeTone": "white" },
-      { "name": "Sunil S. Patil", "experienceBadge": "25+ years in finance & operations", "badgeTone": "white" },
-      { "name": "Sandipan Mondal", "experienceBadge": "20+ years in tech & entrepreneurship", "badgeTone": "crimson" },
-      { "name": "Kaushik Ram Ganapathy", "experienceBadge": "PhD in computational biology", "badgeTone": "white" },
-      { "name": "Pranav Karnad", "experienceBadge": "15 years in marketing", "badgeTone": "crimson" }
+      {
+        "name": "Ganapathy Subramaniam",
+        "experienceBadge": "35 yrs in deep tech & investing",
+        "badgeTone": "crimson"
+      },
+      {
+        "name": "Mathew Cyriac",
+        "experienceBadge": "30 years in finance & investing",
+        "badgeTone": "white"
+      },
+      {
+        "name": "Lip-Bu Tan",
+        "experienceBadge": "40+ years in deep tech & investing",
+        "badgeTone": "crimson"
+      },
+      {
+        "name": "Karthik Madathil",
+        "experienceBadge": "30 years in deep tech",
+        "badgeTone": "white"
+      },
+      {
+        "name": "Sunil S. Patil",
+        "experienceBadge": "25+ years in finance & operations",
+        "badgeTone": "white"
+      },
+      {
+        "name": "Sandipan Mondal",
+        "experienceBadge": "20+ years in tech & entrepreneurship",
+        "badgeTone": "crimson"
+      },
+      {
+        "name": "Kaushik Ram Ganapathy",
+        "experienceBadge": "PhD in computational biology",
+        "badgeTone": "white"
+      },
+      {
+        "name": "Pranav Karnad",
+        "experienceBadge": "15 years in marketing",
+        "badgeTone": "crimson"
+      }
     ]
   },
   "gpsAdvisor": {
     "people": [
-      { "name": "Gani", "employers": ["Celesta Capital", "Cirel Systems", "Cosmic Circuits", "Texas Instruments, India"], "patNum": 1 },
-      { "name": "Mathew", "employers": ["Florintree Advisors", "Blackstone India PE", "iGate", "Bank of America"], "patNum": 2 },
-      { "name": "Lip-Bu", "employers": ["Intel", "SambaNova Systems, Artera AI & Credo", "Cadence Design Systems", "Walden International"], "patNum": 3 }
+      {
+        "name": "Gani",
+        "employers": [
+          "Celesta Capital",
+          "Cirel Systems",
+          "Cosmic Circuits",
+          "Texas Instruments, India"
+        ],
+        "patNum": 1
+      },
+      {
+        "name": "Mathew",
+        "employers": [
+          "Florintree Advisors",
+          "Blackstone India PE",
+          "iGate",
+          "Bank of America"
+        ],
+        "patNum": 2
+      },
+      {
+        "name": "Lip-Bu",
+        "employers": [
+          "Intel",
+          "SambaNova Systems, Artera AI & Credo",
+          "Cadence Design Systems",
+          "Walden International"
+        ],
+        "patNum": 3
+      }
     ]
   },
   "investmentsTeam": {
     "people": [
-      { "name": "Karthik", "employers": ["Atonarp", "Tenpoint Academy", "Cypress Semiconductor", "Texas Instruments"], "patNum": 4 },
-      { "name": "Sandipan", "employers": ["Plato Project", "Samsung Research", "Zapr Media Labs", "Nestle"], "patNum": 5 },
-      { "name": "Kaushik", "employers": ["Scripps Research", "UC San Diego"], "patNum": 6 }
+      {
+        "name": "Karthik",
+        "employers": [
+          "Atonarp",
+          "Tenpoint Academy",
+          "Cypress Semiconductor",
+          "Texas Instruments"
+        ],
+        "patNum": 4
+      },
+      {
+        "name": "Sandipan",
+        "employers": [
+          "Plato Project",
+          "Samsung Research",
+          "Zapr Media Labs",
+          "Nestle"
+        ],
+        "patNum": 5
+      },
+      {
+        "name": "Kaushik",
+        "employers": [
+          "Scripps Research",
+          "UC San Diego"
+        ],
+        "patNum": 6
+      }
     ]
   },
   "operationsTeam": {
     "people": [
-      { "name": "Sunil", "employers": ["Micron", "Cirel Systems", "Cosmic Circuits", "LG Soft"], "patNum": 7 },
-      { "name": "Pranav", "employers": ["Volvo Group", "Epifi Technologies", "Dentsu Creative", "Ogilvy & Mather"], "patNum": 1 }
+      {
+        "name": "Sunil",
+        "employers": [
+          "Micron",
+          "Cirel Systems",
+          "Cosmic Circuits",
+          "LG Soft"
+        ],
+        "patNum": 7
+      },
+      {
+        "name": "Pranav",
+        "employers": [
+          "Volvo Group",
+          "Epifi Technologies",
+          "Dentsu Creative",
+          "Ogilvy & Mather"
+        ],
+        "patNum": 1
+      }
     ],
     "maxWidth": 660
   },
   "thesis": {
     "heading": "Our Investment Areas · Fund II Thesis",
     "core": [
-      { "label": "Life Sciences" }, { "label": "Smart Manufacturing" }, { "label": "Fabless Semiconductor" },
-      { "label": "Artificial Intelligence" }, { "label": "Robotics" }, { "label": "Aerospace & Surveillance" }
+      {
+        "label": "Life Sciences"
+      },
+      {
+        "label": "Smart Manufacturing"
+      },
+      {
+        "label": "Fabless Semiconductor"
+      },
+      {
+        "label": "Artificial Intelligence"
+      },
+      {
+        "label": "Robotics"
+      },
+      {
+        "label": "Aerospace & Surveillance"
+      }
     ],
     "adjacent": [
-      { "label": "Space Tech" }, { "label": "Quantum" }, { "label": "Energy" }, { "label": "Advanced Materials" }
+      {
+        "label": "Space Tech"
+      },
+      {
+        "label": "Quantum"
+      },
+      {
+        "label": "Energy"
+      },
+      {
+        "label": "Advanced Materials"
+      }
     ]
   },
   "dealflow": {
     "heading": "Our Process · Inbound Dealflow",
     "stages": [
-      { "name": "AI\nInbox", "description": "pitch@yali.vc" },
-      { "name": "Team\nVet", "description": "pickup or ignore", "exits": ["Ignore"] },
-      { "name": "Initial\nMeeting", "description": "assess thesis fit", "exits": ["Pass"] },
-      { "name": "Internal\nReview", "description": "wider team discusses", "note": "invite to pitch; sometimes to learn a sector" },
-      { "name": "Pitch", "description": "founder presents",
+      {
+        "name": "AI\nInbox",
+        "description": "pitch@yali.vc"
+      },
+      {
+        "name": "Team\nVet",
+        "description": "pickup or ignore",
         "exits": [
-          { "label": "Watch", "note": "timing / maturity / consensus" },
+          "Ignore"
+        ]
+      },
+      {
+        "name": "Initial\nMeeting",
+        "description": "assess thesis fit",
+        "exits": [
           "Pass"
-        ] },
-      { "name": "Follow-on\nMeeting", "description": "further diligence", "exits": ["Watch", "Park", "Pass"] },
-      { "name": "Portfolio", "description": "investment made", "isFinal": true }
+        ]
+      },
+      {
+        "name": "Internal\nReview",
+        "description": "wider team discusses",
+        "note": "invite to pitch; sometimes to learn a sector"
+      },
+      {
+        "name": "Pitch",
+        "description": "founder presents",
+        "exits": [
+          {
+            "label": "Watch",
+            "note": "timing / maturity / consensus"
+          },
+          "Pass"
+        ]
+      },
+      {
+        "name": "Follow-on\nMeeting",
+        "description": "further diligence",
+        "exits": [
+          "Watch",
+          "Park",
+          "Pass"
+        ]
+      },
+      {
+        "name": "Portfolio",
+        "description": "investment made",
+        "isFinal": true
+      }
     ]
   },
   "portfolioSupport": {
     "heading": "Our Process · Portfolio Support",
     "cadences": [
-      { "frequency": "Weekly", "description": "With very early stage companies", "interval": 1 },
-      { "frequency": "Fortnightly", "description": "With early stage companies", "interval": 2 },
-      { "frequency": "Monthly", "description": "Companies with follow-on rounds", "interval": 4 },
-      { "frequency": "Quarterly", "description": "Board meets with all portfolio companies", "interval": 12 }
+      {
+        "frequency": "Weekly",
+        "description": "With very early stage companies",
+        "interval": 1
+      },
+      {
+        "frequency": "Fortnightly",
+        "description": "With early stage companies",
+        "interval": 2
+      },
+      {
+        "frequency": "Monthly",
+        "description": "Companies with follow-on rounds",
+        "interval": 4
+      },
+      {
+        "frequency": "Quarterly",
+        "description": "Board meets with all portfolio companies",
+        "interval": 12
+      }
     ],
     "note": "Yali actively takes a board position in every portfolio company."
   },
   "cxoMap": {
     "heading": "Our LP network · Top global CXOs",
     "countries": [
-      { "code": "IND", "flag": "🇮🇳", "name": "India", "region": "South Asia" },
-      { "code": "USA", "flag": "🇺🇸", "name": "USA", "region": "North America" },
-      { "code": "TWN", "flag": "🇹🇼", "name": "Taiwan", "region": "East Asia" },
-      { "code": "KOR", "flag": "🇰🇷", "name": "South Korea", "region": "East Asia" },
-      { "code": "SGP", "flag": "🇸🇬", "name": "Singapore", "region": "Southeast Asia" }
+      {
+        "code": "IND",
+        "flag": "🇮🇳",
+        "name": "India",
+        "region": "South Asia"
+      },
+      {
+        "code": "USA",
+        "flag": "🇺🇸",
+        "name": "USA",
+        "region": "North America"
+      },
+      {
+        "code": "JPN",
+        "flag": "🇯🇵",
+        "name": "Japan",
+        "region": "East Asia"
+      },
+      {
+        "code": "TWN",
+        "flag": "🇹🇼",
+        "name": "Taiwan",
+        "region": "East Asia"
+      },
+      {
+        "code": "KOR",
+        "flag": "🇰🇷",
+        "name": "South Korea",
+        "region": "East Asia"
+      },
+      {
+        "code": "SGP",
+        "flag": "🇸🇬",
+        "name": "Singapore",
+        "region": "Southeast Asia"
+      }
     ],
-    "footnote": "Our LPs feature CXOs from India, USA, Taiwan, South Korea and Singapore."
+    "footnote": "Our LPs feature CXOs from India, USA, Japan, Taiwan, South Korea and Singapore."
   },
   "governance": {
     "title": "Proposed structure for Fund II"
   },
   "fundIIKeyTerms": {
     "heading": "Fund II · Key Terms",
-    "fundSizeLabel": "₹1,800 Crore (~$200M)",
-    "greenshoeLabel": "Greenshoe ₹300 Crore",
-    "fundTerm": "10 + 1 + 1",
+    "fundSizeLabel": "₹2,100 Crore (~$233M)",
+    "greenshoeLabel": "+ ₹900 Crore Greenshoe",
+    "fundTerm": "12 + 1 + 1",
     "investmentPeriodYears": 4
   },
   "fundIIDeployment": {
     "heading": "Fund II · Deployment Strategy",
     "allocation": [
-      { "stage": "Seed", "percent": 10, "note": "Initial stage" },
-      { "stage": "Stage Agnostic", "percent": 90, "note": "All stages" }
+      {
+        "stage": "Seed",
+        "percent": 10,
+        "note": "Initial stage"
+      },
+      {
+        "stage": "Stage Agnostic",
+        "percent": 90,
+        "note": "All stages"
+      }
     ]
   },
   "fundIPortfolio": {
     "heading": "Fund I · Portfolio",
-    "asOf": "As of June 2026 · ₹ crores",
+    "asOf": "As of September 2026 · ₹ crores",
     "rows": [
       {
         "name": "4baseCare",
@@ -131,26 +364,28 @@
       {
         "name": "Perceptyne",
         "sector": "Robotics",
-        "invested": "11.8 Cr",
+        "invested": "11.80 Cr",
         "moic": "1.00x",
-        "fmv": "11.8 Cr",
+        "fmv": "11.80 Cr",
         "firstInvestment": "Oct 2024"
       },
       {
         "name": "C2i Semiconductors",
         "sector": "Fabless Semiconductor",
         "invested": "33.57 Cr",
-        "moic": "3.42x",
-        "fmv": "114.74 Cr",
-        "firstInvestment": "Oct 2024"
+        "moic": "7.67x",
+        "fmv": "257.54 Cr",
+        "firstInvestment": "Oct 2024",
+        "exited": true
       },
       {
         "name": "Tonbo Imaging",
         "sector": "Aerospace & Surveillance",
-        "invested": "60.0 Cr",
-        "moic": "1.00x",
-        "fmv": "60.0 Cr",
-        "firstInvestment": "Mar 2025"
+        "invested": "60.00 Cr",
+        "moic": "4.28x",
+        "fmv": "256.61 Cr",
+        "firstInvestment": "Mar 2025",
+        "exited": true
       },
       {
         "name": "PointAI",
@@ -175,14 +410,57 @@
         "moic": "1.00x",
         "fmv": "3.00 Cr",
         "firstInvestment": "Jan 2026"
+      },
+      {
+        "name": "Micropack",
+        "sector": "Smart Manufacturing",
+        "invested": "90.00 Cr",
+        "moic": "1.00x",
+        "fmv": "90.00 Cr",
+        "firstInvestment": "Aug 2026"
+      },
+      {
+        "name": "Ultraviolette",
+        "sector": "Smart Manufacturing",
+        "invested": "90.00 Cr",
+        "moic": "1.00x",
+        "fmv": "90.00 Cr",
+        "firstInvestment": "Sept 2026"
       }
-    ]
+    ],
+    "fmvLabel": "FMV / Exit Value"
+  },
+  "fundIRealisedExits": {
+    "heading": "Fund I · Realised Exits",
+    "unit": "Amount in ₹ crores",
+    "rows": [
+      {
+        "name": "C2i Semiconductors",
+        "note": "Acquired by Infineon Technologies, August 2026",
+        "invested": "33.57",
+        "exitValue": "257.54",
+        "moic": "7.67x"
+      },
+      {
+        "name": "Tonbo Imaging",
+        "note": "Listed on the NSE, 23 October 2026",
+        "invested": "60.00",
+        "exitValue": "256.61",
+        "moic": "4.28x"
+      }
+    ],
+    "total": {
+      "invested": "93.57",
+      "exitValue": "514.16",
+      "moic": "5.49x"
+    }
   },
   "appendixPortfolio": {
     "companies": [
       {
         "name": "4baseCare",
         "sector": "Life Sciences",
+        "investmentStatus": "active",
         "description": "Precision oncology platform leveraging whole-exome sequencing and clinical datasets from underrepresented Indian populations. ICMR-collaborated pipeline targeting colorectal, lung, and breast cancer subtypes absent from Western cohorts. Clinico-genomic reports in clinical use at leading Indian cancer centres.",
         "metrics": [
           {
@@ -203,27 +481,27 @@
           },
           {
             "label": "Ownership",
-            "value": "15.4%"
+            "value": "14.05%"
           },
           {
             "label": "Stage",
-            "value": "Series A"
+            "value": "Series B"
           }
-        ],
-        "investmentStatus": "active"
+        ]
       },
       {
         "name": "Perceptyne",
         "sector": "Robotics",
+        "investmentStatus": "active",
         "description": "Full-stack humanoid and dextrous robot systems. PR-9D single-arm (9-DoF) and PR-34D dual-arm (34-DoF) platforms with proprietary tactile-sensing hardware trained on in-house manipulation datasets. Targeting automotive, electronics, and precision assembly lines.",
         "metrics": [
           {
             "label": "Invested",
-            "value": "11.8 Cr"
+            "value": "11.80 Cr"
           },
           {
             "label": "FMV",
-            "value": "11.8 Cr"
+            "value": "11.80 Cr"
           },
           {
             "label": "MOIC",
@@ -235,18 +513,18 @@
           },
           {
             "label": "Ownership",
-            "value": "12.8%"
+            "value": "12.83%"
           },
           {
             "label": "Stage",
             "value": "Seed"
           }
-        ],
-        "investmentStatus": "active"
+        ]
       },
       {
         "name": "C2i Semiconductors",
         "sector": "Fabless Semiconductor",
+        "investmentStatus": "exited",
         "description": "Digital power management ICs for AI data center infrastructure. Proprietary controllers delivering 40% efficiency improvement over analog alternatives, reducing total rack power consumption. First silicon in production; Series A co-led by Yali with anchor institutional LP participation.",
         "metrics": [
           {
@@ -254,12 +532,12 @@
             "value": "33.57 Cr"
           },
           {
-            "label": "FMV",
-            "value": "114.74 Cr"
+            "label": "Exit Value",
+            "value": "257.54 Cr"
           },
           {
             "label": "MOIC",
-            "value": "3.42x"
+            "value": "7.67x"
           },
           {
             "label": "First Investment",
@@ -267,31 +545,31 @@
           },
           {
             "label": "Ownership",
-            "value": "29.2%"
+            "value": "27.71%"
           },
           {
             "label": "Stage",
-            "value": "Seed"
+            "value": "Series A"
           }
-        ],
-        "investmentStatus": "exited"
+        ]
       },
       {
         "name": "Tonbo Imaging",
         "sector": "Aerospace & Surveillance",
-        "description": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Active Series D follow-on in process; expanding IP base into high-power microwave directed energy applications.",
+        "investmentStatus": "exited",
+        "description": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Listed on the National Stock Exchange (NSE) on 23 October 2026. Expanding IP base into high-power microwave directed energy applications.",
         "metrics": [
           {
             "label": "Invested",
-            "value": "60.0 Cr"
+            "value": "60.00 Cr"
           },
           {
-            "label": "FMV",
-            "value": "60.0 Cr"
+            "label": "Exit Value",
+            "value": "256.61 Cr"
           },
           {
             "label": "MOIC",
-            "value": "1.00x"
+            "value": "4.28x"
           },
           {
             "label": "First Investment",
@@ -299,18 +577,18 @@
           },
           {
             "label": "Ownership",
-            "value": "4.2%"
+            "value": "4.19%"
           },
           {
             "label": "Stage",
             "value": "Series D"
           }
-        ],
-        "investmentStatus": "active"
+        ]
       },
       {
         "name": "PointAI",
         "sector": "Artificial Intelligence",
+        "investmentStatus": "active",
         "description": "GenAI-powered spatial commerce platform enabling customers to visualise and interact with physical products in 3D before purchase. Integrates with existing e-commerce product catalogues; deployment active with consumer electronics and furniture retailers. Reduces returns rate and increases conversion on high-consideration purchases.",
         "metrics": [
           {
@@ -331,18 +609,18 @@
           },
           {
             "label": "Ownership",
-            "value": "10.3%"
+            "value": "10.31%"
           },
           {
             "label": "Stage",
             "value": "Seed"
           }
-        ],
-        "investmentStatus": "active"
+        ]
       },
       {
         "name": "LatentForce",
         "sector": "Artificial Intelligence",
+        "investmentStatus": "active",
         "description": "Enterprise code modernisation using AI and automation. Platform analyses legacy codebases (COBOL, Fortran, Java EE) and generates modernised equivalents with automated test coverage and regression validation. Series A fundraise in progress. Target customers: large financial institutions and public-sector IT departments.",
         "metrics": [
           {
@@ -363,18 +641,18 @@
           },
           {
             "label": "Ownership",
-            "value": "15.4%"
+            "value": "15.38%"
           },
           {
             "label": "Stage",
             "value": "Seed"
           }
-        ],
-        "investmentStatus": "active"
+        ]
       },
       {
         "name": "DeepLase",
         "sector": "Smart Manufacturing",
+        "investmentStatus": "active",
         "description": "IIT-Delhi spin-out with proprietary fiber laser and photonics IP developed over eight years. Applications span directed energy weapons, industrial precision cutting, and free-space optical (FSO) secure communications. iDEX-funded prototype delivered to DRDO; strategic interest from Indian defence primes and allied government labs.",
         "metrics": [
           {
@@ -395,14 +673,77 @@
           },
           {
             "label": "Ownership",
-            "value": "9.4%"
+            "value": "9.38%"
           },
           {
             "label": "Stage",
             "value": "Seed"
           }
-        ],
-        "investmentStatus": "active"
+        ]
+      },
+      {
+        "name": "Micropack",
+        "sector": "Smart Manufacturing",
+        "investmentStatus": "active",
+        "description": "Professional-grade PCB manufacturer. Yali invested ₹90 Cr for an 8.16% stake, priced off a floor enterprise value of ₹1,164 Cr. The stake adjusts with FY28 EBITDA as founder CCPS convert: 8.16% at or below ₹139.68 Cr, about 6.94% at the ₹1,358 Cr EV midpoint, and 6.04% at ₹158.92 Cr or above (the ₹1,552 Cr EV ceiling). Invested capital is unchanged throughout.",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "90.00 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "90.00 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Aug 2026"
+          },
+          {
+            "label": "Ownership",
+            "value": "6.94%"
+          },
+          {
+            "label": "Stage",
+            "value": "Secondary"
+          }
+        ]
+      },
+      {
+        "name": "Ultraviolette",
+        "sector": "Smart Manufacturing",
+        "investmentStatus": "active",
+        "description": "India's high-performance electric motorcycle company",
+        "metrics": [
+          {
+            "label": "Invested",
+            "value": "90.00 Cr"
+          },
+          {
+            "label": "FMV",
+            "value": "90.00 Cr"
+          },
+          {
+            "label": "MOIC",
+            "value": "1.00x"
+          },
+          {
+            "label": "First Investment",
+            "value": "Sept 2026"
+          },
+          {
+            "label": "Ownership",
+            "value": "2.57%"
+          },
+          {
+            "label": "Stage",
+            "value": "Series E"
+          }
+        ]
       }
     ]
   },
@@ -410,7 +751,7 @@
     "4basecare": "Precision oncology platform leveraging whole-exome sequencing and clinical datasets from underrepresented Indian populations. ICMR-collaborated pipeline targeting colorectal, lung, and breast cancer subtypes absent from Western cohorts. Clinico-genomic reports in clinical use at leading Indian cancer centres.",
     "perceptyne-robotics": "Full-stack humanoid and dextrous robot systems. PR-9D single-arm (9-DoF) and PR-34D dual-arm (34-DoF) platforms with proprietary tactile-sensing hardware trained on in-house manipulation datasets. Targeting automotive, electronics, and precision assembly lines.",
     "c2i": "Digital power management ICs for AI data center infrastructure. Proprietary controllers delivering 40% efficiency improvement over analog alternatives, reducing total rack power consumption. First silicon in production; Series A co-led by Yali with anchor institutional LP participation.",
-    "tonbo-imaging-india-limited": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Active Series D follow-on in process; expanding IP base into high-power microwave directed energy applications.",
+    "tonbo-imaging-india-limited": "AI-powered electro-optical and infrared sensor systems for defence and ISR. Export-qualified product line deployed with the Indian Army and global OEM customers. Listed on the National Stock Exchange (NSE) on 23 October 2026. Expanding IP base into high-power microwave directed energy applications.",
     "pointai": "GenAI-powered spatial commerce platform enabling customers to visualise and interact with physical products in 3D before purchase. Integrates with existing e-commerce product catalogues; deployment active with consumer electronics and furniture retailers. Reduces returns rate and increases conversion on high-consideration purchases.",
     "latentforce": "Enterprise code modernisation using AI and automation. Platform analyses legacy codebases (COBOL, Fortran, Java EE) and generates modernised equivalents with automated test coverage and regression validation. Series A fundraise in progress. Target customers: large financial institutions and public-sector IT departments.",
     "deeplase": "IIT-Delhi spin-out with proprietary fiber laser and photonics IP developed over eight years. Applications span directed energy weapons, industrial precision cutting, and free-space optical (FSO) secure communications. iDEX-funded prototype delivered to DRDO; strategic interest from Indian defence primes and allied government labs."
@@ -494,58 +835,124 @@
       }
     ]
   },
-  "closing": { "contacts": ["gani@yali.vc", "sunil@yali.vc"], "website": "yali.vc" },
+  "closing": {
+    "contacts": [
+      "gani@yali.vc",
+      "sunil@yali.vc"
+    ],
+    "website": "yali.vc"
+  },
   "fundIStats": {
-    "heading": "Fund I · As of June 2026",
+    "heading": "Fund I · Fund Snapshot",
     "unit": "Amount in ₹ crores",
+    "columns": [
+      "As of Sep '26",
+      "Current (post exits)"
+    ],
     "rows": [
       {
         "label": "First close date",
-        "value": "15 Jul '24"
+        "values": [
+          "15 Jul '24",
+          "15 Jul '24"
+        ]
       },
       {
         "label": "Final close date",
-        "value": "14 Jul '25"
+        "values": [
+          "14 Jul '25",
+          "14 Jul '25"
+        ]
       },
       {
-        "label": "Combined fund size",
-        "value": "893.00"
+        "label": "Fund size at final close",
+        "values": [
+          "879.44",
+          "879.44"
+        ]
       },
       {
         "label": "Amount drawn down",
-        "value": "216.08"
+        "values": [
+          "452.94",
+          "452.94"
+        ]
       },
       {
         "label": "Total invested in portfolio",
-        "value": "186.54"
+        "values": [
+          "366.55",
+          "366.55"
+        ]
       },
       {
-        "label": "Fair Market Value of portfolio investments (incl. realised value)",
-        "value": "336.89"
+        "label": "Fair Market Value of portfolio investments",
+        "values": [
+          "856.31",
+          "342.15"
+        ]
+      },
+      {
+        "label": "Realised proceeds from exits",
+        "values": [
+          "0.00",
+          "514.16"
+        ]
       },
       {
         "label": "Number of portfolio companies",
-        "value": "7"
+        "group": true
+      },
+      {
+        "label": "Active",
+        "indent": true,
+        "values": [
+          "9",
+          "7"
+        ]
+      },
+      {
+        "label": "Fully exited",
+        "indent": true,
+        "values": [
+          "0",
+          "2"
+        ]
       },
       {
         "label": "Amount returned (incl. passive income)",
-        "value": "1.17"
+        "values": [
+          "1.17",
+          "514.52"
+        ]
       },
       {
         "label": "MOIC",
-        "value": "1.81x"
+        "values": [
+          "2.34x",
+          "2.34x"
+        ]
       },
       {
         "label": "TVPI",
-        "value": "1.54x"
-      },
-      {
-        "label": "RVPI",
-        "value": "1.53x"
+        "values": [
+          "2.00x",
+          "2.00x"
+        ]
       },
       {
         "label": "DPI",
-        "value": "0.0100x"
+        "values": [
+          "0.00x",
+          "1.14x"
+        ]
+      },
+      {
+        "label": "RVPI",
+        "values": [
+          "1.99x",
+          "0.86x"
+        ]
       }
     ]
   },
@@ -553,45 +960,45 @@
     "heading": "Portfolio Investments by Sector",
     "slices": [
       {
+        "label": "Smart Manufacturing",
+        "amount": "183.00",
+        "value": 183,
+        "percent": "49.92",
+        "color": "#830d35"
+      },
+      {
         "label": "Aerospace & Surveillance",
         "amount": "60.00",
         "value": 60,
-        "percent": "32.16",
-        "color": "#830d35"
+        "percent": "16.37",
+        "color": "#bb3e68"
       },
       {
         "label": "Artificial Intelligence",
         "amount": "42.80",
         "value": 42.8,
-        "percent": "22.94",
-        "color": "#bb3e68"
+        "percent": "11.68",
+        "color": "#d65d85"
       },
       {
         "label": "Life Sciences",
         "amount": "35.38",
         "value": 35.38,
-        "percent": "18.97",
-        "color": "#d65d85"
+        "percent": "9.65",
+        "color": "#db90a9"
       },
       {
         "label": "Fabless Semiconductor",
         "amount": "33.57",
         "value": 33.57,
-        "percent": "18.00",
-        "color": "#db90a9"
+        "percent": "9.16",
+        "color": "#f4c0d4"
       },
       {
         "label": "Robotics",
         "amount": "11.80",
         "value": 11.8,
-        "percent": "6.33",
-        "color": "#f4c0d4"
-      },
-      {
-        "label": "Smart Manufacturing",
-        "amount": "3.00",
-        "value": 3,
-        "percent": "1.61",
+        "percent": "3.22",
         "color": "#fae3ec"
       }
     ]
@@ -609,7 +1016,7 @@
         "label": "Evaluated in CRM"
       },
       {
-        "value": "7",
+        "value": "9",
         "label": "Portfolio investments"
       }
     ]
@@ -647,9 +1054,9 @@
     "heading": "Fund I · Near-term Deployment",
     "items": [
       {
-        "label": "Smart Manufacturing · 2 companies",
-        "amount": 200,
-        "description": "Preparing to invest in 2 smart manufacturing companies in the current deployment cycle.",
+        "label": "Smart Manufacturing · 1 company",
+        "amount": 20,
+        "description": "Preparing to invest in 1 smart manufacturing company in the current deployment cycle.",
         "accent": "crimson"
       },
       {

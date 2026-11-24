@@ -1,8 +1,9 @@
 // Pixel-matched to the legacy Fund II Key Terms slide's actual structure
 // (fund2-deck-v2.0.html:1998-2023): it's bespoke inline-styled markup,
 // not a row of stat tiles like the earlier draft assumed — one highlight
-// box (fund size + a gold greenshoe pill) followed by a 2-row bordered
-// table. Rebuilt to match that structure exactly.
+// box (fund size + greenshoe) followed by a 2-row bordered table. The
+// greenshoe was a small gold pill in legacy; it's now set at the fund size's
+// own 32px so the two amounts read with equal weight.
 function TermRow({ label, value, first }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', borderBottom: first ? '1px solid var(--deck-color-ink)' : 'none' }}>
@@ -27,11 +28,11 @@ export function KeyTermsSlide({ heading, fundSizeLabel, greenshoeLabel, fundTerm
         <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--deck-color-crimson)', marginBottom: 10 }}>
           Target Fund Size
         </div>
-        <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 32, fontWeight: 700, color: 'var(--deck-color-ink)', lineHeight: 1, marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 32, fontWeight: 700, color: 'var(--deck-color-ink)', lineHeight: 1 }}>
           {fundSizeLabel}
         </div>
         {greenshoeLabel ? (
-          <div style={{ display: 'inline-block', background: 'var(--deck-color-gold)', fontFamily: 'var(--deck-font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--deck-color-ink)', padding: '4px 10px', marginTop: 4, letterSpacing: '0.04em' }}>
+          <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 32, fontWeight: 700, color: 'var(--deck-color-ink)', lineHeight: 1, marginTop: 12 }}>
             {greenshoeLabel}
           </div>
         ) : null}
@@ -39,7 +40,7 @@ export function KeyTermsSlide({ heading, fundSizeLabel, greenshoeLabel, fundTerm
 
       <div style={{ border: 'var(--deck-border)', minWidth: 340 }}>
         <TermRow label="Term" value={fundTerm} first />
-        <TermRow label="Investment Period" value={`${investmentPeriodYears} Years`} />
+        <TermRow label="Commitment Period" value={`${investmentPeriodYears} Years`} />
       </div>
     </div>
   );

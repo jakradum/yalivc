@@ -1,11 +1,12 @@
 import 'server-only';
 import { fundIIDeck } from '../decks/fund-ii/manifest';
+import { thesesDeck } from '../decks/theses/manifest';
 
 // The code manifest is the catalog: it defines every slide that exists
 // (type + how its props are built from data) and the default order. The
 // Sanity deckManifest only orders and overrides. Adding a slide TYPE or a
 // new data source is a code change (PR), never an edit.
-const MANIFESTS = { 'fund-ii': fundIIDeck };
+const MANIFESTS = { 'fund-ii': fundIIDeck, theses: thesesDeck };
 
 // The one type that can be created from scratch — it needs no data.
 export const GENERIC_DIVIDER = {

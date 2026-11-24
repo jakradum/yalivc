@@ -5,4 +5,4 @@
 export const SLIDE_W = 960;
 export const SLIDE_H = 540;
 
-export const DECK_IDS = ['fund-ii'];
+export const DECK_IDS = ['fund-ii', 'theses'];

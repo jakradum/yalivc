@@ -36,7 +36,7 @@ export async function POST(request, { params }) {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${deckId}.pdf"`,
+        'Content-Disposition': `attachment; filename="${manifest.version || deckId}.pdf"`,
         'Cache-Control': 'no-store',
         'X-Deck-Manifest': encodeURIComponent(JSON.stringify(manifest)),
       },

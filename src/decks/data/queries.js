@@ -81,3 +81,57 @@ export async function fetchTeamMembers() {
     "photoUrl": photo.asset->url
   }`);
 }
+
+// The six core Fund II sectors that carry a full map+tests thesis (the
+// four adjacent sectors only have `asRow`, no `map`/`tests`, and are
+// deliberately excluded by this filter — they belong to a still-undecided
+// grouped "Other Deep Tech" slide, out of scope for this deck for now).
+// `image` is resolved to a hotspot-aware asset ref string here, not a full
+// Sanity image object — mapFromTheses.js turns it into a cropped URL via
+// urlFor(), matching every other image field in this deck system.
+export async function fetchThesisCategories() {
+  return client.fetch(`*[_type == "category" && defined(map) && defined(tests)] | order(order asc) {
+    name,
+    "slug": slug.current,
+    asOf,
+    map{
+      kicker, title, subtitle, segmentLabel,
+      rows[]{ segment, detail, position, decides, leader, others },
+      footers[]{ label, text }
+    },
+    tests{
+      kicker, title, subtitle, testsLabel,
+      items[]{ title, body, evidence, figure, "imageRef": image.asset._ref },
+      whyNow[]{ label, value, source, body },
+      notFund, changeView
+    }
+  }`);
+}
+
+// The four adjacent deep-tech sectors (Space Tech, Quantum, Energy,
+// Advanced Materials) don't carry their own map/tests — just one
+// `asRow` each, meant for a single shared "Other Deep Tech" slide. See
+// mapFromTheses.js's otherDeepTechSlideProps().
+export async function fetchDeepTechRows() {
+  return client.fetch(`*[_type == "category" && defined(asRow) && !defined(map)] | order(order asc) {
+    "slug": slug.current,
+    asRow{ segment, detail, position, decides, leader, others }
+  }`);
+}
+
+// The shared group content (three tests, why-now stats, not-investing
+// boundary, "what changed/what did not") for those same four sectors —
+// see schemas/deepTechGroup.js for why this is one singleton document
+// rather than per-sector fields.
+export async function fetchDeepTechGroup() {
+  return client.fetch(`*[_type == "deepTechGroup"][0]{
+    asOf, kicker, title, subtitle,
+    "imageRef": image.asset._ref,
+    notInvesting{ segment, detail, position, decides, leader, others },
+    footers[]{ label, text },
+    testsKicker, testsTitle, testsSubtitle,
+    tests[]{ title, body, evidence, figure, "imageRef": image.asset._ref },
+    whyNow[]{ label, value, source, body },
+    notFund, changeView
+  }`);
+}

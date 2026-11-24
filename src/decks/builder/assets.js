@@ -23,6 +23,15 @@ export const ASSETS = [
     previewPath: '/builder/decks/fund-ii/?data=sanity',
     draftPreviewPath: '/builder/decks/fund-ii/?data=sanity&manifest=draft',
   },
+  {
+    id: 'theses',
+    kind: 'deck',
+    deckId: 'theses',
+    title: 'Yali Capital — Investment Theses',
+    description: 'The standalone sector-by-sector thesis deck: one segment map + one tests slide per core Fund II sector, sourced from Sanity category content.',
+    previewPath: '/builder/decks/theses/?data=sanity',
+    draftPreviewPath: '/builder/decks/theses/?data=sanity&manifest=draft',
+  },
 ];
 
 // Live status for an asset card.

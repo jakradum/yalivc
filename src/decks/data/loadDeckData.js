@@ -1,13 +1,17 @@
 import 'server-only';
 import fundIIFixture from './fixtures/fund-ii.json';
+import thesesFixture from './fixtures/theses.json';
 import { loadFundIIFromSanity } from './mapFromSanity';
+import { loadThesesFromSanity } from './mapFromTheses';
 
 const FIXTURES = {
   'fund-ii': fundIIFixture,
+  theses: thesesFixture,
 };
 
 const SANITY_LOADERS = {
   'fund-ii': loadFundIIFromSanity,
+  theses: loadThesesFromSanity,
 };
 
 // dataSource: 'fixture' (default, offline/deterministic) or 'sanity'

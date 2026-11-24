@@ -194,7 +194,7 @@ export async function loadFundIIFromSanity() {
       ? {
           heading: 'Fund II · Key Terms',
           fundSizeLabel: `₹${settings.targetFundSizeINR?.toLocaleString('en-IN')} Crore (~$${settings.targetFundSizeUSD}M)`,
-          greenshoeLabel: settings.greenshoeINR ? `Greenshoe ₹${settings.greenshoeINR} Crore` : undefined,
+          greenshoeLabel: settings.greenshoeINR ? `+ ₹${settings.greenshoeINR} Crore Greenshoe` : undefined,
           fundTerm: settings.fundTerm,
           investmentPeriodYears: settings.investmentPeriodYears,
         }
@@ -216,6 +216,7 @@ export async function loadFundIIFromSanity() {
               moic: f.moic != null ? `${f.moic.toFixed(2)}x` : null,
               fmv: f.fmv != null ? cr(f.fmv) : null,
               firstInvestment: f.firstDate ? fmtDate(f.firstDate) : null,
+              exited: c.investmentStatus === 'exited',
             };
           }),
         }

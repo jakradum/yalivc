@@ -64,6 +64,7 @@ export function SlideNumber({ number, dark = false, hidden = false, autoHide = f
   return (
     <div
       ref={ref}
+      data-slide-number=""
       style={{
         position: 'absolute',
         right: 16,

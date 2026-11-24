@@ -15,13 +15,22 @@ import { PortfolioSupportSlide } from '../slide-types/portfolio-support/Portfoli
 import { CXOMapSlide } from '../slide-types/cxo-map/CXOMapSlide';
 import { GovernanceSlide } from '../slide-types/governance/GovernanceSlide';
 import { FundStatsSlide } from '../slide-types/fund-stats/FundStatsSlide';
+import { RealisedExitsSlide } from '../slide-types/realised-exits/RealisedExitsSlide';
 import { DealflowSummarySlide } from '../slide-types/dealflow-summary/DealflowSummarySlide';
 import { SectorPieSlide } from '../slide-types/sector-pie/SectorPieSlide';
 import { LpLogosSlide } from '../slide-types/lp-logos/LpLogosSlide';
 import { NearTermSlide } from '../slide-types/near-term/NearTermSlide';
 import { TitleSlide } from '../slide-types/title/TitleSlide';
 import { LogomarkSlide } from '../slide-types/logomark/LogomarkSlide';
+import { SectorMapSlide } from '../slide-types/sector-map/SectorMapSlide';
+import { SectorTestsSlide } from '../slide-types/sector-tests/SectorTestsSlide';
+import { SectorDividerSlide } from '../slide-types/sector-divider/SectorDividerSlide';
+import { OtherDeepTechSlide } from '../slide-types/other-deep-tech/OtherDeepTechSlide';
+import { QAMapSlide } from '../slide-types/qa/QAMapSlide';
+import { QATestsSlide } from '../slide-types/qa/QATestsSlide';
+import { SectorIndexSlide } from '../slide-types/sector-index/SectorIndexSlide';
 import { fundIIDeck } from '../decks/fund-ii/manifest';
+import { thesesDeck } from '../decks/theses/manifest';
 
 // slideType -> component.
 export const slideComponents = {
@@ -42,15 +51,24 @@ export const slideComponents = {
   'cxo-map': CXOMapSlide,
   governance: GovernanceSlide,
   'fund-stats': FundStatsSlide,
+  'realised-exits': RealisedExitsSlide,
   'dealflow-summary': DealflowSummarySlide,
   'sector-pie': SectorPieSlide,
   'lp-logos': LpLogosSlide,
   'near-term': NearTermSlide,
   title: TitleSlide,
   logomark: LogomarkSlide,
+  'sector-map': SectorMapSlide,
+  'sector-tests': SectorTestsSlide,
+  'sector-divider': SectorDividerSlide,
+  'other-deep-tech': OtherDeepTechSlide,
+  'qa-map': QAMapSlide,
+  'qa-tests': QATestsSlide,
+  'sector-index': SectorIndexSlide,
 };
 
 // deckId -> manifest.
 export const decks = {
   'fund-ii': fundIIDeck,
+  theses: thesesDeck,
 };

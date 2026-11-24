@@ -6,6 +6,8 @@
 export const SLIDE_NUMBER_MODE = {
   cover: 'skip',
   'section-divider': 'skip',
+  'sector-divider': 'skip',
+  'sector-index': 'skip',
   closing: 'dark',
   logomark: 'dark',
   'person-grid': 'dark', // crimson ground
@@ -21,7 +23,9 @@ export const slideNumberMode = (type) => SLIDE_NUMBER_MODE[type] || 'light';
 
 // Slides that never show the section breadcrumb (legacy `skipClasses` + the
 // dividers themselves, which are the section heads).
-const NO_BREADCRUMB = new Set(['cover', 'contents', 'closing', 'section-divider']);
+// The theses deck's Q&A pages carry no section label either: the
+// investment team asked for no eyebrows anywhere in that deck.
+const NO_BREADCRUMB = new Set(['cover', 'contents', 'closing', 'section-divider', 'sector-divider', 'sector-index', 'qa-map', 'qa-tests']);
 
 // Sets `.section` on each slide from the most recent slide that opened one
 // (`sectionStart`), skipping types that don't show a breadcrumb and the

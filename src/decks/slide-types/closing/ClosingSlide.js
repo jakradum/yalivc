@@ -1,5 +1,5 @@
 // Rebuilt from the real end-slide markup — legacy uses the full
-// yali-logo.png lockup (not the favicon mark), a "Thank You" headline,
+// Yali monogram (the lockup with text is retired), a "Thank You" headline,
 // and real contact links, not a bare logomark as the Phase 3 draft had.
 export function ClosingSlide({ contacts = [], website }) {
   return (
@@ -15,7 +15,7 @@ export function ClosingSlide({ contacts = [], website }) {
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/yali-logo.png" alt="Yali Capital" style={{ filter: 'brightness(0) invert(1)', marginBottom: 32, width: 130 }} />
+      <img src="/favicon.svg" alt="Yali Capital" style={{ filter: 'brightness(0) invert(1)', marginBottom: 32, height: 64, width: 'auto' }} />
       <div style={{ fontFamily: 'var(--deck-font-mono)', fontSize: 48, fontWeight: 400, color: '#fff', letterSpacing: '0.01em', marginBottom: 36 }}>
         Thank You
       </div>
