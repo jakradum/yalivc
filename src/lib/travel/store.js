@@ -11,7 +11,7 @@ const client = createClient({
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
+  token: process.env.SANITY_API_TOKEN, // the site's Sanity write key (the old SANITY_WRITE_TOKEN is retired)
 });
 
 const FIELDS = `_id, _createdAt, status, requester, travellers, from, to, depDate, retDate, purpose,

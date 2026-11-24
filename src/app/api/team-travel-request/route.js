@@ -43,7 +43,7 @@ export async function POST(request) {
   if (!isBuilderHost(request.headers.get('host') || '')) return notFound();
   const email = await sessionEmail();
   if (!email) return NextResponse.json({ error: 'Sign in again.' }, { status: 401 });
-  if (!process.env.SANITY_WRITE_TOKEN) return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+  if (!process.env.SANITY_API_TOKEN) return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   const ip = (request.headers.get('x-forwarded-for') || 'local').split(',')[0].trim();
   if (!allowed(ip)) return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 });
 
