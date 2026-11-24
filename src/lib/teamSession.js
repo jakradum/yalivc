@@ -23,6 +23,8 @@ export const ACCESS = {
   travel: ['gani@yali.vc', 'pranav@yali.vc', 'skarthikeyan@yali.vc'],
   // LP portal usage (who signed in, time spent, downloads, ratings). Any Yali account.
   usage: null,
+  // Pitch scheduler invitations (/pitch-invites): create a founder's link and code.
+  pitch: ['pranav@yali.vc', 'gani@yali.vc'],
   // Yali Assets (/assets): deck PDFs for the team. Any Yali account.
   assets: null,
 };

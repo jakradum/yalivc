@@ -1,36 +1,12 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { findInvitation, updateInvitation } from '@/lib/pitch-invitations';
 import crypto from 'crypto';
 import { getCachedSlots, slotStillCached } from '@/lib/slotCache';
 
 // No `send-code` action here on purpose — see docs/pitch-scheduler-plan.md.
-// Codes are only ever minted at invitation-creation time (by the routine via
-// its Sanity MCP connector, or by Pranav manually in Studio for WhatsApp-
-// originated asks) — never on-demand by a page visitor. This route only
+// Codes are only ever minted at invitation-creation time (from
+// team.yali.vc/pitch-invites) — never on-demand by a page visitor. This route only
 // verifies a code against an invitation that already exists.
-
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only, so Studio
-  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
-  // the existing API token until one is created.)
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
-
-// Only used to record codeVerifiedAt below - lets Pranav distinguish "never
-// opened the link" from "entered the code but hasn't picked a slot yet",
-// which otherwise look identical (both status: "invited").
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
 
 const AUTH_SECRET = process.env.PITCH_SCHEDULER_AUTH_SECRET;
 const COOKIE_NAME = 'pitch-scheduler-session';
@@ -115,12 +91,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Too many attempts. Please try again later.' }, { status: 429 });
   }
 
-  const invitation = await client.fetch(
-    `*[_type == "pitchSchedulerInvitation" && invitationId == $invite][0]{
-      _id, invitationId, founderEmail, contactMethod, codeSalt, codeHash, status, expiresAt, slots, codeVerifiedAt
-    }`,
-    { invite }
-  );
+  const invitation = await findInvitation(invite);
 
   // Generic failure for "doesn't exist", "expired", and "wrong code" alike —
   // never reveal which one, same posture as the LP portal's auth route.
@@ -135,11 +106,12 @@ export async function POST(request) {
   const expectedHash = hashCode(invitation.codeSalt, code.trim());
   if (!timingSafeEqualStr(expectedHash, invitation.codeHash)) return genericFailure();
 
-  // Record the first successful verification - best-effort, doesn't block
-  // the actual auth response if it fails.
+  // Record the first successful verification (tells "never opened the link" apart
+  // from "entered the code but hasn't picked a slot yet") - best-effort, doesn't
+  // block the auth response if it fails.
   if (!invitation.codeVerifiedAt) {
-    writeClient.patch(invitation._id).set({ codeVerifiedAt: new Date().toISOString() }).commit().catch((err) => {
-      console.error('Failed to record codeVerifiedAt:', err);
+    updateInvitation(invitation._id, { codeVerifiedAt: new Date().toISOString() }).catch((err) => {
+      console.error('Failed to record codeVerifiedAt:', err.message);
     });
   }
 

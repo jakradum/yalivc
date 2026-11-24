@@ -1,18 +1,11 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { findInvitation } from '@/lib/pitch-invitations';
 import crypto from 'crypto';
 import { createDeckUploadSession, MAX_DECK_BYTES } from '@/lib/graphDrive';
 
 // Hands the slot-picker a OneDrive upload URL for the founder's (optional)
 // pitch deck. The browser then uploads directly to OneDrive - see
 // src/lib/graphDrive.js for why. Requires a valid scheduler session.
-
-const readClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-});
 
 const AUTH_SECRET = process.env.PITCH_SCHEDULER_AUTH_SECRET;
 const COOKIE_NAME = 'pitch-scheduler-session';
@@ -52,10 +45,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'The deck must be under 25 MB' }, { status: 400 });
   }
 
-  const invitation = await readClient.fetch(
-    `*[_type == "pitchSchedulerInvitation" && invitationId == $invitationId][0]{status}`,
-    { invitationId }
-  );
+  const invitation = await findInvitation(invitationId);
   if (!invitation || invitation.status !== 'invited') {
     return NextResponse.json({ error: 'This invitation is no longer valid' }, { status: 409 });
   }

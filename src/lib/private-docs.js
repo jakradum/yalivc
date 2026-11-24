@@ -46,3 +46,22 @@ export async function deleteDocs(ids) {
   });
   return safe.length;
 }
+
+// Compare-and-swap with NO retry: applies `change` only if the document is still at
+// revision `rev` (the one the caller read). Returns the new doc, or null if someone
+// else changed it first. For single-use transitions (a pitch slot being claimed).
+export async function patchDocIfRev(id, rev, change) {
+  if (!isSafeId(id) || typeof rev !== 'string') throw new Error('patchDocIfRev: invalid id or revision');
+  const { rows } = await supa(`/rest/v1/sanity_docs?select=doc&id=eq.${enc(id)}&rev=eq.${enc(rev)}`);
+  const current = rows?.[0]?.doc;
+  if (!current) return null;
+  const now = new Date().toISOString();
+  const next = sanityStyleId();
+  const doc = { ...change(current), _updatedAt: now, _rev: next };
+  const { rows: updated } = await supa(`/rest/v1/sanity_docs?id=eq.${enc(id)}&rev=eq.${enc(rev)}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=representation' },
+    body: { rev: next, sanity_updated_at: now, doc, synced_at: now },
+  });
+  return updated?.length ? doc : null;
+}

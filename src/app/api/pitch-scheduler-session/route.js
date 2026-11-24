@@ -1,19 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { findInvitation } from '@/lib/pitch-invitations';
 import crypto from 'crypto';
 import { getCachedSlots, slotStillCached } from '@/lib/slotCache';
-
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only, so Studio
-  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
-  // the existing API token until one is created.)
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
 
 const AUTH_SECRET = process.env.PITCH_SCHEDULER_AUTH_SECRET;
 const COOKIE_NAME = 'pitch-scheduler-session';
@@ -49,12 +37,7 @@ export async function GET(request) {
     return NextResponse.json({ success: false }, { status: 401, headers: { 'Cache-Control': 'no-store' } });
   }
 
-  const invitation = await client.fetch(
-    `*[_type == "pitchSchedulerInvitation" && invitationId == $invitationId][0]{
-      status, slots, contactMethod, founderEmail
-    }`,
-    { invitationId }
-  );
+  const invitation = await findInvitation(invitationId);
 
   // Session cookie is still validly signed, but the invitation itself is
   // gone/reset - treat as no session rather than erroring.

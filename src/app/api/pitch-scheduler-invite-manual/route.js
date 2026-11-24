@@ -1,37 +1,25 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { getCachedSlots } from '@/lib/slotCache';
+import { getTeamUser } from '@/decks/auth';
+import { TEAM_COOKIE } from '@/lib/teamSession';
+import { createInvitation, updateInvitation } from '@/lib/pitch-invitations';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const INVITE_EXPIRY_HOURS = 48;
 const IST = 'Asia/Kolkata';
 
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
-
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': 'https://yali.vc',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
-}
+// Called from team.yali.vc/pitch-invites (same origin) by a signed-in team member
+// with the 'pitch' area (src/lib/teamSession.js ACCESS). Invitations are stored in
+// Supabase since 24 Nov 2026 (src/lib/pitch-invitations.js).
+const NO_STORE = { 'Cache-Control': 'no-store' };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Must match pitch-scheduler-auth/route.js's hashCode exactly. No shared
 // secret needed - a random per-invitation salt plus that route's rate limit
-// is what makes this safe, which is what lets the routine (which can't hold
-// a secret) mint invitations the same way this route does.
+// is what makes this safe.
 function hashCode(codeSalt, code) {
   return crypto.createHash('sha256').update(`${codeSalt}:${code}`).digest('hex');
 }
@@ -94,17 +82,19 @@ function inviteEmailHtml(link, code) {
 }
 
 export async function POST(request) {
+  const createdBy = getTeamUser(request.cookies.get(TEAM_COOKIE)?.value, 'pitch');
+  if (!createdBy) {
+    return NextResponse.json({ error: 'Sign in to team.yali.vc first' }, { status: 401, headers: NO_STORE });
+  }
+
   let body;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: NO_STORE });
   }
 
-  const { docId, contactMethod, whatsappNumber, founderName, founderEmail, companyName } = body || {};
-  if (!docId) {
-    return NextResponse.json({ error: 'Save the document first' }, { status: 400, headers: CORS_HEADERS });
-  }
+  const { contactMethod, whatsappNumber, founderName, founderEmail, companyName } = body || {};
 
   // Three contact methods: email (this app sends the OTP directly), whatsapp
   // or name-only (Pranav relays the link+code himself - the only difference
@@ -117,20 +107,20 @@ export async function POST(request) {
   const normalizedEmail = founderEmail ? founderEmail.toLowerCase().trim() : '';
 
   if (isWhatsapp && !whatsappNumber) {
-    return NextResponse.json({ error: 'WhatsApp number is required' }, { status: 400, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'WhatsApp number is required' }, { status: 400, headers: NO_STORE });
   }
   if (isNameOnly && !founderName) {
-    return NextResponse.json({ error: 'A contact name is required' }, { status: 400, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'A contact name is required' }, { status: 400, headers: NO_STORE });
   }
   if (isEmail && (!normalizedEmail || !EMAIL_RE.test(normalizedEmail))) {
-    return NextResponse.json({ error: 'A valid contact email is required' }, { status: 400, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'A valid contact email is required' }, { status: 400, headers: NO_STORE });
   }
 
   const slots = await computeCandidateSlots();
   if (slots.length === 0) {
     return NextResponse.json(
-      { error: 'No pitch-slot placeholders in the cache right now (either none exist in the next ~6.5 weeks, or the cache has never been refreshed - check the cron job and /pitchSchedulerSlotCache in Studio).' },
-      { status: 409, headers: CORS_HEADERS }
+      { error: 'No pitch-slot placeholders in the cache right now (either none exist in the next ~6.5 weeks, or the cache has never been refreshed - check the hourly slot refresh cron).' },
+      { status: 409, headers: NO_STORE }
     );
   }
 
@@ -142,7 +132,7 @@ export async function POST(request) {
   const expiresAt = new Date(now.getTime() + INVITE_EXPIRY_HOURS * 60 * 60 * 1000);
   const link = `https://yali.vc/pitch/scheduler?invite=${invitationId}`;
 
-  const patch = {
+  const fields = {
     contactMethod: method,
     whatsappNumber: isWhatsapp ? whatsappNumber : undefined,
     founderName: isNameOnly ? founderName : undefined,
@@ -156,25 +146,16 @@ export async function POST(request) {
     createdAt: now.toISOString(),
     expiresAt: expiresAt.toISOString(),
     source: 'manual',
+    createdBy,
   };
-  // Sanity's patch.set ignores undefined-valued keys at the JSON layer isn't
-  // guaranteed — strip them explicitly.
-  Object.keys(patch).forEach((k) => patch[k] === undefined && delete patch[k]);
+  Object.keys(fields).forEach((k) => fields[k] === undefined && delete fields[k]);
 
-  // Studio saves new documents as drafts (id "drafts.<docId>") until
-  // explicitly published. A plain `.patch(docId)` fails if only the draft
-  // exists yet, AND even if it succeeded, the public/unauthenticated client
-  // in pitch-scheduler-auth can't see drafts at all - the founder's code
-  // would never verify. So we write straight to the PUBLISHED id via
-  // createOrReplace (using the fields already in `body`, not re-reading from
-  // Sanity - the draft may hold newer unsaved values than the published doc)
-  // and clean up any leftover draft so Studio doesn't show a stale one.
+  let doc;
   try {
-    await writeClient.createOrReplace({ _id: docId, _type: 'pitchSchedulerInvitation', ...patch });
-    await writeClient.delete(`drafts.${docId}`).catch(() => {}); // no draft to clean up is fine
+    doc = await createInvitation(fields);
   } catch (err) {
-    console.error('Failed to save invitation:', err);
-    return NextResponse.json({ error: 'Failed to save invitation' }, { status: 500, headers: CORS_HEADERS });
+    console.error('Failed to save invitation:', err.message);
+    return NextResponse.json({ error: 'Failed to save invitation' }, { status: 500, headers: NO_STORE });
   }
 
   if (isEmail) {
@@ -189,18 +170,18 @@ export async function POST(request) {
           subject: 'Your one-time code and scheduling link',
           html: inviteEmailHtml(link, code),
         });
-        await writeClient.patch(docId).set({ notificationStatus: 'sent' }).commit();
+        await updateInvitation(doc._id, { notificationStatus: 'sent' });
       } catch (err) {
-        console.error('Failed to send invite email:', err);
-        await writeClient.patch(docId).set({ notificationStatus: 'failed' }).commit();
-        return NextResponse.json({ error: 'Saved, but failed to send the email' }, { status: 500, headers: CORS_HEADERS });
+        console.error('Failed to send invite email:', err.message);
+        await updateInvitation(doc._id, { notificationStatus: 'failed' }).catch(() => {});
+        return NextResponse.json({ error: 'Saved, but failed to send the email' }, { status: 500, headers: NO_STORE });
       }
     }
-    return NextResponse.json({ success: true, link }, { headers: CORS_HEADERS });
+    return NextResponse.json({ success: true, link }, { headers: NO_STORE });
   }
 
   // WhatsApp / name-only path: nothing emailed. Return both link and
   // plaintext code once — this is the only time the code exists outside the
   // hash — for Pranav to relay however he's actually reaching this contact.
-  return NextResponse.json({ success: true, link, code }, { headers: CORS_HEADERS });
+  return NextResponse.json({ success: true, link, code }, { headers: NO_STORE });
 }

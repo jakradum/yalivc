@@ -79,30 +79,6 @@ export default defineConfig({
                   .documentId('investorRelations')
                   .views([S.view.form()])
               ),
-            S.divider(),
-            // Pitch Scheduler
-            S.listItem()
-              .title('Pitch Scheduler')
-              .child(
-                S.list()
-                  .title('Pitch Scheduler')
-                  .items([
-                    S.listItem().title('Invitations').child(S.documentTypeList('pitchSchedulerInvitation').title('Pitch Scheduler Invitations')),
-                  ])
-              ),
-            S.divider(),
-            // Finance
-            S.listItem()
-              .title('Finance')
-              .child(
-                S.list()
-                  .title('Finance')
-                  .items([
-                    S.listItem()
-                      .title('Letterhead Documents')
-                      .child(S.documentTypeList('letterheadDocument').title('Letterhead Documents')),
-                  ])
-              ),
           ]),
     }),
     visionTool(),

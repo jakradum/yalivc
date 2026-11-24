@@ -136,6 +136,25 @@ export default function TeamPage() {
                 </p>
               </div>
             </a>
+
+            {/* Pitch invites card */}
+            <a href="/team/pitch-invites/" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                border: '1px solid #363636',
+                borderTop: '3px solid #830d35',
+                background: 'rgba(255,255,255,0.88)',
+                padding: '28px 24px',
+                height: '100%',
+                boxSizing: 'border-box',
+              }}>
+                <div style={{ fontFamily: mono, fontSize: 18, fontWeight: 400, color: '#363636', marginBottom: 12, lineHeight: 1.3 }}>
+                  Pitch invites
+                </div>
+                <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
+                  Create a founder&apos;s one-time link and code to pick a pitch slot, and see where each invitation stands.
+                </p>
+              </div>
+            </a>
           </div>
         </div>
       </div>

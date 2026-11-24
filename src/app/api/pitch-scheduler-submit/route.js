@@ -1,27 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@sanity/client';
+import { findInvitation, listInvitations, claimInvitation, updateInvitation } from '@/lib/pitch-invitations';
 import crypto from 'crypto';
 import { Resend } from 'resend';
-
-const readClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  // Read token: the production dataset is private. Published docs only, so Studio
-  // drafts never reach a page. (SANITY_READ_TOKEN is a Viewer token; falls back to
-  // the existing API token until one is created.)
-  token: process.env.SANITY_READ_TOKEN || process.env.SANITY_API_TOKEN,
-  perspective: 'published',
-});
-
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nt0wmty3',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-  token: process.env.SANITY_WRITE_TOKEN,
-});
 
 const AUTH_SECRET = process.env.PITCH_SCHEDULER_AUTH_SECRET;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -102,12 +82,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Slot and company name are required' }, { status: 400 });
   }
 
-  const invitation = await readClient.fetch(
-    `*[_type == "pitchSchedulerInvitation" && invitationId == $invitationId][0]{
-      _id, _rev, invitationId, founderEmail, contactMethod, status, expiresAt, slots
-    }`,
-    { invitationId }
-  );
+  const invitation = await findInvitation(invitationId);
 
   if (!invitation || invitation.status !== 'invited') {
     return NextResponse.json({ error: 'This invitation has already been used or is no longer valid' }, { status: 409 });
@@ -130,10 +105,7 @@ export async function POST(request) {
   // simultaneous submit could still slip past both checks before either
   // commits; acceptable given founder-submission volume is low, and Pranav
   // still manually creates the real calendar invite as a final check.
-  const otherSubmitted = await readClient.fetch(
-    `*[_type == "pitchSchedulerInvitation" && status == "submitted" && invitationId != $invitationId]{selectedSlotId, slots}`,
-    { invitationId }
-  );
+  const otherSubmitted = (await listInvitations()).filter((d) => d.status === 'submitted' && d.invitationId !== invitationId);
   const slotStart = new Date(slot.startUTC).getTime();
   const slotEnd = new Date(slot.endUTC).getTime();
   const alreadyTaken = otherSubmitted.some((inv) => {
@@ -159,19 +131,18 @@ export async function POST(request) {
   // the same invitation will fail here instead of both succeeding.
   let patched;
   try {
-    patched = await writeClient
-      .patch(invitation._id)
-      .ifRevisionId(invitation._rev)
-      .set({
-        status: 'submitted',
-        selectedSlotId,
-        companyName,
-        teammateEmails,
-        founderEmail,
-        notificationStatus: 'pending',
-      })
-      .commit();
+    patched = await claimInvitation(invitation, {
+      status: 'submitted',
+      selectedSlotId,
+      companyName,
+      teammateEmails,
+      founderEmail,
+      notificationStatus: 'pending',
+    });
   } catch {
+    patched = null;
+  }
+  if (!patched) {
     return NextResponse.json({ error: 'This invitation has already been used' }, { status: 409 });
   }
 
@@ -200,7 +171,7 @@ export async function POST(request) {
     }
   }
 
-  await writeClient.patch(invitation._id).set({ notificationStatus }).commit();
+  await updateInvitation(invitation._id, { notificationStatus }).catch((err) => console.error('Failed to record notificationStatus:', err.message));
 
   const response = NextResponse.json({ success: true });
   response.cookies.delete(COOKIE_NAME);
