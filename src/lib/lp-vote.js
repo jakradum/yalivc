@@ -19,8 +19,8 @@ export const VOTE = {
     { id: '10-1-1', label: '10 + 1 + 1', note: '10-year term, with two optional one-year extensions' },
     { id: '12-1-1', label: '12 + 1 + 1', note: '12-year term, with two optional one-year extensions' },
   ],
-  // Votes are refused after this moment (null: open). Set before sending.
-  closesAt: null,
+  // Votes are refused after this moment (end of 5 Dec 2026, IST).
+  closesAt: '2026-12-05T23:59:59+05:30',
 };
 
 export const optionById = (id) => VOTE.options.find((o) => o.id === id) || null;
