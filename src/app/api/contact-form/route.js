@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeClient } from '@/lib/sanity';
+import { createDoc } from '@/lib/private-docs';
 
 const INQUIRY_LABELS = {
   press: 'Press / media inquiry',
@@ -31,9 +31,8 @@ export async function POST(request) {
 
     const submittedAt = new Date().toISOString();
 
-    // Write to Sanity
-    await writeClient.create({
-      _type: 'contactSubmission',
+    // Kept in Supabase (moved out of Sanity 24 Nov 2026); /api/cron/contact-digest reads it
+    await createDoc('contactSubmission', {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       inquiryType: inquiry,

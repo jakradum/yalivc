@@ -1,12 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Resend } from 'resend';
+import { listDocs, patchDoc } from '@/lib/private-docs';
 
 export const maxDuration = 60;
-
-const SANITY_PROJECT_ID = 'nt0wmty3';
-const SANITY_DATASET = 'production';
-const SANITY_API_VERSION = '2024-01-01';
-const SANITY_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data`;
 
 // ─── Email templates ────────────────────────────────────────────────────────
 
@@ -118,30 +114,19 @@ const TEMPLATES = {
   },
 };
 
-// ─── Sanity helpers ──────────────────────────────────────────────────────────
+// ─── Submission helpers (Supabase, since 24 Nov 2026) ───────────────────────
 
 async function fetchUnprocessed() {
-  const query = encodeURIComponent(
-    '*[_type == "contactSubmission" && !defined(processedAt)] | order(submittedAt asc)'
-  );
-  const res = await fetch(`${SANITY_URL}/query/${SANITY_DATASET}?query=${query}`, {
-    headers: { Authorization: `Bearer ${process.env.SANITY_WRITE_TOKEN}` },
-  });
-  const { result } = await res.json();
-  return result || [];
+  return (await listDocs('contactSubmission'))
+    .filter((s) => s.processedAt == null)
+    .sort((a, b) => String(a.submittedAt || '').localeCompare(String(b.submittedAt || '')));
 }
 
 async function patchSubmissions(patches) {
-  // patches: array of { id, fields }
-  const mutations = patches.map(({ id, fields }) => ({ patch: { id, set: fields } }));
-  await fetch(`${SANITY_URL}/mutate/${SANITY_DATASET}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.SANITY_WRITE_TOKEN}`,
-    },
-    body: JSON.stringify({ mutations }),
-  });
+  // patches: array of { id, fields }. Best effort per submission, as before.
+  for (const { id, fields } of patches) {
+    await patchDoc(id, (d) => ({ ...d, ...fields })).catch((err) => console.error('contact-digest patch failed:', err.message));
+  }
 }
 
 // ─── Digest HTML builder ─────────────────────────────────────────────────────
