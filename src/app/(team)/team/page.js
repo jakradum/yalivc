@@ -155,6 +155,25 @@ export default function TeamPage() {
                 </p>
               </div>
             </a>
+
+            {/* Fund II vote card */}
+            <a href="/team/fund-vote/" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                border: '1px solid #363636',
+                borderTop: '3px solid #830d35',
+                background: 'rgba(255,255,255,0.88)',
+                padding: '28px 24px',
+                height: '100%',
+                boxSizing: 'border-box',
+              }}>
+                <div style={{ fontFamily: mono, fontSize: 18, fontWeight: 400, color: '#363636', marginBottom: 12, lineHeight: 1.3 }}>
+                  Fund II vote
+                </div>
+                <p style={{ fontFamily: sans, fontSize: 13, color: '#595959', lineHeight: 1.7, margin: 0 }}>
+                  How LPs voted on the Fund II term, by company, with the date and time of each vote.
+                </p>
+              </div>
+            </a>
           </div>
         </div>
       </div>

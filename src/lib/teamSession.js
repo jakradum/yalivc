@@ -25,6 +25,8 @@ export const ACCESS = {
   usage: null,
   // Pitch scheduler invitations (/pitch-invites): create a founder's link and code.
   pitch: ['pranav@yali.vc', 'gani@yali.vc'],
+  // Fund II term vote results (/fund-vote).
+  vote: ['pranav@yali.vc', 'gani@yali.vc', 'sunil@yali.vc', 'ajay@yali.vc'],
   // Yali Assets (/assets): deck PDFs for the team. Any Yali account.
   assets: null,
 };

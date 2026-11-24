@@ -1,0 +1,23 @@
+/* yali.vc/fund-vote: the Fund II term vote, in the same look as the vote email. Square corners. */
+.wrap { display: flex; justify-content: center; padding: 48px 16px 80px; background: #e4e4e4; }
+.card { width: 100%; max-width: 620px; background: #efefef; }
+.hero { background: #830d35; padding: 36px 40px 32px; }
+.title { margin: 0; font-family: var(--font-jetbrains-mono, monospace); font-size: 26px; font-weight: 700; line-height: 1.25; color: #efefef; }
+.title span { color: #ebde84; }
+.body { padding: 32px 40px 40px; }
+.text { margin: 0 0 24px; font-size: 15px; line-height: 1.7; color: #363636; }
+.text a { color: #830d35; }
+.small { margin: 12px 0 0; font-size: 13px; color: #6b6b6b; }
+.result { margin: 0; font-family: var(--font-jetbrains-mono, monospace); font-size: 32px; font-weight: 700; color: #830d35; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+@media (max-width: 560px) { .options { grid-template-columns: 1fr; } .body, .hero { padding-left: 22px; padding-right: 22px; } }
+.option, .optionOn { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 22px 18px; background: #ffffff; border: 1px solid #363636; text-align: center; }
+.optionOn { border: 3px solid #830d35; padding: 20px 16px; }
+.option:focus-visible, .optionOn:focus-visible { outline: 2px solid #363636; outline-offset: 2px; }
+.optionLabel { font-family: var(--font-jetbrains-mono, monospace) !important; font-size: 26px; font-weight: 700; color: #363636; }
+.optionNote { font-size: 12.5px; line-height: 1.5; color: #595959; }
+.optionMark { margin-top: 4px; font-family: var(--font-jetbrains-mono, monospace) !important; font-size: 12px; font-weight: 700; color: #830d35; }
+.confirm { all: unset; box-sizing: border-box; cursor: pointer; display: block; width: 100%; padding: 16px 20px; background: #830d35; color: #ffffff; text-align: center; font-family: var(--font-jetbrains-mono, monospace) !important; font-size: 16px; font-weight: 700; }
+.confirm:disabled { background: #b9a3aa; cursor: default; }
+.confirm:focus-visible { outline: 2px solid #363636; outline-offset: 2px; }
+.error { margin: 0 0 14px; font-size: 13px; color: #830d35; }
