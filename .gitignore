@@ -48,3 +48,6 @@ exports/
 
 # iCloud / Finder duplicates ("file 2.json")
 * [0-9].*
+
+# logo-trace preview renders
+scripts/logo-trace/.preview-*.svg

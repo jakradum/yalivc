@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- Pen tool for the AmiT swoosh, served by preview.mjs at /edit. Anchors and handles in the rebuild's units
+     (original px x 10). Save writes swoosh.json; rebuild_amit.py then uses it in place of the fitted curve. -->
+<html><head><meta charset="utf-8"><title>AmiT swoosh editor</title><style>
+body{margin:0;padding:20px 28px;font-family:Inter,Arial,sans-serif;color:#363636;background:#eeeceb}
+h1{font:400 20px 'JetBrains Mono',monospace;margin:0 0 4px}
+.help{font-size:12.5px;color:#6b6b6b;margin:0 0 12px;line-height:1.6}
+.bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 10px;font:400 12px 'JetBrains Mono',monospace}
+.bar label{display:flex;gap:6px;align-items:center}
+button{font:400 12px 'JetBrains Mono',monospace;background:#fff;border:1px solid #363636;border-radius:0;padding:6px 12px;cursor:pointer}
+button.primary{background:#363636;color:#fff}
+#status{color:#6b6b6b}
+svg{display:block;width:100%;max-width:1400px;background:#fff;border:1px solid #363636;user-select:none}
+.outline{fill:none;stroke:#00b050;stroke-width:1.6;vector-effect:non-scaling-stroke;cursor:copy}
+.hit{fill:none;stroke:transparent;stroke-width:14;vector-effect:non-scaling-stroke;cursor:copy}
+.arm{stroke:#e07000;stroke-width:1;vector-effect:non-scaling-stroke}
+.anchor{fill:#fff;stroke:#00b050;stroke-width:2;vector-effect:non-scaling-stroke;cursor:move}
+.anchor.sharp{fill:#00b050}
+.anchor.sel,.handle.sel{stroke:#d00;fill:#d00}
+.handle{fill:#e07000;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke;cursor:move}
+</style></head><body>
+<h1>Swoosh editor</h1>
+<p class="help">Drag the square anchors and the round handles. Filled anchors are sharp corners (the two tips); hollow ones are smooth, so their two handles stay in line.
+Double-click the green line to add an anchor. Shift-click an anchor to remove it. Alt-click an anchor to switch smooth / sharp.
+Arrow keys nudge the selected point (shift for bigger steps). Cmd+Z undoes. Save, and the main page rebuilds with your curve.</p>
+<div class="bar">
+  <label>Original <input id="op" type="range" min="0" max="1" step="0.05" value="0.6"></label>
+  <label>Swoosh fill <input id="fp" type="range" min="0" max="1" step="0.05" value="0.45"></label>
+  <label><input id="lt" type="checkbox" checked> Letters</label>
+  <button id="reset">Reset to fitted curve</button>
+  <button id="save" class="primary">Save</button>
+  <span id="status"></span>
+</div>
+<svg id="c" viewBox="-30 -30 1120 650">
+  <image id="orig" href="/orig.png" x="0" y="0" width="1060" height="540" preserveAspectRatio="none" style="image-rendering:pixelated" opacity="0.6"/>
+  <path id="fill" fill="#2a3982" fill-opacity="0.45"/>
+  <g id="letters" opacity="0.8"></g>
+  <path id="hit" class="hit"/>
+  <path id="line" class="outline" pointer-events="none"/>
+  <g id="arms"></g><g id="pts"></g>
+</svg>
+<script>
+const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg', svg = $('c');
+let A = [], sel = null, undo = [], drag = null;
+const snap = () => { undo.push(JSON.stringify(A)); if (undo.length > 200) undo.shift(); };
+const ang = (a, b) => Math.atan2(a[1] - b[1], a[0] - b[0]);
+function load(data) {
+  A = data.anchors.map(a => {
+    // smooth when the two handles are (nearly) in line through the anchor
+    const d = Math.abs(((ang(a.out, a.p) - ang(a.p, a.in)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI);
+    return { p: a.p, in: a.in, out: a.out, smooth: a.smooth ?? d < 0.09 };
+  });
+  sel = null; draw();
+}
+const f = v => v[0].toFixed(1) + ' ' + v[1].toFixed(1);
+function d() {
+  return 'M' + f(A[0].p) + A.map((a, k) => { const b = A[(k + 1) % A.length]; return 'C' + f(a.out) + ' ' + f(b.in) + ' ' + f(b.p); }).join('') + 'Z';
+}
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+function draw() {
+  const p = d(); $('fill').setAttribute('d', p); $('line').setAttribute('d', p); $('hit').setAttribute('d', p);
+  $('arms').innerHTML = ''; $('pts').innerHTML = '';
+  A.forEach((a, k) => {
+    for (const h of ['in', 'out']) {
+      el('line', { x1: a.p[0], y1: a.p[1], x2: a[h][0], y2: a[h][1], class: 'arm' }, $('arms'));
+      const c = el('circle', { cx: a[h][0], cy: a[h][1], r: 6, class: 'handle' + (sel && sel.k === k && sel.h === h ? ' sel' : '') }, $('pts'));
+      c.dataset.k = k; c.dataset.h = h;
+    }
+    const r = el('rect', { x: a.p[0] - 7, y: a.p[1] - 7, width: 14, height: 14, class: 'anchor' + (a.smooth ? '' : ' sharp') + (sel && sel.k === k && sel.h === 'p' ? ' sel' : '') }, $('pts'));
+    r.dataset.k = k; r.dataset.h = 'p';
+  });
+  if (sel) { const v = A[sel.k][sel.h]; $('status').textContent = `${sel.h === 'p' ? 'anchor' : 'handle'} ${sel.k + 1}: x ${(v[0] / 10).toFixed(2)} y ${(v[1] / 10).toFixed(2)} px`; }
+}
+const pt = e => { const m = svg.getScreenCTM().inverse(); const q = new DOMPoint(e.clientX, e.clientY).matrixTransform(m); return [q.x, q.y]; };
+function move(k, h, to) {
+  const a = A[k];
+  if (h === 'p') { const dx = to[0] - a.p[0], dy = to[1] - a.p[1]; for (const x of ['p', 'in', 'out']) a[x] = [a[x][0] + dx, a[x][1] + dy]; return; }
+  a[h] = to;
+  if (a.smooth) { // keep the other handle in line, at its own length
+    const o = h === 'in' ? 'out' : 'in', L = Math.hypot(a[o][0] - a.p[0], a[o][1] - a.p[1]), t = ang(a.p, to);
+    a[o] = [a.p[0] + L * Math.cos(t), a.p[1] + L * Math.sin(t)];
+  }
+}
+svg.addEventListener('pointerdown', e => {
+  const t = e.target; if (!t.dataset.h) return;
+  const k = +t.dataset.k, h = t.dataset.h;
+  if (h === 'p' && e.shiftKey) { if (A.length > 3) { snap(); A.splice(k, 1); sel = null; draw(); } return; }
+  if (h === 'p' && e.altKey) { snap(); A[k].smooth = !A[k].smooth; if (A[k].smooth) move(k, 'out', A[k].out); draw(); return; }
+  snap(); sel = { k, h }; drag = { k, h, off: (() => { const q = pt(e), v = A[k][h]; return [v[0] - q[0], v[1] - q[1]]; })() };
+  svg.setPointerCapture(e.pointerId); draw();
+});
+svg.addEventListener('pointermove', e => { if (!drag) return; const q = pt(e); move(drag.k, drag.h, [q[0] + drag.off[0], q[1] + drag.off[1]]); draw(); });
+svg.addEventListener('pointerup', () => { drag = null; });
+// double-click the line: split the nearest segment there (de Casteljau), keeping the curve's shape
+$('hit').addEventListener('dblclick', e => {
+  const q = pt(e); let best = [1e18];
+  A.forEach((a, k) => {
+    const b = A[(k + 1) % A.length], P = [a.p, a.out, b.in, b.p];
+    for (let i = 1; i < 200; i++) {
+      const t = i / 200, s = 1 - t, x = s ** 3 * P[0][0] + 3 * s * s * t * P[1][0] + 3 * s * t * t * P[2][0] + t ** 3 * P[3][0], y = s ** 3 * P[0][1] + 3 * s * s * t * P[1][1] + 3 * s * t * t * P[2][1] + t ** 3 * P[3][1];
+      const dd = (x - q[0]) ** 2 + (y - q[1]) ** 2; if (dd < best[0]) best = [dd, k, t];
+    }
+  });
+  const [, k, t] = best, a = A[k], j = (k + 1) % A.length, b = A[j];
+  const L = (u, v) => [u[0] + (v[0] - u[0]) * t, u[1] + (v[1] - u[1]) * t];
+  const p01 = L(a.p, a.out), p12 = L(a.out, b.in), p23 = L(b.in, b.p), p012 = L(p01, p12), p123 = L(p12, p23), m = L(p012, p123);
+  snap(); a.out = p01; b.in = p23; A.splice(k + 1, 0, { p: m, in: p012, out: p123, smooth: true }); sel = { k: k + 1, h: 'p' }; draw();
+});
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'z') { if (undo.length) { A = JSON.parse(undo.pop()); draw(); } e.preventDefault(); return; }
+  const dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (dir && sel) { snap(); const s = e.shiftKey ? 10 : 1, v = A[sel.k][sel.h]; move(sel.k, sel.h, [v[0] + dir[0] * s, v[1] + dir[1] * s]); draw(); e.preventDefault(); }
+});
+$('op').oninput = e => $('orig').setAttribute('opacity', e.target.value);
+$('fp').oninput = e => $('fill').setAttribute('fill-opacity', e.target.value);
+$('lt').onchange = e => $('letters').style.display = e.target.checked ? '' : 'none';
+$('reset').onclick = async () => { snap(); load(await (await fetch('/swoosh?fit')).json()); $('status').textContent = 'fitted curve loaded (not saved)'; };
+$('save').onclick = async () => {
+  const body = JSON.stringify({ anchors: A.map(a => ({ p: a.p.map(v => +v.toFixed(1)), in: a.in.map(v => +v.toFixed(1)), out: a.out.map(v => +v.toFixed(1)), smooth: a.smooth })) });
+  const r = await fetch('/swoosh', { method: 'POST', body });
+  $('status').textContent = r.ok ? 'saved, the main page is rebuilding' : 'save failed';
+};
+(async () => {
+  load(await (await fetch('/swoosh')).json());
+  const s = await (await fetch('/letters')).text();
+  $('letters').innerHTML = s.replace(/^<svg[^>]*>|<\/svg>\s*$/g, '');
+})();
+</script></body></html>
