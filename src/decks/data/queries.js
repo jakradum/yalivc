@@ -1,21 +1,18 @@
 import 'server-only';
 import { client } from '@/sanity/client';
+import { listDocs } from '@/lib/private-docs';
+import { getFund2Settings } from '@/lib/fund2-settings';
 
 // Explicit projections only — never `{...}` — same rule the rest of the
 // codebase follows, so nothing unintended ever reaches a rendered deck.
 
+// Fund II terms, from Supabase (src/lib/fund2-settings.js), in the shape the
+// mapper expects: sectors as [{ name }].
 export async function fetchFundIISettings() {
-  return client.fetch(`*[_id == "fund2Settings"][0]{
-    fundName,
-    targetFundSizeINR,
-    targetFundSizeUSD,
-    greenshoeINR,
-    fundTerm,
-    investmentPeriodYears,
-    deploymentStageAllocation[]{ stage, percent, note },
-    "focusSectors": focusSectors[]->{ name },
-    "adjacentSectors": adjacentSectors[]->{ name }
-  }`);
+  const f = await getFund2Settings();
+  if (!f) return null;
+  const { location, ...rest } = f;
+  return { ...rest, focusSectors: f.focusSectors.map((name) => ({ name })), adjacentSectors: f.adjacentSectors.map((name) => ({ name })) };
 }
 
 // Every `company` document — deliberately NOT filtered on
@@ -27,39 +24,54 @@ export async function fetchFundIISettings() {
 // No fund field exists on this schema (Phase 0/4 finding) — Fund II has no
 // completed investments yet, so every invested company is a Fund I holding
 // by construction. Revisit the day a `company` gets a real fund reference.
+// Public fields (name, sector, logo) come from Sanity; investment rounds and
+// quarterly numbers are confidential and live only in Supabase (moved out of
+// Sanity 24 Nov 2026), joined on the document id.
 export async function fetchFundIPortfolio() {
-  return client.fetch(`*[_type == "company"] {
-    name,
-    "sector": category->name,
-    investmentStatus,
-    "slug": slug.current,
-    oneLiner,
-    "logoUrl": logo.asset->url,
-    "initialRound": investmentRounds[isInitialRound == true][0]{ investmentDate, yaliInvestment },
-    "rounds": investmentRounds[]{ investmentDate, yaliInvestment, yaliOwnership, roundName },
-    // Latest reported quarter that actually carries an FMV (and isn't
-    // flagged confidential). quarterlyUpdates is unordered and the newest
-    // quarter is often an empty placeholder, so [-1] returned no FMV.
-    "latestUpdate": quarterlyUpdates[defined(currentFMV) && currentFMVConfidential != true] | order(fiscalYear desc, quarter desc)[0]{
-      currentFMV, multipleOfInvestment, currentOwnershipPercent
-    }
-  }`);
+  const [companies, privateDocs] = await Promise.all([
+    client.fetch(`*[_type == "company"] {
+      _id,
+      name,
+      "sector": category->name,
+      investmentStatus,
+      "slug": slug.current,
+      oneLiner,
+      "logoUrl": logo.asset->url
+    }`),
+    listDocs('company'),
+  ]);
+  const byId = new Map(privateDocs.map((d) => [d._id, d]));
+  return companies.map(({ _id, ...c }) => {
+    const rounds = byId.get(_id)?.investmentRounds;
+    const updates = byId.get(_id)?.quarterlyUpdates;
+    const initial = rounds?.find((r) => r.isInitialRound === true);
+    // Latest reported quarter that actually carries an FMV (and isn't flagged
+    // confidential); the newest quarter is often an empty placeholder.
+    const latest = (updates || [])
+      .filter((u) => u.currentFMV != null && u.currentFMVConfidential !== true)
+      .sort((a, b) => String(b.fiscalYear).localeCompare(String(a.fiscalYear)) || String(b.quarter).localeCompare(String(a.quarter)))[0];
+    return {
+      ...c,
+      initialRound: initial ? { investmentDate: initial.investmentDate ?? null, yaliInvestment: initial.yaliInvestment ?? null } : null,
+      rounds: rounds ? rounds.map((r) => ({ investmentDate: r.investmentDate ?? null, yaliInvestment: r.yaliInvestment ?? null, yaliOwnership: r.yaliOwnership ?? null, roundName: r.roundName ?? null })) : null,
+      latestUpdate: latest ? { currentFMV: latest.currentFMV ?? null, multipleOfInvestment: latest.multipleOfInvestment ?? null, currentOwnershipPercent: latest.currentOwnershipPercent ?? null } : null,
+    };
+  });
 }
 
-// Fund I aggregate stats: the latest quarterly report on lpFundSettings
-// (read-only — that document belongs to the LP report and is never written
-// from here). Quarters are unordered, so sort by fiscal year then quarter.
+// Fund I aggregate stats: the latest quarterly report on lpFundSettings, read
+// from Supabase (read-only; that document belongs to the LP report). Quarters
+// are unordered, so sort by fiscal year then quarter.
 export async function fetchFundIStats() {
-  return client.fetch(`*[_type == "lpFundSettings"][0]{
-    firstCloseDate,
-    finalCloseDate,
-    targetFundSizeINR,
-    fundSizeAtClose,
-    "latest": quarterlyPerformance | order(fiscalYear desc, quarter desc)[0]{
-      quarter, fiscalYear, amountDrawnDown, totalInvested, fairMarketValue,
-      amountReturned, moic, tvpi, dpi, rvpi
-    }
-  }`);
+  const settings = (await listDocs('lpFundSettings'))[0];
+  if (!settings) return null;
+  const latest = [...(settings.quarterlyPerformance || [])]
+    .sort((a, b) => String(b.fiscalYear).localeCompare(String(a.fiscalYear)) || String(b.quarter).localeCompare(String(a.quarter)))[0];
+  const pick = (o, keys) => Object.fromEntries(keys.map((k) => [k, o?.[k] ?? null]));
+  return {
+    ...pick(settings, ['firstCloseDate', 'finalCloseDate', 'targetFundSizeINR', 'fundSizeAtClose']),
+    latest: latest ? pick(latest, ['quarter', 'fiscalYear', 'amountDrawnDown', 'totalInvested', 'fairMarketValue', 'amountReturned', 'moic', 'tvpi', 'dpi', 'rvpi']) : null,
+  };
 }
 
 // LP logos on the "Our limited partners" slide. Which LPs to feature is a

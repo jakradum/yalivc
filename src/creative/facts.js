@@ -1,4 +1,5 @@
 import { createClient } from '@sanity/client';
+import { getFund2Settings } from '../lib/fund2-settings.js';
 
 // Read-only facts the creative agent may look up in Sanity, so a post about a
 // portfolio company starts from what Yali already says about it (and its real
@@ -64,9 +65,9 @@ export async function companyLogoAsset(slugOrName) {
 
 // Fund II terms. Each value carries the `source` string a stat block needs.
 export async function fundFacts() {
-  const f = await client.fetch(`*[_id == "fund2Settings"][0]{ fundName, targetFundSizeINR, targetFundSizeUSD, greenshoeINR, fundTerm, investmentPeriodYears, deploymentStageAllocation[]{ stage, percent }, "focusSectors": focusSectors[]->name, "adjacentSectors": adjacentSectors[]->name }`);
+  const f = await getFund2Settings(); // Supabase since 24 Nov 2026
   if (!f) return null;
-  const src = (k) => `sanity:fund2Settings.${k}`;
+  const src = (k) => `sanity:fund2Settings.${k}`; // label kept for existing fixtures
   return {
     fund: f.fundName,
     targetFundSizeINR: { value: f.targetFundSizeINR, unit: 'Crore', source: src('targetFundSizeINR') },
@@ -74,7 +75,7 @@ export async function fundFacts() {
     greenshoeINR: { value: f.greenshoeINR, unit: 'Crore', source: src('greenshoeINR') },
     fundTerm: { value: f.fundTerm, source: src('fundTerm') },
     investmentPeriodYears: { value: f.investmentPeriodYears, source: src('investmentPeriodYears') },
-    deploymentStageAllocation: { value: f.deploymentStageAllocation, source: src('deploymentStageAllocation') },
+    deploymentStageAllocation: { value: f.deploymentStageAllocation.map(({ stage, percent }) => ({ stage, percent })), source: src('deploymentStageAllocation') },
     focusSectors: f.focusSectors,
     adjacentSectors: f.adjacentSectors,
     note: 'Fund II terms only. Fund I performance figures are not available to you and must never appear in public assets.',

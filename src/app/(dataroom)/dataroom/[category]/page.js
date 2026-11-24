@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/session';
 import { getDataRoomTeamMembers } from '@/lib/sanity-queries';
+import { withTeamEmails } from '@/lib/team-emails';
 import { isYaliStaff } from '@/lib/internal-user';
 import {
   getDataRoomDocuments,
@@ -316,7 +317,7 @@ export default async function CategoryPage({ params }) {
 
   // ── Team ────────────────────────────────────────────────────────────────────
   if (slug === 'team') {
-    const members = (await getDataRoomTeamMembers()) || [];
+    const members = await withTeamEmails((await getDataRoomTeamMembers()) || []);
     return (
       <div className={styles.page}>
         <DataroomTopbar />

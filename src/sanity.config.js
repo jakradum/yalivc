@@ -50,8 +50,6 @@ export default defineConfig({
                           .title('Newsletter')
                           .items([
                             S.listItem().title('Issues').child(S.documentTypeList('newsletter').title('Newsletters')),
-                            S.divider(),
-                            S.listItem().title('Subscribers').child(S.documentTypeList('newsletterSubscriber').title('Subscribers')),
                           ])
                       ),
                     S.listItem().title('News Articles').child(S.documentTypeList('news').title('News')),
@@ -61,85 +59,11 @@ export default defineConfig({
                   ])
               ),
             S.divider(),
-            // LP Portal
+            // Investor logos (co-investors and LPs, shown in decks). LP portal, data
+            // room and Fund II data moved to Supabase on 24 Nov 2026; edits go through Claude.
             S.listItem()
-              .title('LP Portal')
-              .child(
-                S.list()
-                  .title('LP Portal')
-                  .items([
-                    // Fund Settings (singleton)
-                    S.listItem()
-                      .title('Fund Settings')
-                      .child(
-                        S.document()
-                          .schemaType('lpFundSettings')
-                          .documentId('lpFundSettings')
-                          .views([S.view.form()])
-                      ),
-                    S.divider(),
-                    S.listItem()
-                      .title('Investors')
-                      .child(S.documentTypeList('investor').title('Investors')),
-                    S.listItem()
-                      .title('Pipeline Deals')
-                      .child(S.documentTypeList('lpPipelineDeal').title('Pipeline')),
-                    S.divider(),
-                    S.listItem()
-                      .title('LP Quarterly Reports')
-                      .child(S.documentTypeList('lpQuarterlyReport').title('LP Reports')),
-                    S.divider(),
-                    S.listItem()
-                      .title('Portal Users')
-                      .child(S.documentTypeList('portalUser').title('Portal Users')),
-                    S.divider(),
-                    S.listItem()
-                      .title('Portal Feedback (NPS)')
-                      .child(S.documentTypeList('lpPortalFeedback').title('Portal Feedback')),
-                    S.divider(),
-                    S.listItem()
-                      .title('Domain Privileges')
-                      .child(S.documentTypeList('domainPrivilege').title('Domain Privileges')),
-                  ])
-              ),
-            S.divider(),
-            // Fund II (separate from LP Portal — those documents are Fund I's LPs)
-            S.listItem()
-              .title('Fund II')
-              .child(
-                S.list()
-                  .title('Fund II')
-                  .items([
-                    S.listItem()
-                      .title('Fund II Settings')
-                      .child(
-                        S.document()
-                          .schemaType('fund2Settings')
-                          .documentId('fund2Settings')
-                          .views([S.view.form()])
-                      ),
-                  ])
-              ),
-            S.divider(),
-            // Data Room
-            S.listItem()
-              .title('Data Room')
-              .child(
-                S.list()
-                  .title('Data Room')
-                  .items([
-                    S.listItem()
-                      .title('Fund Content')
-                      .id('dataroomFundContent')
-                      .child(
-                        S.document()
-                          .schemaType('dataroomFundContent')
-                          .documentId('dataroomFundContent')
-                          .views([S.view.form()])
-                      ),
-                    S.divider(),
-                  ])
-              ),
+              .title('Investors')
+              .child(S.documentTypeList('investor').title('Investors')),
             S.divider(),
             // Track Record
             S.listItem()
@@ -156,11 +80,6 @@ export default defineConfig({
                   .views([S.view.form()])
               ),
             S.divider(),
-            // Contact form submissions
-            S.listItem()
-              .title('Contact Submissions')
-              .child(S.documentTypeList('contactSubmission').title('Contact Submissions')),
-            S.divider(),
             // Pitch Scheduler
             S.listItem()
               .title('Pitch Scheduler')
@@ -169,15 +88,6 @@ export default defineConfig({
                   .title('Pitch Scheduler')
                   .items([
                     S.listItem().title('Invitations').child(S.documentTypeList('pitchSchedulerInvitation').title('Pitch Scheduler Invitations')),
-                    S.divider(),
-                    S.listItem()
-                      .title('Calendar Connection')
-                      .child(
-                        S.document()
-                          .schemaType('pitchSchedulerCalendarAuth')
-                          .documentId('pitchSchedulerCalendarAuth')
-                          .views([S.view.form()])
-                      ),
                   ])
               ),
             S.divider(),

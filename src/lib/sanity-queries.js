@@ -1410,7 +1410,6 @@ export async function getDataRoomTeamMembers() {
       "photo": photo.asset->url,
       "slug": slug.current,
       enableTeamPage,
-      emailId,
       linkedIn
     }`
   );

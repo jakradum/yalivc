@@ -163,6 +163,7 @@ export default {
             },
             {
               name: 'isYaliLead',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Yali Led This Round',
               type: 'boolean',
               initialValue: false,
@@ -170,6 +171,7 @@ export default {
             },
             {
               name: 'showEarlyInReport',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Show in Current Report (Override)',
               type: 'boolean',
               initialValue: false,
@@ -210,32 +212,38 @@ export default {
             },
             {
               name: 'preMoneyValuation',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Pre-Money Valuation (₹ Crores)',
               type: 'number',
             },
             {
               name: 'totalRoundSize',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Total Round Size (₹ Crores)',
               type: 'number',
             },
             {
               name: 'postMoneyValuation',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Post-Money Valuation (₹ Crores)',
               type: 'number',
             },
             {
               name: 'yaliInvestment',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: "Yali's Investment (₹ Crores)",
               type: 'number',
             },
             {
               name: 'yaliOwnership',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: "Yali's Ownership % (after this round)",
               type: 'number',
               description: 'Fully diluted ownership percentage after this round',
             },
             {
               name: 'coInvestors',
+              hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
               title: 'Co-Investors in this Round',
               type: 'array',
               of: [
@@ -325,6 +333,7 @@ export default {
     // ===== QUARTERLY PERFORMANCE =====
     {
       name: 'quarterlyUpdates',
+      hidden: true, // confidential: kept in Supabase only since 24 Nov 2026
       title: 'Quarterly Performance Updates',
       type: 'array',
       group: 'quarterly',

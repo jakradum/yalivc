@@ -273,6 +273,7 @@ const teamMember = {
       type: 'string',
       group: 'dataRoom',
       description: 'If provided, shown as a clickable email icon in the data room team page.',
+      hidden: true, // kept in Supabase only since 24 Nov 2026 (doc teamMemberEmails); edit through Claude
     },
     {
       name: 'dataRoomBio',
